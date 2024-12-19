@@ -55,9 +55,6 @@ class EditBookmarkViewController: UIViewController,
     var onViewWillDisappear: (() -> Void)?
     var onViewWillAppear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
-    private var isRootViewController: Bool {
-        return navigationController?.viewControllers.first == self
-    }
 
     init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
@@ -134,7 +131,8 @@ class EditBookmarkViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        if isRootViewController {
+        // Check if this is the root view controller so we can save before dismissing
+        if navigationController?.viewControllers.first == self {
             viewModel.saveBookmark()
             self.dismiss(animated: true)
         } else {
@@ -250,7 +248,7 @@ class EditBookmarkViewController: UIViewController,
         case .folder:
             viewModel.folderStructures.count
         case .newFolder:
-            isRootViewController ? 0 : 1
+            1
         }
     }
 

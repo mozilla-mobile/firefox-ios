@@ -722,8 +722,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getBookmarkAction() -> SingleActionViewModel {
-        return isBookmarked ? isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
-                            : getAddBookmarkAction()
+        guard isBookmarked else { return getAddBookmarkAction() }
+        return isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {

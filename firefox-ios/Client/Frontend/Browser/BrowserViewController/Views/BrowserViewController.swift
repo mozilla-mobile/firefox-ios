@@ -1702,7 +1702,7 @@ class BrowserViewController: UIViewController,
             profile.places.getBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard let bookmarkItem = result.successValue?.first,
                 let parentGuid = bookmarkItem.parentGUID else { return }
-                self.profile.places.getBookmarksTree(rootGUID: parentGuid, recursive: true).uponQueue(.main) { result in
+                self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
                     guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
                     let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
                                                           node: bookmarkItem,
