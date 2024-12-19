@@ -7,7 +7,7 @@ import Storage
 
 @testable import Client
 
-class TopSitesDimensionTests: XCTestCase {
+class LegacyTopSitesDimensionTests: XCTestCase {
     struct DeviceSize {
         static let iPhone14 = CGSize(width: 390, height: 844)
         static let iPadAir = CGSize(width: 820, height: 1180)
@@ -173,9 +173,9 @@ class TopSitesDimensionTests: XCTestCase {
     }
 }
 
-extension TopSitesDimensionTests {
+extension LegacyTopSitesDimensionTests {
     func createSubject() -> TopSitesDimension {
-        let subject = TopSitesDimensionImplementation()
+        let subject = LegacyTopSitesDimensionImplementation()
         trackForMemoryLeaks(subject)
 
         return subject

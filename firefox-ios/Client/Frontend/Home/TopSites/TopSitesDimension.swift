@@ -33,7 +33,7 @@ protocol TopSitesDimension {
     ) -> TopSitesSectionDimension
 }
 
-class TopSitesDimensionImplementation: TopSitesDimension {
+class LegacyTopSitesDimensionImplementation: TopSitesDimension {
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface

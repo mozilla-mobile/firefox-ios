@@ -1009,6 +1009,8 @@
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
 		8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */; };
 		8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */; };
+		8AD3AFC32D143EF600CFC887 /* TopSitesDimensionImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC22D143EF000CFC887 /* TopSitesDimensionImplementation.swift */; };
+		8AD3AFC52D143F1200CFC887 /* TopSitesDimensionImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC42D143F0D00CFC887 /* TopSitesDimensionImplementationTests.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
 		8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */; };
@@ -7594,6 +7596,8 @@
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
 		8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehavioralTargetingEvent.swift; sourceTree = "<group>"; };
 		8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTile.swift; sourceTree = "<group>"; };
+		8AD3AFC22D143EF000CFC887 /* TopSitesDimensionImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDimensionImplementation.swift; sourceTree = "<group>"; };
+		8AD3AFC42D143F0D00CFC887 /* TopSitesDimensionImplementationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDimensionImplementationTests.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
 		8AD40FC827BADC4B00672675 /* ReaderModeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeButton.swift; sourceTree = "<group>"; };
@@ -11168,6 +11172,7 @@
 		8A00BD852CAB3FC200680AF9 /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8AD3AFC42D143F0D00CFC887 /* TopSitesDimensionImplementationTests.swift */,
 				8A87B4352CC1A8FD003A9239 /* Mock */,
 				8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */,
 				8A552AC22CB43A7000564C98 /* Redux */,
@@ -11394,6 +11399,7 @@
 		8A454D3D2CB9B896009436D9 /* TopSites */ = {
 			isa = PBXGroup;
 			children = (
+				8AD3AFC22D143EF000CFC887 /* TopSitesDimensionImplementation.swift */,
 				8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */,
 				8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */,
 				8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */,
@@ -16172,6 +16178,7 @@
 				21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */,
 				8AEAD9F52C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift in Sources */,
 				810CD9C12BB346D800E290C2 /* OnboardingCardViewController.swift in Sources */,
+				8AD3AFC32D143EF600CFC887 /* TopSitesDimensionImplementation.swift in Sources */,
 				C8A012F126AB07D70096A7A7 /* JumpBackInViewModel.swift in Sources */,
 				8AAAB05F2C1B72C9008830B3 /* SearchHighlightItem.swift in Sources */,
 				8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */,
@@ -17162,6 +17169,7 @@
 				AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */,
 				8A6B79A02CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift in Sources */,
 				39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */,
+				8AD3AFC52D143F1200CFC887 /* TopSitesDimensionImplementationTests.swift in Sources */,
 				215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */,
 				215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */,
 				2173326A29CCF901007F20C7 /* UIPanGestureRecognizerMock.swift in Sources */,

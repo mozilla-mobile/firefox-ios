@@ -42,7 +42,7 @@ class TopSitesViewModel {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
-        self.dimensionManager = TopSitesDimensionImplementation()
+        self.dimensionManager = LegacyTopSitesDimensionImplementation()
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
