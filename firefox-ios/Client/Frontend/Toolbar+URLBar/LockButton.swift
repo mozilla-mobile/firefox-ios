@@ -9,9 +9,9 @@ import Shared
 class LockButton: UIButton {
     // MARK: - Variables
 
-    var selectedTintColor: UIColor!
-    var unselectedTintColor: UIColor!
-    var disabledTintColor: UIColor!
+    var selectedTintColor: UIColor?
+    var unselectedTintColor: UIColor?
+    var disabledTintColor: UIColor?
 
     override open var isHighlighted: Bool {
         didSet {
@@ -25,7 +25,7 @@ class LockButton: UIButton {
         }
     }
 
-    override var tintColor: UIColor! {
+    override var tintColor: UIColor? {
         didSet {
             self.imageView?.tintColor = self.tintColor
         }
