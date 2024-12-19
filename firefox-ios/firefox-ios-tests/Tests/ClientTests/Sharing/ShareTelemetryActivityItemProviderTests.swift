@@ -23,7 +23,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
         super.tearDown()
     }
-    
+
     func testWithShareType_noShareMessage_callTelemetryOnly() throws {
         let testActivityType = UIActivity.ActivityType.mail
         let testShareType: ShareType = .site(url: testWebURL)
