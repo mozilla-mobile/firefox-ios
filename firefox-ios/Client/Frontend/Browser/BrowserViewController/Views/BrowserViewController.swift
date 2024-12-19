@@ -775,7 +775,7 @@ class BrowserViewController: UIViewController,
         // We need to update autofill status on sync manager as there could be delay from nimbus
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
-        profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
 
@@ -2813,8 +2813,8 @@ class BrowserViewController: UIViewController,
                    level: .debug,
                    category: .setup)
 
-        guard hasSync else { return }
-        let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+        guard hasSync, let syncManager = profile.syncManager else { return }
+        let syncStatus = syncManager.checkCreditCardEngineEnablement()
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .settings,
