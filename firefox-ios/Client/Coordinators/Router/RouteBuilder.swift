@@ -158,10 +158,10 @@ final class RouteBuilder: FeatureFlaggable {
 
         var isBrowsingActivity: Bool {
             if featureFlags.isFeatureEnabled(.universalLinks, checking: .buildOnly) {
-                userActivity.activityType == NSUserActivityTypeBrowsingWeb ||
+                return userActivity.activityType == NSUserActivityTypeBrowsingWeb ||
                 userActivity.activityType == browsingActivityType
             } else {
-                userActivity.activityType == browsingActivityType
+                return true
             }
         }
 

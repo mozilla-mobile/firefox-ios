@@ -9,41 +9,55 @@ class RouteBuilderTests: XCTestCase {
     let testURL = URL(string: "https://example.com")
     let handoffUserActivity = NSUserActivity(activityType: browsingActivityType)
     let universalLinkUserActivity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+    let randomActivity = NSUserActivity(activityType: "random")
 
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         handoffUserActivity.webpageURL = testURL
         universalLinkUserActivity.webpageURL = testURL
+        randomActivity.webpageURL = testURL
     }
-    func test_makeRoute_handlesWebpageURLForActivityTypeBrowsingActivityWhenUniversalLinkIsDisabled() {
+    func test_makeRoute_whenUniversalLinkIsDisabled_HandlesAnyACtivityType() {
         setupNimbusUniversalLinksTesting(isEnabled: false)
         let routeBuilder = createSubject()
 
         let route = routeBuilder.makeRoute(
             userActivity: handoffUserActivity
         )
+
         let universalLinkRoute = routeBuilder.makeRoute(
             userActivity: universalLinkUserActivity
         )
 
+        let randomRoute = routeBuilder.makeRoute(
+            userActivity: randomActivity
+        )
+
         XCTAssertEqual(route, .search(url: testURL, isPrivate: false))
-        XCTAssertNil(universalLinkRoute)
+        XCTAssertEqual(universalLinkRoute, .search(url: testURL, isPrivate: false))
+        XCTAssertEqual(randomRoute, .search(url: testURL, isPrivate: false))
     }
 
-    func test_makeRoute_handlesWebpageURLForActivityTypeBrowsingActivityAndBrowsingWeb_whenUniversalLinkIsEnabled() {
+    func test_makeRoute_whenUniversalLinkIsEnabled_handlesWebpageURLForActivityTypeBrowsingActivityAndBrowsingWeb() {
         setupNimbusUniversalLinksTesting(isEnabled: true)
         let routeBuilder = createSubject()
 
         let route = routeBuilder.makeRoute(
             userActivity: handoffUserActivity
         )
+
         let universalLinkRoute = routeBuilder.makeRoute(
             userActivity: universalLinkUserActivity
         )
 
+        let randomRoute = routeBuilder.makeRoute(
+            userActivity: randomActivity
+        )
+
         XCTAssertEqual(route, .search(url: testURL, isPrivate: false))
         XCTAssertEqual(universalLinkRoute, .search(url: testURL, isPrivate: false))
+        XCTAssertNil(randomRoute)
     }
 
     private func createSubject() -> RouteBuilder {
