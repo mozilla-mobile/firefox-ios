@@ -2088,6 +2088,8 @@ class BrowserViewController: UIViewController,
         switch type.destination {
         case .contextMenu:
             navigationHandler?.showContextMenu()
+        case .trackingProtectionSettings:
+            navigationHandler?.show(settings: .contentBlocker)
         case .customizeHomepage:
             navigationHandler?.show(settings: .homePage)
         case .link:
