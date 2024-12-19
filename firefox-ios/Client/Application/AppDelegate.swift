@@ -154,7 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             profile.removeAccount()
         }
 
-        profile.syncManager.applicationDidBecomeActive()
+        profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
@@ -192,7 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
-        profile.syncManager.applicationDidEnterBackground()
+        profile.syncManager?.applicationDidEnterBackground()
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
