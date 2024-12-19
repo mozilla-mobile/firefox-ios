@@ -30,6 +30,20 @@ import struct MozillaAppServices.Url
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
 
+/// This is a protocol followed by `RustPlaces` to provide an alternative to using `Deferred` in that code.
+/// It's part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
+public protocol RustPlacesProtocol {
+    func withReader<T>(
+        _ callback: @escaping (PlacesReadConnection) throws -> T,
+        completion: @escaping (Result<T, any Error>) -> Void
+    )
+    func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool,
+        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+    )
+}
+
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
@@ -51,7 +65,7 @@ public protocol HistoryMetadataObserver {
     )
 }
 
-public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
+public class RustPlaces: BookmarksHandler, HistoryMetadataObserver, RustPlacesProtocol {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -173,6 +187,41 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
+    public func withReader<T>(
+        _ callback: @escaping (
+            PlacesReadConnection
+        ) throws -> T,
+        completion: @escaping (Result<T, any Error>) -> Void
+    ) {
+        readerQueue.async {
+            guard self.isOpen else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+                return
+            }
+
+            if self.reader == nil {
+                do {
+                    self.reader = try self.api?.openReader()
+                } catch let error {
+                    completion(.failure(error))
+                    return
+                }
+            }
+
+            if let reader = self.reader {
+                do {
+                    let result = try callback(reader)
+                    completion(.success(result))
+                } catch let error {
+                    completion(.failure(error))
+                    return
+                }
+            } else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+            }
+        }
+    }
+
     public func getBookmarksTree(
         rootGUID: GUID,
         recursive: Bool
@@ -180,6 +229,21 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return withReader { connection in
             return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
         }
+    }
+
+    public func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool,
+        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+    ) {
+        withReader(
+            { connection in
+                return try connection.getBookmarksTree(
+                    rootGUID: rootGUID,
+                    recursive: recursive
+                )
+            },
+            completion: completion)
     }
 
     public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
