@@ -11,7 +11,7 @@ class EmbeddedNavController {
     weak var parent: UIViewController?
     var controllers = [UIViewController]()
     var navigationController: UINavigationController
-    var heightConstraint: NSLayoutConstraint!
+    var heightConstraint: NSLayoutConstraint
     let isSearchMode: Bool
 
     init(isSearchMode: Bool, parent: UIViewController, rootViewController: UIViewController) {
