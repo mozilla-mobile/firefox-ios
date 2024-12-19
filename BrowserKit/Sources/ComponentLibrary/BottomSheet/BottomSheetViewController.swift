@@ -58,7 +58,7 @@ public class BottomSheetViewController: UIViewController,
     private lazy var sheetView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
     private lazy var scrollContentView: UIView = .build { _ in }
-    private var contentViewBottomConstraint: NSLayoutConstraint!
+    private var contentViewBottomConstraint: NSLayoutConstraint?
     private var viewTranslation = CGPoint(x: 0, y: 0)
     private let windowUUID: WindowUUID
 
@@ -103,7 +103,7 @@ public class BottomSheetViewController: UIViewController,
         listenForThemeChange(view)
         setupView()
 
-        contentViewBottomConstraint.constant = childViewController.view.frame.height
+        contentViewBottomConstraint?.constant = childViewController.view.frame.height
         view.layoutIfNeeded()
     }
 
@@ -114,7 +114,7 @@ public class BottomSheetViewController: UIViewController,
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        contentViewBottomConstraint.constant = 0
+        contentViewBottomConstraint?.constant = 0
         UIView.animate(withDuration: viewModel.animationTransitionDuration) {
             self.view.backgroundColor = self.viewModel.backgroundColor
             self.view.layoutIfNeeded()
@@ -176,6 +176,8 @@ public class BottomSheetViewController: UIViewController,
         view.accessibilityElements = [closeButton, sheetView]
 
         contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        contentViewBottomConstraint?.isActive = true
+
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
             greaterThanOrEqualTo: scrollContentView.heightAnchor)
 
@@ -193,7 +195,6 @@ public class BottomSheetViewController: UIViewController,
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
                                            constant: BottomSheetViewController.UX.minVisibleTopSpace),
             sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentViewBottomConstraint,
             sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             contentView.topAnchor.constraint(equalTo: sheetView.topAnchor),
@@ -284,7 +285,7 @@ public class BottomSheetViewController: UIViewController,
 
     public func dismissSheetViewController(completion: (() -> Void)? = nil) {
         childViewController.willDismiss()
-        contentViewBottomConstraint.constant = childViewController.view.frame.height
+        contentViewBottomConstraint?.constant = childViewController.view.frame.height
         UIView.animate(
             withDuration: viewModel.animationTransitionDuration,
             animations: {
