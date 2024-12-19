@@ -23,6 +23,6 @@ echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)
 
 echo "\n\n[!] Strings have been imported. You can now create a PR."
 
-echo "\n\n[!] Clean up cloned repos"
+echo "\n\n[*] Clean up cloned repos"
 rm -rf LocalizationTools
 rm -rf firefoxios-l10n
