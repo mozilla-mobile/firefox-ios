@@ -599,9 +599,9 @@ extension BookmarksViewController: Notifiable {
 extension BookmarksViewController {
     func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
-            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+            guard let bookmarkFolder = viewModel.bookmarkFolder else { return }
 
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+            bookmarkCoordinatorDelegate?.showBookmarkDetail(
                 bookmarkType: .folder,
                 parentBookmarkFolder: bookmarkFolder
             )
