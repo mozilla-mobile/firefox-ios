@@ -7,7 +7,7 @@ import Foundation
 class ContentBlockerSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
     private let profile: Profile
-    private var tabManager: TabManager!
+    private var tabManager: TabManager?
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)

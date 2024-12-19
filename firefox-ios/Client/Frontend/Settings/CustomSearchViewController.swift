@@ -13,7 +13,7 @@ class CustomSearchError: MaybeErrorType {
         case DuplicateEngine, FormInput
     }
 
-    var reason: Reason!
+    var reason: Reason
 
     internal var description: String {
         return "Search Engine Not Added"

@@ -26,7 +26,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     var currentWindowUUID: UUID? { windowUUID }
 
     var settingsTitle: NSAttributedString?
-    var url: URL!
+    var url: URL?
     var timer: Timer?
 
     var isLoaded = false {
@@ -73,7 +73,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     private lazy var settingsWebView: WKWebView = .build()
 
     private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
-        if self.isLoaded {
+        guard !self.isLoaded, let url else {
             return
         }
         if timeout > 0 {
@@ -200,15 +200,15 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         self.isError = true
     }
 
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
         didTimeOut()
     }
 
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
         didTimeOut()
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
