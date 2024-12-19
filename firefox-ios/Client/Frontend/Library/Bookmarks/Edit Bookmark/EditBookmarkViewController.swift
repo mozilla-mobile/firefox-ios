@@ -41,9 +41,23 @@ class EditBookmarkViewController: UIViewController,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
         view.tableHeaderView = headerSpacerView
     }
+
+    private lazy var saveBarButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(
+            title: String.Bookmarks.Menu.EditBookmarkSave,
+            style: .done,
+            target: self,
+            action: #selector(saveButtonAction)
+        )
+        return button
+    }()
+
     var onViewWillDisappear: (() -> Void)?
     var onViewWillAppear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
+    private var isRootViewController: Bool {
+        return navigationController?.viewControllers.first == self
+    }
 
     init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
@@ -68,6 +82,8 @@ class EditBookmarkViewController: UIViewController,
         viewModel.onFolderStatusUpdate = { [weak self] in
             self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
         }
+
+        navigationItem.rightBarButtonItem = saveBarButton
         // The back button title sometimes doesn't allign with the chevron, force navigation bar layout
         navigationController?.navigationBar.layoutIfNeeded()
         setupSubviews()
@@ -95,8 +111,11 @@ class EditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
+        // Save when popping the view off the navigation stack
+        if isMovingFromParent {
+            viewModel.saveBookmark()
+        }
         onViewWillDisappear?()
-        viewModel.saveBookmark()
     }
 
     // MARK: - Setup
@@ -109,6 +128,19 @@ class EditBookmarkViewController: UIViewController,
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    // MARK: - Actions
+
+    @objc
+    func saveButtonAction() {
+        if isRootViewController {
+            viewModel.saveBookmark()
+            self.dismiss(animated: true)
+        } else {
+            // Save will happen in viewWillDisappear
+            navigationController?.popViewController(animated: true)
+        }
     }
 
     // MARK: - Themeable
@@ -218,7 +250,7 @@ class EditBookmarkViewController: UIViewController,
         case .folder:
             viewModel.folderStructures.count
         case .newFolder:
-            1
+            isRootViewController ? 0 : 1
         }
     }
 

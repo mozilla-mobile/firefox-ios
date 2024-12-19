@@ -27,6 +27,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
     func showFilePicker(fileURL: URL)
+    func showEditBookmark()
 }
 
 extension ToolBarActionMenuDelegate {
@@ -56,7 +57,8 @@ enum MenuButtonToastAction {
 class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
-                            AppVersionUpdateCheckerProtocol {
+                            AppVersionUpdateCheckerProtocol,
+                            BookmarksRefactorFeatureFlagProvider {
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -720,7 +722,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getBookmarkAction() -> SingleActionViewModel {
-        return isBookmarked ? getRemoveBookmarkAction() : getAddBookmarkAction()
+        return isBookmarked ? isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
+                            : getAddBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
@@ -761,6 +764,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 object: .bookmark,
                 value: .pageActionMenu
             )
+        }
+    }
+
+    private func getEditBookmarkAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .LegacyAppMenu.EditBookmarkLabel,
+                                     iconString: StandardImageIdentifiers.Large.bookmarkFill) { _ in
+            self.delegate?.showEditBookmark()
         }
     }
 
