@@ -17,8 +17,9 @@ final class TrackingProtectionModelTests: XCTestCase {
                                                               contentBlockerStatus: .disabled,
                                                               contentBlockerStats: nil,
                                                               selectedTab: nil)
-        trackingProtectionModel.clearCookiesAndSiteData(cookiesClearable: cookiesClearable,
-                                                        siteDataClearable: siteDataClearable)
+        _ = cookiesClearable.clear()
+        _ = siteDataClearable.clear()
+        trackingProtectionModel.clearCookiesAndSiteData()
         XCTAssertNotNil(cookiesClearable.isSucceed)
         XCTAssertNotNil(siteDataClearable.isSucceed)
     }
