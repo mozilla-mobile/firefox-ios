@@ -430,4 +430,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         documentPicker.modalPresentationStyle = .formSheet
         showViewController(viewController: documentPicker)
     }
+
+    func showEditBookmark() {
+        openBookmarkEditPanel()
+    }
 }
