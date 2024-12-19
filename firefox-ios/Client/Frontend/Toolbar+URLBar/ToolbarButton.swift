@@ -9,9 +9,9 @@ import Shared
 class ToolbarButton: UIButton {
     // MARK: - Variables
 
-    private var selectedTintColor: UIColor!
-    private var unselectedTintColor: UIColor!
-    private var disabledTintColor: UIColor!
+    private var selectedTintColor: UIColor?
+    private var unselectedTintColor: UIColor?
+    private var disabledTintColor: UIColor?
 
     // Optionally can associate a separator line that hide/shows along with the button
     weak var separatorLine: UIView?
@@ -28,7 +28,7 @@ class ToolbarButton: UIButton {
         }
     }
 
-    override var tintColor: UIColor! {
+    override var tintColor: UIColor? {
         didSet {
             self.imageView?.tintColor = self.tintColor
         }
