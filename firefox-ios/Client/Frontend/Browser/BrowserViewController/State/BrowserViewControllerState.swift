@@ -167,6 +167,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 navigationDestination: NavigationDestination(.customizeHomepage)
             )
 
+        case NavigationBrowserActionType.tapOnTrackingProtection:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.trackingProtectionSettings)
+            )
+
         case NavigationBrowserActionType.tapOnCell,
             NavigationBrowserActionType.tapOnLink:
             return BrowserViewControllerState(
