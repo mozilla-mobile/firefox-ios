@@ -182,7 +182,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator
+            settingsDelegate: parentCoordinator,
+            title: isTermsOfServiceFeatureEnabled ? .StudiesSettingTitleV2 : .SettingsStudiesToggleTitle,
+            message: isTermsOfServiceFeatureEnabled ? .StudiesSettingMessageV2 : .SettingsStudiesToggleMessage,
+            linkedText: isTermsOfServiceFeatureEnabled ? .StudiesSettingLinkV2 : .SettingsStudiesToggleLink,
+            isToSEnabled: isTermsOfServiceFeatureEnabled
         )
 
         // Only add these toggles to the Settings if Terms Of Service feature flag is enabled
@@ -192,14 +196,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 delegate: settingsDelegate,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 settingsDelegate: parentCoordinator,
-                title: .SendTechnicalDataSettingTitle,
-                message: String(format: .SendTechnicalDataSettingMessage,
-                                MozillaName.shortName.rawValue,
-                                AppName.shortName.rawValue),
-                linkedText: .SendTechnicalDataSettingLink,
+                title: .SendTechnicalDataSettingTitleV2,
+                message: String(format: .SendTechnicalDataSettingMessageV2, AppName.shortName.rawValue),
+                linkedText: .SendTechnicalDataSettingLinkV2,
                 prefKey: AppConstants.prefSendUsageData,
                 a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
-                learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
+                learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"),
+                isToSEnabled: isTermsOfServiceFeatureEnabled
             )
 
             sendTechnicalDataSettings.shouldSendData = { [weak self] value in
@@ -216,10 +219,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 settingsDelegate: parentCoordinator,
                 title: .SendDailyUsagePingSettingTitle,
                 message: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
-                linkedText: .SendDailyUsagePingSettingLink,
+                linkedText: .SendDailyUsagePingSettingLinkV2,
                 prefKey: AppConstants.prefSendDailyUsagePing,
                 a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
-                learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile")
+                learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile"),
+                isToSEnabled: isTermsOfServiceFeatureEnabled
             )
             sendDailyUsagePingSettings.shouldSendData = { value in
                 // TODO: FXIOS-10469 Firefox iOS: DAU Ping Setting
@@ -238,7 +242,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 linkedText: .SendUsageSettingLink,
                 prefKey: AppConstants.prefSendUsageData,
                 a11yId: AccessibilityIdentifiers.Settings.SendData.sendAnonymousUsageDataTitle,
-                learnMoreURL: SupportUtils.URLForTopic("adjust")
+                learnMoreURL: SupportUtils.URLForTopic("adjust"),
+                isToSEnabled: isTermsOfServiceFeatureEnabled
             )
 
             sendAnonymousUsageDataSettings.shouldSendData = { [weak self] value in
@@ -256,10 +261,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator,
             title: .SendCrashReportsSettingTitle,
             message: String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue),
-            linkedText: .SendCrashReportsSettingLink,
+            linkedText: isTermsOfServiceFeatureEnabled ? .SendCrashReportsSettingLinkV2 : .SendCrashReportsSettingLink,
             prefKey: AppConstants.prefSendCrashReports,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
-            learnMoreURL: SupportUtils.URLForTopic("mobile-crash-reports")
+            learnMoreURL: SupportUtils.URLForTopic("mobile-crash-reports"),
+            isToSEnabled: isTermsOfServiceFeatureEnabled
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
@@ -428,7 +434,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getSupportSettings() -> [SettingSection] {
-        guard let studiesToggleSetting else { return [] }
+        let isTermsOfServiceFeatureEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
 
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
@@ -447,22 +453,26 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        if let sendTechnicalDataSetting {
-            supportSettings.append(sendTechnicalDataSetting)
-        } else if let sendAnonymousUsageDataSetting {
-            supportSettings.append(sendAnonymousUsageDataSetting)
-        }
+        guard let studiesToggleSetting, let sendCrashReportsSetting else { return [] }
 
-        if let sendCrashReportsSetting {
-            supportSettings.append(sendCrashReportsSetting)
-        }
-
-        if let sendDailyUsagePingSetting {
-            supportSettings.append(sendDailyUsagePingSetting)
+        if isTermsOfServiceFeatureEnabled {
+            guard let sendTechnicalDataSetting, let sendDailyUsagePingSetting else { return [] }
+            supportSettings.append(contentsOf: [
+                sendTechnicalDataSetting,
+                studiesToggleSetting,
+                sendDailyUsagePingSetting,
+                sendCrashReportsSetting
+            ])
+        } else {
+            guard let sendAnonymousUsageDataSetting else { return [] }
+            supportSettings.append(contentsOf: [
+                sendAnonymousUsageDataSetting,
+                sendCrashReportsSetting,
+                studiesToggleSetting
+            ])
         }
 
         supportSettings.append(contentsOf: [
-            studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
