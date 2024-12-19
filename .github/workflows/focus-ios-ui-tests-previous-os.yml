@@ -34,7 +34,7 @@ jobs:
       - name: Install packages
         run: |
           pip3 install virtualenv pipenv
-          gem install xcpretty -v 0.4.0
+          gem install xcpretty -v 0.3.0
           pip install blockkit==1.9.1
       - name: Setup Xcode
         id: xcode
@@ -83,7 +83,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan FullFunctionalTests \
             -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
-            | tee xcodebuild-fullfunctionaltests.log | xcpretty -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-fullfunctionaltests.log | xcpretty _0.3.0_ -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
       - name: Determine pass/fail status
