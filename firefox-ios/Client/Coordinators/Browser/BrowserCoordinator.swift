@@ -505,7 +505,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - EnhancedTrackingProtectionCoordinatorDelegate
-
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
@@ -690,6 +689,23 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showEnhancedTrackingProtection(sourceView: UIView) {
         showETPMenu(sourceView: sourceView)
+    }
+
+    func closeEnhancedTrackingProtection() {
+        guard let etpCoordinator = childCoordinators.first(where: {
+            $0 is EnhancedTrackingProtectionCoordinator
+        }) as? EnhancedTrackingProtectionCoordinator else {
+            return // there is no modal to close
+        }
+        didFinishEnhancedTrackingProtection(from: etpCoordinator)
+    }
+    func enhancedTrackingProtectionGoBack() {
+        guard let etpCoordinator = childCoordinators.first(where: {
+            $0 is EnhancedTrackingProtectionCoordinator
+        }) as? EnhancedTrackingProtectionCoordinator else {
+            return // there is no modal to close
+        }
+        etpCoordinator.goBack()
     }
 
     func showFakespotFlowAsModal(productURL: URL) {
