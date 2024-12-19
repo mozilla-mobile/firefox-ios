@@ -51,7 +51,12 @@ jobs:
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
         run: |
-          sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
+          output=$(xcrun simctl list runtimes | grep "${{ matrix.ios_version }}")
+          if  [ -n "$output" ]; then
+            echo "Pattern found."
+          else
+            sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
+          fi
           xcrun simctl list devices iphone
       - name: Build Focus
         id: compile
