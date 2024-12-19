@@ -63,7 +63,7 @@ jobs:
             - name: Install packages
               id: packages
               run: |
-                gem uninstall xcpretty -ax
+                gem uninstall xcpretty -ax -v 0.4.0
                 gem install xcpretty -v 0.3.0
                 xcpretty -version
                 pip install blockkit==1.9.1
