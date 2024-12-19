@@ -25,8 +25,8 @@ class TabsButton: UIButton, ThemeApplicable {
         static let infinitySymbol: String = "\u{221E}"
     }
 
-    private var selectedTintColor: UIColor!
-    private var unselectedTintColor: UIColor!
+    private var selectedTintColor: UIColor?
+    private var unselectedTintColor: UIColor?
     private var theme: Theme?
 
     // When all animations are completed, this is the most-recently assigned tab count that is shown.
