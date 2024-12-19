@@ -6,7 +6,7 @@ import Foundation
 
 class ClearPrivateDataSetting: Setting {
     private let profile: Profile
-    private var tabManager: TabManager!
+    private var tabManager: TabManager?
     private weak var settingsDelegate: PrivacySettingsDelegate?
 
     override var accessoryView: UIImageView? {

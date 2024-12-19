@@ -13,8 +13,8 @@ class SettingsViewController: UIViewController, Themeable {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    var profile: Profile!
-    var tabManager: TabManager!
+    var profile: Profile?
+    var tabManager: TabManager?
     let windowUUID: WindowUUID
 
     var currentWindowUUID: UUID? { return windowUUID }

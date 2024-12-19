@@ -10,8 +10,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
-    var currentNewTabChoice: NewTabPage!
-    var currentStartAtHomeSetting: StartAtHomeSetting!
+    var currentNewTabChoice: NewTabPage?
+    var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
 
@@ -88,7 +88,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            guard let currentNewTabChoice = self.currentNewTabChoice else { return }
+            self.prefs.setString(currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
 
@@ -111,8 +112,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             isChecked: { return !showTopSites.isChecked() },
             settingDidChange: { (string) in
                 self.currentNewTabChoice = NewTabPage.homePage
-                self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-                self.tableView.reloadData()
+                onFinished()
             })
 
         showWebPage.alignTextFieldToNatural()

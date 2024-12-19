@@ -154,26 +154,25 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             return UITableViewCell()
         }
 
-        var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
 
         switch section {
         case .defaultEngine:
-                engine = model.defaultEngine
-                cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
-                cell.accessibilityValue = engine.shortName
-                cell.textLabel?.text = engine.shortName
-                cell.imageView?.image = engine.image.createScaled(IconSize)
-                cell.imageView?.layer.cornerRadius = 4
-                cell.imageView?.layer.masksToBounds = true
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            guard let engine = model.defaultEngine else { break }
+            cell.editingAccessoryType = .disclosureIndicator
+            cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
+            cell.accessibilityValue = engine.shortName
+            cell.textLabel?.text = engine.shortName
+            cell.imageView?.image = engine.image.createScaled(IconSize)
+            cell.imageView?.layer.cornerRadius = 4
+            cell.imageView?.layer.masksToBounds = true
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         case .alternateEngines:
             // The default engine is not an alternate search engine.
             let index = indexPath.item + 1
             if index < model.orderedEngines.count {
-                engine = model.orderedEngines[index]
+                let engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
                 let toggle = ThemedSwitch()
