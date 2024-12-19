@@ -54,8 +54,8 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     }
 
     private lazy var bordersHelper = ThemedHeaderFooterViewBordersHelper()
-    private var titleTopConstraint: NSLayoutConstraint!
-    private var titleBottomConstraint: NSLayoutConstraint!
+    private var titleTopConstraint: NSLayoutConstraint?
+    private var titleBottomConstraint: NSLayoutConstraint?
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -97,12 +97,12 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     private func setupInitialConstraints() {
         titleTopConstraint = stackView.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                             constant: UX.titleVerticalLongPadding)
+        titleTopConstraint?.isActive = true
         titleBottomConstraint = stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                                   constant: -UX.titleVerticalPadding)
+        titleBottomConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            titleTopConstraint,
-            titleBottomConstraint,
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: UX.titleHorizontalPadding),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
@@ -111,7 +111,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     }
 
     private func updateTitleAlignmentConstraints() {
-        titleTopConstraint.constant = titleAlignment.topConstraintConstant
-        titleBottomConstraint.constant = titleAlignment.bottomConstraintConstant
+        titleTopConstraint?.constant = titleAlignment.topConstraintConstant
+        titleBottomConstraint?.constant = titleAlignment.bottomConstraintConstant
     }
 }
