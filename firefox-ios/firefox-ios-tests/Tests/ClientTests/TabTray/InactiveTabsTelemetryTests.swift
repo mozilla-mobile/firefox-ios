@@ -27,39 +27,55 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         subject?.sectionShown()
 
         XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
-        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
-        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown))
+        if let savedMetric = gleanWrapper.savedEvent as? CounterMetricType {
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown))
+        } else {
+            XCTFail("savedEvent is not of type CounterMetricType")
+        }
     }
 
     func testRecordInactiveTabWhenClosedAllTabsThenGleanIsCalled() throws {
         subject?.closedAllTabs()
 
         XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
-        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
-        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn))
+        if let savedMetric = gleanWrapper.savedEvent as? CounterMetricType {
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn))
+        } else {
+            XCTFail("savedEvent is not of type CounterMetricType")
+        }
     }
 
     func testRecordInactiveTabWhenTabOpenedThenGleanIsCalled() throws {
         subject?.tabOpened()
 
         XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
-        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
-        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.openInactiveTab))
+        if let savedMetric = gleanWrapper.savedEvent as? CounterMetricType {
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.openInactiveTab))
+        } else {
+            XCTFail("savedEvent is not of type CounterMetricType")
+        }
     }
 
     func testRecordInactiveTabWhenTabSwipedClosedThenGleanIsCalled() throws {
         subject?.tabSwipedToClose()
 
         XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
-        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
-        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose))
+        if let savedMetric = gleanWrapper.savedEvent as? CounterMetricType {
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose))
+        } else {
+            XCTFail("savedEvent is not of type CounterMetricType")
+        }
     }
 
     func testRecordInactiveTabWhenThenGleanIsCalled() throws {
         subject?.sectionToggled(hasExpanded: true)
 
         XCTAssertEqual(gleanWrapper.submitEventMetricTypeCalled, 1)
-        let savedMetric = gleanWrapper.savedEvent as! EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
-        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray))
+        if let savedMetric
+            = gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra> {
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose))
+        } else {
+            XCTFail("savedEvent is not of type EventMetricType")
+        }
     }
 }
