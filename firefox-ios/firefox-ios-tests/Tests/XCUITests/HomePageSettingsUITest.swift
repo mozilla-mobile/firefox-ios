@@ -150,7 +150,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
         navigator.goto(HomePanelsScreen)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.collectionViews.cells.staticTexts
             .elementContainingText("Mozilla - Internet for people").exists)
     }
@@ -188,7 +188,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons["Done"].tap()
 
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
     }
 
@@ -213,8 +213,8 @@ class HomePageSettingsUITests: BaseTestCase {
 
     // Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
         let numberOfTopSites = app
             .cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             .collectionViews

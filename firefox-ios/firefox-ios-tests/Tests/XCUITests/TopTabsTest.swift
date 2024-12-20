@@ -113,7 +113,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(
             app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
-        XCTAssert(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        XCTAssert(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
 
     private func openNtabsFromTabTray(numTabs: Int) {

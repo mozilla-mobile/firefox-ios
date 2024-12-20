@@ -350,7 +350,7 @@ class SearchTests: BaseTestCase {
 
             // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
             validateUrlHasFocusAndKeyboardIsDisplayed()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
             // Tap the back icon <
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()

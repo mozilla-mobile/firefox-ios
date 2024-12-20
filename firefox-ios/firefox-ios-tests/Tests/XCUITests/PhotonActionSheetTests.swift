@@ -19,7 +19,7 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Verify that the site is pinned to top
-        let itemCell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
         if #available(iOS 17, *) {

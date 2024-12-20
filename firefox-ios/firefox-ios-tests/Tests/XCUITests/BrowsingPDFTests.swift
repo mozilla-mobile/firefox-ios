@@ -111,7 +111,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForElementsToExist(
             [
-                app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+                app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
                 app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )
@@ -119,7 +119,7 @@ class BrowsingPDFTests: BaseTestCase {
         // Open pdf from pinned site
         let pdfTopSite = app
             .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .cells[PDF_website["bookmarkLabel"]!]
+            .links[PDF_website["bookmarkLabel"]!]
             .children(matching: .other)
             .element
             .children(matching: .other)
@@ -136,7 +136,7 @@ class BrowsingPDFTests: BaseTestCase {
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
         waitForElementsToExist(
             [
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
             app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )

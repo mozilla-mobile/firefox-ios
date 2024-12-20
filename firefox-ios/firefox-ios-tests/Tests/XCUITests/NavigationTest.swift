@@ -526,7 +526,7 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
             backButton.tap()
             waitUntilPageLoad()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         }
     }
 
