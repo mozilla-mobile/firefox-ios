@@ -110,7 +110,7 @@
 //                $0 is UIHostingController<LoginAutofillView>
 //            }) as? UIHostingController<LoginAutofillView> {
 //                hostingViewController.rootView.viewModel.onLoginCellTap(
-//                    EncryptedLogin(
+//                    Login(
 //                        credentials: URLCredential(
 //                            user: "test",
 //                            password: "doubletest",
