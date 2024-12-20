@@ -148,7 +148,7 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     func didFinish() {
-        (libraryCoordinator as? BrowserCoordinator)?.didFinish(from: self)
+        libraryCoordinator?.didFinishLibrary(from: self)
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {

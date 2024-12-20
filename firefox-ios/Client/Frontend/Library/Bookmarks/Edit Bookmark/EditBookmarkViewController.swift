@@ -108,12 +108,11 @@ class EditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
-        // Save when popping the view off the navigation stack
+        // Save when popping the view off the navigation stack (when in library)
         if isMovingFromParent {
             viewModel.saveBookmark()
         }
         onViewWillDisappear?()
-        viewModel.didFinish()
     }
 
     // MARK: - Setup
@@ -132,12 +131,12 @@ class EditBookmarkViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        // Check if this is the root view controller so we can save before dismissing
+        // If we are in the standalone version of edit bookmark, we should save before dismissing
         if navigationController?.viewControllers.first == self {
             viewModel.saveBookmark()
-            self.dismiss(animated: true)
+            viewModel.didFinish()
         } else {
-            // Save will happen in viewWillDisappear
+            // If we are in the library, save will happen in viewWillDisappear
             navigationController?.popViewController(animated: true)
         }
     }

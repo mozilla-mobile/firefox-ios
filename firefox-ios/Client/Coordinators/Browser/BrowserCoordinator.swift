@@ -176,7 +176,7 @@ class BrowserCoordinator: BaseCoordinator,
                                                    modalStyle: .overFullScreen)
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         sheet.modalTransitionStyle = .crossDissolve
-        present(sheet, animated: true)
+        present(sheet)
     }
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
@@ -192,6 +192,10 @@ class BrowserCoordinator: BaseCoordinator,
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
+        navigationController.onViewDismissed = { [weak self] in
+            // Remove coordinator when user drags down to dismiss modal
+            self?.didFinish(from: bookmarksCoordinator)
+        }
         present(navigationController)
     }
 
@@ -515,7 +519,7 @@ class BrowserCoordinator: BaseCoordinator,
         return windowUUID
     }
 
-    func didFinishLibrary(from coordinator: LibraryCoordinator) {
+    func didFinishLibrary(from coordinator: Coordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)
     }
@@ -1010,9 +1014,7 @@ class BrowserCoordinator: BaseCoordinator,
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
 
-    private func present(_ viewController: UIViewController,
-                         animated: Bool = true,
-                         completion: (() -> Void)? = nil) {
+    private func present(_ viewController: UIViewController) {
         browserViewController.willNavigateAway()
         router.present(viewController)
     }

@@ -1689,8 +1689,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// This function will open a view separate from the bookmark edit panel found in the
-    /// Library Panel - Bookmarks section.
+    /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
     internal func openBookmarkEditPanel() {
         guard !profile.isShutdown else { return }
 
