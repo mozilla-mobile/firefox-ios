@@ -35,8 +35,10 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
 
     func fetchFolders() async -> [Folder] {
         let numDesktopBookmarks = await countDesktopBookmarks()
-        return await withUnsafeContinuation { continuation in
+        return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID, recursive: true) { result in
+                var folders = [Folder]()
+                defer { continuation.resume(returning: folders) }
                 switch result {
                 case .success(let data):
                     guard let rootFolder = data as? BookmarkFolderData else { return }
@@ -45,13 +47,10 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
                     let childrenFolders = rootFolder.children?.compactMap {
                         return $0 as? BookmarkFolderData
                     }
-                    var folders = [Folder]()
                     for folder in childrenFolders ?? [] {
                         recursiveAddSubFolders(folder, folders: &folders, hasDesktopBookmarks: hasDesktopBookmarks)
                     }
-                    continuation.resume(returning: folders)
-                case .failure:
-                    continuation.resume(returning: [])
+                case .failure: return
                 }
             }
         }
