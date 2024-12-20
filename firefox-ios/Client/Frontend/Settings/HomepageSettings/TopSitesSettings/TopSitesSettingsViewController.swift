@@ -69,7 +69,13 @@ extension TopSitesSettingsViewController {
         override var status: NSAttributedString {
             let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
             let numberOfRows = profile?.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
-
+            store.dispatch(
+                TopSitesAction(
+                    numberOfRows: numberOfRows,
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.updatedNumberOfRows
+                )
+            )
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
 
