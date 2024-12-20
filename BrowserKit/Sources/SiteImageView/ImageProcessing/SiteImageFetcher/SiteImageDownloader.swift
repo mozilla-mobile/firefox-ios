@@ -22,10 +22,10 @@ extension SiteImageDownloader {
     /// Downloads an image at the given URL. Throws `SiteImageError` errors.
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
         // Override Kingfisher's default timeout (which is 15s)
-        let modifier = AnyModifier { request in
-            var r = request
-            r.timeoutInterval = self.timeoutDelay
-            return r
+        let modifier = AnyModifier { [weak self] request in
+            var modifiedRequest = request
+            modifiedRequest.timeoutInterval = self?.timeoutDelay ?? 15
+            return modifiedRequest
         }
 
         do {
