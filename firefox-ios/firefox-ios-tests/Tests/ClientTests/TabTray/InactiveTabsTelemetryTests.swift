@@ -9,49 +9,57 @@ import XCTest
 
 final class InactiveTabsTelemetryTests: XCTestCase {
     var subject: InactiveTabsTelemetry?
+    var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to puth them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-        subject = InactiveTabsTelemetry()
+        gleanWrapper = MockGleanWrapper()
+        subject = InactiveTabsTelemetry(gleanWrapper: gleanWrapper)
     }
 
     override func tearDown() {
         subject = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
     func testRecordInactiveTabWhenSectionShownThenGleanIsCalled() throws {
         subject?.sectionShown()
 
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.InactiveTabsTray.inactiveTabShown)
+        XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
+        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
+        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown))
     }
 
     func testRecordInactiveTabWhenClosedAllTabsThenGleanIsCalled() throws {
         subject?.closedAllTabs()
 
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
+        XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
+        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
+        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn))
     }
 
     func testRecordInactiveTabWhenTabOpenedThenGleanIsCalled() throws {
         subject?.tabOpened()
 
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.InactiveTabsTray.openInactiveTab)
+        XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
+        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
+        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.openInactiveTab))
     }
 
     func testRecordInactiveTabWhenTabSwipedClosedThenGleanIsCalled() throws {
         subject?.tabSwipedToClose()
 
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
+        XCTAssertEqual(gleanWrapper.submitCounterMetricTypeCalled, 1)
+        let savedMetric = gleanWrapper.savedEvent as! CounterMetricType
+        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose))
     }
 
     func testRecordInactiveTabWhenThenGleanIsCalled() throws {
         subject?.sectionToggled(hasExpanded: true)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray)
+        XCTAssertEqual(gleanWrapper.submitEventMetricTypeCalled, 1)
+        let savedMetric = gleanWrapper.savedEvent as! EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
+        XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray))
     }
 }

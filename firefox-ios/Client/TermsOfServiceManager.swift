@@ -29,7 +29,7 @@ struct TermsOfServiceManager: FeatureFlaggable {
 
     func shouldSendTechnicalData(value: Bool) {
         // AdjustHelper.setEnabled($0)
-        DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+        DefaultGleanWrapper().setUpload(isEnabled: value)
 
         if !value {
             prefs.removeObjectForKey(PrefsKeys.Usage.profileId)
