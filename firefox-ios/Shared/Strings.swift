@@ -6,10 +6,10 @@
 import Foundation
 
 public struct Strings {
-    // This is a little workaround to get localizations
-    // FXIOS-10838 will fix this by moving localizations or this struct into the appropriate place
-    public static let bundle = Bundle(identifier: "org.mozilla.ios.Localizations") ?? .main
+    public static let bundle = Bundle(for: LocalizationClass.self)
 }
+
+class LocalizationClass {}
 
 // MARK: - Localization helper function
 
