@@ -113,7 +113,7 @@ class EditBookmarkViewController: UIViewController,
             viewModel.saveBookmark()
         }
         onViewWillDisappear?()
-        viewModel.finish()
+        viewModel.didFinish()
     }
 
     // MARK: - Setup

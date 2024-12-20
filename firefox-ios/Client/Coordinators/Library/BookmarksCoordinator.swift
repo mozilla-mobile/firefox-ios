@@ -22,7 +22,7 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
 
     func showSignIn()
 
-    func finish()
+    func didFinish()
 }
 
 extension BookmarksCoordinatorDelegate {
@@ -50,7 +50,6 @@ class BookmarksCoordinator: BaseCoordinator,
     private let profile: Profile
     private weak var libraryCoordinator: LibraryCoordinatorDelegate?
     private weak var libraryNavigationHandler: LibraryNavigationHandler?
-    private weak var parentCoordinator: ParentCoordinatorDelegate?
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
     private let isBookmarkRefactorEnabled: Bool
@@ -148,8 +147,8 @@ class BookmarksCoordinator: BaseCoordinator,
         router.present(controller)
     }
 
-    func finish() {
-        parentCoordinator?.didFinish(from: self)
+    func didFinish() {
+        (libraryCoordinator as? BrowserCoordinator)?.didFinish(from: self)
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {

@@ -135,6 +135,9 @@ class EditBookmarkViewModel: ParentFolderSelector {
         selectedFolder = folder
         folderStructures = [folder]
         onFolderStatusUpdate?()
+        
+    func didFinish() {
+        bookmarkCoordinatorDelegate?.didFinish()
     }
 }
 
