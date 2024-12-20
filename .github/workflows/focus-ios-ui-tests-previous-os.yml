@@ -6,7 +6,9 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 16.1
+    xcode_version: 16.2
+    xcodebuild_scheme: Focus
+    xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
 
 jobs:
@@ -49,41 +51,52 @@ jobs:
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
         run: |
-          sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
+          xcrun simctl list runtimes
+          output=$(xcrun simctl list runtimes | grep 'iOS ${{ matrix.ios_version }}' || true)
+          if [ -n "$output" ]; then
+            echo "iOS ${{ matrix.ios_version }} simulator has already been installed"
+          else
+            echo "Install iOS ${{ matrix.ios_version }} runtime"
+            sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
+          fi
           xcrun simctl list devices iphone
       - name: Build Focus
         id: compile
         run: |
-          xcodebuild build-for-testing \
-            -project Blockzilla.xcodeproj -scheme Focus \
-            -configuration FocusDebug \
-            CODE_SIGNING_ALLOWED=NO -destination \
-            'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
+          xcodebuild \
+            build-for-testing \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ARCH="arm64"
         working-directory:  ${{ env.browser }}
       - name: Run smoke tests
         id: run-smoketests
         run: |
-          xcodebuild test-without-building \
-            -project Blockzilla.xcodeproj -scheme Focus \
-            -configuration FocusDebug \
-            CODE_SIGNING_ALLOWED=NO \
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketests \
-            | tee xcodebuild-smoketests.log | xcpretty -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-smoketests.log | xcpretty _0.3.0_ -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
       - name: Run full functional tests
         id: run-fullfunctionaltests
         run: |
-          xcodebuild test-without-building \
-            -project Blockzilla.xcodeproj -scheme Focus \
-            -configuration FocusDebug \
-            CODE_SIGNING_ALLOWED=NO \
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan FullFunctionalTests \
             -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
-            | tee xcodebuild-fullfunctionaltests.log | xcpretty -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-fullfunctionaltests.log | xcpretty _0.3.0_ -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
       - name: Determine pass/fail status
