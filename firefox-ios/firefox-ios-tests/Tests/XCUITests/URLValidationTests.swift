@@ -42,9 +42,7 @@ class URLValidationTests: BaseTestCase {
     }
 
     private func clearURL() {
-        if iPad() {
-            navigator.goto(URLBarOpen)
-            app.buttons["Clear text"].waitAndTap()
-        }
+        navigator.goto(URLBarOpen)
+        app.buttons["Clear text"].waitAndTap()
     }
 }

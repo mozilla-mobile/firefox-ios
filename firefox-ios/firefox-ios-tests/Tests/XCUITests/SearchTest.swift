@@ -188,8 +188,8 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
         changeSearchEngine(searchEngine: "Google")
-        changeSearchEngine(searchEngine: "eBay")
         changeSearchEngine(searchEngine: "Wikipedia")
+        changeSearchEngine(searchEngine: "eBay")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353246
