@@ -28,8 +28,6 @@ struct DefaultFaviconFetcher: FaviconFetcher {
         do {
             let result = try await imageDownloader.downloadImage(with: imageURL)
             return result.image
-        } catch let error as KingfisherError {
-            throw SiteImageError.unableToDownloadImage(error.errorDescription ?? "No description")
         } catch let error as SiteImageError {
             throw error
         } catch {
