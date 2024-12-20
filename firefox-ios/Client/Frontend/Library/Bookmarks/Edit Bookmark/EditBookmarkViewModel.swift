@@ -9,7 +9,14 @@ import Shared
 
 typealias VoidReturnCallback = () -> Void
 
-class EditBookmarkViewModel {
+protocol ParentFolderSelector: AnyObject {
+    /// In some cases, a child `EditFolderViewController` needs to pass information to a parent `EditBookmarkViewController`
+    /// to select the folder that was just created
+    /// - Parameter folder: The folder that was created in the `EditFolderViewController`
+    func selectFolderCreatedFromChild(folder: Folder)
+}
+
+class EditBookmarkViewModel: ParentFolderSelector {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
@@ -18,7 +25,7 @@ class EditBookmarkViewModel {
     private let bookmarksSaver: BookmarksSaver
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
 
-    private var isFolderCollapsed = true
+    private(set) var isFolderCollapsed = true
     private(set) var folderStructures: [Folder] = []
     private(set) var selectedFolder: Folder?
 
@@ -31,6 +38,13 @@ class EditBookmarkViewModel {
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
+
+    var getBackNavigationButtonTitle: String {
+        if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
+            return .Bookmarks.Menu.AllBookmarks
+        }
+        return parentFolder.title
+    }
 
     init(parentFolder: FxBookmarkNode,
          node: FxBookmarkNode?,
@@ -50,13 +64,6 @@ class EditBookmarkViewModel {
         selectedFolder = folder
     }
 
-    func backNavigationButtonTitle() -> String {
-        if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
-            return .Bookmarks.Menu.AllBookmarks
-        }
-        return parentFolder.title
-    }
-
     func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
         return isFolderSelected && !isFolderCollapsed
     }
@@ -73,9 +80,10 @@ class EditBookmarkViewModel {
     }
 
     func createNewFolder() {
-        self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+        bookmarkCoordinatorDelegate?.showBookmarkDetail(
             bookmarkType: .folder,
-            parentBookmarkFolder: parentFolder)
+            parentBookmarkFolder: parentFolder,
+            parentFolderSelector: self)
     }
 
     private func getFolderStructure(_ selectedFolder: Folder) {
@@ -96,9 +104,10 @@ class EditBookmarkViewModel {
         node = node?.copy(with: bookmarkTitle, url: url)
     }
 
-    func saveBookmark() {
-        guard let selectedFolder, let node else { return }
-        Task { @MainActor [weak self] in
+    @discardableResult
+    func saveBookmark() -> Task<Void, Never>? {
+        guard let selectedFolder, let node else { return nil }
+        return Task { @MainActor [weak self] in
             // There is no way to access the EditBookmarkViewController without the bookmark already existing,
             // so this call will always try to update an existing bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,
@@ -117,6 +126,15 @@ class EditBookmarkViewModel {
 
             self?.onBookmarkSaved?()
         }
+    }
+
+    // MARK: ParentFolderSelector
+
+    func selectFolderCreatedFromChild(folder: Folder) {
+        isFolderCollapsed = true
+        selectedFolder = folder
+        folderStructures = [folder]
+        onFolderStatusUpdate?()
     }
 }
 

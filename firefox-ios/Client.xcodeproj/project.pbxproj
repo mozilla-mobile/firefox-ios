@@ -940,6 +940,12 @@
 		8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */; };
 		8A9B87AD2C1B39100042B894 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9B87AC2C1B39100042B894 /* SearchViewModel.swift */; };
 		8A9B87AF2C1B39EA0042B894 /* SearchListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9B87AE2C1B39EA0042B894 /* SearchListSection.swift */; };
+		8A9D31602D13506400171502 /* MockParentFolderSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D315F2D13506100171502 /* MockParentFolderSelector.swift */; };
+		8A9D31622D13545A00171502 /* EditFolderViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */; };
+		8A9D31642D1355EE00171502 /* MockFxBookmarkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */; };
+		8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */; };
+		8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */; };
+		8A9D316A2D135EB000171502 /* EditBookmarkViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */; };
 		8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */; };
 		8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
@@ -7536,6 +7542,12 @@
 		8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModel.swift; sourceTree = "<group>"; };
 		8A9B87AC2C1B39100042B894 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		8A9B87AE2C1B39EA0042B894 /* SearchListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListSection.swift; sourceTree = "<group>"; };
+		8A9D315F2D13506100171502 /* MockParentFolderSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentFolderSelector.swift; sourceTree = "<group>"; };
+		8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewModelTests.swift; sourceTree = "<group>"; };
+		8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxBookmarkNode.swift; sourceTree = "<group>"; };
+		8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
+		8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksSaver.swift; sourceTree = "<group>"; };
+		8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModelTests.swift; sourceTree = "<group>"; };
 		8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatusBarScrollDelegate.swift; sourceTree = "<group>"; };
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
 		8AA020EE2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSplashScreenFeatureLayer.swift; sourceTree = "<group>"; };
@@ -9881,20 +9893,14 @@
 		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
 			isa = PBXGroup;
 			children = (
-				0B7FC3D42CAE82AE005C5CCE /* Mocks */,
+				8A9D31612D13545100171502 /* EditFolderViewModelTests.swift */,
+				8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */,
 				0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */,
 				0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */,
 				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
 				0B7CF8842CAC1B7000DC02F8 /* Legacy */,
 			);
 			path = Bookmarks;
-			sourceTree = "<group>";
-		};
-		0B7FC3D42CAE82AE005C5CCE /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Mocks;
 			sourceTree = "<group>";
 		};
 		0B8BF3732CA2EB3300E9812D /* Edit Bookmark */ = {
@@ -12761,21 +12767,24 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */,
+				8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */,
 				45D5EDBF292D619000311934 /* MockablePinnedSites.swift */,
 				2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */,
 				8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */,
 				434CD57729F6FC4500A0D04B /* MockAppAuthenticator.swift */,
 				8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */,
 				965C3C9729343445006499ED /* MockAppSessionManager.swift */,
-				0AFF7F632C7784D600265214 /* MockDataCleaner.swift */,
 				8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */,
 				8A5038132A5DFCE000A1B02A /* MockBrowserProfile.swift */,
 				C8C3FEA029F973C40038E3BA /* MockBrowserViewController.swift */,
 				8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */,
 				8AABBD042A0041380089941E /* MockCoordinator.swift */,
-				ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */,
+				0AFF7F632C7784D600265214 /* MockDataCleaner.swift */,
 				8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */,
 				8ABA9C8C28931223002C0077 /* MockDispatchQueue.swift */,
+				0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */,
+				8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */,
 				8AABBCFD2A0017560089941E /* MockGleanWrapper.swift */,
 				21B548962B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift */,
 				8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */,
@@ -12788,17 +12797,19 @@
 				5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */,
 				E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */,
 				21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */,
+				8A9D315F2D13506100171502 /* MockParentFolderSelector.swift */,
 				8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
-				ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */,
-				ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */,
 				8A7A26E029D4785900EA76F1 /* MockRouter.swift */,
+				ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */,
 				C8C3FE9C29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift */,
 				21D884402A79628E00AF144C /* MockSettingsDelegate.swift */,
 				8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */,
+				ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */,
 				8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */,
 				8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */,
 				5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */,
+				ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */,
 				C80C11F228B3CD3E0062922A /* MockTests */,
 				5AA75A622A46272000533F8D /* MockThemeManager.swift */,
 				8AE80BAE2891960300BC12EA /* MockTraitCollection.swift */,
@@ -12806,10 +12817,9 @@
 				5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */,
 				C80C11EF28B3C9150062922A /* MockUserDefaults.swift */,
 				E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */,
-				2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */,
 				BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */,
 				1D558A562BED7ECB001EF527 /* MockWindowManager.swift */,
-				0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */,
+				2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -17077,6 +17087,7 @@
 				C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */,
 				C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
+				8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */,
 				B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */,
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,
 				8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */,
@@ -17096,6 +17107,7 @@
 				C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */,
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
 				ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */,
+				8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
@@ -17230,7 +17242,9 @@
 				8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
+				8A9D31642D1355EE00171502 /* MockFxBookmarkNode.swift in Sources */,
 				8A827E302C20C7F5008D5E3C /* MicrosurveyMiddlewareTests.swift in Sources */,
+				8A9D31622D13545A00171502 /* EditFolderViewModelTests.swift in Sources */,
 				21B548992B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift in Sources */,
 				8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
@@ -17312,6 +17326,7 @@
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
+				8A9D31602D13506400171502 /* MockParentFolderSelector.swift in Sources */,
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
@@ -17323,6 +17338,7 @@
 				8A93F86829D373B0004159D9 /* MockNavigationController.swift in Sources */,
 				8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */,
 				8A0727492B4898D20071BB9F /* WebviewTelemetryTests.swift in Sources */,
+				8A9D316A2D135EB000171502 /* EditBookmarkViewModelTests.swift in Sources */,
 				3B6F40181DC7849C00656CC6 /* TopSitesViewModelTests.swift in Sources */,
 				8A00BD882CAB401700680AF9 /* HomepageViewControllerTests.swift in Sources */,
 				C869915528917803007ACC5C /* WallpaperMetadataTestProvider.swift in Sources */,
