@@ -133,7 +133,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForTabsButton()
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.nowAt(NewTabScreen)
-        app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].firstMatch.swipeUp()
+        app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].firstMatch.swipeUp()
         snapshot("TopSitesMenu-00")
 
         // Workaround since in some locales Top Sites are not shown right away

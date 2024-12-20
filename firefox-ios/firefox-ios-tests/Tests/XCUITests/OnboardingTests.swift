@@ -95,7 +95,7 @@ class OnboardingTests: BaseTestCase {
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 
@@ -162,7 +162,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         mozWaitForElementToExist(topSites)
     }
@@ -195,7 +195,7 @@ class OnboardingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 
@@ -262,7 +262,7 @@ class OnboardingTests: BaseTestCase {
         }
 
         app.buttons["Save and Start Browsing"].waitAndTap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
 
         // Check if the toolbar exists
@@ -306,7 +306,7 @@ class OnboardingTests: BaseTestCase {
         }
 
         app.buttons["Save and Start Browsing"].waitAndTap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
 
         // Check if the toolbar exists
@@ -334,7 +334,7 @@ class OnboardingTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         app.buttons["CloseButton"].waitAndTap()
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 }

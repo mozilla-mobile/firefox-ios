@@ -216,7 +216,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
         let numberOfTopSites = app
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            .links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             .collectionViews
             .cells
             .count

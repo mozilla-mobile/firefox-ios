@@ -111,7 +111,7 @@ class TopTabsTest: BaseTestCase {
 
         // After removing only one tab it automatically goes to HomepanelView
         mozWaitForElementToExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         XCTAssert(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
     }
@@ -152,7 +152,7 @@ class TopTabsTest: BaseTestCase {
         app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
 
         mozWaitForElementToExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         navigator.nowAt(BrowserTab)
         if !iPad() {
@@ -285,7 +285,7 @@ class TopTabsTest: BaseTestCase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
             app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
             mozWaitForElementToExist(
-                app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+                app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             )
 
             // Close tab
@@ -302,7 +302,7 @@ class TopTabsTest: BaseTestCase {
             // Go to Private Mode
             app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
             mozWaitForElementToExist(
-                app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+                app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             )
             navigator.nowAt(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
