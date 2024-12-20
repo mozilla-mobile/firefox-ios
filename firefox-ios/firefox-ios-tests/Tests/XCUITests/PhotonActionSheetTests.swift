@@ -23,10 +23,10 @@ class PhotonActionSheetTests: BaseTestCase {
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
         if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+            mozWaitForElementToExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
             // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.cells["Example Domain"].images.element(boundBy: 1))
+            mozWaitForElementToExist(app.links["Example Domain"].images.element(boundBy: 1))
         }
 
         // Remove pin
@@ -37,9 +37,9 @@ class PhotonActionSheetTests: BaseTestCase {
          * We will wait for the pinned icon on the example.com tile to disappear (max 8 seconds polling)
          */
         if #available(iOS 17, *) {
-            mozWaitForElementToNotExist(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+            mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
-            mozWaitForElementToNotExist(app.cells["Example Domain"].images.element(boundBy: 1))
+            mozWaitForElementToNotExist(app.links["Example Domain"].images.element(boundBy: 1))
         }
 
         mozWaitForElementToNotExist(cell)
