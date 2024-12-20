@@ -10,7 +10,7 @@ import Shared
 typealias VoidReturnCallback = () -> Void
 
 protocol ParentFolderSelector: AnyObject {
-    /// Enables a child `EditFolderViewController` to pass information to the parent `EditBookmarkViewController`
+    /// In some cases, a child `EditFolderViewController` needs to pass information to a parent `EditBookmarkViewController`
     /// to select the folder that was just created
     /// - Parameter folder: The folder that was created in the `EditFolderViewController`
     func selectFolderCreatedFromChild(folder: Folder)

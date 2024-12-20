@@ -23,7 +23,7 @@ class EditFolderViewModel {
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
-    var onFolderCreated: ParentFolderSelector?
+    weak var parentFolderSelector: ParentFolderSelector?
 
     var controllerTitle: String {
         return isNewFolderView ? .BookmarksNewFolder : .BookmarksEditFolder
@@ -112,7 +112,7 @@ class EditFolderViewModel {
                 // When the folder edit view is a child of the edit bookmark view, the newly created folder
                 // should be selected
                 let folderCreated = Folder(title: folder.title, guid: guid, indentation: 0)
-                onFolderCreated?.selectFolderCreatedFromChild(folder: folderCreated)
+                parentFolderSelector?.selectFolderCreatedFromChild(folder: folderCreated)
             case .failure(let error):
                 self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
             }

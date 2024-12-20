@@ -135,12 +135,12 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
-    func testSave_whenHasGuidCallsOnFolderCreated() async throws {
+    func testSave_whenHasGuidCallsParentFolderSelector() async throws {
         let expectedGuid = "09876"
         bookmarksSaver.mockCreateGuid = expectedGuid
         profile.prefs.setString(expectedGuid, forKey: PrefsKeys.RecentBookmarkFolder)
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        subject.onFolderCreated = parentFolderSelector
+        subject.parentFolderSelector = parentFolderSelector
 
         let task = subject.save()
         await task?.value

@@ -219,7 +219,7 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
         }
-        viewModel.onFolderCreated = parentFolderSelector
+        viewModel.parentFolderSelector = parentFolderSelector
         setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
