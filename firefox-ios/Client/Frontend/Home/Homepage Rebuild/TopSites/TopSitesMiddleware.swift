@@ -9,6 +9,11 @@ import Redux
 final class TopSitesMiddleware {
     private let topSitesManager: TopSitesManager
 
+    // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
+    // but keeping logic consistent for now
+    private var otherSites: [TopSiteState] = []
+    private var sponsoredTiles: [SponsoredTile] = []
+
     init(profile: Profile = AppContainer.shared.resolve()) {
         self.topSitesManager = TopSitesManager(
             prefs: profile.prefs,
@@ -32,14 +37,30 @@ final class TopSitesMiddleware {
 
     private func getTopSitesDataAndUpdateState(for action: Action) {
         Task {
-            let topSites = await topSitesManager.getTopSites()
-            store.dispatch(
-                TopSitesAction(
-                    topSites: topSites,
-                    windowUUID: action.windowUUID,
-                    actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
-                )
-            )
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    self.otherSites = await self.topSitesManager.getOtherSites()
+                    await self.updateTopSites(for: action.windowUUID)
+                }
+                group.addTask {
+                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    await self.updateTopSites(for: action.windowUUID)
+                }
+            }
         }
+    }
+
+    private func updateTopSites(for windowUUID: WindowUUID) async {
+        let topSites = await self.topSitesManager.recalculateTopSites(
+            otherSites: self.otherSites,
+            sponsoredSites: self.sponsoredTiles
+        )
+        store.dispatch(
+            TopSitesAction(
+                topSites: topSites,
+                windowUUID: windowUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
     }
 }
