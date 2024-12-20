@@ -1704,13 +1704,7 @@ class BrowserViewController: UIViewController,
                 let parentGuid = bookmarkItem.parentGUID else { return }
                 self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
                     guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-                    let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
-                                                          node: bookmarkItem,
-                                                          profile: self.profile)
-                    let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                                windowUUID: self.windowUUID)
-                    let navigationController = DismissableNavigationViewController(rootViewController: controller)
-                    self.present(navigationController, animated: true, completion: nil)
+                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
                 }
             }
         // Open legacy bookmark edit view
