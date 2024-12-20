@@ -39,21 +39,36 @@ final class TopSitesMiddleware {
         Task {
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
-                    self.otherSites = await self.topSitesManager.getOtherSites()
-                    await self.updateTopSites(for: action.windowUUID)
+                    let otherSites = await self.topSitesManager.getOtherSites()
+                    await self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: otherSites,
+                        sponsoredTiles: self.sponsoredTiles
+                    )
                 }
                 group.addTask {
-                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
-                    await self.updateTopSites(for: action.windowUUID)
+                    let sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    await self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: self.otherSites,
+                        sponsoredTiles: sponsoredTiles
+                    )
                 }
+
+                await group.waitForAll()
+                await updateTopSites(
+                    for: action.windowUUID,
+                    otherSites: self.otherSites,
+                    sponsoredTiles: self.sponsoredTiles
+                )
             }
         }
     }
 
-    private func updateTopSites(for windowUUID: WindowUUID) async {
+    private func updateTopSites(for windowUUID: WindowUUID, otherSites: [TopSiteState], sponsoredTiles: [SponsoredTile]) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
-            otherSites: self.otherSites,
-            sponsoredSites: self.sponsoredTiles
+            otherSites: otherSites,
+            sponsoredSites: sponsoredTiles
         )
         store.dispatch(
             TopSitesAction(
