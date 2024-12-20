@@ -112,7 +112,7 @@ class DomainAutocompleteTests: BaseTestCase {
         let value = urlBarAddress.value
         XCTAssertEqual(value as? String, "Search or enter address", "The url has not been removed correctly")
 
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     // Ensure that the scheme is included in the autocompletion.

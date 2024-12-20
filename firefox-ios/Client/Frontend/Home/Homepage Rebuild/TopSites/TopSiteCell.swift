@@ -142,6 +142,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
+        accessibilityTraits = .link
 
         let siteURLString = topSite.site.url
         var imageResource: SiteResource?

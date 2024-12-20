@@ -36,7 +36,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
@@ -52,7 +52,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
 
         // Now check if it switches to FF Home
@@ -60,7 +60,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307029

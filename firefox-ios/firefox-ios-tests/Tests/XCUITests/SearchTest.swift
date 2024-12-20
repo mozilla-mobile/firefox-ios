@@ -138,7 +138,7 @@ class SearchTests: BaseTestCase {
 
         navigator.nowAt(HomePanelsScreen)
         mozWaitForElementToExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.waitAndTap()
@@ -350,7 +350,7 @@ class SearchTests: BaseTestCase {
 
             // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
             validateUrlHasFocusAndKeyboardIsDisplayed()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
             // Tap the back icon <
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
