@@ -19,16 +19,7 @@ protocol DefaultImageCache {
 
 extension ImageCache: DefaultImageCache {
     func retrieve(forKey key: String) async throws -> UIImage? {
-        return try await withCheckedThrowingContinuation { continuation in
-            retrieveImage(forKey: key) { result in
-                switch result {
-                case .success(let imageResult):
-                    continuation.resume(returning: imageResult.image)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        return try await Kingfisher.ImageCache.default.retrieveImage(forKey: key).image
     }
 
     func store(image: UIImage, forKey key: String) {
