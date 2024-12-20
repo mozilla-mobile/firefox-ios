@@ -55,7 +55,8 @@ extension LocalDesktopFolder: BookmarksFolderCell {
         return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
                                              accessoryView: nil,
-                                             accessoryType: .disclosureIndicator)
+                                             accessoryType: .disclosureIndicator,
+                                             editingAccessoryView: nil)
     }
 
     func didSelect(profile: Profile,
