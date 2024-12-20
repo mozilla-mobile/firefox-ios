@@ -14,7 +14,7 @@ final class TopSitesMiddleware {
     private var otherSites: [TopSiteState] = []
     private var sponsoredTiles: [SponsoredTile] = []
 
-    init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface?) {
+    init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface? = nil) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(
             prefs: profile.prefs,
             googleTopSiteManager: GoogleTopSiteManager(

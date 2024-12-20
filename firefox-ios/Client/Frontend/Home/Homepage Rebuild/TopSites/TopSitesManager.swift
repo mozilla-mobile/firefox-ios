@@ -8,10 +8,24 @@ import Shared
 import Storage
 
 protocol TopSitesManagerInterface {
+    /// Returns a list of top sites state using the top site history manager to fetch the other sites, which is composed of history-based (Frecency) + pinned + default suggested tiles
+    func getOtherSites() async -> [TopSiteState]
+
+    /// Returns a list of sponsored tiles using the contile provider
+    func fetchSponsoredSites() async -> [SponsoredTile]
+
+    /// Returns a list of top sites used to show the user
+    ///
+    /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
+    /// In terms of space, pinned tiles has precedence over the Google tile,
+    /// which has precedence over sponsored and frecency tiles.
+    ///
+    /// From a user perspective, Google top site is always first (from left to right),
+    /// then comes the sponsored tiles, pinned sites and then frecency top sites.
+    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState]
 }
 
-// TODO: FXIOS-10165 - Add full logic + tests for retrieving top sites
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
 class TopSitesManager: TopSitesManagerInterface {
     private var logger: Logger
@@ -21,7 +35,6 @@ class TopSitesManager: TopSitesManagerInterface {
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
     private let searchEnginesManager: SearchEnginesManagerProvider
 
-    // TODO: FXIOS-10477 - Add number of rows calculation and device size updates
     private let maxTopSites: Int
     private let maxNumberOfSponsoredTile: Int = 2
 
@@ -43,13 +56,6 @@ class TopSitesManager: TopSitesManagerInterface {
         self.maxTopSites = maxTopSites
     }
 
-    /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
-    /// In terms of space, pinned tiles has precedence over the Google tile,
-    /// which has precedence over sponsored and frecency tiles.
-    ///
-    /// From a user perspective, Google top site is always first (from left to right),
-    /// then comes the sponsored tiles, pinned sites and then frecency top sites.
-    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
@@ -74,26 +80,6 @@ class TopSitesManager: TopSitesManagerInterface {
     }
 
     // MARK: Sponsored tiles (Contiles)
-    private var shouldLoadSponsoredTiles: Bool {
-        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
-    }
-
-    private func filterSponsoredSites(
-        contiles: [SponsoredTile],
-        with availableSpaceCount: Int,
-        and otherSites: [TopSiteState]
-    ) async -> [TopSiteState] {
-        guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
-
-        guard !contiles.isEmpty else { return [] }
-
-        let filteredContiles = contiles
-            .filter { shouldShowSponsoredSite(with: $0, and: otherSites) }
-            .compactMap { TopSiteState(site: $0) }
-
-        return filteredContiles
-    }
-
     func fetchSponsoredSites() async -> [SponsoredTile] {
         let contiles = await withCheckedContinuation { continuation in
             contileProvider.fetchContiles { [weak self] result in
@@ -110,9 +96,28 @@ class TopSitesManager: TopSitesManagerInterface {
             }
         }
 
-        return contiles
+        return contiles.compactMap { SponsoredTile(contile: $0) }
+    }
+
+    private var shouldLoadSponsoredTiles: Bool {
+        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
+    }
+
+    private func filterSponsoredSites(
+        contiles: [SponsoredTile],
+        with availableSpaceCount: Int,
+        and otherSites: [TopSiteState]
+    ) async -> [TopSiteState] {
+        guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
+
+        guard !contiles.isEmpty else { return [] }
+
+        let filteredContiles = contiles
             .prefix(maxNumberOfSponsoredTile)
-            .compactMap { SponsoredTile(contile: $0) }
+            .filter { shouldShowSponsoredSite(with: $0, and: otherSites) }
+            .compactMap { TopSiteState(site: $0) }
+
+        return filteredContiles
     }
 
     /// Show the sponsored site only if site is not already present in the pinned sites 
@@ -131,7 +136,7 @@ class TopSitesManager: TopSitesManagerInterface {
         return !sponsoredSiteIsAlreadyPresent && shouldAddDefaultEngine
     }
 
-    // MARK: Other Sites = History-based (Frencency) + Pinned + Default suggested tiles
+    // MARK: Other Sites
     func getOtherSites() async -> [TopSiteState] {
         let otherSites = await withCheckedContinuation { continuation in
             topSiteHistoryManager.getTopSites { sites in

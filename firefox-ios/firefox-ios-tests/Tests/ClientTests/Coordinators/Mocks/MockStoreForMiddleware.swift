@@ -12,6 +12,10 @@ import Redux
 /// store implementation (e.g. storing a completion handler for asynchronous middleware actions so you can await expectations
 ///  in your tests).
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
+    private let lock = NSLock()
+    private var expectedDispatchCount = 0
+    private var dispatchCount = 0
+
     var state: State
 
     /// Records all actions dispatched to the mock store. Check this property to ensure that your middleware correctly
@@ -50,7 +54,18 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     }
 
     func dispatch(_ action: Redux.Action) {
+        lock.lock()
+        defer { lock.unlock() }
         dispatchedActions.append(action)
         dispatchCalled?()
+    }
+
+    /// Waits for the specified number of dispatches and executes the completion handler.
+    /// - Parameters:
+    ///   - count: The number of dispatches to wait for.
+    ///   - completion: The closure to call when the expected dispatch count is reached.
+    func waitForDispatch(_ count: Int = 1, completion: @escaping () -> Void) {
+        expectedDispatchCount = count
+        dispatchCalled = completion
     }
 }

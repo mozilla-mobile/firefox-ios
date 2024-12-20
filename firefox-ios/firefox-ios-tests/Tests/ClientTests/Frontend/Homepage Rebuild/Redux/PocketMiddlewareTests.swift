@@ -28,7 +28,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
 
-        mockStore.dispatchCalled = {
+        mockStore.waitForDispatch {
             expectation.fulfill()
         }
 
