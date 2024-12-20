@@ -247,6 +247,9 @@ class BookmarksViewController: SiteTableViewController,
         if bookmarkNode.isNonEmptyFolder {
             presentDeletingActionToUser(indexPath, bookmarkNode: bookmarkNode)
             return
+        } else if bookmarkNode.type == .separator {
+            self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
+            return
         }
 
         self.deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
