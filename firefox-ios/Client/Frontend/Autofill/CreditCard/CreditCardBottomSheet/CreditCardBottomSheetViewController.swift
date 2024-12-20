@@ -218,11 +218,13 @@ class CreditCardBottomSheetViewController: UIViewController,
     }
 
     func updateConstraints() {
-        let buttonsHeight = buttonsContainerStackView.frame.height
-        let estimatedContentHeight = cardTableView.contentSize.height +
-        buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
-        let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
-        contentViewHeightConstraint?.constant = (contentViewHeightConstraint?.constant ?? 0.0) * aspectRatio
+        if let contentViewHeightConstraint {
+            let buttonsHeight = buttonsContainerStackView.frame.height
+            let estimatedContentHeight = cardTableView.contentSize.height +
+                buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
+            let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
+            contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
+        }
 
         let contentWidthCheck = UX.contentViewWidth > view.frame.size.width
         let contentViewWidth = contentWidthCheck ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
