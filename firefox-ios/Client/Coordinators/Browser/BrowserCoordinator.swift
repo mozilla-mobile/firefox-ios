@@ -29,7 +29,8 @@ class BrowserCoordinator: BaseCoordinator,
                           WindowEventCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
-                          SearchEngineSelectionCoordinatorDelegate {
+                          SearchEngineSelectionCoordinatorDelegate,
+                          BookmarksRefactorFeatureFlagProvider {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
@@ -188,7 +189,8 @@ class BrowserCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: self,
-            libraryNavigationHandler: nil
+            libraryNavigationHandler: nil,
+            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)

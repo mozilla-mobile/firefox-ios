@@ -60,16 +60,14 @@ class BookmarksCoordinator: BaseCoordinator,
         router: Router,
         profile: Profile,
         windowUUID: WindowUUID,
-        parentCoordinator: LibraryCoordinatorDelegate?,
-        navigationHandler: LibraryNavigationHandler?,
+        libraryCoordinator: LibraryCoordinatorDelegate?,
+        libraryNavigationHandler: LibraryNavigationHandler?,
         isBookmarkRefactorEnabled: Bool
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.libraryCoordinator = libraryCoordinator
         self.libraryNavigationHandler = libraryNavigationHandler
-        self.parentCoordinator = parentCoordinator
-        self.navigationHandler = navigationHandler
         self.isBookmarkRefactorEnabled = isBookmarkRefactorEnabled
         super.init(router: router)
     }

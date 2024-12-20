@@ -128,6 +128,10 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    func didFinish() {
+        bookmarkCoordinatorDelegate?.didFinish()
+    }
+
     // MARK: ParentFolderSelector
 
     func selectFolderCreatedFromChild(folder: Folder) {
@@ -135,9 +139,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
         selectedFolder = folder
         folderStructures = [folder]
         onFolderStatusUpdate?()
-        
-    func didFinish() {
-        bookmarkCoordinatorDelegate?.didFinish()
     }
 }
 

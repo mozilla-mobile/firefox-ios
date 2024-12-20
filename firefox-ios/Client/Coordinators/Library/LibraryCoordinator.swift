@@ -127,8 +127,8 @@ class LibraryCoordinator: BaseCoordinator,
             router: router,
             profile: profile,
             windowUUID: windowUUID,
-            parentCoordinator: parentCoordinator,
-            navigationHandler: self,
+            libraryCoordinator: parentCoordinator,
+            libraryNavigationHandler: self,
             isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         add(child: bookmarksCoordinator)
