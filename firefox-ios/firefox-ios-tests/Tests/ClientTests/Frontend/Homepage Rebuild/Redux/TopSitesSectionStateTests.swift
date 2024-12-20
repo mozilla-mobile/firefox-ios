@@ -9,6 +9,16 @@ import XCTest
 @testable import Client
 
 final class TopsSitesSectionStateTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        super.tearDown()
+    }
+
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
@@ -54,6 +64,40 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState, defaultState(with: initialState))
         XCTAssertEqual(newState.topSitesData.count, 0)
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, [])
+    }
+
+    func test_updatedNumberOfRows_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                numberOfRows: 4,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.numberOfRows, 4)
+    }
+
+    func test_updatedNumberOfTilesPerRow_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                numberOfTilesPerRow: 8,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
     // MARK: - Private

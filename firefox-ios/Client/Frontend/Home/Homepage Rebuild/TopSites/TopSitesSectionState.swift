@@ -8,7 +8,8 @@ import Redux
 import Shared
 
 /// State for the top sites section that is used in the homepage
-/// The state does not only contain the data, but needs to know about the number of rows and tiles per row in order to only show a specific amount of the top sites data.
+/// The state does not only contain the top sites list, but needs to also know about the number of rows
+/// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     var topSitesData: [TopSiteState]
@@ -80,7 +81,7 @@ struct TopSitesSectionState: StateType, Equatable {
             else {
                 return defaultState(from: state)
             }
-            print("CYN action \(numberOfTilesPerRow)")
+
             return TopSitesSectionState(
                 windowUUID: state.windowUUID,
                 topSitesData: state.topSitesData,

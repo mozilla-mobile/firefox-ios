@@ -59,9 +59,6 @@ final class HomepageSectionLayoutProvider {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-
-    // MARK: Top Sites variables
-    // Used to calculate the layout configuration for top sites, which also determines the amount of top sites data to filter on
     private var dimensionImplementation: TopSitesDimensionImplementation
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
@@ -185,7 +182,7 @@ final class HomepageSectionLayoutProvider {
             cellWidth: UX.TopSitesConstants.cellEstimatedSize.width
         )
 
-        let numberOfTilesPerRow = dimensionImplementation.currentCount ?? UX.TopSitesConstants.minCards
+        let numberOfTilesPerRow = dimensionImplementation.numberOfTilesPerRow ?? UX.TopSitesConstants.minCards
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),

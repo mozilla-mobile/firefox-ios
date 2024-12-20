@@ -5,10 +5,12 @@
 import Common
 
 class TopSitesDimensionImplementation {
-    var currentCount: Int? {
+    /// The update count of number of tiles per row based on device layout
+    /// After updating the value, the top sites state should be updated respectively
+    var numberOfTilesPerRow: Int? {
         willSet {
-            guard newValue != currentCount else { return }
-            DispatchQueue.main.async {
+            guard newValue != numberOfTilesPerRow else { return }
+            queue.async {
                 store.dispatch(
                     TopSitesAction(
                         numberOfTilesPerRow: newValue,
@@ -19,9 +21,12 @@ class TopSitesDimensionImplementation {
             }
         }
     }
+
     private let windowUUID: WindowUUID
-    init(windowUUID: WindowUUID) {
+    private let queue: DispatchQueueInterface
+    init(windowUUID: WindowUUID, queue: DispatchQueueInterface = DispatchQueue.main) {
         self.windowUUID = windowUUID
+        self.queue = queue
     }
 
     /// Updates the number of tiles (top sites) per row the user will see. This depends on the UI interface the user has.
@@ -39,6 +44,6 @@ class TopSitesDimensionImplementation {
         let minCardsConstant = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
         let numberOfTilesPerRow = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
-        self.currentCount = numberOfTilesPerRow
+        self.numberOfTilesPerRow = numberOfTilesPerRow
     }
 }

@@ -70,7 +70,7 @@ final class HomepageDiffableDataSource:
     }
 
     /// Gets the proper amount of top sites based on layout configuration
-    /// which is determ
+    /// which is determined by the number of rows and number of tiles per row
     /// - Parameters:
     ///   - topSiteState: state object for top site section
     ///   - textColor: text color from wallpaper configuration
