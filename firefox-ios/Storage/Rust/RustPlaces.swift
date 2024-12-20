@@ -30,22 +30,13 @@ import struct MozillaAppServices.Url
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
 
-/// This is a protocol followed by `RustPlaces` to provide an alternative to using `Deferred` in that code.
-/// It's part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
-public protocol RustPlacesProtocol {
-    func withReader<T>(
-        _ callback: @escaping (PlacesReadConnection) throws -> T,
-        completion: @escaping (Result<T, any Error>) -> Void
-    )
+public protocol BookmarksHandler {
+    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(
         rootGUID: GUID,
         recursive: Bool,
         completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     )
-}
-
-public protocol BookmarksHandler {
-    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
     func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void)
     func updateBookmarkNode(
@@ -65,7 +56,7 @@ public protocol HistoryMetadataObserver {
     )
 }
 
-public class RustPlaces: BookmarksHandler, HistoryMetadataObserver, RustPlacesProtocol {
+public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -187,6 +178,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver, RustPlacesPr
         return deferred
     }
 
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
     public func withReader<T>(
         _ callback: @escaping (
             PlacesReadConnection
