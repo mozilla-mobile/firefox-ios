@@ -277,13 +277,15 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.browserTabName)
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
+        waitUntilPageLoad()
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         // Drag first tab on the second one
         dragAndDrop(
             dragElement: app.collectionViews.cells[firstWebsite.tabName],
-            dropOnElement: app.collectionViews.cells[secondWebsite.browserTabName]
+            dropOnElement: app.collectionViews.cells[secondWebsite.tabName]
         )
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.browserTabName, secondTab: firstWebsite.tabName)
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
         if let urlString = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
             XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
@@ -296,7 +298,9 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.browserTabName)
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
+        waitUntilPageLoad()
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         navigator.goto(TabTray)
 
         // Drag first tab on the second one

@@ -110,6 +110,7 @@ class PrivateBrowsingTest: BaseTestCase {
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
+        waitUntilPageLoad()
         waitForTabsButton()
 
         // Go back to regular browser
