@@ -9,6 +9,7 @@ enum ToastType: Equatable {
     case addBookmark
     case addToReadingList
     case addShortcut
+    case clearCookies
     case closedSingleTab
     case closedSingleInactiveTab
     case closedAllTabs(count: Int)
@@ -25,6 +26,8 @@ enum ToastType: Equatable {
             return .LegacyAppMenu.AddToReadingListConfirmMessage
         case .addShortcut:
             return .LegacyAppMenu.AddPinToShortcutsConfirmMessage
+        case .clearCookies:
+            return .Menu.EnhancedTrackingProtection.clearDataToastMessage
         case .closedSingleTab, .closedSingleInactiveTab:
             return .TabsTray.CloseTabsToast.SingleTabTitle
         case let .closedAllInactiveTabs(tabsCount),
@@ -52,7 +55,8 @@ enum ToastType: Equatable {
         case .closedSingleInactiveTab: actionType = TabPanelViewActionType.undoCloseInactiveTab
         case .closedAllTabs: actionType = TabPanelViewActionType.undoCloseAllTabs
         case .closedAllInactiveTabs: actionType = TabPanelViewActionType.undoCloseAllInactiveTabs
-        case .copyURL,
+        case .clearCookies,
+                .copyURL,
                 .addBookmark,
                 .addShortcut,
                 .addToReadingList,
