@@ -21,6 +21,8 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     )
 
     func showSignIn()
+
+    func finish()
 }
 
 extension BookmarksCoordinatorDelegate {
@@ -46,8 +48,9 @@ class BookmarksCoordinator: BaseCoordinator,
     // MARK: - Properties
 
     private let profile: Profile
-    private weak var parentCoordinator: LibraryCoordinatorDelegate?
-    private weak var navigationHandler: LibraryNavigationHandler?
+    private weak var libraryCoordinator: LibraryCoordinatorDelegate?
+    private weak var libraryNavigationHandler: LibraryNavigationHandler?
+    private weak var parentCoordinator: ParentCoordinatorDelegate?
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
     private let isBookmarkRefactorEnabled: Bool
@@ -64,6 +67,8 @@ class BookmarksCoordinator: BaseCoordinator,
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
+        self.libraryCoordinator = libraryCoordinator
+        self.libraryNavigationHandler = libraryNavigationHandler
         self.parentCoordinator = parentCoordinator
         self.navigationHandler = navigationHandler
         self.isBookmarkRefactorEnabled = isBookmarkRefactorEnabled
@@ -79,12 +84,12 @@ class BookmarksCoordinator: BaseCoordinator,
         if isBookmarkRefactorEnabled {
             let controller = BookmarksViewController(viewModel: viewModel, windowUUID: windowUUID)
             controller.bookmarkCoordinatorDelegate = self
-            controller.libraryPanelDelegate = parentCoordinator
+            controller.libraryPanelDelegate = libraryCoordinator
             router.push(controller)
         } else {
             let controller = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
             controller.bookmarkCoordinatorDelegate = self
-            controller.libraryPanelDelegate = parentCoordinator
+            controller.libraryPanelDelegate = libraryCoordinator
             router.push(controller)
         }
     }
@@ -143,8 +148,12 @@ class BookmarksCoordinator: BaseCoordinator,
         router.present(controller)
     }
 
+    func finish() {
+        parentCoordinator?.didFinish(from: self)
+    }
+
     func shareLibraryItem(url: URL, sourceView: UIView) {
-        navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
+        libraryNavigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
     }
 
     // MARK: - QRCodeNavigationHandler
@@ -210,11 +219,11 @@ class BookmarksCoordinator: BaseCoordinator,
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
-            self?.navigationHandler?.setNavigationBarHidden(true)
+            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
         controller.onViewWillDisappear = { [weak self] in
             if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.navigationHandler?.setNavigationBarHidden(false)
+                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
             }
         }
         return controller
@@ -234,11 +243,11 @@ class BookmarksCoordinator: BaseCoordinator,
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
-            self?.navigationHandler?.setNavigationBarHidden(true)
+            self?.libraryNavigationHandler?.setNavigationBarHidden(true)
         }
         controller.onViewWillDisappear = { [weak self] in
             if !(controller.transitionCoordinator?.isInteractive ?? false) {
-                self?.navigationHandler?.setNavigationBarHidden(false)
+                self?.libraryNavigationHandler?.setNavigationBarHidden(false)
             }
         }
         return controller

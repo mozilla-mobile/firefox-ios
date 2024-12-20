@@ -187,8 +187,9 @@ class BrowserCoordinator: BaseCoordinator,
             router: router,
             profile: profile,
             windowUUID: windowUUID,
-            parentCoordinator: nil,
-            navigationHandler: nil
+            libraryCoordinator: nil,
+            libraryNavigationHandler: nil,
+            parentCoordinator: self
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
