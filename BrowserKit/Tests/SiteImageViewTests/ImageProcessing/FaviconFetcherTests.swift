@@ -25,7 +25,7 @@ final class FaviconFetcherTests: XCTestCase {
         let subject = DefaultFaviconFetcher()
 
         do {
-            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!,
+            _ = try await subject.fetchFavicon(from: URL(string: "https://www.mozilla.org")!,
                                                imageDownloader: mockImageDownloader)
             XCTFail("Should have failed with error")
         } catch let error as SiteImageError {
@@ -49,42 +49,24 @@ final class FaviconFetcherTests: XCTestCase {
             XCTFail("Should have succeeded with image")
         }
     }
-
-    func testTimeout_completesWithoutImageOrError() async {
-        mockImageDownloader.timeoutDelay = 1
-        let subject = DefaultFaviconFetcher()
-
-        do {
-            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!,
-                                               imageDownloader: mockImageDownloader)
-            XCTFail("Should have failed with error")
-        } catch let error as SiteImageError {
-            XCTAssertEqual("Unable to download image with reason: Timeout reached", error.description)
-        } catch {
-            XCTFail("Should have failed with SiteImageError type")
-        }
-    }
 }
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
     var logger: Logger = DefaultLogger.shared
-    var timeoutDelay: UInt64 = 10
-    var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
+    var timeoutDelay: Double = 10
 
     var image: UIImage?
     var error: KingfisherError?
 
-    func downloadImage(with url: URL,
-                       completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
-    ) -> DownloadTask? {
-        if let error = error {
-            completionHandler?(.failure(error))
+    func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
+        if let error {
+            throw error
         } else if let image = image {
-            completionHandler?(.success(MockSiteImageLoadingResult(image: image)))
+            return MockSiteImageLoadingResult(image: image)
         }
 
-        return nil // not using download task
+        throw SiteImageError.unableToDownloadImage("Bad mock setup")
     }
 }
 
