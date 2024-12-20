@@ -6,6 +6,11 @@ import Shared
 import Common
 
 class StartAtHomeHelper: FeatureFlaggable {
+    private struct Constants {
+        static let hoursToTriggerStartAtHome = 4
+        static let secondsToTriggerStartAtHome = 5
+    }
+
     private var isRestoringTabs: Bool
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
@@ -51,10 +56,10 @@ class StartAtHomeHelper: FeatureFlaggable {
         switch startAtHomeSetting {
         case .afterFourHours:
             let hoursSinceLastActive = dateComponents.hour ?? 0
-            return hoursSinceLastActive >= 4
+            return hoursSinceLastActive >= Constants.hoursToTriggerStartAtHome
         case .always:
             let secondsSinceLastActive = dateComponents.second ?? 0
-            return secondsSinceLastActive >= 5
+            return secondsSinceLastActive >= Constants.secondsToTriggerStartAtHome
         case .disabled:
             return false
         }
