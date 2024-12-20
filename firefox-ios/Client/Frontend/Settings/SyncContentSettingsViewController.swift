@@ -175,7 +175,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
 
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
-            _ = self.profile.syncManager?.syncNamedCollections(
+            _ = self.profile?.syncManager?.syncNamedCollections(
                 why: .enabledChange,
                 names: Array(enginesToSyncOnExit)
             )
