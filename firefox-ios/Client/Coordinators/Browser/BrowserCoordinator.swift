@@ -179,22 +179,6 @@ class BrowserCoordinator: BaseCoordinator,
         present(sheet, animated: true)
     }
 
-    func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
-        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
-        let navigationController = DismissableNavigationViewController()
-        let router = DefaultRouter(navigationController: navigationController)
-        let bookmarksCoordinator = BookmarksCoordinator(
-            router: router,
-            profile: profile,
-            windowUUID: windowUUID,
-            parentCoordinator: nil,
-            navigationHandler: nil
-        )
-        add(child: bookmarksCoordinator)
-        bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
-        present(navigationController)
-    }
-
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(

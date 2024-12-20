@@ -84,16 +84,6 @@ class BookmarksCoordinator: BaseCoordinator,
         }
     }
 
-    func start(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
-        let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
-                                              node: bookmark,
-                                              profile: self.profile)
-        viewModel.bookmarkCoordinatorDelegate = self
-        let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                    windowUUID: self.windowUUID)
-        router.setRootViewController(controller)
-    }
-
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         if isBookmarkRefactorEnabled {
