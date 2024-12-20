@@ -5,11 +5,12 @@
 // swiftlint:disable line_length
 import Foundation
 
-public struct Strings {
-    public static let bundle = Bundle(for: LocalizationClass.self)
-}
+// MARK: - Localization bundle setup
+class BundleClass {}
 
-class LocalizationClass {}
+public struct Strings {
+    public static let bundle = Bundle(for: BundleClass.self)
+}
 
 // MARK: - Localization helper function
 
