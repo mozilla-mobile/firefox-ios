@@ -61,7 +61,7 @@ jobs:
           echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
         fi
-          
+  
     - name: Run script to import strings
       run: sh ./firefox-ios/import-strings.sh
 
