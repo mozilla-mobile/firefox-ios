@@ -55,62 +55,25 @@ final class MainMenuMiddleware {
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
-            guard let destination = action.navigationDestination?.destination else { return }
-            self.handleTelemetryFor(for: destination,
-                                    isHomepage: isHomepage,
-                                    and: action.navigationDestination?.url)
+            self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapShowDetailsView:
-            if action.detailsViewToShow == .tools {
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.tools)
-            } else if action.detailsViewToShow == .save {
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
-            }
+            self.handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapToggleUserAgent:
-            guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
-                  let hasChangedUserAgent = action.telemetryInfo?.hasChangedUserAgent
-            else { return }
-            if defaultIsDesktop {
-                let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-            } else {
-                let option = hasChangedUserAgent ? TelemetryAction.switchToMobileSite : TelemetryAction.switchToDesktopSite
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-            }
+            self.handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapCloseMenu:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
 
         case GeneralBrowserActionType.showReaderMode:
-            guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
-            let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
-            self.telemetry.toolsSubmenuOptionTapped(with: false, and: option)
+            self.handleShowReaderModeAction(action: action)
 
         case MainMenuActionType.didInstantiateView:
-            if let accountData = self.getAccountData() {
-                if let iconURL = accountData.iconURL {
-                    GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                        guard let self else { return }
-                        self.dispatchUpdateAccountHeader(
-                            accountData: accountData,
-                            action: action,
-                            icon: image)
-                    }
-                } else {
-                    self.dispatchUpdateAccountHeader(accountData: accountData, action: action)
-                }
-            } else {
-                self.dispatchUpdateAccountHeader(action: action)
-            }
+            self.handleDidInstantiateViewAction(action: action)
 
         case MainMenuActionType.viewDidLoad:
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: action.windowUUID,
-                    actionType: MainMenuMiddlewareActionType.requestTabInfo
-                )
-            )
+            self.handleViewDidLoadAction(action: action)
 
         case MainMenuActionType.menuDismissed:
             self.telemetry.menuDismissed(isHomepage: isHomepage)
@@ -140,22 +103,67 @@ final class MainMenuMiddleware {
             self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
 
         case MainMenuDetailsActionType.tapToggleNightMode:
-            guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
-            let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
-            self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: option)
+            self.handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapBackToMainMenu:
-            guard let submenuType = action.telemetryInfo?.submenuType else { return }
-            if submenuType == .save {
-                self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-            } else {
-                self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-            }
+            self.handleTapBackToMainMenuAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapDismissView:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
 
         default: break
+        }
+    }
+
+    private func handleTapNavigateToDestinationAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let destination = action.navigationDestination?.destination else { return }
+        handleTelemetryFor(for: destination,
+                           isHomepage: isHomepage,
+                           and: action.navigationDestination?.url)
+    }
+
+    private func handleTapShowDetailsViewAction(action: MainMenuAction, isHomepage: Bool) {
+        if action.detailsViewToShow == .tools {
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.tools)
+        } else if action.detailsViewToShow == .save {
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
+        }
+    }
+
+    private func handleTapToggleUserAgentAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
+              let hasChangedUserAgent = action.telemetryInfo?.hasChangedUserAgent
+        else { return }
+        if defaultIsDesktop {
+            let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
+        } else {
+            let option = hasChangedUserAgent ? TelemetryAction.switchToMobileSite : TelemetryAction.switchToDesktopSite
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
+        }
+    }
+
+    private func handleShowReaderModeAction(action: MainMenuAction) {
+        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+        let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
+        telemetry.toolsSubmenuOptionTapped(with: false, and: option)
+    }
+
+    private func handleDidInstantiateViewAction(action: MainMenuAction) {
+        if let accountData = getAccountData() {
+            if let iconURL = accountData.iconURL {
+                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                    guard let self else { return }
+                    self.dispatchUpdateAccountHeader(
+                        accountData: accountData,
+                        action: action,
+                        icon: image)
+                }
+            } else {
+                dispatchUpdateAccountHeader(accountData: accountData, action: action)
+            }
+        } else {
+            dispatchUpdateAccountHeader(action: action)
         }
     }
 
@@ -172,6 +180,30 @@ final class MainMenuMiddleware {
                 accountIcon: icon
             )
         )
+    }
+
+    private func handleViewDidLoadAction(action: MainMenuAction) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: action.windowUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+    }
+
+    private func handleTapToggleNightModeAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+        let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
+        telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: option)
+    }
+
+    private func handleTapBackToMainMenuAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let submenuType = action.telemetryInfo?.submenuType else { return }
+        if submenuType == .save {
+            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
+        } else {
+            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
+        }
     }
 
     private func getAccountData() -> AccountData? {
