@@ -22,6 +22,7 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
 
     func showSignIn()
 
+    /// Calls the parent coordinator dismiss and remove the bookmarks coordinator
     func didFinish()
 }
 
