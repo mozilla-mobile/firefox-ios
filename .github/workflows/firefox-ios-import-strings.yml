@@ -63,7 +63,7 @@ jobs:
         fi
 
     - name: Run script to import strings
-      run: sh ./bootstrap.sh --importLocales
+      run: sh ./firefox-ios/import-strings.sh
 
     - name: Update new strings
       run: |-
