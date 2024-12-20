@@ -24,4 +24,21 @@ struct DefaultGleanWrapper: GleanWrapper {
     func submitPing() {
         GleanMetrics.Pings.shared.firstSession.submit()
     }
+
+    func submitEventMetricType<ExtraObject>(event: EventMetricType<ExtraObject>,
+                                            extras: EventExtras) where ExtraObject: EventExtras {
+        if let castedExtras = extras as? ExtraObject {
+            event.record(castedExtras)
+        } else {
+            fatalError("extras could not be cast to the expected type \(ExtraObject.self)")
+        }
+    }
+}
+
+class Example {
+    func example() {
+        let didConfirmExtra = GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra(didConfirm: true)
+        DefaultGleanWrapper().submitEventMetricType(event: GleanMetrics.PrivateBrowsing.dataClearanceIconTapped,
+                                                    extras: didConfirmExtra)
+    }
 }
