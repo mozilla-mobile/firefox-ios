@@ -46,7 +46,7 @@ class AccountSyncHandler: TabEventHandler {
         guard profile.hasSyncableAccount() else { return }
 
         throttler.throttle { [weak self] in
-            _ = self?.profile.syncManager.syncNamedCollections(why: .user, names: ["tabs"])
+            _ = self?.profile.syncManager?.syncNamedCollections(why: .user, names: ["tabs"])
         }
     }
 }
