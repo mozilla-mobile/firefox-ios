@@ -65,7 +65,11 @@ final class TopSitesMiddleware {
         }
     }
 
-    private func updateTopSites(for windowUUID: WindowUUID, otherSites: [TopSiteState], sponsoredTiles: [SponsoredTile]) async {
+    private func updateTopSites(
+        for windowUUID: WindowUUID,
+        otherSites: [TopSiteState],
+        sponsoredTiles: [SponsoredTile]
+    ) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
             sponsoredSites: sponsoredTiles
