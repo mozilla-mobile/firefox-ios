@@ -8,6 +8,7 @@ import Foundation
 enum BrowserNavigationDestination: Equatable {
     // Native views
     case customizeHomepage
+    case trackingProtectionSettings
 
     // Webpage views
     case link

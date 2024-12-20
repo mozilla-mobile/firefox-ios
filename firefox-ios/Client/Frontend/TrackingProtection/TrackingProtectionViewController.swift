@@ -190,7 +190,18 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: Redux
     func newState(state: TrackingProtectionState) {
         trackingProtectionState = state
-        // TODO: FXIOS-10657 connect the ETP navigation with the BVC general navigation
+        if let navDestination = state.navigateTo {
+            switch navDestination {
+            case .home:
+                navigationController?.popToRootViewController(animated: true)
+            case .back:
+                navigationController?.popViewController(animated: true)
+            case .close:
+                enhancedTrackingProtectionMenuDelegate?.didFinish()
+            case .settings:
+                showSettings()
+            }
+        }
         if let displayView = state.displayView {
             switch displayView {
             case .blockedTrackersDetails:
@@ -556,6 +567,15 @@ class TrackingProtectionViewController: UIViewController,
         let detailsVC = TrackingProtectionDetailsViewController(with: model.getDetailsModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(detailsVC, animated: true)
+    }
+
+    private func showSettings() {
+        store.dispatch(
+            NavigationBrowserAction(
+                windowUUID: self.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnTrackingProtection
+            )
+        )
     }
 
     // MARK: Clear Cookies Alert
