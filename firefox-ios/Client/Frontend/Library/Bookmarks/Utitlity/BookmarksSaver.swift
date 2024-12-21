@@ -12,7 +12,7 @@ protocol BookmarksSaver {
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, Error>
     func createBookmark(url: String, title: String?, position: UInt32?) async
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
-                             parentFolderGUID: String, 
+                             parentFolderGUID: String,
                              completion: @escaping (GUID?) -> Void)
 }
 
@@ -111,7 +111,7 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                                                    position: folder.position).bind { result in
                         return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
                                                 : deferMaybe(result.successValue)
-                    }
+                }
 
             default:
                 return nil
