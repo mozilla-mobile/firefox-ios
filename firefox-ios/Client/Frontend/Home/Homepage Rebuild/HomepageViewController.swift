@@ -43,7 +43,6 @@ final class HomepageViewController: UIViewController,
     private var dataSource: HomepageDiffableDataSource?
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
-    private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var overlayManager: OverlayModeManager
     private var logger: Logger
     private var homepageState: HomepageState
@@ -252,6 +251,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
+        let layoutConfiguration = HomepageSectionLayoutProvider(windowUUID: windowUUID).createCompositionalLayout()
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
         HomepageItem.cellTypes.forEach {
