@@ -35,11 +35,11 @@ extension BookmarkFolderData: BookmarksFolderCell {
                                                  accessoryType: .none,
                                                  editingAccessoryView: UIImageView(image: chevronImage))
         } else {
-                return OneLineTableViewCellViewModel(title: title,
-                                                     leftImageView: leftImageView,
-                                                     accessoryView: nil,
-                                                     accessoryType: .disclosureIndicator,
-                                                     editingAccessoryView: nil)
+            return OneLineTableViewCellViewModel(title: title,
+                                                 leftImageView: leftImageView,
+                                                 accessoryView: nil,
+                                                 accessoryType: .disclosureIndicator,
+                                                 editingAccessoryView: nil)
         }
     }
 
