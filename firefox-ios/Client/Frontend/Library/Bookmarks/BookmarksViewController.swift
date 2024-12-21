@@ -186,7 +186,7 @@ class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView,
                    dropSessionDidUpdate session: UIDropSession,
                    withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        guard  let destinationIndex = destinationIndexPath?.row,
+        guard let destinationIndex = destinationIndexPath?.row,
                let sourceIndex = (session.localDragSession?.items[safe: 0]?.localObject as? IndexPath)?.row,
             let destinationFolder = viewModel.bookmarkNodes[safe: destinationIndex],
             let sourceNode = viewModel.bookmarkNodes[safe: sourceIndex],
@@ -205,13 +205,12 @@ class BookmarksViewController: SiteTableViewController,
               let sourceItem = viewModel.bookmarkNodes[safe: sourceIndexPath.row],
               let destinationItem = viewModel.bookmarkNodes [safe: destinationIndexPath.row],
               coordinator.proposal.intent == .insertIntoDestinationIndexPath
-
-        else {return}
+        else { return }
 
         Task {
-            let res = await bookmarksSaver?.save(bookmark: sourceItem,
-                                                 parentFolderGUID: destinationItem.guid)
-            switch res {
+            let result = await bookmarksSaver?.save(bookmark: sourceItem,
+                                                    parentFolderGUID: destinationItem.guid)
+            switch result {
             case .success:
                 Task { @MainActor in
                     tableView.beginUpdates()
@@ -248,11 +247,11 @@ class BookmarksViewController: SiteTableViewController,
             presentDeletingActionToUser(indexPath, bookmarkNode: bookmarkNode)
             return
         } else if bookmarkNode.type == .separator {
-            self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
+            deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
             return
         }
 
-        self.deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
+        deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
     }
 
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
@@ -285,7 +284,7 @@ class BookmarksViewController: SiteTableViewController,
 
     private func deleteBookmarkWithUndo(indexPath: IndexPath,
                                         bookmarkNode: FxBookmarkNode) {
-        self.profile.places.getBookmarksTree(rootGUID: bookmarkNode.guid, recursive: true).uponQueue(.main) { result in
+        profile.places.getBookmarksTree(rootGUID: bookmarkNode.guid, recursive: true).uponQueue(.main) { result in
             guard let maybeBookmarkTreeRoot = result.successValue,
                   let bookmarkTreeRoot = maybeBookmarkTreeRoot else { return }
 
@@ -311,11 +310,11 @@ class BookmarksViewController: SiteTableViewController,
 
     private func addBookmarkNodeToTable(bookmarkNode: FxBookmarkNode) {
         let position = Int(bookmarkNode.position)
-        self.tableView.beginUpdates()
-        self.tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
-        self.viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
-        self.tableView.endUpdates()
-        self.updateEmptyState()
+        tableView.beginUpdates()
+        tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
+        viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
+        tableView.endUpdates()
+        updateEmptyState()
     }
 
     /// Performs the delete asynchronously even though we update the
