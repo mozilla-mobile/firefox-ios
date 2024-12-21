@@ -128,6 +128,10 @@ class EditBookmarkViewModel: ParentFolderSelector {
         }
     }
 
+    func didFinish() {
+        bookmarkCoordinatorDelegate?.didFinish()
+    }
+
     // MARK: ParentFolderSelector
 
     func selectFolderCreatedFromChild(folder: Folder) {
