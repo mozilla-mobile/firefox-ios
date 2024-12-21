@@ -90,7 +90,7 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
     }
 
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
-                             parentFolderGUID: String, _ completion: @escaping (GUID?) -> Void) {
+                             parentFolderGUID: String, completion: @escaping (GUID?) -> Void) {
         let operation: Deferred<Maybe<GUID?>>? = {
             switch bookmarkNode.type {
             case .bookmark:
