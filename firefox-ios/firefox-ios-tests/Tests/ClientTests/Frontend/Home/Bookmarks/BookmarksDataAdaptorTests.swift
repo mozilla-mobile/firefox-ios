@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-class BookmarksDataAdaptorTests: XCTestCase {
+final class BookmarksDataAdaptorTests: XCTestCase {
     var subject: BookmarksDataAdaptor!
     var mockBookmarksHandler: BookmarksHandlerMock!
     var mockNotificationCenter: MockNotificationCenter!
