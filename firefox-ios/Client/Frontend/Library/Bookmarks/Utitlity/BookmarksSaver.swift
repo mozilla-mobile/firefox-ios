@@ -12,7 +12,8 @@ protocol BookmarksSaver {
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, Error>
     func createBookmark(url: String, title: String?, position: UInt32?) async
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
-                             parentFolderGUID: String, _ completion: @escaping (GUID?) -> Void)
+                             parentFolderGUID: String, 
+                             completion: @escaping (GUID?) -> Void)
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvider {
@@ -105,9 +106,9 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
             case .folder:
                 guard let folder = bookmarkNode as? BookmarkFolderData else { return nil }
 
-                    return profile.places.createFolder(parentGUID: parentFolderGUID,
-                                                       title: folder.title,
-                                                       position: folder.position).bind { result in
+                return profile.places.createFolder(parentGUID: parentFolderGUID,
+                                                   title: folder.title,
+                                                   position: folder.position).bind { result in
                         return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
                                                 : deferMaybe(result.successValue)
                     }

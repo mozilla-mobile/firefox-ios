@@ -38,13 +38,13 @@ class OneLineTableViewCell: UITableViewCell,
     }
 
     var reorderControlImageView: UIImageView? {
-            let reorderControl = self.subviews.first { view in
-                view.classForCoder.description() == "UITableViewCellReorderControl"
-            }
-            return reorderControl?.subviews.first { view in
-                view is UIImageView
-            } as? UIImageView
+        let reorderControl = self.subviews.first { view in
+            view.classForCoder.description() == "UITableViewCellReorderControl"
         }
+        return reorderControl?.subviews.first { view in
+            view is UIImageView
+        } as? UIImageView
+    }
 
     var shouldLeftAlignTitle = false
     var customization: OneLineTableViewCustomization = .regular
@@ -87,7 +87,7 @@ class OneLineTableViewCell: UITableViewCell,
 
     private func updateReorderControl() {
         guard isBookmarkRefactorEnabled else { return }
-        self.reorderControlImageView?.image = reorderControlImageView?.image?.withRenderingMode(.alwaysTemplate)
+        reorderControlImageView?.image = reorderControlImageView?.image?.withRenderingMode(.alwaysTemplate)
     }
 
     /// Holds a reference to the left image view's leading constraint so we can update
@@ -205,7 +205,7 @@ class OneLineTableViewCell: UITableViewCell,
         if isBookmarkRefactorEnabled {
             accessoryView?.tintColor = theme.colors.iconSecondary
             editingAccessoryView?.tintColor = theme.colors.iconSecondary
-            self.tintColor = theme.colors.iconSecondary
+            tintColor = theme.colors.iconSecondary
         }
 
         switch customization {
