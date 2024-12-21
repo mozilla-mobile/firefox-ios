@@ -92,12 +92,17 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
         listenForThemeChange(view)
-        setupNotifications(forObserver: self, observing: [.LibraryPanelStateDidChange])
+        setupNotifications(forObserver: self,
+                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,8 +140,13 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         updateSegmentControl()
     }
 
-    fileprivate func updateTitle() {
-        if let newTitle = viewModel.selectedPanel?.title {
+    /// The Library title can be updated from some subpanels navigation actions
+    /// - Parameter subpanelTitle: The title coming from a subpanel, optional as by default we set the title to be
+    /// the selectedPanel.title
+    private func updateTitle(subpanelTitle: String? = nil) {
+        if let subpanelTitle {
+            navigationItem.title = subpanelTitle
+        } else if let newTitle = viewModel.selectedPanel?.title {
             navigationItem.title = newTitle
         }
     }
@@ -380,6 +390,8 @@ extension LibraryViewController: Notifiable {
         case .LibraryPanelStateDidChange:
             setupButtons()
             updateSegmentControl()
+        case .LibraryPanelBookmarkTitleChanged:
+            updateTitle(subpanelTitle: notification.userInfo?["title"] as? String)
         default: break
         }
     }

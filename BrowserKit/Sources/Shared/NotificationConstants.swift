@@ -81,6 +81,8 @@ extension Notification.Name {
 
     public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
 
+    public static let LibraryPanelBookmarkTitleChanged = Notification.Name("LibraryPanelBookmarkTitleChanged")
+
     public static let SearchSettingsChanged = Notification.Name("SearchSettingsChanged")
 
     public static let SponsoredAndNonSponsoredSuggestionsChanged = Notification.Name("SponsoredAndNonSponsoredSuggestions")

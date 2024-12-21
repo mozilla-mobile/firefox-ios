@@ -113,7 +113,7 @@ class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Lifecycle
@@ -149,9 +149,26 @@ class BookmarksViewController: SiteTableViewController,
                     self?.flashRow()
                 }
                 self?.updateEmptyState()
+                self?.updateParentViewControllerTitle()
             }
         }
     }
+
+    private func updateParentViewControllerTitle() {
+        guard viewModel.isBookmarkRefactorEnabled else { return }
+        if !viewModel.isRootNode, let folderTitle = viewModel.bookmarkFolder?.title {
+            notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
+                                    withObject: nil,
+                                    withUserInfo: ["title": folderTitle])
+        } else {
+            // This will set the title to the default one
+            notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
+                                    withObject: nil,
+                                    withUserInfo: nil)
+        }
+    }
+
+    // MARK: - Actions
 
     private func centerVisibleRow() -> Int {
         let visibleCells = tableView.visibleCells
