@@ -35,12 +35,18 @@ protocol GleanWrapper {
 
 /// Glean wrapper to abstract Glean from our application
 struct DefaultGleanWrapper: GleanWrapper {
+    private let glean: Glean
+
+    init(glean: Glean = Glean.shared) {
+        self.glean = glean
+    }
+
     func handleDeeplinkUrl(url: URL) {
-        Glean.shared.handleCustomUrl(url: url)
+        glean.handleCustomUrl(url: url)
     }
 
     func setUpload(isEnabled: Bool) {
-        Glean.shared.setCollectionEnabled(isEnabled)
+        glean.setCollectionEnabled(isEnabled)
     }
 
     func submitPing() {
