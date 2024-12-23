@@ -444,8 +444,8 @@ class HomePageSettingsUITests: BaseTestCase {
         app.buttons["Shortcuts"].tap()
         navigator.goto(NewTabScreen)
         app.buttons["Done"].tap()
-        mozWaitForElementToExist(app.cells["TopSitesCell"])
-        let totalTopSites = app.cells.matching(identifier: "TopSitesCell").count
+        mozWaitForElementToExist(app.links["TopSitesCell"])
+        let totalTopSites = app.links.matching(identifier: "TopSitesCell").count
         XCTAssertTrue(totalTopSites > minBoundary)
         XCTAssertTrue(totalTopSites < maxBoundary)
     }
