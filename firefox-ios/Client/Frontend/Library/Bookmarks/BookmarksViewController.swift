@@ -260,6 +260,11 @@ class BookmarksViewController: SiteTableViewController,
         bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
             guard let guid = res else {return}
             completion?(guid)
+
+            if self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) == bookmarkTreeRoot.guid {
+                self.profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
+            }
+
             // In the case that the node is a folder, restore its children as well
             guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
 
