@@ -12,23 +12,25 @@ protocol GleanWrapper {
 
     // MARK: Glean Metrics
 
-    func submitEventMetricType<ExtraObject>(event: EventMetricType<ExtraObject>,
-                                            extras: EventExtras) where ExtraObject: EventExtras
-    func submitEventMetricType<NoExtras>(event: EventMetricType<NoExtras>) where NoExtras: EventExtras
-    func submitCounterMetricType(event: CounterMetricType)
-    func submitStringMetricType(event: StringMetricType, value: String)
-    func submitLabeledMetricType(event: LabeledMetricType<CounterMetricType>, value: String)
-    func submitBooleanMetricType(event: BooleanMetricType, value: Bool)
-    func submitQuantityMetricType(event: QuantityMetricType, value: Int64)
+    func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
+                                  extras: EventExtras) where ExtraObject: EventExtras
+    func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras
+    func incrementCounter(for metric: CounterMetricType)
+    func recordString(for metric: StringMetricType, value: String)
+    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String)
+    func setBoolean(for metric: BooleanMetricType, value: Bool)
+    func recordQuantity(for metric: QuantityMetricType, value: Int64)
 
-    func addToNumeratorRateMetricType(event: RateMetricType, amount: Int32)
-    func addToDenominatorRateMetricType(event: RateMetricType, amount: Int32)
+    func incrementNumerator(for metric: RateMetricType, amount: Int32)
+    func incrementDenominator(for metric: RateMetricType, amount: Int32)
 
-    func startMeasurementTelemetry(forMetric metric: TimingDistributionMetricType) -> GleanTimerId
-    func cancelMeasurementTelemetry(forMetric metric: TimingDistributionMetricType,
-                                    timerId: GleanTimerId)
-    func stopAndAccumulate(forMetric metric: TimingDistributionMetricType,
-                           timerId: GleanTimerId)
+    // MARK: Timing Metrics
+    /// You should nullify any references to the timer after stopping it
+    func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId
+    func cancelTiming(for metric: TimingDistributionMetricType,
+                      timerId: GleanTimerId)
+    func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
+                                 timerId: GleanTimerId)
 }
 
 /// Glean wrapper to abstract Glean from our application
@@ -47,62 +49,61 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     // MARK: Glean Metrics
 
-    func submitEventMetricType<ExtraObject>(event: EventMetricType<ExtraObject>,
-                                            extras: EventExtras) where ExtraObject: EventExtras {
+    func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
+                                  extras: EventExtras) where ExtraObject: EventExtras {
         if let castedExtras = extras as? ExtraObject {
-            event.record(castedExtras)
+            metric.record(castedExtras)
         } else {
             fatalError("extras could not be cast to the expected type \(ExtraObject.self)")
         }
     }
 
-    func submitEventMetricType<NoExtras>(event: EventMetricType<NoExtras>) where NoExtras: EventExtras {
-        event.record()
+    func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras {
+        metric.record()
     }
 
-    func submitCounterMetricType(event: CounterMetricType) {
-        event.add()
+    func incrementCounter(for metric: CounterMetricType) {
+        metric.add()
     }
 
-    func submitStringMetricType(event: StringMetricType, value: String) {
-        event.set(value)
+    func recordString(for metric: StringMetricType, value: String) {
+        metric.set(value)
     }
 
-    func submitLabeledMetricType(event: LabeledMetricType<CounterMetricType>, value: String) {
-        event[value].add()
+    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+        metric[label].add()
     }
 
-    func submitBooleanMetricType(event: BooleanMetricType, value: Bool) {
-        GleanMetrics.App.choiceScreenAcquisition.set(value)
+    func setBoolean(for metric: BooleanMetricType, value: Bool) {
+        metric.set(value)
     }
 
-    func submitQuantityMetricType(event: QuantityMetricType, value: Int64) {
-        event.set(value)
+    func recordQuantity(for metric: QuantityMetricType, value: Int64) {
+        metric.set(value)
     }
 
     // MARK: RateMetricType
 
-    func addToNumeratorRateMetricType(event: RateMetricType, amount: Int32) {
-        event.addToNumerator(amount)
+    func incrementNumerator(for metric: RateMetricType, amount: Int32) {
+        metric.addToNumerator(amount)
     }
 
-    func addToDenominatorRateMetricType(event: RateMetricType, amount: Int32) {
-        event.addToDenominator(amount)
+    func incrementDenominator(for metric: RateMetricType, amount: Int32) {
+        metric.addToDenominator(amount)
     }
 
     // MARK: MeasurementTelemetry
 
-    func startMeasurementTelemetry(forMetric metric: TimingDistributionMetricType) -> GleanTimerId {
+    func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {
         return metric.start()
     }
 
-    func cancelMeasurementTelemetry(forMetric metric: TimingDistributionMetricType,
+    func cancelTiming(for metric: TimingDistributionMetricType,
                                     timerId: GleanTimerId) {
         metric.cancel(timerId)
     }
 
-    /// You should nullify any references to the timer after stopping it
-    func stopAndAccumulate(forMetric metric: TimingDistributionMetricType,
+    func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
                            timerId: GleanTimerId) {
         metric.stopAndAccumulate(timerId)
     }

@@ -18,25 +18,25 @@ struct InactiveTabsTelemetry {
     }
 
     func sectionShown() {
-        gleanWrapper.submitCounterMetricType(event: GleanMetrics.InactiveTabsTray.inactiveTabShown)
+        gleanWrapper.incrementCounter(for: GleanMetrics.InactiveTabsTray.inactiveTabShown)
     }
 
     func tabSwipedToClose() {
-        gleanWrapper.submitCounterMetricType(event: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
+        gleanWrapper.incrementCounter(for: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
     }
 
     func closedAllTabs() {
-        gleanWrapper.submitCounterMetricType(event: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
+        gleanWrapper.incrementCounter(for: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
     }
 
     func tabOpened() {
-        gleanWrapper.submitCounterMetricType(event: GleanMetrics.InactiveTabsTray.openInactiveTab)
+        gleanWrapper.incrementCounter(for: GleanMetrics.InactiveTabsTray.openInactiveTab)
     }
 
     func sectionToggled(hasExpanded: Bool) {
         let hasExpandedEvent: EventExtraKey = hasExpanded ? .inactiveTabsExpanded : .inactiveTabsCollapsed
         let expandedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: hasExpandedEvent.rawValue)
-        gleanWrapper.submitEventMetricType(event: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray,
-                                           extras: expandedExtras)
+        gleanWrapper.recordEvent(for: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray,
+                                 extras: expandedExtras)
     }
 }
