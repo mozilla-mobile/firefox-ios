@@ -13,8 +13,6 @@ import Redux
 ///  in your tests).
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     private let lock = NSLock()
-    private var expectedDispatchCount = 0
-    private var dispatchCount = 0
 
     var state: State
 
@@ -53,19 +51,12 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         // TODO: if you need it
     }
 
+    /// We implemented the lock to ensure that this is thread safe
+    /// since actions can be dispatch in concurrent tasks
     func dispatch(_ action: Redux.Action) {
         lock.lock()
         defer { lock.unlock() }
         dispatchedActions.append(action)
         dispatchCalled?()
-    }
-
-    /// Waits for the specified number of dispatches and executes the completion handler.
-    /// - Parameters:
-    ///   - count: The number of dispatches to wait for.
-    ///   - completion: The closure to call when the expected dispatch count is reached.
-    func waitForDispatch(_ count: Int = 1, completion: @escaping () -> Void) {
-        expectedDispatchCount = count
-        dispatchCalled = completion
     }
 }

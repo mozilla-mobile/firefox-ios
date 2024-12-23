@@ -8,7 +8,8 @@ import Shared
 import Storage
 
 protocol TopSitesManagerInterface {
-    /// Returns a list of top sites state using the top site history manager to fetch the other sites, which is composed of history-based (Frecency) + pinned + default suggested tiles
+    /// Returns a list of top sites state using the top site history manager to fetch the other sites
+    /// which is composed of history-based (Frecency) + pinned + default suggested tiles
     func getOtherSites() async -> [TopSiteState]
 
     /// Returns a list of sponsored tiles using the contile provider
