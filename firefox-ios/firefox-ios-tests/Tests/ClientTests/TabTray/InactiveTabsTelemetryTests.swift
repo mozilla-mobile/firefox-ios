@@ -73,7 +73,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.submitEventMetricTypeCalled, 1)
         if let savedMetric
             = gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra> {
-            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose))
+            XCTAssert(type(of: savedMetric) == type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray))
         } else {
             XCTFail("savedEvent is not of type EventMetricType")
         }
