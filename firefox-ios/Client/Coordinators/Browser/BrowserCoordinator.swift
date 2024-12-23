@@ -59,7 +59,7 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         glean: GleanWrapper = DefaultGleanWrapper.shared,
+         glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
