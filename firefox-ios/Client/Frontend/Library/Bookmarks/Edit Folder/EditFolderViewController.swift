@@ -92,7 +92,11 @@ class EditFolderViewController: UIViewController,
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
         onViewWillDisappear?()
-        viewModel.save()
+
+        // Only save when clicking the back button, not when we swipe the view controller away
+        if isMovingFromParent {
+            viewModel.save()
+        }
     }
 
     private func setupSubviews() {
