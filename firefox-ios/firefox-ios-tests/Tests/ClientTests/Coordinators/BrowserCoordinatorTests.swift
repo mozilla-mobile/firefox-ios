@@ -1189,6 +1189,55 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MicrosurveyViewController)
     }
 
+    // MARK: - Edit Bookmark Controller
+    func testShowEditBookmarks_addBookmarksCoordinator() {
+        let subject = createSubject()
+
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is BookmarksCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is EditBookmarkViewController)
+    }
+
+    func testShowEditBookmarks_didDidDismiss_removesChild() {
+        let subject = createSubject()
+
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+        guard let bookmarksCoordinator = subject.childCoordinators[0] as? BookmarksCoordinator else {
+            XCTFail("Bookmarks coordinator was expected to be resolved")
+            return
+        }
+
+        subject.didFinish(from: bookmarksCoordinator)
+
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {

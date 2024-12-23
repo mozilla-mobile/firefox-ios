@@ -36,6 +36,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showPasswordGeneratorCalled = 0
     var navigateFromHomePanelCalled = 0
     var showContextMenuCalled = 0
+    var showEditBookmarkCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -149,5 +150,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         showPasswordGeneratorCalled += 1
+    }
+
+    func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
+        showEditBookmarkCalled += 1
     }
 }

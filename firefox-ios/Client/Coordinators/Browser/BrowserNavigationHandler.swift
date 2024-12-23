@@ -107,6 +107,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Navigates to our custom context menu (Photon Action Sheet)
     func showContextMenu()
+
+    /// Navigates to the edit bookmark view
+    func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode)
 }
 
 extension BrowserNavigationHandler {

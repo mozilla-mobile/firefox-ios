@@ -182,8 +182,8 @@ final class BookmarksCoordinatorTests: XCTestCase {
             router: router,
             profile: profile,
             windowUUID: .XCTestDefaultUUID,
-            parentCoordinator: parentCoordinator,
-            navigationHandler: navigationHandler,
+            libraryCoordinator: parentCoordinator,
+            libraryNavigationHandler: navigationHandler,
             isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         trackForMemoryLeaks(subject)

@@ -10,7 +10,7 @@ import Storage
 import enum MozillaAppServices.VisitType
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
-    func didFinishLibrary(from coordinator: LibraryCoordinator)
+    func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
@@ -127,8 +127,8 @@ class LibraryCoordinator: BaseCoordinator,
             router: router,
             profile: profile,
             windowUUID: windowUUID,
-            parentCoordinator: parentCoordinator,
-            navigationHandler: self,
+            libraryCoordinator: parentCoordinator,
+            libraryNavigationHandler: self,
             isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         add(child: bookmarksCoordinator)

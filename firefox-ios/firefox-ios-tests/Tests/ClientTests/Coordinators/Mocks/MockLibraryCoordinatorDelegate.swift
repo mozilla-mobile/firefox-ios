@@ -14,13 +14,14 @@ class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDe
     var libraryPanelWindowUUID: WindowUUID { return WindowUUID.XCTestDefaultUUID }
     var didFinishSettingsCalled = 0
     var didRequestToOpenInNewTabCalled = false
+    var didFinishLibraryCalled = 0
     var didSelectURLCalled = false
     var didOpenRecentlyClosedSiteInNewTab = 0
     var lastOpenedURL: URL?
     var lastVisitType: VisitType?
     var isPrivate = false
 
-    func didFinishLibrary(from coordinator: LibraryCoordinator) {
+    func didFinishLibrary(from coordinator: Coordinator) {
         didFinishSettingsCalled += 1
     }
 
