@@ -67,6 +67,30 @@
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Betalningsmetoder";
 
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Läs mer.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Läs mer";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Kraschrapporter tillåter oss att diagnostisera och lösa problem med webbläsaren.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Skicka automatiskt kraschrapporter";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Läs mer.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Läs mer";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Detta hjälper %@ att uppskatta antalet aktiva användare.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping för daglig användning";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Konto";
 
@@ -150,4 +174,31 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Förslag från sponsorer";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Läs mer";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Testa funktioner och idéer innan de släpps för alla.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Installera och kör studier";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Läs mer.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Läs mer";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ strävar efter att endast samla in det vi behöver för att tillhandahålla och förbättra %2$@ för alla.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Data om din enhet, hårdvarukonfiguration och användning hjälper oss att förbättra %@ funktioner, prestanda och stabilitet.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Tekniska data och interaktionsdata";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Skicka teknisk data och interaktionsdata";
 

@@ -1,0 +1,12 @@
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "താങ്ങളുടെ ആദ്യ തിരയൽ തുടങ്ങുക";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "യാതൊന്നും അവശേഷിപ്പിക്കാതെ തിരയുക";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "%@-ൽ കരുതിവച്ച കുക്കികളോ നാൾവഴിയോ ഇല്ലാതെ തിരയുക.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "സ്വകാര്യ തിരയൽ ഉപയോഗിച്ചു് നോക്കുക";
+

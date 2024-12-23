@@ -4,6 +4,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Nova: simpligita menuo";
 
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Mildigita";
+
 /* The accessibility label for the back button in the Main menu header navigation view. */
 "MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Malantaŭen";
 
@@ -220,6 +223,9 @@
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Raporto";
 
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Raporti misfunkciantan retejon…";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Dividi";
 
@@ -253,6 +259,9 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Konservi";
 
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Konservi submenuon";
+
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Iri al versio por komputiloj";
 
@@ -261,6 +270,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Iloj";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Submenuo de iloj";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Serĉi en paĝo…";

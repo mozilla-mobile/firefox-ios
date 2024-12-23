@@ -67,6 +67,24 @@
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Ödeme yöntemleri";
 
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Daha fazla bilgi alın.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Daha fazla bilgi alın";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Çökme raporları tarayıcıyla ilgili sorunları teşhis etmemize ve düzeltmemize olanak tanır.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Çökme raporlarını otomatik olarak gönder";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Daha fazla bilgi alın.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Daha fazla bilgi alın";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Hesap";
 
@@ -150,4 +168,22 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Sponsorlardan Öneriler";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Daha fazla bilgi alın";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Yeni özellikleri ve fikirleri herkesin kullanımına açılmadan önce deneyin.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Daha fazla bilgi alın.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Daha fazla bilgi alın";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Teknik veriler ve etkileşim verileri";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Teknik verileri ve etkileşim verilerini gönder";
 

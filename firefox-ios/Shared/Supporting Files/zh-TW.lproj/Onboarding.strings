@@ -103,6 +103,54 @@
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "在不同裝置間切換時保持加密";
 
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v135" = "同意並繼續";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.TermsOfService.ManageLink.v135" = "管理";
+
+/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "為了幫助改善瀏覽器，%1$@ 會將除錯與互動資料傳送回 %2$@。%3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 關心您的隱私。到我們的 %2$@ 閱讀更多資訊。";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隱私權保護政策。";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "了解更多資訊。";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "了解更多資訊";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "傳送錯誤報告，可讓我們診斷並修正瀏覽器的問題。%@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "自動傳送錯誤報告";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "關於您的裝置、硬體設定，以及您如何使用 %1$@ 的方式，可幫助我們為所有使用者改進功能、效能與穩定度。%2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "傳送技術與互動資料給 %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
+"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "幫助我們讓 %@ 變得更好";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "又快又安全地上網";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "若繼續，代表您同意 %@";
+
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ 服務條款。";
+
+/* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
+"Onboarding.TermsOfService.Title.v135" = "歡迎使用 %@！";
+
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "經典背景圖";
 

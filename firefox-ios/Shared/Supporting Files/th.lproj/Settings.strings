@@ -151,3 +151,18 @@
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "คำแนะนำจากผู้สนับสนุน";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "เรียนรู้เพิ่มเติม";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "เรียนรู้เพิ่มเติม";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "เรียนรู้เพิ่มเติม";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "ข้อมูลทางเทคนิคและการโต้ตอบ";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "ส่งข้อมูลทางเทคนิคและการโต้ตอบ";
+

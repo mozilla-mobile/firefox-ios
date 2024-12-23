@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Càrrica arrè";
+
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "U prupitariu di %@ nun u cunfijurau bonu e nun pozzu stabbiliri un cullijamentu sicuru.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Stai accura. Parissi chi cc'è quarchi prubblema.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Prova a cullijàriti di n'autru dispusitivu. Cuntrolla u modem o u router. Scullèjati e cullèjati arrè ô Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Parissi ca cc'è un prubblema câ to cunnissioni â riti.";
+

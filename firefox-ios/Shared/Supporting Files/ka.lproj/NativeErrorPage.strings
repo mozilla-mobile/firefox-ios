@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "განახლება";
+
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "%@ არ აქვს მფლობელს სათანადოდ გამართული და დაცული კავშირი ვერ იქმნება.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "ფრთხილად. რაღაც რიგზე ვერაა.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "სცადეთ დაკავშირება სხვა მოწყობილობიდან. შეამოწმეთ თქვენი მოდემი ან როუტერი. გამოთიშეთ და კვლავ დაუკავშირეთ WiFi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "როგორც ჩანს, რაღაც ხარვეზია ქსელთან კავშირისას.";
+

@@ -53,10 +53,10 @@
 "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Mbylleni menunë për privatësinë dhe sigurinë";
 
 /* Text to let users know that the current website is secure. */
-"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Lidhje e sigurt";
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Lidhje e siguruar";
 
 /* Text to let users know that the current website is not secure. */
-"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Lidhje jo e sigurt";
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Lidhje jo e siguruar";
 
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "S’u gjetën gjurmues";

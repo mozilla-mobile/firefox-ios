@@ -1439,7 +1439,7 @@
 "Settings.SendUsage.Link" = "详细了解。";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla 仅收集为大众提供和改进 Firefox 所必要的信息。";
+"Settings.SendUsage.Message" = "Mozilla 力图仅收集为大众提供和改进 Firefox 所必要的信息。";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "发送使用数据";
