@@ -40,6 +40,9 @@
 /* Hide password text selection menu item */
 "Hide" = "Masquer";
 
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "Mot de passe supprimé";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "Les identifiants seront supprimés définitivement.";
 

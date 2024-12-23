@@ -92,7 +92,7 @@
 "Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Njoftoni Se Për Produktin Ka Prapë Stok";
 
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
-"Shopping.InfoCard.ProductNotInStock.Title.v121" = "Produkti S’Është i Passhëm";
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "S’ka Stok Produkti";
 
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Kjo mund të zgjasë rreth 60 sekonda.";

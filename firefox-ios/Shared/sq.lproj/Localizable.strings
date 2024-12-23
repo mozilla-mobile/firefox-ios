@@ -302,7 +302,7 @@
 "ErrorPages.Advanced.Button" = "Të thelluara";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Kujdes: s’e konfirmojmë dot se lidhja juaj me këtë sajt është e sigurt.";
+"ErrorPages.AdvancedWarning1.Text" = "Kujdes: s’e konfirmojmë dot se lidhja juaj me këtë sajt është e siguruar.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Mund të jetë një keqformësim ose futje hundësh nga dikush që po sulmon. Vazhdoni, nëse e pranoni rrezikun potencial.";
@@ -926,10 +926,10 @@
 "Privacy Policy" = "Rregulla Privatësie";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Lidhja s’është e sigurt";
+"ProtectionStatus.NotSecure" = "Lidhja s’është e siguruar";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Lidhja është e sigurt";
+"ProtectionStatus.Secure" = "Lidhja është e siguruar";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motorë Kërkimesh të Shpejta";

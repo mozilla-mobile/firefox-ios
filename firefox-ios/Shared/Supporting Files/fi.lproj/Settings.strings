@@ -151,3 +151,6 @@
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Ehdotuksia sponsoreilta";
 
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Kokeile ominaisuuksia ja ideoita, ennen kuin ne julkaistaan kaikille.";
+
