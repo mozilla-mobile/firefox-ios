@@ -181,7 +181,6 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
-        guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let navigationController = DismissableNavigationViewController()
         let router = DefaultRouter(navigationController: navigationController)
         let bookmarksCoordinator = BookmarksCoordinator(
