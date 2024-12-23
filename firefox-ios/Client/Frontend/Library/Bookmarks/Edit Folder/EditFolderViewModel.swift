@@ -106,7 +106,7 @@ class EditFolderViewModel {
             switch result {
             case .success(let guid):
                 // A nil guid indicates a bookmark update, not creation
-                guard let guid else { return }
+                guard let guid else { break }
                 profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
 
                 // When the folder edit view is a child of the edit bookmark view, the newly created folder

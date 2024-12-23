@@ -105,12 +105,17 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertEqual(bookmarksSaver.saveCalled, 0)
     }
 
-    func testSave_whenNilGuidReturned() async throws {
+    func testSave_whenNilGuidReturned_thenCallsSaveBookmarkButNoRecentBookmark() async throws {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        let expectation = expectation(description: "onBookmarkSaved should be called")
+        subject.onBookmarkSaved = {
+            expectation.fulfill()
+        }
 
         let task = subject.save()
         await task?.value
 
+        await fulfillment(of: [expectation])
         let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
         XCTAssertNil(prefs.things[PrefsKeys.RecentBookmarkFolder])
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
