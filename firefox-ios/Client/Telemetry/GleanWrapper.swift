@@ -99,12 +99,12 @@ struct DefaultGleanWrapper: GleanWrapper {
     }
 
     func cancelTiming(for metric: TimingDistributionMetricType,
-                                    timerId: GleanTimerId) {
+                      timerId: GleanTimerId) {
         metric.cancel(timerId)
     }
 
     func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
-                           timerId: GleanTimerId) {
+                                 timerId: GleanTimerId) {
         metric.stopAndAccumulate(timerId)
     }
 }
