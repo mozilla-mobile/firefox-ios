@@ -18,6 +18,7 @@ class BookmarksViewController: SiteTableViewController,
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
         static let toastDismissDelay = DispatchTimeInterval.seconds(8)
+        static let toastDelayBefore = DispatchTimeInterval.milliseconds(0)
     }
 
     // MARK: - Properties
@@ -295,11 +296,13 @@ class BookmarksViewController: SiteTableViewController,
 
             self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
 
-            let toast = ActionToast(text:
-                                        String(format: .Bookmarks.Menu.DeletedBookmark, bookmarkNode.title),
-                                    bottomContainer: self.view,
+            let toastVM = ButtonToastViewModel(
+                labelText: String(format: .Bookmarks.Menu.DeletedBookmark, bookmarkNode.title),
+                buttonText: .UndoString,
+                textAlignment: .left)
+            let toast = ButtonToast(viewModel: toastVM,
                                     theme: self.currentTheme(),
-                                    buttonTitle: .UndoString) {
+                                    completion: {buttonPressed in
                 guard let parentGUID = bookmarkTreeRoot.parentGUID else { return }
                 self.restoreBookmarkTree(bookmarkTreeRoot: bookmarkTreeRoot, parentFolderGUID: parentGUID) { guid in
                     self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
@@ -308,8 +311,14 @@ class BookmarksViewController: SiteTableViewController,
                         self.addBookmarkNodeToTable(bookmarkNode: fxBookmarkNode)
                     }
                 }
+            })
+            toast.showToast(viewController: self, delay: UX.toastDelayBefore, duration: UX.toastDismissDelay) { toast in
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                ]
             }
-            toast.show(toastDismissAfter: UX.toastDismissDelay)
         }
     }
 
