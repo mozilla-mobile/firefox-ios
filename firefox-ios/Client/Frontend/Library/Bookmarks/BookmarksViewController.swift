@@ -155,7 +155,6 @@ class BookmarksViewController: SiteTableViewController,
     }
 
     private func updateParentViewControllerTitle() {
-        guard viewModel.isBookmarkRefactorEnabled else { return }
         if !viewModel.isRootNode, let folderTitle = viewModel.bookmarkFolder?.title {
             notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
                                     withObject: nil,
