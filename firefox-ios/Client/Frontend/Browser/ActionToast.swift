@@ -88,7 +88,7 @@ final class ActionToast: ThemeApplicable {
         self.buttonAction = buttonAction
     }
 
-    func show(toastDismissAfter: DispatchTimeInterval = Toast.UX.toastDismissAfter) {
+    func show() {
         stackView.addArrangedSubview(toastLabel)
         stackView.addArrangedSubview(UIView())
         stackView.addArrangedSubview(actionButton)
@@ -110,7 +110,7 @@ final class ActionToast: ThemeApplicable {
             ]
         )
         applyTheme(theme: theme)
-        animate(stackView, toastDismissAfter: toastDismissAfter)
+        animate(stackView)
 
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .announcement, argument: text)
@@ -130,7 +130,7 @@ final class ActionToast: ThemeApplicable {
         )
     }
 
-    private func animate(_ toast: UIView, toastDismissAfter: DispatchTimeInterval) {
+    private func animate(_ toast: UIView) {
         UIView.animate(
             withDuration: Toast.UX.toastAnimationDuration,
             animations: {
@@ -143,7 +143,7 @@ final class ActionToast: ThemeApplicable {
                 let thousandMilliseconds = DispatchTimeInterval.milliseconds(1000)
                 let zeroMilliseconds = DispatchTimeInterval.milliseconds(0)
                 let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? thousandMilliseconds : zeroMilliseconds
-                let dispatchTime = DispatchTime.now() + toastDismissAfter + voiceOverDelay
+                let dispatchTime = DispatchTime.now() + Toast.UX.toastDismissAfter + voiceOverDelay
 
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
                     self.dismiss(toast)
