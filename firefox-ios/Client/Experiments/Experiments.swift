@@ -208,9 +208,11 @@ enum Experiments {
             Strings.bundle.fallbackTranslationBundle(language: "en-US"),
         ].compactMap { $0 }
 
-        let nimbusRecordedContext = RecordedNimbusContext(isFirstRun: isFirstRun,
-                                                          isReviewCheckerEnabled: isReviewCheckerEnabled(),
-                                                          isDefaultBrowser: true) // TODO: Update after https://github.com/mozilla-mobile/firefox-ios/pull/23754 merges
+        let nimbusRecordedContext = RecordedNimbusContext(
+            isFirstRun: isFirstRun,
+            isReviewCheckerEnabled: isReviewCheckerEnabled(),
+            isDefaultBrowser: isDefaultBrowser()
+        )
 
         return NimbusBuilder(dbPath: dbPath)
             .with(url: remoteSettingsURL)
