@@ -22,6 +22,7 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
 
     func showSignIn()
 
+    /// Calls the parent coordinator dismiss and remove the bookmarks coordinator
     func didFinish()
 }
 
@@ -94,10 +95,10 @@ class BookmarksCoordinator: BaseCoordinator,
     func start(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
         let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
                                               node: bookmark,
-                                              profile: self.profile)
+                                              profile: profile)
         viewModel.bookmarkCoordinatorDelegate = self
         let controller = EditBookmarkViewController(viewModel: viewModel,
-                                                    windowUUID: self.windowUUID)
+                                                    windowUUID: windowUUID)
         router.setRootViewController(controller)
     }
 
