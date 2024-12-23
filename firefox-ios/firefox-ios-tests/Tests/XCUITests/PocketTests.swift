@@ -10,11 +10,9 @@ class PocketTests: BaseTestCase {
     }
 
     func validatePocketStoriesCount() {
-        let numPocketStories = app.collectionViews.containing(
-            .cell,
-            identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
-        ).children(matching: .cell).count - 1
-
+        let numPocketStories = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
+            .staticTexts.count
         if iPad() {
             XCTAssertTrue(numPocketStories > 7, "Expected at least 8 stories on iPad.")
         } else {
@@ -68,7 +66,9 @@ class PocketTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
 
         // Tap on the first Pocket element
-        app.collectionViews.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell].firstMatch.tap()
+        app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
+            .staticTexts.firstMatch.tap()
         waitUntilPageLoad()
         // The url textField is not empty
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
