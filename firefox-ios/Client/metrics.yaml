@@ -763,7 +763,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
       - interaction
@@ -784,7 +784,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1609218#c4
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -805,7 +805,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -824,7 +824,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -844,7 +844,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1508305#c9
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -862,7 +862,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1520741#c18
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -882,7 +882,7 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1525045#c18
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
@@ -902,13 +902,12 @@ usage:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
     data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
     data_sensitivity:
       - technical
     notification_emails:
+      - fx-ios-data-stewards@mozilla.com
       - glean-team@mozilla.com
-      - jrediger@mozilla.com
-      - loines@mozilla.com
     expires: never
 
 # Downloads
