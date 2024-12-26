@@ -25,7 +25,7 @@ struct SectionHeaderState: Equatable {
     }
 }
 
-struct PocketDiscoverState: Equatable {
+struct PocketDiscoverState: Equatable, Hashable {
     var title: String
     var url: URL?
 }

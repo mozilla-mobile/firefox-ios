@@ -35,7 +35,7 @@ final class HomepageDiffableDataSource:
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
-        case pocketDiscover
+        case pocketDiscover(PocketDiscoverState)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -62,7 +62,7 @@ final class HomepageDiffableDataSource:
 
         let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
         snapshot.appendItems(stories, toSection: .pocket(textColor))
-        snapshot.appendItems([.pocketDiscover], toSection: .pocket(textColor))
+        snapshot.appendItems([.pocketDiscover(state.pocketState.pocketDiscoverItem)], toSection: .pocket(textColor))
 
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 

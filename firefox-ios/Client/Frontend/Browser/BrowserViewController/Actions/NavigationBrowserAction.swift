@@ -10,13 +10,16 @@ import Redux
 class NavigationBrowserAction: Action {
     let url: URL?
     let isGoogleTopSite: Bool?
+    let contextMenuConfiguration: ContextMenuConfiguration?
 
     init(url: URL? = nil,
          isGoogleTopSite: Bool? = nil,
+         contextMenuConfiguration: ContextMenuConfiguration? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.url = url
         self.isGoogleTopSite = isGoogleTopSite
+        self.contextMenuConfiguration = contextMenuConfiguration
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
