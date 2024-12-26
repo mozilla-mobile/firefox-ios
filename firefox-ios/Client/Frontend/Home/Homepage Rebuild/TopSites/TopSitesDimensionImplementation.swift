@@ -42,8 +42,7 @@ class TopSitesDimensionImplementation {
         let minCardsConstant = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
         let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
-        // Since this method gets called several multiple times, including when we update top sites state
-        // we add the following to ensure that the call to update numberOfTilesPerRow completes
+        // TODO: FXIOS-10972 - Investigate a better way to solve the crash issue that is resolved by adding this
         queue.async {
             self.numberOfTilesPerRow = tilesPerRowCount
         }
