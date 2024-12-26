@@ -58,9 +58,13 @@ final class HomepageSectionLayoutProvider {
     }
 
     private var logger: Logger
+    private var windowUUID: WindowUUID
+    private var dimensionImplementation: TopSitesDimensionImplementation
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+        self.windowUUID = windowUUID
         self.logger = logger
+        self.dimensionImplementation = TopSitesDimensionImplementation(windowUUID: windowUUID)
     }
 
     func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
@@ -166,11 +170,11 @@ final class HomepageSectionLayoutProvider {
         return section
     }
 
-    func createTopSitesSectionLayout(
+    private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
         availableWidth: CGFloat
     ) -> NSCollectionLayoutSection {
-        let numberOfTilesPerRow = TopSitesDimensionImplementation().getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = dimensionImplementation.getNumberOfTilesPerRow(
             availableWidth: availableWidth,
             leadingInset: UX.leadingInset(
                 traitCollection: traitCollection

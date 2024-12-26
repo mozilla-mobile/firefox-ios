@@ -7,19 +7,27 @@ import Redux
 
 final class TopSitesAction: Action {
     var topSites: [TopSiteState]?
+    var numberOfRows: Int?
+    var numberOfTilesPerRow: Int?
 
     init(
         topSites: [TopSiteState]? = nil,
+        numberOfRows: Int? = nil,
+        numberOfTilesPerRow: Int? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.topSites = topSites
+        self.numberOfRows = numberOfRows
+        self.numberOfTilesPerRow = numberOfTilesPerRow
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum TopSitesActionType: ActionType {
     case fetchTopSites
+    case updatedNumberOfRows
+    case updatedNumberOfTilesPerRow
 }
 
 enum TopSitesMiddlewareActionType: ActionType {

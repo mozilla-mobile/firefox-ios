@@ -5,25 +5,40 @@
 import Common
 import Foundation
 import Redux
+import Shared
 
 /// State for the top sites section that is used in the homepage
+/// The state does not only contain the top sites list, but needs to also know about the number of rows
+/// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     var topSitesData: [TopSiteState]
+    var numberOfRows: Int
+    var numberOfTilesPerRow: Int
 
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
+        let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
+        let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
+        let numberOfRows = Int(preferredNumberOfRows ?? defaultNumberOfRows)
+
         self.init(
             windowUUID: windowUUID,
-            topSitesData: []
+            topSitesData: [],
+            numberOfRows: numberOfRows,
+            numberOfTilesPerRow: 0
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        topSitesData: [TopSiteState]
+        topSitesData: [TopSiteState],
+        numberOfRows: Int,
+        numberOfTilesPerRow: Int
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
+        self.numberOfRows = numberOfRows
+        self.numberOfTilesPerRow = numberOfTilesPerRow
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -42,7 +57,35 @@ struct TopSitesSectionState: StateType, Equatable {
 
             return TopSitesSectionState(
                 windowUUID: state.windowUUID,
-                topSitesData: sites
+                topSitesData: sites,
+                numberOfRows: state.numberOfRows,
+                numberOfTilesPerRow: state.numberOfTilesPerRow
+            )
+        case TopSitesActionType.updatedNumberOfRows:
+            guard let topSitesAction = action as? TopSitesAction,
+                  let numberOfRows = topSitesAction.numberOfRows
+            else {
+                return defaultState(from: state)
+            }
+
+            return TopSitesSectionState(
+                windowUUID: state.windowUUID,
+                topSitesData: state.topSitesData,
+                numberOfRows: numberOfRows,
+                numberOfTilesPerRow: state.numberOfTilesPerRow
+            )
+        case TopSitesActionType.updatedNumberOfTilesPerRow:
+            guard let topSitesAction = action as? TopSitesAction,
+                  let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
+            else {
+                return defaultState(from: state)
+            }
+
+            return TopSitesSectionState(
+                windowUUID: state.windowUUID,
+                topSitesData: state.topSitesData,
+                numberOfRows: state.numberOfRows,
+                numberOfTilesPerRow: numberOfTilesPerRow
             )
         default:
             return defaultState(from: state)
@@ -52,7 +95,9 @@ struct TopSitesSectionState: StateType, Equatable {
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData
+            topSitesData: state.topSitesData,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow
         )
     }
 }

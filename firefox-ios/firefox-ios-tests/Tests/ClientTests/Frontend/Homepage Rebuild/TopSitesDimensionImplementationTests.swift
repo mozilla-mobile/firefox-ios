@@ -7,6 +7,8 @@ import XCTest
 @testable import Client
 
 class TopSitesDimensionImplementationTests: XCTestCase {
+    private var dispatchQueue: MockDispatchQueue!
+
     struct UX {
         struct DeviceSize {
             static let iPhone14 = CGSize(width: 390, height: 844)
@@ -15,6 +17,18 @@ class TopSitesDimensionImplementationTests: XCTestCase {
         }
 
         static let cellWidth = HomepageSectionLayoutProvider.UX.TopSitesConstants.cellEstimatedSize.width
+    }
+
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+        dispatchQueue = MockDispatchQueue()
+    }
+
+    override func tearDown() {
+        dispatchQueue = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func test_getNumberOfTilesPerRow_withPortraitIphone_showsExpectedRowNumber() {
@@ -102,6 +116,9 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func createSubject() -> TopSitesDimensionImplementation {
-        return TopSitesDimensionImplementation()
+        let subject = TopSitesDimensionImplementation(windowUUID: .XCTestDefaultUUID, queue: dispatchQueue)
+        trackForMemoryLeaks(subject)
+
+        return subject
     }
 }
