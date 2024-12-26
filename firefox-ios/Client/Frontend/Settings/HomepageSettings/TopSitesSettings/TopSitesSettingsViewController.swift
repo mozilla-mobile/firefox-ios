@@ -71,7 +71,7 @@ extension TopSitesSettingsViewController {
             let numberOfRows = profile?.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
             store.dispatch(
                 TopSitesAction(
-                    numberOfRows: numberOfRows,
+                    numberOfRows: Int(numberOfRows),
                     windowUUID: self.windowUUID,
                     actionType: TopSitesActionType.updatedNumberOfRows
                 )

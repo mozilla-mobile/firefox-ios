@@ -13,13 +13,13 @@ import Shared
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     var topSitesData: [TopSiteState]
-    var numberOfRows: Int32
+    var numberOfRows: Int
     var numberOfTilesPerRow: Int
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
-        let numberOfRows = preferredNumberOfRows ?? defaultNumberOfRows
+        let numberOfRows = Int(preferredNumberOfRows ?? defaultNumberOfRows)
 
         self.init(
             windowUUID: windowUUID,
@@ -32,7 +32,7 @@ struct TopSitesSectionState: StateType, Equatable {
     private init(
         windowUUID: WindowUUID,
         topSitesData: [TopSiteState],
-        numberOfRows: Int32,
+        numberOfRows: Int,
         numberOfTilesPerRow: Int
     ) {
         self.windowUUID = windowUUID
@@ -77,7 +77,6 @@ struct TopSitesSectionState: StateType, Equatable {
         case TopSitesActionType.updatedNumberOfTilesPerRow:
             guard let topSitesAction = action as? TopSitesAction,
                   let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
-
             else {
                 return defaultState(from: state)
             }

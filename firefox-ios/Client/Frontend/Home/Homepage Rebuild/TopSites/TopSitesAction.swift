@@ -7,12 +7,12 @@ import Redux
 
 final class TopSitesAction: Action {
     var topSites: [TopSiteState]?
-    var numberOfRows: Int32?
+    var numberOfRows: Int?
     var numberOfTilesPerRow: Int?
 
     init(
         topSites: [TopSiteState]? = nil,
-        numberOfRows: Int32? = nil,
+        numberOfRows: Int? = nil,
         numberOfTilesPerRow: Int? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
