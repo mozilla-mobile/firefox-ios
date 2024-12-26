@@ -174,15 +174,13 @@ final class HomepageSectionLayoutProvider {
         for traitCollection: UITraitCollection,
         availableWidth: CGFloat
     ) -> NSCollectionLayoutSection {
-        dimensionImplementation.updateNumberOfTilesPerRow(
+        let numberOfTilesPerRow = dimensionImplementation.getNumberOfTilesPerRow(
             availableWidth: availableWidth,
             leadingInset: UX.leadingInset(
                 traitCollection: traitCollection
             ),
             cellWidth: UX.TopSitesConstants.cellEstimatedSize.width
         )
-
-        let numberOfTilesPerRow = dimensionImplementation.numberOfTilesPerRow ?? UX.TopSitesConstants.minCards
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),

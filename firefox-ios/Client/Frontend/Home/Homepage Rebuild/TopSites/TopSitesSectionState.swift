@@ -19,7 +19,7 @@ struct TopSitesSectionState: StateType, Equatable {
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
-        let numberOfRows = Int32(preferredNumberOfRows ?? defaultNumberOfRows)
+        let numberOfRows = preferredNumberOfRows ?? defaultNumberOfRows
 
         self.init(
             windowUUID: windowUUID,

@@ -7,18 +7,16 @@ import Common
 class TopSitesDimensionImplementation {
     /// The update count of number of tiles per row based on device layout
     /// After updating the value, the top sites state should be updated respectively
-    var numberOfTilesPerRow: Int? {
+    private var numberOfTilesPerRow: Int? {
         willSet {
             guard newValue != numberOfTilesPerRow else { return }
-            queue.async {
-                store.dispatch(
-                    TopSitesAction(
-                        numberOfTilesPerRow: newValue,
-                        windowUUID: self.windowUUID,
-                        actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-                    )
+            store.dispatch(
+                TopSitesAction(
+                    numberOfTilesPerRow: newValue,
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.updatedNumberOfTilesPerRow
                 )
-            }
+            )
         }
     }
 
@@ -33,7 +31,7 @@ class TopSitesDimensionImplementation {
     /// - Parameter availableWidth: available width size depending on device
     /// - Parameter leadingInset: padding for top site section
     /// - Parameter cellWidth: width of individual top site tiles
-    func updateNumberOfTilesPerRow(availableWidth: CGFloat, leadingInset: CGFloat, cellWidth: CGFloat) {
+    func getNumberOfTilesPerRow(availableWidth: CGFloat, leadingInset: CGFloat, cellWidth: CGFloat) -> Int {
         var availableWidth = availableWidth - leadingInset * 2
         var numberOfTiles = 0
 
@@ -42,8 +40,14 @@ class TopSitesDimensionImplementation {
             availableWidth = availableWidth - cellWidth - HomepageSectionLayoutProvider.UX.standardSpacing
         }
         let minCardsConstant = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
-        let numberOfTilesPerRow = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
+        let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
-        self.numberOfTilesPerRow = numberOfTilesPerRow
+        // Since this method gets called several multiple times, including when we update top sites state
+        // we add the following to ensure that the call to update numberOfTilesPerRow completes
+        queue.async {
+            self.numberOfTilesPerRow = tilesPerRowCount
+        }
+
+        return tilesPerRowCount
     }
 }
