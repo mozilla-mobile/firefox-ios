@@ -7,10 +7,15 @@ import Foundation
 import Redux
 
 final class TopSitesMiddleware {
-    private let topSitesManager: TopSitesManager
+    private let topSitesManager: TopSitesManagerInterface
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
-        self.topSitesManager = TopSitesManager(
+    // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
+    // but keeping logic consistent for now
+    private var otherSites: [TopSiteState] = []
+    private var sponsoredTiles: [SponsoredTile] = []
+
+    init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface?) {
+        self.topSitesManager = topSitesManager ?? TopSitesManager(
             prefs: profile.prefs,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
@@ -32,14 +37,49 @@ final class TopSitesMiddleware {
 
     private func getTopSitesDataAndUpdateState(for action: Action) {
         Task {
-            let topSites = await topSitesManager.getTopSites()
-            store.dispatch(
-                TopSitesAction(
-                    topSites: topSites,
-                    windowUUID: action.windowUUID,
-                    actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    self.otherSites = await self.topSitesManager.getOtherSites()
+                    await self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: self.otherSites,
+                        sponsoredTiles: self.sponsoredTiles
+                    )
+                }
+                group.addTask {
+                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    await self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: self.otherSites,
+                        sponsoredTiles: self.sponsoredTiles
+                    )
+                }
+
+                await group.waitForAll()
+                await updateTopSites(
+                    for: action.windowUUID,
+                    otherSites: self.otherSites,
+                    sponsoredTiles: self.sponsoredTiles
                 )
-            )
+            }
         }
+    }
+
+    private func updateTopSites(
+        for windowUUID: WindowUUID,
+        otherSites: [TopSiteState],
+        sponsoredTiles: [SponsoredTile]
+    ) async {
+        let topSites = await self.topSitesManager.recalculateTopSites(
+            otherSites: otherSites,
+            sponsoredSites: sponsoredTiles
+        )
+        store.dispatch(
+            TopSitesAction(
+                topSites: topSites,
+                windowUUID: windowUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
     }
 }

@@ -7,9 +7,13 @@ import Common
 import Shared
 import Storage
 
+protocol TopSitesManagerInterface {
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState]
+}
+
 // TODO: FXIOS-10165 - Add full logic + tests for retrieving top sites
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
-class TopSitesManager {
+class TopSitesManager: TopSitesManagerInterface {
     private var logger: Logger
     private let prefs: Prefs
     private let contileProvider: ContileProviderInterface
@@ -39,26 +43,19 @@ class TopSitesManager {
         self.maxTopSites = maxTopSites
     }
 
-    func getTopSites() async -> [TopSiteState] {
-        return await calculateTopSites()
-    }
-
     /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
-    /// In terms of space, pinned tiles has precedence over the Google tile, 
+    /// In terms of space, pinned tiles has precedence over the Google tile,
     /// which has precedence over sponsored and frecency tiles.
     ///
     /// From a user perspective, Google top site is always first (from left to right),
     /// then comes the sponsored tiles, pinned sites and then frecency top sites.
     /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
-    private func calculateTopSites() async -> [TopSiteState] {
-        // TODO: FXIOS-10477 - Look into creating task groups to run asynchronous methods concurrently
-        let otherSites = await getOtherSites()
-
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
         let updatedSpaceCount = getUpdatedSpaceCount(with: googleTopSite, and: availableSpaceCount)
-        let sponsoredSites = await getSponsoredSites(with: updatedSpaceCount, and: otherSites)
+        let sponsoredSites = await filterSponsoredSites(contiles: sponsoredSites, with: updatedSpaceCount, and: otherSites)
 
         let totalTopSites = googleTopSite + sponsoredSites + otherSites
 
@@ -81,10 +78,12 @@ class TopSitesManager {
         return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
     }
 
-    private func getSponsoredSites(with availableSpaceCount: Int, and otherSites: [TopSiteState]) async -> [TopSiteState] {
+    private func filterSponsoredSites(
+        contiles: [SponsoredTile],
+        with availableSpaceCount: Int,
+        and otherSites: [TopSiteState]
+    ) async -> [TopSiteState] {
         guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
-
-        let contiles = await fetchSponsoredSites()
 
         guard !contiles.isEmpty else { return [] }
 
@@ -95,7 +94,7 @@ class TopSitesManager {
         return filteredContiles
     }
 
-    private func fetchSponsoredSites() async -> [SponsoredTile] {
+    func fetchSponsoredSites() async -> [SponsoredTile] {
         let contiles = await withCheckedContinuation { continuation in
             contileProvider.fetchContiles { [weak self] result in
                 if case .success(let contiles) = result {
@@ -133,7 +132,7 @@ class TopSitesManager {
     }
 
     // MARK: Other Sites = History-based (Frencency) + Pinned + Default suggested tiles
-    private func getOtherSites() async -> [TopSiteState] {
+    func getOtherSites() async -> [TopSiteState] {
         let otherSites = await withCheckedContinuation { continuation in
             topSiteHistoryManager.getTopSites { sites in
                 continuation.resume(returning: sites)
