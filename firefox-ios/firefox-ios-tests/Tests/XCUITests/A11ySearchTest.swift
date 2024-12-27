@@ -88,7 +88,6 @@ class A11ySearchTest: BaseTestCase {
                     if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
                         shouldIgnore = true
                     }
-
                     return shouldIgnore
                 }
                 // swiftlint:enable empty_count
