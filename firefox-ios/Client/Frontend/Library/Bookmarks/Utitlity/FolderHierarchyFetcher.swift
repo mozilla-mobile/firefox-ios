@@ -123,9 +123,9 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
     }
 
     private func prependDesktopFolders(_ folder: BookmarkFolderData,
-                                        folders: inout [Folder],
-                                        indent: Int = 0,
-                                        prefixFolders: [BookmarkFolderData] = []) {
+                                       folders: inout [Folder],
+                                       indent: Int = 0,
+                                       prefixFolders: [BookmarkFolderData] = []) {
         prefixFolders.forEach {
             folders.append(Folder(title: $0.title, guid: $0.guid, indentation: indent + 2))
         }
