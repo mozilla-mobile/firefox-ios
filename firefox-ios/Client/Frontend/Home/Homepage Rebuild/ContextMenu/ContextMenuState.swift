@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 import Storage
 
 /// State to populate actions for the `PhotonActionSheet` view
@@ -15,7 +16,14 @@ struct ContextMenuState {
     var site: Site?
     var actions: [[PhotonRowActions]] = [[]]
 
-    init(configuration: ContextMenuConfiguration) {
+    private let configuration: ContextMenuConfiguration
+    private let windowUUID: WindowUUID
+    weak var coordinatorDelegate: ContextMenuCoordinator?
+
+    init(configuration: ContextMenuConfiguration, windowUUID: WindowUUID) {
+        self.configuration = configuration
+        self.windowUUID = windowUUID
+
         guard let site = configuration.site else { return }
         self.site = site
 
@@ -33,37 +41,40 @@ struct ContextMenuState {
     private func getTopSitesActions(site: Site) -> [PhotonRowActions] {
         let topSiteActions: [PhotonRowActions]
         if site is PinnedSite {
-            topSiteActions = getPinnedTileActions()
+            topSiteActions = getPinnedTileActions(site: site)
         } else if site as? SponsoredTile != nil {
-            topSiteActions = getSponsoredTileActions()
+            topSiteActions = getSponsoredTileActions(site: site)
         } else {
-            topSiteActions = getOtherTopSitesActions()
+            topSiteActions = getOtherTopSitesActions(site: site)
         }
         return topSiteActions
     }
 
-    private func getPinnedTileActions() -> [PhotonRowActions] {
+    private func getPinnedTileActions(site: Site) -> [PhotonRowActions] {
+        guard let siteURL = site.url.asURL else { return [] }
         return [getRemovePinTopSiteAction(),
-                getOpenInNewTabAction(),
-                getOpenInNewPrivateTabAction(),
+                getOpenInNewTabAction(siteURL: siteURL),
+                getOpenInNewPrivateTabAction(siteURL: siteURL),
                 getRemoveTopSiteAction(),
-                getShareAction()]
+                getShareAction(siteURL: site.url)]
     }
 
-    private func getSponsoredTileActions() -> [PhotonRowActions] {
-        return [getOpenInNewTabAction(),
-                getOpenInNewPrivateTabAction(),
+    private func getSponsoredTileActions(site: Site) -> [PhotonRowActions] {
+        guard let siteURL = site.url.asURL else { return [] }
+        return [getOpenInNewTabAction(siteURL: siteURL),
+                getOpenInNewPrivateTabAction(siteURL: siteURL),
                 getSettingsAction(),
                 getSponsoredContentAction(),
-                getShareAction()]
+                getShareAction(siteURL: site.url)]
     }
 
-    private func getOtherTopSitesActions() -> [PhotonRowActions] {
+    private func getOtherTopSitesActions(site: Site) -> [PhotonRowActions] {
+        guard let siteURL = site.url.asURL else { return [] }
         return [getPinTopSiteAction(),
-                getOpenInNewTabAction(),
-                getOpenInNewPrivateTabAction(),
+                getOpenInNewTabAction(siteURL: siteURL),
+                getOpenInNewPrivateTabAction(siteURL: siteURL),
                 getRemoveTopSiteAction(),
-                getShareAction()]
+                getShareAction(siteURL: site.url)]
     }
 
     /// This action removes the tile out of the top sites.
@@ -73,7 +84,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            // TODO: FXIOS-10614 - Add proper actions
         }).items
     }
 
@@ -82,7 +93,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.pin,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            // TODO: FXIOS-10614 - Add proper actions
         }).items
     }
 
@@ -93,7 +104,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.pinSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            // TODO: FXIOS-10614 - Add proper actions
         }).items
     }
 
@@ -102,7 +113,8 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.settings,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            dispatchSettingsAction(section: .topSites)
+            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
@@ -111,38 +123,43 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.helpCircle,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
+            dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
+            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
     // MARK: - Pocket item's context menu actions
     private func getPocketActions(site: Site) -> [PhotonRowActions] {
-        let openInNewTabAction = getOpenInNewTabAction()
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction()
-        let shareAction = getShareAction()
+        guard let siteURL = site.url.asURL else { return [] }
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let shareAction = getShareAction(siteURL: site.url)
         let bookmarkAction = getBookmarkAction(site: site)
 
         return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
     // MARK: - Default actions
-    private func getOpenInNewTabAction() -> PhotonRowActions {
+    private func getOpenInNewTabAction(siteURL: URL) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .OpenInNewTabContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.plus,
             allowIconScaling: true
         ) { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            dispatchOpenNewTabAction(siteURL: siteURL, isPrivate: false)
+            // TODO: FXIOS-10171 - Add telemetry
         }.items
     }
 
-    private func getOpenInNewPrivateTabAction() -> PhotonRowActions {
+    private func getOpenInNewPrivateTabAction(siteURL: URL) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.privateMode,
             allowIconScaling: true
         ) { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            dispatchOpenNewTabAction(siteURL: siteURL, isPrivate: true)
+            // TODO: FXIOS-10171 - Add telemetry
         }.items
     }
 
@@ -151,7 +168,7 @@ struct ContextMenuState {
         if site.bookmarked ?? false {
             bookmarkAction = getRemoveBookmarkAction()
         } else {
-            bookmarkAction = getAddBookmarkAction()
+            bookmarkAction = getAddBookmarkAction(site: site)
         }
         return bookmarkAction.items
     }
@@ -161,25 +178,72 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            // TODO: FXIOS-10975 - Add proper actions
         })
     }
 
-    private func getAddBookmarkAction() -> SingleActionViewModel {
+    private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
+            // TODO: FXIOS-10975 - Add proper actions
         })
     }
 
-    private func getShareAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .ShareContextMenuTitle,
-                                     iconString: StandardImageIdentifiers.Large.share,
-                                     allowIconScaling: true,
-                                     tapHandler: { _ in
-            // TODO: FXIOS-10613 - Add proper actions
-        }).items
+    private func getShareAction(siteURL: String) -> PhotonRowActions {
+        return SingleActionViewModel(
+            title: .ShareContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.share,
+            allowIconScaling: true,
+            tapHandler: { _ in
+                guard let url = URL(string: siteURL, invalidCharacters: false) else { return }
+                let shareSheetConfiguration = ShareSheetConfiguration(
+                    shareType: .site(url: url),
+                    shareMessage: nil,
+                    sourceView: configuration.sourceView ?? UIView(),
+                    sourceRect: nil,
+                    toastContainer: configuration.toastContainer,
+                    popoverArrowDirection: [.up, .down, .left]
+                )
+
+                dispatchShareSheetAction(shareSheetConfiguration: shareSheetConfiguration)
+            }).items
+    }
+
+    // MARK: Dispatch Actions
+    private func dispatchSettingsAction(section: Route.SettingsSection) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(section)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
+            )
+        )
+    }
+
+    private func dispatchOpenNewTabAction(siteURL: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(
+                    .newTab,
+                    url: siteURL,
+                    isPrivate: isPrivate,
+                    selectNewTab: selectNewTab
+                ),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+            )
+        )
+    }
+
+    private func dispatchShareSheetAction(shareSheetConfiguration: ShareSheetConfiguration) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShareSheet
+            )
+        )
     }
 }

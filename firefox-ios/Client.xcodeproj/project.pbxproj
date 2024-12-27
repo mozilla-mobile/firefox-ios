@@ -725,6 +725,7 @@
 		8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */; };
 		8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */; };
 		8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */; };
+		8A09BCC32D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */; };
 		8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */; };
 		8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */; };
 		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
@@ -906,6 +907,7 @@
 		8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A83B7492A265044002FF9AC /* SettingsCoordinatorTests.swift */; };
 		8A83B74C2A265061002FF9AC /* LibraryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A83B74B2A265061002FF9AC /* LibraryCoordinatorTests.swift */; };
 		8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8482EE2BE15FFE00F9007B /* MicrosurveyPromptStateTests.swift */; };
+		8A855C032D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855C022D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift */; };
 		8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */; };
 		8A8629E72880B7330096DDB1 /* LegacyBookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E52880B69C0096DDB1 /* LegacyBookmarksPanelTests.swift */; };
 		8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */; };
@@ -7507,6 +7509,7 @@
 		8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A093D802A4B58330099ABA5 /* MockSettingsFlowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsFlowDelegate.swift; sourceTree = "<group>"; };
 		8A093D822A4B68940099ABA5 /* PrivacySettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsDelegate.swift; sourceTree = "<group>"; };
+		8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateHomepageViewController.swift; sourceTree = "<group>"; };
 		8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageCardCell.swift; sourceTree = "<group>"; };
 		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
@@ -7695,6 +7698,7 @@
 		8A83B7492A265044002FF9AC /* SettingsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A83B74B2A265061002FF9AC /* LibraryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A8482EE2BE15FFE00F9007B /* MicrosurveyPromptStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptStateTests.swift; sourceTree = "<group>"; };
+		8A855C022D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuCoordinator.swift; sourceTree = "<group>"; };
 		8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderCell.swift; sourceTree = "<group>"; };
 		8A8629E52880B69C0096DDB1 /* LegacyBookmarksPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksPanelTests.swift; sourceTree = "<group>"; };
 		8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedTabsStoreTests.swift; sourceTree = "<group>"; };
@@ -11377,8 +11381,8 @@
 		8A00BD852CAB3FC200680AF9 /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8A09BCC12D22F1A500CFDF60 /* ContextMenu */,
 				8AD3AFC42D143F0D00CFC887 /* TopSitesDimensionImplementationTests.swift */,
-				8A4B66412D1DC962008C5B64 /* ContextMenuConfigurationTests.swift */,
 				8A87B4352CC1A8FD003A9239 /* Mock */,
 				8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */,
 				8A552AC22CB43A7000564C98 /* Redux */,
@@ -11398,6 +11402,15 @@
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		8A09BCC12D22F1A500CFDF60 /* ContextMenu */ = {
+			isa = PBXGroup;
+			children = (
+				8A4B66412D1DC962008C5B64 /* ContextMenuConfigurationTests.swift */,
+				8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */,
+			);
+			path = ContextMenu;
 			sourceTree = "<group>";
 		};
 		8A0A1BA12B22010200E8706F /* PrivateHome */ = {
@@ -11744,6 +11757,7 @@
 			children = (
 				8AC0B1BF2D1D9356004237FD /* ContextMenuConfiguration.swift */,
 				8A62B15C2CED408B0045F46E /* ContextMenuState.swift */,
+				8A855C022D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift */,
 			);
 			path = ContextMenu;
 			sourceTree = "<group>";
@@ -16282,6 +16296,7 @@
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
+				8A855C032D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */,
 				8A2DAD4B2CC02AA00067ECD0 /* LabelButtonHeaderView.swift in Sources */,
@@ -17374,6 +17389,7 @@
 				8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */,
 				217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */,
+				8A09BCC32D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift in Sources */,
 				0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift in Sources */,
 				E16C76812ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift in Sources */,
 				1D8487B62AD6038100F7527C /* RemoteTabPanelStateTests.swift in Sources */,

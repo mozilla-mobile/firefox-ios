@@ -1378,7 +1378,8 @@ class BrowserViewController: UIViewController,
             browserDelegate?.showHomepage(
                 overlayManager: overlayManager,
                 isZeroSearch: inline,
-                statusBarScrollDelegate: statusBarOverlay
+                statusBarScrollDelegate: statusBarOverlay,
+                toastContainer: contentContainer
             )
         } else {
             browserDelegate?.showLegacyHomepage(
@@ -2114,8 +2115,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showContextMenu(for: configuration)
         case .trackingProtectionSettings:
             navigationHandler?.show(settings: .contentBlocker)
-        case .customizeHomepage:
-            navigationHandler?.show(settings: .homePage)
+        case .settings(let section):
+            navigationHandler?.show(settings: section)
         case .link:
             guard let url = type.url else {
                 logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
@@ -2125,6 +2126,21 @@ class BrowserViewController: UIViewController,
                 to: url,
                 visitType: .link,
                 isGoogleTopSite: type.isGoogleTopSite ?? false
+            )
+        case .newTab:
+            guard let url = type.url, let isPrivate = type.isPrivate, let selectNewTab = type.selectNewTab else {
+                logger.log("all params need to be set to properly create a new tab", level: .warning, category: .coordinator)
+                return
+            }
+            navigationHandler?.openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        case .shareSheet(let config):
+            navigationHandler?.showShareSheet(
+                shareType: config.shareType,
+                shareMessage: config.shareMessage,
+                sourceView: config.sourceView,
+                sourceRect: config.sourceRect,
+                toastContainer: config.toastContainer,
+                popoverArrowDirection: config.popoverArrowDirection
             )
         }
     }

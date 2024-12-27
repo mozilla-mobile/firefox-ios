@@ -155,6 +155,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             themeManager: themeManager,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
+            toastContainer: UIView(),
             notificationCenter: notificationCenter
         )
         trackForMemoryLeaks(homepageViewController)

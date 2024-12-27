@@ -160,7 +160,10 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             NavigationBrowserActionType.tapOnTrackingProtection,
             NavigationBrowserActionType.tapOnCell,
             NavigationBrowserActionType.tapOnLink,
-            NavigationBrowserActionType.longPressOnCell:
+            NavigationBrowserActionType.longPressOnCell,
+            NavigationBrowserActionType.tapOnOpenInNewTab,
+            NavigationBrowserActionType.tapOnSettingsSection,
+            NavigationBrowserActionType.tapOnShareSheet:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
@@ -170,7 +173,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: action.navigationDestination
             )
-
         default:
             return defaultState(from: state, action: action)
         }
