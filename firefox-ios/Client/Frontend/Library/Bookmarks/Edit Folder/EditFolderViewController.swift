@@ -180,7 +180,11 @@ class EditFolderViewController: UIViewController,
                                                            for: indexPath) as? OneLineTableViewCell,
                   let folder = viewModel.folderStructures[safe: indexPath.row]
             else { return UITableViewCell() }
-            configureParentFolderCell(cell, folder: folder)
+            if folder.guid == Folder.dummyFolderGuid {
+                configureDesktopBookmarksHeaderCell(cell)
+            } else {
+                configureParentFolderCell(cell, folder: folder)
+            }
             return cell
         }
     }
@@ -202,7 +206,24 @@ class EditFolderViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.customization = .regular
         cell.applyTheme(theme: theme)
+    }
+
+    private func configureDesktopBookmarksHeaderCell(_ cell: OneLineTableViewCell) {
+        cell.titleLabel.text = String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
+        cell.customization = .desktopBookmarksLabel
+        cell.indentationLevel = 1
+        cell.accessoryType = .none
+        cell.selectionStyle = .none
+        cell.applyTheme(theme: theme)
+    }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == "DUMMY" {
+            return nil
+        }
+        return indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

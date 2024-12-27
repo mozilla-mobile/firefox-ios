@@ -9,6 +9,7 @@ import SiteImageView
 enum OneLineTableViewCustomization {
     case regular
     case newFolder
+    case desktopBookmarksLabel
 }
 
 struct OneLineTableViewCellViewModel {
@@ -159,6 +160,8 @@ class OneLineTableViewCell: UITableViewCell,
         selectionStyle = .default
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
+        titleLabel.font = FXFontStyles.Regular.body.scaledFont()
+        leftImageView.isHidden = false
     }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
@@ -192,6 +195,10 @@ class OneLineTableViewCell: UITableViewCell,
             accessoryView?.tintColor = theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textAccent
             titleLabel.textColor = theme.colors.textAccent
+        case .desktopBookmarksLabel:
+            titleLabel.font = FXFontStyles.Regular.caption1.scaledFont()
+            titleLabel.textColor = theme.colors.textSecondary
+            leftImageView.isHidden = true
         }
     }
 }
