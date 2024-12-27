@@ -290,7 +290,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == "DUMMY" {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.dummyFolderGuid {
             return nil
         }
         return indexPath
