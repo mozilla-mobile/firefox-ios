@@ -12,6 +12,8 @@ import Redux
 /// store implementation (e.g. storing a completion handler for asynchronous middleware actions so you can await expectations
 ///  in your tests).
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
+    private let lock = NSLock()
+
     var state: State
 
     /// Records all actions dispatched to the mock store. Check this property to ensure that your middleware correctly
@@ -49,7 +51,11 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         // TODO: if you need it
     }
 
+    /// We implemented the lock to ensure that this is thread safe
+    /// since actions can be dispatch in concurrent tasks
     func dispatch(_ action: Redux.Action) {
+        lock.lock()
+        defer { lock.unlock() }
         dispatchedActions.append(action)
         dispatchCalled?()
     }
