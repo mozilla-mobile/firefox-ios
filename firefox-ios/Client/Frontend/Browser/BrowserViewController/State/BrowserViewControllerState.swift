@@ -202,7 +202,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(.contextMenu)
+                navigationDestination: NavigationDestination(.contextMenu,
+                                                             contextMenuConfiguration: action.contextMenuConfiguration)
             )
 
         default:

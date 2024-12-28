@@ -125,7 +125,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         navigateFromHomePanelCalled += 1
     }
 
-    func showContextMenu() {
+    func showContextMenu(for configuration: ContextMenuConfiguration) {
         showContextMenuCalled += 1
     }
 
