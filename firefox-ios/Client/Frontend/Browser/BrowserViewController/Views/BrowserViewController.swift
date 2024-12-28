@@ -2103,7 +2103,15 @@ class BrowserViewController: UIViewController,
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
         case .contextMenu:
-            navigationHandler?.showContextMenu()
+            guard let configuration = type.contextMenuConfiguration else {
+                logger.log(
+                        "configuration should not be nil when navigating for a context menu type",
+                        level: .warning,
+                        category: .coordinator
+                    )
+                return
+            }
+            navigationHandler?.showContextMenu(for: configuration)
         case .trackingProtectionSettings:
             navigationHandler?.show(settings: .contentBlocker)
         case .customizeHomepage:

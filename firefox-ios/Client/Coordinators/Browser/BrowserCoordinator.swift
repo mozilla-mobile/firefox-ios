@@ -170,10 +170,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
-    func showContextMenu() {
-        // TODO: FXIOS-10613 - Add proper context menu actions
-        let state = ContextMenuState()
+    func showContextMenu(for configuration: ContextMenuConfiguration) {
+        let state = ContextMenuState(configuration: configuration)
         let viewModel = PhotonActionSheetViewModel(actions: state.actions,
+                                                   site: state.site,
                                                    modalStyle: .overFullScreen)
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         sheet.modalTransitionStyle = .crossDissolve

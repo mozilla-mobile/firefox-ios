@@ -106,7 +106,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool)
 
     /// Navigates to our custom context menu (Photon Action Sheet)
-    func showContextMenu()
+    func showContextMenu(for configuration: ContextMenuConfiguration)
 
     /// Navigates to the edit bookmark view
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode)

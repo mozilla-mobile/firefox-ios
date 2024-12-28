@@ -357,7 +357,7 @@ final class HomepageViewController: UIViewController,
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover:
+        case .pocketDiscover(let item):
             guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
                 cellType: PocketDiscoverCell.self,
                 for: indexPath
@@ -365,7 +365,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            pocketDiscoverCell.configure(text: homepageState.pocketState.pocketDiscoverItem.title, theme: currentTheme)
+            pocketDiscoverCell.configure(text: item.title, theme: currentTheme)
 
             return pocketDiscoverCell
 
@@ -461,8 +461,20 @@ final class HomepageViewController: UIViewController,
     @objc
     private func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
-        // TODO: FXIOS-10613 - Pass proper action data to context menu
-        navigateToContextMenu()
+        let point = longPressGestureRecognizer.location(in: collectionView)
+        guard let indexPath = collectionView?.indexPathForItem(at: point),
+              let item = dataSource?.itemIdentifier(for: indexPath),
+              let section = dataSource?.sectionIdentifier(for: indexPath.section),
+              let sourceView = collectionView?.cellForItem(at: indexPath)
+        else {
+            self.logger.log(
+                "Item selected at \(point) but does not navigate to context menu",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
     }
 
     // MARK: Dispatch Actions
@@ -494,9 +506,11 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func navigateToContextMenu() {
+    private func navigateToContextMenu(for section: HomepageSection, and item: HomepageItem, sourceView: UIView? = nil) {
+        let configuration = ContextMenuConfiguration(homepageSection: section, item: item, sourceView: sourceView)
         store.dispatch(
             NavigationBrowserAction(
+                contextMenuConfiguration: configuration,
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.longPressOnCell
             )
@@ -531,10 +545,10 @@ final class HomepageViewController: UIViewController,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
             )
-        case .pocketDiscover:
+        case .pocketDiscover(let item):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: homepageState.pocketState.pocketDiscoverItem.url,
+                    url: item.url,
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
