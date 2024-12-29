@@ -21,67 +21,74 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
 
     let profile: Profile
 
-    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, Error> {
+    @MainActor
+    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, any Error> {
         return await withCheckedContinuation { continuation in
-            let operation: Deferred<Maybe<GUID?>>? = {
-                switch bookmark.type {
-                case .bookmark:
-                    guard let bookmark = bookmark as? BookmarkItemData else { return deferMaybe(nil) }
-                    let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
-
-                    if bookmark.parentGUID == nil {
-                        return profile.places.createBookmark(parentGUID: parentFolderGUID,
-                                                             url: bookmark.url,
-                                                             title: bookmark.title,
-                                                             position: position).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
-                                                    : deferMaybe(result.successValue)
-                        }
-                    } else {
-                        return profile.places.updateBookmarkNode(guid: bookmark.guid,
-                                                                 parentGUID: parentFolderGUID,
-                                                                 position: bookmark.position,
-                                                                 title: bookmark.title,
-                                                                 url: bookmark.url).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
-                        }
-                    }
-
-                case .folder:
-                    guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
-                    let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
-
-                    if folder.parentGUID == nil {
-                        return profile.places.createFolder(parentGUID: parentFolderGUID,
-                                                           title: folder.title,
-                                                           position: position).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
-                                                    : deferMaybe(result.successValue)
-                        }
-                    } else {
-                        return profile.places.updateBookmarkNode( guid: folder.guid,
-                                                                  parentGUID: parentFolderGUID,
-                                                                  position: folder.position,
-                                                                  title: folder.title).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
-                        }
-                    }
-
-                default:
-                    return nil
+            switch bookmark.type {
+            case .bookmark:
+                guard let bookmark = bookmark as? BookmarkItemData else {
+                    return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
                 }
-            }()
+                let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
 
-            if let operation {
-                operation.uponQueue(.main, block: { result in
-                    if let successValue = result.successValue {
-                        continuation.resume(returning: .success(successValue))
-                    } else {
-                        continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                if bookmark.parentGUID == nil {
+                    profile.places.createBookmark(parentGUID: parentFolderGUID,
+                                                  url: bookmark.url,
+                                                  title: bookmark.title,
+                                                  position: position) { result in
+                        switch result {
+                        case .success(let guid):
+                            return continuation.resume(returning: .success(guid))
+                        case .failure:
+                            return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                        }
                     }
-                })
-            } else {
-                continuation.resume(returning: .failure(SaveError.bookmarkTypeDontSupportSaving))
+                } else {
+                    profile.places.updateBookmarkNode(guid: bookmark.guid,
+                                                      parentGUID: parentFolderGUID,
+                                                      position: bookmark.position,
+                                                      title: bookmark.title,
+                                                      url: bookmark.url) { result in
+                        switch result {
+                        case .success:
+                            return continuation.resume(returning: .success(nil))
+                        case .failure:
+                            return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                        }
+                    }
+                }
+            case .folder:
+                guard let folder = bookmark as? BookmarkFolderData else {
+                    return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                }
+                let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
+
+                if folder.parentGUID == nil {
+                    profile.places.createFolder(parentGUID: parentFolderGUID,
+                                                title: folder.title,
+                                                position: position) { result in
+                        switch result {
+                        case .success(let guid):
+                            return continuation.resume(returning: .success(guid))
+                        case .failure:
+                            return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                        }
+                    }
+                } else {
+                    profile.places.updateBookmarkNode(guid: folder.guid,
+                                                      parentGUID: parentFolderGUID,
+                                                      position: folder.position,
+                                                      title: folder.title) { result in
+                        switch result {
+                        case .success:
+                            return continuation.resume(returning: .success(nil))
+                        case .failure:
+                            return continuation.resume(returning: .failure(SaveError.saveOperationFailed))
+                        }
+                    }
+                }
+            default:
+                return continuation.resume(returning: .failure(SaveError.bookmarkTypeDontSupportSaving))
             }
         }
     }

@@ -46,6 +46,15 @@ public protocol BookmarksHandler {
         title: String?,
         url: String?
     ) -> Success
+
+    func updateBookmarkNode(
+        guid: GUID,
+        parentGUID: GUID?,
+        position: UInt32?,
+        title: String?,
+        url: String?,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    )
 }
 
 public protocol HistoryMetadataObserver {
@@ -144,6 +153,36 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
+    public func withWriter<T>(
+        _ callback: @escaping (
+            PlacesWriteConnection
+        ) throws -> T,
+        completion: @escaping (Result<T, any Error>) -> Void
+    ) {
+        writerQueue.async {
+            guard self.isOpen else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+                return
+            }
+
+            if self.writer == nil {
+                self.writer = self.api?.getWriter()
+            }
+
+            if let writer = self.writer {
+                do {
+                    let result = try callback(writer)
+                    completion(.success(result))
+                } catch let error {
+                    completion(.failure(error))
+                }
+            } else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+            }
+        }
+    }
+
     private func withReader<T>(
         _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
@@ -179,7 +218,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     }
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
-    public func withReader<T>(
+    private func withReader<T>(
         _ callback: @escaping (
             PlacesReadConnection
         ) throws -> T,
@@ -206,7 +245,6 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                     completion(.success(result))
                 } catch let error {
                     completion(.failure(error))
-                    return
                 }
             } else {
                 completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
@@ -361,6 +399,21 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
+    public func createFolder(parentGUID: GUID, title: String,
+                             position: UInt32?,
+                             completion: @escaping (Result<GUID, any Error>) -> Void) {
+        withWriter(
+            { connection in
+                return try connection.createFolder(
+                    parentGUID: parentGUID,
+                    title: title,
+                    position: position
+                )
+            },
+            completion: completion)
+    }
+
     public func createSeparator(parentGUID: GUID,
                                 position: UInt32?) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
@@ -388,6 +441,28 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
+    public func createBookmark(
+        parentGUID: GUID,
+        url: String,
+        title: String?,
+        position: UInt32?,
+        completion: @escaping (Result<GUID, any Error>) -> Void
+    ) {
+        withWriter(
+            { connection in
+                let response = try connection.createBookmark(
+                    parentGUID: parentGUID,
+                    url: url,
+                    title: title,
+                    position: position
+                )
+                self.notificationCenter.post(name: .BookmarksUpdated, object: self)
+                return response
+            },
+            completion: completion)
+    }
+
     public func updateBookmarkNode(
         guid: GUID,
         parentGUID: GUID? = nil,
@@ -404,6 +479,28 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                 url: url
             )
         }
+    }
+
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
+    public func updateBookmarkNode(
+        guid: Shared.GUID,
+        parentGUID: Shared.GUID? = nil,
+        position: UInt32? = nil,
+        title: String? = nil,
+        url: String? = nil,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        withWriter(
+            { connection in
+                return try connection.updateBookmarkNode(
+                    guid: guid,
+                    parentGUID: parentGUID,
+                    position: position,
+                    title: title,
+                    url: url
+                )
+            },
+            completion: completion)
     }
 
     public func reopenIfClosed() -> NSError? {
