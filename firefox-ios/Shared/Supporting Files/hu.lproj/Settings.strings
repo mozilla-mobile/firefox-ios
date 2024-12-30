@@ -70,6 +70,9 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "További tudnivalók.";
 
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "További tudnivalók";
+
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Az összeomlás-jelentések lehetővé teszik a böngésző hibáinak diagnosztizálását és javítását.";
 
@@ -78,6 +81,9 @@
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "További tudnivalók.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "További tudnivalók";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
 "Settings.DailyUsagePing.Message.v135" = "Ez segít a %@ számára az aktív felhasználók megbecslésében.";
@@ -169,12 +175,30 @@
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Szponzorált javaslatok";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "További tudnivalók";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Próbálja ki a funkciókat és az ötleteket, mielőtt mindenki számára hozzáférhetővé válnak.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Tanulmányok telepítése és futtatása";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "További tudnivalók.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "További tudnivalók";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
 "Settings.TechnicalData.Message.v135" = "A %1$@ arra törekszik, hogy csak azt gyűjtse, ami a %2$@ fejlesztéséhez és támogatásához szükséges.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Az eszközre, hardverkonfigurációra és a használatra vonatkozó adatok segítenek minket a %@ funkcióinak, teljesítményének és stabilitásának javításában.";
+
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Műszaki és interakciós adatok";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Műszaki és interakciós adatok küldése";
 

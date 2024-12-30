@@ -170,7 +170,7 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "შემოთავაზებები ვებსივრციდან";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "მხარდაჭერა დამკვეთის შეთავაზების ნახვით %@ დროდადრო რომ გაჩვენებთ";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "თანადგომისთვის იხილეთ დამკვეთის შემოთავაზებები, %@ დროდადრო რომ გაჩვენებთ";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "შემოთავაზებები დამკვეთისგან";

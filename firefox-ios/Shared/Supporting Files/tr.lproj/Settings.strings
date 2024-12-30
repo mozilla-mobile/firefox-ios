@@ -85,6 +85,9 @@
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Daha fazla bilgi alın";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Bu sayede aktif %@ kullanıcılarının sayısını tahmin edebiliriz.";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Hesap";
 
@@ -180,6 +183,12 @@
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Daha fazla bilgi alın";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@, yalnızca %2$@ tarayıcısını daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Cihazınız, donanım yapılandırmanız ve kullanımınızla ilgili veriler %@ tarayıcısının özelliklerini, performansını ve kararlılığını geliştirmemize yardımcı olur.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Teknik veriler ve etkileşim verileri";

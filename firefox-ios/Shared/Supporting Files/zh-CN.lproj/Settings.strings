@@ -23,7 +23,7 @@
 "Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "使用保存的地址";
 
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
-"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "添加信用卡";
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "添加卡片";
 
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "安全保存您的卡片信息，方便下次使用。";
@@ -38,10 +38,10 @@
 "CreditCard.Settings.NotNow.v122" = "暂时不要";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v122" = "要安全地保存此信用卡吗？";
+"CreditCard.Settings.RememberThisCard.v122" = "要安全地保存此卡片吗？";
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
-"CreditCard.Settings.UpdateThisCard.v122" = "要更新信用卡吗？";
+"CreditCard.Settings.UpdateThisCard.v122" = "要更新卡片吗？";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v122" = "更新";
@@ -53,7 +53,7 @@
 "CreditCards.Settings.ManageCards.v112" = "管理卡片";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
-"CreditCards.Settings.UseASavedCard.v122" = "使用保存的信用卡";
+"CreditCards.Settings.UseASavedCard.v122" = "使用保存的卡片";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "使用保存的卡片";

@@ -109,6 +109,9 @@
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Upravljaj";
 
+/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Za pomoč pri izboljšavah brskalnika %1$@ organizaciji %2$@ pošilja diagnostične podatke in podatke o uporabi. %3$@";
+
 /* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@u je mar za vašo zasebnost. Preberite več v našem %2$@.";
 
@@ -120,6 +123,18 @@
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Več o tem";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Poročila o sesutjih nam omogočajo diagnosticiranje in odpravljanje težav z brskalnikom. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Samodejno pošlji poročila o sesutjih";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Podatki o vaši napravi, nastavitvi strojne opreme in načinu uporabe brskalnika %1$@ pomagajo izboljšati funkcionalnost, zmogljivost in zanesljivost za uporabnike po vsem svetu. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Pošiljaj tehnične podatke in podatke o uporabi organizaciji %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Pomagajte nam izboljšati %@";

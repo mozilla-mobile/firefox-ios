@@ -1,5 +1,23 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Agregar marcadores mientras navegas para que puedas encontrar después tus sitios favoritos.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Esta carpeta está vacía";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "Guarda sitios mientras navegas. También te mostraremos los marcadores de tus otros dispositivos sincronizados.";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
+"Bookmarks.EmptyState.Root.ButtonTitle.v135" = "Iniciar sesión para sincronizar";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "Aún no hay marcadores";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Todo";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "Eliminar Marcador";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Eliminado “%@”";
@@ -9,6 +27,9 @@
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Editar marcador";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "Guardar";
 
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Guardar en";

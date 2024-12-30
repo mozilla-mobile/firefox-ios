@@ -1,3 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "വീണ്ടും ലഭ്യമാക്കുക";
 
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "താങ്ങളുടെ അന്തരവല സമ്പർക്കത്തിൽ കുഴപ്പം ഉണ്ടു്.";
+
