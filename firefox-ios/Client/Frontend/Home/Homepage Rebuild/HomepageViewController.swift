@@ -153,23 +153,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleToolbarStateOnScroll() {
-        // TODO: FXIOS-10877 This logic will be handled by toolbar state, the homepage will just dispatch the action
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-
-        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
-        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
-           let toolbarState,
-           toolbarState.addressToolbar.isEditing {
-            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
-            // On a website we just dismiss the keyboard
-            if toolbarState.addressToolbar.url == nil {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(action)
-            } else {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
-                store.dispatch(action)
-            }
-        }
+        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
+        // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
+        store.dispatch(action)
     }
 
     // MARK: - Redux
