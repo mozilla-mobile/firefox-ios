@@ -5,7 +5,11 @@
 import Foundation
 import Common
 
-final class ContextMenuCoordinator: BaseCoordinator {
+protocol ContextMenuCoordinatorDelegate: AnyObject {
+    func dismissFlow()
+}
+
+final class ContextMenuCoordinator: BaseCoordinator, ContextMenuCoordinatorDelegate {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
     private let configuration: ContextMenuConfiguration
@@ -28,6 +32,7 @@ final class ContextMenuCoordinator: BaseCoordinator {
             modalStyle: .overFullScreen
         )
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        sheet.coordinator = self
         sheet.modalTransitionStyle = .crossDissolve
         router.present(sheet)
     }

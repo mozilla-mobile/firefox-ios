@@ -48,6 +48,8 @@ class PhotonActionSheet: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    weak var coordinator: ContextMenuCoordinatorDelegate?
+
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.layer.cornerRadius = UX.cornerRadius
@@ -324,7 +326,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     @objc
     private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
-        dismissVC()
+        dismissSheet()
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -332,7 +334,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         // Need to handle click outside view for non-popover sheet styles
         guard let touch = touches.first else { return }
         if !tableView.frame.contains(touch.location(in: view)) {
-            dismissVC()
+            dismissSheet()
         }
     }
 
@@ -490,11 +492,16 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         (header as? ThemeApplicable)?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return header
     }
+
+    private func dismissSheet(withCompletion completion: (() -> Void)? = nil) {
+        dismissVC(withCompletion: completion)
+        coordinator?.dismissFlow()
+    }
 }
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
     func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void) {
-        dismissVC(withCompletion: animationCompletion)
+        dismissSheet(withCompletion: animationCompletion)
     }
 }
