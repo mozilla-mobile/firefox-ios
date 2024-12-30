@@ -150,9 +150,9 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
-            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint, invalidCharacters: false)
-        }
+//        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
+//            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint, invalidCharacters: false)
+//        }
         return URL(string: UnifiedAdsProvider.prodResourceEndpoint, invalidCharacters: false)
     }
 }

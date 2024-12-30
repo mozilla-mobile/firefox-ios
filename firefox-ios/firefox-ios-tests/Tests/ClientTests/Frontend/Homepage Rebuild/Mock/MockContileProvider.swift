@@ -7,7 +7,7 @@ import Shared
 
 @testable import Client
 
-class MockContileProvider: ContileProviderInterface {
+class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderInterface {
     enum MockError: Error {
         case testError
     }
@@ -50,5 +50,26 @@ class MockContileProvider: ContileProviderInterface {
 
     func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
         completion(result)
+    }
+
+    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void) {
+        switch result {
+        case .success(let contiles):
+            let unifiedTiles = self.convert(contiles: contiles)
+            completion(.success(unifiedTiles))
+        case .failure(let error):
+            completion(.failure(error))
+        }
+    }
+
+    func convert(contiles: [Contile]) -> [UnifiedTile] {
+        return contiles.enumerated().map { (index, contile) in
+            UnifiedTile(format: "tile",
+                        url: contile.url,
+                        callbacks: UnifiedTileCallback(click: contile.clickUrl, impression: contile.impressionUrl),
+                        imageUrl: contile.imageUrl,
+                        name: contile.name,
+                        blockKey: "Block_key_\(index)")
+        }
     }
 }
