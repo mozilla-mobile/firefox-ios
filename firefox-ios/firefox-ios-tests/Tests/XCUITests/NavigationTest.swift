@@ -511,11 +511,11 @@ class NavigationTest: BaseTestCase {
         closeFromAppSwitcherAndRelaunch()
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
-        app.links[website_2["link"]!].tap()
+        app.links[website_2["link"]!].waitAndTap()
         waitUntilPageLoad()
         let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         mozWaitForElementToExist(backButton)
-        XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
+        mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
         backButton.tap()
         waitUntilPageLoad()
