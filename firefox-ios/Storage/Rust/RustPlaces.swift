@@ -403,15 +403,13 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     public func createFolder(parentGUID: GUID, title: String,
                              position: UInt32?,
                              completion: @escaping (Result<GUID, any Error>) -> Void) {
-        withWriter(
-            { connection in
+        withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,
                     title: title,
                     position: position
                 )
-            },
-            completion: completion)
+            }, completion: completion)
     }
 
     public func createSeparator(parentGUID: GUID,
@@ -449,8 +447,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         position: UInt32?,
         completion: @escaping (Result<GUID, any Error>) -> Void
     ) {
-        withWriter(
-            { connection in
+        withWriter({ connection in
                 let response = try connection.createBookmark(
                     parentGUID: parentGUID,
                     url: url,
@@ -459,8 +456,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                 )
                 self.notificationCenter.post(name: .BookmarksUpdated, object: self)
                 return response
-            },
-            completion: completion)
+            }, completion: completion)
     }
 
     public func updateBookmarkNode(
@@ -490,8 +486,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         url: String? = nil,
         completion: @escaping (Result<Void, any Error>) -> Void
     ) {
-        withWriter(
-            { connection in
+        withWriter({ connection in
                 return try connection.updateBookmarkNode(
                     guid: guid,
                     parentGUID: parentGUID,
@@ -499,8 +494,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                     title: title,
                     url: url
                 )
-            },
-            completion: completion)
+            }, completion: completion)
     }
 
     public func reopenIfClosed() -> NSError? {
