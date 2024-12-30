@@ -572,6 +572,7 @@ class TrackingProtectionViewController: UIViewController,
     private func showSettings() {
         store.dispatch(
             NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.trackingProtectionSettings),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnTrackingProtection
             )

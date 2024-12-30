@@ -94,7 +94,7 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage)
+        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage, destination: .customizeHomepage)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .customizeHomepage)
@@ -108,7 +108,7 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertNil(initialState.navigationDestination)
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
-        let action = getNavigationBrowserAction(for: .tapOnCell, url: url)
+        let action = getNavigationBrowserAction(for: .tapOnCell, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .link)
@@ -122,7 +122,7 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertNil(initialState.navigationDestination)
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
-        let action = getNavigationBrowserAction(for: .tapOnLink, url: url)
+        let action = getNavigationBrowserAction(for: .tapOnLink, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .link)
@@ -144,10 +144,11 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
     private func getNavigationBrowserAction(
         for actionType: NavigationBrowserActionType,
+        destination: BrowserNavigationDestination,
         url: URL? = nil
     ) -> NavigationBrowserAction {
         return NavigationBrowserAction(
-            url: url,
+            navigationDestination: NavigationDestination(destination, url: url),
             windowUUID: .XCTestDefaultUUID,
             actionType: actionType
         )

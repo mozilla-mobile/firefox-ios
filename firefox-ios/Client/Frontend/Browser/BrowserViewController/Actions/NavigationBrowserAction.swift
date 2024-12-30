@@ -8,18 +8,12 @@ import Redux
 
 /// Actions that are related to navigation from the user perspective
 class NavigationBrowserAction: Action {
-    let url: URL?
-    let isGoogleTopSite: Bool?
-    let contextMenuConfiguration: ContextMenuConfiguration?
+    let navigationDestination: NavigationDestination
 
-    init(url: URL? = nil,
-         isGoogleTopSite: Bool? = nil,
-         contextMenuConfiguration: ContextMenuConfiguration? = nil,
+    init(navigationDestination: NavigationDestination,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.url = url
-        self.isGoogleTopSite = isGoogleTopSite
-        self.contextMenuConfiguration = contextMenuConfiguration
+        self.navigationDestination = navigationDestination
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
