@@ -228,14 +228,12 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         recursive: Bool,
         completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     ) {
-        withReader(
-            { connection in
-                return try connection.getBookmarksTree(
-                    rootGUID: rootGUID,
-                    recursive: recursive
-                )
-            },
-            completion: completion)
+        withReader({ connection in
+            return try connection.getBookmarksTree(
+                rootGUID: rootGUID,
+                recursive: recursive
+            )
+        }, completion: completion)
     }
 
     public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
