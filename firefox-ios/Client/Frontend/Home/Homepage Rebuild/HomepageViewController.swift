@@ -490,6 +490,7 @@ final class HomepageViewController: UIViewController,
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.customizeHomepage),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
             )
@@ -499,7 +500,7 @@ final class HomepageViewController: UIViewController,
     private func navigateToPocketLearnMore() {
         store.dispatch(
             NavigationBrowserAction(
-                url: homepageState.pocketState.footerURL,
+                navigationDestination: NavigationDestination(.link, url: homepageState.pocketState.footerURL),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
             )
@@ -510,7 +511,7 @@ final class HomepageViewController: UIViewController,
         let configuration = ContextMenuConfiguration(homepageSection: section, item: item, sourceView: sourceView)
         store.dispatch(
             NavigationBrowserAction(
-                contextMenuConfiguration: configuration,
+                navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.longPressOnCell
             )
@@ -531,8 +532,11 @@ final class HomepageViewController: UIViewController,
         case .topSite(let state, _):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: state.site.url.asURL,
-                    isGoogleTopSite: state.isGoogleURL,
+                    navigationDestination: NavigationDestination(
+                        .link,
+                        url: state.site.url.asURL,
+                        isGoogleTopSite: state.isGoogleURL
+                    ),
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
@@ -540,7 +544,7 @@ final class HomepageViewController: UIViewController,
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: story.url,
+                    navigationDestination: NavigationDestination(.link, url: story.url),
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
@@ -548,7 +552,10 @@ final class HomepageViewController: UIViewController,
         case .pocketDiscover(let item):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: item.url,
+                    navigationDestination: NavigationDestination(
+                        .link,
+                        url: item.url
+                    ),
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
