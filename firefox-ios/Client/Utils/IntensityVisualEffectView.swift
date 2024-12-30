@@ -15,7 +15,7 @@ class IntensityVisualEffectView: UIVisualEffectView {
     init(effect: UIVisualEffect, intensity: CGFloat) {
         super.init(effect: nil)
         animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [unowned self] in self.effect = effect }
-        animator.fractionComplete = intensity
+        animator?.fractionComplete = intensity
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -23,5 +23,5 @@ class IntensityVisualEffectView: UIVisualEffectView {
     }
 
     // MARK: - Properties
-    private var animator: UIViewPropertyAnimator!
+    private var animator: UIViewPropertyAnimator?
 }
