@@ -76,16 +76,14 @@ class EditBookmarkViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .Bookmarks.Menu.EditBookmarkTitle
-        viewModel.onFolderStatusUpdate = { [weak self] shouldUpdateNewFolderSection in
+        viewModel.onFolderStatusUpdate = { [weak self] in
             guard let self = self else { return }
 
             self.tableView.performBatchUpdates {
-                if shouldUpdateNewFolderSection {
-                    if self.viewModel.isFolderCollapsed {
-                        self.tableView.deleteSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
-                    } else {
-                        self.tableView.insertSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
-                    }
+                if self.viewModel.isFolderCollapsed {
+                    self.tableView.deleteSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
+                } else {
+                    self.tableView.insertSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
                 }
                 self.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
             }
