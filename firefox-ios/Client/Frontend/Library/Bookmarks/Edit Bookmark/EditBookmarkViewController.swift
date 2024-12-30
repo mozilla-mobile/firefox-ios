@@ -76,8 +76,19 @@ class EditBookmarkViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .Bookmarks.Menu.EditBookmarkTitle
-        viewModel.onFolderStatusUpdate = { [weak self] in
-            self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
+        viewModel.onFolderStatusUpdate = { [weak self] shouldUpdateNewFolderSection in
+            guard let self = self else { return }
+
+            self.tableView.performBatchUpdates {
+                if shouldUpdateNewFolderSection {
+                    if self.viewModel.isFolderCollapsed {
+                        self.tableView.deleteSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
+                    } else {
+                        self.tableView.insertSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
+                    }
+                }
+                self.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
+            }
         }
 
         navigationItem.rightBarButtonItem = saveBarButton
@@ -166,7 +177,7 @@ class EditBookmarkViewController: UIViewController,
     // MARK: - UITableViewDataSource & UITableViewDelegate
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        return viewModel.isFolderCollapsed ? Section.allCases.count - 1 : Section.allCases.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -191,7 +202,8 @@ class EditBookmarkViewController: UIViewController,
             return cell
         case .newFolder:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell
+                                                           for: indexPath) as? OneLineTableViewCell,
+                  !viewModel.isFolderCollapsed
             else {
                 return UITableViewCell()
             }
@@ -248,7 +260,7 @@ class EditBookmarkViewController: UIViewController,
         case .folder:
             viewModel.folderStructures.count
         case .newFolder:
-            1
+             viewModel.isFolderCollapsed ? 0 : 1
         }
     }
 

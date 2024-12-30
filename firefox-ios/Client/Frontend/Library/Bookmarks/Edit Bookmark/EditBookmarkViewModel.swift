@@ -36,7 +36,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         return node?.url ?? ""
     }
 
-    var onFolderStatusUpdate: VoidReturnCallback?
+    var onFolderStatusUpdate: ((Bool) -> Void)?
     var onBookmarkSaved: VoidReturnCallback?
 
     var getBackNavigationButtonTitle: String {
@@ -73,10 +73,10 @@ class EditBookmarkViewModel: ParentFolderSelector {
         if isFolderCollapsed {
             selectedFolder = folder
             folderStructures = [folder]
-            onFolderStatusUpdate?()
         } else {
             getFolderStructure(folder)
         }
+        onFolderStatusUpdate?(true)
     }
 
     func createNewFolder() {
@@ -92,7 +92,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
             guard let folders else { return }
             self?.folderStructures = folders
             self?.selectedFolder = selectedFolder
-            self?.onFolderStatusUpdate?()
+            self?.onFolderStatusUpdate?(false)
         }
     }
 
@@ -138,7 +138,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
         isFolderCollapsed = true
         selectedFolder = folder
         folderStructures = [folder]
-        onFolderStatusUpdate?()
+        onFolderStatusUpdate?(true)
     }
 }
 
