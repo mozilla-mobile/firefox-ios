@@ -141,12 +141,14 @@ class BrowserCoordinator: BaseCoordinator,
     func showHomepage(
         overlayManager: OverlayModeManager,
         isZeroSearch: Bool,
-        statusBarScrollDelegate: StatusBarScrollDelegate
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        toastContainer: UIView
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager,
-            statusBarScrollDelegate: statusBarScrollDelegate
+            statusBarScrollDelegate: statusBarScrollDelegate,
+            toastContainer: toastContainer
         )
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -171,13 +173,10 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showContextMenu(for configuration: ContextMenuConfiguration) {
-        let state = ContextMenuState(configuration: configuration)
-        let viewModel = PhotonActionSheetViewModel(actions: state.actions,
-                                                   site: state.site,
-                                                   modalStyle: .overFullScreen)
-        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
-        sheet.modalTransitionStyle = .crossDissolve
-        present(sheet)
+        let coordinator = ContextMenuCoordinator(configuration: configuration, router: router, windowUUID: windowUUID)
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
     }
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
@@ -202,11 +201,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        browserViewController.homePanelDidRequestToOpenInNewTab(
-            url,
-            isPrivate: isPrivate,
-            selectNewTab: selectNewTab
-        )
+        openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
     func switchMode() {
@@ -668,7 +663,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
-
+    func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        browserViewController.homePanelDidRequestToOpenInNewTab(
+            url,
+            isPrivate: isPrivate,
+            selectNewTab: selectNewTab
+        )
+    }
     func showShareSheet(
         shareType: ShareType,
         shareMessage: ShareMessage?,

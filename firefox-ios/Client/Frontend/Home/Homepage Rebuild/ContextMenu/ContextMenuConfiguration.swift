@@ -6,6 +6,7 @@ import Storage
 struct ContextMenuConfiguration: Equatable {
     var homepageSection: HomepageSection
     var sourceView: UIView?
+    var toastContainer: UIView
 
     var site: Site? {
         switch item {
@@ -27,10 +28,12 @@ struct ContextMenuConfiguration: Equatable {
     init(
         homepageSection: HomepageSection,
         item: HomepageItem? = nil,
-        sourceView: UIView? = nil
+        sourceView: UIView? = nil,
+        toastContainer: UIView
     ) {
         self.homepageSection = homepageSection
         self.item = item
         self.sourceView = sourceView
+        self.toastContainer = toastContainer
     }
 }

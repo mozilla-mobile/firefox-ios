@@ -43,8 +43,7 @@ final class HomepageViewController: UIViewController,
     private var dataSource: HomepageDiffableDataSource?
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
-    private var overlayManager: OverlayModeManager
-    private var logger: Logger
+
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -52,11 +51,17 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    // MARK: - Private constants
+    private let overlayManager: OverlayModeManager
+    private let logger: Logger
+    private let toastContainer: UIView
+
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
+         toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
@@ -65,6 +70,7 @@ final class HomepageViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
+        self.toastContainer = toastContainer
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -490,7 +496,7 @@ final class HomepageViewController: UIViewController,
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.customizeHomepage),
+                navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
             )
@@ -508,7 +514,12 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToContextMenu(for section: HomepageSection, and item: HomepageItem, sourceView: UIView? = nil) {
-        let configuration = ContextMenuConfiguration(homepageSection: section, item: item, sourceView: sourceView)
+        let configuration = ContextMenuConfiguration(
+            homepageSection: section,
+            item: item,
+            sourceView: sourceView,
+            toastContainer: toastContainer
+        )
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),

@@ -20,9 +20,17 @@ class NavigationBrowserAction: Action {
 }
 
 enum NavigationBrowserActionType: ActionType {
-    case tapOnCustomizeHomepage
-    case tapOnCell
-    case tapOnLink
+    // Native views
     case tapOnTrackingProtection
+    case tapOnShareSheet
+    case tapOnCustomizeHomepage
+    case tapOnSettingsSection
+
+    // link related
+    case tapOnLink
+    case tapOnOpenInNewTab
+
+    // cell related
+    case tapOnCell
     case longPressOnCell
 }
