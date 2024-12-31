@@ -679,18 +679,26 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
-        switch toast {
-        case .addShortcut,
-                .clearCookies,
-                .addToReadingList,
-                .removeShortcut,
-                .removeFromReadingList,
-                .addBookmark:
+        func showToast() {
             SimpleToast().showAlertWithText(
                 toast.title,
                 bottomContainer: contentContainer,
                 theme: currentTheme()
             )
+        }
+        switch toast {
+        case .addShortcut,
+                .clearCookies,
+                .addToReadingList,
+                .removeShortcut,
+                .removeFromReadingList:
+            showToast()
+        case .addBookmark:
+            if isBookmarkRefactorEnabled {
+                showBookmarkToast(action: .add)
+            } else {
+                showToast()
+            }
         default:
             let viewModel = ButtonToastViewModel(
                 labelText: toast.title,
@@ -1677,9 +1685,29 @@ class BrowserViewController: UIViewController,
     }
 
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
+        func showAddBookmarkToast(folderName: String) {
+            let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
+            self.showToast(message: message, toastAction: .bookmarkPage)
+        }
+
         switch action {
         case .add:
-            self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            if !isBookmarkRefactorEnabled {
+                self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            }
+            // Get the folder title using the recent bookmark folder pref
+            // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
+            else if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
+                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+                profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
+                    guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                    let folderName = bookmarkFolder.title
+                    showAddBookmarkToast(folderName: folderName)
+                }
+            // If recent bookmarks folder is nil or the mobile (default) folder
+            } else {
+                showAddBookmarkToast(folderName: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel)
+            }
         case .remove:
             self.showToast(
                 bookmarkURL,
