@@ -18,11 +18,13 @@ struct ContextMenuState {
 
     private let configuration: ContextMenuConfiguration
     private let windowUUID: WindowUUID
+    private let logger: Logger
     weak var coordinatorDelegate: ContextMenuCoordinator?
 
-    init(configuration: ContextMenuConfiguration, windowUUID: WindowUUID) {
+    init(configuration: ContextMenuConfiguration, windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.configuration = configuration
         self.windowUUID = windowUUID
+        self.logger = logger
 
         guard let site = configuration.site else { return }
         self.site = site
@@ -123,7 +125,14 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.helpCircle,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else { return }
+            guard let url = SupportUtils.URLForTopic("sponsor-privacy") else {
+                self.logger.log(
+                    "Unable to retrieve URL for sponsor-privacy, return early",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
             dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
             // TODO: FXIOS-10171 - Add telemetry
         }).items
@@ -197,7 +206,14 @@ struct ContextMenuState {
             iconString: StandardImageIdentifiers.Large.share,
             allowIconScaling: true,
             tapHandler: { _ in
-                guard let url = URL(string: siteURL, invalidCharacters: false) else { return }
+                guard let url = URL(string: siteURL, invalidCharacters: false) else {
+                    self.logger.log(
+                        "Unable to retrieve URL for \(siteURL), return early",
+                        level: .warning,
+                        category: .homepage
+                    )
+                    return
+                }
                 let shareSheetConfiguration = ShareSheetConfiguration(
                     shareType: .site(url: url),
                     shareMessage: nil,
