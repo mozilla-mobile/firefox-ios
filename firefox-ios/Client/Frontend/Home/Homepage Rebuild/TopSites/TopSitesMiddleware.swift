@@ -16,7 +16,7 @@ final class TopSitesMiddleware {
 
     init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface? = nil) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(
-            prefs: profile.prefs,
+            profile: profile,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
             ),
@@ -30,6 +30,24 @@ final class TopSitesMiddleware {
         case HomepageActionType.initialize,
             TopSitesActionType.fetchTopSites:
             self.getTopSitesDataAndUpdateState(for: action)
+        case ContextMenuActionType.tappedOnAddTopSites:
+            guard let site = (action as? ContextMenuAction)?.site else {
+                // add logger
+                return
+            }
+            self.topSitesManager.pinTopSite(site)
+        case ContextMenuActionType.tappedOnRemovePinnedSites:
+            guard let site = (action as? ContextMenuAction)?.site else {
+                // add logger
+                return
+            }
+            self.topSitesManager.removePinTopSite(site)
+        case ContextMenuActionType.tappedOnRemoveTopSites:
+            guard let site = (action as? ContextMenuAction)?.site else {
+                // add logger
+                return
+            }
+            self.topSitesManager.removeTopSite(site)
         default:
             break
         }

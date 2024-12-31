@@ -836,6 +836,7 @@
 		8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87AEE02C1B4D17007428B2 /* SearchViewModelTests.swift */; };
 		8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */; };
 		8A552AC82CB43AB400564C98 /* HeaderStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */; };
+		8A5564022D23317100028CA7 /* ContextMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5564012D23317100028CA7 /* ContextMenuAction.swift */; };
 		8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0E5F3D2BFBA49400DE052B /* MicrosurveyCoordinatorTests.swift */; };
 		8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */; };
 		8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */; };
@@ -7628,6 +7629,7 @@
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
 		8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageStateTests.swift; sourceTree = "<group>"; };
 		8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderStateTests.swift; sourceTree = "<group>"; };
+		8A5564012D23317100028CA7 /* ContextMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuAction.swift; sourceTree = "<group>"; };
 		8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
@@ -11767,6 +11769,7 @@
 			children = (
 				8AC0B1BF2D1D9356004237FD /* ContextMenuConfiguration.swift */,
 				8A62B15C2CED408B0045F46E /* ContextMenuState.swift */,
+				8A5564012D23317100028CA7 /* ContextMenuAction.swift */,
 				8A855C022D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift */,
 			);
 			path = ContextMenu;
@@ -16680,6 +16683,7 @@
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				43D16B8529831EA5009F8279 /* Style.swift in Sources */,
 				E16258EF2A83BE0800522742 /* FakespotLoadingView.swift in Sources */,
+				8A5564022D23317100028CA7 /* ContextMenuAction.swift in Sources */,
 				8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */,
 				8AE80BB82891BE0700BC12EA /* JumpBackInDataAdaptor.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */,

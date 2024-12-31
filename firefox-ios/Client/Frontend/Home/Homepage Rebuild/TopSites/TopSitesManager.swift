@@ -25,12 +25,18 @@ protocol TopSitesManagerInterface {
     /// then comes the sponsored tiles, pinned sites and then frecency top sites.
     /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState]
+
+    func removeTopSite(_ site: Site)
+
+    func pinTopSite(_ site: Site)
+
+    func removePinTopSite(_ site: Site)
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
 class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private var logger: Logger
-    private let prefs: Prefs
+    private let profile: Profile
     private let contileProvider: ContileProviderInterface
     private let googleTopSiteManager: GoogleTopSiteManagerProvider
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
@@ -41,7 +47,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private let maxNumberOfSponsoredTile: Int = 2
 
     init(
-        prefs: Prefs,
+        profile: Profile,
         contileProvider: ContileProviderInterface = ContileProvider(),
         unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
         googleTopSiteManager: GoogleTopSiteManagerProvider,
@@ -50,7 +56,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         logger: Logger = DefaultLogger.shared,
         maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     ) {
-        self.prefs = prefs
+        self.profile = profile
         self.contileProvider = contileProvider
         self.unifiedAdsProvider = unifiedAdsProvider
         self.googleTopSiteManager = googleTopSiteManager
@@ -76,7 +82,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // MARK: Google tile
     private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteState] {
         guard googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0),
-                let googleSite = googleTopSiteManager.suggestedSiteData
+              let googleSite = googleTopSiteManager.suggestedSiteData
         else {
             return []
         }
@@ -120,7 +126,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     private var shouldLoadSponsoredTiles: Bool {
-        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
+        return profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
     }
 
     private func filterSponsoredSites(
@@ -140,7 +146,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         return filteredContiles
     }
 
-    /// Show the sponsored site only if site is not already present in the pinned sites 
+    /// Show the sponsored site only if site is not already present in the pinned sites
     /// and it's not the default search engine
     private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
@@ -203,6 +209,32 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             duplicates.insert(state)
 
             return state
+        }
+    }
+
+    // MARK: - Context actions
+    func removeTopSite(_ site: Site) {
+        removePinTopSite(site)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.hideURLFromTopSites(site)
+        }
+    }
+
+    func pinTopSite(_ site: Site) {
+        _ = profile.pinnedSites.addPinnedTopSite(site)
+    }
+
+    func removePinTopSite(_ site: Site) {
+        googleTopSiteManager.removeGoogleTopSite(site: site)
+        topSiteHistoryManager.removeTopSite(site: site)
+    }
+
+    private func hideURLFromTopSites(_ site: Site) {
+        topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
+        // We make sure to remove all history for URL so it doesn't show anymore in the
+        // top sites, this is the approach that Android takes too.
+        profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+            NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
         }
     }
 }

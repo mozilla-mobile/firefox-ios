@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import Storage
+import Redux
 
 /// State to populate actions for the `PhotonActionSheet` view
 /// Ideally, we want that view to subscribe to the store and update its state following the redux pattern
@@ -19,6 +20,7 @@ struct ContextMenuState {
     private let configuration: ContextMenuConfiguration
     private let windowUUID: WindowUUID
     private let logger: Logger
+
     weak var coordinatorDelegate: ContextMenuCoordinator?
 
     init(configuration: ContextMenuConfiguration, windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
@@ -54,10 +56,10 @@ struct ContextMenuState {
 
     private func getPinnedTileActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
-        return [getRemovePinTopSiteAction(),
+        return [getRemovePinTopSiteAction(site: site),
                 getOpenInNewTabAction(siteURL: siteURL),
                 getOpenInNewPrivateTabAction(siteURL: siteURL),
-                getRemoveTopSiteAction(),
+                getRemoveTopSiteAction(site: site),
                 getShareAction(siteURL: site.url)]
     }
 
@@ -72,41 +74,44 @@ struct ContextMenuState {
 
     private func getOtherTopSitesActions(site: Site) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
-        return [getPinTopSiteAction(),
+        return [getPinTopSiteAction(site: site),
                 getOpenInNewTabAction(siteURL: siteURL),
                 getOpenInNewPrivateTabAction(siteURL: siteURL),
-                getRemoveTopSiteAction(),
+                getRemoveTopSiteAction(site: site),
                 getShareAction(siteURL: site.url)]
     }
 
     /// This action removes the tile out of the top sites.
     /// If site is pinned, it removes it from pinned and remove from top sites in general.
-    private func getRemoveTopSiteAction() -> PhotonRowActions {
+    private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10614 - Add proper actions
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemoveTopSites)
+            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
-    private func getPinTopSiteAction() -> PhotonRowActions {
+    private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .PinTopsiteActionTitle2,
                                      iconString: StandardImageIdentifiers.Large.pin,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10614 - Add proper actions
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnAddTopSites)
+            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
     /// This unpin action removes the top site from the location it's in.
     /// The tile can stil appear in the top sites as unpinned.
-    private func getRemovePinTopSiteAction() -> PhotonRowActions {
+    private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
         return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
                                      iconString: StandardImageIdentifiers.Large.pinSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10614 - Add proper actions
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemovePinnedSites)
+            // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
 
@@ -177,7 +182,7 @@ struct ContextMenuState {
         if site.bookmarked ?? false {
             bookmarkAction = getRemoveBookmarkAction()
         } else {
-            bookmarkAction = getAddBookmarkAction(site: site)
+            bookmarkAction = getAddBookmarkAction()
         }
         return bookmarkAction.items
     }
@@ -191,7 +196,7 @@ struct ContextMenuState {
         })
     }
 
-    private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
+    private func getAddBookmarkAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
@@ -259,6 +264,16 @@ struct ContextMenuState {
                 navigationDestination: NavigationDestination(.shareSheet(shareSheetConfiguration)),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnShareSheet
+            )
+        )
+    }
+
+    private func dispatchContextMenuAction(site: Site, actionType: ActionType) {
+        store.dispatch(
+            ContextMenuAction(
+                site: site,
+                windowUUID: windowUUID,
+                actionType: actionType
             )
         )
     }
