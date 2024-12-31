@@ -187,7 +187,7 @@ class EditBookmarkViewController: UIViewController,
             snapshot.appendSections([.folder])
         }
         snapshot.appendSections([.newFolder])
-        
+
         // Add items for the Bookmark section
         snapshot.appendItems([.bookmark], toSection: .bookmark)
 
