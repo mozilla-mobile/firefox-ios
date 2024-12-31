@@ -37,7 +37,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
         } else {
             return OneLineTableViewCellViewModel(title: title,
                                                  leftImageView: leftImageView,
-                                                 accessoryView: nil,
+                                                 accessoryView: UIImageView(image: chevronImage),
                                                  accessoryType: .disclosureIndicator,
                                                  editingAccessoryView: nil)
         }
@@ -80,7 +80,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         } else {
             return OneLineTableViewCellViewModel(title: title,
                                                  leftImageView: nil,
-                                                 accessoryView: nil,
+                                                 accessoryView: UIImageView(image: chevronImage),
                                                  accessoryType: .disclosureIndicator,
                                                  editingAccessoryView: nil)
         }
