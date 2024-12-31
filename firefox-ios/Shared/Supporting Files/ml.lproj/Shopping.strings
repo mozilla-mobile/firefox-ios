@@ -28,6 +28,9 @@
 /* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "വിവരം അറിയിക്കുന്നതിനു് നന്ദി!";
 
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "ഈ അവലോകനങ്ങളെക്കുറിച്ച് ഇതുവരെ വിവരങ്ങളൊന്നുമില്ല";
+
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "കൂടുതല്‍ അറിയുക";
 
@@ -57,6 +60,9 @@
 
 /* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "തുറന്നതു്";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "ബീറ്റ";
 
 /* Title for error card displayed to the user when the device is disconnected from the network. */
 "Shopping.WarningCard.CheckNoConnection.Title.v120" = "ഗോളാന്തരവല സമ്പർക്കമില്ല";

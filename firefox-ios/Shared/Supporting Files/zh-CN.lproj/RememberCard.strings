@@ -5,11 +5,11 @@
 "CreditCard.RememberCard.MainButtonTitle.v122" = "保存";
 
 /* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v122" = "要安全地保存此信用卡吗？";
+"CreditCard.RememberCard.MainTitle.v122" = "要安全地保存此卡片吗？";
 
 /* This value is used as the title for the Not Now button in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v115" = "暂时不要";
 
 /* This value is used as the toast message for the saving success alert in the remember credit card page */
-"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "已保存新信用卡";
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "已保存新卡片";
 

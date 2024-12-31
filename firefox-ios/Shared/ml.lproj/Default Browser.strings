@@ -10,11 +10,14 @@
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ഫയർ‌ഫോക്സിൽ‌ തന്നെതാനെ തുറക്കുന്നതിന് വെബ്‌സൈറ്റുകൾ‌, ഇ-തപാലുകൾ, സന്ദേശങ്ങൾ‌ എന്നിവയിൽ‌ നിന്നും കണ്ണികൾ സജ്ജമാക്കുക.";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "വേഗത, സുരക്ഷ, സ്വകാര്യത എന്നിവ യാന്ത്രികമാക്കുന്നതിന് താങ്ങളുടെ സ്ഥിരസ്ഥിതി അന്വേഷിയന്ത്രമായി Firefox-നെ തിരഞ്ഞെടുക്കുക.";
+
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ദിവസേന തിരച്ചിലിന്റെ നില ഉയർത്തുക";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വഷിയേ  തുറക്കുക ";
+"DefaultBrowserCard.Title" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രത്തിനെ  തുറക്കുക ";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "ക്രമീകരണങ്ങളിലേക്ക് പോവുക";

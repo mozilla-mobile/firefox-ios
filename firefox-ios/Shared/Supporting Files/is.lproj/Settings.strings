@@ -88,6 +88,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
 "Settings.DailyUsagePing.Message.v135" = "Þetta hjálpar %@ að áætla virka notendur.";
 
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping um daglega notkun";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Reikningur";
 
@@ -174,6 +177,9 @@
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Kanna nánar";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Prófaðu eiginleika og hugmyndir áður en þær eru settar í dreifingu.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Settu upp og keyrðu rannsóknir";
