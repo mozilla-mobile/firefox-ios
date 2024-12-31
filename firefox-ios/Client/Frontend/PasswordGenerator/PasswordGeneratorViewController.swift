@@ -11,7 +11,17 @@ import WebKit
 
 class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
-        static let containerPadding: CGFloat = 20
+        static let containerVerticalPadding: CGFloat = 20
+        static var containerHorizontalPadding: CGFloat {
+            if ((UIDevice.current.userInterfaceIdiom == .phone) && UIDevice.current.orientation.isLandscape) ||
+                ((UIDevice.current.userInterfaceIdiom == .pad) && UIDevice.current.orientation.isPortrait) {
+                return 90
+            }
+            if (UIDevice.current.userInterfaceIdiom == .pad) && UIDevice.current.orientation.isLandscape {
+                return 270
+            }
+            return containerVerticalPadding
+        }
         static let containerElementsVerticalPadding: CGFloat = 16
         static let headerTrailingPadding: CGFloat = 45
     }
@@ -113,16 +123,16 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.containerPadding),
+                constant: UX.containerHorizontalPadding),
             contentView.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -UX.containerPadding),
+                constant: -UX.containerHorizontalPadding),
             contentView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: UX.containerPadding),
+                constant: UX.containerVerticalPadding),
             contentView.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -UX.containerPadding),
+                constant: -UX.containerVerticalPadding)
         ])
 
         // Content View Elements Layout
