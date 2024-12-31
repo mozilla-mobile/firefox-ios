@@ -28,13 +28,14 @@ protocol TopSitesManagerInterface {
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
-class TopSitesManager: TopSitesManagerInterface {
+class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private var logger: Logger
     private let prefs: Prefs
     private let contileProvider: ContileProviderInterface
     private let googleTopSiteManager: GoogleTopSiteManagerProvider
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
     private let searchEnginesManager: SearchEnginesManagerProvider
+    private let unifiedAdsProvider: UnifiedAdsProviderInterface
 
     private let maxTopSites: Int
     private let maxNumberOfSponsoredTile: Int = 2
@@ -42,6 +43,7 @@ class TopSitesManager: TopSitesManagerInterface {
     init(
         prefs: Prefs,
         contileProvider: ContileProviderInterface = ContileProvider(),
+        unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
         googleTopSiteManager: GoogleTopSiteManagerProvider,
         topSiteHistoryManager: TopSiteHistoryManagerProvider,
         searchEnginesManager: SearchEnginesManagerProvider,
@@ -50,6 +52,7 @@ class TopSitesManager: TopSitesManagerInterface {
     ) {
         self.prefs = prefs
         self.contileProvider = contileProvider
+        self.unifiedAdsProvider = unifiedAdsProvider
         self.googleTopSiteManager = googleTopSiteManager
         self.topSiteHistoryManager = topSiteHistoryManager
         self.searchEnginesManager = searchEnginesManager
@@ -83,16 +86,32 @@ class TopSitesManager: TopSitesManagerInterface {
     // MARK: Sponsored tiles (Contiles)
     func fetchSponsoredSites() async -> [SponsoredTile] {
         let contiles = await withCheckedContinuation { continuation in
-            contileProvider.fetchContiles { [weak self] result in
-                if case .success(let contiles) = result {
-                    continuation.resume(returning: contiles)
-                } else {
-                    self?.logger.log(
-                        "Contile provider did not return any sponsored tiles when requested",
-                        level: .warning,
-                        category: .homepage
-                    )
-                    continuation.resume(returning: [])
+            if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+                unifiedAdsProvider.fetchTiles { [weak self] result in
+                    if case .success(let unifiedTiles) = result {
+                        let sponsoredTiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
+                        continuation.resume(returning: sponsoredTiles)
+                    } else {
+                        self?.logger.log(
+                            "Unified ads provider did not return any sponsored tiles when requested",
+                            level: .warning,
+                            category: .homepage
+                        )
+                        continuation.resume(returning: [])
+                    }
+                }
+            } else {
+                contileProvider.fetchContiles { [weak self] result in
+                    if case .success(let contiles) = result {
+                        continuation.resume(returning: contiles)
+                    } else {
+                        self?.logger.log(
+                            "Contile provider did not return any sponsored tiles when requested",
+                            level: .warning,
+                            category: .homepage
+                        )
+                        continuation.resume(returning: [])
+                    }
                 }
             }
         }
