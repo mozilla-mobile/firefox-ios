@@ -9,7 +9,7 @@ protocol FolderHierarchyFetcher {
     func fetchFolders() async -> [Folder]
 }
 
-struct Folder: Equatable {
+struct Folder: Equatable, Hashable {
     init(title: String, guid: String, indentation: Int) {
         self.title = Self.localizedTitle(guid) ?? title
         self.guid = guid

@@ -38,6 +38,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
+    var onCollapseChanged: VoidReturnCallback?
 
     var getBackNavigationButtonTitle: String {
         if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
@@ -74,6 +75,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
             selectedFolder = folder
             folderStructures = [folder]
             onFolderStatusUpdate?()
+            onCollapseChanged?()
         } else {
             getFolderStructure(folder)
         }
@@ -93,6 +95,8 @@ class EditBookmarkViewModel: ParentFolderSelector {
             self?.folderStructures = folders
             self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
+            self?.onCollapseChanged?()
+
         }
     }
 
