@@ -8,7 +8,6 @@ import MozillaAppServices
 
 class EditBookmarkViewController: UIViewController,
                                   UITableViewDelegate,
-                                  UITableViewDataSource,
                                   Themeable {
     private enum Section: Int, CaseIterable {
         case bookmark
@@ -29,8 +28,22 @@ class EditBookmarkViewController: UIViewController,
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 
+    // Diffable datasource
+    private enum BookmarkSection: Int, CaseIterable {
+        case bookmark
+        case folder
+        case newFolder
+    }
+
+    enum TableItem: Hashable {
+        case bookmark // Represents Bookmark title and URL
+        case folder // Represents Folder
+        case newFolder
+    }
+
+    private var dataSource: UITableViewDiffableDataSource<BookmarkSection, TableItem>?
+
     private lazy var tableView: UITableView = .build { view in
-        view.dataSource = self
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
         view.register(cellType: OneLineTableViewCell.self)
@@ -124,6 +137,73 @@ class EditBookmarkViewController: UIViewController,
         onViewWillDisappear?()
     }
 
+    private func configureDataSource() {
+        // swiftlint:disable line_length
+        dataSource = UITableViewDiffableDataSource<BookmarkSection, TableItem>(tableView: tableView) { [weak self] tableView, indexPath, item in
+            // swiftlint:enable line_length
+            guard let self else { return UITableViewCell() }
+            switch item {
+            case .bookmark:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: EditBookmarkCell.cellIdentifier,
+                                                               for: indexPath) as? EditBookmarkCell
+                else {
+                    return UITableViewCell()
+                }
+                self.configureEditBookmarkCell(cell)
+                return cell
+
+            case .folder(let folder):
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                               for: indexPath) as? OneLineTableViewCell
+                else {
+                    return UITableViewCell()
+                }
+                if folder.guid == Folder.dummyFolderGuid {
+                    self.configureDesktopBookmarksHeaderCell(cell)
+                } else {
+                    self.configureParentFolderCell(cell, folder: folder)
+                }
+                return cell
+
+            case .newFolder:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                               for: indexPath) as? OneLineTableViewCell,
+                      !self.viewModel.isFolderCollapsed
+                else {
+                    return UITableViewCell()
+                }
+                self.configureNewFolderCell(cell)
+                return cell
+            }
+        }
+    }
+
+    private func applySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<BookmarkSection, TableItem>()
+
+        // Add sections
+        snapshot.appendSections([.bookmark, .folder, .newFolder])
+        if !viewModel.folderStructures.isEmpty {
+            snapshot.appendSections([.folder])
+        }
+        snapshot.appendSections([.newFolder])
+
+
+        // Add items for the Bookmark section
+        snapshot.appendItems([.bookmark], toSection: .bookmark)
+
+        // Add items for the Folder section
+        let folderItems = viewModel.folderStructures.map { TableItem.folder($0) }
+        snapshot.appendItems(folderItems, toSection: .folder)
+
+        // Add the New Folder section if not collapsed
+        if !viewModel.isFolderCollapsed {
+            snapshot.appendItems([.newFolder], toSection: .newFolder)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
     // MARK: - Setup
 
     private func setupSubviews() {
@@ -174,42 +254,6 @@ class EditBookmarkViewController: UIViewController,
 
     // MARK: - UITableViewDataSource & UITableViewDelegate
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.isFolderCollapsed ? Section.allCases.count - 1 : Section.allCases.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
-        switch section {
-        case .bookmark:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EditBookmarkCell.cellIdentifier,
-                                                           for: indexPath) as? EditBookmarkCell
-            else {
-                return UITableViewCell()
-            }
-            configureEditBookmarkCell(cell)
-            return cell
-        case .folder:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell,
-                  let folder = viewModel.folderStructures[safe: indexPath.row]
-            else {
-                return UITableViewCell()
-            }
-            configureParentFolderCell(cell, folder: folder)
-            return cell
-        case .newFolder:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell,
-                  !viewModel.isFolderCollapsed
-            else {
-                return UITableViewCell()
-            }
-            configureNewFolderCell(cell)
-            return cell
-        }
-    }
-
     private func configureEditBookmarkCell(_ cell: EditBookmarkCell) {
         cell.setData(siteURL: viewModel.bookmarkURL, title: viewModel.bookmarkTitle)
         cell.onURLFieldUpdate = { [weak self] in
@@ -250,18 +294,6 @@ class EditBookmarkViewController: UIViewController,
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = Section(rawValue: section) else { return 0 }
-        return switch section {
-        case .bookmark:
-            1
-        case .folder:
-            viewModel.folderStructures.count
-        case .newFolder:
-             viewModel.isFolderCollapsed ? 0 : 1
-        }
-    }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let sectionEnum = Section(rawValue: section), sectionEnum == .folder else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier)
@@ -284,15 +316,5 @@ class EditBookmarkViewController: UIViewController,
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         guard let section = Section(rawValue: section), section == .folder else { return 0 }
         return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard let section = Section(rawValue: indexPath.section) else { return }
-        if section == .folder, let folder = viewModel.folderStructures[safe: indexPath.row] {
-            viewModel.selectFolder(folder)
-        } else if section == .newFolder {
-            viewModel.createNewFolder()
-        }
     }
 }
