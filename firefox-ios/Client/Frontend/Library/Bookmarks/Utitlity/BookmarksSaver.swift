@@ -30,9 +30,9 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                 switch bookmark.type {
                 case .bookmark:
                     guard let bookmark = bookmark as? BookmarkItemData else { return deferMaybe(nil) }
-                    let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
 
                     if bookmark.parentGUID == nil {
+                        let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                         return profile.places.createBookmark(parentGUID: parentFolderGUID,
                                                              url: bookmark.url,
                                                              title: bookmark.title,
@@ -41,9 +41,10 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                                                     : deferMaybe(result.successValue)
                         }
                     } else {
+                        let position: UInt32? = parentFolderGUID == bookmark.parentGUID ? bookmark.position : nil
                         return profile.places.updateBookmarkNode(guid: bookmark.guid,
                                                                  parentGUID: parentFolderGUID,
-                                                                 position: bookmark.position,
+                                                                 position: position,
                                                                  title: bookmark.title,
                                                                  url: bookmark.url).bind { result in
                             return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
@@ -52,9 +53,9 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
 
                 case .folder:
                     guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
-                    let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
 
                     if folder.parentGUID == nil {
+                        let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                         return profile.places.createFolder(parentGUID: parentFolderGUID,
                                                            title: folder.title,
                                                            position: position).bind { result in
@@ -62,9 +63,10 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                                                     : deferMaybe(result.successValue)
                         }
                     } else {
+                        let position: UInt32? = parentFolderGUID == folder.parentGUID ? folder.position : nil
                         return profile.places.updateBookmarkNode( guid: folder.guid,
                                                                   parentGUID: parentFolderGUID,
-                                                                  position: folder.position,
+                                                                  position: position,
                                                                   title: folder.title).bind { result in
                             return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
                         }
