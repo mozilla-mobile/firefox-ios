@@ -225,4 +225,15 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon
         )
     }
+
+    private static func handleTapToggleUserAgentAndCloseMenuAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            shouldDismiss: true,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
 }
