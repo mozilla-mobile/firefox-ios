@@ -15,6 +15,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
@@ -144,6 +145,23 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserMiddlewareActionType.websiteDidScroll)
     }
 
+    func test_scrollViewWillBeginDragging_triggersHomepageAction() throws {
+        let homepageVC = createSubject()
+        let scrollView = UIScrollView()
+        scrollView.contentOffset.y = 10
+        setupNimbusToolbarRefactorTesting(isEnabled: true)
+
+        homepageVC.scrollViewWillBeginDragging(scrollView)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: {
+                $0 is ToolbarAction
+            }) as? ToolbarAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+        XCTAssertEqual(actionType, ToolbarActionType.cancelEditOnHomepage)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
@@ -173,5 +191,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
+    }
+
+    private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(
+                enabled: isEnabled
+            )
+        }
     }
 }
