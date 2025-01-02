@@ -208,4 +208,14 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon
         )
     }
+
+    private static func handleUpdateAccountHeaderAction(state: MainMenuState, action: MainMenuAction) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: action.accountData,
+            accountIcon: action.accountIcon
+        )
+    }
 }
