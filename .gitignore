@@ -150,7 +150,7 @@ Production.xcconfig
 SourcePackages
 test_output
 .vscode
-EcosiaTests/Results
+firefox-ios/EcosiaTests/Results
 
 # TODO Ecosia Upgrade: Remove once confirmed not needed
 # (they are still above but prefixed with `firefox-ios/`)
