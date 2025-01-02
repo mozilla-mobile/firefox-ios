@@ -212,4 +212,19 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: action.accountIcon
         )
     }
+
+    private static func handleUpdateCurrentTabInfoAction(state: MainMenuState,
+                                                         currentTabInfo: MainMenuTabInfo) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                for: state.currentSubmenuView,
+                and: state.windowUUID
+            ),
+            currentTabInfo: currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
 }
