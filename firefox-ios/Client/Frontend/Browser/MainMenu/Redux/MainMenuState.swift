@@ -217,4 +217,15 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon
         )
     }
+
+    private static func handleTapShowDetailsViewAction(state: MainMenuState, action: MainMenuAction) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            submenuDestination: action.detailsViewToShow,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
 }
