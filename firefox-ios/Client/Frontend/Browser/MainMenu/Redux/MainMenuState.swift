@@ -140,14 +140,7 @@ struct MainMenuState: ScreenState, Equatable {
             return handleUpdateCurrentTabInfoAction(state: state, currentTabInfo: currentTabInfo)
         case MainMenuActionType.tapShowDetailsView:
             guard let action = action as? MainMenuAction else { return defaultState(from: state) }
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                submenuDestination: action.detailsViewToShow,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleTapShowDetailsViewAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
             guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return MainMenuState(
