@@ -131,13 +131,7 @@ struct MainMenuState: ScreenState, Equatable {
             guard let action = action as? MainMenuAction
             else { return defaultState(from: state) }
 
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: action.accountData,
-                accountIcon: action.accountIcon
-            )
+            return handleUpdateAccountHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
                   let currentTabInfo = action.currentTabInfo
