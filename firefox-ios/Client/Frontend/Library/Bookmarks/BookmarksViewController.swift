@@ -175,58 +175,6 @@ class BookmarksViewController: SiteTableViewController,
 
     // MARK: - Actions
 
-    override func tableView(_ tableView: UITableView,
-                            itemsForBeginning session: any UIDragSession,
-                            at indexPath: IndexPath) -> [UIDragItem] {
-        let item = UIDragItem(itemProvider: NSItemProvider())
-        item.localObject = indexPath
-
-        return [item]
-    }
-
-    func tableView(_ tableView: UITableView,
-                   dropSessionDidUpdate session: UIDropSession,
-                   withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-        guard let destinationIndex = destinationIndexPath?.row,
-               let sourceIndex = (session.localDragSession?.items[safe: 0]?.localObject as? IndexPath)?.row,
-            let destinationFolder = viewModel.bookmarkNodes[safe: destinationIndex],
-            let sourceNode = viewModel.bookmarkNodes[safe: sourceIndex],
-            destinationFolder.type == .folder,
-            sourceNode.type == .bookmark || sourceNode.type == .folder,
-            sourceNode.guid != destinationFolder.guid else {
-            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-        }
-        return UITableViewDropProposal(operation: .move, intent: .automatic)
-    }
-
-    func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath,
-              let item = coordinator.items[safe: 0],
-              let sourceIndexPath = item.dragItem.localObject as? IndexPath,
-              let sourceItem = viewModel.bookmarkNodes[safe: sourceIndexPath.row],
-              let destinationItem = viewModel.bookmarkNodes [safe: destinationIndexPath.row],
-              coordinator.proposal.intent == .insertIntoDestinationIndexPath
-        else { return }
-
-        Task {
-            let result = await bookmarksSaver?.save(bookmark: sourceItem,
-                                                    parentFolderGUID: destinationItem.guid)
-            switch result {
-            case .success:
-                Task { @MainActor in
-                    tableView.beginUpdates()
-                    viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
-                    tableView.deleteRows(at: [sourceIndexPath], with: .left)
-                    tableView.endUpdates()
-                    updateEmptyState()
-                    profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
-                }
-            default:
-                return
-            }
-        }
-    }
-
     private func centerVisibleRow() -> Int {
         let visibleCells = tableView.visibleCells
         if let middleCell = visibleCells[safe: visibleCells.count / 2],
@@ -608,6 +556,60 @@ class BookmarksViewController: SiteTableViewController,
 
     private func currentTheme() -> Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
+    // MARK: - UITableViewDragDelegate | UITableViewDropDelegate
+
+    override func tableView(_ tableView: UITableView,
+                            itemsForBeginning session: any UIDragSession,
+                            at indexPath: IndexPath) -> [UIDragItem] {
+        let item = UIDragItem(itemProvider: NSItemProvider())
+        item.localObject = indexPath
+
+        return [item]
+    }
+
+    func tableView(_ tableView: UITableView,
+                   dropSessionDidUpdate session: UIDropSession,
+                   withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        guard let destinationIndex = destinationIndexPath?.row,
+              let sourceIndex = (session.localDragSession?.items[safe: 0]?.localObject as? IndexPath)?.row,
+              let destinationFolder = viewModel.bookmarkNodes[safe: destinationIndex],
+              let sourceNode = viewModel.bookmarkNodes[safe: sourceIndex],
+              destinationFolder.type == .folder,
+              sourceNode.type == .bookmark || sourceNode.type == .folder,
+              sourceNode.guid != destinationFolder.guid else {
+            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UITableViewDropProposal(operation: .move, intent: .automatic)
+    }
+
+    func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath,
+              let item = coordinator.items[safe: 0],
+              let sourceIndexPath = item.dragItem.localObject as? IndexPath,
+              let sourceItem = viewModel.bookmarkNodes[safe: sourceIndexPath.row],
+              let destinationItem = viewModel.bookmarkNodes [safe: destinationIndexPath.row],
+              coordinator.proposal.intent == .insertIntoDestinationIndexPath
+        else { return }
+
+        Task {
+            let result = await bookmarksSaver?.save(bookmark: sourceItem,
+                                                    parentFolderGUID: destinationItem.guid)
+            switch result {
+            case .success:
+                Task { @MainActor in
+                    tableView.beginUpdates()
+                    viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
+                    tableView.deleteRows(at: [sourceIndexPath], with: .left)
+                    tableView.endUpdates()
+                    updateEmptyState()
+                    profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
+                }
+            default:
+                return
+            }
+        }
     }
 }
 
