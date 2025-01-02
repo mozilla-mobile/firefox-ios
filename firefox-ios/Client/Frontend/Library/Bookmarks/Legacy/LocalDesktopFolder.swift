@@ -52,9 +52,12 @@ class LocalDesktopFolder: FxBookmarkNode {
 
 extension LocalDesktopFolder: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
+        let image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        let accessoryView = UIImageView(image: image)
+
         return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
-                                             accessoryView: nil,
+                                             accessoryView: accessoryView,
                                              accessoryType: .disclosureIndicator,
                                              editingAccessoryView: nil)
     }
