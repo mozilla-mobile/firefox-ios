@@ -256,13 +256,15 @@ class BookmarksViewController: SiteTableViewController,
     }
 
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
-                                     parentFolderGUID: String, completion: ((GUID) -> Void)? = nil) {
+                                     parentFolderGUID: String,
+                                     recentBookmarkFolderGUID: String?,
+                                     completion: ((GUID) -> Void)? = nil) {
         guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
         bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
             guard let guid = res else {return}
             completion?(guid)
 
-            if self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) == bookmarkTreeRoot.guid {
+            if recentBookmarkFolderGUID != nil && recentBookmarkFolderGUID == bookmarkTreeRoot.guid {
                 self.profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
             }
 
@@ -270,7 +272,9 @@ class BookmarksViewController: SiteTableViewController,
             guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
 
             for child in children {
-                self.restoreBookmarkTree(bookmarkTreeRoot: child, parentFolderGUID: guid)
+                self.restoreBookmarkTree(bookmarkTreeRoot: child,
+                                         parentFolderGUID: guid,
+                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID)
             }
         }
     }
@@ -294,6 +298,8 @@ class BookmarksViewController: SiteTableViewController,
             guard let maybeBookmarkTreeRoot = result.successValue,
                   let bookmarkTreeRoot = maybeBookmarkTreeRoot else { return }
 
+            let recentBookmarkFolderGUID = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
+
             self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
 
             let toastVM = ButtonToastViewModel(
@@ -302,9 +308,11 @@ class BookmarksViewController: SiteTableViewController,
                 textAlignment: .left)
             let toast = ButtonToast(viewModel: toastVM,
                                     theme: self.currentTheme(),
-                                    completion: {buttonPressed in
-                guard let parentGUID = bookmarkTreeRoot.parentGUID else { return }
-                self.restoreBookmarkTree(bookmarkTreeRoot: bookmarkTreeRoot, parentFolderGUID: parentGUID) { guid in
+                                    completion: { buttonPressed in
+                guard buttonPressed, let parentGUID = bookmarkTreeRoot.parentGUID else { return }
+                self.restoreBookmarkTree(bookmarkTreeRoot: bookmarkTreeRoot,
+                                         parentFolderGUID: parentGUID,
+                                         recentBookmarkFolderGUID: recentBookmarkFolderGUID) { guid in
                     self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
                         guard let newBookmarkNode = result.successValue ?? nil,
                               let fxBookmarkNode = newBookmarkNode as? FxBookmarkNode else { return }
