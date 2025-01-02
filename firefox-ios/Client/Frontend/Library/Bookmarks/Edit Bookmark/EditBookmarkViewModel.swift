@@ -96,7 +96,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
             self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
             self?.onCollapseChanged?()
-
         }
     }
 
