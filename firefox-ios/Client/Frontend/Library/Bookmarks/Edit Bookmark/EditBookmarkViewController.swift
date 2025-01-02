@@ -9,10 +9,8 @@ import MozillaAppServices
 class EditBookmarkViewController: UIViewController,
                                   UITableViewDelegate,
                                   Themeable {
-    private enum Section: Int, CaseIterable {
-        case bookmark
-        case folder
-        case newFolder
+    private enum TableSection: Int, CaseIterable {
+        case main
     }
 
     enum TableItem: Hashable {
@@ -61,7 +59,7 @@ class EditBookmarkViewController: UIViewController,
     var onViewWillAppear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
 
-    private var dataSource: UITableViewDiffableDataSource<Section, TableItem>!
+    private var dataSource: UITableViewDiffableDataSource<TableSection, TableItem>!
 
     init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
@@ -148,7 +146,9 @@ class EditBookmarkViewController: UIViewController,
     }
 
     private func configureDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, TableItem>(tableView: tableView) { tableView, indexPath, item in
+        // swiftlint:disable line_length
+        dataSource = UITableViewDiffableDataSource<TableSection, TableItem>(tableView: tableView) { tableView, indexPath, item in
+            // swiftlint:enable line_length
             switch item {
             case .bookmark:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: EditBookmarkCell.cellIdentifier,
@@ -186,21 +186,21 @@ class EditBookmarkViewController: UIViewController,
     }
 
     private func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TableItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<TableSection, TableItem>()
 
         // Add sections
-        snapshot.appendSections(Section.allCases)
+        snapshot.appendSections([.main])
 
         // Add items for the Bookmark section
-        snapshot.appendItems([.bookmark], toSection: .bookmark)
+        snapshot.appendItems([.bookmark], toSection: .main)
 
         // Add items for the Folder section
         let folderItems = viewModel.folderStructures.map { TableItem.folder($0) }
-        snapshot.appendItems(folderItems, toSection: .folder)
+        snapshot.appendItems(folderItems, toSection: .main)
 
         // Add the New Folder section if not collapsed
         if !viewModel.isFolderCollapsed {
-            snapshot.appendItems([.newFolder], toSection: .newFolder)
+            snapshot.appendItems([.newFolder], toSection: .main)
         }
 
         dataSource.apply(snapshot, animatingDifferences: true)
@@ -294,7 +294,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionEnum = Section(rawValue: section), sectionEnum == .folder else { return nil }
+      //  guard let sectionEnum = TableSection(rawValue: section), sectionEnum == .folder else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier)
         else { return nil }
         var configuration = UIListContentConfiguration.plainHeader()
@@ -313,7 +313,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard let section = Section(rawValue: section), section == .folder else { return 0 }
+       // guard let section = TableSection(rawValue: section), section == .folder else { return 0 }
         return UITableView.automaticDimension
     }
 
