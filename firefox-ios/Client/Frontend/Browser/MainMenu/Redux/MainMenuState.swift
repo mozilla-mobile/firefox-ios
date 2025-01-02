@@ -204,4 +204,14 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon
         )
     }
+
+    private static func handleViewDidLoadAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
 }
