@@ -146,14 +146,7 @@ struct MainMenuState: ScreenState, Equatable {
             return handleTapNavigateToDestinationAction(state: state, action: action)
         case MainMenuActionType.tapToggleUserAgent,
             MainMenuActionType.tapCloseMenu:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                shouldDismiss: true,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleTapToggleUserAgentAndCloseMenuAction(state: state)
         default:
             return defaultState(from: state)
         }
