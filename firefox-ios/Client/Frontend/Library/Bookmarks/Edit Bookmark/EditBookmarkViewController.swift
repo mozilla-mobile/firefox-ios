@@ -87,12 +87,12 @@ class EditBookmarkViewController: UIViewController,
         }
         viewModel.onCollapseChanged = { [weak self] in
             guard let self = self else { return }
-            var snapshot = self.dataSource.snapshot()
-            guard let selectedFolder = self.viewModel.selectedFolder else { return }
+           // var snapshot = self.dataSource.snapshot()
+           // guard let selectedFolder = self.viewModel.selectedFolder else { return }
+            self.applySnapshot()
+            // snapshot.reconfigureItems([.folder(selectedFolder)])
 
-            snapshot.reconfigureItems([.folder(selectedFolder)])
-
-            dataSource.apply(snapshot, animatingDifferences: true)
+           // dataSource.apply(snapshot, animatingDifferences: true)
         }
 
         navigationItem.rightBarButtonItem = saveBarButton
