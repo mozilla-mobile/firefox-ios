@@ -436,10 +436,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                                                windowUUID: windowUUID,
                                                actionType: ToolbarActionType.urlDidChange
         )
-        let stateWithURL = reducer(
-            initialState,
-            didChangeURLAction
-        )
+
+        let stateWithURL = reducer(initialState, didChangeURLAction)
 
         let newState = reducer(
             stateWithURL,
