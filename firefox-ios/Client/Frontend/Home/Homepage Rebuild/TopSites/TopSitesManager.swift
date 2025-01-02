@@ -26,11 +26,16 @@ protocol TopSitesManagerInterface {
     /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState]
 
+    /// Removes the site out of the top sites.
+    /// If site is pinned it removes it from pinned and top sites list.
     func removeTopSite(_ site: Site)
 
+    /// Adds the top site as a pinned tile in the top sites lists.
     func pinTopSite(_ site: Site)
 
-    func removePinTopSite(_ site: Site)
+    /// Unpin removes the top site from the location it's in.
+    /// The site still can appear in the top sites as unpin.
+    func unpinTopSite(_ site: Site)
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
@@ -42,6 +47,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let unifiedAdsProvider: UnifiedAdsProviderInterface
+    private let dispatchQueue: DispatchQueueInterface
 
     private let maxTopSites: Int
     private let maxNumberOfSponsoredTile: Int = 2
@@ -54,6 +60,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         topSiteHistoryManager: TopSiteHistoryManagerProvider,
         searchEnginesManager: SearchEnginesManagerProvider,
         logger: Logger = DefaultLogger.shared,
+        dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
         maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     ) {
         self.profile = profile
@@ -63,6 +70,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.topSiteHistoryManager = topSiteHistoryManager
         self.searchEnginesManager = searchEnginesManager
         self.logger = logger
+        self.dispatchQueue = dispatchQueue
         self.maxTopSites = maxTopSites
     }
 
@@ -212,10 +220,10 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         }
     }
 
-    // MARK: - Context actions
+    // MARK: - Context menu actions
     func removeTopSite(_ site: Site) {
-        removePinTopSite(site)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+        unpinTopSite(site)
+        dispatchQueue.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.hideURLFromTopSites(site)
         }
     }
@@ -224,7 +232,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         _ = profile.pinnedSites.addPinnedTopSite(site)
     }
 
-    func removePinTopSite(_ site: Site) {
+    func unpinTopSite(_ site: Site) {
         googleTopSiteManager.removeGoogleTopSite(site: site)
         topSiteHistoryManager.removeTopSite(site: site)
     }
@@ -233,7 +241,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
         // We make sure to remove all history for URL so it doesn't show anymore in the
         // top sites, this is the approach that Android takes too.
-        profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+        profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { [weak self] _ in
             NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
         }
     }

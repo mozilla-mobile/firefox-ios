@@ -88,7 +88,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemoveTopSites)
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemoveTopSite)
             // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
@@ -98,7 +98,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.pin,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnAddTopSites)
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnPinTopSite)
             // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
@@ -110,7 +110,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.pinSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnRemovePinnedSites)
+            dispatchContextMenuAction(site: site, actionType: ContextMenuActionType.tappedOnUnpinTopSite)
             // TODO: FXIOS-10171 - Add telemetry
         }).items
     }
@@ -182,7 +182,7 @@ struct ContextMenuState {
         if site.bookmarked ?? false {
             bookmarkAction = getRemoveBookmarkAction()
         } else {
-            bookmarkAction = getAddBookmarkAction()
+            bookmarkAction = getAddBookmarkAction(site: site)
         }
         return bookmarkAction.items
     }
@@ -196,7 +196,7 @@ struct ContextMenuState {
         })
     }
 
-    private func getAddBookmarkAction() -> SingleActionViewModel {
+    private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,

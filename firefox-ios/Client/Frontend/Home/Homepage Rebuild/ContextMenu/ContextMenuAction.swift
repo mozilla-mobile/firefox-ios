@@ -21,7 +21,7 @@ final class ContextMenuAction: Action {
 }
 
 enum ContextMenuActionType: ActionType {
-    case tappedOnRemoveTopSites
-    case tappedOnAddTopSites
-    case tappedOnRemovePinnedSites
+    case tappedOnRemoveTopSite
+    case tappedOnPinTopSite
+    case tappedOnUnpinTopSite
 }
