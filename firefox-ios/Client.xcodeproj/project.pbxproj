@@ -11378,7 +11378,6 @@
 			path = Migration;
 			sourceTree = "<group>";
 		};
-		2CB289612B07C8F000A8FCB3 /* Helpers */ = {
 		2C6189232B7A8A22006B70D7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -15823,6 +15822,7 @@
 		3BFE4B061D342FB800DDF53F /* XCUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BFE4B201D342FB900DDF53F /* Build configuration list for PBXNativeTarget "XCUITests" */;
+			buildPhases = (
 				3BFE4B031D342FB800DDF53F /* Sources */,
 				3BFE4B041D342FB800DDF53F /* Frameworks */,
 			);
@@ -15842,6 +15842,8 @@
 		};
 		43BE5774278BA4D900491291 /* RustMozillaAppServices */ = {
 			isa = PBXNativeTarget;
+			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */;
+			buildPhases = (
 				43BE577C278BA4D900491291 /* Sources */,
 				43BE577D278BA4D900491291 /* Frameworks */,
 			);
@@ -16660,6 +16662,7 @@
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
@@ -16702,6 +16705,8 @@
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			inputFileListPaths = (
 			);
@@ -25167,6 +25172,8 @@
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Fennec;
 		};
 		4354D3E224EEEEC5001184F6 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
