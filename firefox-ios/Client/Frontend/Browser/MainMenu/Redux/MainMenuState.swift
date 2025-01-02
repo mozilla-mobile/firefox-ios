@@ -126,13 +126,7 @@ struct MainMenuState: ScreenState, Equatable {
 
         switch action.actionType {
         case MainMenuActionType.viewDidLoad:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleViewDidLoadAction(state: state)
         case MainMenuMiddlewareActionType.updateAccountHeader:
             guard let action = action as? MainMenuAction
             else { return defaultState(from: state) }
