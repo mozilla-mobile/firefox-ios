@@ -343,9 +343,11 @@ class BookmarksViewController: SiteTableViewController,
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         profile.places.deleteBookmarkNode(guid: bookmarkNode.guid).uponQueue(.main) { _ in
-            let recentBookmarkFolderPref = PrefsKeys.RecentBookmarkFolder
-            if bookmarkNode.guid == self.profile.prefs.stringForKey(recentBookmarkFolderPref) {
-                self.profile.prefs.removeObjectForKey(recentBookmarkFolderPref)
+            if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
+                self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
+                    guard let nodeValue = node.successValue, nodeValue == nil else { return }
+                    self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                }
             }
             self.removeBookmarkShortcut()
         }
