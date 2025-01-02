@@ -9,6 +9,7 @@ import Storage
 
 class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
     private let mockSiteData: PinnedSite?
+    var removeGoogleTopSiteCalledCount = 0
 
     init(mockSiteData: PinnedSite? = PinnedSite(
         site: Site(url: GoogleTopSiteManager.Constants.usUrl, title: "Google Test"),
@@ -22,5 +23,9 @@ class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
 
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
         return hasSpace
+    }
+
+    func removeGoogleTopSite(site: Site) {
+        removeGoogleTopSiteCalledCount += 1
     }
 }

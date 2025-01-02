@@ -5,24 +5,31 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 final class TopSitesMiddleware {
     private let topSitesManager: TopSitesManagerInterface
+    private let logger: Logger
 
     // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
     // but keeping logic consistent for now
     private var otherSites: [TopSiteState] = []
     private var sponsoredTiles: [SponsoredTile] = []
 
-    init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface? = nil) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        topSitesManager: TopSitesManagerInterface? = nil,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(
-            prefs: profile.prefs,
+            profile: profile,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
             ),
             topSiteHistoryManager: TopSiteHistoryManager(profile: profile),
             searchEnginesManager: profile.searchEnginesManager
         )
+        self.logger = logger
     }
 
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
@@ -30,9 +37,30 @@ final class TopSitesMiddleware {
         case HomepageActionType.initialize,
             TopSitesActionType.fetchTopSites:
             self.getTopSitesDataAndUpdateState(for: action)
+        case ContextMenuActionType.tappedOnPinTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.pinTopSite(site)
+        case ContextMenuActionType.tappedOnUnpinTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.unpinTopSite(site)
+        case ContextMenuActionType.tappedOnRemoveTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.removeTopSite(site)
         default:
             break
         }
+    }
+
+    private func getSite(for action: Action) -> Site? {
+        guard let site = (action as? ContextMenuAction)?.site else {
+            self.logger.log(
+                "Unable to retrieve site for \(action.actionType)",
+                level: .warning,
+                category: .homepage
+            )
+            return nil
+        }
+        return site
     }
 
     private func getTopSitesDataAndUpdateState(for action: Action) {

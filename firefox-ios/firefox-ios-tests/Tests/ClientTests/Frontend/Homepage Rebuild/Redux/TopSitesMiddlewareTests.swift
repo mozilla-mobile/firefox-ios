@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Storage
 import XCTest
 
 @testable import Client
@@ -76,6 +77,78 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
+    }
+
+    func test_tappedOnPinTopSite_withSite_callsPinTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let action = ContextMenuAction(
+            site: site,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnPinTopSite
+        )
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.pinTopSiteCalledCount, 1)
+    }
+
+    func test_tappedOnPinTopSite_withoutSite_doesNotCallPinTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = ContextMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnPinTopSite
+        )
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.pinTopSiteCalledCount, 0)
+    }
+
+    func test_tappedOnUnpinTopSite_withSite_callsUnpinTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let action = ContextMenuAction(
+            site: site,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnUnpinTopSite
+        )
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.unpinTopSiteCalledCount, 1)
+    }
+
+    func test_tappedOnUnpinTopSite_withoutSite_doesNotCallUnpinTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = TopSitesAction(windowUUID: .XCTestDefaultUUID, actionType: ContextMenuActionType.tappedOnUnpinTopSite)
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.unpinTopSiteCalledCount, 0)
+    }
+
+    func test_tappedOnRemoveTopSite_withSite_callsRemoveTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let action = ContextMenuAction(
+            site: site,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnRemoveTopSite
+        )
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.removeTopSiteCalledCount, 1)
+    }
+
+    func test_tappedOnRemoveTopSite_withoutSite_doesNotCallRemoveTopSite() {
+        let subject = createSubject(topSitesManager: mockTopSitesManager)
+        let action = TopSitesAction(windowUUID: .XCTestDefaultUUID, actionType: ContextMenuActionType.tappedOnRemoveTopSite)
+
+        subject.topSitesProvider(appState, action)
+
+        XCTAssertEqual(mockTopSitesManager.removeTopSiteCalledCount, 0)
     }
 
     // MARK: - Helpers
