@@ -11,21 +11,30 @@ protocol ContextMenuCoordinatorDelegate: AnyObject {
 
 final class ContextMenuCoordinator: BaseCoordinator, ContextMenuCoordinatorDelegate {
     weak var parentCoordinator: ParentCoordinatorDelegate?
+
     private let windowUUID: WindowUUID
     private let configuration: ContextMenuConfiguration
+    /// Used to call bookmark methods in BVC
+    private let bookmarksHandlerDelegate: BookmarksHandlerDelegate
 
     init(
         configuration: ContextMenuConfiguration,
         router: Router,
-        windowUUID: WindowUUID
+        windowUUID: WindowUUID,
+        bookmarksHandlerDelegate: BookmarksHandlerDelegate
     ) {
         self.configuration = configuration
         self.windowUUID = windowUUID
+        self.bookmarksHandlerDelegate = bookmarksHandlerDelegate
         super.init(router: router)
     }
 
     func start() {
-        let state = ContextMenuState(configuration: configuration, windowUUID: windowUUID)
+        let state = ContextMenuState(
+            bookmarkDelegate: bookmarksHandlerDelegate,
+            configuration: configuration,
+            windowUUID: windowUUID
+        )
         let viewModel = PhotonActionSheetViewModel(
             actions: state.actions,
             site: state.site,

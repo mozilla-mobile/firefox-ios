@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Storage
 import XCTest
 
 @testable import Client
@@ -50,14 +51,19 @@ final class ContextMenuCoordinatorTests: XCTestCase {
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> ContextMenuCoordinator {
         let configuration = ContextMenuConfiguration(homepageSection: .header, toastContainer: UIView())
-
         let subject = ContextMenuCoordinator(
             configuration: configuration,
             router: mockRouter,
-            windowUUID: .XCTestDefaultUUID
+            windowUUID: .XCTestDefaultUUID,
+            bookmarksHandlerDelegate: MockBookmarksHandlerDelegate()
         )
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
+}
+
+class MockBookmarksHandlerDelegate: BookmarksHandlerDelegate {
+    func addBookmark(url: String, title: String?, site: Site?) { }
+    func removeBookmark(url: URL, title: String?, site: Site?) { }
 }
