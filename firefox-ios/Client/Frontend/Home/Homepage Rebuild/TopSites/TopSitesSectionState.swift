@@ -12,20 +12,24 @@ import Shared
 /// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var topSitesData: [TopSiteState]
-    var numberOfRows: Int
-    var numberOfTilesPerRow: Int
+    let topSitesData: [TopSiteState]
+    let numberOfRows: Int
+    let numberOfTilesPerRow: Int
+    let shouldShowSection: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
         let numberOfRows = Int(preferredNumberOfRows ?? defaultNumberOfRows)
+        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
+        let initialNumberOfTilesPerRow = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
 
         self.init(
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: 0
+            numberOfTilesPerRow: initialNumberOfTilesPerRow,
+            shouldShowSection: shouldShowSection
         )
     }
 
@@ -33,12 +37,14 @@ struct TopSitesSectionState: StateType, Equatable {
         windowUUID: WindowUUID,
         topSitesData: [TopSiteState],
         numberOfRows: Int,
-        numberOfTilesPerRow: Int
+        numberOfTilesPerRow: Int,
+        shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
         self.numberOfTilesPerRow = numberOfTilesPerRow
+        self.shouldShowSection = shouldShowSection
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -59,7 +65,8 @@ struct TopSitesSectionState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 topSitesData: sites,
                 numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow
+                numberOfTilesPerRow: state.numberOfTilesPerRow,
+                shouldShowSection: !sites.isEmpty && state.shouldShowSection
             )
         case TopSitesActionType.updatedNumberOfRows:
             guard let topSitesAction = action as? TopSitesAction,
@@ -72,7 +79,8 @@ struct TopSitesSectionState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 topSitesData: state.topSitesData,
                 numberOfRows: numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow
+                numberOfTilesPerRow: state.numberOfTilesPerRow,
+                shouldShowSection: state.shouldShowSection
             )
         case TopSitesActionType.updatedNumberOfTilesPerRow:
             guard let topSitesAction = action as? TopSitesAction,
@@ -85,7 +93,22 @@ struct TopSitesSectionState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 topSitesData: state.topSitesData,
                 numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: numberOfTilesPerRow
+                numberOfTilesPerRow: numberOfTilesPerRow,
+                shouldShowSection: state.shouldShowSection
+            )
+        case TopSitesActionType.toggleShowSectionSetting:
+            guard let topSitesAction = action as? TopSitesAction,
+                  let isEnabled = topSitesAction.isEnabled
+            else {
+                return defaultState(from: state)
+            }
+
+            return TopSitesSectionState(
+                windowUUID: state.windowUUID,
+                topSitesData: state.topSitesData,
+                numberOfRows: state.numberOfRows,
+                numberOfTilesPerRow: state.numberOfTilesPerRow,
+                shouldShowSection: isEnabled
             )
         default:
             return defaultState(from: state)
@@ -97,7 +120,8 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
         )
     }
 }
