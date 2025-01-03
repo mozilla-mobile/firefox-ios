@@ -363,7 +363,7 @@ extension FxAWebViewModel {
 
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         profile.rustFxA.accountManager?.finishAuthentication(authData: auth) { _ in
-            self.profile.syncManager.onAddedAccount()
+            self.profile.syncManager?.onAddedAccount()
 
             // only ask for notification permission if it's not onboarding related (e.g. settings)
             // or if the onboarding flow is missing the notifications card
