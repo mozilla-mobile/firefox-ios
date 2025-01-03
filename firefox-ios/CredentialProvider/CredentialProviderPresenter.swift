@@ -7,7 +7,7 @@ import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
 
-class CredentialProviderPresenter {
+final class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
     private let appAuthenticator: AppAuthenticator
@@ -29,25 +29,37 @@ class CredentialProviderPresenter {
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if self.profile.logins.reopenIfClosed() != nil {
-            cancel(with: .failed)
-        } else if let id = credentialIdentity.recordIdentifier {
-            profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
-                switch result {
-                case .failure:
-                    self?.cancel(with: .failed)
-                case .success(let record):
-                    if let passwordCredential = record?.passwordCredential {
-                        self?.view?.extensionContext.completeRequest(
-                            withSelectedCredential: passwordCredential,
-                            completionHandler: nil
-                        )
-                    } else {
-                        self?.cancel(with: .userInteractionRequired)
+        let maxRetries = 3
+        var currentRetry = 0
+
+        func attemptProvision() {
+            if self.profile.logins.reopenIfClosed() != nil {
+                self.cancel(with: .failed)
+            } else if let id = credentialIdentity.recordIdentifier {
+                profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
+                    switch result {
+                    case .failure:
+                        self?.cancel(with: .failed)
+                    case .success(let record):
+                        if let passwordCredential = record?.passwordCredential {
+                            self?.view?.extensionContext.completeRequest(
+                                withSelectedCredential: passwordCredential)
+                        } else {
+                            if currentRetry < maxRetries {
+                                currentRetry += 1
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    attemptProvision()
+                                }
+                            } else {
+                                self?.cancel(with: .userInteractionRequired)
+                            }
+                        }
                     }
-                }
-            })
+                })
+            }
         }
+
+        attemptProvision()
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
