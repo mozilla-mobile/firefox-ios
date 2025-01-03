@@ -11,15 +11,15 @@ import Common
 class ReaderModeStyleViewController: UIViewController, Themeable {
     // UI views
     private var fontTypeButtons: [ReaderModeFontTypeButton] = []
-    private var fontSizeLabel: ReaderModeFontSizeLabel?
+    private lazy var fontSizeLabel: ReaderModeFontSizeLabel = .build()
     private var fontSizeButtons: [ReaderModeFontSizeButton] = []
     private var themeButtons: [ReaderModeThemeButton] = []
     private var brightnessImageViews = [UIImageView]()
     private var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
 
-    private var fontTypeRow: UIView?
-    private var fontSizeRow: UIView?
-    private var brightnessRow: UIView?
+    private lazy var fontTypeRow: UIView = .build()
+    private lazy var fontSizeRow: UIView = .build()
+    private lazy var brightnessRow: UIView = .build()
 
     private lazy var slider: UISlider = .build { slider in
         slider.accessibilityLabel = .ReaderModeStyleBrightnessAccessibilityLabel
@@ -60,7 +60,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         // Font type row
 
-        let fontTypeRow: UIView = .build()
         view.addSubview(fontTypeRow)
 
         NSLayoutConstraint.activate([
@@ -69,7 +68,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             fontTypeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
             fontTypeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
         ])
-        self.fontTypeRow = fontTypeRow
 
         fontTypeButtons = [
             ReaderModeFontTypeButton(fontType: ReaderModeFontType.sansSerif),
@@ -83,7 +81,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         // Font size row
 
-        let fontSizeRow: UIView = .build()
         view.addSubview(fontSizeRow)
 
         NSLayoutConstraint.activate([
@@ -92,16 +89,13 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             fontSizeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
             fontSizeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
         ])
-        self.fontSizeRow = fontSizeRow
 
-        let fontSizeLabel: ReaderModeFontSizeLabel = .build()
         fontSizeRow.addSubview(fontSizeLabel)
 
         NSLayoutConstraint.activate([
             fontSizeLabel.centerXAnchor.constraint(equalTo: fontSizeRow.centerXAnchor),
             fontSizeLabel.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor),
         ])
-        self.fontSizeLabel = fontSizeLabel
 
         fontSizeButtons = [
             ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.smaller),
@@ -141,7 +135,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         // Brightness row
 
-        let brightnessRow: UIView = .build()
         view.addSubview(brightnessRow)
         NSLayoutConstraint.activate(
             [
@@ -155,7 +148,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
                 ),
             ]
         )
-        self.brightnessRow = brightnessRow
 
         brightnessRow.addSubview(slider)
         NSLayoutConstraint.activate(
@@ -221,7 +213,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             view?.backgroundColor = theme.colors.layer1
         }
 
-        fontSizeLabel?.textColor = theme.colors.textPrimary
+        fontSizeLabel.textColor = theme.colors.textPrimary
 
         fontTypeButtons.forEach { button in
             button.setTitleColor(theme.colors.textPrimary,
@@ -293,7 +285,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         for button in themeButtons {
             button.fontType = fontType
         }
-        fontSizeLabel?.fontType = fontType
+        fontSizeLabel.fontType = fontType
     }
 
     @objc
