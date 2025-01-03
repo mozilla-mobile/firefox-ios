@@ -79,6 +79,7 @@ class EditBookmarkViewController: UIViewController,
         viewModel.onFolderStatusUpdate = { [weak self] in
             guard let self = self else { return }
 
+            // TODO: FXIOS-10985 - replace batch updates with diffable data source
             self.tableView.performBatchUpdates {
                 if self.viewModel.isFolderCollapsed {
                     self.tableView.deleteSections(IndexSet(integer: Section.newFolder.rawValue), with: .none)
