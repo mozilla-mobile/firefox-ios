@@ -33,6 +33,7 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksRefactorFeatureFlagProvider,
+                             BookmarksHandlerDelegate,
                              FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -1646,7 +1647,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func addBookmark(url: String, title: String? = nil) {
+    func addBookmark(url: String, title: String? = nil, site: Site? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
             title = url
@@ -1665,14 +1666,15 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-
+        site?.setBookmarked(true)
         showBookmarkToast(action: .add)
     }
 
-    func removeBookmark(url: URL, title: String?) {
+    func removeBookmark(url: URL, title: String?, site: Site? = nil) {
         profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
+            site?.setBookmarked(false)
         }
     }
 

@@ -12,7 +12,7 @@ import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
-    func addBookmark(url: String, title: String?)
+    func addBookmark(url: String, title: String?, site: Site?)
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
@@ -734,7 +734,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             else { return }
 
             // The method in BVC also handles the toast for this use case
-            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title)
+            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, site: nil)
             TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .add,

@@ -173,7 +173,12 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showContextMenu(for configuration: ContextMenuConfiguration) {
-        let coordinator = ContextMenuCoordinator(configuration: configuration, router: router, windowUUID: windowUUID)
+        let coordinator = ContextMenuCoordinator(
+            configuration: configuration,
+            router: router,
+            windowUUID: windowUUID,
+            bookmarksHandlerDelegate: browserViewController
+        )
         coordinator.parentCoordinator = self
         add(child: coordinator)
         coordinator.start()

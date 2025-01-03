@@ -8,6 +8,14 @@ import Shared
 import Storage
 import Redux
 
+/// A protocol that defines methods for handling bookmark operations.
+/// Classes conforming to this protocol can manage adding and removing bookmarks.
+/// Since bookmarks are not using Redux, we use this instead of dispatching an action.
+protocol BookmarksHandlerDelegate: AnyObject {
+    func addBookmark(url: String, title: String?, site: Site?)
+    func removeBookmark(url: URL, title: String?, site: Site?)
+}
+
 /// State to populate actions for the `PhotonActionSheet` view
 /// Ideally, we want that view to subscribe to the store and update its state following the redux pattern
 /// For now, we will instantiate this state and populate the associated view model instead to avoid
@@ -17,13 +25,23 @@ struct ContextMenuState {
     var site: Site?
     var actions: [[PhotonRowActions]] = [[]]
 
+    private let profile: Profile
+    private let bookmarkDelegate: BookmarksHandlerDelegate
     private let configuration: ContextMenuConfiguration
     private let windowUUID: WindowUUID
     private let logger: Logger
 
     weak var coordinatorDelegate: ContextMenuCoordinator?
 
-    init(configuration: ContextMenuConfiguration, windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        bookmarkDelegate: BookmarksHandlerDelegate,
+        configuration: ContextMenuConfiguration,
+        windowUUID: WindowUUID,
+        logger: Logger = DefaultLogger.shared
+    ) {
+        self.profile = profile
+        self.bookmarkDelegate = bookmarkDelegate
         self.configuration = configuration
         self.windowUUID = windowUUID
         self.logger = logger
@@ -179,20 +197,30 @@ struct ContextMenuState {
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
-        if site.bookmarked ?? false {
-            bookmarkAction = getRemoveBookmarkAction()
+        let isBookmarked = profile.places.isBookmarked(url: site.url).value.successValue ?? false
+        if isBookmarked {
+            bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {
             bookmarkAction = getAddBookmarkAction(site: site)
         }
         return bookmarkAction.items
     }
 
-    private func getRemoveBookmarkAction() -> SingleActionViewModel {
+    private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10975 - Add proper actions
+            guard let siteURL = site.url.asURL else {
+                self.logger.log(
+                    "Unable to retrieve URL for \(site.url), unable to remove bookmarks",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
+            bookmarkDelegate.removeBookmark(url: siteURL, title: site.title, site: site)
+            // TODO: FXIOS-10171 - Add telemetry
         })
     }
 
@@ -201,7 +229,9 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // TODO: FXIOS-10975 - Add proper actions
+            // The method in BVC also handles the toast for this use case
+            bookmarkDelegate.addBookmark(url: site.url, title: site.title, site: site)
+            // TODO: FXIOS-10171 - Add telemetry
         })
     }
 
