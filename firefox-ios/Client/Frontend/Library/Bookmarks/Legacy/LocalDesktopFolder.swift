@@ -12,7 +12,8 @@ import struct MozillaAppServices.Guid
 /// - Have the menu, unfiled and toolbar folders all under a desktop folder that doesn't exists in the backend
 /// - Present the menu, unfiled and toolbar folders to the users without making a backend call.
 /// Desktop folder content is fetched when folder is selected.
-class LocalDesktopFolder: FxBookmarkNode {
+class LocalDesktopFolder: FxBookmarkNode,
+                            BookmarksRefactorFeatureFlagProvider {
     // Guid used locally, but never synced to Firefox Sync accounts
     static let localDesktopFolderGuid = "localDesktopFolder"
 
@@ -52,9 +53,12 @@ class LocalDesktopFolder: FxBookmarkNode {
 
 extension LocalDesktopFolder: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
+        let image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        let accessoryView = isBookmarkRefactorEnabled ? UIImageView(image: image) : nil
+
         return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
-                                             accessoryView: nil,
+                                             accessoryView: accessoryView,
                                              accessoryType: .disclosureIndicator,
                                              editingAccessoryView: nil)
     }
