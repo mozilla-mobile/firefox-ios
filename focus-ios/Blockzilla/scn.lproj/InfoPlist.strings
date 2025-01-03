@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Chistu ti pirmetti di scattari e carricari fotu.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Chistu ti pirmetti di sbluccari l'applicazzioni.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "I siti chi vìsiti ponnu addumannari a to pusizzioni.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Chistu ti pirmetti di scattari e carricari vidiu.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Chistu ti pirmetti di sarbari e carricari fotu.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Scancella e grapi";
+

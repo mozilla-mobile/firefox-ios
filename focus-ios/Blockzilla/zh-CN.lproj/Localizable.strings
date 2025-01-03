@@ -277,11 +277,14 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "深色";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "我们可借助崩溃报告来诊断和修复浏览器的问题。";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ 会将您在地址栏中输入的内容发送至您的搜索引擎。";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla 坚持仅收集用来为大众改进 %@ 所必需的数据。";
+"Settings.detailTextSendUsageData" = "Mozilla 力图仅收集用来为大众改进 %@ 所必需的数据。";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "社交";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "自动发送崩溃报告";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "使用面容 ID 解锁应用";

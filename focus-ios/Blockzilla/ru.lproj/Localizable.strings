@@ -277,6 +277,9 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Тёмная";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "Сообщения о падении позволяют нам диагностировать и устранять проблемы с браузером.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ будет отправлять то, что вы вводите в адресной строке, в вашу поисковую систему.";
 
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Социальные сети";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Автоматически отправлять сообщения о падениях";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Использовать Face ID для разблокировки приложения";

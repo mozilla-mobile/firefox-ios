@@ -277,6 +277,9 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Күңгірт";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "Құлау хабарламалары бізге браузердегі ақауларды анықтауға және түзетуге мүмкіндік береді.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
 
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Әлеуметтік";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Құлау хабарламаларын автоматты түрде жіберу";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Қолданбаны босату үшін Face ID қолданыңыз";

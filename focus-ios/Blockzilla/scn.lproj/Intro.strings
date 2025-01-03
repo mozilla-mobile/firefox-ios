@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Scancella tutta a to crunuluggìa di navigazzioni, i chiavi e i viscotta quannu voi cu n'ammaccata sula.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "A to crunuluggìa è storia passata";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Avanti";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Stai circannu n'autra cosa? Scarta n'autru muturi di risciduta.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Riscedi â to manera";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Sauta";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Porta a navigazzioni privata a n'autru liveḍḍu. Ferma i pubblicità e autri cuntinuti chi ti ponnu trazzari ntra i siti e fari ammurrari u carricamentu dî pàggini.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Ammutta a to privatizza";
+

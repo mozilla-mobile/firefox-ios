@@ -277,6 +277,9 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Koyu";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "Çökme raporları tarayıcıyla ilgili sorunları teşhis etmemize ve düzeltmemize olanak tanır.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
 
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Sosyal";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Çökme raporlarını otomatik olarak gönder";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uygulamanın kilidini açmak için Face ID’yi kullan";
