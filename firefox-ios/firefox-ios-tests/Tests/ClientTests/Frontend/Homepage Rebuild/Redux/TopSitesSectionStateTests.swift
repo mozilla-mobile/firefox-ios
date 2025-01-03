@@ -100,6 +100,40 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
+    func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
+    func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldShowSection)
+    }
+
     // MARK: - Private
     private func createSubject() -> TopSitesSectionState {
         return TopSitesSectionState(windowUUID: .XCTestDefaultUUID)

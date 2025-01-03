@@ -172,7 +172,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
                 statusText: pocketStatusText
-            )
+            ) { value in
+                store.dispatch(
+                    PocketAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: PocketActionType.toggleShowSectionSetting
+                    )
+                )
+            }
             sectionItems.append(pocketSetting)
         }
 
@@ -272,6 +280,13 @@ extension HomePageSettingViewController {
             let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
             typealias Shortcuts = String.Settings.Homepage.Shortcuts
             let status: String = areShortcutsOn ? Shortcuts.ToggleOn : Shortcuts.ToggleOff
+            store.dispatch(
+                TopSitesAction(
+                    isEnabled: areShortcutsOn,
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.toggleShowSectionSetting
+                )
+            )
             return NSAttributedString(string: String(format: status))
         }
 

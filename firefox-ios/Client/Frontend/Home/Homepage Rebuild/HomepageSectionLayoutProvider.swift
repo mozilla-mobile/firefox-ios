@@ -67,25 +67,7 @@ final class HomepageSectionLayoutProvider {
         self.dimensionImplementation = TopSitesDimensionImplementation(windowUUID: windowUUID)
     }
 
-    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            guard let section = HomepageSection(rawValue: sectionIndex) else {
-                self.logger.log(
-                    "Section should not have been nil, something went wrong",
-                    level: .fatal,
-                    category: .homepage
-                )
-                return nil
-            }
-            return self.createLayoutSection(
-                    for: section,
-                    with: environment.traitCollection,
-                    size: environment.container.effectiveContentSize
-                )
-        }
-    }
-
-    private func createLayoutSection(
+    func createLayoutSection(
         for section: HomepageSection,
         with traitCollection: UITraitCollection,
         size: CGSize
