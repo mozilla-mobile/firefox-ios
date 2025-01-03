@@ -8,19 +8,23 @@ import Redux
 
 final class PocketAction: Action {
     var pocketStories: [PocketStoryState]?
+    var isEnabled: Bool?
 
     init(
         pocketStories: [PocketStoryState]? = nil,
+        isEnabled: Bool? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.pocketStories = pocketStories
+        self.isEnabled = isEnabled
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum PocketActionType: ActionType {
     case enteredForeground
+    case toggleShowSectionSetting
 }
 
 enum PocketMiddlewareActionType: ActionType {

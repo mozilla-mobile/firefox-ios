@@ -55,6 +55,7 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
+    private let collectionLayout: UICollectionViewLayout?
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -63,7 +64,8 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         collectionLayout: UICollectionViewLayout? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -72,6 +74,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.collectionLayout = collectionLayout
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -244,8 +247,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let layoutConfiguration = HomepageSectionLayoutProvider(windowUUID: windowUUID).createCompositionalLayout()
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionLayout ?? createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -271,6 +273,28 @@ final class HomepageViewController: UIViewController,
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+            guard let section = self.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
+                self.logger.log(
+                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    level: .fatal,
+                    category: .homepage
+                )
+                return nil
+            }
+
+            return HomepageSectionLayoutProvider(
+                windowUUID: self.windowUUID
+            ).createLayoutSection(
+                for: section,
+                with: environment.traitCollection,
+                size: environment.container.effectiveContentSize
+            )
+        }
+        return layout
     }
 
     private func configureDataSource() {
