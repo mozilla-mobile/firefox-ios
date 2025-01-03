@@ -380,7 +380,7 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    // MARK: - Long press
+    // MARK: - Actions
 
     @objc
     private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -392,6 +392,12 @@ class BookmarksViewController: SiteTableViewController,
 
         presentContextMenu(for: indexPath)
     }
+
+    @objc
+    private func didPressContextMenuButton(_ sender: UIButton) {
+        let row = sender.tag
+        let indexPath = IndexPath(row: row, section: 0) // Assuming section 0, adjust if needed
+        presentContextMenu(for: indexPath)    }
 
     private func backButtonView() -> UIView? {
         let navigationBarContentView = navigationController?.navigationBar.subviews.first(where: {
@@ -474,21 +480,31 @@ class BookmarksViewController: SiteTableViewController,
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: OneLineTableViewCell.cellIdentifier,
                 for: indexPath) as? OneLineTableViewCell {
-            // Site is needed on BookmarkItemData to setup cell image
-            var site: Site?
+            var viewModel = bookmarkCell.getViewModel()
+            cell.tag = indexPath.item
+
+            // BookmarkItemData requires:
+            // - Site to setup cell image
+            // - AccessoryView to setup context menu button affordance
+            var site: Site
             if let node = node as? BookmarkItemData {
                 site = Site(url: node.url,
                             title: node.title,
                             bookmarked: true,
                             guid: node.guid)
-            }
-            cell.tag = indexPath.item
+                if viewModel.leftImageView == nil {
+                    cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                }
 
-            let viewModel = bookmarkCell.getViewModel()
-
-            if let site = site,
-               viewModel.leftImageView == nil {
-                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                var buttonConfig = UIButton.Configuration.plain()
+                let icon = UIImage(named: StandardImageIdentifiers.Large.ellipsis)?.withRenderingMode(.alwaysTemplate)
+                buttonConfig.image = icon
+                let contextButton = UIButton()
+                contextButton.configuration = buttonConfig
+                contextButton.tag = indexPath.row
+                contextButton.frame = CGRect(width: 44, height: 44)
+                contextButton.addTarget(self, action: #selector(didPressContextMenuButton(_:)), for: .touchUpInside)
+                viewModel.accessoryView = contextButton
             }
 
             cell.configure(viewModel: viewModel)
