@@ -12,18 +12,21 @@ import WebKit
 class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
         static let containerVerticalPadding: CGFloat = 20
-        static var containerHorizontalPadding: CGFloat {
-            if ((UIDevice.current.userInterfaceIdiom == .phone) && UIDevice.current.orientation.isLandscape) ||
-                ((UIDevice.current.userInterfaceIdiom == .pad) && UIDevice.current.orientation.isPortrait) {
-                return 90
-            }
-            if (UIDevice.current.userInterfaceIdiom == .pad) && UIDevice.current.orientation.isLandscape {
-                return 270
-            }
-            return containerVerticalPadding
-        }
+        static let containerHorizontalPaddingSm: CGFloat = 20
+        static let containerHorizontalPaddingMd: CGFloat = 90
+        static let containerHorizontalPaddingLg: CGFloat = 270
         static let containerElementsVerticalPadding: CGFloat = 16
         static let headerTrailingPadding: CGFloat = 45
+    }
+
+    private func getContainerHorizontalPadding() -> CGFloat {
+        if UIDevice.current.orientation.isLandscape {
+             return UIDevice.current.userInterfaceIdiom == .pad ? UX.containerHorizontalPaddingLg :
+                UX.containerHorizontalPaddingMd
+        } else {
+             return UIDevice.current.userInterfaceIdiom == .pad ? UX.containerHorizontalPaddingMd :
+                UX.containerHorizontalPaddingSm
+        }
     }
 
     // MARK: - Redux
@@ -120,13 +123,14 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         contentView.addSubviews(header, descriptionLabel, passwordField, usePasswordButton)
 
         // Content View Constraints
+        let containerHorizontalPadding = getContainerHorizontalPadding()
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.containerHorizontalPadding),
+                constant: containerHorizontalPadding),
             contentView.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -UX.containerHorizontalPadding),
+                constant: -containerHorizontalPadding),
             contentView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: UX.containerVerticalPadding),
