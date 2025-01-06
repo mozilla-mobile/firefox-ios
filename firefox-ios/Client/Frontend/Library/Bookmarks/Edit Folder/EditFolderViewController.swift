@@ -63,6 +63,7 @@ class EditFolderViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
