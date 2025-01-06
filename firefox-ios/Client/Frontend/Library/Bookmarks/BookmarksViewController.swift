@@ -784,6 +784,8 @@ extension BookmarksViewController {
 
         switch subState {
         case .mainView, .inFolder:
+            // Set editing false first to hide any swipe actions that may already be showing
+            tableView.setEditing(false, animated: true)
             enableEditMode()
         case .inFolderEditMode:
             disableEditMode()
