@@ -39,7 +39,7 @@ extension SDRow {
 }
 
 extension BrowserDBSQLite: PinnedSites {
-    public func removeFromPinnedTopSites(_ site: Site) -> Success {
+    public func removeFromPinnedTopSites(_ site: any SitePr) -> Success {
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
@@ -62,7 +62,7 @@ extension BrowserDBSQLite: PinnedSites {
         return self.database.queryReturnsResults(sql, args: args)
     }
 
-    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<any SitePr>>> {
         let sql = """
             SELECT * FROM pinned_top_sites
             ORDER BY pinDate DESC
@@ -70,23 +70,16 @@ extension BrowserDBSQLite: PinnedSites {
         return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.historyMetadataColumnFactory)
     }
 
-    public func addPinnedTopSite(_ site: Site) -> Success { // needs test
+    public func addPinnedTopSite(_ site: any SitePr) -> Success {
         let now = Date.now()
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
 
-        // We insert a dummy guid for backward compatibility.
-        // in the past, the guid was required, but we removed that requirement.
-        // if we do not insert a guid, users who downgrade their version of firefox will
-        // crash when loading their pinned tabs.
-        //
-        // We have since allowed the guid to be optional, and should remove this guid
-        // once we stop supporting downgrading to any versions less than 110.
-        let args: Args = [site.url, now, site.title, site.id, "dummy-guid", host]
+        let args: Args = [site.url, now, site.title, site.id, host]
         let arglist = BrowserDB.varlist(args.count)
 
-        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
+        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, domain) VALUES \(arglist)", args)])
         >>== {
             self.notificationCenter.post(name: .TopSitesUpdated, object: self)
             return succeed()
