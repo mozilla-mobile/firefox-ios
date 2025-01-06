@@ -187,7 +187,7 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-            if folder.guid == Folder.dummyFolderGuid {
+            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
                 configureDesktopBookmarksHeaderCell(cell)
             } else {
                 configureParentFolderCell(cell, folder: folder)
@@ -290,7 +290,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.dummyFolderGuid {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
             return nil
         }
         return indexPath

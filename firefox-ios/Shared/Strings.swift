@@ -173,7 +173,7 @@ extension String {
                 value: "Edit Bookmark",
                 comment: "Label on the top of the `Edit Bookmarks` screen.")
             public static let EditBookmarkDesktopBookmarksLabel = MZLocalizedString(
-                key: "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v135",
+                key: "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136",
                 tableName: "Bookmarks",
                 value: "DESKTOP BOOKMARKS",
                 comment: "Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop.")
