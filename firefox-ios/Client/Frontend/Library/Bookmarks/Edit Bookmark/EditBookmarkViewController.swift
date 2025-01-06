@@ -197,7 +197,11 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-            configureParentFolderCell(cell, folder: folder)
+            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
+                configureDesktopBookmarksHeaderCell(cell)
+            } else {
+                configureParentFolderCell(cell, folder: folder)
+            }
             return cell
         case .newFolder:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
@@ -233,6 +237,15 @@ class EditBookmarkViewController: UIViewController,
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
         cell.customization = .regular
+        cell.applyTheme(theme: theme)
+    }
+
+    private func configureDesktopBookmarksHeaderCell(_ cell: OneLineTableViewCell) {
+        cell.titleLabel.text = String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
+        cell.customization = .desktopBookmarksLabel
+        cell.indentationLevel = 1
+        cell.accessoryType = .none
+        cell.selectionStyle = .none
         cell.applyTheme(theme: theme)
     }
 
@@ -285,6 +298,13 @@ class EditBookmarkViewController: UIViewController,
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         guard let section = Section(rawValue: section), section == .folder else { return 0 }
         return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
+            return nil
+        }
+        return indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
