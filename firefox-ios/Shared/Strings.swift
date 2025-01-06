@@ -183,12 +183,12 @@ extension String {
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
             public static let SavedBookmarkToastLabel = MZLocalizedString(
-                key: "Bookmarks.Menu.SavedBookmarkToastLabel.v135",
+                key: "Bookmarks.Menu.SavedBookmarkToastLabel.v136",
                 tableName: "Bookmarks",
                 value: "Saved in \"%@\"",
                 comment: "The label displayed in the toast when saving a bookmark via the menu. The placeholder represents the folder where the bookmark is saved to")
             public static let SavedBookmarkToastDefaultFolderLabel = MZLocalizedString(
-                key: "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v135",
+                key: "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136",
                 tableName: "Bookmarks",
                 value: "Bookmarks",
                 comment: "Label describing the name of the default folder that a bookmark is saved to when a recent folder is not set. This label is used for the saved bookmark toast. The toast would read: (Saved in \"Bookmarks\")")

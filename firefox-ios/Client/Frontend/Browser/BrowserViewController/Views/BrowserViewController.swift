@@ -1687,13 +1687,13 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         func showAddBookmarkToast(folderName: String) {
             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-            self.showToast(message: message, toastAction: .bookmarkPage)
+            showToast(message: message, toastAction: .bookmarkPage)
         }
 
         switch action {
         case .add:
             if !isBookmarkRefactorEnabled {
-                self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+                showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
             }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
