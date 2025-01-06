@@ -289,7 +289,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = "XCUITests.xctest"
+               BuildableName = "XCUITests"
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -529,10 +529,6 @@
                BuildableName = "ToolbarKitTests"
                BlueprintName = "ToolbarKitTests"
                ReferencedContainer = "container:../BrowserKit">
-               BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
-               BuildableName = "UITests.xctest"
-               BlueprintName = "UITests"
-               ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference

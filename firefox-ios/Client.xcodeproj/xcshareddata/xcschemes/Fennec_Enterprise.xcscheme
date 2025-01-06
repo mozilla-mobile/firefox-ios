@@ -46,7 +46,7 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2CD368442C5BC31700972871"
+               BlueprintIdentifier = "2C6C90812C614A16007D9B43"
                BuildableName = "EcosiaSnapshotTests.xctest"
                BlueprintName = "EcosiaSnapshotTests"
                ReferencedContainer = "container:Client.xcodeproj">
@@ -73,7 +73,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = "XCUITests.xctest"
+               BuildableName = "XCUITests"
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
