@@ -65,6 +65,7 @@ class EditBookmarkViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
