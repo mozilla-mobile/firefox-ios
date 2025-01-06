@@ -673,12 +673,12 @@ extension RustPlaces {
     public func getTopFrecentSiteInfos(
         limit: Int,
         thresholdOption: FrecencyThresholdOption
-    ) -> Deferred<Maybe<[Site]>> {
+    ) -> Deferred<Maybe<[any SitePr]>> {
         let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
 
-        let returnValue = Deferred<Maybe<[Site]>>()
+        let returnValue = Deferred<Maybe<[any SitePr]>>()
         deferred.upon { result in
             guard let result = result.successValue else {
                 returnValue.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
@@ -693,7 +693,7 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                return Site(url: info.url, title: title)
+                return BasicSite(id: UUID().hashValue, url: info.url, title: title)
             }))
         }
         return returnValue
@@ -703,15 +703,15 @@ extension RustPlaces {
         limit: Int,
         offset: Int,
         excludedTypes: VisitTransitionSet
-    ) -> Deferred<Maybe<Cursor<Site>>> {
+    ) -> Deferred<Maybe<Cursor<any SitePr>>> {
         let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
-        let result = Deferred<Maybe<Cursor<Site>>>()
+        let result = Deferred<Maybe<Cursor<any SitePr>>>()
         deferred.upon { visitInfos in
             guard let visitInfos = visitInfos.successValue else {
                 result.fill(Maybe(failure: visitInfos.failureValue ?? "Unknown Error"))
                 return
             }
-            let sites = visitInfos.infos.map { info -> Site in
+            let sites = visitInfos.infos.map { info -> BasicSite in
                 var title: String
                 if let actualTitle = info.title, !actualTitle.isEmpty {
                     title = actualTitle
@@ -722,7 +722,7 @@ extension RustPlaces {
                 }
                 // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
                 let hashValue = "\(info.url)_\(info.timestamp)".hashValue
-                let site = Site(id: hashValue, url: info.url, title: title)
+                var site = BasicSite(id: hashValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()

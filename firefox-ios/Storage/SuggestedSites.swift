@@ -6,17 +6,29 @@ import UIKit
 import Shared
 import SiteImageView
 
-open class SuggestedSite: Site {
-    override open var tileURL: URL {
+public struct SuggestedSite: SitePr {
+    public var id: Int
+    public var url: String
+    public var title: String
+    public var faviconResource: SiteImageView.SiteResource?
+    public var metadata: PageMetadata?
+    public var latestVisit: Visit?
+    public var isBookmarked: Bool?
+
+    let trackingId: Int
+
+    public var tileURL: URL {
         return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
     }
-    let trackingId: Int
-    public init(url: String,
-                title: String,
-                trackingId: Int,
-                faviconResource: SiteResource? = nil) {
+
+    public init(url: String, title: String, trackingId: Int, faviconResource: SiteImageView.SiteResource? = nil) {
         self.trackingId = trackingId
-        super.init(url: url, title: title, bookmarked: nil, faviconResource: faviconResource)
-        self.guid = "default" + title // A guid is required in the case the site might become a pinned site
+        self.id = UUID().hashValue
+        self.url = url
+        self.title = title
+        self.faviconResource = faviconResource
+
+        // FIXME Is this needed?
+//        self.guid = "default" + title // A guid is required in the case the site might become a pinned site
     }
 }

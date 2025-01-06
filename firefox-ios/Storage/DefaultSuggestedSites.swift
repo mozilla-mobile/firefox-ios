@@ -131,7 +131,7 @@ open class DefaultSuggestedSites {
         ]
     ]
 
-    public static func defaultSites() -> [Site] {
+    public static func defaultSites() -> [any SitePr] {
         let locale = Locale.current
         let defaultSites = sites[locale.identifier] ?? sites["default"]
         return defaultSites?.map { data in

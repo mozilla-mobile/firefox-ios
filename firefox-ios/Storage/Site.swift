@@ -6,110 +6,79 @@ import UIKit
 import Shared
 import SiteImageView
 
-// TODO: Site shouldn't have all of these optional decorators. Include those in the
-// cursor results, perhaps as a tuple.
-open class Site: Identifiable {
-    open var id: Int?
-    open var guid: String?
+public protocol SitePr: Identifiable, Hashable, Equatable {
+    var id: Int { get }
+    var url: String { get }
+    var title: String { get }
 
-    open var tileURL: URL {
+    var faviconResource: SiteResource?  { get set }
+    var metadata: PageMetadata?  { get set }
+    var latestVisit: Visit?  { get set }
+    var isBookmarked: Bool?  { get set }
+
+    // Getter Helpers
+    var tileURL: URL { get }
+    var secondLevelDomain: String? { get }
+    var faviconImageCacheKey: String { get }
+}
+
+/// Provides some default implementation of helpers and methods for a Site.
+extension SitePr {
+    public var tileURL: URL {
         return URL(string: url, invalidCharacters: false)?.domainURL ?? URL(string: "about:blank")!
     }
 
     // i.e. `http://www.example.com/` --> `example`
-    open var secondLevelDomain: String? {
+    public var secondLevelDomain: String? {
         return URL(string: url, invalidCharacters: false)?.host?.components(separatedBy: ".").suffix(2).first
     }
 
     public var faviconImageCacheKey: String {
         return tileURL.shortDomain ?? tileURL.shortDisplayString
     }
-    private var storage: Storage {
-        return Storage(resource: faviconResource, title: title, id: id, guid: guid, url: url)
-    }
+}
 
-    public let url: String
-    public let title: String
-    public let faviconResource: SiteResource?
-    open var metadata: PageMetadata?
-    open var latestVisit: Visit?
-    open fileprivate(set) var bookmarked: Bool?
-    // Created since to avoid making Sites Codable which involes making also PageMetadata and Visit Codable too
-    private struct Storage: Codable {
-        let resource: SiteResource?
-        let title: String
-        let id: Int?
-        let guid: String?
-        let url: String
-    }
+public struct BasicSite: SitePr, Codable {
+    public var id: Int
+    public var url: String
+    public var title: String
+    public var faviconResource: SiteImageView.SiteResource?
+    public var metadata: PageMetadata?
+    public var latestVisit: Visit?
+    public var isBookmarked: Bool?
 
-    private init(from storage: Storage) {
-        self.faviconResource = storage.resource
-        self.title = storage.title
-        self.url = storage.url
-        self.id = storage.id
-        self.guid = storage.guid
-    }
-
-    public convenience init(url: String, title: String) {
-        self.init(url: url, title: title, bookmarked: false, guid: nil, faviconResource: nil)
-    }
-
-    public convenience init(id: Int, url: String, title: String) {
-        self.init(url: url, title: title, bookmarked: false, guid: nil, faviconResource: nil)
+    public init(id: Int, url: String, title: String, faviconResource: SiteImageView.SiteResource? = nil) {
         self.id = id
-    }
-
-    public init(url: String,
-                title: String,
-                bookmarked: Bool?,
-                guid: String? = nil,
-                faviconResource: SiteResource? = nil) {
         self.url = url
         self.title = title
-        self.bookmarked = bookmarked
-        self.guid = guid
         self.faviconResource = faviconResource
     }
 
-    open func setBookmarked(_ bookmarked: Bool) {
-        self.bookmarked = bookmarked
-    }
-
     // MARK: - Encode & Decode
+    // We manually implement the codable methods as we don't need to encode `PageMetadata` and `Visit` information.
 
-    public static func encode(with encoder: JSONEncoder, data: [Site]) throws -> Data {
-        let storage = data.map { site in
-            return site.storage
-        }
-        return try encoder.encode(storage)
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case url
+        case title
+        case faviconResource = "resource"
     }
 
-    public static func decode(from decoder: JSONDecoder, data: Data) throws -> [Site] {
-        let storage = try decoder.decode([Storage].self, from: data)
-        return storage.map {
-            return Site(from: $0)
-        }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(url, forKey: .url)
+        try container.encode(title, forKey: .title)
+        try container.encode(faviconResource, forKey: .faviconResource)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try values.decode(Int.self, forKey: .id)
+        let url = try values.decode(String.self, forKey: .url)
+        let title = try values.decode(String.self, forKey: .title)
+        let faviconResource = try values.decode(SiteImageView.SiteResource.self, forKey: .faviconResource)
+
+        self.init(id: id, url: url, title: title, faviconResource: faviconResource)
     }
 }
-
-// MARK: - Hashable
-extension Site: Hashable {
-     public func hash(into hasher: inout Hasher) {
-         // The == operator below must match the same requirements as this method
-         hasher.combine(id)
-         hasher.combine(guid)
-         hasher.combine(title)
-         hasher.combine(url)
-         hasher.combine(faviconResource)
-     }
-
-     public static func == (lhs: Site, rhs: Site) -> Bool {
-         // The hash method above must match the same requirements as this operator
-         return lhs.id == rhs.id
-         && lhs.guid == rhs.guid
-         && lhs.title == rhs.title
-         && lhs.url == rhs.url
-         && lhs.faviconResource == rhs.faviconResource
-     }
- }

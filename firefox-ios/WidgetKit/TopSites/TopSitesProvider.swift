@@ -9,7 +9,7 @@ import Storage
 import Common
 import Shared
 
-typealias WidgetTopSite = Site
+typealias WidgetTopSite = BasicSite
 
 struct TopSitesProvider: TimelineProvider {
     init(userDefaults: UserDefaultsInterface = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) ?? .standard) {
@@ -58,8 +58,8 @@ struct TopSitesProvider: TimelineProvider {
 
     private func getStoredTopSites() -> [WidgetTopSite] {
         if let topSites = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTopTab) as? Data {
-            let decoder = JSONDecoder()
-            return (try? WidgetTopSite.decode(from: decoder, data: topSites)) ?? []
+            let decodedSites = try? JSONDecoder().decode([WidgetTopSite].self, from: topSites)
+            return decodedSites ?? []
         }
         return [WidgetTopSite]()
     }
