@@ -88,6 +88,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
 "Settings.DailyUsagePing.Message.v135" = "Bu sayede aktif %@ kullanıcılarının sayısını tahmin edebiliriz.";
 
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Günlük kullanım ping’i";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Hesap";
 
@@ -177,6 +180,9 @@
 
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Yeni özellikleri ve fikirleri herkesin kullanımına açılmadan önce deneyin.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Araştırmaları yükle ve çalıştır";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Daha fazla bilgi alın.";

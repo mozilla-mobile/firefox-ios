@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Mpustari Firefox comu u to navigaturi pridifinutu veni a diri scartari na riti cchiù graputa e accissìbbili.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Mpustari Firefox comu u to navicaturi pridifinutu veni a diri scartari na riti cchiù graputa e accissìbbili.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Scarta n'Internet megghiu";
@@ -11,19 +11,19 @@
 "DefaultBrowserCard.Description" = "Cunfijura pi fari gràpiri 'n autumàticu cu Firefox i lijami dî siti, l'e-mail e i missaggi.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Scarta Firefox comu u to navigaturi pridifinutu p'aviri 'n autumàticu vilucità, sicurizza e privatizza.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Scarta Firefox comu u to navicaturi pridifinutu p'aviri 'n autumàticu vilucità, sicurizza e privatizza.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Title.v108" = "Navigazzioni d'ogni jornu sempri megghiu";
+"DefaultBrowserCard.NextLevel.Title.v108" = "Navicazzioni d'ogni jornu sempri megghiu";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blocca cchiù assai di 3.000 trazzatura p'ogni utenti ô misi. Scàrtani comu navigaturi pridifinutu p'aviri privatizza sicura.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blocca cchiù assai di 3.000 trazzatura p'ogni utenti ô misi. Scàrtani comu navicaturi pridifinutu p'aviri privatizza sicura.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox pruteggi a to privatizza";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Cancia u to navigaturi pridifinutu";
+"DefaultBrowserCard.Title" = "Cancia u to navicaturi pridifinutu";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Vai nnê mpustazzioni";
@@ -32,14 +32,14 @@
 "DefaultBrowserOnboarding.Description1" = "1. Vai nnê mpustazzioni";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Ammacca Applicazzioni pû navigaturi pridifinutu";
+"DefaultBrowserOnboarding.Description2" = "2. Ammacca Applicazzioni pû navicaturi pridifinutu";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Scarta Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Applicazzioni pû navigaturi pridifinutu";
+"DefaultBrowserOnboarding.Screenshot" = "Applicazzioni pû navicaturi pridifinutu";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "Cunfijura comu navigaturi pridifinutu";
+"Settings.DefaultBrowserMenuItem" = "Cunfijura comu navicaturi pridifinutu";
 

@@ -16,6 +16,12 @@
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ദിവസേന തിരച്ചിലിന്റെ നില ഉയർത്തുക";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "ഓരോ ഉപയോക്താവിനു് ഫയർഫോക്സു് ശരാശരി 3,000-ൽ കൂടുതൽ പിന്തുടർച്ചയന്ത്രങ്ങളെ പ്രതിമാസം തടയാരുണ്ടു്. മനസ്സിനൊരു സമാധാനത്തിനു് വേണ്ടി ഞങ്ങളെ താങ്ങളുടെ തനതു അന്വേഷിയന്ത്രമായി ആക്കുക.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "ഫയർഫോക്സിൽ സ്വകാര്യതൊരു എളുപ്പമുള്ളകാര്യമാണു്";
+
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രത്തിനെ  തുറക്കുക ";
 

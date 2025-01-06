@@ -8,7 +8,7 @@
 "Upgrade.SyncSign.Title.v114" = "Canciari schirmi è cchiù fàcili di sempri";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v114" = "Cunfijura comu navigaturi pridifinutu";
+"Upgrade.Welcome.Action.v114" = "Cunfijura comu navicaturi pridifinutu";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Description.v114" = "Novi culura. Cchiù cummidità. A stissa didizzioni ê genti cchiù assai chi ê prufitti.";
