@@ -185,7 +185,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "കണ്ണി പകര്‍ത്തുക";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "കണ്ണി ഡൗൺലോഡ് ചെയ്യുക";
+"ContextMenu.DownloadLinkButtonTitle" = "കണ്ണി ഇറക്കിവയ്ക്കുക";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "പുതിയ ടാബില്‍ തുറക്കുക";
@@ -360,6 +360,9 @@
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "എല്ലാ സമന്വയിപ്പിച്ച ടാബുകൾ കാണുക";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "സമന്വയിപ്പുതോടു് എടുത്തതു്";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "പണം കൊണ്ടു് പ്രചരിപ്പിച്ചതു്";
@@ -931,6 +934,9 @@
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "അതിവേഗ തിരച്ചിലിനായുള്ള പ്രയോഗങ്ങള്‍";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "പ്രയോഗ പീടികയിൽ അവലോകനം കൊടുക്കുക";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "വായിക്കുക";
 
@@ -994,11 +1000,14 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ഈ ഡാറ്റ അസാധുവാണ്";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ഉപകരണ 'ക്രമീകരണങ്ങൾ' > 'ഫയർഫോക്സ്' എന്നതിലേക്ക് പോകുക. ക്യാമറ ഉപയോഗിക്കാൻ Firefox-നെ അനുവാദം കൊടുക്കുക.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR സങ്കേതം പരിശോധിക്കുക";
 
 /* Open search section of settings */
-"Search" = "തെരയുക";
+"Search" = "തിരയുക";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "തെരയൂ അല്ലെങ്കില്‍ വിലാസം നല്‍കൂ";
@@ -1135,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "യുആര്‍എല്‍ (ക്വറിയെ %s കൊണ്ട് മാറ്റുക)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "ബാഹ്യ പ്രയോഗങ്ങളെ തുറക്കുന്നത് തടയുക";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "എല്ലാ വെബ്സൈറ്റ് ഡാറ്റയും മായ്ക്കുക";
 
@@ -1208,16 +1220,16 @@
 "Settings.DisplayTheme.SwitchTitle" = "യാന്ത്രികമായി";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "സിസ്റ്റം തീം";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "വ്യവസ്ഥ അലങ്കാരം";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "സിസ്റ്റം ലൈറ്റ്/ഡാർക്ക് മോഡ് ഉപയോഗിക്കുക";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "വ്യവസ്ഥ വെള്ളിച്ച/ഇരുണ്ട രീതി ഉപയോഗിക്കുക";
 
 /* Theme picker settings section title */
-"Settings.DisplayTheme.ThemePicker.SectionHeader" = "തീം പിക്കർ";
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "അലങ്കാര കവാടഫലകം";
 
 /* Title in main app settings for Theme settings */
-"Settings.DisplayTheme.Title.v2" = "തീം";
+"Settings.DisplayTheme.Title.v2" = "അലങ്കാരം";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ഉപകരണത്തിന്റെ പേരു്";

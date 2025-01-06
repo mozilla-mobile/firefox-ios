@@ -178,6 +178,12 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Meer info";
 
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Probeer functies en ideeën uit voordat ze voor iedereen beschikbaar zijn.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Onderzoeken installeren en uitvoeren";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Meer info.";
 
@@ -187,6 +193,12 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
 "Settings.TechnicalData.Message.v135" = "%1$@ streeft ernaar alleen te verzamelen wat nodig is om %2$@ voor iedereen aan te bieden en te verbeteren.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Gegevens over uw apparaat, hardwareconfiguratie en gebruik helpen ons de functies, prestaties en stabiliteit van %@ te verbeteren.";
+
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Technische en interactiegegevens";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Technische en interactiegegevens verzenden";
 

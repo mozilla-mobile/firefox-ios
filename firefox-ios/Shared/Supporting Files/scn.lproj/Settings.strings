@@ -74,7 +74,7 @@
 "Settings.CrashReports.Link.v136" = "Cchiù nfurmazzioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navigaturi.";
+"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Manna 'n autumàticu i signalijazzioni di scasciu";
@@ -155,7 +155,7 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "Mustra suggirimenti di Firefox nnê sissioni privati";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Riscedi nnâ crunuluggìa di navigazzioni";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Riscedi nnâ crunuluggìa di navicazzioni";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Riscedi nnê nzingalibbra";
