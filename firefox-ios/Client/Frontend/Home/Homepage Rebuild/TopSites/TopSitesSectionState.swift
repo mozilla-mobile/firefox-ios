@@ -22,13 +22,12 @@ struct TopSitesSectionState: StateType, Equatable {
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
         let numberOfRows = Int(preferredNumberOfRows ?? defaultNumberOfRows)
         let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
-        let initialNumberOfTilesPerRow = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
 
         self.init(
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: initialNumberOfTilesPerRow,
+            numberOfTilesPerRow: 0,
             shouldShowSection: shouldShowSection
         )
     }

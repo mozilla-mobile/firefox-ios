@@ -276,9 +276,11 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            guard let section = self.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
-                self.logger.log(
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: self.windowUUID)
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
+                self?.logger.log(
                     "Section should not have been nil, something went wrong for \(sectionIndex)",
                     level: .fatal,
                     category: .homepage
@@ -286,9 +288,7 @@ final class HomepageViewController: UIViewController,
                 return nil
             }
 
-            return HomepageSectionLayoutProvider(
-                windowUUID: self.windowUUID
-            ).createLayoutSection(
+            return sectionProvider.createLayoutSection(
                 for: section,
                 with: environment.traitCollection,
                 size: environment.container.effectiveContentSize
