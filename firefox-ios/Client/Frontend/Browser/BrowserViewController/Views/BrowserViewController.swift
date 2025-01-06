@@ -1060,6 +1060,7 @@ class BrowserViewController: UIViewController,
         ])
 
         if isJSAlertRefactorEnabled {
+            // This will be documented with FXIOS-10952
             checkForJSAlerts()
         } else {
             showQueuedAlertIfAvailable()
