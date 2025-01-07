@@ -56,6 +56,17 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.faviconResource = faviconResource
     }
 
+    init(fromSite site: Site, withLocalizedURLString urlString: String) {
+        self.id = site.id
+        self.url = urlString
+        self.title = site.title
+        self.type = site.type
+        self.faviconResource = site.faviconResource
+        self.metadata = site.metadata
+        self.latestVisit = site.latestVisit
+        self.isBookmarked = site.isBookmarked
+    }
+
     // MARK: - Encode & Decode
     // We manually implement the codable methods as we don't need to encode `PageMetadata` and `Visit` information.
 

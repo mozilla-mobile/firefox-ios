@@ -39,7 +39,7 @@ extension SDRow {
 }
 
 extension BrowserDBSQLite: PinnedSites {
-    public func removeFromPinnedTopSites(_ site: any SitePr) -> Success {
+    public func removeFromPinnedTopSites(_ site: Site) -> Success {
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
@@ -62,7 +62,7 @@ extension BrowserDBSQLite: PinnedSites {
         return self.database.queryReturnsResults(sql, args: args)
     }
 
-    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<any SitePr>>> {
+    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
         let sql = """
             SELECT * FROM pinned_top_sites
             ORDER BY pinDate DESC
@@ -70,7 +70,7 @@ extension BrowserDBSQLite: PinnedSites {
         return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.historyMetadataColumnFactory)
     }
 
-    public func addPinnedTopSite(_ site: any SitePr) -> Success {
+    public func addPinnedTopSite(_ site: Site) -> Success {
         let now = Date.now()
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))

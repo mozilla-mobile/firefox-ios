@@ -9,18 +9,19 @@ import Shared
  * Factory methods for converting rows from SQLite into model objects
  */
 extension BrowserDBSQLite {
-    class func basicHistoryColumnFactory(_ row: SDRow) -> BasicSite {
+    class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         guard let id = row["historyID"] as? Int,
               let url = row["url"] as? String,
               let title = row["title"] as? String else {
-            return BasicSite(id: UUID().hashValue, url: "", title: "") // FIXME this is not good??
+            return Site(id: UUID().hashValue, url: "", title: "", type: .basic)
         }
 
-        var site = BasicSite(id: id, url: url, title: title)
+        var site = Site(id: id, url: url, title: title, type: .basic)
 
         // Extract a boolean from the row if it's present.
-        let iB = row["is_bookmarked"] as? Int
-        site.isBookmarked = (iB == nil) ? nil : (iB! != 0)
+        if let isBookmarked = row["is_bookmarked"] as? Int {
+            site.isBookmarked = isBookmarked != 0
+        }
 
         // Find the most recent visit, regardless of which column it might be in.
         let local = row.getTimestamp("localVisitDate") ?? 0
@@ -48,7 +49,7 @@ extension BrowserDBSQLite {
             providerName: row["provider_name"] as? String)
     }
 
-    class func historyMetadataColumnFactory(_ row: SDRow) -> BasicSite {
+    class func historyMetadataColumnFactory(_ row: SDRow) -> Site {
         var site = basicHistoryColumnFactory(row)
         site.metadata = pageMetadataColumnFactory(row)
         return site
