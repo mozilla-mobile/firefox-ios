@@ -73,7 +73,7 @@
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		1265098A2CDA32790011BA36 /* BrazeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126509882CDA31890011BA36 /* BrazeServiceTests.swift */; };
 		1285E2B52CC293CA0053506B /* AnalyticsSpyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */; };
-12C11E252D281BA100E4DDBF /* EcosiaLaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E242D281B8D00E4DDBF /* EcosiaLaunchScreenView.swift */; };
+		12C11E252D281BA100E4DDBF /* EcosiaLaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E242D281B8D00E4DDBF /* EcosiaLaunchScreenView.swift */; };
 		12C11E262D281BC300E4DDBF /* EcosiaLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12C11E232D281B8D00E4DDBF /* EcosiaLaunchScreen.xib */; };
 		12C11E272D281BCC00E4DDBF /* EcosiaHomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E212D281B7200E4DDBF /* EcosiaHomepageSectionType.swift */; };
 		12C11E282D281BD100E4DDBF /* EcosiaTopSiteItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E222D281B7A00E4DDBF /* EcosiaTopSiteItemCell.swift */; };
@@ -255,12 +255,12 @@
 		12C11F612D2831CF00E4DDBF /* MultiWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */; };
 		12C11F622D2831CF00E4DDBF /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		12C11F632D2831E500E4DDBF /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
-12C11F652D2C0FCA00E4DDBF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 12C11F642D2C0FCA00E4DDBF /* Common */; };
+		12C11F652D2C0FCA00E4DDBF /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 12C11F642D2C0FCA00E4DDBF /* Common */; };
 		12C25BD42D27D9510048BADA /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 2CE294462B7CDD56006C22B2 /* Core */; };
 		12C25BD52D27D9510048BADA /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 2CE2E24C2B9B1FCB00973C16 /* Core */; };
 		12C25BD62D27D9510048BADA /* MozillaAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 2CABD7152C11C9CC00A0750F /* MozillaAppServices */; };
 		12C25BED2D27F0A40048BADA /* SnowplowTracker in Frameworks */ = {isa = PBXBuildFile; productRef = 12C25BEC2D27F0A40048BADA /* SnowplowTracker */; };
-12C25BEF2D27F5A50048BADA /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 12C25BEE2D27F5A50048BADA /* Core */; };
+		12C25BEF2D27F5A50048BADA /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 12C25BEE2D27F5A50048BADA /* Core */; };
 		12C25BF12D27F5ED0048BADA /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 12C25BF02D27F5ED0048BADA /* Core */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
@@ -440,7 +440,7 @@
 		2C19DACF2C74C7BF00D2641C /* snapshot_configuration.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C19DACE2C74C7BF00D2641C /* snapshot_configuration.json */; };
 		2C2349A32C57E5BC007A5894 /* EcosiaPerformanceTestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2349A22C57E5BC007A5894 /* EcosiaPerformanceTestHistory.swift */; };
 		2C26EA142C04CAD100795552 /* EcosiaTopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C26EA132C04CAD100795552 /* EcosiaTopSitesHelperTests.swift */; };
-2C49854E206173C800893DAE /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
+		2C49854E206173C800893DAE /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
 		2C4D16602C76360800E89C95 /* environment.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C4D165F2C76360800E89C95 /* environment.json */; };
 		2C5B81C82C75388300B81D95 /* LocaleRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5B81C72C75388300B81D95 /* LocaleRetriever.swift */; };
 		2C6189A82B7A8A22006B70D7 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C61892E2B7A8A22006B70D7 /* Analytics.swift */; };
@@ -1951,7 +1951,7 @@
 			remoteGlobalIDString = 047F9B2624E1FE1C00CD7DF7;
 			remoteInfo = WidgetKitExtension;
 		};
-12C11F042D28304700E4DDBF /* PBXContainerItemProxy */ = {
+		12C11F042D28304700E4DDBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
@@ -2408,7 +2408,7 @@
 		126A40A4A5AFDFD655B0FDF4 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		126F44CCB14373DC7813DE1F /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSpyTests.swift; sourceTree = "<group>"; };
-12C11E132D28128000E4DDBF /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
+		12C11E132D28128000E4DDBF /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		12C11E142D2812B200E4DDBF /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		12C11E152D2812B200E4DDBF /* EcosiaBeta.ShareTo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.ShareTo.xcconfig; path = Configuration/EcosiaBeta.ShareTo.xcconfig; sourceTree = "<group>"; };
 		12C11E162D2812B200E4DDBF /* EcosiaBeta.WidgetKit.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.WidgetKit.xcconfig; path = Configuration/EcosiaBeta.WidgetKit.xcconfig; sourceTree = "<group>"; };
@@ -14336,7 +14336,7 @@
 				12C11E132D28128000E4DDBF /* Common.xcconfig */,
 				12C11E142D2812B200E4DDBF /* Debug.xcconfig */,
 				2CB288D32B07C6F400A8FCB3 /* Ecosia.xcconfig */,
-12C11F662D2C298600E4DDBF /* Ecosia.ShareTo.xcconfig */,
+				12C11F662D2C298600E4DDBF /* Ecosia.ShareTo.xcconfig */,
 				12C11F672D2C299D00E4DDBF /* Ecosia.WidgetKit.xcconfig */,
 				2CB288D02B07C6F300A8FCB3 /* EcosiaBeta.xcconfig */,
 				12C11E152D2812B200E4DDBF /* EcosiaBeta.ShareTo.xcconfig */,
@@ -15494,7 +15494,7 @@
 						ProvisioningStyle = Manual;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
-3BFE4B061D342FB800DDF53F = {
+					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
@@ -16019,50 +16019,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
-		};
-		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Client/metrics.yaml",
-				"$(SRCROOT)/Client/pings.yaml",
-				"$(SRCROOT)/Client/tags.yaml",
-			);
-			name = "Glean SDK Generator Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Client/Generated/Metrics/Metrics.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n# remove old Metrics file if present\nrm \"${SRCROOT}/Client/Generated/Metrics.swift\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
-		};
-		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SOURCE_ROOT)/nimbus.fml.yaml",
-			);
-			name = "Nimbus Feature Manifest Generator Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Client/Generated/FxNimbus.swift",
-				"$(SRCROOT)/Client/Generated/FxNimbusMessaging.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -26263,12 +26219,12 @@
 			package = 126509832CD925B30011BA36 /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
 			productName = BrazeUI;
 		};
-12C11F082D28306100E4DDBF /* MappaMundi */ = {
+		12C11F082D28306100E4DDBF /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
 			productName = MappaMundi;
 		};
-12C11F642D2C0FCA00E4DDBF /* Common */ = {
+		12C11F642D2C0FCA00E4DDBF /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};
