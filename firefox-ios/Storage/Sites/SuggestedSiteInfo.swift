@@ -9,5 +9,3 @@ import SiteImageView
 public struct SuggestedSiteInfo: Equatable, Codable, Hashable {
     public let trackingId: Int
 }
-
-// FIXME rename this file after changes committed

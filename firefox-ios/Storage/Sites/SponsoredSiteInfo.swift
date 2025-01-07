@@ -20,5 +20,4 @@ public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
 //    }
 }
 
-// FIXME rename this file after changes committed
 // FIXME remove Client membership?

@@ -14,5 +14,4 @@ public struct PinnedSiteInfo: Equatable, Codable, Hashable {
 //    }
 }
 
-// FIXME rename file after changes committed
 // FIXME remove Client membership?
