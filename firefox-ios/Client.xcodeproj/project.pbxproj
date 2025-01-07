@@ -10614,6 +10614,7 @@
 		2FCAE21B1ABB51F800877008 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				ED5835FC2D2D8D9C000C188A /* Sites */,
 				D37DE2821CA2047500A5EC69 /* CertStore.swift */,
 				28C4AB711AD42D4300D9ACE3 /* Clients.swift */,
 				2FCAE2411ABB531100877008 /* Cursor.swift */,
@@ -10633,10 +10634,8 @@
 				2FCAE2471ABB531100877008 /* RemoteTabs.swift */,
 				D057B2AC22022617000614E0 /* Rust */,
 				2829D39F1C2F0AD400DCF931 /* Sharing.swift */,
-				2FCAE2481ABB531100877008 /* Site.swift */,
 				2FCAE2491ABB531100877008 /* SQL */,
 				2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */,
-				0B54BD181B698B7C004C822C /* SuggestedSites.swift */,
 				2FCAE25A1ABB531100877008 /* ThirdParty */,
 				2FCAE25C1ABB531100877008 /* Visit.swift */,
 				BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */,
@@ -12024,8 +12023,6 @@
 				8AB8571C27D929350075C173 /* TopSitesViewModel.swift */,
 				8A03294D288F1F0800AD9B89 /* TopSitesDimension.swift */,
 				8A2D593D27DC0AA100713EC9 /* TopSite.swift */,
-				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
-				8A5BD95B2878AA74000FE773 /* PinnedSite.swift */,
 			);
 			path = TopSites;
 			sourceTree = "<group>";
@@ -14201,6 +14198,17 @@
 				EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		ED5835FC2D2D8D9C000C188A /* Sites */ = {
+			isa = PBXGroup;
+			children = (
+				2FCAE2481ABB531100877008 /* Site.swift */,
+				8A5BD95B2878AA74000FE773 /* PinnedSite.swift */,
+				8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */,
+				0B54BD181B698B7C004C822C /* SuggestedSites.swift */,
+			);
+			path = Sites;
 			sourceTree = "<group>";
 		};
 		EDD3348C2D109416004516D0 /* Sharing */ = {
