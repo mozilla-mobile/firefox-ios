@@ -774,7 +774,7 @@ class SearchViewController: SiteTableViewController,
                     twoLineCell,
                     site.title,
                     site.url,
-                    site.bookmarked ?? false
+                    site.isBookmarked ?? false
                 )
                 cell = twoLineCell
             }

@@ -11,6 +11,35 @@ public enum SiteType: Equatable, Codable, Hashable {
     case suggestedSite(SuggestedSiteInfo)
     case sponsoredSite(SponsoredSiteInfo)
     case pinnedSite(PinnedSiteInfo)
+
+    // MARK: - Helpers
+
+    public var isPinnedSite: Bool {
+        switch self {
+        case .pinnedSite:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var isSponsoredSite: Bool {
+        switch self {
+        case .sponsoredSite:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var isSuggestedSite: Bool {
+        switch self {
+        case .suggestedSite:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public struct Site: Identifiable, Hashable, Equatable, Codable {
@@ -44,6 +73,16 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
 
     public var faviconImageCacheKey: String {
         return tileURL.shortDomain ?? tileURL.shortDisplayString
+    }
+
+    // MARK: - Factory Methods
+
+    public static func createBasicSite(url: String, title: String) -> Site {
+        return Site(id: UUID().hashValue, url: url, title: title, type: .basic)
+    }
+
+    public static func createSponsoredSite(url: String, title: String, siteInfo: SponsoredSiteInfo) -> Site {
+        return Site(id: UUID().hashValue, url: url, title: title, type: .sponsoredSite(siteInfo))
     }
 
     // MARK: - Initializers

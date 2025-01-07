@@ -188,7 +188,7 @@ private extension JumpBackInViewModel {
 private extension JumpBackInViewModel {
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
-        let site = Site(url: itemURL, title: item.displayTitle)
+        let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
@@ -198,7 +198,7 @@ private extension JumpBackInViewModel {
 
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
         let itemURL = item.tab.URL.absoluteString
-        let site = Site(url: itemURL, title: item.tab.title)
+        let site = Site.createBasicSite(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
         let image = UIImage(named: StandardImageIdentifiers.Large.syncTabs)
 
@@ -434,13 +434,13 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = onLongPressTileAction else { return }
 
-        var site = Site(url: "", title: "")
+        var site = Site.createBasicSite(url: "", title: "")
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
             if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
-                site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
+                site = Site.createBasicSite(url: item.url?.absoluteString ?? "", title: item.title ?? "")
             }
         } else if hasSyncedTab {
-            site = Site(
+            site = Site.createBasicSite(
                 url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "",
                 title: mostRecentSyncedTab?.tab.title ?? ""
             )

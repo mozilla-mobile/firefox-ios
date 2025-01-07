@@ -955,7 +955,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
 
@@ -976,7 +977,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             store.dispatch(

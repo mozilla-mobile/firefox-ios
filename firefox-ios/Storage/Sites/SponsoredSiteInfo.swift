@@ -10,6 +10,13 @@ public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
     public let clickURL: String
     public let imageURL: String
 
+    public init(tileId: Int, impressionURL: String, clickURL: String, imageURL: String) {
+        self.tileId = tileId
+        self.impressionURL = impressionURL
+        self.clickURL = clickURL
+        self.imageURL = imageURL
+    }
+
     // TODO Could make factory in Client with Contile if desired...
 //    init(contile: Contile) {
 //        // Used for telemetry

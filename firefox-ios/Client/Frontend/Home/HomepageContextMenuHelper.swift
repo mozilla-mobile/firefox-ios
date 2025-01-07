@@ -122,7 +122,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     ) -> [PhotonRowActions]? {
         guard let siteURL = highlightItem.siteUrl else { return nil }
 
-        let site = Site(url: siteURL.absoluteString, title: highlightItem.displayTitle)
+        let site = Site.createBasicSite(url: siteURL.absoluteString, title: highlightItem.displayTitle)
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .historyHighlights)
         let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .historyHighlights)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
@@ -189,7 +189,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
-        if site.bookmarked ?? false {
+        if site.isBookmarked ?? false {
             bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {
             bookmarkAction = getAddBookmarkAction(site: site)
@@ -267,25 +267,31 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         guard let siteURL = site.url.asURL else { return nil }
 
         let topSiteActions: [PhotonRowActions]
-        if let site = site as? PinnedSite {
-            topSiteActions = [getRemovePinTopSiteAction(site: site),
-                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getRemoveTopSiteAction(site: site),
-                              getShareAction(site: site, sourceView: sourceView)]
-        } else if site as? SponsoredTile != nil {
+
+        switch site.type {
+        case .sponsoredSite(_):
             topSiteActions = [getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction(),
                               getShareAction(site: site, sourceView: sourceView)]
-        } else {
+
+        case .pinnedSite(_):
+            topSiteActions = [getRemovePinTopSiteAction(site: site),
+                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
+                              getRemoveTopSiteAction(site: site),
+                              getShareAction(site: site, sourceView: sourceView)]
+        default:
             topSiteActions = [getPinTopSiteAction(site: site),
                               getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site),
                               getShareAction(site: site, sourceView: sourceView)]
+
+
         }
+
         return topSiteActions
     }
 

@@ -4,11 +4,12 @@
 
 import Common
 import Shared
+import Storage
 
 /// Send click and impression telemetry using the unified tile callbacks
 protocol UnifiedAdsCallbackTelemetry {
-    func sendImpressionTelemetry(tile: SponsoredTile, position: Int)
-    func sendClickTelemetry(tile: SponsoredTile, position: Int)
+    func sendImpressionTelemetry(tileSite: Site, position: Int)
+    func sendClickTelemetry(tileSite: Site, position: Int)
 }
 
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
@@ -23,13 +24,17 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         self.logger = logger
     }
 
-    func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
-        let impressionURL = tile.impressionURL
+    func sendImpressionTelemetry(tileSite: Site, position: Int) {
+        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
+
+        let impressionURL = siteInfo.impressionURL
         sendTelemetry(urlString: impressionURL, position: position)
     }
 
-    func sendClickTelemetry(tile: SponsoredTile, position: Int) {
-        let clickURL = tile.clickURL
+    func sendClickTelemetry(tileSite: Site, position: Int) {
+        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
+
+        let clickURL = siteInfo.clickURL
         sendTelemetry(urlString: clickURL, position: position)
     }
 

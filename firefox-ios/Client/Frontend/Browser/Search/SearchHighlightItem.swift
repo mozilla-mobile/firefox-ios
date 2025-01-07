@@ -18,6 +18,6 @@ struct SearchHighlightItem {
         return highlightItem.urlString ?? ""
     }
     var siteURL: String {
-        return Site(url: urlString, title: highlightItem.displayTitle).url
+        return urlString
     }
 }

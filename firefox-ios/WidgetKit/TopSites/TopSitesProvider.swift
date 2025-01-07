@@ -9,7 +9,7 @@ import Storage
 import Common
 import Shared
 
-typealias WidgetTopSite = BasicSite
+typealias WidgetTopSite = Site
 
 struct TopSitesProvider: TimelineProvider {
     init(userDefaults: UserDefaultsInterface = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) ?? .standard) {
