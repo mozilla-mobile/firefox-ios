@@ -525,7 +525,6 @@
 		45D5EDCC292D839800311934 /* PinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDCB292D839700311934 /* PinnedSites.swift */; };
 		45D5EDCE292D83DB00311934 /* SQLitePinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDCD292D83DA00311934 /* SQLitePinnedSites.swift */; };
 		45D5EDD1292D857000311934 /* TestSQLitePinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDCF292D854000311934 /* TestSQLitePinnedSites.swift */; };
-		45D5EDD2292D89A200311934 /* PinnedSiteInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD95B2878AA74000FE773 /* PinnedSiteInfo.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F2A06BE26F8E46E0017DA05 /* TabCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
@@ -1021,7 +1020,6 @@
 		8AD08D1727E91AC800B8E907 /* TabsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
 		8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */; };
-		8AD3271527E3B45D00EAF033 /* SponsoredSiteInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredSiteInfo.swift */; };
 		8AD3AFC32D143EF600CFC887 /* TopSitesDimensionImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC22D143EF000CFC887 /* TopSitesDimensionImplementation.swift */; };
 		8AD3AFC52D143F1200CFC887 /* TopSitesDimensionImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC42D143F0D00CFC887 /* TopSitesDimensionImplementationTests.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
@@ -16261,7 +16259,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45D5EDD2292D89A200311934 /* PinnedSiteInfo.swift in Sources */,
 				8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */,
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
@@ -16653,7 +16650,6 @@
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				0AFF7F682C78989000265214 /* CertificatesHeaderItem.swift in Sources */,
-				8AD3271527E3B45D00EAF033 /* SponsoredSiteInfo.swift in Sources */,
 				B2999FF32B194A8300F0FEC1 /* FillCreditCardForm.swift in Sources */,
 				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
