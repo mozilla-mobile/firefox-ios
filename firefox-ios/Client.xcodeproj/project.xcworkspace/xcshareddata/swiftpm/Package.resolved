@@ -28,15 +28,6 @@
       }
     },
     {
-      "identity" : "fmdb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ccgus/fmdb",
-      "state" : {
-        "revision" : "e6e1c0eff4f115c46a850db9dc92fb41a01a8b55",
-        "version" : "2.7.8"
-      }
-    },
-    {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nbhasin2/Fuzi.git",
@@ -66,7 +57,7 @@
     {
       "identity" : "ios-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ecosia/ios-core",
+      "location" : "https://github.com/ecosia/ios-core.git",
       "state" : {
         "branch" : "main",
         "revision" : "def9d182ab7c7fd65b092ab5d8044811ac1a3826"
@@ -122,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ecosia/rust-components-swift/",
       "state" : {
-        "revision" : "277bceafc423d793f5a1c1a50f76d67fb1feec4e",
-        "version" : "133.0.0"
+        "branch" : "122.0.2_Glean_dependency_removed",
+        "revision" : "b5d49206724ececd346bc1ac1a9474424e2f00df"
       }
     },
     {
@@ -154,6 +145,15 @@
       }
     },
     {
+      "identity" : "snowplow-ios-tracker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/snowplow/snowplow-ios-tracker",
+      "state" : {
+        "revision" : "c105d9f8b875f2442512c3c8b1c8bbe9c209a302",
+        "version" : "6.0.9"
+      }
+    },
+    {
       "identity" : "swift-asn1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
@@ -181,24 +181,6 @@
       }
     },
     {
-      "identity" : "swiftdraw",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swhitty/SwiftDraw",
-      "state" : {
-        "revision" : "a5c680f07b33f4cc9a451491b417b8119de23c6e",
-        "version" : "0.17.0"
-      }
-    },
-    {
-      "identity" : "snowplow-ios-tracker",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/snowplow/snowplow-ios-tracker",
-      "state" : {
-        "revision" : "bf1495987d63dc3595270df1a1bb516bfef8585f",
-        "version" : "6.0.8"
-      }
-    },
-    {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
@@ -214,6 +196,15 @@
       "state" : {
         "revision" : "0687f71944021d616d34d922343dcef086855920",
         "version" : "600.0.1"
+      }
+    },
+    {
+      "identity" : "swiftdraw",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/SwiftDraw",
+      "state" : {
+        "revision" : "a5c680f07b33f4cc9a451491b417b8119de23c6e",
+        "version" : "0.17.0"
       }
     },
     {
