@@ -48,6 +48,9 @@ sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' focus-ios-tests/tools/Localiza
 echo "[*] Removing es-ES locale mapping from swift import task"
 sed -i '' '/es-ES/d' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
 
+echo "[*] Use en instead of en-US as developmentRegion in swift import task"
+sed -i '' 's/"developmentRegion" : "en-US"/"developmentRegion" : "en"/' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+
 echo "[*] Removing WidgetKit/en-US.lproj/WidgetIntents.strings from swift import task"
 # Match all text between a line containing 'ShortcutItemTitleQRCode' to ']' and delete them
 sed -ri '' '/ShortcutItemTitleQRCode/,/\]/{/ShortcutItemTitleQRCode/!{/\]/!d;};}' focus-ios-tests/tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
