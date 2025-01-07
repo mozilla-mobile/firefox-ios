@@ -3,23 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 
-final class SponsoredTile: Site {
-    var tileId: Int
-    var impressionURL: String
-    var clickURL: String
-    var imageURL: String
+public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
+    public let tileId: Int
+    public let impressionURL: String
+    public let clickURL: String
+    public let imageURL: String
 
-    init(contile: Contile) {
-        // Used for telemetry
-        self.tileId = contile.id
-        self.impressionURL = contile.impressionUrl
-        self.clickURL = contile.clickUrl
-        self.imageURL = contile.imageUrl
-        super.init(url: contile.url, title: contile.name, bookmarked: nil)
-
-        // A guid is required in case the site might become a pinned site
-        self.guid = "default" + contile.name
-    }
+    // TODO Could make factory in Client with Contile if desired...
+//    init(contile: Contile) {
+//        // Used for telemetry
+//        self.tileId = contile.id
+//        self.impressionURL = contile.impressionUrl
+//        self.clickURL = contile.clickUrl
+//        self.imageURL = contile.imageUrl
+//    }
 }
+
+// FIXME rename this file after changes committed
+// FIXME remove Client membership?

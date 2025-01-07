@@ -3,14 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 import SiteImageView
 
-open class PinnedSite: Site {
-    let isPinnedSite = true
+public struct PinnedSiteInfo: Equatable, Codable, Hashable {
+    public let isPinnedSite: Bool
 
-    init(site: Site, faviconResource: SiteResource?) {
-        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, faviconResource: faviconResource)
-        self.metadata = site.metadata
-    }
+//    init(site: Site, faviconResource: SiteResource?) {
+//        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, faviconResource: faviconResource)
+//        self.metadata = site.metadata
+//    }
 }
+
+// FIXME rename file after changes committed
+// FIXME remove Client membership?

@@ -1867,6 +1867,8 @@
 		ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
 		ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */; };
+		ED5835FD2D2D98C6000C188A /* SponsoredTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */; };
+		ED5835FE2D2D98DB000C188A /* PinnedSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD95B2878AA74000FE773 /* PinnedSite.swift */; };
 		ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */; };
 		ED67B2982D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2972D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift */; };
 		ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */; };
@@ -16008,11 +16010,13 @@
 				0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */,
 				318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */,
 				285D3B681B4380B70035FD22 /* Queue.swift in Sources */,
+				ED5835FE2D2D98DB000C188A /* PinnedSite.swift in Sources */,
 				D076971F206AC60900FACFD8 /* ReadingList.swift in Sources */,
 				28E08C9A1AF44F00009BA2FA /* BrowserSchema.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				B28BF6622B7ACC17006357CA /* UnencryptedAddressFields.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
+				ED5835FD2D2D98C6000C188A /* SponsoredTile.swift in Sources */,
 				2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */,
 				D05434D9225BAA6200FDE4EF /* RustPlaces.swift in Sources */,
 				D0A627662270C982006AFA2E /* photon-colors.swift in Sources */,

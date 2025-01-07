@@ -6,29 +6,38 @@ import UIKit
 import Shared
 import SiteImageView
 
-public protocol SitePr: Identifiable, Hashable, Equatable {
-    var id: Int { get }
-    var url: String { get }
-    var title: String { get }
-
-    var faviconResource: SiteResource?  { get set }
-    var metadata: PageMetadata?  { get set }
-    var latestVisit: Visit?  { get set }
-    var isBookmarked: Bool?  { get set }
-
-    // Getter Helpers
-    var tileURL: URL { get }
-    var secondLevelDomain: String? { get }
-    var faviconImageCacheKey: String { get }
+public enum SiteType: Equatable, Codable, Hashable {
+    case basic
+    case suggestedSite(SuggestedSiteInfo)
+    case sponsoredSite(SponsoredSiteInfo)
+    case pinnedSite(PinnedSiteInfo)
 }
 
-/// Provides some default implementation of helpers and methods for a Site.
-extension SitePr {
+public struct Site: Identifiable, Hashable, Equatable, Codable {
+    public let id: Int
+    public let url: String
+    public let title: String
+    public let type: SiteType
+
+    // MARK: - Other information
+    public var faviconResource: SiteImageView.SiteResource?
+    public var metadata: PageMetadata?
+    public var latestVisit: Visit?
+    public var isBookmarked: Bool?
+
+    // MARK: - Getters
+
+    // Returns the tile's URL.
     public var tileURL: URL {
-        return URL(string: url, invalidCharacters: false)?.domainURL ?? URL(string: "about:blank")!
+        switch type {
+        case .suggestedSite:
+            return URL(string: url, invalidCharacters: false) ?? URL(string: "about:blank")!
+        default:
+            return URL(string: url, invalidCharacters: false)?.domainURL ?? URL(string: "about:blank")!
+        }
     }
 
-    // i.e. `http://www.example.com/` --> `example`
+    /// Gets the second level domain (i.e. `http://www.example.com/` --> `example`).
     public var secondLevelDomain: String? {
         return URL(string: url, invalidCharacters: false)?.host?.components(separatedBy: ".").suffix(2).first
     }
@@ -36,21 +45,14 @@ extension SitePr {
     public var faviconImageCacheKey: String {
         return tileURL.shortDomain ?? tileURL.shortDisplayString
     }
-}
 
-public struct BasicSite: SitePr, Codable {
-    public var id: Int
-    public var url: String
-    public var title: String
-    public var faviconResource: SiteImageView.SiteResource?
-    public var metadata: PageMetadata?
-    public var latestVisit: Visit?
-    public var isBookmarked: Bool?
+    // MARK: - Initializers
 
-    public init(id: Int, url: String, title: String, faviconResource: SiteImageView.SiteResource? = nil) {
+    public init(id: Int, url: String, title: String, type: SiteType, faviconResource: SiteImageView.SiteResource? = nil) {
         self.id = id
         self.url = url
         self.title = title
+        self.type = type
         self.faviconResource = faviconResource
     }
 
@@ -61,24 +63,34 @@ public struct BasicSite: SitePr, Codable {
         case id
         case url
         case title
+        case type
         case faviconResource = "resource"
     }
 
+    // FIXME Do we foresee any encoding issues by adding a new key... (mapping from old version of the app)
+    // FIXME Is this just used by the widget extension? nbd then... but check the SQL lite DB file too
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+
         try container.encode(id, forKey: .id)
         try container.encode(url, forKey: .url)
         try container.encode(title, forKey: .title)
+        try container.encode(type, forKey: .type)
         try container.encode(faviconResource, forKey: .faviconResource)
     }
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+
         let id = try values.decode(Int.self, forKey: .id)
         let url = try values.decode(String.self, forKey: .url)
         let title = try values.decode(String.self, forKey: .title)
         let faviconResource = try values.decode(SiteImageView.SiteResource.self, forKey: .faviconResource)
 
-        self.init(id: id, url: url, title: title, faviconResource: faviconResource)
+        // To migrate old users to the new Site format, we make type optional and assign it to `.basic` if not present
+        let type = (try? values.decode(SiteType.self, forKey: .type)) ?? .basic
+
+        self.init(id: id, url: url, title: title, type: type, faviconResource: faviconResource)
     }
 }
