@@ -23,6 +23,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
+    private var hasDesktopFolders = false
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private var logger: Logger
@@ -90,7 +91,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     /// we need to account for this when saving bookmark index in A-S. This is done by subtracting
     /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
-        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID else {
+        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID, hasDesktopFolders else {
             return index
         }
 
@@ -120,8 +121,11 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
                     switch result {
                     case .success(let bookmarkCount):
                             if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
+                                self.hasDesktopFolders = true
                                 let desktopFolder = LocalDesktopFolder()
                                 self.bookmarkNodes.insert(desktopFolder, at: 0)
+                            } else {
+                                self.hasDesktopFolders = false
                             }
                     case .failure(let error):
                             self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
