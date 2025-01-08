@@ -26114,7 +26114,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ecosia/rust-components-swift/";
 			requirement = {
-				branch = 122.0.2_Glean_dependency_removed;
+				branch = 133.0.0_Glean_removed;
 				kind = branch;
 			};
 		};

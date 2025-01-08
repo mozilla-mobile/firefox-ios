@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ecosia/rust-components-swift/",
       "state" : {
-        "branch" : "122.0.2_Glean_dependency_removed",
-        "revision" : "b5d49206724ececd346bc1ac1a9474424e2f00df"
+        "branch" : "133.0.0_Glean_removed",
+        "revision" : "e23b9086b2ce905e1b3187248c965c123b780fff"
       }
     },
     {
