@@ -103,6 +103,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -288,7 +289,7 @@ final class HomepageViewController: UIViewController,
             return sectionProvider.createLayoutSection(
                 for: section,
                 with: environment.traitCollection,
-                size: environment.container.effectiveContentSize
+                size: environment.container.contentSize
             )
         }
         return layout
@@ -320,7 +321,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header:
+        case .header(let state):
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
                 for: indexPath
@@ -328,10 +329,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(
-                headerState: homepageState.headerState,
-                showiPadSetup: shouldUseiPadSetup()
-            ) { [weak self] in
+            headerCell.configure(headerState: state) { [weak self] in
                 self?.toggleHomepageMode()
             }
 
@@ -451,6 +449,17 @@ final class HomepageViewController: UIViewController,
         default:
             return nil
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        store.dispatch(
+            HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.traitCollectionDidChange
+            )
+        )
     }
 
     // MARK: Tap Geasutre Recognizer
