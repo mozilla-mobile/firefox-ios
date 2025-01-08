@@ -1679,11 +1679,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "To help improve the browser, %@ sends diagnostic and interaction data to %@. %@",
                 comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
-            public static let TermsOfServiceLink = MZLocalizedString(
-                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+            public static let TermsOfUseLink = MZLocalizedString(
+                key: "Onboarding.TermsOfUse.TermsOfUseLink.v136",
                 tableName: "Onboarding",
-                value: "%@ Terms of Service.",
-                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+                value: "%@ Terms of Use.",
+                comment: "Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name.")
             public static let PrivacyNoticeLink = MZLocalizedString(
                 key: "Onboarding.TermsOfService.PrivacyNoticeLink.v135",
                 tableName: "Onboarding",
@@ -7666,6 +7666,11 @@ extension String {
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send daily usage ping.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
         }
     }
 }
