@@ -100,8 +100,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private func migrateAndRestore() {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
-            logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            Task { @MainActor in
+                // Log on main thread, where computed `tab` properties can be accessed without risk of races
+                logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
+                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            }
         }
     }
 
@@ -111,8 +114,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
-            logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            Task { @MainActor in
+                // Log on main thread, where computed `tab` properties can be accessed without risk of races
+                logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            }
         }
     }
 
