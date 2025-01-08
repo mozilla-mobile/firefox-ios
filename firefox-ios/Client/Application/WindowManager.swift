@@ -35,7 +35,8 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
-    /// Convenience. Returns the TabManager for a specific window but in a safe way as it can be deinit for that particular window.
+    /// Convenience. Returns the TabManager for a specific window but in a safe way as it can be deinit
+    /// for that particular window.
     func safeTabManager(for windowUUID: WindowUUID) -> TabManager?
 
     /// Convenience. Returns all TabManagers for all open windows.
