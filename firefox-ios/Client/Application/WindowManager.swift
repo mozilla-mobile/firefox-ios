@@ -35,6 +35,9 @@ protocol WindowManager {
     /// Convenience. Returns the TabManager for a specific window.
     func tabManager(for windowUUID: WindowUUID) -> TabManager
 
+    /// Convenience. Returns the TabManager for a specific window but in a safe way as it can be deinit for that particular window.
+    func safeTabManager(for windowUUID: WindowUUID) -> TabManager?
+
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
@@ -99,6 +102,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     private let defaults: UserDefaultsInterface
     private let tabSyncCoordinator = WindowTabsSyncCoordinator()
     private let widgetSimpleTabsCoordinator = WindowSimpleTabsCoordinator()
+    private var isCleaningUp: Bool = false
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
     // UUIDs at the beginning of the list are prioritized over UUIDs at the end
@@ -133,6 +137,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
+        checkAccessDuringCleanUp()
         guard let tabManager = window(for: windowUUID)?.tabManager else {
             assertionFailure("Tab Manager unavailable for requested UUID: \(windowUUID). This is a client error.")
             logger.log("No tab manager for window UUID.", level: .fatal, category: .window)
@@ -140,6 +145,34 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         }
 
         return tabManager
+    }
+
+    func safeTabManager(for windowUUID: WindowUUID) -> TabManager? {
+        checkAccessDuringCleanUp()
+        if let tabManager = window(for: windowUUID)?.tabManager {
+            return tabManager
+        }
+
+        logger.log("Tab Manager unavailable for requested UUID: \(windowUUID). This is a client error.",
+                   level: .warning,
+                   category: .window)
+
+        // Fallback: Check if any window has a valid tabManager
+        if let fallbackTabManager = windows.first?.value.tabManager {
+            return fallbackTabManager
+        }
+
+        logger.log("No tab managers available in any window.",
+                   level: .fatal,
+                   category: .window)
+        return nil
+    }
+
+    private func checkAccessDuringCleanUp() {
+        assert(!isCleaningUp, "Attempted to access tabManager during cleanup of a window")
+        if isCleaningUp {
+            logger.log("Accessing tabManager during clean up of a window.", level: .info, category: .window)
+        }
     }
 
     func allWindowTabManagers() -> [TabManager] {
@@ -151,6 +184,10 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     func windowWillClose(uuid: WindowUUID) {
+        isCleaningUp = true
+        defer { isCleaningUp = false }
+        logger.log("WindowManager: windowWillClose for UUID: \(uuid)", level: .info, category: .lifecycle)
+
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
         // Fix edge case in which a scene's UUID might still be reserved when the scene is disconnected

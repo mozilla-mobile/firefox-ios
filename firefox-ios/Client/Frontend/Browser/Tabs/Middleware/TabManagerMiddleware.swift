@@ -255,11 +255,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     /// - Returns: Array of TabModel used to configure collection view
     private func refreshTabs(for isPrivateMode: Bool, uuid: WindowUUID) -> [TabModel] {
         var tabs = [TabModel]()
-        let tabManager = tabManager(for: uuid)
-        let selectedTab = tabManager.selectedTab
+        // Optional tab manager as we might try to refresh tabs during deinit of the window
+        let tabManager = safeTabManager(for: uuid)
+        let selectedTab = tabManager?.selectedTab
         // Be careful to use active tabs and not inactive tabs
-        let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
-        tabManagerTabs.forEach { tab in
+        let tabManagerTabs = isPrivateMode ? tabManager?.privateTabs : tabManager?.normalActiveTabs
+        tabManagerTabs?.compactMap { $0 }.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
                                     isPrivate: tab.isPrivate,
@@ -626,6 +627,18 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         }
 
         return windowManager.tabManager(for: uuid)
+    }
+
+    // Provide an optional tab manager method as TabManager can be already deinit for the current window
+    private func safeTabManager(for uuid: WindowUUID) -> TabManager? {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard uuid != .unavailable else {
+            assertionFailure()
+            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
+            return windowManager.allWindowTabManagers().first!
+        }
+
+        return windowManager.safeTabManager(for: uuid)
     }
 
     // MARK: - Tab Peek
