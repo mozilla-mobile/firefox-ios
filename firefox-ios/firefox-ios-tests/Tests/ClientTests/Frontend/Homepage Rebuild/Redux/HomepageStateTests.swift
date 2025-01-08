@@ -42,7 +42,7 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertTrue(initialState.headerState.showiPadSetup)
+        XCTAssertTrue(newState.headerState.showiPadSetup)
     }
 
     // MARK: - Private

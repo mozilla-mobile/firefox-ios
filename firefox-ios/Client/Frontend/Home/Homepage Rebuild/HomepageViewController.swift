@@ -289,7 +289,7 @@ final class HomepageViewController: UIViewController,
             return sectionProvider.createLayoutSection(
                 for: section,
                 with: environment.traitCollection,
-                size: environment.container.effectiveContentSize
+                size: environment.container.contentSize
             )
         }
         return layout
