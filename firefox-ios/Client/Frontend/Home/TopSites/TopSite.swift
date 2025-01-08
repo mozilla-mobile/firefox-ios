@@ -20,19 +20,21 @@ final class TopSite: FeatureFlaggable {
     }
 
     var isPinned: Bool {
-        return (site as? PinnedSite) != nil
+        return site.type.isPinnedSite
     }
 
     var isSuggested: Bool {
-        return (site as? SuggestedSite) != nil
+        return site.type.isSuggestedSite
     }
 
-    var isSponsoredTile: Bool {
-        return (site as? SponsoredTile) != nil
+    var isSponsoredTile: Bool { // FIXME naming
+        return site.type.isSponsoredSite
     }
 
     var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+        guard case SiteType.pinnedSite(let siteInfo) = site.type else { return false }
+
+        return siteInfo.isGooglePinnedTile
     }
 
     var isGoogleURL: Bool {
@@ -54,12 +56,12 @@ final class TopSite: FeatureFlaggable {
 
     func impressionTracking(position: Int, unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry) {
         // Only sending sponsored tile impressions for now
-        guard let tile = site as? SponsoredTile else { return }
+        guard site.type.isSponsoredSite else { return }
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
         } else {
-            SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
         }
     }
 

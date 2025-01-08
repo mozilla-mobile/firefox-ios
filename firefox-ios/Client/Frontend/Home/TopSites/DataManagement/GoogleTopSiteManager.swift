@@ -8,7 +8,7 @@ import Storage
 import SiteImageView
 
 public protocol GoogleTopSiteManagerProvider {
-    var suggestedSiteData: PinnedSite? { get }
+    var suggestedSiteData: Site? { get }
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool
     func removeGoogleTopSite(site: Site)
 }
@@ -73,14 +73,11 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
         self.prefs = prefs
     }
 
-    var suggestedSiteData: PinnedSite? {
+    var suggestedSiteData: Site? {
         guard let url = self.url else { return nil }
 
-        let pinnedSite = PinnedSite(
-            site: Site(url: url, title: "Google"),
-            faviconResource: Constants.faviconResource
-        )
-        pinnedSite.guid = Constants.googleGUID
+        let pinnedSite = Site.createPinnedSite(url: url, title: "Google", isGooglePinnedTile: true)
+
         return pinnedSite
     }
 
@@ -92,7 +89,11 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     }
 
     func removeGoogleTopSite(site: Site) {
-        guard site.guid == GoogleTopSiteManager.Constants.googleGUID else { return }
+        guard case SiteType.pinnedSite(let siteInfo) = site.type,
+              siteInfo.isGooglePinnedTile else {
+            return
+        }
+
         isHidden = true
     }
 

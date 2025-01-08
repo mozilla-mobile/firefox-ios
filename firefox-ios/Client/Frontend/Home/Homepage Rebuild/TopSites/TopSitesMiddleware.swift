@@ -14,7 +14,7 @@ final class TopSitesMiddleware {
     // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
     // but keeping logic consistent for now
     private var otherSites: [TopSiteState] = []
-    private var sponsoredTiles: [SponsoredTile] = []
+    private var sponsoredTiles: [Site] = []
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -96,7 +96,7 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [SponsoredTile]
+        sponsoredTiles: [Site]
     ) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,

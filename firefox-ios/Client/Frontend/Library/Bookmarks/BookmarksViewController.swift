@@ -477,10 +477,11 @@ class BookmarksViewController: SiteTableViewController,
             // Site is needed on BookmarkItemData to setup cell image
             var site: Site?
             if let node = node as? BookmarkItemData {
-                site = Site(url: node.url,
-                            title: node.title,
-                            bookmarked: true,
-                            guid: node.guid)
+                site = Site.createBasicSite(
+                    url: node.url,
+                    title: node.title,
+                    isBookmarked: true
+                )
             }
             cell.tag = indexPath.item
 
@@ -664,7 +665,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             return nil
         }
 
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        return Site.createBasicSite(url: bookmarkItem.url, title: bookmarkItem.title, isBookmarked: true)
     }
 
     private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {

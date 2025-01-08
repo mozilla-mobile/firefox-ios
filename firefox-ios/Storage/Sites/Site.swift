@@ -77,13 +77,36 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
 
     // MARK: - Factory Methods
 
-    public static func createBasicSite(url: String, title: String) -> Site {
-        return Site(id: UUID().hashValue, url: url, title: title, type: .basic)
+    public static func createBasicSite(url: String, title: String, isBookmarked: Bool = false) -> Site {
+        var site = Site(id: UUID().hashValue, url: url, title: title, type: .basic)
+        site.isBookmarked = isBookmarked
+        return site
     }
 
     public static func createSponsoredSite(url: String, title: String, siteInfo: SponsoredSiteInfo) -> Site {
         return Site(id: UUID().hashValue, url: url, title: title, type: .sponsoredSite(siteInfo))
     }
+
+    public static func createPinnedSite(url: String, title: String, isGooglePinnedTile: Bool) -> Site {
+        let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
+        return Site(id: UUID().hashValue, url: url, title: title, type: .pinnedSite(siteInfo))
+    }
+
+//    public static func createPinnedSite(fromSite site: Site) -> Site {
+//        // FIXME can the google pinned tile every go through this?
+//        let siteInfo = PinnedSiteInfo(isGoogleSite: false)
+//
+//        return Site(
+//            id: site.id,
+//            url: site.url,
+//            title: site.title,
+//            type: .pinnedSite,
+//            faviconResource: site.faviconResource,
+//            metadata: site.metadata,
+//            latestVisit: site.latestVisit,
+//            isBookmarked: site.isBookmarked
+//        )
+//    }
 
     // MARK: - Initializers
 
@@ -93,6 +116,26 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.title = title
         self.type = type
         self.faviconResource = faviconResource
+    }
+
+    public init(
+        id: Int,
+        url: String,
+        title: String,
+        type: SiteType,
+        faviconResource: SiteImageView.SiteResource? = nil,
+        metadata: PageMetadata? = nil,
+        latestVisit: Visit? = nil,
+        isBookmarked: Bool? = nil
+    ) {
+        self.id = id
+        self.url = url
+        self.title = title
+        self.type = type
+        self.faviconResource = faviconResource
+        self.metadata = metadata
+        self.latestVisit = latestVisit
+        self.isBookmarked = isBookmarked
     }
 
     init(fromSite site: Site, withLocalizedURLString urlString: String) {
