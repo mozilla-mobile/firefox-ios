@@ -146,7 +146,7 @@ class TabScrollingController: NSObject,
 
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        observedScrollViews.compactMap { $0 }.forEach { stopObserving(scrollView: $0) }
         guard let themeObserver else { return }
         notificationCenter.removeObserver(themeObserver)
     }
@@ -277,9 +277,9 @@ class TabScrollingController: NSObject,
         scrollView.addObserver(self, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
     }
 
-    func stopObserving(scrollView: UIScrollView) {
-        guard observedScrollViews.contains(scrollView) else {
-            logger.log("Duplicate KVO de-registration for scroll view", level: .warning, category: .webview)
+    func stopObserving(scrollView: UIScrollView?) {
+        guard let scrollView = scrollView, observedScrollViews.contains(scrollView) else {
+            logger.log("Duplicate KVO de-registration or nil scrollView", level: .warning, category: .webview)
             return
         }
 
