@@ -31,7 +31,7 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable {
-        case header(TextColor?)
+        case header(HeaderState)
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
@@ -54,8 +54,9 @@ final class HomepageDiffableDataSource:
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+
         snapshot.appendSections([.header])
-        snapshot.appendItems([.header(textColor)], toSection: .header)
+        snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
         if let topSites = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites])
