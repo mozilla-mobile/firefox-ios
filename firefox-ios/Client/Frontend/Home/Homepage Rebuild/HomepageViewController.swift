@@ -63,8 +63,7 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared,
-         collectionLayout: UICollectionViewLayout? = nil
+         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
