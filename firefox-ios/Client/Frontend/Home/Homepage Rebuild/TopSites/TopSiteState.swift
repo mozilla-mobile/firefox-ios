@@ -32,7 +32,11 @@ struct TopSiteState: Hashable, Equatable {
     }
 
     var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+        guard case SiteType.pinnedSite(let siteInfo) = site.type else {
+            return false
+        }
+
+        return siteInfo.isGooglePinnedTile
     }
 
     var isGoogleURL: Bool {
@@ -69,25 +73,5 @@ struct TopSiteState: Hashable, Equatable {
         }
 
         return "history-based"
-    }
-
-    // MARK: - Equatable
-    static func == (lhs: TopSiteState, rhs: TopSiteState) -> Bool {
-        lhs.site == rhs.site &&
-        lhs.isPinned == rhs.isPinned &&
-        lhs.isSuggested == rhs.isSuggested &&
-        lhs.isSponsoredTile == rhs.isSponsoredTile &&
-        lhs.isGoogleGUID == rhs.isGoogleGUID &&
-        lhs.isGoogleURL == rhs.isGoogleURL
-    }
-
-    // MARK: - Hashable
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.site)
-        hasher.combine(self.isPinned)
-        hasher.combine(self.isSuggested)
-        hasher.combine(self.isSponsoredTile)
-        hasher.combine(self.isGoogleGUID)
-        hasher.combine(self.isGoogleURL)
     }
 }

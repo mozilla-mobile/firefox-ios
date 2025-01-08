@@ -51,10 +51,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     func presentContextMenu(for site: Site,
                             with sourceView: UIView?,
                             sectionType: HomepageSectionType,
-                            completionHandler: @escaping () -> PhotonActionSheet?
+                            completionHandler: @escaping (Site) -> PhotonActionSheet?
     ) {
-        fetchBookmarkStatus(for: site) {
-            guard let contextMenu = completionHandler() else { return }
+        fetchBookmarkStatus(for: site) { site in
+            guard let contextMenu = completionHandler(site) else { return }
             self.delegate?.present(contextMenu, animated: true, completion: nil)
         }
     }
@@ -202,9 +202,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
-                site.setBookmarked(false)
-            }
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {}
 
             let url = URL(string: site.url)
             self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
@@ -231,7 +229,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
             QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
-            site.setBookmarked(true)
 
             self.delegate?.homePanelDidRequestBookmarkToast(url: nil, action: .add)
 
@@ -352,11 +349,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         }).items
     }
 
-    private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
+    private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping (Site) -> Void) {
         viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
-            let isBookmarked = result.successValue ?? false
-            site.setBookmarked(isBookmarked)
-            completionHandler()
+            var updatedSite = site
+            updatedSite.isBookmarked = result.successValue ?? false
+            completionHandler(updatedSite)
         }
     }
 

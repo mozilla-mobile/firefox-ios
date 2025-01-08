@@ -26,5 +26,3 @@ public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
 //        self.imageURL = contile.imageUrl
 //    }
 }
-
-// FIXME remove Client membership?

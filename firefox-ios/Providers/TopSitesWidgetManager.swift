@@ -31,6 +31,7 @@ class TopSitesWidgetManager: TopSitesWidget {
 
             // save top sites for widgetkit use
             self.save(topSites: sites)
+
             // Update widget timeline
             WidgetCenter.shared.reloadAllTimelines()
         }
