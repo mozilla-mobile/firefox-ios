@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:blog.mozilla.org?mode=developer</string>
+		<string>applinks:blog.mozilla.org</string>
 	</array>
 	<key>AdjustAppToken</key>
 	<string>$(ADJUST_APP_TOKEN)</string>
