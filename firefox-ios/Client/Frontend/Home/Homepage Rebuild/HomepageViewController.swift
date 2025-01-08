@@ -55,7 +55,6 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
-    private let collectionLayout: UICollectionViewLayout?
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -74,7 +73,6 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
-        self.collectionLayout = collectionLayout
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -247,7 +245,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionLayout ?? createLayout())
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
