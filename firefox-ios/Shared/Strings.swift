@@ -191,12 +191,12 @@ extension String {
                 key: "Bookmarks.Menu.SavedBookmarkToastLabel.v136",
                 tableName: "Bookmarks",
                 value: "Saved in \"%@\"",
-                comment: "The label displayed in the toast when saving a bookmark via the menu. The placeholder represents the folder where the bookmark is saved to")
+                comment: "The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to")
             public static let SavedBookmarkToastDefaultFolderLabel = MZLocalizedString(
                 key: "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136",
                 tableName: "Bookmarks",
-                value: "Bookmarks",
-                comment: "Label describing the name of the default folder that a bookmark is saved to when a recent folder is not set. This label is used for the saved bookmark toast. The toast would read: (Saved in \"Bookmarks\")")
+                value: "Saved in \"Bookmarks\"",
+                comment: "The label displayed in the toast notification when saving a bookmark via the menu to the default folder. \"Bookmarks\" is the name of the default folder where the bookmark will be saved to.")
         }
 
         public struct EmptyState {

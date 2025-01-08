@@ -1716,11 +1716,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
-        func showAddBookmarkToast(folderName: String) {
-            let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-            showToast(message: message, toastAction: .bookmarkPage)
-        }
-
         switch action {
         case .add:
             if !isBookmarkRefactorEnabled {
@@ -1733,11 +1728,12 @@ class BrowserViewController: UIViewController,
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
                     let folderName = bookmarkFolder.title
-                    showAddBookmarkToast(folderName: folderName)
+                    let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
+                    self.showToast(message: message, toastAction: .bookmarkPage)
                 }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showAddBookmarkToast(folderName: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel)
+                showToast(message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel, toastAction: .bookmarkPage)
             }
         case .remove:
             self.showToast(
