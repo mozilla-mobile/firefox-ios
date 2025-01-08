@@ -24,7 +24,7 @@ class HomeButtonTests: BaseTestCase {
 
         XCUIDevice.shared.orientation = .landscapeRight
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
     }
 

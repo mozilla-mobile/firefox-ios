@@ -56,7 +56,7 @@ class DownloadsTests: BaseTestCase {
             app.webViews.links.firstMatch.swipeLeft(velocity: 1000)
             app.webViews.links.firstMatch.swipeLeft(velocity: 1000)
         }
-        app.webViews.links[testFileName].firstMatch.tap()
+        app.webViews.links[testFileName].firstMatch.waitAndTap()
 
         waitForElementsToExist(
             [
@@ -65,7 +65,7 @@ class DownloadsTests: BaseTestCase {
                 app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download]
             ]
         )
-        app.buttons["Cancel"].tap()
+        app.buttons["Cancel"].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         checkTheNumberOfDownloadedItems(items: 0)
@@ -149,7 +149,7 @@ class DownloadsTests: BaseTestCase {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
         if !iPad() {
-            app.navigationBars["UIActivityContentView"].buttons["Close"].tap()
+            app.navigationBars["UIActivityContentView"].buttons["Close"].waitAndTap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
@@ -186,7 +186,7 @@ class DownloadsTests: BaseTestCase {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
         if !iPad() {
-            app.navigationBars["UIActivityContentView"].buttons["Close"].tap()
+            app.navigationBars["UIActivityContentView"].buttons["Close"].waitAndTap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
@@ -201,12 +201,12 @@ class DownloadsTests: BaseTestCase {
         for _ in 0..<numberOfDownloads {
             mozWaitForElementToExist(app.webViews.links[testFileName])
 
-            app.webViews.links[testFileName].firstMatch.tap()
+            app.webViews.links[testFileName].firstMatch.waitAndTap()
 
             mozWaitForElementToExist(
                 app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download]
             )
-            app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
+            app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].waitAndTap()
         }
         waitForTabsButton()
     }
@@ -216,7 +216,7 @@ class DownloadsTests: BaseTestCase {
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"])
         app.webViews.links["Download Text"].press(forDuration: 1)
-        app.buttons["Download Link"].tap()
+        app.buttons["Download Link"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306903
@@ -253,7 +253,7 @@ class DownloadsTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
-        app.cells.switches["Downloaded Files"].tap()
+        app.cells.switches["Downloaded Files"].waitAndTap()
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)

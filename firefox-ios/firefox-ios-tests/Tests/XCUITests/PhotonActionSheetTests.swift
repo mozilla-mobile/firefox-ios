@@ -52,7 +52,7 @@ class PhotonActionSheetTests: BaseTestCase {
 //        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
 //        waitUntilPageLoad()
 //        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
 //
 //        // Wait to see the Share options sheet
 //        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
@@ -66,9 +66,9 @@ class PhotonActionSheetTests: BaseTestCase {
         // Temporarily disabled until url bar redesign work FXIOS-8172
         /*
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         mozWaitForElementToExist(app.cells["Send Link to Device"], timeout: 10)
-        app.cells["Send Link to Device"].tap()
+        app.cells["Send Link to Device"].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
         XCTAssertTrue(app.staticTexts["Please open Firefox, go to Settings and sign in to continue."].exists)
@@ -84,9 +84,9 @@ class PhotonActionSheetTests: BaseTestCase {
         // Launch "Share" from the hamburger menu instead of the share icon from the
         // awesome bar.
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         navigator.goto(ToolsBrowserTabMenu)
-        app.cells[AccessibilityIdentifiers.MainMenu.share].tap()
+        app.cells[AccessibilityIdentifiers.MainMenu.share].waitAndTap()
 
         if #unavailable(iOS 16) {
             waitForElementsToExist(
@@ -139,13 +139,13 @@ class PhotonActionSheetTests: BaseTestCase {
                 app.staticTexts["You are not signed in to your account."]
             ]
         )
-        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
+        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
         openNewShareSheet()
-        app.buttons["Cancel"].tap()
+        app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)

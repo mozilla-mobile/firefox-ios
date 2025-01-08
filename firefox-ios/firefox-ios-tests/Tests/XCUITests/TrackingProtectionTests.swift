@@ -51,7 +51,7 @@ class TrackingProtectionTests: BaseTestCase {
                 ).label
             )
         }
-        app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).tap()
+        app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
         if #unavailable(iOS 16) {
@@ -62,8 +62,8 @@ class TrackingProtectionTests: BaseTestCase {
 
     private func enableStrictMode() {
         navigator.performAction(Action.EnableStrictMode)
-        app.buttons[buttonSettings].tap()
-        app.buttons[buttonDone].tap()
+        app.buttons[buttonSettings].waitAndTap()
+        app.buttons[buttonDone].waitAndTap()
     }
 
     func checkTrackingProtectionOn() -> Bool {
@@ -142,27 +142,27 @@ class TrackingProtectionTests: BaseTestCase {
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
         if switchValue as? String == "0" {
-            app.switches.firstMatch.tap()
+            app.switches.firstMatch.waitAndTap()
         }
         switchValue = app.switches.firstMatch.value!
         XCTAssertEqual(switchValue as? String, "1")
 
-        app.switches.firstMatch.tap()
+        app.switches.firstMatch.waitAndTap()
         let switchValueOFF = app.switches.firstMatch.value!
         XCTAssertEqual(switchValueOFF as? String, "0")
 
         // Open TP Settings menu
-        // app.buttons["Privacy settings"].tap()
+        // app.buttons["Privacy settings"].waitAndTap()
         // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23706
         navigator.goto(SettingsScreen)
         app.staticTexts["Tracking Protection"].waitAndTap()
         mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as? String, "1")
-        app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
+        app.switches["prefkey.trackingprotection.normalbrowsing"].waitAndTap()
         // Disable ETP from setting and check that it applies to the site
-        app.buttons["Settings"].tap()
-        app.buttons["Done"].tap()
+        app.buttons["Settings"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
@@ -174,7 +174,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].waitAndTap()
         waitForElementsToExist(
             [
                 app.navigationBars["Client.TPAccessoryInfo"],
@@ -187,14 +187,14 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToNotExist(app.cells.staticTexts["Tracking content"])
 
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        app.buttons["Tracking Protection"].waitAndTap()
 
         // See Strict mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].waitAndTap()
         XCTAssertTrue(app.cells.staticTexts["Tracking content"].exists)
 
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        app.buttons["Tracking Protection"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307061
@@ -226,7 +226,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
         mozWaitForElementToExist(app.links.staticTexts["expired"])
-        app.links.staticTexts["expired"].tap()
+        app.links.staticTexts["expired"].waitAndTap()
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
         mozWaitForElementToExist(

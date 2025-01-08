@@ -10,7 +10,7 @@ class UrlBarTests: BaseTestCase {
         // Visit any website and select the URL bar
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         // The keyboard is brought up.
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         // Scroll on the page
@@ -36,12 +36,12 @@ class UrlBarTests: BaseTestCase {
         navigator.goto(SearchSettings)
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine1])
-        defaultSearchEngine.tap()
-        app.tables.staticTexts[defaultSearchEngine2].tap()
+        defaultSearchEngine.waitAndTap()
+        app.tables.staticTexts[defaultSearchEngine2].waitAndTap()
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
         navigator.goto(SettingsScreen)
-        app.navigationBars.buttons["Done"].tap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        app.navigationBars.buttons["Done"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
@@ -51,7 +51,7 @@ class UrlBarTests: BaseTestCase {
     private func tapUrlBarValidateKeyboardAndIcon() {
         // Tap on the URL bar
         waitForTabsButton()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         // The keyboard pops up and the default search icon is correctly displayed in the URL bar
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count

@@ -269,11 +269,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     let map = MMScreenGraph(for: test, with: FxUserState.self)
 
     let navigationControllerBackAction = {
-        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 
     let cancelBackAction = {
-        app.otherElements["PopoverDismissRegion"].tap()
+        app.otherElements["PopoverDismissRegion"].waitAndTap()
     }
 
     let dismissContextMenuAction = {
@@ -336,21 +336,21 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         if #unavailable(iOS 16) {
             screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
                 UIPasteboard.general.string = userState.url ?? defaultURL
-                                menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
+                                menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
             }
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.tap()
+            menu.cells[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.waitAndTap()
         }
 
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
+                app.otherElements["PopoverDismissRegion"].waitAndTap()
             } else {
-                app.buttons["PhotonMenu.close"].tap()
+                app.buttons["PhotonMenu.close"].waitAndTap()
             }
         }
         screenState.dismissOnUse = true
@@ -358,7 +358,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
         screenState.gesture(forAction: Action.TrackingProtectionperSiteToggle) { userState in
-            app.tables.cells["tp.add-to-safelist"].tap()
+            app.tables.cells["tp.add-to-safelist"].waitAndTap()
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
 
@@ -366,15 +366,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             forAction: Action.OpenSettingsFromTPMenu,
             transitionTo: TrackingProtectionSettings
         ) { userState in
-            app.cells["settings"].tap()
+            app.cells["settings"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
             if isTablet {
                 // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
+                app.otherElements["PopoverDismissRegion"].waitAndTap()
             } else {
-                app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton].tap()
+                app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton].waitAndTap()
             }
         }
 
@@ -392,8 +392,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
-            app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.waitAndTap()
+            app.textFields.firstMatch.waitAndTap()
             app.textFields.firstMatch.typeText(url)
             app.textFields.firstMatch.typeText("\r")
         }
@@ -402,8 +402,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
             sleep(1)
-            app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.waitAndTap()
+            app.textFields.firstMatch.waitAndTap()
             app.textFields.firstMatch.typeText("\(url)")
         }
 
@@ -411,7 +411,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.noop(to: HomePanel_TopSites)
 
         screenState.backAction = {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         screenState.dismissOnUse = true
     }
@@ -446,7 +446,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(BasicAuthDialog) { screenState in
         screenState.onEnterWaitFor(element: app.alerts.element(boundBy: 0))
         screenState.backAction = {
-            app.alerts.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+            app.alerts.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
         screenState.dismissOnUse = true
     }
@@ -478,7 +478,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
-                app.buttons["Done"].tap()
+                app.buttons["Done"].waitAndTap()
         }
 
         screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
@@ -491,7 +491,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             forAction: Action.ExitMobileBookmarksFolder,
             transitionTo: LibraryPanel_Bookmarks
         ) { userState in
-                bookmarksButton.tap()
+                bookmarksButton.waitAndTap()
         }
         screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
     }
@@ -499,22 +499,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(MobileBookmarksEdit) { screenState in
         screenState.tap(app.buttons["libraryPanelBottomLeftButton"], to: MobileBookmarksAdd)
         screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
-            app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
+            app.tables["Bookmarks List"].buttons.element(boundBy: 0).waitAndTap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
             if #available(iOS 17, *) {
                 if app.buttons["Remove Test Folder"].exists {
-                    app.buttons["Remove Test Folder"].tap()
-                    app.buttons["Delete"].tap()
+                    app.buttons["Remove Test Folder"].waitAndTap()
+                    app.buttons["Delete"].waitAndTap()
                 } else {
-                    app.buttons["Delete"].tap()
+                    app.buttons["Delete"].waitAndTap()
                 }
             } else {
                 if app.buttons["Delete Test Folder"].exists {
-                    app.buttons["Delete Test Folder"].tap()
-                    app.buttons["Delete"].tap()
+                    app.buttons["Delete Test Folder"].waitAndTap()
+                    app.buttons["Delete"].waitAndTap()
                 } else {
-                    app.buttons["Delete"].tap()
+                    app.buttons["Delete"].waitAndTap()
                 }
             }
         }
@@ -522,19 +522,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
         screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
-            app.otherElements["New Bookmark"].tap()
+            app.otherElements["New Bookmark"].waitAndTap()
         }
         screenState.gesture(forAction: Action.AddNewFolder) { userState in
-            app.otherElements["New Folder"].tap()
+            app.otherElements["New Folder"].waitAndTap()
         }
         screenState.gesture(forAction: Action.AddNewSeparator) { userState in
-            app.otherElements["New Separator"].tap()
+            app.otherElements["New Separator"].waitAndTap()
         }
     }
 
     map.addScreenState(EnterNewBookmarkTitleAndUrl) { screenState in
         screenState.gesture(forAction: Action.SaveCreatedBookmark) { userState in
-            app.buttons["Save"].tap()
+            app.buttons["Save"].waitAndTap()
         }
     }
 
@@ -558,24 +558,24 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: HistoryRecentlyClosed
         )
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
-            app.toolbars.matching(identifier: "Toolbar").buttons["historyBottomDeleteButton"].tap()
+            app.toolbars.matching(identifier: "Toolbar").buttons["historyBottomDeleteButton"].waitAndTap()
         }
         screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
-                app.buttons["Done"].tap()
+                app.buttons["Done"].waitAndTap()
         }
     }
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
         screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
-                app.buttons["Done"].tap()
+                app.buttons["Done"].waitAndTap()
         }
     }
 
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
-            app.buttons["Done"].tap()
+            app.buttons["Done"].waitAndTap()
         }
         screenState.tap(app.buttons["readingListLarge"], to: LibraryPanel_ReadingList)
     }
@@ -621,7 +621,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ShowIntroduction.title], to: ShowTourInSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Notifications.title], to: NotificationsSettings)
         screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
-            app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title].tap()
+            app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -629,13 +629,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(DisplaySettings) { screenState in
         screenState.gesture(forAction: Action.SelectAutomatically) { userState in
-            app.cells.staticTexts["Automatically"].tap()
+            app.cells.staticTexts["Automatically"].waitAndTap()
         }
         screenState.gesture(forAction: Action.SelectManually) { userState in
-            app.cells.staticTexts["Manually"].tap()
+            app.cells.staticTexts["Manually"].waitAndTap()
         }
         screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
-            app.switches["SystemThemeSwitchValue"].tap()
+            app.switches["SystemThemeSwitchValue"].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -649,20 +649,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
             // Screengraph will go back to main Settings screen. Manually tap on settings
-            app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
+            app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].waitAndTap()
             if #unavailable(iOS 17) {
-                app.tables.buttons["Delete Mozilla Engine"].tap()
+                app.tables.buttons["Delete Mozilla Engine"].waitAndTap()
             } else {
-                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].waitAndTap()
             }
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
+            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].waitAndTap()
         }
     }
 
     map.addScreenState(SiriSettings) { screenState in
         screenState.gesture(forAction: Action.OpenSiriFromSettings) { userState in
             // Tap on Open New Tab to open Siri
-            app.cells["SiriSettings"].staticTexts.element(boundBy: 0).tap()
+            app.cells["SiriSettings"].staticTexts.element(boundBy: 0).waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -689,10 +689,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.secureTextFields.element(boundBy: 0).tapAndTypeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
-            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].waitAndTap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.signInButton].tap()
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.signInButton].waitAndTap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
@@ -703,9 +703,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(AddCustomSearchSettings) { screenState in
         screenState.gesture(forAction: Action.AddCustomSearchEngine) { userState in
-            app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].tap()
+            app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].waitAndTap()
             app.typeText("Mozilla Engine")
-            app.tables.textViews["customEngineUrl"].tap()
+            app.tables.textViews["customEngineUrl"].waitAndTap()
 
             let searchEngineUrl = "https://developer.mozilla.org/search?q=%s"
             let tablesQuery = app.tables
@@ -713,22 +713,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             sleep(1)
             UIPasteboard.general.string = searchEngineUrl
             customengineurlTextView.press(forDuration: 1.0)
-            app.staticTexts["Paste"].tap()
+            app.staticTexts["Paste"].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(WebsiteDataSettings) { screenState in
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
-            app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].tap()
-            app.alerts.buttons["OK"].tap()
+            app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap()
+            app.alerts.buttons["OK"].waitAndTap()
         }
         // The swipeDown() is a workaround for an intermittent issue that the search filed is not always in view.
         screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
-            app.searchFields["Filter Sites"].tap()
+            app.searchFields["Filter Sites"].waitAndTap()
         }
         screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { userState in
-            app.tables.cells["ShowMoreWebsiteData"].tap()
+            app.tables.cells["ShowMoreWebsiteData"].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -737,13 +737,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
 
         screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { UserState in
-            table.cells["NewTabAsBlankPage"].tap()
+            table.cells["NewTabAsBlankPage"].waitAndTap()
         }
         screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { UserState in
-            table.cells["NewTabAsFirefoxHome"].tap()
+            table.cells["NewTabAsFirefoxHome"].waitAndTap()
         }
         screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { UserState in
-            table.cells["NewTabAsCustomURL"].tap()
+            table.cells["NewTabAsCustomURL"].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -751,30 +751,30 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(HomeSettings) { screenState in
         screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { UserState in
-            app.cells["HomeAsFirefoxHome"].tap()
+            app.cells["HomeAsFirefoxHome"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { UserState in
-            app.cells["HomeAsCustomURL"].tap()
+            app.cells["HomeAsCustomURL"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
             userState.pocketInNewTab = !userState.pocketInNewTab
-            app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].tap()
+            app.tables.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
-            app.tables.cells["TopSitesRows"].tap()
+            app.tables.cells["TopSitesRows"].waitAndTap()
             select(rows: userState.numTopSitesRows)
-            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlyVisited) { userState in
-            app.tables.cells.switches["Recently Visited"].tap()
+            app.tables.cells.switches["Recently Visited"].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
-            app.tables.cells.switches["Bookmarks"].tap()
+            app.tables.cells.switches["Bookmarks"].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -782,23 +782,23 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(ToolbarSettings) { screenState in
         screenState.gesture(forAction: Action.SelectToolbarBottom) { UserState in
-            app.cells[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].tap()
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].waitAndTap()
         }
 
         screenState.gesture(forAction: Action.SelectToolbarTop) { UserState in
-            app.cells[AccessibilityIdentifiers.Settings.SearchBar.topSetting].tap()
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.topSetting].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
     }
 
     func select(rows: Int) {
-        app.staticTexts[String(rows)].firstMatch.tap()
+        app.staticTexts[String(rows)].firstMatch.waitAndTap()
     }
 
     func type(text: String) {
         text.forEach { char in
-            app.keys[String(char)].tap()
+            app.keys[String(char)].waitAndTap()
         }
     }
 
@@ -808,8 +808,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: WebsiteDataSettings
         )
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
-            app.tables.cells["ClearPrivateData"].tap()
-            app.alerts.buttons["OK"].tap()
+            app.tables.cells["ClearPrivateData"].waitAndTap()
+            app.alerts.buttons["OK"].waitAndTap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -821,7 +821,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(ShowTourInSettings) { screenState in
         screenState.gesture(to: Intro_FxASignin) {
             let turnOnSyncButton = app.buttons["signInOnboardingButton"]
-            turnOnSyncButton.tap()
+            turnOnSyncButton.waitAndTap()
         }
     }
 

@@ -213,11 +213,11 @@ class AddressesTests: BaseTestCase {
         navigator.goto(AddressesSettings)
         let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
         mozWaitForElementToExist(app.navigationBars[addresses.title])
-        app.buttons[addresses.addAddress].tap()
+        app.buttons[addresses.addAddress].waitAndTap()
         mozWaitForElementToExist(app.navigationBars[addresses.addAddress])
         if !app.staticTexts["Name"].exists {
-            app.buttons["Close"].tap()
-            app.buttons[addresses.addAddress].tap()
+            app.buttons["Close"].waitAndTap()
+            app.buttons[addresses.addAddress].waitAndTap()
         }
         mozWaitForElementToExist(app.staticTexts["Name"])
     }
@@ -246,7 +246,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typeName(name: String, updateText: Bool = false) {
-        app.staticTexts["Name"].tap()
+        app.staticTexts["Name"].waitAndTap()
         if updateText {
             clearText()
         }
@@ -254,7 +254,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typeOrganization(organization: String, updateText: Bool = false) {
-        app.staticTexts["Organization"].tap()
+        app.staticTexts["Organization"].waitAndTap()
         if updateText {
             clearText()
         }
@@ -262,7 +262,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typeStreetAddress(street: String, updateText: Bool = false) {
-        app.staticTexts["Street Address"].tap()
+        app.staticTexts["Street Address"].waitAndTap()
         if updateText {
             clearText()
         }
@@ -270,7 +270,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typeCity(city: String, updateText: Bool = false) {
-        app.staticTexts["City"].tap()
+        app.staticTexts["City"].waitAndTap()
         if updateText {
             clearText()
         }
@@ -278,18 +278,18 @@ class AddressesTests: BaseTestCase {
     }
 
     private func selectCountry(country: String) {
-        app.staticTexts["Country or Region"].tap()
+        app.staticTexts["Country or Region"].waitAndTap()
         mozWaitForElementToExist(app.buttons[country])
-        app.buttons[country].tap()
+        app.buttons[country].waitAndTap()
     }
 
     private func typeZIP(zip: String, updateText: Bool = false, isPostalCode: Bool = false) {
         if isPostalCode {
             scrollToElement(app.staticTexts["Postal Code"])
-            app.staticTexts["Postal Code"].tap()
+            app.staticTexts["Postal Code"].waitAndTap()
         } else {
             scrollToElement(app.staticTexts["ZIP Code"])
-            app.staticTexts["ZIP Code"].tap()
+            app.staticTexts["ZIP Code"].waitAndTap()
         }
         if updateText {
             clearText()
@@ -299,7 +299,7 @@ class AddressesTests: BaseTestCase {
 
     private func typePhone(phone: String, updateText: Bool = false) {
         if app.buttons["Done"].isHittable {
-            app.buttons["Done"].tap()
+            app.buttons["Done"].waitAndTap()
         }
         app.staticTexts["Phone"].tapOnApp()
         if updateText {
@@ -310,7 +310,7 @@ class AddressesTests: BaseTestCase {
 
     private func typeEmail(email: String, updateText: Bool = false) {
         scrollToElement(app.staticTexts["Email"])
-        app.staticTexts["Email"].tap()
+        app.staticTexts["Email"].waitAndTap()
         if updateText {
             clearText()
         }
@@ -321,7 +321,7 @@ class AddressesTests: BaseTestCase {
         if withRetry {
             app.buttons["Save"].tapWithRetry()
         } else {
-            app.buttons["Save"].tap()
+            app.buttons["Save"].waitAndTap()
         }
     }
 
