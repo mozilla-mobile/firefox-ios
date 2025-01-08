@@ -244,8 +244,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let layoutConfiguration = HomepageSectionLayoutProvider(windowUUID: windowUUID).createCompositionalLayout()
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -271,6 +270,28 @@ final class HomepageViewController: UIViewController,
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: self.windowUUID)
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
+                self?.logger.log(
+                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    level: .fatal,
+                    category: .homepage
+                )
+                return nil
+            }
+
+            return sectionProvider.createLayoutSection(
+                for: section,
+                with: environment.traitCollection,
+                size: environment.container.effectiveContentSize
+            )
+        }
+        return layout
     }
 
     private func configureDataSource() {

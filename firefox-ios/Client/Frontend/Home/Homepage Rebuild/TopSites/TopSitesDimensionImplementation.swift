@@ -7,7 +7,7 @@ import Common
 class TopSitesDimensionImplementation {
     /// The update count of number of tiles per row based on device layout
     /// After updating the value, the top sites state should be updated respectively
-    private var numberOfTilesPerRow: Int? {
+    private var numberOfTilesPerRow: Int = 0 {
         willSet {
             guard newValue != numberOfTilesPerRow else { return }
             store.dispatch(
