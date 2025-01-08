@@ -202,6 +202,11 @@ public struct PrefsKeys {
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.
     public static let RecentBookmarkFolder = "RecentBookmarkFolder"
+
+    // The guid of the bookmark folder that was last viewed.
+    // Used to indicate which folder should be opened across app sessions.
+    public static let LastViewedBookmarkFolder = "LastViewedBookmarkFolder"
+
     // Represents whether or not the bookmark refactor feature flag is enabled
     // Used in the share extension
     public static let IsBookmarksRefactorEnabled = "IsBookmarksRefactorEnabled"

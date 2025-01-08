@@ -396,7 +396,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
-            bookmarkCoordinatorDelegate?.start(from: folder)
+            bookmarkCoordinatorDelegate?.start(fromGUID: folder.guid, animated: true)
         }
     }
 

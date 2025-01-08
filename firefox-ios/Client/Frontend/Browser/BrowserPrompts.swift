@@ -131,7 +131,7 @@ protocol NewJSPromptAlertControllerDelegate: AnyObject {
 class NewJSPromptAlertController: UIAlertController {
     var alertInfo: NewJSAlertInfo?
     weak var delegate: NewJSPromptAlertControllerDelegate?
-    private var handledAction: Bool = false
+    private var handledAction = false
     private var dismissalResult: Any?
 
     convenience init(

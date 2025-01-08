@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import Storage
 
-import enum MozillaAppServices.VisitType
+import MozillaAppServices
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
     func didFinishLibrary(from coordinator: Coordinator)
@@ -135,10 +135,53 @@ class LibraryCoordinator: BaseCoordinator,
         if isBookmarkRefactorEnabled {
             (navigationController.topViewController as? BookmarksViewController)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator
+            if let recentFolderGUID = profile.prefs.stringForKey(PrefsKeys.LastViewedBookmarkFolder) {
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+
+                populateBookmarksNavigationController(currentFolderGUID: recentFolderGUID,
+                                                      bookmarksCoordinator: bookmarksCoordinator) {
+                        CATransaction.commit()
+                }
+            }
         } else {
             (navigationController.topViewController as? LegacyBookmarksPanel)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator
         }
+    }
+
+    private func populateBookmarksNavigationController(currentFolderGUID: String,
+                                                       bookmarksCoordinator: BookmarksCoordinator,
+                                                       completion: @escaping () -> Void) {
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
+                                        recursive: true).uponQueue(.main) { result in
+            guard let maybeBookmarkTreeRoot = result.successValue,
+                  let bookmarkTreeRoot = maybeBookmarkTreeRoot else { return }
+            guard var path = self.findPathToFolder(targetGUID: currentFolderGUID,
+                                                   treeRootNode: bookmarkTreeRoot),
+                  !path.isEmpty else {return}
+            path.removeFirst()
+            path.forEach { el in
+                bookmarksCoordinator.start(fromGUID: el.guid, animated: false)
+            }
+            completion()
+        }
+    }
+
+    private func findPathToFolder(targetGUID: String, treeRootNode: BookmarkNodeData) -> [BookmarkNodeData]? {
+        guard let treeRootFolder = treeRootNode as? BookmarkFolderData else { return nil}
+        guard targetGUID != treeRootFolder.guid else {return [treeRootNode]}
+        var path: [BookmarkNodeData]?
+
+        guard let children = treeRootFolder.children else {return nil}
+        for childNode in children {
+            if let pathToFolder = findPathToFolder(targetGUID: targetGUID, treeRootNode: childNode) {
+                path = pathToFolder
+            }
+        }
+        guard path != nil else {return nil}
+        path?.insert(treeRootNode, at: 0)
+        return path
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {
