@@ -23,6 +23,7 @@ class MockGleanWrapper: GleanWrapper {
     var cancelTimingCalled = 0
     var stopAndAccumulateCalled = 0
     var savedEvent: Any?
+    var savedExtras: Any?
 
     var savedHandleDeeplinkUrl: URL?
     var savedSetUploadIsEnabled: Bool?
@@ -45,6 +46,7 @@ class MockGleanWrapper: GleanWrapper {
     func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
                                   extras: EventExtras) where ExtraObject: EventExtras {
         savedEvent = metric
+        savedExtras = extras
         recordEventCalled += 1
     }
 

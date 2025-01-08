@@ -29,7 +29,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -40,7 +40,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -51,7 +51,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.openInactiveTab)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -62,7 +62,7 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -75,20 +75,8 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-    }
-
-    // MARK: Helpers
-
-    private struct DebugMessage {
-        let firstText = "Expected savedMetric to be of type "
-        let lastText = ", but got "
-        let text: String
-
-        init<Metatype>(expectedMetric: Metatype, resultMetric: Metatype) {
-            text = "\(firstText)\(expectedMetric)\(lastText)\(resultMetric)"
-        }
     }
 }
