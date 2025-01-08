@@ -106,7 +106,6 @@
         "NavigationTest\/testOpenExternalLink()",
         "NavigationTest\/testOpenInNewPrivateTab()",
         "NavigationTest\/testOpenInNewTab()",
-        "NavigationTest\/testSSL()",
         "NavigationTest\/testScrollsToTopWithMultipleTabs()",
         "NavigationTest\/testShareLink()",
         "NavigationTest\/testShareLinkPrivateMode()",
