@@ -7,8 +7,8 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 16.1
-    ios_version: 18.1
+    xcode_version: 16.2
+    ios_version: 18.2
     ios_simulator_default: iPhone 16
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
@@ -90,7 +90,7 @@ jobs:
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ matrix.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
-                    | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
+                    | tee xcodebuild.log | xcpretty _0.3.0_ -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
             - name: Print test report
