@@ -420,7 +420,6 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
         urlBarBackButton.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         urlBarBackButton.waitAndTap()
         XCTAssertFalse(urlBarBackButton.isEnabled)
@@ -477,7 +476,7 @@ class HistoryTests: BaseTestCase {
                 .waitAndTap()
         } else {
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-            // app.otherElements.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+            // app.otherElements.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         }
     }
 

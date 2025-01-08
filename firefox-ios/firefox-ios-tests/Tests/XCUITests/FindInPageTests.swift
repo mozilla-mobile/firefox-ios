@@ -230,7 +230,6 @@ class FindInPageTests: BaseTestCase {
                 mozWaitForElementToExist(app.menuItems["show.next.items.menu.button"])
             }
         }
-        mozWaitForElementToExist(app.menuItems["Find in Page"])
         app.menuItems["Find in Page"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.searchFields[textToFind])

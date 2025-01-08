@@ -112,7 +112,6 @@ class ZoomingTests: BaseTestCase {
     private func selectTabTrayWebsites(tab: Int) {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.collectionViews.staticTexts.element)
         app.collectionViews.staticTexts.element(boundBy: tab).waitAndTap()
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom

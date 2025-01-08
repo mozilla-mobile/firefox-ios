@@ -63,7 +63,6 @@ final class InactiveTabsTest: BaseTestCase {
         // Go to Settings -> Tabs and disable "Inactive tabs"
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.Settings.Tabs.title])
         app.cells[AccessibilityIdentifiers.Settings.Tabs.title].waitAndTap()
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Tabs.Customize.title])
         XCTAssertEqual(
@@ -93,9 +92,7 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Go to Settings -> Tabs and enable "Inactive tabs"
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.Settings.Tabs.title])
         app.cells[AccessibilityIdentifiers.Settings.Tabs.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Tabs.Customize.title])
         app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].waitAndTap()
         XCTAssertEqual(
             app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "1")
@@ -104,7 +101,6 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Return to tabs tray
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
 
         // Tap on a tab from the inactive list
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].waitAndTap()
@@ -142,7 +138,6 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Swipe on a tab from the list to delete
         app.otherElements["Tabs Tray"].staticTexts["Google"].swipeLeft()
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].buttons["Close"])
         app.otherElements["Tabs Tray"].buttons["Close"].waitAndTap() // Note: No AccessibilityIdentifier
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         waitForElementsToExist(

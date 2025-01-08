@@ -66,9 +66,9 @@ class PhotonActionSheetTests: BaseTestCase {
         // Temporarily disabled until url bar redesign work FXIOS-8172
         /*
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         mozWaitForElementToExist(app.cells["Send Link to Device"], timeout: 10)
-        app.cells["Send Link to Device"].waitAndTap()
+        app.cells["Send Link to Device"].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
         XCTAssertTrue(app.staticTexts["Please open Firefox, go to Settings and sign in to continue."].exists)
@@ -84,7 +84,7 @@ class PhotonActionSheetTests: BaseTestCase {
         // Launch "Share" from the hamburger menu instead of the share icon from the
         // awesome bar.
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         navigator.goto(ToolsBrowserTabMenu)
         app.cells[AccessibilityIdentifiers.MainMenu.share].waitAndTap()
 

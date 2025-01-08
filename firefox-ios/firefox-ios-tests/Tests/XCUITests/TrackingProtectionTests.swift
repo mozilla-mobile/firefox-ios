@@ -225,7 +225,6 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.links.staticTexts["expired"])
         app.links.staticTexts["expired"].waitAndTap()
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled

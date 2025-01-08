@@ -29,7 +29,6 @@ class LoginTest: BaseTestCase {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
         app.buttons["submit"].waitAndTap()
-        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
     }
 
@@ -200,7 +199,6 @@ class LoginTest: BaseTestCase {
         app.buttons["Edit"].waitAndTap()
         mozWaitForElementToExist(app.tables["Login Detail List"])
         app.tables["Login Detail List"].cells.elementContainingText("Username").waitAndTap()
-        mozWaitForElementToExist(app.menuItems["Select All"])
         app.menuItems["Select All"].waitAndTap()
         app.menuItems["Cut"].waitAndTap()
         enterTextInField(typedText: "foo")

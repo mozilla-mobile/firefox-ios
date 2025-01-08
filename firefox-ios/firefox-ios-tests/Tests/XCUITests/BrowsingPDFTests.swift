@@ -132,7 +132,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         waitForElementsToExist(
             [

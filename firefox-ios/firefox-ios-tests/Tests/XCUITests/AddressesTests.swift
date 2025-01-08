@@ -279,7 +279,6 @@ class AddressesTests: BaseTestCase {
 
     private func selectCountry(country: String) {
         app.staticTexts["Country or Region"].waitAndTap()
-        mozWaitForElementToExist(app.buttons[country])
         app.buttons[country].waitAndTap()
     }
 

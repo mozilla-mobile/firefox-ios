@@ -101,9 +101,9 @@ class ClipBoardTests: BaseTestCase {
 //        waitUntilPageLoad()
 //        mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
 //        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
+//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 //        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
-//        app.cells["Copy"].waitAndTap()
+//        app.cells["Copy"].tap()
 //
 //        checkCopiedUrl()
 //        mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])

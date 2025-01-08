@@ -69,11 +69,8 @@ class BaseTestCase: XCTestCase {
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
         if icon.exists {
             icon.press(forDuration: 1.5)
-            mozWaitForElementToExist(springboard.buttons["Remove App"])
             springboard.buttons["Remove App"].waitAndTap()
-            mozWaitForElementToExist(springboard.alerts.buttons["Delete App"])
             springboard.alerts.buttons["Delete App"].waitAndTap()
-            mozWaitForElementToExist(springboard.alerts.buttons["Delete"])
             springboard.alerts.buttons["Delete"].waitAndTap()
         }
     }
@@ -294,10 +291,8 @@ class BaseTestCase: XCTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Reader View"])
         app.buttons["Reader View"].waitAndTap()
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].waitAndTap()
     }
 
@@ -314,7 +309,6 @@ class BaseTestCase: XCTestCase {
     }
 
      func selectOptionFromContextMenu(option: String) {
-        mozWaitForElementToExist(app.tables["Context Menu"].cells.otherElements[option])
         app.tables["Context Menu"].cells.otherElements[option].waitAndTap()
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }

@@ -205,15 +205,15 @@ class NavigationTest: BaseTestCase {
             // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
             urlBarAddress.typeText("www.google.com")
             // Tapping two times when the text is not selected will reveal the menu
-            urlBarAddress.waitAndTap()
+            urlBarAddress.tap()
             mozWaitForElementToExist(urlBarAddress)
-            urlBarAddress.waitAndTap()
+            urlBarAddress.tap()
             mozWaitForElementToExist(app.menuItems["Select All"])
             XCTAssertTrue(app.menuItems["Select All"].exists)
             XCTAssertTrue(app.menuItems["Select"].exists)
 
             // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-            app.menuItems["Select All"].waitAndTap()
+            app.menuItems["Select All"].tap()
             mozWaitForElementToExist(app.menuItems["Copy"])
             if iPad() {
                 XCTAssertTrue(app.menuItems["Copy"].exists)
@@ -235,10 +235,10 @@ class NavigationTest: BaseTestCase {
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 3)
-            app.tables.otherElements[StandardImageIdentifiers.Large.link].waitAndTap()
+            app.tables.otherElements[StandardImageIdentifiers.Large.link].tap()
 
             sleep(2)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
             // Since the textField value appears all selected first time is clicked
             // this workaround is necessary
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -279,7 +279,6 @@ class NavigationTest: BaseTestCase {
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].exists)
         app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
@@ -362,7 +361,6 @@ class NavigationTest: BaseTestCase {
         // Now disable the Block PopUps option
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(switchBlockPopUps, timeout: TIMEOUT)
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
@@ -492,7 +490,6 @@ class NavigationTest: BaseTestCase {
     func testBookmarkLink() {
         // Long-tap on an article link. Choose "Bookmark Link".
         openContextMenuForArticleLink()
-        mozWaitForElementToExist(app.buttons["Bookmark Link"])
         app.buttons["Bookmark Link"].waitAndTap()
         // The link has been added to the Bookmarks panel in Library
         navigator.goto(LibraryPanel_Bookmarks)

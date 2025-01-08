@@ -269,15 +269,12 @@ class TodayWidgetTests: BaseTestCase {
         // Tap the first Firefox entry
         iOS_Settings.staticTexts["org.mozilla.ios.Fennec"].waitAndTap()
         // Wait for "Paste from Other Apps" button, tap it, then allow copying
-        mozWaitForElementToExist(iOS_Settings.buttons["Paste from Other Apps"])
         iOS_Settings.buttons["Paste from Other Apps"].waitAndTap()
-        mozWaitForElementToExist(iOS_Settings.staticTexts["Allow"])
         iOS_Settings.staticTexts["Allow"].waitAndTap()
     }
 
     private func addWidget(widgetName: String) {
         if iPad() {
-            mozWaitForElementToExist(springboard.buttons["Add Widget"])
             springboard.buttons["Add Widget"].waitAndTap()
         } else {
             if #available(iOS 18, *) {
@@ -287,7 +284,6 @@ class TodayWidgetTests: BaseTestCase {
                 }
             }
             springboard.buttons["Edit"].waitAndTap()
-            mozWaitForElementToExist(springboard.buttons["Add Widget"])
             springboard.buttons["Add Widget"].waitAndTap()
         }
         mozWaitElementHittable(element: springboard.searchFields["Search Widgets"], timeout: TIMEOUT)
@@ -300,7 +296,6 @@ class TodayWidgetTests: BaseTestCase {
 
     private func findAndTapWidget(widgetType: String) {
         let widget = springboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", widgetType)).element
-        mozWaitForElementToExist(widget)
         widget.waitAndTap()
     }
 

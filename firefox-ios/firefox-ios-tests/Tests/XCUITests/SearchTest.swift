@@ -493,8 +493,8 @@ class SearchTests: BaseTestCase {
 //        ]
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
 //
-//        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 //
 //        navigator.nowAt(NewTabScreen)
 //        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -510,10 +510,10 @@ class SearchTests: BaseTestCase {
 //
 //        mozWaitForElementToNotExist(app.tables["SiteTable"])
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
-//        privateModeSearchSuggestSwitch.waitAndTap()
+//        privateModeSearchSuggestSwitch.tap()
 //
-//        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 //
 //        navigator.nowAt(NewTabScreen)
 //        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -537,8 +537,8 @@ class SearchTests: BaseTestCase {
 //        ]
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
 //
-//        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 //
 //        navigator.nowAt(NewTabScreen)
 //        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -554,10 +554,10 @@ class SearchTests: BaseTestCase {
 //
 //        mozWaitForElementToNotExist(app.tables["SiteTable"])
 //        mozWaitForElementToExist(privateModeSearchSuggestSwitch)
-//        privateModeSearchSuggestSwitch.waitAndTap()
+//        privateModeSearchSuggestSwitch.tap()
 //
-//        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
-//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+//        app.navigationBars["Search"].buttons["Settings"].tap()
+//        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 //
 //        navigator.nowAt(NewTabScreen)
 //        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)

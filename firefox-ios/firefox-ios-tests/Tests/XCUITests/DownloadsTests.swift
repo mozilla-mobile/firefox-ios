@@ -199,8 +199,6 @@ class DownloadsTests: BaseTestCase {
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
         for _ in 0..<numberOfDownloads {
-            mozWaitForElementToExist(app.webViews.links[testFileName])
-
             app.webViews.links[testFileName].firstMatch.waitAndTap()
 
             mozWaitForElementToExist(
