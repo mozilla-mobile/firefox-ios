@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:blog.mozilla.org</string>
+	</array>
 	<key>AdjustAppToken</key>
 	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AppIdentifierPrefix</key>
