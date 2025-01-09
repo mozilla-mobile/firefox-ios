@@ -380,6 +380,18 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
+    private func createContextButton() -> UIButton {
+        var buttonConfig = UIButton.Configuration.plain()
+        let icon = UIImage(named: StandardImageIdentifiers.Large.ellipsis)?.withRenderingMode(.alwaysTemplate)
+        buttonConfig.image = icon
+        buttonConfig.automaticallyUpdateForSelection = true
+        let contextButton = UIButton()
+        contextButton.configuration = buttonConfig
+        contextButton.frame = CGRect(width: 44, height: 44)
+
+        return contextButton
+    }
+
     // MARK: - Actions
 
     @objc
@@ -475,7 +487,6 @@ class BookmarksViewController: SiteTableViewController,
                 withIdentifier: OneLineTableViewCell.cellIdentifier,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
-            cell.tag = indexPath.item
 
             // BookmarkItemData requires:
             // - Site to setup cell image
@@ -489,12 +500,7 @@ class BookmarksViewController: SiteTableViewController,
                     cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 }
 
-                var buttonConfig = UIButton.Configuration.plain()
-                let icon = UIImage(named: StandardImageIdentifiers.Large.ellipsis)?.withRenderingMode(.alwaysTemplate)
-                buttonConfig.image = icon
-                let contextButton = UIButton()
-                contextButton.configuration = buttonConfig
-                contextButton.frame = CGRect(width: 44, height: 44)
+                let contextButton = createContextButton()
                 contextButton.addAction(UIAction { [weak self] _ in
                     self?.presentContextMenu(for: indexPath)
                 }, for: .touchUpInside)
