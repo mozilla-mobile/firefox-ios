@@ -13,10 +13,12 @@ extension BrowserDBSQLite {
         let id = row["historyID"] as? Int
         guard let url = row["url"] as? String, let title = row["title"] as? String else {
             assertionFailure("None of these properties should be nil")
-            return Site(url: "", title: "")
+            return Site.createBasicSite(url: "", title: "")
         }
 
-        var site = Site(id: id, url: url, title: title, type: .basic)
+        // FXIOS-10996 improved our `Site` type to have strict unique IDs. But this `historyID` field was previously
+        // optional, so we need to migrate users over in v136. Otherwise users will lose all their pinned top sites.
+        var site = Site(id: id ?? UUID().hashValue, url: url, title: title, type: .basic)
 
         // Extract a boolean from the row if it's present.
         if let isBookmarked = row["is_bookmarked"] as? Int {
