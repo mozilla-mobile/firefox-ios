@@ -7,8 +7,8 @@ import UIKit
 import Glean
 
 enum UsageReason: String {
-    case active = "active"
-    case inactive = "inactive"
+    case active
+    case inactive
 }
 
 protocol GleanUsageReportingApi {
@@ -68,11 +68,13 @@ class GleanLifecycleObserver {
         )
     }
 
-    @objc private func appWillEnterForeground(notification: NSNotification) {
+    @objc
+    private func appWillEnterForeground(notification: NSNotification) {
         handleForegroundEvent()
     }
 
-    @objc private func appDidEnterBackground(notification: NSNotification) {
+    @objc
+    private func appDidEnterBackground(notification: NSNotification) {
         handleBackgroundEvent()
     }
 
