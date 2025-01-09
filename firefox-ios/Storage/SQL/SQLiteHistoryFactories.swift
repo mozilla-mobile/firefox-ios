@@ -10,11 +10,10 @@ import Shared
  */
 extension BrowserDBSQLite {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
-        guard let id = row["historyID"] as? Int,
-              let url = row["url"] as? String,
-              let title = row["title"] as? String else {
+        let id = row["historyID"] as? Int
+        guard let url = row["url"] as? String, let title = row["title"] as? String else {
             assertionFailure("None of these properties should be nil")
-            return Site(id: UUID().hashValue, url: "", title: "")
+            return Site(url: "", title: "")
         }
 
         // Extract a boolean from the row if it's present.
