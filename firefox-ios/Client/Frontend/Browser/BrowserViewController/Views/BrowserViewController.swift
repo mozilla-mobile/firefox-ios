@@ -4223,6 +4223,7 @@ extension BrowserViewController: TopTabsDelegate {
         let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
+            openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
