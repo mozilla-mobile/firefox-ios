@@ -393,12 +393,6 @@ class BookmarksViewController: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
-    @objc
-    private func didPressContextMenuButton(_ sender: UIButton) {
-        let row = sender.tag
-        let indexPath = IndexPath(row: row, section: 0) // Assuming section 0, adjust if needed
-        presentContextMenu(for: indexPath)    }
-
     private func backButtonView() -> UIView? {
         let navigationBarContentView = navigationController?.navigationBar.subviews.first(where: {
             $0.description.starts(with: "<_UINavigationBarContentView:")
@@ -486,12 +480,11 @@ class BookmarksViewController: SiteTableViewController,
             // BookmarkItemData requires:
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
-            var site: Site
             if let node = node as? BookmarkItemData {
-                site = Site(url: node.url,
-                            title: node.title,
-                            bookmarked: true,
-                            guid: node.guid)
+                let site = Site(url: node.url,
+                                title: node.title,
+                                bookmarked: true,
+                                guid: node.guid)
                 if viewModel.leftImageView == nil {
                     cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 }
@@ -501,9 +494,10 @@ class BookmarksViewController: SiteTableViewController,
                 buttonConfig.image = icon
                 let contextButton = UIButton()
                 contextButton.configuration = buttonConfig
-                contextButton.tag = indexPath.row
                 contextButton.frame = CGRect(width: 44, height: 44)
-                contextButton.addTarget(self, action: #selector(didPressContextMenuButton(_:)), for: .touchUpInside)
+                contextButton.addAction(UIAction { [weak self] _ in
+                    self?.presentContextMenu(for: indexPath)
+                }, for: .touchUpInside)
                 viewModel.accessoryView = contextButton
             }
 
