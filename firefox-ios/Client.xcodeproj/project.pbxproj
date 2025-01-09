@@ -937,6 +937,7 @@
 		8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9441892CE3E190007FF4E5 /* MockSearchEngineManager.swift */; };
 		8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */; };
 		8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */; };
+		8A967E422D30419100B1017D /* TelemetryDebugMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */; };
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
 		8A97E6EA2C58487900F94793 /* AddressLocaleFeatureValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97E6E92C58487900F94793 /* AddressLocaleFeatureValidator.swift */; };
 		8A97E6EF2C584C4900F94793 /* AddressLocaleFeatureValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97E6ED2C584AC300F94793 /* AddressLocaleFeatureValidatorTests.swift */; };
@@ -7743,6 +7744,7 @@
 		8A9441892CE3E190007FF4E5 /* MockSearchEngineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchEngineManager.swift; sourceTree = "<group>"; };
 		8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifier.swift; sourceTree = "<group>"; };
 		8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifierTests.swift; sourceTree = "<group>"; };
+		8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryDebugMessage.swift; sourceTree = "<group>"; };
 		8A96C4B828F9DD8700B75884 /* ThemableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemableTests.swift; sourceTree = "<group>"; };
 		8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseRootViewController.swift; sourceTree = "<group>"; };
 		8A97E6E92C58487900F94793 /* AddressLocaleFeatureValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressLocaleFeatureValidator.swift; sourceTree = "<group>"; };
@@ -12098,6 +12100,7 @@
 		8ACA8F722919870B00D3075D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */,
 				8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */,
 				2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */,
 				8A7A26E629D4C0D800EA76F1 /* IntroScreenManagerTests.swift */,
@@ -17394,6 +17397,7 @@
 				8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */,
 				5A3A7DD62889CF3D0065F81A /* BookmarksDataAdaptorTests.swift in Sources */,
 				8AD08D1727E91AC800B8E907 /* TabsTelemetryTests.swift in Sources */,
+				8A967E422D30419100B1017D /* TelemetryDebugMessage.swift in Sources */,
 				C8C3FE9D29F907B30038E3BA /* MockSearchHandlerRouteCoordinator.swift in Sources */,
 				ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */,
 				C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */,
