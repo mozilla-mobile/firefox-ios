@@ -132,7 +132,6 @@ struct MainMenuState: ScreenState, Equatable {
         case MainMenuActionType.updateCurrentTabInfo:
             return handleUpdateCurrentTabInfoAction(state: state, action: action)
         case MainMenuActionType.tapShowDetailsView:
-            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return handleTapShowDetailsViewAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
             guard let action = action as? MainMenuAction else { return defaultState(from: state) }
@@ -197,7 +196,9 @@ struct MainMenuState: ScreenState, Equatable {
         )
     }
 
-    private static func handleTapShowDetailsViewAction(state: MainMenuState, action: MainMenuAction) -> MainMenuState {
+    private static func handleTapShowDetailsViewAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
         return MainMenuState(
             windowUUID: state.windowUUID,
             menuElements: state.menuElements,
