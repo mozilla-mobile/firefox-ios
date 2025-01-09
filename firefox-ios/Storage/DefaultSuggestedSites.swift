@@ -36,31 +36,28 @@ open class DefaultSuggestedSites {
 
     private static let sites = [
         "default": [
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://m.facebook.com/",
                 title: .DefaultSuggestedFacebook,
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 632)),
+                trackingId: 632,
                 faviconResource: .bundleAsset(
                     name: "facebook",
                     forRemoteResource: URL(string: "https://static.xx.fbcdn.net/rsrc.php/v3/yi/r/4Kv5U5b1o3f.png")!
                 )
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://m.youtube.com/",
                 title: .DefaultSuggestedYouTube,
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 631)),
+                trackingId: 631,
                 faviconResource: .bundleAsset(
                     name: "youtube",
                     forRemoteResource: URL(string: "https://m.youtube.com/static/apple-touch-icon-180x180-precomposed.png")!
                 )
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://www.amazon.com/",
                 title: .DefaultSuggestedAmazon,
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 630)),
+                trackingId: 630,
                 // NOTE: Amazon does not host a high quality favicon. We are falling back to the one hosted in our
                 // ContileProvider.contileProdResourceEndpoint (https://ads.mozilla.org/v1/tiles).
                 faviconResource: .bundleAsset(
@@ -68,21 +65,19 @@ open class DefaultSuggestedSites {
                     forRemoteResource: URL(string: "https://tiles-cdn.prod.ads.prod.webservices.mozgcp.net/CAP5k4gWqcBGwir7bEEmBWveLMtvldFu-y_kyO3txFA=.9991.jpg")!
                 )
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://www.wikipedia.org/",
                 title: .DefaultSuggestedWikipedia,
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 629)),
+                                trackingId: 629,
                 faviconResource: .bundleAsset(
                     name: "wikipedia",
                     forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
                 )
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://x.com/",
                 title: .DefaultSuggestedX,
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 628)),
+                                trackingId: 628,
                 faviconResource: .bundleAsset(
                     name: "x",
                     forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
@@ -90,43 +85,37 @@ open class DefaultSuggestedSites {
             )
         ],
         "zh_CN": [ // FIXME Do we still want this as a special case localization? Android doesn't compile this vers. anymore
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "http://mozilla.com.cn",
                 title: "火狐社区",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 700)),
+                trackingId: 700,
                 faviconResource: .remoteURL(url: URL(string: "http://mozilla.com.cn/favicon.ico")!)
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "https://m.baidu.com/",
                 title: "百度",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 701)),
+                                trackingId: 701,
                 faviconResource: .remoteURL(url: URL(string: "https://psstatic.cdn.bcebos.com/video/wiseindex/aa6eef91f8b5b1a33b454c401_1660835115000.png")!)
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "http://sina.cn",
                 title: "新浪",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 702)),
+                                trackingId: 702,
                 faviconResource: .remoteURL(url: URL(string: "https://mjs.sinaimg.cn/wap/online/public/images/addToHome/sina_114x114_v1.png")!)
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "http://info.3g.qq.com/g/s?aid=index&g_f=23946&g_ut=3",
                 title: "腾讯",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 703)),
+                trackingId: 703,
                 faviconResource: .remoteURL(url: URL(string: "https://mat1.gtimg.com/qqcdn/qqindex2021/favicon.ico")!)
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: "http://m.taobao.com",
                 title: "淘宝",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 704)),
+                trackingId: 704,
                 faviconResource: .remoteURL(url: URL(string: "https://gw.alicdn.com/tps/i2/TB1nmqyFFXXXXcQbFXXE5jB3XXX-114-114.png")!)
             ),
-            Site(
-                id: UUID().hashValue,
+            Site.createSuggestedSite(
                 url: """
                 https://union-click.jd.com/jdc?e=618%7Cpc%7C&p=JF8BAKgJK1olXDYDZBoCUBV\
                 IMzZNXhpXVhgcCEEGXVRFXTMWFQtAM1hXWFttFkhAaihBfRN1XE5ZMipYVQ1uYwxAa1cZb\
@@ -134,7 +123,7 @@ open class DefaultSuggestedSites {
                 nBG8BKydLFl5fCQ5eCUsSM184GGsSXQ8WUiwcWl8RcV84G1slXTZdEAMAOEkWAmsBK2s
                 """,
                 title: "京东",
-                type: .suggestedSite(SuggestedSiteInfo(trackingId: 705)),
+                trackingId: 705,
                 // FIXME We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )

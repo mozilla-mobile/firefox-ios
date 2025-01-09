@@ -77,9 +77,15 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
 
     // MARK: - Factory Methods
 
-    public static func createBasicSite(url: String, title: String, isBookmarked: Bool = false) -> Site {
+    public static func createBasicSite(
+        url: String,
+        title: String,
+        isBookmarked: Bool? = false,
+        faviconResource: SiteImageView.SiteResource? = nil
+    ) -> Site {
         var site = Site(id: UUID().hashValue, url: url, title: title, type: .basic)
         site.isBookmarked = isBookmarked
+        site.faviconResource = faviconResource
         return site
     }
 
@@ -87,26 +93,42 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         return Site(id: UUID().hashValue, url: url, title: title, type: .sponsoredSite(siteInfo))
     }
 
+    public static func createSuggestedSite(
+        url: String,
+        title: String,
+        trackingId: Int,
+        faviconResource: SiteImageView.SiteResource? = nil
+    ) -> Site {
+        let siteInfo = SuggestedSiteInfo(trackingId: trackingId)
+        return Site(
+            id: UUID().hashValue,
+            url: url,
+            title: title,
+            type: .suggestedSite(siteInfo),
+            faviconResource: faviconResource
+        )
+    }
+
     public static func createPinnedSite(url: String, title: String, isGooglePinnedTile: Bool) -> Site {
         let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
         return Site(id: UUID().hashValue, url: url, title: title, type: .pinnedSite(siteInfo))
     }
 
-//    public static func createPinnedSite(fromSite site: Site) -> Site {
-//        // FIXME can the google pinned tile every go through this?
-//        let siteInfo = PinnedSiteInfo(isGoogleSite: false)
-//
-//        return Site(
-//            id: site.id,
-//            url: site.url,
-//            title: site.title,
-//            type: .pinnedSite,
-//            faviconResource: site.faviconResource,
-//            metadata: site.metadata,
-//            latestVisit: site.latestVisit,
-//            isBookmarked: site.isBookmarked
-//        )
-//    }
+    public static func createPinnedSite(fromSite site: Site) -> Site {
+        // FIXME can the google pinned tile every go through this?
+        let siteInfo = PinnedSiteInfo(isGooglePinnedTile: false)
+
+        return Site(
+            id: site.id,
+            url: site.url,
+            title: site.title,
+            type: .pinnedSite(siteInfo),
+            faviconResource: site.faviconResource,
+            metadata: site.metadata,
+            latestVisit: site.latestVisit,
+            isBookmarked: site.isBookmarked
+        )
+    }
 
     // MARK: - Initializers
 

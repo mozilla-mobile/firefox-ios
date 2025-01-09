@@ -198,6 +198,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     }
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
+        // FIXME need to test the getRemoveBookmarkAction path...
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
@@ -266,14 +267,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         let topSiteActions: [PhotonRowActions]
 
         switch site.type {
-        case .sponsoredSite(_):
+        case .sponsoredSite:
             topSiteActions = [getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction(),
                               getShareAction(site: site, sourceView: sourceView)]
 
-        case .pinnedSite(_):
+        case .pinnedSite:
             topSiteActions = [getRemovePinTopSiteAction(site: site),
                               getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
@@ -285,8 +286,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site),
                               getShareAction(site: site, sourceView: sourceView)]
-
-
         }
 
         return topSiteActions

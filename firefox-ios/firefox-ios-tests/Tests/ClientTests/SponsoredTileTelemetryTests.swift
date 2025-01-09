@@ -6,6 +6,7 @@
 
 import Glean
 import XCTest
+import Storage
 
 class SponsoredTileTelemetryTests: XCTestCase {
     override func setUp() {
@@ -23,7 +24,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(withContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -44,7 +45,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+        SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: topSite, position: 2)
 
         waitForExpectations(timeout: 5.0)
     }
@@ -54,7 +55,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(withContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -74,7 +75,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendClickTelemetry(tile: topSite, position: 3)
+        SponsoredTileTelemetry.sendClickTelemetry(tileSite: topSite, position: 3)
 
         waitForExpectations(timeout: 5.0)
     }
@@ -83,7 +84,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testContextIdImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(withContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -99,7 +100,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
             expectation.fulfill()
         }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
+        SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: topSite, position: 2)
         waitForExpectations(timeout: 5.0)
     }
 

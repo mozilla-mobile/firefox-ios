@@ -6,13 +6,5 @@ import Foundation
 import SiteImageView
 
 public struct PinnedSiteInfo: Equatable, Codable, Hashable {
-    public let isGooglePinnedTile: Bool // Used for telemetry only
-
-//    init(site: Site, faviconResource: SiteResource?) {
-//        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, faviconResource: faviconResource)
-//        self.metadata = site.metadata
-//    }
+    public let isGooglePinnedTile: Bool // Used for telemetry
 }
-
-// FIXME remove Client membership?
-// FIXME delete this type...??

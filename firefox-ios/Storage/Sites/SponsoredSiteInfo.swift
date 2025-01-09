@@ -16,13 +16,4 @@ public struct SponsoredSiteInfo: Equatable, Codable, Hashable {
         self.clickURL = clickURL
         self.imageURL = imageURL
     }
-
-    // TODO Could make factory in Client with Contile if desired...
-//    init(contile: Contile) {
-//        // Used for telemetry
-//        self.tileId = contile.id
-//        self.impressionURL = contile.impressionUrl
-//        self.clickURL = contile.clickUrl
-//        self.imageURL = contile.imageUrl
-//    }
 }

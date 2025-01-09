@@ -30,7 +30,13 @@ final class TopsSitesSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
-        let exampleTopSite = TopSiteState(site: Site(url: "https://www.example.com", title: "hello", bookmarked: false, guid: nil))
+        let exampleTopSite = TopSiteState(
+            site: Site.createBasicSite(
+                url: "https://www.example.com",
+                title: "hello",
+                isBookmarked: false
+            )
+        )
 
         let newState = reducer(
             initialState,

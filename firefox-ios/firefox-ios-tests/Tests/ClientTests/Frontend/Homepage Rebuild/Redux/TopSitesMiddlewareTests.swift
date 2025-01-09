@@ -81,7 +81,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnPinTopSite_withSite_callsPinTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,
@@ -107,7 +107,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnUnpinTopSite_withSite_callsUnpinTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,
@@ -130,7 +130,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnRemoveTopSite_withSite_callsRemoveTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,

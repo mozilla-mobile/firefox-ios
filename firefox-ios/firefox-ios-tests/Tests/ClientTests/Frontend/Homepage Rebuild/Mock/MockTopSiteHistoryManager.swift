@@ -14,32 +14,28 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
 
     static var defaultSuccessData: [Site] {
         return [
-            PinnedSite(
-                site: Site(url: "www.mozilla.com", title: "Pinned Site Test"),
-                faviconResource: nil
-            ),
-            PinnedSite(
-                site: Site(url: "www.firefox.com", title: "Pinned Site 2 Test"),
-                faviconResource: nil
-            ),
-            Site(url: "www.example.com", title: "History-Based Tile Test")
+            Site.createPinnedSite(fromSite: Site.createBasicSite(url: "www.mozilla.com", title: "Pinned Site Test")),
+            Site.createPinnedSite(fromSite: Site.createBasicSite(url: "www.firefox.com", title: "Pinned Site 2 Test")),
+            Site.createBasicSite(url: "www.example.com", title: "History-Based Tile Test")
         ]
     }
 
     // Demonstrates a tile that exists under sponsored tile list
     static var duplicateTile: [Site] {
         return [
-            PinnedSite(
-                site: Site(url: "https://firefox.com", title: "Firefox Sponsored Tile"),
-                faviconResource: nil
-            )
+            Site.createPinnedSite(
+                fromSite: Site.createBasicSite(
+                    url: "https://firefox.com",
+                    title: "Firefox Sponsored Tile"
+                )
+            ),
         ]
     }
 
     static var noPinnedData: [Site] {
         return [
-            Site(url: "https://firefox.com", title: "History-Based Tile Test"),
-            Site(url: "www.example.com", title: "History-Based Tile 2 Test")
+            Site.createBasicSite(url: "https://firefox.com", title: "History-Based Tile Test"),
+            Site.createBasicSite(url: "www.example.com", title: "History-Based Tile 2 Test")
         ]
     }
 

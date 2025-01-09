@@ -261,8 +261,10 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let expectedContileResult = ContileResult.success(ContileProviderMock.defaultSuccessData)
         let subject = createSubject(expectedContileResult: expectedContileResult)
 
-        var sites: [Site] = [Site(url: "www.test.com", title: "A test"),
-                             Site(url: "www.test2.com", title: "A test2")]
+        var sites: [Site] = [
+            Site.createBasicSite(url: "www.test.com", title: "A test"),
+            Site.createBasicSite(url: "www.test2.com", title: "A test2")
+        ]
         subject.addSponsoredTiles(sites: &sites, shouldAddGoogle: true, availableSpaceCount: 10)
 
         XCTAssertEqual(sites.count, 4, "Added two contiles and two sites")
@@ -586,18 +588,26 @@ class TopSiteHistoryManagerStub: TopSiteHistoryManager {
         var sites = [Site]()
 
         (0..<addPinnedSiteCount).forEach {
-            let pinnedSiteURL = duplicatePinnedSiteURL ? String(format: ContileProviderMock.url, "\($0)"): String(format: ContileProviderMock.pinnedURL, "\($0)")
-            let site = Site(url: pinnedSiteURL, title: String(format: ContileProviderMock.pinnedTitle, "\($0)"))
+            let pinnedSiteURL = duplicatePinnedSiteURL
+                ? String(format: ContileProviderMock.url, "\($0)")
+                : String(format: ContileProviderMock.pinnedURL, "\($0)")
+            let site = Site.createBasicSite(
+                url: pinnedSiteURL,
+                title: String(format: ContileProviderMock.pinnedTitle, "\($0)")
+            )
             sites.append(
-                PinnedSite(
-                    site: site,
-                    faviconResource: nil
-                )
+                Site.createPinnedSite(fromSite: site)
             )
         }
 
         (0..<siteCount).forEach {
-            let site = Site(url: String(format: ContileProviderMock.url, "\($0)"), title: String(format: ContileProviderMock.title, "\($0)"))
+            let site = Site.createBasicSite(
+                url: String(
+                    format: ContileProviderMock.url,
+                    "\($0)"
+                ),
+                title: String(format: ContileProviderMock.title, "\($0)")
+            )
             sites.append(site)
         }
 

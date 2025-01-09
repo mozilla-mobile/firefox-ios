@@ -21,14 +21,14 @@ final class MockTopSitesManager: TopSitesManagerInterface {
         return createSites(count: 15, subtitle: ": otherSites")
     }
 
-    func fetchSponsoredSites() async -> [SponsoredTile] {
+    func fetchSponsoredSites() async -> [Site] {
         fetchSponsoredSitesCalledCount += 1
 
         let contiles = MockSponsoredProvider.defaultSuccessData
-        return contiles.compactMap { SponsoredTile(contile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(withContile: $0) }
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState] {
         recalculateTopSitesCalledCount += 1
         return createSites(subtitle: ": total top sites")
     }
@@ -36,8 +36,8 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     func createSites(count: Int = 30, subtitle: String = "") -> [TopSiteState] {
         var sites = [TopSiteState]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0) \(subtitle)")
+            let site = Site.createBasicSite(url: "www.url\($0).com",
+                                            title: "Title \($0) \(subtitle)")
             sites.append(TopSiteState(site: site))
         }
         return sites

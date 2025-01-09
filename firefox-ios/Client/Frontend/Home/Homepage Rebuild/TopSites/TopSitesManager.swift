@@ -7,6 +7,20 @@ import Common
 import Shared
 import Storage
 
+// FIXME Move me to own file
+extension Site {
+    static func createSponsoredSite(withContile contile: Contile) -> Site {
+        let siteInfo = SponsoredSiteInfo(
+            tileId: contile.id,
+            impressionURL: contile.impressionUrl,
+            clickURL: contile.clickUrl,
+            imageURL: contile.imageUrl
+        )
+
+        return Site.createSponsoredSite(url: contile.url, title: contile.name, siteInfo: siteInfo)
+    }
+}
+
 protocol TopSitesManagerInterface {
     /// Returns a list of top sites state using the top site history manager to fetch the other sites
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
@@ -130,15 +144,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             }
         }
 
-        return contiles.compactMap {
-            let siteInfo = SponsoredSiteInfo(
-                tileId: $0.id,
-                impressionURL: $0.impressionUrl,
-                clickURL: $0.clickUrl,
-                imageURL: $0.imageUrl
-            )
-            return Site.createSponsoredSite(url: $0.url, title: $0.name, siteInfo: siteInfo)
-        }
+        return contiles.compactMap { Site.createSponsoredSite(withContile: $0) }
     }
 
     private var shouldLoadSponsoredTiles: Bool {

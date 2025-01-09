@@ -247,13 +247,7 @@ private extension Array where Element == Site {
         for (index, _) in contiles.enumerated() {
             guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
 
-            let sponsoredSiteInfo = SponsoredSiteInfo(
-                tileId: contile.id,
-                impressionURL: contile.impressionUrl,
-                clickURL: contile.clickUrl,
-                imageURL: contile.imageUrl
-            )
-            let site = Site.createSponsoredSite(url: contile.url, title: contile.name, siteInfo: sponsoredSiteInfo)
+            let site = Site.createSponsoredSite(withContile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
             // or if it's the default search engine

@@ -804,7 +804,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let title = self.selectedTab?.displayTitle else { return }
 
             let site = Site.createBasicSite(url: url.absoluteString, title: title)
-            
+
             self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     self.delegate?.showToast(

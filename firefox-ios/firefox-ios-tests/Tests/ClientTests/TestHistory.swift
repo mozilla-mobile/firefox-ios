@@ -18,7 +18,7 @@ class TestHistory: ProfileTest {
         visitType: VisitType = .link
     ) {
         _ = places.reopenIfClosed()
-        let site = Site(url: url, title: title)
+        let site = Site.createBasicSite(url: url, title: title)
         let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
         let res = places.applyObservation(visitObservation: visit).value
         XCTAssertEqual(
