@@ -24,7 +24,6 @@ class GleanUsageReportingApiMock: GleanUsageReportingApi {
 }
 
 class GleanUsageReportingLifecycleObserverTest: XCTestCase {
-
     private var fakeGleanUsageReportingApi: GleanUsageReportingApiMock!
     private var fakeCurrentTime: Int64!
     private var fakeCurrentTimeProvider: (() -> Int64)!
@@ -40,12 +39,12 @@ class GleanUsageReportingLifecycleObserverTest: XCTestCase {
     }
 
     func testNoPingsSubmittedBeforeLifecycleChanges() {
-        let _ = createObserver()
+        _ = createObserver()
         XCTAssertEqual(fakeGleanUsageReportingApi.pingSubmitCount, 0)
     }
 
     func testNoUsageReasonSetBeforeLifecycleChanges() {
-        let _ = createObserver()
+        _ = createObserver()
         XCTAssertNil(fakeGleanUsageReportingApi.lastUsageReason)
     }
 

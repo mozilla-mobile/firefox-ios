@@ -18,7 +18,6 @@ protocol GleanUsageReportingApi {
 }
 
 class GleanUsageReporting: GleanUsageReportingApi {
-
     private let numberOfNanosInAMilli: Int64 = 1000
 
     func setUsageReason(_ usageReason: UsageReason) {
@@ -43,7 +42,6 @@ class GleanUsageReporting: GleanUsageReportingApi {
 }
 
 class GleanLifecycleObserver {
-
     private let gleanUsageReportingApi: GleanUsageReportingApi
     private let currentTimeProvider: () -> Int64
     private var durationStartMs: Int64?
