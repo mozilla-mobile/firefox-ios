@@ -35,7 +35,8 @@ final class TopSitesMiddleware {
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
-            TopSitesActionType.fetchTopSites:
+            TopSitesActionType.fetchTopSites,
+            TopSitesActionType.toggleShowSponsoredSettings:
             self.getTopSitesDataAndUpdateState(for: action)
         case ContextMenuActionType.tappedOnPinTopSite:
             guard let site = self.getSite(for: action) else { return }
