@@ -59,8 +59,8 @@ class TestSQLitePinnedSites: XCTestCase {
         func checkPinnedSites() -> Success {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
-                XCTAssertEqual(pinnedSites[0]!.url, site2.url)
-                XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
+                XCTAssertEqual(pinnedSites[0]?.url, site2.url)
+                XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
                 return succeed()
             }
         }
@@ -69,7 +69,7 @@ class TestSQLitePinnedSites: XCTestCase {
             return pinnedSites.removeFromPinnedTopSites(site2) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
-                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should be the only pin left")
                     return succeed()
                 }
             }
@@ -79,7 +79,7 @@ class TestSQLitePinnedSites: XCTestCase {
             return pinnedSites.addPinnedTopSite(site1) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
-                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    XCTAssertEqual(pinnedSites[0]?.url, site1.url, "Site1 should still be the only pin")
                     return succeed()
                 }
             }
@@ -91,7 +91,7 @@ class TestSQLitePinnedSites: XCTestCase {
             >>> dupePinnedSite
             >>> done
 
-        waitForExpectations(timeout: 10.0) { error in
+        waitForExpectations(timeout: 3) { error in
             return
         }
     }
@@ -125,8 +125,8 @@ class TestSQLitePinnedSites: XCTestCase {
         func checkPinnedSites() -> Success {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
-                XCTAssertEqual(pinnedSites[0]!.url, site2.url)
-                XCTAssertEqual(pinnedSites[1]!.url, site1.url, "The older pinned site should be last")
+                XCTAssertEqual(pinnedSites[0]?.url, site2.url)
+                XCTAssertEqual(pinnedSites[1]?.url, site1.url, "The older pinned site should be last")
                 return succeed()
             }
         }
@@ -134,8 +134,7 @@ class TestSQLitePinnedSites: XCTestCase {
         func removePinnedSites() -> Success {
             return pinnedSites.removeFromPinnedTopSites(site2) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
-                    XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
-                    XCTAssertEqual(pinnedSites[0]!.url, site1.url, "Site2 should be the only pin left")
+                    XCTAssertEqual(pinnedSites.count, 0, "Duplicate pinned domains are removed with a fuzzy search")
                     return succeed()
                 }
             }
@@ -143,9 +142,63 @@ class TestSQLitePinnedSites: XCTestCase {
 
         addPinnedSites()
             >>> checkPinnedSites
+            >>> checkPinnedSites
+            >>> removePinnedSites
             >>> done
 
-        waitForExpectations(timeout: 10.0) { error in
+        waitForExpectations(timeout: 3) { error in
+            return
+        }
+    }
+
+    func testPinnedTopSites_idOfMaxSizeInt64() {
+        let database = BrowserDB(
+            filename: "testPinnedTopSitesDuplicateDomains.db",
+            schema: BrowserSchema(),
+            files: files
+        )
+        let prefs = MockProfilePrefs()
+        let pinnedSites = BrowserDBSQLite(database: database, prefs: prefs)
+
+        // create pinned sites with a same domain name
+        let siteId = Int.max
+        let site = Site(id: Int.max, url: "http://site.com/foo1", title: "A domain")
+
+        let expectation = self.expectation(description: "Add site")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func addPinnedSite() -> Success {
+            return pinnedSites.addPinnedTopSite(site)
+        }
+
+        func checkPinnedSite() -> Success {
+            return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
+                XCTAssertEqual(pinnedSites.count, 1)
+                XCTAssertEqual(pinnedSites[0]?.id, siteId)
+                XCTAssertEqual(pinnedSites[0]?.url, site.url)
+                XCTAssertEqual(pinnedSites[0]?.title, site.title)
+                return succeed()
+            }
+        }
+
+        func removePinnedSite() -> Success {
+            return pinnedSites.removeFromPinnedTopSites(site) >>== {
+                return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
+                    XCTAssertEqual(pinnedSites.count, 0, "There should be no pinned sites")
+                    return succeed()
+                }
+            }
+        }
+
+        addPinnedSite()
+            >>> checkPinnedSite
+            >>> removePinnedSite
+            >>> done
+
+        waitForExpectations(timeout: 3) { error in
             return
         }
     }

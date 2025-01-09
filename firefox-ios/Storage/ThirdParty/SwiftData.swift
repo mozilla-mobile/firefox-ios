@@ -283,8 +283,10 @@ private class SQLiteDBStatement {
                 status = sqlite3_bind_double(pointer, Int32(index+1), obj as! Double)
             } else if obj is Int64 {
                 status = sqlite3_bind_int64(pointer, Int32(index+1), Int64(obj as! Int64))
+            } else if obj is Int32 {
+                status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int32))
             } else if obj is Int {
-                status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int))
+                status = sqlite3_bind_int64(pointer, Int32(index+1), Int64(obj as! Int))
             } else if obj is Bool {
                 status = sqlite3_bind_int(pointer, Int32(index+1), (obj as! Bool) ? 1 : 0)
             } else if obj is String {
