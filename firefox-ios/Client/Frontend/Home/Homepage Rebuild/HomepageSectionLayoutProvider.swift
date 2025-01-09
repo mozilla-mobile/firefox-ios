@@ -59,12 +59,10 @@ final class HomepageSectionLayoutProvider {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-    private var dimensionImplementation: TopSitesDimensionImplementation
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
         self.logger = logger
-        self.dimensionImplementation = TopSitesDimensionImplementation(windowUUID: windowUUID)
     }
 
     func createLayoutSection(

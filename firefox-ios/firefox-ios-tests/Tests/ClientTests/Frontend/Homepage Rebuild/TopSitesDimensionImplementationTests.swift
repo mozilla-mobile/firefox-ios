@@ -13,18 +13,6 @@ class TopSitesDimensionImplementationTests: XCTestCase {
             static let iPadAir = CGSize(width: 820, height: 1180)
             static let iPadAirCompactSplit = CGSize(width: 320, height: 375)
         }
-
-        static let cellWidth = HomepageSectionLayoutProvider.UX.TopSitesConstants.cellEstimatedSize.width
-    }
-
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
-    }
-
-    override func tearDown() {
-        DependencyHelperMock().reset()
-        super.tearDown()
     }
 
     func test_getNumberOfTilesPerRow_withPortraitIphone_showsExpectedRowNumber() {
@@ -34,8 +22,7 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.width,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 4)
@@ -48,8 +35,7 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.height,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 8)
@@ -62,8 +48,7 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.width,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 7)
@@ -76,8 +61,7 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.height,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 10)
@@ -90,8 +74,7 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.width,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 4)
@@ -104,17 +87,14 @@ class TopSitesDimensionImplementationTests: XCTestCase {
 
         let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.height,
-            leadingInset: leadingInset,
-            cellWidth: UX.cellWidth
+            leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 4)
     }
 
     func createSubject() -> TopSitesDimensionImplementation {
-        let subject = TopSitesDimensionImplementation(windowUUID: .XCTestDefaultUUID)
-        trackForMemoryLeaks(subject)
-
+        let subject = TopSitesDimensionImplementation()
         return subject
     }
 }

@@ -51,6 +51,10 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    private var availableWidth: CGFloat {
+        return view.frame.size.width
+    }
+
     // MARK: - Private constants
     private let overlayManager: OverlayModeManager
     private let logger: Logger
@@ -107,7 +111,7 @@ final class HomepageViewController: UIViewController,
         store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
-                numberOfTilesPerRow: numberOfTilesPerRow(for: view.frame.size.width),
+                numberOfTilesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -184,13 +188,11 @@ final class HomepageViewController: UIViewController,
     /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
     /// - Returns: The number of tiles that can fit in a single row within the available width.
     private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
-        let dimensionImplementation = TopSitesDimensionImplementation(windowUUID: windowUUID)
-        return dimensionImplementation.getNumberOfTilesPerRow(
+        return TopSitesDimensionImplementation().getNumberOfTilesPerRow(
             availableWidth: availableWidth,
             leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
                 traitCollection: traitCollection
-            ),
-            cellWidth: HomepageSectionLayoutProvider.UX.TopSitesConstants.cellEstimatedSize.width
+            )
         )
     }
 
@@ -640,7 +642,7 @@ final class HomepageViewController: UIViewController,
                 guard let self else { return }
                 store.dispatch(
                     TopSitesAction(
-                        numberOfTilesPerRow: self.numberOfTilesPerRow(for: self.view.frame.size.width),
+                        numberOfTilesPerRow: self.numberOfTilesPerRow(for: availableWidth),
                         windowUUID: self.windowUUID,
                         actionType: TopSitesActionType.fetchTopSites
                     )
