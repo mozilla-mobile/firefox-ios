@@ -175,8 +175,7 @@ struct MainMenuState: ScreenState, Equatable {
         )
     }
 
-    private static func handleUpdateCurrentTabInfoAction(state: MainMenuState,
-                                                         action: Action) -> MainMenuState {
+    private static func handleUpdateCurrentTabInfoAction(state: MainMenuState, action: Action) -> MainMenuState {
         guard let action = action as? MainMenuAction,
               let currentTabInfo = action.currentTabInfo
         else { return defaultState(from: state) }
