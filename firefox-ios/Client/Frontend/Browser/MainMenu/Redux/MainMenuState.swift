@@ -165,8 +165,7 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     private static func handleUpdateAccountHeaderAction(state: MainMenuState, action: Action) -> MainMenuState {
-        guard let action = action as? MainMenuAction
-        else { return defaultState(from: state) }
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
 
         return MainMenuState(
             windowUUID: state.windowUUID,
