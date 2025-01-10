@@ -86,6 +86,7 @@ only_rules: # Only enforce these rules, ignore all others
   - accessibility_trait_for_button
   - force_cast
   - closure_body_length
+  - implicitly_unwrapped_optional
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
