@@ -104,7 +104,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // MARK: Google tile
     private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteState] {
         guard googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0),
-              let googleSite = googleTopSiteManager.suggestedSiteData
+              let googleSite = googleTopSiteManager.pinnedSiteData
         else {
             return []
         }
