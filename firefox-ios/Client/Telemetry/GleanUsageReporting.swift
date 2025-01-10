@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Glean
+import Shared
 
 enum UsageReason: String {
     case active
@@ -13,19 +14,12 @@ enum UsageReason: String {
 
 protocol GleanUsageReportingApi {
     func setUsageReason(_ usageReason: UsageReason)
-    func setDuration(_ durationMillis: Int64)
     func submitPing()
 }
 
 class GleanUsageReporting: GleanUsageReportingApi {
-    private let numberOfNanosInAMilli: Int64 = 1000
-
     func setUsageReason(_ usageReason: UsageReason) {
         GleanMetrics.Usage.reason.set(usageReason.rawValue)
-    }
-
-    func setDuration(_ durationMillis: Int64) {
-        GleanMetrics.Usage.duration.setRawNanos(durationMillis * numberOfNanosInAMilli)
     }
 
     func submitPing() {
@@ -38,20 +32,18 @@ class GleanUsageReporting: GleanUsageReportingApi {
         GleanMetrics.Usage.osVersion.set(UIDevice.current.systemVersion)
         GleanMetrics.Usage.appDisplayVersion.set(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
         GleanMetrics.Usage.appBuild.set(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
+        GleanMetrics.Usage.appChannel.set(AppConstants.buildChannel.rawValue)
     }
 }
 
 class GleanLifecycleObserver {
     private let gleanUsageReportingApi: GleanUsageReportingApi
-    private let currentTimeProvider: () -> Int64
-    private var durationStartMs: Int64?
+    private var id: TimerId?
 
     init(
-        gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting(),
-        currentTimeProvider: @escaping () -> Int64 = { Int64(Date().timeIntervalSince1970 * 1000) }
+        gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting()
     ) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
-        self.currentTimeProvider = currentTimeProvider
 
         NotificationCenter.default.addObserver(
             self,
@@ -79,15 +71,13 @@ class GleanLifecycleObserver {
     }
 
     func handleForegroundEvent() {
-        durationStartMs = currentTimeProvider()
+        id = GleanMetrics.Usage.duration.start()
         gleanUsageReportingApi.setUsageReason(.active)
         gleanUsageReportingApi.submitPing()
     }
 
     func handleBackgroundEvent() {
-        if let startMs = durationStartMs {
-            gleanUsageReportingApi.setDuration(currentTimeProvider() - startMs)
-        }
+        id.map(GleanMetrics.Usage.duration.stopAndAccumulate)
         gleanUsageReportingApi.setUsageReason(.inactive)
         gleanUsageReportingApi.submitPing()
     }

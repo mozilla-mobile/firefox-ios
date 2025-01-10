@@ -25,17 +25,10 @@ class GleanUsageReportingApiMock: GleanUsageReportingApi {
 
 class GleanUsageReportingLifecycleObserverTest: XCTestCase {
     private var fakeGleanUsageReportingApi: GleanUsageReportingApiMock!
-    private var fakeCurrentTime: Int64!
-    private var fakeCurrentTimeProvider: (() -> Int64)!
 
     override func setUp() {
         super.setUp()
         fakeGleanUsageReportingApi = GleanUsageReportingApiMock()
-        fakeCurrentTime = 0
-        fakeCurrentTimeProvider = { [unowned self] in
-            self.fakeCurrentTime += 1
-            return self.fakeCurrentTime
-        }
     }
 
     func testNoPingsSubmittedBeforeLifecycleChanges() {
@@ -79,20 +72,9 @@ class GleanUsageReportingLifecycleObserverTest: XCTestCase {
         XCTAssertNil(fakeGleanUsageReportingApi.lastDurationMillis)
     }
 
-    func testSetDurationToLastForegroundSessionLength() {
-        let observer = createObserver()
-        observer.handleForegroundEvent()
-        XCTAssertEqual(fakeCurrentTime, 1)
-        _ = fakeCurrentTimeProvider()
-        observer.handleBackgroundEvent()
-        XCTAssertEqual(fakeCurrentTime, 3)
-        XCTAssertEqual(fakeGleanUsageReportingApi.lastDurationMillis, 2)
-    }
-
     private func createObserver() -> GleanLifecycleObserver {
         return GleanLifecycleObserver(
-            gleanUsageReportingApi: fakeGleanUsageReportingApi,
-            currentTimeProvider: fakeCurrentTimeProvider
+            gleanUsageReportingApi: fakeGleanUsageReportingApi
         )
     }
 }

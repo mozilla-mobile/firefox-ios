@@ -754,7 +754,8 @@ usage:
       - usage-reporting
 
   duration:
-    type: timespan
+    type: timing_distribution
+    time_unit: millisecond
     description: |
       The duration of the last foreground session.
     time_unit: second
