@@ -61,7 +61,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         // We test that without a pref, google is added
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[0].isGoogleGUID)
+        XCTAssertTrue(data[0].isGooglePinnedTile)
     }
 
     func testCalculateTopSitesData_hasGoogleTopSiteWithPinnedCount_googlePrefsNil() {
@@ -71,7 +71,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         // We test that without a pref, google is added even with pinned tiles
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[0].isGoogleGUID)
+        XCTAssertTrue(data[0].isGooglePinnedTile)
     }
 
     func testCalculateTopSitesData_hasNotGoogleTopSite_IfHidden() {
@@ -83,7 +83,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         // We test that having more pinned than available tiles, google tile isn't put in
         XCTAssertFalse(data[0].isGoogleURL)
-        XCTAssertFalse(data[0].isGoogleGUID)
+        XCTAssertFalse(data[0].isGooglePinnedTile)
     }
 
     // MARK: Pinned site
@@ -382,7 +382,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[0].isGoogleGUID)
+        XCTAssertTrue(data[0].isGooglePinnedTile)
     }
 
     func testSearchEngine_pinnedTile_doesntGetRemoved() {

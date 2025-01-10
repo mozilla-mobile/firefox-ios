@@ -31,7 +31,7 @@ struct TopSiteState: Hashable, Equatable {
         return site.type.isSponsoredSite
     }
 
-    var isGoogleGUID: Bool {
+    var isGooglePinnedTile: Bool {
         guard case SiteType.pinnedSite(let siteInfo) = site.type else {
             return false
         }
@@ -62,7 +62,7 @@ struct TopSiteState: Hashable, Equatable {
     }
 
     func getTelemetrySiteType() -> String {
-        if isPinned && isGoogleGUID {
+        if isPinned && isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"

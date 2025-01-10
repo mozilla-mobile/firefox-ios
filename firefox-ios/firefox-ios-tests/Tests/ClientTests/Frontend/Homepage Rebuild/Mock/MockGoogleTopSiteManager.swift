@@ -21,7 +21,7 @@ class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
         self.mockSiteData = mockSiteData
     }
 
-    var suggestedSiteData: Site? {
+    var pinnedSiteData: Site? {
         return mockSiteData
     }
 

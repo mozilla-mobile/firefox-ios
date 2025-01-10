@@ -31,7 +31,7 @@ final class TopSite: FeatureFlaggable {
         return site.type.isSponsoredSite
     }
 
-    var isGoogleGUID: Bool {
+    var isGooglePinnedTile: Bool {
         guard case SiteType.pinnedSite(let siteInfo) = site.type else { return false }
 
         return siteInfo.isGooglePinnedTile
@@ -66,7 +66,7 @@ final class TopSite: FeatureFlaggable {
     }
 
     func getTelemetrySiteType() -> String {
-        if isPinned && isGoogleGUID {
+        if isPinned && isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"

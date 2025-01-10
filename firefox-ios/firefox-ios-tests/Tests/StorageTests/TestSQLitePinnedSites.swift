@@ -162,7 +162,16 @@ class TestSQLitePinnedSites: XCTestCase {
 
         // create pinned sites with a same domain name
         let siteId = Int.max
-        let site = Site(id: Int.max, url: "http://site.com/foo1", title: "A domain")
+        let site = Site(
+            id: Int.max,
+            url: "http://site.com/foo1",
+            title: "A domain",
+            type: .pinnedSite(
+                PinnedSiteInfo(
+                    isGooglePinnedTile: false
+                )
+            )
+        )
 
         let expectation = self.expectation(description: "Add site")
         func done() -> Success {
