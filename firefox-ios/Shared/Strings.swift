@@ -197,6 +197,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Saved in “Bookmarks”",
                 comment: "The label displayed in the toast notification when saving a bookmark via the menu to the default folder. \"Bookmarks\" is the name of the default folder where the bookmark will be saved to.")
+            public static let MoreOptionsA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.MoreOptionsA11yLabel.v136",
+                tableName: "Bookmarks",
+                value: "More options",
+                comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
         }
 
         public struct EmptyState {
