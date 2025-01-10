@@ -15,7 +15,7 @@ enum OneLineTableViewCustomization {
 struct OneLineTableViewCellViewModel {
     let title: String?
     var leftImageView: UIImage?
-    let accessoryView: UIImageView?
+    var accessoryView: UIView?
     let accessoryType: UITableViewCell.AccessoryType
     let editingAccessoryView: UIImageView?
 }
@@ -36,6 +36,10 @@ class OneLineTableViewCell: UITableViewCell,
         static let shortLeadingMargin: CGFloat = 5
         static let longLeadingMargin: CGFloat = 13
         static let cornerRadius: CGFloat = 5
+        static let accessoryViewTrailingPaddingForImage: CGFloat = 16
+        // Icon buttons typically have a minimum padding of 44px, so for them to be vertically aligned with image
+        // accessory views (24px width), they would need 10px less trailing padding
+        static let accessoryViewTrailingPaddingForButton: CGFloat = 6
     }
 
     var reorderControlImageView: UIImageView? {
@@ -84,6 +88,12 @@ class OneLineTableViewCell: UITableViewCell,
     override func layoutSubviews() {
         super.layoutSubviews()
         updateReorderControl()
+
+        if let accessoryView {
+            let accessoryPadding = accessoryView is UIButton ? UX.accessoryViewTrailingPaddingForButton
+                                                             : UX.accessoryViewTrailingPaddingForImage
+            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - accessoryPadding
+        }
     }
 
     private func updateReorderControl() {
@@ -213,7 +223,7 @@ class OneLineTableViewCell: UITableViewCell,
 
         switch customization {
         case .regular:
-            accessoryView?.tintColor = theme.colors.iconSecondary
+            accessoryView?.tintColor = accessoryView is UIButton ? theme.colors.iconPrimary : theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:

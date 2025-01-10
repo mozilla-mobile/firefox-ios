@@ -380,7 +380,19 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    // MARK: - Long press
+    private func createContextButton() -> UIButton {
+        var buttonConfig = UIButton.Configuration.plain()
+        let icon = UIImage(named: StandardImageIdentifiers.Large.ellipsis)?.withRenderingMode(.alwaysTemplate)
+        buttonConfig.image = icon
+        buttonConfig.automaticallyUpdateForSelection = true
+        let contextButton = UIButton()
+        contextButton.configuration = buttonConfig
+        contextButton.frame = CGRect(width: 44, height: 44)
+
+        return contextButton
+    }
+
+    // MARK: - Actions
 
     @objc
     private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -474,21 +486,25 @@ class BookmarksViewController: SiteTableViewController,
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: OneLineTableViewCell.cellIdentifier,
                 for: indexPath) as? OneLineTableViewCell {
-            // Site is needed on BookmarkItemData to setup cell image
-            var site: Site?
+            var viewModel = bookmarkCell.getViewModel()
+
+            // BookmarkItemData requires:
+            // - Site to setup cell image
+            // - AccessoryView to setup context menu button affordance
             if let node = node as? BookmarkItemData {
-                site = Site(url: node.url,
-                            title: node.title,
-                            bookmarked: true,
-                            guid: node.guid)
-            }
-            cell.tag = indexPath.item
+                let site = Site(url: node.url,
+                                title: node.title,
+                                bookmarked: true,
+                                guid: node.guid)
+                if viewModel.leftImageView == nil {
+                    cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                }
 
-            let viewModel = bookmarkCell.getViewModel()
-
-            if let site = site,
-               viewModel.leftImageView == nil {
-                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                let contextButton = createContextButton()
+                contextButton.addAction(UIAction { [weak self] _ in
+                    self?.presentContextMenu(for: indexPath)
+                }, for: .touchUpInside)
+                viewModel.accessoryView = contextButton
             }
 
             cell.configure(viewModel: viewModel)
