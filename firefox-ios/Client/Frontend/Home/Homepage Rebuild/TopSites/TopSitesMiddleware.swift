@@ -14,7 +14,7 @@ final class TopSitesMiddleware {
     // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
     // but keeping logic consistent for now
     private var otherSites: [TopSiteState] = []
-    private var sponsoredTiles: [Site] = []
+    private var sponsoredSites: [Site] = []
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -71,15 +71,15 @@ final class TopSitesMiddleware {
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredSites: self.sponsoredSites
                     )
                 }
                 group.addTask {
-                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredSites: self.sponsoredSites
                     )
                 }
 
@@ -87,7 +87,7 @@ final class TopSitesMiddleware {
                 await updateTopSites(
                     for: action.windowUUID,
                     otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredTiles
+                    sponsoredSites: self.sponsoredSites
                 )
             }
         }
@@ -96,11 +96,11 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [Site]
+        sponsoredSites: [Site]
     ) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
-            sponsoredSites: sponsoredTiles
+            sponsoredSites: sponsoredSites
         )
         store.dispatch(
             TopSitesAction(

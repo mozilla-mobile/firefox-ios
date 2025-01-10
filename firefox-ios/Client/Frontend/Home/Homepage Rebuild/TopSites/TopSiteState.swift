@@ -16,7 +16,7 @@ struct TopSiteState: Hashable, Equatable {
     }
 
     var accessibilityLabel: String? {
-        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(title), \(sponsoredText)" : title
     }
 
     var isPinned: Bool {
@@ -27,7 +27,7 @@ struct TopSiteState: Hashable, Equatable {
         return site.type.isSuggestedSite
     }
 
-    var isSponsoredTile: Bool {
+    var isSponsored: Bool {
         return site.type.isSponsoredSite
     }
 
@@ -68,7 +68,7 @@ struct TopSiteState: Hashable, Equatable {
             return "user-added"
         } else if isSuggested {
             return "suggested"
-        } else if isSponsoredTile {
+        } else if isSponsored {
             return "sponsored"
         }
 

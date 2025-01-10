@@ -247,7 +247,7 @@ private extension Array where Element == Site {
         for (index, _) in contiles.enumerated() {
             guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
 
-            let site = Site.createSponsoredSite(withContile: contile)
+            let site = Site.createSponsoredSite(fromContile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
             // or if it's the default search engine

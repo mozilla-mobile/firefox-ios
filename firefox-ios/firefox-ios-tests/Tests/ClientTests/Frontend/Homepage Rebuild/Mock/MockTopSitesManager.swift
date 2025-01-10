@@ -25,7 +25,7 @@ final class MockTopSitesManager: TopSitesManagerInterface {
         fetchSponsoredSitesCalledCount += 1
 
         let contiles = MockSponsoredProvider.defaultSuccessData
-        return contiles.compactMap { Site.createSponsoredSite(withContile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState] {

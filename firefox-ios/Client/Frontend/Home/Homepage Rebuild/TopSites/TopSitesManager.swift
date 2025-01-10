@@ -7,20 +7,6 @@ import Common
 import Shared
 import Storage
 
-// FIXME Move me to own file
-extension Site {
-    static func createSponsoredSite(withContile contile: Contile) -> Site {
-        let siteInfo = SponsoredSiteInfo(
-            tileId: contile.id,
-            impressionURL: contile.impressionUrl,
-            clickURL: contile.clickUrl,
-            imageURL: contile.imageUrl
-        )
-
-        return Site.createSponsoredSite(url: contile.url, title: contile.name, siteInfo: siteInfo)
-    }
-}
-
 protocol TopSitesManagerInterface {
     /// Returns a list of top sites state using the top site history manager to fetch the other sites
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
@@ -30,14 +16,18 @@ protocol TopSitesManagerInterface {
     func fetchSponsoredSites() async -> [Site]
 
     /// Returns a list of top sites used to show the user
-    ///
+    /// 
     /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
     /// In terms of space, pinned tiles has precedence over the Google tile,
     /// which has precedence over sponsored and frecency tiles.
-    ///
+    /// 
     /// From a user perspective, Google top site is always first (from left to right),
     /// then comes the sponsored tiles, pinned sites and then frecency top sites.
-    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
+    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceed the available number shown of tiles.
+    /// 
+    /// - Parameters:
+    ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
+    ///   - sponsoredSites: Contains the sponsored sites.
     func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState]
 
     /// Removes the site out of the top sites.
@@ -144,7 +134,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             }
         }
 
-        return contiles.compactMap { Site.createSponsoredSite(withContile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
     private var shouldLoadSponsoredTiles: Bool {

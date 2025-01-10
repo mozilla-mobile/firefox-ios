@@ -126,8 +126,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertTrue(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfError() {
@@ -137,8 +137,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfSuccessEmpty() {
@@ -148,8 +148,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddMoreSponsoredTileThanMaximum() {
@@ -160,9 +160,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[1].isSponsoredTile)
-        XCTAssertTrue(data[2].isSponsoredTile)
-        XCTAssertFalse(data[3].isSponsoredTile)
+        XCTAssertTrue(data[1].isSponsored)
+        XCTAssertTrue(data[2].isSponsored)
+        XCTAssertFalse(data[3].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddSponsoredTileIfDuplicatePinned() {
@@ -176,8 +176,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_addSponsoredTileIfDuplicateIsNotPinned() {
@@ -190,8 +190,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertTrue(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_addNextTileIfSponsoredTileIsDuplicate() {
@@ -205,9 +205,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertTrue(data[1].isSponsoredTile)
+        XCTAssertTrue(data[1].isSponsored)
         XCTAssertEqual(data[1].title, ContileProviderMock.defaultSuccessData[0].name)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddTileIfAllSpacesArePinned() {
@@ -220,8 +220,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertFalse(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testCalculateTopSitesData_doesNotAddTileIfAllSpacesArePinnedAndGoogleIsThere() {
@@ -230,8 +230,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     func testSponsoredTileOrder_emptySites_addsAllContiles() {
@@ -304,8 +304,8 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
         XCTAssertTrue(data[0].isGoogleURL)
         XCTAssertEqual(data[1].title, ContileProviderMock.duplicateTile.name)
-        XCTAssertTrue(data[1].isSponsoredTile)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertTrue(data[1].isSponsored)
+        XCTAssertFalse(data[2].isSponsored)
     }
 
     // Pinned > Sponsored
@@ -318,9 +318,9 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
         XCTAssertTrue(data[1].isPinned)
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[2].isSponsored)
         XCTAssertFalse(data[2].isPinned)
     }
 
@@ -334,17 +334,17 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(data[0].isGoogleURL)
 
         let tile1 = data[1]
-        XCTAssertFalse(tile1.isSponsoredTile)
+        XCTAssertFalse(tile1.isSponsored)
         XCTAssertTrue(tile1.isPinned)
         XCTAssertEqual(tile1.site.url, expectedPinnedURL)
 
         let tile2 = data[2]
-        XCTAssertFalse(tile2.isSponsoredTile)
+        XCTAssertFalse(tile2.isSponsored)
         XCTAssertFalse(tile2.isPinned)
         XCTAssertNotEqual(tile2.title, expectedPinnedURL)
 
         let tile3 = data[3]
-        XCTAssertFalse(tile3.isSponsoredTile)
+        XCTAssertFalse(tile3.isSponsored)
         XCTAssertFalse(tile3.isPinned)
         XCTAssertNotEqual(tile3.title, expectedPinnedURL)
     }
@@ -358,11 +358,11 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(data.count, 3, "Should have google site and 2 pinned sites")
         XCTAssertTrue(data[0].isGoogleURL)
 
-        XCTAssertFalse(data[1].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
         XCTAssertTrue(data[1].isPinned)
         XCTAssertEqual(data[1].site.url, "https://www.apinnedurl.com/pinned0")
 
-        XCTAssertFalse(data[2].isSponsoredTile)
+        XCTAssertFalse(data[2].isSponsored)
         XCTAssertTrue(data[2].isPinned)
         XCTAssertEqual(data[2].site.url, "https://www.apinnedurl.com/pinned1")
     }
@@ -427,7 +427,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         let data = subject.getTopSitesData()
 
         XCTAssertTrue(data[0].isGoogleURL)
-        XCTAssertFalse(data[1].isSponsoredTile)
+        XCTAssertFalse(data[1].isSponsored)
     }
 }
 

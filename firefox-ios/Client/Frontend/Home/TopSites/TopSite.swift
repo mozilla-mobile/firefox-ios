@@ -16,7 +16,7 @@ final class TopSite: FeatureFlaggable {
     }
 
     var accessibilityLabel: String? {
-        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(title), \(sponsoredText)" : title
     }
 
     var isPinned: Bool {
@@ -27,7 +27,7 @@ final class TopSite: FeatureFlaggable {
         return site.type.isSuggestedSite
     }
 
-    var isSponsoredTile: Bool { // FIXME naming
+    var isSponsored: Bool {
         return site.type.isSponsoredSite
     }
 
@@ -72,7 +72,7 @@ final class TopSite: FeatureFlaggable {
             return "user-added"
         } else if isSuggested {
             return "suggested"
-        } else if isSponsoredTile {
+        } else if isSponsored {
             return "sponsored"
         }
 

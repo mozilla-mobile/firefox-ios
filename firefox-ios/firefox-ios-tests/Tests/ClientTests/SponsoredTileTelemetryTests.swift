@@ -24,7 +24,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = Site.createSponsoredSite(withContile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -55,7 +55,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
-        let topSite = Site.createSponsoredSite(withContile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
@@ -84,7 +84,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testContextIdImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = Site.createSponsoredSite(withContile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in

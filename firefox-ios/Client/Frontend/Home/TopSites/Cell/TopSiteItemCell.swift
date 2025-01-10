@@ -239,7 +239,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private func configureSponsoredSite(_ topSite: TopSite) {
-        guard topSite.isSponsoredTile else { return }
+        guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
     }

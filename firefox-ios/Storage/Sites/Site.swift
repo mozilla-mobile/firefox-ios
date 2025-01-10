@@ -114,9 +114,8 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         return Site(id: UUID().hashValue, url: url, title: title, type: .pinnedSite(siteInfo))
     }
 
-    public static func createPinnedSite(fromSite site: Site) -> Site {
-        // FIXME can the google pinned tile every go through this?
-        let siteInfo = PinnedSiteInfo(isGooglePinnedTile: false)
+    public static func createPinnedSite(fromSite site: Site, isGooglePinnedTile: Bool = false) -> Site {
+        let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
 
         return Site(
             id: site.id,

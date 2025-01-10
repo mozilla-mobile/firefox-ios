@@ -74,6 +74,6 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
             position: 0
         )
 
-        return Site.createSponsoredSite(withContile: contile)
+        return Site.createSponsoredSite(fromContile: contile)
     }
 }

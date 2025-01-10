@@ -15,7 +15,7 @@ class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
         mockSiteData: Site? = Site.createPinnedSite(
             url: GoogleTopSiteManager.Constants.usUrl,
             title: "Google Test",
-            isGooglePinnedTile: false
+            isGooglePinnedTile: true
         )
     ) {
         self.mockSiteData = mockSiteData
