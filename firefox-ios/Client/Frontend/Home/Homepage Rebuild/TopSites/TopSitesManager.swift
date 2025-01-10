@@ -99,6 +99,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
     // MARK: Sponsored tiles (Contiles)
     func fetchSponsoredSites() async -> [SponsoredTile] {
+        guard shouldLoadSponsoredTiles else { return [] }
         let contiles = await withCheckedContinuation { continuation in
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
                 unifiedAdsProvider.fetchTiles { [weak self] result in
