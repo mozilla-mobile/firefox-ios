@@ -69,6 +69,9 @@
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
+		124DAE7F2D301B290050104C /* LegacyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7A2D2FD1330050104C /* LegacyTheme.swift */; };
+		124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */; };
+		124DAE812D301C550050104C /* LegacyDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */; };
 		126509852CD925B40011BA36 /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 126509842CD925B40011BA36 /* BrazeKit */; };
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		1265098A2CDA32790011BA36 /* BrazeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126509882CDA31890011BA36 /* BrazeServiceTests.swift */; };
@@ -2403,6 +2406,9 @@
 		11F747589EB8A55A47647C93 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		120F42119EB30F217AB9493E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		123045959E0F295753B4B4DB /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Today.strings; sourceTree = "<group>"; };
+		124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDarkTheme.swift; sourceTree = "<group>"; };
+		124DAE7A2D2FD1330050104C /* LegacyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTheme.swift; sourceTree = "<group>"; };
+		124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyThemeManager.swift; sourceTree = "<group>"; };
 		126509882CDA31890011BA36 /* BrazeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrazeServiceTests.swift; sourceTree = "<group>"; };
 		12674A038346A46589A0AC0B /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = "el.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		126A40A4A5AFDFD655B0FDF4 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -9989,6 +9995,16 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		124DAE782D2FD0C90050104C /* RecoveredFromUpgrade */ = {
+			isa = PBXGroup;
+			children = (
+				124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */,
+				124DAE7A2D2FD1330050104C /* LegacyTheme.swift */,
+				124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */,
+			);
+			path = RecoveredFromUpgrade;
+			sourceTree = "<group>";
+		};
 		1285E2B32CC293A20053506B /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -10627,6 +10643,7 @@
 		2CB288D92B07C8EF00A8FCB3 /* Ecosia */ = {
 			isa = PBXGroup;
 			children = (
+				124DAE782D2FD0C90050104C /* RecoveredFromUpgrade */,
 				2C02BE5A2B0E705300FE80C2 /* LaunchScreen */,
 				2CB288DA2B07C8EF00A8FCB3 /* MMP */,
 				2CB288DC2B07C8EF00A8FCB3 /* UI */,
@@ -16417,6 +16434,7 @@
 				8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */,
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
+				124DAE812D301C550050104C /* LegacyDarkTheme.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */,
@@ -16539,6 +16557,7 @@
 				8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */,
 				C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */,
 				EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */,
+				124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
 				B2FEA68D2B460D390058E616 /* AddressAutofillSettingsViewController.swift in Sources */,
@@ -16601,6 +16620,7 @@
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */,
+				124DAE7F2D301B290050104C /* LegacyTheme.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* GlobalTabEventHandlers.swift in Sources */,
