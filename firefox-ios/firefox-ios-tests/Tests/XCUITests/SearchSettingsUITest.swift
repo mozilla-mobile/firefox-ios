@@ -18,9 +18,9 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine1])
 
         // Change to another browser and check it is set as default
-        defaultSearchEngine.tap()
+        defaultSearchEngine.waitAndTap()
         let listOfEngines = app.tables
-        listOfEngines.staticTexts[defaultSearchEngine2].tap()
+        listOfEngines.staticTexts[defaultSearchEngine2].waitAndTap()
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
     }
 
@@ -35,7 +35,7 @@ class SearchSettingsUITests: BaseTestCase {
 
         // Check that it can be edited
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        app.buttons["Edit"].tap()
+        app.buttons["Edit"].waitAndTap()
         XCTAssertTrue(app.buttons["Done"].isEnabled)
         if #unavailable(iOS 17) {
             mozWaitForElementToExist(app.tables.buttons["Delete \(customSearchEngine["name"]!)"])
@@ -68,9 +68,9 @@ class SearchSettingsUITests: BaseTestCase {
 
         // Select the custom engine as the default one
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
-        defaultSearchEngine.tap()
+        defaultSearchEngine.waitAndTap()
         let listOfEngines = app.tables
-        listOfEngines.staticTexts[customSearchEngine["name"]!].tap()
+        listOfEngines.staticTexts[customSearchEngine["name"]!].waitAndTap()
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
@@ -85,13 +85,13 @@ class SearchSettingsUITests: BaseTestCase {
         addCustomSearchEngine()
         // Edit is enabled
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        app.buttons["Edit"].tap()
+        app.buttons["Edit"].waitAndTap()
         XCTAssertTrue(app.buttons["Done"].isEnabled)
 
         // Navigate to the search engine picker and back
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
-        defaultSearchEngine.tap()
-        app.buttons["Cancel"].tap()
+        defaultSearchEngine.waitAndTap()
+        app.buttons["Cancel"].waitAndTap()
 
         // Check to see we're not in editing state, edit is enable and done does not appear
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
@@ -110,15 +110,15 @@ class SearchSettingsUITests: BaseTestCase {
         // Add a custom search engine
         addCustomSearchEngine()
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        app.buttons["Edit"].tap()
+        app.buttons["Edit"].waitAndTap()
         // Remove the custom search engine and check that edit is disabled
         let tablesQuery = app.tables
         if #unavailable(iOS 17) {
-            tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].tap()
+            tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].waitAndTap()
         } else {
-            tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
+            tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].waitAndTap()
         }
-        tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
+        tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].waitAndTap()
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
 }

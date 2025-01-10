@@ -8,7 +8,7 @@ let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
@@ -19,11 +19,11 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         // Perform a search using a custom search engine
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.textFields.firstMatch.waitAndTap()
         app.textFields.firstMatch.typeText("window")
-        app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
+        app.scrollViews.otherElements.buttons["Mozilla Engine search"].waitAndTap()
         waitUntilPageLoad()
 
         guard let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
@@ -45,7 +45,7 @@ class ThirdPartySearchTest: BaseTestCase {
         dismissSearchScreen()
 
         // Perform a search to check
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields.firstMatch.typeText("window\n")
 
         waitUntilPageLoad()
@@ -66,7 +66,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         app.navigationBars["Search"].buttons["Settings"].waitAndTap()
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.textFields.firstMatch.waitAndTap()
         app.textFields.firstMatch.typeText("window")
@@ -110,7 +110,7 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(AddCustomSearchSettings)
-        app.textViews["customEngineTitle"].tap()
+        app.textViews["customEngineTitle"].waitAndTap()
         app.typeText("Feeling Lucky")
 
         let searchUrl = "http://www.google.com/search?q=&btnI"
@@ -122,18 +122,18 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(customengineurlTextView)
 
         UIPasteboard.general.string = searchUrl
-        customengineurlTextView.tap()
+        customengineurlTextView.waitAndTap()
         customengineurlTextView.press(forDuration: 2.0)
         let pasteOption = app.menuItems["Paste"]
         if pasteOption.exists {
-            pasteOption.tap()
+            pasteOption.waitAndTap()
         } else {
             var nrOfTaps = 3
             while !pasteOption.exists && nrOfTaps > 0 {
                 customengineurlTextView.press(forDuration: 2.0)
                 nrOfTaps -= 1
             }
-            pasteOption.tap()
+            pasteOption.waitAndTap()
         }
 
         app.buttons["customEngineSaveButton"].waitAndTap()

@@ -16,7 +16,7 @@ class DataManagementTests: BaseTestCase {
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
         // Navigate back to the browser
         mozWaitElementHittable(element: app.buttons["Data Management"], timeout: TIMEOUT)
-        app.buttons["Data Management"].tap()
+        app.buttons["Data Management"].waitAndTap()
         app.buttons["Settings"].waitAndTap()
         app.buttons["Done"].waitAndTap()
     }
@@ -36,10 +36,10 @@ class DataManagementTests: BaseTestCase {
         var beforeDelete = 0
         if #available(iOS 17, *) {
             beforeDelete = app.cells.images.count
-            app.cells.images["circle"].firstMatch.tap()
+            app.cells.images["circle"].firstMatch.waitAndTap()
         } else {
             beforeDelete = app.cells.staticTexts.count
-            app.cells.staticTexts.firstMatch.tap()
+            app.cells.staticTexts.firstMatch.waitAndTap()
         }
 
         app.otherElements.staticTexts["Clear Items: 1"].waitAndTap()
@@ -70,7 +70,7 @@ class DataManagementTests: BaseTestCase {
             mozWaitForElementToExist(app.tables.buttons.firstMatch)
         }
         if app.cells["ShowMoreWebsiteData"].exists {
-            app.cells["ShowMoreWebsiteData"].tap()
+            app.cells["ShowMoreWebsiteData"].waitAndTap()
         }
         mozWaitForElementToExist(app.staticTexts["example.com"])
         if #available(iOS 17, *) {
@@ -96,7 +96,7 @@ class DataManagementTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Search results"])
         let expectedSearchResults = app.tables["Search results"].cells.count
         XCTAssertEqual(expectedSearchResults-1, 1)
-        app.buttons["Cancel"].tap()
+        app.buttons["Cancel"].waitAndTap()
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
         if #available(iOS 17, *) {
             XCTAssertGreaterThan(app.cells.images.count, 1)

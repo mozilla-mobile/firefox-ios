@@ -64,7 +64,7 @@ class DomainAutocompleteTests: BaseTestCase {
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
 
         // Enter the complete website and check that there is not more text added, just what user typed
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText(website["value"]!)
         mozWaitForValueContains(urlBarAddress, value: website["value"]!)
         let value2 = urlBarAddress.value
@@ -141,36 +141,36 @@ class DomainAutocompleteTests: BaseTestCase {
         XCTAssertEqual(value as? String, "baz", "Wrong autocompletion")
 
         // Ensure we don't match against TLDs.
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText(".com")
         let value2 = urlBarAddress.value
         // Check there is not more text added, just what user typed
         XCTAssertEqual(value2 as? String, ".com", "Wrong autocompletion")
 
         // Ensure we don't match other characters ie: ., :, /
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText(".")
         let value3 = urlBarAddress.value
         XCTAssertEqual(value3 as? String, ".", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText(":")
         let value4 = urlBarAddress.value
         XCTAssertEqual(value4 as? String, ":", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("/")
         let value5 = urlBarAddress.value
         XCTAssertEqual(value5 as? String, "/", "Wrong autocompletion")
 
         // Ensure we don't match strings that don't start a word.
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("tter")
         let value6 = urlBarAddress.value
         XCTAssertEqual(value6 as? String, "tter", "Wrong autocompletion")
 
         // Ensure we don't match words outside of the domain
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("login")
         let value7 = urlBarAddress.value
         XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
@@ -185,13 +185,13 @@ class DomainAutocompleteTests: BaseTestCase {
         let value = urlBarAddress.value
         XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("an")
         mozWaitForValueContains(urlBarAddress, value: ".com")
         let value2 = urlBarAddress.value
         XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("anc")
         mozWaitForValueContains(urlBarAddress, value: ".com")
         let value3 = urlBarAddress.value
@@ -208,14 +208,14 @@ class DomainAutocompleteTests: BaseTestCase {
         XCTAssertEqual(value as? String, "MoZilla.org", "Wrong autocompletion")
 
         // Test that leading spaces still show suggestions.
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("    moz")
         mozWaitForValueContains(urlBarAddress, value: ".org")
         let value2 = urlBarAddress.value
         XCTAssertEqual(value2 as? String, "    mozilla.org", "Wrong autocompletion")
 
         // Test that trailing spaces do *not* show suggestions.
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("    moz ")
         mozWaitForValueContains(urlBarAddress, value: "moz")
         let value3 = urlBarAddress.value

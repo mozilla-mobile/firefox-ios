@@ -169,7 +169,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         // Workaround
-        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()

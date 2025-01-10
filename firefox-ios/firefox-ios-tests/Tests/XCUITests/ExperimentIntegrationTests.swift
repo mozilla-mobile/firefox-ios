@@ -12,7 +12,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         app.activate()
         let closeButton = app.buttons["CloseButton"]
         if closeButton.waitForExistence(timeout: TIMEOUT) {
-            closeButton.tap()
+            closeButton.waitAndTap()
         }
         super.setUpScreenGraph()
         UIView.setAnimationsEnabled(false) // IMPORTANT
@@ -23,7 +23,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'FxVersion'")
         )
         for _ in 0...5 {
-            element.element.tap()
+            element.element.waitAndTap()
         }
         secretMenu = true
     }
@@ -35,12 +35,12 @@ final class ExperimentIntegrationTests: BaseTestCase {
             enableSecretMenu()
         }
         let experiments = app.tables.cells.containing(NSPredicate(format: "label CONTAINS 'Experiments'"))
-        experiments.element.tap()
+        experiments.element.waitAndTap()
 
         let experiment = app.tables.cells.containing(NSPredicate(format: "label CONTAINS '\(experimentName)'"))
         XCTAssertNotNil(experiment)
 
-        experiment.element.tap()
+        experiment.element.waitAndTap()
 
         let checkmark = app.buttons.matching(
             NSPredicate(format: "label CONTAINS 'checkmark'")
@@ -67,7 +67,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
-        surveyLink.element.tap()
+        surveyLink.element.waitAndTap()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "survey")
     }
@@ -78,7 +78,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         wait(forElement: dismissLink.element, timeout: TIMEOUT_LONG)
-        dismissLink.element.tap()
+        dismissLink.element.waitAndTap()
 
         navigator.goto(NewTabScreen)
         waitForTabsButton()
@@ -98,7 +98,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
-        surveyLink.element.tap()
+        surveyLink.element.waitAndTap()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "survey")
     }
@@ -109,7 +109,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
-        surveyLink.element.tap()
+        surveyLink.element.waitAndTap()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "survey")
     }
@@ -120,7 +120,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
-        surveyLink.element.tap()
+        surveyLink.element.waitAndTap()
 
         navigator.goto(NewTabScreen)
         waitForTabsButton()
@@ -136,7 +136,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
         wait(forElement: studiesToggle.element, timeout: TIMEOUT)
         XCTAssertEqual(studiesToggle.element.value as? String, "1")
-        studiesToggle.element.tap()
+        studiesToggle.element.waitAndTap()
         XCTAssertEqual(studiesToggle.element.value as? String, "0")
         XCTAssertFalse(checkExperimentEnrollment(experimentName: experimentName))
     }

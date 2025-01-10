@@ -28,13 +28,13 @@ class EngagementNotificationTests: BaseTestCase {
         navigator.goto(NotificationsSettings)
         let tipsSwitch = app.switches["TipsAndFeaturesNotificationsUserPrefsKey"]
         mozWaitForElementToExist(tipsSwitch)
-        app.switches["TipsAndFeaturesNotificationsUserPrefsKey"].tap()
+        app.switches["TipsAndFeaturesNotificationsUserPrefsKey"].waitAndTap()
         let springBoard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let popUpTitle = "Would Like to Send You Notifications"
         // Validate pop-up
         mozWaitForElementToExist(springBoard.alerts.elementContainingText(popUpTitle))
         // Choose "Don't allow"
-        springBoard.buttons["Don’t Allow"].tap()
+        springBoard.buttons["Don’t Allow"].waitAndTap()
         // Toggle moves back to the "Off" position
         mozWaitForValueContains(tipsSwitch, value: "0")
         // Validate You turned off all Firefox notifications message

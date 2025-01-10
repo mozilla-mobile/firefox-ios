@@ -40,7 +40,7 @@ class ReadingListTests: BaseTestCase {
 
         // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -66,7 +66,7 @@ class ReadingListTests: BaseTestCase {
 
         // Initially reading list is empty
         checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -76,7 +76,7 @@ class ReadingListTests: BaseTestCase {
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
         checkReadingListNumberOfItems(items: 1)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         updateScreenGraph()
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
@@ -94,11 +94,11 @@ class ReadingListTests: BaseTestCase {
         addContentToReaderView()
 
         // Mark the content as read, so the mark as unread buttons appear
-        app.buttons["Mark as Read"].tap()
+        app.buttons["Mark as Read"].waitAndTap()
         mozWaitForElementToExist(app.buttons["Mark as Unread"])
 
         // Mark the content as unread, so the mark as read button appear
-        app.buttons["Mark as Unread"].tap()
+        app.buttons["Mark as Unread"].waitAndTap()
         mozWaitForElementToExist(app.buttons["Mark as Read"])
     }
 
@@ -131,7 +131,7 @@ class ReadingListTests: BaseTestCase {
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"])
-        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
+        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).waitAndTap()
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
@@ -160,7 +160,7 @@ class ReadingListTests: BaseTestCase {
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Add item to Reading List from Page Options Menu
         updateScreenGraph()
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -188,7 +188,7 @@ class ReadingListTests: BaseTestCase {
 
         // Select to open in New Tab
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.plus].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
         updateScreenGraph()
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
@@ -208,7 +208,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(savedToReadingList)
         savedToReadingList.press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.cross].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.cross].waitAndTap()
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
@@ -230,7 +230,7 @@ class ReadingListTests: BaseTestCase {
                 app.staticTexts[emptyReadingList3]
             ]
         )
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -238,7 +238,7 @@ class ReadingListTests: BaseTestCase {
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
         // Tap on an article
-        savedToReadingList.tap()
+        savedToReadingList.waitAndTap()
         // The article is displayed in Reader View
         mozWaitForElementToExist(app.buttons["Reader View"])
         // iOS 18 only: Reader View icon is enabled but is not selected.
@@ -246,7 +246,7 @@ class ReadingListTests: BaseTestCase {
             XCTAssertTrue(app.buttons["Reader View"].isSelected)
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)

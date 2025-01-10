@@ -79,7 +79,7 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePasswordNewAccount)
         // Switching to the next text field is required to determine if the message still appears or not
-        app.webViews.secureTextFields.element(boundBy: 0).tap()
+        app.webViews.secureTextFields.element(boundBy: 0).waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts["At least 8 characters"])
     }
 
@@ -120,7 +120,7 @@ class SyncUITests: BaseTestCase {
         let passMessage = "Your password is currently hidden."
         mozWaitForElementToExist(app.webViews.switches[passMessage])
         // Remove the password typed, Show (password) option should not be shown
-        app.keyboards.keys["delete"].tap()
+        app.keyboards.keys["delete"].waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }
 
@@ -137,7 +137,7 @@ class SyncUITests: BaseTestCase {
                 app.buttons["Ready to Scan"],
                 app.buttons["Use Email Instead"]]
         )
-        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
+        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].waitAndTap()
         mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 }

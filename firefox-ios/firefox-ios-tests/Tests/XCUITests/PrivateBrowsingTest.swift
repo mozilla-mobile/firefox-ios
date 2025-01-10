@@ -115,7 +115,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        app.cells.staticTexts["Homepage"].tap()
+        app.cells.staticTexts["Homepage"].waitAndTap()
         navigator.nowAt(NewTabScreen)
 
         // Go back to private browsing and check that the tab has been closed
@@ -229,7 +229,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
         var numTab = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
 
         // Validate Close All Tabs and Cancel options
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
@@ -238,7 +238,7 @@ class PrivateBrowsingTest: BaseTestCase {
         }
 
         // Tap on "Close All Tabs"
-        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].waitAndTap()
         if #unavailable(iOS 16) {
             // Wait for the screen to refresh first.
             mozWaitForElementToExist(
@@ -275,7 +275,7 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(newPrivateTab)
         scrollToElement(newPrivateTab)
         // Tap on "New private tab" option
-        newPrivateTab.tap()
+        newPrivateTab.waitAndTap()
         // Tap on "New private tab" option
         navigator.nowAt(NewTabScreen)
         if #available(iOS 16, *) {
@@ -306,7 +306,7 @@ fileprivate extension BaseTestCase {
             settingsTableView.swipeUp()
         }
         let closePrivateTabsSwitch = settingsTableView.switches["ClosePrivateTabs"]
-        closePrivateTabsSwitch.tap()
+        closePrivateTabsSwitch.waitAndTap()
     }
 }
 

@@ -18,7 +18,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         urlBarAddress.waitAndTap()
         if iPad() {
-            app.menuItems["Select All"].tap()
+            app.menuItems["Select All"].waitAndTap()
         }
         app.menuItems["Copy"].waitAndTap()
         app.typeText("\r")
@@ -32,7 +32,7 @@ class ClipBoardTests: BaseTestCase {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
                 if allowBtn.waitForExistence(timeout: TIMEOUT) {
-                    allowBtn.tap()
+                    allowBtn.waitAndTap()
                 }
 
                 guard var value = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
@@ -85,7 +85,7 @@ class ClipBoardTests: BaseTestCase {
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(urlBar)
         urlBar.press(forDuration: 1.5)
-        app.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
+        app.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
         // The URL is pasted and the page is correctly loaded
         mozWaitForElementToExist(urlBar)
         waitForValueContains(urlBar, value: "localhost")
@@ -114,7 +114,7 @@ class ClipBoardTests: BaseTestCase {
 //        mozWaitForElementToExist(
 //            app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction]
 //        )
-//        app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
+//        app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
 //        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
 //        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], value: "www.example.com")
     }

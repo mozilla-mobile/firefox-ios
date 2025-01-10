@@ -11,7 +11,7 @@ class NightModeTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
         XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn off Night Mode")
         // Turn off night mode
-        app.tables.cells["MainMenu.NightModeOn"].tap()
+        app.tables.cells["MainMenu.NightModeOn"].waitAndTap()
     }
 
     private func checkNightModeOff() {

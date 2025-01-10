@@ -153,7 +153,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForValueContains(url, value: "mozilla")
         XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         validateKeyboardIsRaisedAndDismissed()
 
@@ -164,7 +164,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForValueContains(url, value: "mozilla")
         XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         validateKeyboardIsRaisedAndDismissed()
     }
