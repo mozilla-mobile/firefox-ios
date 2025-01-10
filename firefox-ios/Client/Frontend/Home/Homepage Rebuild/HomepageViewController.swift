@@ -51,10 +51,15 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    private var availableWidth: CGFloat {
+        return view.frame.size.width
+    }
+
     // MARK: - Private constants
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
+    private let mainQueue: DispatchQueueInterface
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -63,7 +68,8 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -72,6 +78,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.mainQueue = mainQueue
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -104,6 +111,7 @@ final class HomepageViewController: UIViewController,
         store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
+                numberOfTilesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -117,6 +125,13 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
+        store.dispatch(
+            TopSitesAction(
+                numberOfTilesPerRow: numberOfTilesPerRow(for: size.width),
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
+            )
+        )
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -164,6 +179,21 @@ final class HomepageViewController: UIViewController,
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
         store.dispatch(action)
+    }
+
+    /// Calculates the number of tiles that can fit in a single row based on the available width.
+    /// Used for top sites section layout and data filtering.
+    /// Must be calculated on main thread only due to use of traitCollection.
+    ///
+    /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
+    /// - Returns: The number of tiles that can fit in a single row within the available width.
+    private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
+        return TopSitesDimensionImplementation().getNumberOfTilesPerRow(
+            availableWidth: availableWidth,
+            leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
+                traitCollection: traitCollection
+            )
+        )
     }
 
     // MARK: - Redux
@@ -288,8 +318,7 @@ final class HomepageViewController: UIViewController,
 
             return sectionProvider.createLayoutSection(
                 for: section,
-                with: environment.traitCollection,
-                size: environment.container.contentSize
+                with: environment.traitCollection
             )
         }
         return layout
@@ -608,12 +637,17 @@ final class HomepageViewController: UIViewController,
                 .FirefoxAccountChanged,
                 .TopSitesUpdated,
                 .DefaultSearchEngineUpdated:
-            store.dispatch(
-                TopSitesAction(
-                    windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.fetchTopSites
+            // To ensure that `numberOfTilesPerRow` is calculated on the main thread
+            mainQueue.ensureMainThread { [weak self] in
+                guard let self else { return }
+                store.dispatch(
+                    TopSitesAction(
+                        numberOfTilesPerRow: self.numberOfTilesPerRow(for: availableWidth),
+                        windowUUID: self.windowUUID,
+                        actionType: TopSitesActionType.fetchTopSites
+                    )
                 )
-            )
+            }
         default: break
         }
     }

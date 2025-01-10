@@ -7,9 +7,11 @@ import Redux
 
 final class HomepageAction: Action {
     var showiPadSetup: Bool?
+    var numberOfTilesPerRow: Int?
 
-    init(showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+    init(showiPadSetup: Bool? = nil, numberOfTilesPerRow: Int? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
         self.showiPadSetup = showiPadSetup
+        self.numberOfTilesPerRow = numberOfTilesPerRow
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

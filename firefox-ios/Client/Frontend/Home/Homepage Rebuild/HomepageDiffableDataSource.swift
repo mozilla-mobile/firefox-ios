@@ -12,22 +12,12 @@ typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
-
+    typealias NumberOfTilesPerRow = Int
     enum HomeSection: Hashable {
         case header
-        case topSites
+        case topSites(NumberOfTilesPerRow)
         case pocket(TextColor?)
         case customizeHomepage
-
-        init?(rawValue: Int) {
-            switch rawValue {
-            case 0: self = .header
-            case 1: self = .topSites
-            case 2: self = .pocket(nil)
-            case 3: self = .customizeHomepage
-            default: return nil
-            }
-        }
     }
 
     enum HomeItem: Hashable {
@@ -59,8 +49,8 @@ final class HomepageDiffableDataSource:
         snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
         if let topSites = getTopSites(with: state.topSitesState, and: textColor) {
-            snapshot.appendSections([.topSites])
-            snapshot.appendItems(topSites, toSection: .topSites)
+            snapshot.appendSections([.topSites(state.topSitesState.numberOfTilesPerRow)])
+            snapshot.appendItems(topSites, toSection: .topSites(state.topSitesState.numberOfTilesPerRow))
         }
 
         if let stories = getPocketStories(with: state.pocketState) {
@@ -92,9 +82,9 @@ final class HomepageDiffableDataSource:
         with topSitesState: TopSitesSectionState,
         and textColor: TextColor?
     ) -> [HomepageDiffableDataSource.HomeItem]? {
+        guard topSitesState.shouldShowSection else { return nil }
         let topSites: [HomeItem] = topSitesState.topSitesData.compactMap { .topSite($0, textColor) }
-        guard topSitesState.shouldShowSection, !topSites.isEmpty else { return nil }
-        let filterTopSites = topSites.prefix(Int(topSitesState.numberOfRows) * topSitesState.numberOfTilesPerRow)
-        return Array(filterTopSites)
+        guard !topSites.isEmpty else { return nil }
+        return topSites
     }
 }
