@@ -79,207 +79,8 @@
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,
-      "firefoxLabsGroup": null
-    },
-    {
-      "schemaVersion": "1.12.0",
-      "slug": "ios-optimize-onboarding-card-order",
-      "id": "ios-optimize-onboarding-card-order",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "iOS Optimize Onboarding Card Order",
-      "userFacingDescription": "Experiment changing the order of onboarding cards",
-      "isEnrollmentPaused": true,
-      "isRollout": false,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-onboarding-framework-feature-release-19",
-        "start": 0,
-        "count": 10000,
-        "total": 10000
-      },
-      "featureIds": [
-        "onboarding-framework-feature"
-      ],
-      "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        }
-      ],
-      "branches": [
-        {
-          "slug": "control",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {}
-            }
-          ]
-        },
-        {
-          "slug": "treatment-a",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "order": 10
-                  },
-                  "customization-theme": {
-                    "order": 20
-                  },
-                  "customization-toolbar": {
-                    "order": 30
-                  },
-                  "sign-to-sync": {
-                    "order": 40
-                  },
-                  "notification-permissions": {
-                    "order": 50
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-b",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "order": 10
-                  },
-                  "customization-toolbar": {
-                    "order": 20
-                  },
-                  "customization-theme": {
-                    "order": 30
-                  },
-                  "sign-to-sync": {
-                    "order": 40
-                  },
-                  "notification-permissions": {
-                    "order": 50
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-c",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "order": 10
-                  },
-                  "customization-toolbar": {
-                    "order": 20
-                  },
-                  "customization-theme": {
-                    "order": 30
-                  },
-                  "notification-permissions": {
-                    "order": 40
-                  },
-                  "sign-to-sync": {
-                    "order": 50
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-d",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "onboarding-framework-feature",
-              "enabled": true,
-              "value": {
-                "cards": {
-                  "welcome": {
-                    "order": 10
-                  },
-                  "customization-theme": {
-                    "order": 20
-                  },
-                  "customization-toolbar": {
-                    "order": 30
-                  },
-                  "notification-permissions": {
-                    "order": 40
-                  },
-                  "sign-to-sync": {
-                    "order": 50
-                  }
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true' && is_phone) && (app_version|versionCompare('131.!') >= 0) && (enrollments_map['long-term-holdback-2024-h2-velocity-ios'] == 'delivery')))",
-      "startDate": "2024-10-18",
-      "enrollmentEndDate": "2024-12-09",
-      "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 14,
-      "referenceBranch": "control",
-      "featureValidationOptOut": false,
-      "localizations": null,
-      "locales": null,
-      "publishedDate": "2024-10-18T19:26:21.181472Z",
-      "isFirefoxLabsOptIn": false,
-      "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null,
-      "firefoxLabsGroup": null
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     },
     {
       "schemaVersion": "1.12.0",
@@ -346,24 +147,25 @@
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,
-      "firefoxLabsGroup": null
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "long-term-holdback-2024-h2-velocity-ios",
-      "id": "long-term-holdback-2024-h2-velocity-ios",
+      "slug": "long-term-holdback-2025-h1-growth-ios",
+      "id": "long-term-holdback-2025-h1-growth-ios",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "Long term holdback 2024 H2 Velocity iOS",
-      "userFacingDescription": "Long-term holdback for H2 Velocity experiments",
+      "userFacingName": "Long term holdback 2025 H1 Growth iOS",
+      "userFacingDescription": "Long-term holdback for growth experiments",
       "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-no-feature-ios-release-1",
+        "namespace": "ios-no-feature-ios-release-2",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -408,7 +210,7 @@
         }
       ],
       "targeting": "((is_already_enrolled) || ((app_version|versionCompare('123.!') >= 0)))",
-      "startDate": "2024-09-19",
+      "startDate": "2024-12-12",
       "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 100,
@@ -417,11 +219,12 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-09-19T17:57:04.754326Z",
+      "publishedDate": "2024-12-12T20:37:24.603794Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,
-      "firefoxLabsGroup": null
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     }
   ]
 }
