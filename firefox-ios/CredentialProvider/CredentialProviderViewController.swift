@@ -17,7 +17,7 @@ protocol CredentialProviderViewProtocol: AnyObject {
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
-class CredentialProviderViewController: ASCredentialProviderViewController {
+final class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
     private let appAuthenticator = AppAuthenticator()
 
@@ -26,9 +26,9 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         self.presenter = CredentialProviderPresenter(view: self)
     }
 
-    var currentViewController: UIViewController? {
+    private var currentViewController: UIViewController? {
         didSet {
-            if let currentViewController = self.currentViewController {
+            if let currentViewController {
                 self.addChild(currentViewController)
                 currentViewController.view.frame = self.view.bounds
                 self.view.addSubview(currentViewController.view)
@@ -50,12 +50,19 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         }
     }
 
-    /*
-     Prepare your UI to list available credentials for the user to choose from. The items in
-     'serviceIdentifiers' describe the service the user is logging in to, so your extension can
-     prioritize the most relevant credentials in the list.
-     */
+    /**
+    Prepares the interface to display a list of credentials from which the user can select.
 
+    - Parameter serviceIdentifiers: An array of service identifiers that provide a
+     hint about the service for which the user needs credentials.
+
+    The system calls this method to tell your extension’s view controller to prepare to present a list of credentials.
+    After calling this method, the system presents the view controller to the user.
+
+    Use the given `serviceIdentifiers` array to filter or prioritize the credentials to display.
+    The service identifier array might be empty,
+    but your extension should still show credentials from which the user can pick.
+    */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.credentialList(for: serviceIdentifiers)
@@ -64,39 +71,72 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         }
     }
 
-    /*
-     Implement this method if your extension supports showing credentials in the QuickType bar.
-     When the user selects a credential from your app, this method will be called with the
-     ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
-     Provide the password by completing the extension request with the associated ASPasswordCredential.
-     If using the credential would require showing custom UI for authenticating the user, cancel
-     the request with error code ASExtensionError.userInteractionRequired.
-     */
+    /**
+    Attempts to provide the user-requested credential with no further user interaction.
 
+    - Parameter credentialIdentity: The credential identity for which a credential should be provided.
+
+    When the user selects a credential identity from the QuickType bar,
+    the system calls the `provideCredentialWithoutUserInteraction(for:)`
+    method to ask your extension to provide the corresponding credential.
+
+    Call the context’s `completeRequest(withSelectedCredential:completionHandler:)`
+    method to provide the credential if the extension can do so without further user interaction.
+    If not—for example, because the user must first unlock a password database—call the `cancelRequest(withError:)`
+    method instead using an error with domain `ASExtensionErrorDomain` and code `userInteractionRequired`.
+    In turn, the system calls your `prepareInterfaceToProvideCredential(for:)`
+    method to give your extension a chance to present an interface to handle the needed user interaction.
+
+    You can alternatively call the cancel method to indicate other error conditions using one of the codes in
+    `ASExtensionError.Code`.
+    */
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
         if appAuthenticator.canAuthenticateDeviceOwner {
             self.presenter?.credentialProvisionRequested(for: credentialIdentity)
         } else {
-            self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))
+            self.presenter?.showPasscodeRequirement()
         }
     }
 
-    /*! @abstract Prepare the view controller to show user interface for providing the user-requested credential.
-     @param credentialIdentity the credential identity for which a credential should be provided.
-     @discussion The system calls this method when your extension cannot provide the requested credential 
-     without user interaction. Set up the view controller for any user interaction required to provide the
-     requested credential only. The user interaction should be limited in nature to operations required
-     for providing the requested credential. An example is showing an authentication UI to unlock
-     the user's passwords database.
-     Call -[ASCredentialProviderExtensionContext completeRequestWithSelectedCredential:completionHandler:] to
-     provide the credential. If an error occurs, call -[ASCredentialProviderExtensionContext cancelRequestWithError:]
-     and pass an error with domain ASExtensionErrorDomain and an appropriate error code from ASExtensionErrorCode.
-     For example, if the credential identity cannot be found in the database, pass an error with
-     code ASExtensionErrorCodeCredentialIdentityNotFound.
-     */
+    /**
+    Prepares the view controller to show user interface for providing the user-requested credential.
 
+    - Parameter credentialIdentity: The credential identity for which a credential should be provided.
+
+    The system calls this method when your extension can’t provide the requested credential without user interaction.
+    Set up the view controller for any user interaction required to provide the requested credential.
+    Limit user interaction to operations required for providing the requested credential,
+    like showing an authentication UI to unlock the user’s passwords database.
+
+    Call the context’s `completeRequest(withSelectedCredential:completionHandler:)` to provide the credential.
+    Alternatively, if an error occurs, call `cancelRequest(withError:)` instead and pass an error with domain
+    `ASExtensionErrorDomain` and an appropriate error code from `ASExtensionError.Code`.
+    For example, if your app can’t find the credential identity in the database, pass an error with code
+    `ASExtensionError.Code.credentialIdentityNotFound`.
+    */
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.showPasscodeRequirement()
+        // Set up UI for allowing the user to fill the provided credential.
+        showRetryAutofillAlert(for: credentialIdentity)
+    }
+
+    private func showRetryAutofillAlert(for credentialIdentity: ASPasswordCredentialIdentity) {
+        let alertController = UIAlertController(
+            title: "Autofill Error",
+            message: "There was an issue with autofill. Please try again.",
+            preferredStyle: .alert
+        )
+
+        let retryAction = UIAlertAction(title: "Retry", style: .default) { [unowned self] _ in
+            provideCredentialWithoutUserInteraction(for: credentialIdentity)
+        }
+        alertController.addAction(retryAction)
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] _ in
+            extensionContext.cancelRequest(withError: ASExtensionError(.userCanceled))
+        }
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true)
     }
 }
 
