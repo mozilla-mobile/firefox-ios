@@ -27,7 +27,11 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_homepageInitializeAction_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+        let action = HomepageAction(
+            numberOfTilesPerRow: 4,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
 
         let expectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
         expectation.expectedFulfillmentCount = 3
@@ -46,15 +50,21 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+        let numberOfTilesPerRow = try XCTUnwrap(actionsCalled.compactMap { $0.numberOfTilesPerRow } as? [Int])
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
+        XCTAssertEqual(numberOfTilesPerRow, [4, 4, 4])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
     func test_fetchTopSitesAction_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let action = TopSitesAction(windowUUID: .XCTestDefaultUUID, actionType: TopSitesActionType.fetchTopSites)
+        let action = TopSitesAction(
+            numberOfTilesPerRow: 4,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TopSitesActionType.fetchTopSites
+        )
 
         let expectation = XCTestExpectation(description: "All top sites middleware actions are dispatched")
         expectation.expectedFulfillmentCount = 3
@@ -73,9 +83,11 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
+        let numberOfTilesPerRow = try XCTUnwrap(actionsCalled.compactMap { $0.numberOfTilesPerRow } as? [Int])
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
+        XCTAssertEqual(numberOfTilesPerRow, [4, 4, 4])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 

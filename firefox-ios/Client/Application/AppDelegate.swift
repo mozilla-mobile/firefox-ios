@@ -11,7 +11,7 @@ import TabDataStore
 
 import class MozillaAppServices.Viaduct
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -164,8 +164,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            // TODO: testing to see if this fixes https://mozilla-hub.atlassian.net/browse/FXIOS-7632
-            // self?.profile.cleanupHistoryIfNeeded()
+            if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
+                self?.profile.cleanupHistoryIfNeeded()
+            }
             self?.ratingPromptManager.updateData()
         }
 

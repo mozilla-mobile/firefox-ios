@@ -72,6 +72,27 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, [])
     }
 
+    func test_retrievedUpdatedStoriesAction_withNumberOfTilesPerRow_returnsDefaultState() throws {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let exampleTopSites = createSites(count: 15)
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: exampleTopSites,
+                numberOfTilesPerRow: 1,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.topSitesData.count, 2)
+        XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["Title 0", "Title 1"])
+    }
+
     func test_updatedNumberOfRows_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -151,5 +172,15 @@ final class TopsSitesSectionStateTests: XCTestCase {
 
     private func defaultState(with state: TopSitesSectionState) -> TopSitesSectionState {
         return TopSitesSectionState.defaultState(from: state)
+    }
+
+    private func createSites(count: Int = 30) -> [TopSiteState] {
+        var sites = [TopSiteState]()
+        (0..<count).forEach {
+            let site = Site(url: "www.url\($0).com",
+                            title: "Title \($0)")
+            sites.append(TopSiteState(site: site))
+        }
+        return sites
     }
 }

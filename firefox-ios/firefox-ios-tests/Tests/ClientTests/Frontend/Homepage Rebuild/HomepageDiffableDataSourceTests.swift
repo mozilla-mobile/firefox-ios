@@ -94,7 +94,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let updatedState = HomepageState.reducer(
             state,
             TopSitesAction(
-                numberOfRows: 4,
+                numberOfRows: 2,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: TopSitesActionType.updatedNumberOfRows
             )
@@ -112,8 +112,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: finalState)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites), 16)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .customizeHomepage])
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites(4), .customizeHomepage])
     }
 
     func test_updateSnapshot_withValidState_returnPocketStories() throws {

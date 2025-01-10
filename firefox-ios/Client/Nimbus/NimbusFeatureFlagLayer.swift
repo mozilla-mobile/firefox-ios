@@ -24,6 +24,9 @@ final class NimbusFeatureFlagLayer {
                 .isToolbarCFREnabled:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .cleanupHistoryReenabled:
+            return checkCleanupHistoryReenabled(from: nimbus)
+
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
@@ -142,6 +145,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarkRefactorFeature.value().enabled
+    }
+
+    private func checkCleanupHistoryReenabled(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.cleanupHistoryReenabled.value()
+        return config.enabled
     }
 
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,

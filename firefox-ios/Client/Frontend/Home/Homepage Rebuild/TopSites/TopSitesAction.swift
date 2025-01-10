@@ -32,6 +32,7 @@ enum TopSitesActionType: ActionType {
     case updatedNumberOfRows
     case updatedNumberOfTilesPerRow
     case toggleShowSectionSetting
+    case toggleShowSponsoredSettings
 }
 
 enum TopSitesMiddlewareActionType: ActionType {
