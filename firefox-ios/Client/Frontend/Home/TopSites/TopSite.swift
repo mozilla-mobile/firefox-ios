@@ -8,8 +8,8 @@ import Shared
 
 // Top site UI class, used in the home top site section
 final class TopSite: FeatureFlaggable {
-    var site: Site
-    var title: String
+    let site: Site
+    let title: String
 
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored

@@ -182,9 +182,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         case faviconResource = "resource"
     }
 
-    // FIXME Do we foresee any encoding issues by adding a new key... (mapping from old version of the app)
-    // FIXME Is this just used by the widget extension? nbd then... but check the SQL lite DB file too
-
+    /// We only need to encode/decode Sites for the Widget Extension. The Widget extension only needs a subset of properties.
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -192,20 +190,28 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         try container.encode(url, forKey: .url)
         try container.encode(title, forKey: .title)
         try container.encode(type, forKey: .type)
+
+        // Optional properties
         try container.encode(faviconResource, forKey: .faviconResource)
     }
 
+    /// We only need to encode/decode Sites for the Widget Extension. The Widget extension only needs a subset of properties.
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
-        let id = try values.decode(Int.self, forKey: .id)
+        // FXIOS-10996 improved our `Site` type to have strict unique IDs. But this `historyID` field was previously
+        // optional, so we need to migrate users over in v136. Otherwise users will lose all their pinned top sites.
+        let id = try? values.decode(Int.self, forKey: .id)
+
         let url = try values.decode(String.self, forKey: .url)
         let title = try values.decode(String.self, forKey: .title)
-        let faviconResource = try values.decode(SiteImageView.SiteResource.self, forKey: .faviconResource)
 
         // To migrate old users to the new Site format, we make type optional and assign it to `.basic` if not present
         let type = (try? values.decode(SiteType.self, forKey: .type)) ?? .basic
 
-        self.init(id: id, url: url, title: title, type: type, faviconResource: faviconResource)
+        // Optional properties
+        let faviconResource = try? values.decode(SiteImageView.SiteResource.self, forKey: .faviconResource)
+
+        self.init(id: id ?? UUID().hashValue, url: url, title: title, type: type, faviconResource: faviconResource)
     }
 }
