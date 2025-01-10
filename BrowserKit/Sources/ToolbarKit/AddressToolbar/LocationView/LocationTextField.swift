@@ -169,7 +169,6 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         guard !isSettingMarkedText else { return }
 
         hideCursor = markedTextRange != nil
-        removeCompletion()
 
         let isKeyboardReplacingText = lastReplacement != nil
         if isKeyboardReplacingText, markedTextRange == nil {
