@@ -3,11 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 
 struct PrivateBrowsingTelemetry {
     func sendDataClearanceTappedTelemetry(didConfirm: Bool) {
+        /* Ecosia: Remove Glean
         let didConfirmExtra = GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra(didConfirm: didConfirm)
         GleanMetrics.PrivateBrowsing.dataClearanceIconTapped.record(didConfirmExtra)
+         */
     }
 }

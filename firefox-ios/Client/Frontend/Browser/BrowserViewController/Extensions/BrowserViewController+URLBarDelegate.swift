@@ -4,7 +4,9 @@
 
 import Shared
 import Storage
+/* Ecosia: Remove Glean
 import Glean
+ */
 import Common
 import ComponentLibrary
 
@@ -267,9 +269,11 @@ extension BrowserViewController: URLBarDelegate {
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 
+        /* Ecosia: Remove Glean
         GleanMetrics.Search
             .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()
+         */
         searchTelemetry?.shouldSetUrlTypeSearch = true
 
         let searchData = LegacyTabGroupData(searchTerm: text,

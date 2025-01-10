@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import Storage
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 import Common
 
 private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
@@ -82,19 +84,22 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
 
     var query: String = "" {
         didSet {
-            // Ecosia: remove Glean dependency
-            // let timerid = GleanMetrics.Awesomebar.queryTime.start()
+            /* Ecosia: Remove Glean
+            let timerid = GleanMetrics.Awesomebar.queryTime.start()
+             */
             guard profile is BrowserProfile else {
                 assertionFailure("nil profile")
-                // Ecosia: remove Glean dependency
-                // GleanMetrics.Awesomebar.queryTime.cancel(timerid)
+                /* Ecosia: Remove Glean
+                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
+                 */
                 return
             }
 
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
-                // Ecosia: remove Glean dependency
-                // GleanMetrics.Awesomebar.queryTime.cancel(timerid)
+                /* Ecosia: Remove Glean
+                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
+                */
                 return
             }
 
@@ -133,7 +138,9 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                                                      oldValue: String) {
         let results = queries
         defer {
+            /* Ecosia: Remove Glean
             GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
+             */
         }
 
         let bookmarksSites = results[safe: 0] ?? []

@@ -2,7 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+/* Ecosia: Remove Glean
 import Glean
+ */
 import Redux
 import XCTest
 
@@ -11,7 +13,9 @@ import XCTest
 final class MainMenuMiddlewareTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        /* Ecosia: Remove Glean
         Glean.shared.resetGlean(clearStores: true)
+         */
         DependencyHelperMock().bootstrapDependencies()
     }
 

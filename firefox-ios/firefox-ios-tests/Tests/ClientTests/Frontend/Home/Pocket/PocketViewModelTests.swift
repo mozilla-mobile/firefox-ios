@@ -3,7 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 import Shared
 import XCTest
 
@@ -19,8 +21,9 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
-        // Ecosia: remove Glean dependency
-        // Glean.shared.resetGlean(clearStores: true)
+        /* Ecosia: Remove Glean
+        Glean.shared.resetGlean(clearStores: true)
+         */
     }
 
     override func tearDown() {
@@ -155,6 +158,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertNotNil(cell)
     }
 
+    /* Ecosia: Remove Glean
     func testClickingDiscoverCell_recordsTapOnStory() {
         adaptor.pocketStories = createStories(numberOfStories: 1)
         let subject = createSubject()
@@ -164,6 +168,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryOrigin)
         testLabeledMetricSuccess(metric: GleanMetrics.Pocket.openStoryPosition)
     }
+     */
 
     func testClickingDiscoverCell_callsTapTileAction() {
         adaptor.pocketStories = createStories(numberOfStories: 1)

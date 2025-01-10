@@ -3,11 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+/* Ecosia: Remove Glean
 import Glean
+ */
 
 struct HomepageTelemetry {
     func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
+        /* Ecosia: Remove Glean
         let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
         GleanMetrics.Homepage.privateModeToggle.record(isPrivateModeExtra)
+         */
     }
 }

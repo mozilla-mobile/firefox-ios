@@ -7,7 +7,9 @@ import Foundation
 import Shared
 import Storage
 import Account
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 
 class AppLaunchUtil {
     private var logger: Logger

@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import WebKit
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 
 public enum BasicSearchProvider: String {
     case google
@@ -141,12 +143,14 @@ class AdsTelemetryHelper: TabContentScript {
     // Tracking
 
     public static func trackAdsFoundOnPage(providerName: String) {
-        // Ecosia: remove Glean dependency
-        // GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
+        /* Ecosia: Remove Glean
+        GleanMetrics.BrowserSearch.withAds["provider-\(providerName)"].add()
+         */
     }
 
     public static func trackAdsClickedOnPage(providerName: String) {
-        // Ecosia: remove Glean dependency
-        // GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
+        /* Ecosia: Remove Glean
+        GleanMetrics.BrowserSearch.adClicks["provider-\(providerName)"].add()
+         */
     }
 }

@@ -7,7 +7,9 @@ import Storage
 import CoreSpotlight
 import UIKit
 import Common
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 import TabDataStore
 import Core
 

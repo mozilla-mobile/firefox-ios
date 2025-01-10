@@ -4,7 +4,9 @@
 
 @testable import Client
 
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 import XCTest
 import Common
 import Shared

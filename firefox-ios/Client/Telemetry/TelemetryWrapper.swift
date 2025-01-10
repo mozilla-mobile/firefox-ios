@@ -5,7 +5,9 @@
 // Disabling `line_length` for this whole file because it is going to get refactored/replaced soon.
 // swiftlint:disable line_length
 import Common
-// Ecosia: remove Glean dependency // import Glean
+/* Ecosia: Remove Glean
+import Glean
+ */
 import Shared
 import Account
 import Sync

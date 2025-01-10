@@ -3,31 +3,43 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+/* Ecosia: Remove Glean
 import Glean
+ */
 
 struct MainMenuTelemetry {
     func mainMenuOptionTapped(with isHomepage: Bool, and option: String) {
+        /* Ecosia: Remove Glean
         let extra = GleanMetrics.AppMenu.MainMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
         GleanMetrics.AppMenu.mainMenuOptionSelected.record(extra)
+         */
     }
 
     func saveSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
+        /* Ecosia: Remove Glean
         let extra = GleanMetrics.AppMenu.SaveMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
         GleanMetrics.AppMenu.saveMenuOptionSelected.record(extra)
+         */
     }
 
     func toolsSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
+        /* Ecosia: Remove Glean
         let extra = GleanMetrics.AppMenu.ToolsMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
         GleanMetrics.AppMenu.toolsMenuOptionSelected.record(extra)
+         */
     }
 
     func closeButtonTapped(isHomepage: Bool) {
+        /* Ecosia: Remove Glean
         let extra = GleanMetrics.AppMenu.CloseButtonExtra(isHomepage: isHomepage)
         GleanMetrics.AppMenu.closeButton.record(extra)
+         */
     }
 
     func menuDismissed(isHomepage: Bool) {
+        /* Ecosia: Remove Glean
         let extra = GleanMetrics.AppMenu.MenuDismissedExtra(isHomepage: isHomepage)
         GleanMetrics.AppMenu.menuDismissed.record(extra)
+         */
     }
 }
