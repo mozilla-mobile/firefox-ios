@@ -38,7 +38,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
-    var onCollapseChanged: VoidReturnCallback?
 
     var getBackNavigationButtonTitle: String {
         if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
@@ -65,8 +64,16 @@ class EditBookmarkViewModel: ParentFolderSelector {
         selectedFolder = folder
     }
 
-    func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
-        return isFolderSelected && !isFolderCollapsed
+    func shouldShowDisclosureIndicatorForFolder(_ folder: Folder) -> Bool {
+        let shouldShowDisclosureIndicator = folder.guid == selectedFolder?.guid
+        return shouldShowDisclosureIndicator && !isFolderCollapsed
+    }
+
+    func indentationForFolder(_ folder: Folder) -> Int {
+        if isFolderCollapsed {
+            return 0
+        }
+        return folder.indentation
     }
 
     func selectFolder(_ folder: Folder) {
@@ -75,7 +82,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
             selectedFolder = folder
             folderStructures = [folder]
             onFolderStatusUpdate?()
-            onCollapseChanged?()
         } else {
             getFolderStructure(folder)
         }
@@ -95,7 +101,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
             self?.folderStructures = folders
             self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
-            self?.onCollapseChanged?()
         }
     }
 

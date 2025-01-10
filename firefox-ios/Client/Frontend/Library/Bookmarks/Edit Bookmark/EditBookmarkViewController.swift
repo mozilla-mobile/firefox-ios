@@ -11,11 +11,12 @@ class EditBookmarkViewController: UIViewController,
                                   Themeable {
     private enum TableSection: Int, CaseIterable {
         case main
+        case selectFolder
     }
 
     enum TableItem: Hashable {
         case bookmark // Represent bookmark title and URL
-        case folder(Folder) // Represent a folder
+        case folder(Folder, Bool) // Represent a folder
         case newFolder
     }
 
@@ -82,17 +83,7 @@ class EditBookmarkViewController: UIViewController,
         super.viewDidLoad()
         title = .Bookmarks.Menu.EditBookmarkTitle
         viewModel.onFolderStatusUpdate = { [weak self] in
-            guard let self = self else { return }
-            self.applySnapshot()
-        }
-        viewModel.onCollapseChanged = { [weak self] in
-            guard let self = self else { return }
-           // var snapshot = self.dataSource.snapshot()
-           // guard let selectedFolder = self.viewModel.selectedFolder else { return }
-            self.applySnapshot()
-            // snapshot.reconfigureItems([.folder(selectedFolder)])
-
-           // dataSource.apply(snapshot, animatingDifferences: true)
+            self?.applySnapshot()
         }
 
         navigationItem.rightBarButtonItem = saveBarButton
@@ -159,7 +150,7 @@ class EditBookmarkViewController: UIViewController,
                 self.configureEditBookmarkCell(cell)
                 return cell
 
-            case .folder(let folder):
+            case .folder(let folder, _):
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
                                                                for: indexPath) as? OneLineTableViewCell
                 else {
@@ -183,24 +174,25 @@ class EditBookmarkViewController: UIViewController,
                 return cell
             }
         }
+        dataSource.defaultRowAnimation = .fade
     }
 
     private func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<TableSection, TableItem>()
 
         // Add sections
-        snapshot.appendSections([.main])
+        snapshot.appendSections([.main, .selectFolder])
 
         // Add items for the Bookmark section
         snapshot.appendItems([.bookmark], toSection: .main)
 
         // Add items for the Folder section
-        let folderItems = viewModel.folderStructures.map { TableItem.folder($0) }
-        snapshot.appendItems(folderItems, toSection: .main)
+        let folderItems = viewModel.folderStructures.map { TableItem.folder($0, viewModel.isFolderCollapsed) }
+        snapshot.appendItems(folderItems, toSection: .selectFolder)
 
         // Add the New Folder section if not collapsed
         if !viewModel.isFolderCollapsed {
-            snapshot.appendItems([.newFolder], toSection: .main)
+            snapshot.appendItems([.newFolder], toSection: .selectFolder)
         }
 
         dataSource.apply(snapshot, animatingDifferences: true)
@@ -260,9 +252,8 @@ class EditBookmarkViewController: UIViewController,
         cell.titleLabel.text = folder.title
         let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
         cell.leftImageView.image = folderImage
-        cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
-        let isFolderSelected = folder == viewModel.selectedFolder
-        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
+        cell.indentationLevel = viewModel.indentationForFolder(folder)
+        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicatorForFolder(folder)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
         cell.customization = .regular
@@ -294,7 +285,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-      //  guard let sectionEnum = TableSection(rawValue: section), sectionEnum == .folder else { return nil }
+        guard let sectionEnum = TableSection(rawValue: section), sectionEnum == .selectFolder else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier)
         else { return nil }
         var configuration = UIListContentConfiguration.plainHeader()
@@ -313,7 +304,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-       // guard let section = TableSection(rawValue: section), section == .folder else { return 0 }
+        guard let section = TableSection(rawValue: section), section == .selectFolder else { return 0 }
         return UITableView.automaticDimension
     }
 
@@ -328,7 +319,7 @@ class EditBookmarkViewController: UIViewController,
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
         switch item {
-        case .folder(let folder):
+        case .folder(let folder, _):
             viewModel.selectFolder(folder)
         case .newFolder:
             viewModel.createNewFolder()

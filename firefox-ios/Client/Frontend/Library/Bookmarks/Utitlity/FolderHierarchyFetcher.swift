@@ -22,10 +22,6 @@ struct Folder: Equatable, Hashable {
 
     static let dummyFolderGuid = "DUMMY"
 
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.guid == rhs.guid
-    }
-
     static func localizedTitle(_ guid: String) -> String? {
         return LocalizedRootBookmarkFolderStrings[guid]
     }
