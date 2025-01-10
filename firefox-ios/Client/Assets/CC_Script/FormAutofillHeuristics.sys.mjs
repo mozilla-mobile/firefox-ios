@@ -13,6 +13,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   FieldScanner: "resource://gre/modules/shared/FieldScanner.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
+  MLAutofill: "resource://autofill/MLAutofill.sys.mjs",
 });
 
 /**
@@ -704,23 +705,37 @@ export const FormAutofillHeuristics = {
    * in the belonging section. The details contain the autocomplete info
    * (e.g. fieldName, section, etc).
    *
-   * @param {HTMLFormElement} form
+   * @param {formLike} formLike
    *        the elements in this form to be predicted the field info.
+   * @param {boolean} ignoreInvisibleInput
+   *        True to NOT run heuristics on invisible <input> fields.
    * @returns {Array<FormSection>}
    *        all sections within its field details in the form.
    */
-  getFormInfo(form) {
-    const elements = Array.from(form.elements).filter(element =>
+  getFormInfo(formLike, ignoreInvisibleInput) {
+    const elements = Array.from(formLike.elements).filter(element =>
       lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
     );
 
+    let closestHeaders;
+    let closestButtons;
+    if (FormAutofill.isMLExperimentEnabled && elements.length) {
+      closestHeaders = lazy.MLAutofill.closestHeaderAbove(elements);
+      closestButtons = lazy.MLAutofill.closestButtonBelow(elements);
+    }
+
     const fieldDetails = [];
-    for (const element of elements) {
+    for (let idx = 0; idx < elements.length; idx++) {
+      const element = elements[idx];
       // Ignore invisible <input>, we still keep invisible <select> since
       // some websites implements their custom dropdown and use invisible <select>
       // to store the value.
       const isVisible = lazy.FormAutofillUtils.isFieldVisible(element);
-      if (!HTMLSelectElement.isInstance(element) && !isVisible) {
+      if (
+        !HTMLSelectElement.isInstance(element) &&
+        !isVisible &&
+        ignoreInvisibleInput
+      ) {
         continue;
       }
 
@@ -742,11 +757,13 @@ export const FormAutofillHeuristics = {
       }
 
       fieldDetails.push(
-        lazy.FieldDetail.create(element, form, fieldName, {
+        lazy.FieldDetail.create(element, formLike, fieldName, {
           autocompleteInfo: inferInfo.autocompleteInfo,
           fathomLabel: inferInfo.fathomLabel,
           fathomConfidence: inferInfo.fathomConfidence,
           isVisible,
+          mlHeaderInput: closestHeaders?.[idx] ?? null,
+          mlButtonInput: closestButtons?.[idx] ?? null,
         })
       );
     }
