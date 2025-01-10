@@ -5,26 +5,9 @@
 import Common
 
 class TopSitesDimensionImplementation {
-    /// The update count of number of tiles per row based on device layout
-    /// After updating the value, the top sites state should be updated respectively
-    private var numberOfTilesPerRow: Int = 0 {
-        willSet {
-            guard newValue != numberOfTilesPerRow else { return }
-            store.dispatch(
-                TopSitesAction(
-                    numberOfTilesPerRow: newValue,
-                    windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-                )
-            )
-        }
-    }
-
     private let windowUUID: WindowUUID
-    private let queue: DispatchQueueInterface
-    init(windowUUID: WindowUUID, queue: DispatchQueueInterface = DispatchQueue.main) {
+    init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
-        self.queue = queue
     }
 
     /// Updates the number of tiles (top sites) per row the user will see. This depends on the UI interface the user has.
@@ -41,11 +24,6 @@ class TopSitesDimensionImplementation {
         }
         let minCardsConstant = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
         let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
-
-        // TODO: FXIOS-10972 - Investigate a better way to solve the crash issue that is resolved by adding this
-        queue.async {
-            self.numberOfTilesPerRow = tilesPerRowCount
-        }
 
         return tilesPerRowCount
     }
