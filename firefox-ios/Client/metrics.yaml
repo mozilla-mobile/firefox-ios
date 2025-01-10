@@ -763,8 +763,11 @@ usage:
       - usage-reporting
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+      - https://bugzilla.mozilla.org/1519120
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
       - interaction
@@ -784,8 +787,10 @@ usage:
       documented in the ping's pings.yaml file.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1557048
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1609218#c4
     data_sensitivity:
       - technical
     notification_emails:
@@ -805,8 +810,10 @@ usage:
       FreeBSD, NetBSD, OpenBSD, Solaris, Unknown
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
     notification_emails:
@@ -824,8 +831,10 @@ usage:
       If the version detection fails, this metric gets set to `Unknown`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
     notification_emails:
@@ -844,8 +853,10 @@ usage:
       this metric gets set to `Unknown`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1508305#c9
     data_sensitivity:
       - technical
     notification_emails:
@@ -862,8 +873,10 @@ usage:
       The channel the application is being distributed on.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1520741
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1520741#c18
     data_sensitivity:
       - technical
     notification_emails:
@@ -882,8 +895,10 @@ usage:
       The date of the first run of the application.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1525045
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1525045#c18
     data_sensitivity:
       - technical
     notification_emails:
@@ -902,8 +917,10 @@ usage:
       this metric gets set to `Unknown`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
     notification_emails:
