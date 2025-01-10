@@ -138,21 +138,11 @@ struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
 
-    // when clicking the videos on nba.com they make requests to
-    // demdex.net ,doubleclick.net, amazon-adsystem.com, rfihub.com as well
-    // and if the User Agent is different in any of those, the video on nba.com won't work either.
-    // Rokuchannel didn't have these restrictions
     public static let customUAFor = [
         // Ecosia: Update paypal UA
         // "paypal.com": defaultMobileUA,
         "paypal.com": UserAgentBuilder.defaultPayPalMobileUserAgent().userAgent(),
         "yahoo.com": defaultMobileUA,
-        "demdex.net": mobileAdsUA,
-        "doubleclick.net": mobileAdsUA,
-        "rfihub.com": mobileAdsUA,
-        "amazon-adsystem.com": mobileAdsUA,
-        "nba.com": mobileAdsUA,
-        "roku.com": mobileAdsUA,
         "disneyplus.com": customDesktopUA]
 
     // Ecosia: Add custom desktop UA
