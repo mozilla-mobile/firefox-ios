@@ -25,7 +25,7 @@ private let REQUEST_KEY_PRIVILEGED = "privileged"
  PrivilegedRequest(), but the value of doing this is not clear as these requests should work fine
  as regular URLRequest().
  **/
-class PrivilegedRequest: NSMutableURLRequest {
+final class PrivilegedRequest: NSMutableURLRequest {
     override init(url: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {
         func getUrl() -> URL {
             if InternalURL.isValid(url: url), let result = InternalURL.authorize(url: url) {
