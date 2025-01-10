@@ -217,20 +217,38 @@ export class FormAutofillHandler {
    * Collect <input>, <select>, and <iframe> elements from the specified form
    * and return the correspond 'FieldDetail' objects.
    *
-   * @param {HTMLFormElement} form
+   * @param {formLike} formLike
    *        The form that we collect information from.
+   * @param {boolean} includeIframe
+   *        True to add <iframe> to the returned FieldDetails array.
+   * @param {boolean} ignoreInvisibleInput
+   *        True to NOT run heuristics on invisible <input> fields.
    *
    * @returns {Array<FieldDeail>}
    *        An array containing eliglble fields for autofill, also
    *        including iframe.
    */
-  static collectFormFields(form) {
-    const fieldDetails = lazy.FormAutofillHeuristics.getFormInfo(form) ?? [];
+  static collectFormFieldDetails(
+    formLike,
+    includeIframe,
+    ignoreInvisibleInput = true
+  ) {
+    const fieldDetails =
+      lazy.FormAutofillHeuristics.getFormInfo(formLike, ignoreInvisibleInput) ??
+      [];
 
-    let index = 0;
+    // 'FormLike' only contains <input> & <select>, so in order to include <iframe>
+    // in the list of 'FieldDetails', we need to search for <iframe> in the form.
+    if (!includeIframe) {
+      return fieldDetails;
+    }
+
+    // Insert <iframe> elements into the fieldDetails array, maintaining the element order.
     const fieldDetailsIncludeIframe = [];
-    const elements = form.rootElement.querySelectorAll("input, select, iframe");
-
+    let index = 0;
+    const elements = formLike.rootElement.querySelectorAll(
+      "input, select, iframe"
+    );
     for (const element of elements) {
       if (fieldDetails[index]?.element == element) {
         fieldDetailsIncludeIframe.push(fieldDetails[index]);
@@ -239,8 +257,17 @@ export class FormAutofillHandler {
         element.localName == "iframe" &&
         FormAutofillUtils.isFieldVisible(element)
       ) {
-        const iframeFd = lazy.FieldDetail.create(element, form, "iframe");
-        fieldDetailsIncludeIframe.push(iframeFd);
+        // Add the <iframe> only if it is under the `formLike` element.
+        // While we use formLike.rootElement.querySelectorAll, it is still possible
+        // we find an <iframe> inside a <form> within this rootElement. In this
+        // case, we don't want to include the <iframe> in the field list.
+        if (
+          lazy.AutofillFormFactory.findRootForField(element) ==
+          formLike.rootElement
+        ) {
+          const iframeFd = lazy.FieldDetail.create(element, formLike, "iframe");
+          fieldDetailsIncludeIframe.push(iframeFd);
+        }
       }
     }
     return fieldDetailsIncludeIframe;

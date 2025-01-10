@@ -83,10 +83,22 @@ export const FormAutofill = {
     }
     return false;
   },
+
+  /**
+   * Return true if address autofill is available for a specific country.
+   */
   isAutofillAddressesAvailableInCountry(country) {
-    return FormAutofill._addressAutofillSupportedCountries.includes(
-      country.toUpperCase()
-    );
+    if (FormAutofill._isAutofillAddressesAvailableInExperiment) {
+      return true;
+    }
+
+    let available = FormAutofill._isAutofillAddressesAvailable;
+    if (country && available == "detect") {
+      return FormAutofill._addressAutofillSupportedCountries.includes(
+        country.toUpperCase()
+      );
+    }
+    return available == "on";
   },
   get isAutofillEnabled() {
     return this.isAutofillAddressesEnabled || this.isAutofillCreditCardsEnabled;
@@ -315,6 +327,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
   "_isMLExperimentEnabled",
   "extensions.formautofill.ml.experiment.enabled",
   false
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "MLModelRevision",
+  "extensions.formautofill.ml.experiment.modelRevision",
+  null
 );
 
 ChromeUtils.defineLazyGetter(FormAutofill, "countries", () =>
