@@ -33,6 +33,9 @@ class GleanUsageReporting: GleanUsageReportingApi {
         GleanMetrics.Usage.appDisplayVersion.set(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
         GleanMetrics.Usage.appBuild.set(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
         GleanMetrics.Usage.appChannel.set(AppConstants.buildChannel.rawValue)
+        if let date = InstallationUtils.inferredDateInstalledOn {
+            GleanMetrics.Usage.firstRunDate.set(date)
+        }
     }
 }
 
