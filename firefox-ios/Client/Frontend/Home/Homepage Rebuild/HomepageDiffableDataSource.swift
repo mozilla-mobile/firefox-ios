@@ -82,8 +82,9 @@ final class HomepageDiffableDataSource:
         with topSitesState: TopSitesSectionState,
         and textColor: TextColor?
     ) -> [HomepageDiffableDataSource.HomeItem]? {
+        guard topSitesState.shouldShowSection else { return nil }
         let topSites: [HomeItem] = topSitesState.topSitesData.compactMap { .topSite($0, textColor) }
-        guard topSitesState.shouldShowSection, !topSites.isEmpty else { return nil }
+        guard !topSites.isEmpty else { return nil }
         return topSites
     }
 }
