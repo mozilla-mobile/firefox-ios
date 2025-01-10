@@ -126,70 +126,18 @@ struct MainMenuState: ScreenState, Equatable {
 
         switch action.actionType {
         case MainMenuActionType.viewDidLoad:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleViewDidLoadAction(state: state)
         case MainMenuMiddlewareActionType.updateAccountHeader:
-            guard let action = action as? MainMenuAction
-            else { return defaultState(from: state) }
-
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: action.accountData,
-                accountIcon: action.accountIcon
-            )
+            return handleUpdateAccountHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
-            guard let action = action as? MainMenuAction,
-                  let currentTabInfo = action.currentTabInfo
-            else { return defaultState(from: state) }
-
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuConfigurator.generateMenuElements(
-                    with: currentTabInfo,
-                    for: state.currentSubmenuView,
-                    and: state.windowUUID
-                ),
-                currentTabInfo: currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleUpdateCurrentTabInfoAction(state: state, action: action)
         case MainMenuActionType.tapShowDetailsView:
-            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                submenuDestination: action.detailsViewToShow,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleTapShowDetailsViewAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
-            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                navigationDestination: action.navigationDestination,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleTapNavigateToDestinationAction(state: state, action: action)
         case MainMenuActionType.tapToggleUserAgent,
             MainMenuActionType.tapCloseMenu:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                shouldDismiss: true,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return handleTapToggleUserAgentAndTapCloseMenuAction(state: state)
         default:
             return defaultState(from: state)
         }
@@ -200,6 +148,83 @@ struct MainMenuState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleViewDidLoadAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleUpdateAccountHeaderAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: action.accountData,
+            accountIcon: action.accountIcon
+        )
+    }
+
+    private static func handleUpdateCurrentTabInfoAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction,
+              let currentTabInfo = action.currentTabInfo
+        else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                for: state.currentSubmenuView,
+                and: state.windowUUID
+            ),
+            currentTabInfo: currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleTapShowDetailsViewAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            submenuDestination: action.detailsViewToShow,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleTapNavigateToDestinationAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            navigationDestination: action.navigationDestination,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
+    }
+
+    private static func handleTapToggleUserAgentAndTapCloseMenuAction(state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            shouldDismiss: true,
             accountData: state.accountData,
             accountIcon: state.accountIcon
         )
