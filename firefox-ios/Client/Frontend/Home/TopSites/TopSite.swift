@@ -66,7 +66,7 @@ final class TopSite: FeatureFlaggable {
     }
 
     func getTelemetrySiteType() -> String {
-        if isPinned && isGooglePinnedTile {
+        if isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"

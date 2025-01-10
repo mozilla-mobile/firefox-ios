@@ -249,7 +249,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = await subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteState(site: $0) },
-            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(withContile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
 
         XCTAssertEqual(topSites.count, 2)

@@ -62,7 +62,7 @@ struct TopSiteState: Hashable, Equatable {
     }
 
     func getTelemetrySiteType() -> String {
-        if isPinned && isGooglePinnedTile {
+        if isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"
