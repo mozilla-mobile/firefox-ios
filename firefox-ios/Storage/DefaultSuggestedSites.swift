@@ -68,7 +68,7 @@ open class DefaultSuggestedSites {
             Site.createSuggestedSite(
                 url: "https://www.wikipedia.org/",
                 title: .DefaultSuggestedWikipedia,
-                                trackingId: 629,
+                trackingId: 629,
                 faviconResource: .bundleAsset(
                     name: "wikipedia",
                     forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
@@ -77,7 +77,7 @@ open class DefaultSuggestedSites {
             Site.createSuggestedSite(
                 url: "https://x.com/",
                 title: .DefaultSuggestedX,
-                                trackingId: 628,
+                trackingId: 628,
                 faviconResource: .bundleAsset(
                     name: "x",
                     forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
@@ -94,13 +94,13 @@ open class DefaultSuggestedSites {
             Site.createSuggestedSite(
                 url: "https://m.baidu.com/",
                 title: "百度",
-                                trackingId: 701,
+                trackingId: 701,
                 faviconResource: .remoteURL(url: URL(string: "https://psstatic.cdn.bcebos.com/video/wiseindex/aa6eef91f8b5b1a33b454c401_1660835115000.png")!)
             ),
             Site.createSuggestedSite(
                 url: "http://sina.cn",
                 title: "新浪",
-                                trackingId: 702,
+                trackingId: 702,
                 faviconResource: .remoteURL(url: URL(string: "https://mjs.sinaimg.cn/wap/online/public/images/addToHome/sina_114x114_v1.png")!)
             ),
             Site.createSuggestedSite(
@@ -127,7 +127,7 @@ open class DefaultSuggestedSites {
                 // FIXME We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
-        ]
+                 ]
     ]
 
     public static func defaultSites() -> [Site] {
@@ -136,7 +136,7 @@ open class DefaultSuggestedSites {
         return defaultSites?.map { site in
             // Override default suggested site URLs with a localized URL for domains in `urlMap` (e.g. localized Amazon)
             if let domainMap = DefaultSuggestedSites.urlMap[site.url],
-                let localizedURL = domainMap[locale.identifier] {
+               let localizedURL = domainMap[locale.identifier] {
                 return Site(fromSite: site, withLocalizedURLString: localizedURL)
             }
             return site
