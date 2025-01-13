@@ -11,7 +11,6 @@ import Shared
 
 typealias WidgetTopSite = Site
 
-/* Ecosia: Comment out `TopSitesProvider`
 struct TopSitesProvider: TimelineProvider {
     init(userDefaults: UserDefaultsInterface = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) ?? .standard) {
         self.userDefaults = userDefaults
@@ -65,7 +64,6 @@ struct TopSitesProvider: TimelineProvider {
         return [WidgetTopSite]()
     }
 }
-*/
 
 struct TopSitesEntry: TimelineEntry {
     let date: Date

@@ -9,6 +9,8 @@ import Combine
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
 
+    // TODO Ecosia Upgrade: Do we want this widget? We had changed to point to tabs in the past
+    // https://github.com/ecosia/ios-browser/commit/d2f1d6e69f60e816fb940ad3ea472b4980655900
      var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TopSitesProvider()) { entry in
             TopSitesView(entry: entry)
