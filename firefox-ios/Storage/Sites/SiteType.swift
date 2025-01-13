@@ -39,4 +39,3 @@ public enum SiteType: Equatable, Codable, Hashable {
         }
     }
 }
-
