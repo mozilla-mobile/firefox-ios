@@ -52,7 +52,7 @@ class PhotonActionSheetTests: BaseTestCase {
 //        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
 //        waitUntilPageLoad()
 //        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
 //
 //        // Wait to see the Share options sheet
 //        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
@@ -86,7 +86,7 @@ class PhotonActionSheetTests: BaseTestCase {
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         navigator.goto(ToolsBrowserTabMenu)
-        app.cells[AccessibilityIdentifiers.MainMenu.share].tap()
+        app.cells[AccessibilityIdentifiers.MainMenu.share].waitAndTap()
 
         if #unavailable(iOS 16) {
             waitForElementsToExist(
@@ -139,13 +139,13 @@ class PhotonActionSheetTests: BaseTestCase {
                 app.staticTexts["You are not signed in to your account."]
             ]
         )
-        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
+        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
         openNewShareSheet()
-        app.buttons["Cancel"].tap()
+        app.buttons["Cancel"].waitAndTap()
         // User is back to the BrowserTab where the sharesheet was launched
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)

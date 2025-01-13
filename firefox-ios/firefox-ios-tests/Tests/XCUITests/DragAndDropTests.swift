@@ -313,7 +313,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
 
         // Leave Tab Tray and check order in Top Tabs
-        app.cells.staticTexts[secondWebsiteUnselected.tabName].firstMatch.tap()
+        app.cells.staticTexts[secondWebsiteUnselected.tabName].firstMatch.waitAndTap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -333,7 +333,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         app.textFields[searchTextField].press(forDuration: 1, thenDragTo: searchField)
 
         // Verify that the text in the search field is the same as the text in the url text field
-        searchField.tap()
+        searchField.waitAndTap()
         guard let textValue = app.textFields[searchTextField].value as? String, textValue == websiteWithSearchField
         else {
             XCTFail("The url text field value is not equal to \(websiteWithSearchField)")

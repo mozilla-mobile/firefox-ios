@@ -153,7 +153,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
+            app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
         }
     }
 
@@ -192,15 +192,15 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
+                app.otherElements["PopoverDismissRegion"].waitAndTap()
             } else {
-                app.buttons["PhotonMenu.close"].tap()
+                app.buttons["PhotonMenu.close"].waitAndTap()
             }
         }
     }
 
     let navigationControllerBackAction = {
-        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 
     map.addScreenState(SettingsScreen) { screenState in

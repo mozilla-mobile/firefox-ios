@@ -50,7 +50,7 @@ class ToolbarMenuTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         validateMenuOptions()
-        app.buttons["MainMenu.CloseMenuButton"].tap()
+        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
         XCUIDevice.shared.orientation = .landscapeLeft
         waitForElementsToExist(
             [
@@ -70,10 +70,10 @@ class ToolbarMenuTests: BaseTestCase {
             hamburgerMenu.isAbove(element: firstPocketCell),
             "Menu button is not below the pocket cells area"
         )
-        hamburgerMenu.tap()
+        hamburgerMenu.waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         validateMenuOptions()
-        app.buttons["MainMenu.CloseMenuButton"].tap()
+        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
     }
 

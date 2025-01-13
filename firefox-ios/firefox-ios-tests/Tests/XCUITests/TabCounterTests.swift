@@ -59,7 +59,7 @@ class TabCounterTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"]
                 .collectionViews.cells.element(boundBy: 0)
-                .buttons[StandardImageIdentifiers.Large.cross].tap()
+                .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
             let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
             mozWaitForElementToExist(navBarTabTrayButton)
@@ -68,10 +68,10 @@ class TabCounterTests: BaseTestCase {
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
             app.otherElements["Tabs Tray"].cells
-                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
+                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         }
 
-        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()
+        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
