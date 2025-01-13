@@ -164,6 +164,16 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         )
     }
 
+    private static func handleTapEditBookmarkAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            navigationDestination: MenuNavigationDestination(.editBookmark)
+        )
+    }
+
     static func defaultState(from state: MainMenuDetailsState) -> MainMenuDetailsState {
         return MainMenuDetailsState(
             windowUUID: state.windowUUID,
