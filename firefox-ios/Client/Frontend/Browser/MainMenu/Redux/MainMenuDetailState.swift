@@ -160,6 +160,16 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         )
     }
 
+    private static func handleDismissableAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            shouldDismiss: true
+        )
+    }
+
     static func defaultState(from state: MainMenuDetailsState) -> MainMenuDetailsState {
         return MainMenuDetailsState(
             windowUUID: state.windowUUID,
