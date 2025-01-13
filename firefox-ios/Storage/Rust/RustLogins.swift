@@ -268,9 +268,9 @@ public class RustLoginEncryptionKeys {
                 return "InvalidKey"
             case .MissingKey:
                 return "MissingKey"
-            case .EncryptionFailed(reason: let reason): 
+            case .EncryptionFailed(reason: let reason):
                 return "EncryptionFailed reason:\(reason)"
-            case .DecryptionFailed(reason: let reason): 
+            case .DecryptionFailed(reason: let reason):
                 return "DecryptionFailed reason:\(reason)"
             }
         }
@@ -592,7 +592,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
             self.getStoredKey { result in
                 switch result {
-                case .success(_):
+                case .success:
                     do {
                         let id = try self.storage?.add(login: login).id
                         deferred.fill(Maybe(success: id!))
@@ -618,7 +618,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
             self.getStoredKey { result in
                 switch result {
-                case .success(_):
+                case .success:
                     do {
                         let login = try self.storage?.add(login: login)
                         completionHandler(.success(login))
@@ -682,7 +682,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
             self.getStoredKey { result in
                 switch result {
-                case .success(_):
+                case .success:
                     do {
                         _ = try self.storage?.update(id: id, login: login)
                         deferred.fill(Maybe(success: ()))
@@ -711,7 +711,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
                 self.getStoredKey { result in
                     switch result {
-                    case .success(_):
+                    case .success:
                         do {
                             let updatedLogin = try self.storage?.update(id: id, login: login)
                             completionHandler(.success(updatedLogin))
