@@ -97,13 +97,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         case MainMenuDetailsActionType.tapEditBookmark:
             return handleTapEditBookmarkAction(state: state)
         case MainMenuDetailsActionType.tapZoom:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                navigationDestination: MenuNavigationDestination(.zoom)
-            )
+            return handleTapZoomAction(state: state)
         default:
             return defaultState(from: state)
         }
