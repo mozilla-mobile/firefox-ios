@@ -84,13 +84,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         case ScreenActionType.showScreen:
             return handleShowScreenAction(action: action, state: state)
         case MainMenuDetailsActionType.tapBackToMainMenu:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                shouldGoBackToMenu: true
-            )
+            return handleTapBackToMainMenuAction(state: state)
         case MainMenuDetailsActionType.tapDismissView,
             MainMenuDetailsActionType.tapAddToBookmarks,
             MainMenuDetailsActionType.tapAddToShortcuts,
