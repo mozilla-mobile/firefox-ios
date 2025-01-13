@@ -1869,6 +1869,7 @@
 		ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */; };
 		ED67B2982D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2972D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift */; };
 		ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */; };
+		ED6D46E02D3573F80045E4ED /* TitleActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */; };
 		ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */; };
 		ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DA2CF674730035EC8F /* ShareMessage.swift */; };
 		ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DC2CF6749B0035EC8F /* ShareType.swift */; };
@@ -17316,6 +17317,7 @@
 				8A6B799B2CDBCF3D003C3077 /* TopSitesManagerTests.swift in Sources */,
 				21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */,
 				43B658D929CE251C00C9EF08 /* CreditCardInputViewModelTests.swift in Sources */,
+				ED6D46E02D3573F80045E4ED /* TitleActivityItemProviderTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				5A70EF1D295E3C3500790249 /* TestSetup.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
