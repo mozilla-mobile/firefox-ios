@@ -110,7 +110,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         if control.isOn {
             // Reset the user interface style to the default before choosing our theme
             UIApplication.shared.delegate?.window??.overrideUserInterfaceStyle = .unspecified
-            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
+            // TODO Ecosia Upgrade: Re-add if LegacyThemeManager is kept
+            // LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
         } else if LegacyThemeManager.instance.automaticBrightnessIsOn {
             LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         }
