@@ -193,14 +193,13 @@ class OneLineTableViewCell: UITableViewCell,
             view.addSubview(accessoryView)
 
             if isButton {
-                if let button = accessoryView as? UIButton {
-                    if var buttonConfig = button.configuration {
-                        buttonConfig.image = buttonConfig.image?.createScaled(CGSize(width: iconSize,
-                                                                                     height: iconSize))
-                        button.configuration = buttonConfig
-                    }
-                }
+                let button = accessoryView as? UIButton
+                var buttonConfig = button?.configuration
+                let image = buttonConfig?.image?.createScaled(CGSize(width: iconSize, height: iconSize))
+                buttonConfig?.image = image
+                button?.configuration = buttonConfig
             }
+
             accessoryView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 accessoryView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
