@@ -1,7 +1,6 @@
 name: Bitrise Xcode Check and Update
 
 on:
-  workflow_dispatch: {}
   schedule:
     - cron: '0 */6 * * *'
 
