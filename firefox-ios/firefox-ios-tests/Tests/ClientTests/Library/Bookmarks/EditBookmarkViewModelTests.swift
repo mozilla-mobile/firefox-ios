@@ -55,21 +55,30 @@ class EditBookmarkViewModelTests: XCTestCase {
 
     func testShouldShowDisclosureIndicator_whenIsFolderSelected() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        let folder = Folder(title: folder.title, guid: folder.guid, indentation: 0)
 
-        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
+        subject.selectFolder(folder)
+
+        XCTAssertTrue(subject.shouldShowDisclosureIndicatorForFolder(folder))
     }
 
     func testShouldShowDisclosureIndicator_whenIsNotFolderSelected() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        let folder = Folder(title: folder.title, guid: folder.guid, indentation: 0)
 
-        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
+        XCTAssertFalse(subject.shouldShowDisclosureIndicatorForFolder(folder))
     }
 
-    func testShouldShowDisclosureIndicator_whenIsNotFolderSelectedAfterSelectFolder() {
+    func testShouldShowDisclosureIndicator_whenIsFolderCollapsed() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
+        let folder = Folder(title: folder.title, guid: folder.guid, indentation: 0)
 
-        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
+        subject.selectFolder(folder)
+        // double selecting folder turns true isFolderCollapsed
+        subject.selectFolder(folder)
+
+        XCTAssertFalse(subject.shouldShowDisclosureIndicatorForFolder(folder))
+        XCTAssertTrue(subject.isFolderCollapsed)
     }
 
     func testBackNavigationButtonTitle_whenIsMobileFolderGuid() {

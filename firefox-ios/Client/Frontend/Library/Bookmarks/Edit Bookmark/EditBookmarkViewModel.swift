@@ -78,8 +78,8 @@ class EditBookmarkViewModel: ParentFolderSelector {
 
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
+        selectedFolder = folder
         if isFolderCollapsed {
-            selectedFolder = folder
             folderStructures = [folder]
             onFolderStatusUpdate?()
         } else {
@@ -99,7 +99,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
             let folders = await self?.folderFetcher.fetchFolders()
             guard let folders else { return }
             self?.folderStructures = folders
-            self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
         }
     }
