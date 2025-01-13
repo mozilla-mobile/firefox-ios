@@ -152,6 +152,35 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowScreenAction(action: Action, state: Self) -> MainMenuDetailsState {
+        guard let screenAction = action as? ScreenAction,
+              screenAction.screen == .mainMenuDetails,
+              let menuState = store.state.screenState(
+                MainMenuState.self,
+                for: .mainMenu,
+                window: action.windowUUID),
+              let currentTabInfo = menuState.currentTabInfo,
+              let currentSubmenu = menuState.currentSubmenuView
+              // let toolbarState = store.state.screenState(
+              //   ToolbarState.self,
+              //   for: .toolbar,
+              //   window: action.windowUUID),
+              // let readerModeState = toolbarState.addressToolbar.readerModeState
+        else { return defaultState(from: state) }
+
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                for: currentSubmenu,
+                and: action.windowUUID,
+                readerState: nil
+            ),
+            submenuType: currentSubmenu,
+            isHomepage: state.isHomepage
+        )
+    }
+
     static func defaultState(from state: MainMenuDetailsState) -> MainMenuDetailsState {
         return MainMenuDetailsState(
             windowUUID: state.windowUUID,
