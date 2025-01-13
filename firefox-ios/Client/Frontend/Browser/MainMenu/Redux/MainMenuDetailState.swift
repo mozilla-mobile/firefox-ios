@@ -93,13 +93,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             MainMenuDetailsActionType.tapRemoveFromReadingList,
             MainMenuDetailsActionType.tapToggleNightMode,
             GeneralBrowserActionType.showReaderMode:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                shouldDismiss: true
-            )
+            return handleDismissableAction(state: state)
         case MainMenuDetailsActionType.tapEditBookmark:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
