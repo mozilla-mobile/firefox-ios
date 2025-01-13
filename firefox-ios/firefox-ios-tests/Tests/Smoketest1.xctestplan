@@ -209,6 +209,7 @@
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests",
+        "ShareMenuTests",
         "SiteLoadTest",
         "SyncUITests",
         "SyncUITests\/testCreateAnAccountLink()",

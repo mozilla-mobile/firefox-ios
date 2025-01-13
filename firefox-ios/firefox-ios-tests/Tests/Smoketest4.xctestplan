@@ -149,6 +149,7 @@
         "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests",
+        "ShareMenuTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",

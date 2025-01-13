@@ -428,6 +428,7 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(SettingsScreen)
         app.buttons["Done"].waitAndTap()
     }
+
     func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
         var elementsDict = [XCUIElement: String]()
         for element in elements {
