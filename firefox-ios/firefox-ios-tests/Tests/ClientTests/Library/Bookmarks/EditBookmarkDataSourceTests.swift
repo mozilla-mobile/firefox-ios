@@ -47,7 +47,6 @@ final class EditBookmarkDataSourceTests: XCTestCase {
             tableCells.append(EditBookmarkTableCell.folder($0, true))
         }
 
-
         subject.updateSnapshot(isFolderCollapsed: true, folders: folders)
 
         XCTAssertEqual(subject.snapshot().sectionIdentifiers, sections)
