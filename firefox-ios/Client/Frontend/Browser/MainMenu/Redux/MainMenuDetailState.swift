@@ -95,13 +95,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             GeneralBrowserActionType.showReaderMode:
             return handleDismissableAction(state: state)
         case MainMenuDetailsActionType.tapEditBookmark:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                navigationDestination: MenuNavigationDestination(.editBookmark)
-            )
+            return handleTapEditBookmarkAction(state: state)
         case MainMenuDetailsActionType.tapZoom:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
