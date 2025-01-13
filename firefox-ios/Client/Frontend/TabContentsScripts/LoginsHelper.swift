@@ -243,7 +243,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 switch res {
                 case .success(let successValue):
                     for saved in successValue {
-                        if saved.decryptedPassword == login.password {
+                        if saved.password == login.password {
                             self.profile.logins.use(login: saved, completionHandler: { _ in })
                             return
                         }
