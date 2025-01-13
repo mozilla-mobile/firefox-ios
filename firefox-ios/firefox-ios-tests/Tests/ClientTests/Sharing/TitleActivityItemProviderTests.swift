@@ -77,6 +77,42 @@ final class TitleActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(subtitle, testMessage)
     }
 
+    // MARK: - Sent from Firefox experiment WhatsApp tab share override
+
+    func testOveridesWhatsAppShareItem_forApplySentFromFirefoxTreatment_toWhatsApp() {
+        let testActivityType = UIActivity.ActivityType(rawValue: "net.whatsapp.WhatsApp.ShareExtension")
+
+        let titleActivityItemProvider = TitleActivityItemProvider(title: testMessage, applySentFromFirefoxTreatment: true)
+        let itemForActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+        let subtitle = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            subjectForActivityType: testActivityType
+        )
+
+        XCTAssertTrue(itemForActivity is NSNull, "When applying Sent from Firefox treatment, don't append title to items")
+        XCTAssertEqual(subtitle, testMessage)
+    }
+
+    func testBasicBehaviour_whenApplySentFromFirefoxTreatment_forUnrelatedActivity() {
+        let testActivityType = UIActivity.ActivityType.mail
+
+        let titleActivityItemProvider = TitleActivityItemProvider(title: testMessage, applySentFromFirefoxTreatment: true)
+        let itemForActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+        let subtitle = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            subjectForActivityType: testActivityType
+        )
+
+        XCTAssertTrue(itemForActivity is NSNull, "When applying Sent from Firefox treatment, don't append title to items")
+        XCTAssertEqual(subtitle, testMessage)
+    }
+
     // MARK: - Helpers
 
     private func createStubActivityViewController() -> UIActivityViewController {
