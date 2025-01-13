@@ -70,7 +70,7 @@ extension BrowserDBSQLite: PinnedSites {
         return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.historyMetadataColumnFactory)
     }
 
-    public func addPinnedTopSite(_ site: Site) -> Success {
+    public func addPinnedTopSite(_ site: Site) -> Success { // needs test
         let now = Date.now()
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))

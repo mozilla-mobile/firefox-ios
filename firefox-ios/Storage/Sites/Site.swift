@@ -123,7 +123,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.isBookmarked = isBookmarked
     }
 
-    init(fromSite site: Site, withLocalizedURLString urlString: String) {
+    init(copiedFromSite site: Site, withLocalizedURLString urlString: String) {
         self.id = site.id
         self.url = urlString
         self.title = site.title
@@ -162,8 +162,8 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
-        // FXIOS-10996 improved our `Site` type to have strict unique IDs. But this `historyID` field was previously
-        // optional, so we need to migrate users over in v136. Otherwise users will lose all their pinned top sites.
+        // FXIOS-10996 improved our `Site` type to have strict unique IDs. But this field was previously optional, so we need
+        // to migrate users over in v136. Otherwise users will lose all their pinned top sites.
         let id = try? values.decode(Int.self, forKey: .id)
 
         let url = try values.decode(String.self, forKey: .url)

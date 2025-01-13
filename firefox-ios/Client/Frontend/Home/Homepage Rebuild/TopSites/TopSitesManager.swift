@@ -219,8 +219,8 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
-
             previousStates.insert(state)
+
             return state
         }
     }

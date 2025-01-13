@@ -198,7 +198,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     }
 
     private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
-        // FIXME need to test the getRemoveBookmarkAction path...
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,

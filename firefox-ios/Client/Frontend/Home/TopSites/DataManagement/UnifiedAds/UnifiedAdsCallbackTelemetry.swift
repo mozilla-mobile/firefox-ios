@@ -27,15 +27,13 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     func sendImpressionTelemetry(tileSite: Site, position: Int) {
         guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
 
-        let impressionURL = siteInfo.impressionURL
-        sendTelemetry(urlString: impressionURL, position: position)
+        sendTelemetry(urlString: siteInfo.impressionURL, position: position)
     }
 
     func sendClickTelemetry(tileSite: Site, position: Int) {
         guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
 
-        let clickURL = siteInfo.clickURL
-        sendTelemetry(urlString: clickURL, position: position)
+        sendTelemetry(urlString: siteInfo.clickURL, position: position)
     }
 
     private func sendTelemetry(urlString: String, position: Int) {
