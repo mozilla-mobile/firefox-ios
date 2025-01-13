@@ -14,7 +14,7 @@ protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyCl
 }
 
 protocol LibraryNavigationHandler: AnyObject {
-    func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController, folderPath: [String]?)
     func shareLibraryItem(url: URL, sourceView: UIView)
     func setNavigationBarHidden(_ value: Bool)
 }
@@ -80,10 +80,10 @@ class LibraryCoordinator: BaseCoordinator,
 
     // MARK: - LibraryNavigationHandler
 
-    func start(panelType: LibraryPanelType, navigationController: UINavigationController) {
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController, folderPath: [String]?) {
         switch panelType {
         case .bookmarks:
-            makeBookmarksCoordinator(navigationController: navigationController)
+            makeBookmarksCoordinator(navigationController: navigationController, folderPath: folderPath)
         case .history:
             makeHistoryCoordinator(navigationController: navigationController)
         case .downloads:
@@ -120,7 +120,7 @@ class LibraryCoordinator: BaseCoordinator,
         coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
     }
 
-    private func makeBookmarksCoordinator(navigationController: UINavigationController) {
+    private func makeBookmarksCoordinator(navigationController: UINavigationController, folderPath: [String]?) {
         guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let bookmarksCoordinator = BookmarksCoordinator(
@@ -135,53 +135,13 @@ class LibraryCoordinator: BaseCoordinator,
         if isBookmarkRefactorEnabled {
             (navigationController.topViewController as? BookmarksViewController)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator
-            if let recentFolderGUID = profile.prefs.stringForKey(PrefsKeys.LastViewedBookmarkFolder) {
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-
-                populateBookmarksNavigationController(currentFolderGUID: recentFolderGUID,
-                                                      bookmarksCoordinator: bookmarksCoordinator) {
-                        CATransaction.commit()
-                }
+            folderPath?.forEach { folderGUID in
+                bookmarksCoordinator.start(fromGUID: folderGUID)
             }
         } else {
             (navigationController.topViewController as? LegacyBookmarksPanel)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator
         }
-    }
-
-    private func populateBookmarksNavigationController(currentFolderGUID: String,
-                                                       bookmarksCoordinator: BookmarksCoordinator,
-                                                       completion: @escaping () -> Void) {
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
-                                        recursive: true).uponQueue(.main) { result in
-            guard let maybeBookmarkTreeRoot = result.successValue,
-                  let bookmarkTreeRoot = maybeBookmarkTreeRoot else { return }
-            guard var path = self.findPathToFolder(targetGUID: currentFolderGUID,
-                                                   treeRootNode: bookmarkTreeRoot),
-                  !path.isEmpty else {return}
-            path.removeFirst()
-            path.forEach { el in
-                bookmarksCoordinator.start(fromGUID: el.guid, animated: false)
-            }
-            completion()
-        }
-    }
-
-    private func findPathToFolder(targetGUID: String, treeRootNode: BookmarkNodeData) -> [BookmarkNodeData]? {
-        guard let treeRootFolder = treeRootNode as? BookmarkFolderData else { return nil}
-        guard targetGUID != treeRootFolder.guid else {return [treeRootNode]}
-        var path: [BookmarkNodeData]?
-
-        guard let children = treeRootFolder.children else {return nil}
-        for childNode in children {
-            if let pathToFolder = findPathToFolder(targetGUID: targetGUID, treeRootNode: childNode) {
-                path = pathToFolder
-            }
-        }
-        guard path != nil else {return nil}
-        path?.insert(treeRootNode, at: 0)
-        return path
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {
