@@ -79,7 +79,7 @@ final class TitleActivityItemProviderTests: XCTestCase {
 
     // MARK: - Sent from Firefox experiment WhatsApp tab share override
 
-    func testOveridesWhatsAppShareItem_forApplySentFromFirefoxTreatment_toWhatsApp() {
+    func testOveridesWhatsAppShareItem_forApplySentFromFirefoxTreatment() {
         let testActivityType = UIActivity.ActivityType(rawValue: "net.whatsapp.WhatsApp.ShareExtension")
 
         let titleActivityItemProvider = TitleActivityItemProvider(title: testMessage, applySentFromFirefoxTreatment: true)
