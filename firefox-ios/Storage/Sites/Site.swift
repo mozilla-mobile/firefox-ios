@@ -6,42 +6,6 @@ import UIKit
 import Shared
 import SiteImageView
 
-public enum SiteType: Equatable, Codable, Hashable {
-    case basic
-    case suggestedSite(SuggestedSiteInfo)
-    case sponsoredSite(SponsoredSiteInfo)
-    case pinnedSite(PinnedSiteInfo)
-
-    // MARK: - Helpers
-
-    public var isPinnedSite: Bool {
-        switch self {
-        case .pinnedSite:
-            return true
-        default:
-            return false
-        }
-    }
-
-    public var isSponsoredSite: Bool {
-        switch self {
-        case .sponsoredSite:
-            return true
-        default:
-            return false
-        }
-    }
-
-    public var isSuggestedSite: Bool {
-        switch self {
-        case .suggestedSite:
-            return true
-        default:
-            return false
-        }
-    }
-}
-
 public struct Site: Identifiable, Hashable, Equatable, Codable {
     public let id: Int
     public let url: String
