@@ -106,7 +106,7 @@ onboarding-opt-out:
   bugs:
     - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
   data_reviews:
-    - https://bugzilla.mozilla.org/show_bug.cgi?id=1587095#c6
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24101
   notification_emails:
     - glean-team@mozilla.com
     - jrediger@mozilla.com
