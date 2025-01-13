@@ -42,11 +42,15 @@ class GleanUsageReporting: GleanUsageReportingApi {
 class GleanLifecycleObserver {
     private let gleanUsageReportingApi: GleanUsageReportingApi
     private var id: TimerId?
+    private var isObserving: Bool = false
 
-    init(
-        gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting()
-    ) {
+    init(gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting()) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
+    }
+
+    func startObserving() {
+        guard !isObserving else { return }
+        isObserving = true
 
         NotificationCenter.default.addObserver(
             self,
@@ -58,6 +62,23 @@ class GleanLifecycleObserver {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(appDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+    }
+
+    func stopObserving() {
+        guard isObserving else { return }
+        isObserving = false
+
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+
+        NotificationCenter.default.removeObserver(
+            self,
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
