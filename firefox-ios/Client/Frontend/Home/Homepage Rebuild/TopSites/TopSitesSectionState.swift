@@ -121,6 +121,23 @@ struct TopSitesSectionState: StateType, Equatable {
         )
     }
 
+    private static func handleUpdatedNumberOfRowsAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let numberOfRows = topSitesAction.numberOfRows
+        else {
+            return defaultState(from: state)
+        }
+
+        let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: filteredSites,
+            numberOfRows: numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
     /// Filters the top sites to be displayed in the view based on user preferences and layout configuration.
     /// - Parameters:
     ///   - sites: The full list of sites fetched from the top sites manager.
