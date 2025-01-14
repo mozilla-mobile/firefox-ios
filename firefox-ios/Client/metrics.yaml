@@ -1545,7 +1545,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1556,7 +1556,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1567,7 +1567,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1578,7 +1578,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1589,7 +1589,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1605,7 +1605,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -1621,7 +1621,7 @@ onboarding:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
