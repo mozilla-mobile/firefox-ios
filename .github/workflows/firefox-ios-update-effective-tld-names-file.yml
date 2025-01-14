@@ -43,6 +43,7 @@ jobs:
           echo "create_pr=true" >> $GITHUB_ENV
           cp tmp.dat firefox-ios/Shared/effective_tld_names.dat
           echo "branch_name=refactor-update-effective-tld-names" >> $GITHUB_ENV
+          echo "pr_title=Refactor [vXXX] Update effective_tld_names file $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR updates the effective_tld_names file" >> $GITHUB_ENV
           rm tmp.dat
         fi
