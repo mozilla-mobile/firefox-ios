@@ -753,6 +753,181 @@ usage:
     send_in_pings:
       - usage-reporting
 
+  duration:
+    type: timing_distribution
+    time_unit: millisecond
+    description: |
+      The duration of the last foreground session.
+    time_unit: second
+    send_in_pings:
+      - usage-reporting
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+      - https://bugzilla.mozilla.org/1519120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  reason:
+    type: string
+    lifetime: ping
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The optional reason the ping was submitted.
+      The specific values for reason are specific to each ping, and are
+      documented in the ping's pings.yaml file.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1557048
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1609218#c4
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  os:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The name of the operating system.
+      Possible values:
+      Android, iOS, Linux, Darwin, Windows,
+      FreeBSD, NetBSD, OpenBSD, Solaris, Unknown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  os_version:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The user-visible version of the operating system (e.g. "1.2.3").
+      If the version detection fails, this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_display_version:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The user visible version string (e.g. "1.0.3").
+      If the value was not provided through configuration,
+      this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1508305#c9
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_channel:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The channel the application is being distributed on.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1520741
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1520741#c18
+    data_sensitivity:
+      - technical
+    notification_emails:
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  first_run_date:
+    type: datetime
+    lifetime: user
+    send_in_pings:
+      - usage-reporting
+    time_unit: day
+    description: |
+      The date of the first run of the application.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1525045
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1525045#c18
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_build:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The build identifier generated by the CI system (e.g. "1234/A").
+      If the value was not provided through configuration,
+      this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
 # Downloads
 downloads:
   download_now_button_tapped:
