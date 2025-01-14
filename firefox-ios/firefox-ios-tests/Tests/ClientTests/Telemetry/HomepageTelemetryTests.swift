@@ -11,7 +11,7 @@ final class HomepageTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()// Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to puth them in a state in which they can collect data.
+        // tests in order to put them in a state in which they can collect data.
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
     }
@@ -36,5 +36,28 @@ final class HomepageTelemetryTests: XCTestCase {
 
         let resultValue = try XCTUnwrap(GleanMetrics.Homepage.privateModeToggle.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["is_private_mode"], "false")
+    }
+
+    func testGleanWrapperIntegration() throws {
+        // Define a mock GleanWrapper
+        class MockGleanWrapper: GleanWrapperProtocol {
+            var recordedValues: [Bool] = []
+
+            func recordPrivateModeToggle(isPrivateMode: Bool) {
+                recordedValues.append(isPrivateMode)
+            }
+        }
+
+        // Create the mock wrapper and pass it to HomepageTelemetry
+        let mockWrapper = MockGleanWrapper()
+        let subject = HomepageTelemetry(gleanWrapper: mockWrapper)
+
+        // Test recording with enteringPrivateMode = true
+        subject.sendHomepageTappedTelemetry(enteringPrivateMode: true)
+        XCTAssertEqual(mockWrapper.recordedValues, [true])
+
+        // Test recording with enteringPrivateMode = false
+        subject.sendHomepageTappedTelemetry(enteringPrivateMode: false)
+        XCTAssertEqual(mockWrapper.recordedValues, [true, false])
     }
 }
