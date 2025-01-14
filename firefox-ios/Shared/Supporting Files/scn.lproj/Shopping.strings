@@ -119,10 +119,10 @@
 "Shopping.OptInCard.Disclaimer.Text.v123" = "Scartannu \"Se, pruvàmulu\" accetti sti tèrmini:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
-"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Virìfica quantu sunnu affidàbbili i ricinzioni ncapu a %1$@ prima d'accattari. U Virificaturi dî ricinzioni, na funzioni spirimintali di %2$@, è ntigratu nnô navigaturi.";
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Virìfica quantu sunnu affidàbbili i ricinzioni ncapu a %1$@ prima d'accattari. U Virificaturi dî ricinzioni, na funzioni spirimintali di %2$@, è ntigratu nnô navicaturi.";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
-"Shopping.OptInCard.FirstParagraph.Description.v120" = "Virìfica quantu sunnu affidàbbili i ricinzioni ncapu a %1$@ prima d'accattari. U Virificaturi dî ricinzioni, na funzioni spirimintali di %2$@, è ntigratu nnô navigaturi. Funziona macari nne %3$@ e %4$@.";
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Virìfica quantu sunnu affidàbbili i ricinzioni ncapu a %1$@ prima d'accattari. U Virificaturi dî ricinzioni, na funzioni spirimintali di %2$@, è ntigratu nnô navicaturi. Funziona macari nne %3$@ e %4$@.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Prova a nostra guida ê ricinzioni dî prudutti";

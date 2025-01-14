@@ -1,6 +1,21 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "ക്രമീകരണങ്ങളിലേക്കു പോവുക";
 
+/* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.FirstLabel.v114" = "1. ക്രമീകരണങ്ങളിലേക്കു് പോവുക";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. സ്ഥിരമായി ഉപയോഗിക്കുന്ന അന്വേഷിയേ അമർത്തുക";
+
+/* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.ThirdLabel.v114" = "3. *%@* തിരഞ്ഞെടുക്കുക";
+
+/* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.Title.v114" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രത്തിനെ  തുറക്കുക ";
+
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "%@-നെ ഇഷ്ടാനുസൃതമാക്കുക";
+
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "പരതാൻ തുടങ്ങുക";
 
@@ -82,6 +97,12 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "%@-നു് മെച്ചപ്പെടുത്താൻ ഞങ്ങളെ സഹായിക്കുക";
 
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "വേഗതയേറിയതും സുരക്ഷിതവുമായ വെബ് തിരയൽ";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "തുടരുന്നതിലൂടെ, താങ്ങൾ %@ അംഗീകരിക്കുന്നു";
+
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ സേവന നിബന്ധനകള്‍.";
 
@@ -90,6 +111,9 @@
 
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.Wallpaper.Action.v114" = "ചുവർകടലാസു് ഇടുക";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "ഒരു %@ ചുവർക്കടലാസു് തിരഞ്ഞെടുക്കുക";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
 "Onboarding.Welcome.Action.v114" = "ഉപയോഗിക്കാൻ തുടങ്ങുക";
@@ -102,4 +126,10 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "ഒഴിവാക്കുക";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "താങ്ങളെ സുരക്ഷിതമായി വയ്ക്കാൻ ഞങ്ങളുടെ കടമയാണു്";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v114" = "ഒരു സ്വതന്ത്ര ഗോളാന്തരവലയിലേക്കു സ്വാഗതം";
 

@@ -15,8 +15,9 @@ enum OneLineTableViewCustomization {
 struct OneLineTableViewCellViewModel {
     let title: String?
     var leftImageView: UIImage?
-    let accessoryView: UIImageView?
+    var accessoryView: UIView?
     let accessoryType: UITableViewCell.AccessoryType
+    let editingAccessoryView: UIImageView?
 }
 
 class OneLineTableViewCell: UITableViewCell,
@@ -35,6 +36,19 @@ class OneLineTableViewCell: UITableViewCell,
         static let shortLeadingMargin: CGFloat = 5
         static let longLeadingMargin: CGFloat = 13
         static let cornerRadius: CGFloat = 5
+        static let accessoryViewTrailingPaddingForImage: CGFloat = 16
+        // Icon buttons typically have a minimum padding of 44px, so for them to be vertically aligned with image
+        // accessory views (24px width), they would need 10px less trailing padding
+        static let accessoryViewTrailingPaddingForButton: CGFloat = 6
+    }
+
+    var reorderControlImageView: UIImageView? {
+        let reorderControl = self.subviews.first { view in
+            view.classForCoder.description() == "UITableViewCellReorderControl"
+        }
+        return reorderControl?.subviews.first { view in
+            view is UIImageView
+        } as? UIImageView
     }
 
     var shouldLeftAlignTitle = false
@@ -57,7 +71,6 @@ class OneLineTableViewCell: UITableViewCell,
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         setupLayout()
     }
 
@@ -70,6 +83,22 @@ class OneLineTableViewCell: UITableViewCell,
                             left: UX.imageSize + 2 * UX.borderViewMargin,
                             bottom: 0,
                             right: 0)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateReorderControl()
+
+        if let accessoryView {
+            let accessoryPadding = accessoryView is UIButton ? UX.accessoryViewTrailingPaddingForButton
+                                                             : UX.accessoryViewTrailingPaddingForImage
+            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - accessoryPadding
+        }
+    }
+
+    private func updateReorderControl() {
+        guard isBookmarkRefactorEnabled else { return }
+        reorderControlImageView?.image = reorderControlImageView?.image?.withRenderingMode(.alwaysTemplate)
     }
 
     /// Holds a reference to the left image view's leading constraint so we can update
@@ -170,6 +199,7 @@ class OneLineTableViewCell: UITableViewCell,
         titleLabel.text = viewModel.title
         accessoryView = viewModel.accessoryView
         accessoryType = viewModel.accessoryType
+        editingAccessoryView = viewModel.editingAccessoryView
 
         if let image = viewModel.leftImageView {
             leftImageView.manuallySetImage(image)
@@ -185,10 +215,15 @@ class OneLineTableViewCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
+        if isBookmarkRefactorEnabled {
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            editingAccessoryView?.tintColor = theme.colors.iconSecondary
+            tintColor = theme.colors.iconSecondary
+        }
 
         switch customization {
         case .regular:
-            accessoryView?.tintColor = theme.colors.iconSecondary
+            accessoryView?.tintColor = accessoryView is UIButton ? theme.colors.iconPrimary : theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:

@@ -43,8 +43,7 @@ final class HomepageViewController: UIViewController,
     private var dataSource: HomepageDiffableDataSource?
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
-    private var overlayManager: OverlayModeManager
-    private var logger: Logger
+
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -52,20 +51,34 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    private var availableWidth: CGFloat {
+        return view.frame.size.width
+    }
+
+    // MARK: - Private constants
+    private let overlayManager: OverlayModeManager
+    private let logger: Logger
+    private let toastContainer: UIView
+    private let mainQueue: DispatchQueueInterface
+
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
+         toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
+        self.toastContainer = toastContainer
         self.logger = logger
+        self.mainQueue = mainQueue
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -97,6 +110,8 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
+                numberOfTilesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -110,6 +125,13 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
+        store.dispatch(
+            TopSitesAction(
+                numberOfTilesPerRow: numberOfTilesPerRow(for: size.width),
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
+            )
+        )
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -153,23 +175,25 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleToolbarStateOnScroll() {
-        // TODO: FXIOS-10877 This logic will be handled by toolbar state, the homepage will just dispatch the action
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
+        // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
+        store.dispatch(action)
+    }
 
-        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
-        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
-           let toolbarState,
-           toolbarState.addressToolbar.isEditing {
-            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
-            // On a website we just dismiss the keyboard
-            if toolbarState.addressToolbar.url == nil {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(action)
-            } else {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
-                store.dispatch(action)
-            }
-        }
+    /// Calculates the number of tiles that can fit in a single row based on the available width.
+    /// Used for top sites section layout and data filtering.
+    /// Must be calculated on main thread only due to use of traitCollection.
+    ///
+    /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
+    /// - Returns: The number of tiles that can fit in a single row within the available width.
+    private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
+        return TopSitesDimensionImplementation().getNumberOfTilesPerRow(
+            availableWidth: availableWidth,
+            leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
+                traitCollection: traitCollection
+            )
+        )
     }
 
     // MARK: - Redux
@@ -251,8 +275,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let layoutConfiguration = HomepageSectionLayoutProvider(windowUUID: windowUUID).createCompositionalLayout()
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -278,6 +301,27 @@ final class HomepageViewController: UIViewController,
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: self.windowUUID)
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
+                self?.logger.log(
+                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    level: .fatal,
+                    category: .homepage
+                )
+                return nil
+            }
+
+            return sectionProvider.createLayoutSection(
+                for: section,
+                with: environment.traitCollection
+            )
+        }
+        return layout
     }
 
     private func configureDataSource() {
@@ -306,7 +350,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header:
+        case .header(let state):
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
                 for: indexPath
@@ -314,10 +358,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(
-                headerState: homepageState.headerState,
-                showiPadSetup: shouldUseiPadSetup()
-            ) { [weak self] in
+            headerCell.configure(headerState: state) { [weak self] in
                 self?.toggleHomepageMode()
             }
 
@@ -439,6 +480,17 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        store.dispatch(
+            HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.traitCollectionDidChange
+            )
+        )
+    }
+
     // MARK: Tap Geasutre Recognizer
     private func addTapGestureRecognizerToDismissKeyboard() {
         // We want any interaction with the homepage to dismiss the keyboard, including taps
@@ -490,7 +542,7 @@ final class HomepageViewController: UIViewController,
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.customizeHomepage),
+                navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
             )
@@ -508,7 +560,12 @@ final class HomepageViewController: UIViewController,
     }
 
     private func navigateToContextMenu(for section: HomepageSection, and item: HomepageItem, sourceView: UIView? = nil) {
-        let configuration = ContextMenuConfiguration(homepageSection: section, item: item, sourceView: sourceView)
+        let configuration = ContextMenuConfiguration(
+            homepageSection: section,
+            item: item,
+            sourceView: sourceView,
+            toastContainer: toastContainer
+        )
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
@@ -580,12 +637,17 @@ final class HomepageViewController: UIViewController,
                 .FirefoxAccountChanged,
                 .TopSitesUpdated,
                 .DefaultSearchEngineUpdated:
-            store.dispatch(
-                TopSitesAction(
-                    windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.fetchTopSites
+            // To ensure that `numberOfTilesPerRow` is calculated on the main thread
+            mainQueue.ensureMainThread { [weak self] in
+                guard let self else { return }
+                store.dispatch(
+                    TopSitesAction(
+                        numberOfTilesPerRow: self.numberOfTilesPerRow(for: availableWidth),
+                        windowUUID: self.windowUUID,
+                        actionType: TopSitesActionType.fetchTopSites
+                    )
                 )
-            )
+            }
         default: break
         }
     }

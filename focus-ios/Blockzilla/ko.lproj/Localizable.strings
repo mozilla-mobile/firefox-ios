@@ -277,6 +277,9 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "어두운";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "충돌 보고서를 통해 브라우저 문제를 진단하고 해결할 수 있습니다.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@가 주소창에 입력한 내용을 검색엔진에 전송합니다.";
 
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "소셜";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "자동으로 충돌 보고서 보내기";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Face ID를 사용해서 앱 잠금 해제";

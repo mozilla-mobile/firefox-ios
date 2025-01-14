@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
+    case cleanupHistoryReenabled
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -25,6 +26,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
+    case jsAlertRefactor
     case jumpBackIn
     case loginAutofill
     case menuRefactor
@@ -108,6 +110,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .bookmarksRefactor,
                 .accountSettingsRedux,
                 .addressAutofillEdit,
+                .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .closeRemoteTabs,
                 .fakespotBackInStock,
@@ -115,6 +118,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
+                .jsAlertRefactor,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,

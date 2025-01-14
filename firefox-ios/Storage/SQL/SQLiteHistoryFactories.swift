@@ -12,16 +12,15 @@ extension BrowserDBSQLite {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         let id = row["historyID"] as? Int
         guard let url = row["url"] as? String, let title = row["title"] as? String else {
+            assertionFailure("None of these properties should be nil")
             return Site(url: "", title: "")
         }
-        let guid = row["guid"] as? String
 
         // Extract a boolean from the row if it's present.
         let iB = row["is_bookmarked"] as? Int
         let isBookmarked: Bool? = (iB == nil) ? nil : (iB! != 0)
 
         let site = Site(url: url, title: title, bookmarked: isBookmarked)
-        site.guid = guid
         site.id = id
 
         // Find the most recent visit, regardless of which column it might be in.
@@ -33,6 +32,7 @@ extension BrowserDBSQLite {
         if latest > 0 {
             site.latestVisit = Visit(date: latest, type: .link)
         }
+
         return site
     }
 

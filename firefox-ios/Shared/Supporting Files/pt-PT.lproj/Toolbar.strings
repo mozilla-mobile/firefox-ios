@@ -8,5 +8,5 @@
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Fechar este separador";
 
 /* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
-"Toolbar.Tabs.Button.A11y.Label.v135" = "Abrir separadores";
+"Toolbar.Tabs.Button.A11y.Label.v135" = "Separadores abertos";
 

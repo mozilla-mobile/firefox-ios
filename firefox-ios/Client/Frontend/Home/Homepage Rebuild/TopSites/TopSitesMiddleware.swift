@@ -5,37 +5,68 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 final class TopSitesMiddleware {
     private let topSitesManager: TopSitesManagerInterface
+    private let logger: Logger
 
     // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
     // but keeping logic consistent for now
     private var otherSites: [TopSiteState] = []
     private var sponsoredTiles: [SponsoredTile] = []
 
-    init(profile: Profile = AppContainer.shared.resolve(), topSitesManager: TopSitesManagerInterface? = nil) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        topSitesManager: TopSitesManagerInterface? = nil,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(
-            prefs: profile.prefs,
+            profile: profile,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
             ),
             topSiteHistoryManager: TopSiteHistoryManager(profile: profile),
             searchEnginesManager: profile.searchEnginesManager
         )
+        self.logger = logger
     }
 
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.initialize,
-            TopSitesActionType.fetchTopSites:
+        case HomepageActionType.initialize:
+            self.getTopSitesDataAndUpdateState(for: action, and: (action as? HomepageAction)?.numberOfTilesPerRow)
+        case TopSitesActionType.fetchTopSites:
+            self.getTopSitesDataAndUpdateState(for: action, and: (action as? TopSitesAction)?.numberOfTilesPerRow)
+        case TopSitesActionType.toggleShowSponsoredSettings:
             self.getTopSitesDataAndUpdateState(for: action)
+        case ContextMenuActionType.tappedOnPinTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.pinTopSite(site)
+        case ContextMenuActionType.tappedOnUnpinTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.unpinTopSite(site)
+        case ContextMenuActionType.tappedOnRemoveTopSite:
+            guard let site = self.getSite(for: action) else { return }
+            self.topSitesManager.removeTopSite(site)
         default:
             break
         }
     }
 
-    private func getTopSitesDataAndUpdateState(for action: Action) {
+    private func getSite(for action: Action) -> Site? {
+        guard let site = (action as? ContextMenuAction)?.site else {
+            self.logger.log(
+                "Unable to retrieve site for \(action.actionType)",
+                level: .warning,
+                category: .homepage
+            )
+            return nil
+        }
+        return site
+    }
+
+    private func getTopSitesDataAndUpdateState(for action: Action, and numberOfTilesPerRow: Int? = nil) {
         Task {
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
@@ -43,7 +74,8 @@ final class TopSitesMiddleware {
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredTiles: self.sponsoredTiles,
+                        numberOfTilesPerRow: numberOfTilesPerRow
                     )
                 }
                 group.addTask {
@@ -51,7 +83,8 @@ final class TopSitesMiddleware {
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredTiles: self.sponsoredTiles,
+                        numberOfTilesPerRow: numberOfTilesPerRow
                     )
                 }
 
@@ -59,7 +92,8 @@ final class TopSitesMiddleware {
                 await updateTopSites(
                     for: action.windowUUID,
                     otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredTiles
+                    sponsoredTiles: self.sponsoredTiles,
+                    numberOfTilesPerRow: numberOfTilesPerRow
                 )
             }
         }
@@ -68,7 +102,8 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [SponsoredTile]
+        sponsoredTiles: [SponsoredTile],
+        numberOfTilesPerRow: Int? = nil
     ) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
@@ -77,6 +112,7 @@ final class TopSitesMiddleware {
         store.dispatch(
             TopSitesAction(
                 topSites: topSites,
+                numberOfTilesPerRow: numberOfTilesPerRow,
                 windowUUID: windowUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )

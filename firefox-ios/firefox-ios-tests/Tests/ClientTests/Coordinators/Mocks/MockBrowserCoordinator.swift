@@ -37,6 +37,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var navigateFromHomePanelCalled = 0
     var showContextMenuCalled = 0
     var showEditBookmarkCalled = 0
+    var openInNewTabCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -154,5 +155,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
         showEditBookmarkCalled += 1
+    }
+
+    func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        openInNewTabCalled += 1
     }
 }

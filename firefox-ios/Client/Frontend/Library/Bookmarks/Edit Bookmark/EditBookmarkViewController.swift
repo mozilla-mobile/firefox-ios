@@ -65,6 +65,7 @@ class EditBookmarkViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
@@ -186,7 +187,8 @@ class EditBookmarkViewController: UIViewController,
 
         case .folder(let folder, _):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell
+                                                           for: indexPath) as? OneLineTableViewCell,
+                  !viewModel.isFolderCollapsed
             else {
                 return UITableViewCell()
             }
@@ -286,7 +288,7 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.dummyFolderGuid {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
             return nil
         }
         return indexPath

@@ -103,8 +103,8 @@ class HistoryTests: BaseTestCase {
             navigator.goto(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
             navigator.goto(ClearPrivateDataSettings)
-            app.tables.cells["ClearPrivateData"].tap()
-            app.alerts.buttons["OK"].tap()
+            app.tables.cells["ClearPrivateData"].waitAndTap()
+            app.alerts.buttons["OK"].waitAndTap()
 
             // Back on History panel view check that there is not any item
             navigator.goto(LibraryPanel_History)
@@ -127,15 +127,15 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         // Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
-        app.tables.cells["ClearPrivateData"].tap()
+        app.tables.cells["ClearPrivateData"].waitAndTap()
         mozWaitForElementToExist(app.tables.cells["ClearPrivateData"])
-        app.alerts.buttons["OK"].tap()
+        app.alerts.buttons["OK"].waitAndTap()
 
         // Wait for OK pop-up to disappear after confirming
         mozWaitForElementToNotExist(app.alerts.buttons["OK"])
 
         // Try to tap on the disabled Clear Private Data button
-        app.tables.cells["ClearPrivateData"].tap()
+        app.tables.cells["ClearPrivateData"].waitAndTap()
 
         // If the button is disabled, the confirmation pop-up should not exist
         // Disabling assertion due to https://mozilla-hub.atlassian.net/browse/FXIOS-7494 issue
@@ -253,8 +253,8 @@ class HistoryTests: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
-        app.tables.cells["ClearPrivateData"].tap()
-        app.alerts.buttons["OK"].tap()
+        app.tables.cells["ClearPrivateData"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
 
         // The closed tab is *not* listed in "Recently Closed Tabs List"
         navigator.goto(LibraryPanel_History)
@@ -310,7 +310,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.plus].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
 
         // The page is opened on the new tab
         navigator.nowAt(NewTabScreen)
@@ -344,7 +344,7 @@ class HistoryTests: BaseTestCase {
         )
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)
@@ -381,7 +381,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -420,9 +420,8 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
         urlBarBackButton.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
-        app.tables.staticTexts["The Book of Mozilla"].tap()
-        urlBarBackButton.tap()
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
+        urlBarBackButton.waitAndTap()
         XCTAssertFalse(urlBarBackButton.isEnabled)
         urlBarForwardButton.press(forDuration: 1)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
@@ -434,7 +433,7 @@ class HistoryTests: BaseTestCase {
     // We used this approach to avoid code duplication
 
     private func tapOnClearRecentHistoryOption(optionSelected: String) {
-        app.buttons[optionSelected].tap()
+        app.buttons[optionSelected].waitAndTap()
     }
 
     private func navigateToPage() {
@@ -474,9 +473,9 @@ class HistoryTests: BaseTestCase {
                 .cells
                 .element(boundBy: 0)
                 .buttons[StandardImageIdentifiers.Large.cross]
-                .tap()
+                .waitAndTap()
         } else {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
             // app.otherElements.cells.element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
         }
     }

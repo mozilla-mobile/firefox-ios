@@ -12,6 +12,10 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     var fetchSponsoredSitesCalledCount = 0
     var recalculateTopSitesCalledCount = 0
 
+    var removeTopSiteCalledCount = 0
+    var pinTopSiteCalledCount = 0
+    var unpinTopSiteCalledCount = 0
+
     func getOtherSites() async -> [TopSiteState] {
         getOtherSitesCalledCount += 1
         return createSites(count: 15, subtitle: ": otherSites")
@@ -20,7 +24,7 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     func fetchSponsoredSites() async -> [SponsoredTile] {
         fetchSponsoredSitesCalledCount += 1
 
-        let contiles = MockContileProvider.defaultSuccessData
+        let contiles = MockSponsoredProvider.defaultSuccessData
         return contiles.compactMap { SponsoredTile(contile: $0) }
     }
 
@@ -37,5 +41,17 @@ final class MockTopSitesManager: TopSitesManagerInterface {
             sites.append(TopSiteState(site: site))
         }
         return sites
+    }
+
+    func removeTopSite(_ site: Site) {
+        removeTopSiteCalledCount += 1
+    }
+
+    func pinTopSite(_ site: Site) {
+        pinTopSiteCalledCount += 1
+    }
+
+    func unpinTopSite(_ site: Site) {
+        unpinTopSiteCalledCount += 1
     }
 }

@@ -9,6 +9,9 @@ import Storage
 
 class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
     private let sites: [Site]?
+    var removeDefaultTopSitesTileCalledCount = 0
+    var removeTopSiteCalledCount = 0
+
     static var defaultSuccessData: [Site] {
         return [
             PinnedSite(
@@ -46,5 +49,13 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
 
     func getTopSites(completion: @escaping ([Site]?) -> Void) {
         completion(sites)
+    }
+
+    func removeDefaultTopSitesTile(site: Site) {
+        removeDefaultTopSitesTileCalledCount += 1
+    }
+
+    func removeTopSite(site: Site) {
+        removeTopSiteCalledCount += 1
     }
 }

@@ -39,8 +39,6 @@ final class TopSiteState: Hashable, Equatable {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
 
-    var identifier = UUID().uuidString
-
     init(site: Site) {
         self.site = site
         if let provider = site.metadata?.providerName {
@@ -75,11 +73,21 @@ final class TopSiteState: Hashable, Equatable {
 
     // MARK: - Equatable
     static func == (lhs: TopSiteState, rhs: TopSiteState) -> Bool {
-        lhs.site == rhs.site
+        lhs.site == rhs.site &&
+        lhs.isPinned == rhs.isPinned &&
+        lhs.isSuggested == rhs.isSuggested &&
+        lhs.isSponsoredTile == rhs.isSponsoredTile &&
+        lhs.isGoogleGUID == rhs.isGoogleGUID &&
+        lhs.isGoogleURL == rhs.isGoogleURL
     }
 
     // MARK: - Hashable
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.site)
+        hasher.combine(self.isPinned)
+        hasher.combine(self.isSuggested)
+        hasher.combine(self.isSponsoredTile)
+        hasher.combine(self.isGoogleGUID)
+        hasher.combine(self.isGoogleURL)
     }
 }

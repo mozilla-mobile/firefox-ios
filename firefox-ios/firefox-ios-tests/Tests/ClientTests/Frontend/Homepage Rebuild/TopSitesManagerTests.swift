@@ -2,20 +2,25 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import Common
 import Shared
 import Storage
+import XCTest
 
 @testable import Client
 
 final class TopSitesManagerTests: XCTestCase {
     private var profile: MockProfile?
+    private var dispatchQueue: MockDispatchQueue?
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        dispatchQueue = MockDispatchQueue()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
+        dispatchQueue = nil
         profile = nil
         super.tearDown()
     }
@@ -68,9 +73,10 @@ final class TopSitesManagerTests: XCTestCase {
 
     // MARK: Sponsored Top Site
     func test_fetchSponsoredSites_withSuccessData_returnSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: false)
         let subject = try createSubject(
-            contileProvider: MockContileProvider(
-                result: .success(MockContileProvider.defaultSuccessData)
+            contileProvider: MockSponsoredProvider(
+                result: .success(MockSponsoredProvider.defaultSuccessData)
             )
         )
 
@@ -81,9 +87,10 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_fetchSponsoredSites_withEmptySuccess_returnSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: false)
         let subject = try createSubject(
-            contileProvider: MockContileProvider(
-                result: .success(MockContileProvider.emptySuccessData)
+            contileProvider: MockSponsoredProvider(
+                result: .success(MockSponsoredProvider.emptySuccessData)
             )
         )
 
@@ -92,9 +99,48 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     func test_fetchSponsoredSites_withFailure_returnNoSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: false)
         let subject = try createSubject(
-            contileProvider: MockContileProvider(
-                result: .failure(MockContileProvider.MockError.testError)
+            contileProvider: MockSponsoredProvider(
+                result: .failure(MockSponsoredProvider.MockError.testError)
+            )
+        )
+
+        let topSites = await subject.fetchSponsoredSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_fetchSponsoredSites_forUnifiedAds_withSuccessData_returnSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: true)
+        let subject = try createSubject(
+            unifiedAdsProvider: MockSponsoredProvider(
+                result: .success(MockSponsoredProvider.defaultSuccessData)
+            )
+        )
+
+        let topSites = await subject.fetchSponsoredSites()
+        XCTAssertEqual(topSites.count, 3)
+        let expectedTitles = ["Firefox Sponsored Tile", "Mozilla Sponsored Tile", "Focus Sponsored Tile"]
+        XCTAssertEqual(topSites.compactMap { $0.title }, expectedTitles)
+    }
+
+    func test_fetchSponsoredSites_forUnifiedAds_withEmptySuccess_returnSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: true)
+        let subject = try createSubject(
+            unifiedAdsProvider: MockSponsoredProvider(
+                result: .success(MockSponsoredProvider.emptySuccessData)
+            )
+        )
+
+        let topSites = await subject.fetchSponsoredSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_fetchSponsoredSites_forUnifiedAds_withFailure_returnNoSponsoredSites() async throws {
+        setupNimbusUnifiedAdsTesting(isEnabled: true)
+        let subject = try createSubject(
+            unifiedAdsProvider: MockSponsoredProvider(
+                result: .failure(MockSponsoredProvider.MockError.testError)
             )
         )
 
@@ -203,7 +249,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = await subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteState(site: $0) },
-            sponsoredSites: MockContileProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -217,7 +263,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
         let topSites = await subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
-            sponsoredSites: MockContileProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -232,7 +278,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = await subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteState(site: $0) },
-            sponsoredSites: MockContileProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
         )
         XCTAssertEqual(topSites.count, 6)
         let expectedTitles = [
@@ -260,7 +306,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = await subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
-            sponsoredSites: MockContileProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
         )
         XCTAssertEqual(topSites.count, 3)
         let expectedTitles = [
@@ -292,17 +338,66 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = await subject.recalculateTopSites(
             otherSites: [],
-            sponsoredSites: MockContileProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
+            sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { SponsoredTile(contile: $0) }
         )
 
         XCTAssertEqual(topSites.compactMap { $0.title }, ["Google Test", "Mozilla Sponsored Tile"])
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://www.google.com/webhp?client=firefox-b-1-m&channel=ts", "https://mozilla.com"])
     }
 
+    // MARK: Context menu actions
+    func test_unpinTopSite_callsProperMethods() throws {
+        let mockGoogleTopSiteManager = MockGoogleTopSiteManager()
+        let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
+        let subject = try createSubject(
+            googleTopSiteManager: mockGoogleTopSiteManager,
+            topSiteHistoryManager: mockTopSiteHistoryManager
+        )
+        let site = Site(url: "www.example.com", title: "Example Pinned Site")
+        subject.unpinTopSite(site)
+
+        XCTAssertEqual(mockGoogleTopSiteManager.removeGoogleTopSiteCalledCount, 1)
+        XCTAssertEqual(mockTopSiteHistoryManager.removeTopSiteCalledCount, 1)
+    }
+
+    func test_removeTopSite_callsProperMethods() throws {
+        let mockGoogleTopSiteManager = MockGoogleTopSiteManager()
+        let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
+        let subject = try createSubject(
+            googleTopSiteManager: mockGoogleTopSiteManager,
+            topSiteHistoryManager: mockTopSiteHistoryManager
+        )
+        let site = Site(url: "www.example.com", title: "Example Pinned Site")
+        subject.removeTopSite(site)
+
+        XCTAssertEqual(mockGoogleTopSiteManager.removeGoogleTopSiteCalledCount, 1)
+        XCTAssertEqual(mockTopSiteHistoryManager.removeTopSiteCalledCount, 1)
+        XCTAssertEqual(mockTopSiteHistoryManager.removeDefaultTopSitesTileCalledCount, 1)
+    }
+
+    func test_pinTopSite_callsProperMethods() throws {
+        let mockPinnedSites = MockablePinnedSites()
+        let profile = MockProfile(injectedPinnedSites: mockPinnedSites)
+        let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
+        let subject = try createSubject(
+            injectedProfile: profile,
+            topSiteHistoryManager: mockTopSiteHistoryManager
+        )
+        let site = Site(url: "www.example.com", title: "Example Pinned Site")
+
+        subject.pinTopSite(site)
+
+        XCTAssertEqual(mockPinnedSites.addPinnedTopSiteCalledCount, 1)
+    }
+
     private func createSubject(
+        injectedProfile: Profile? = nil,
         googleTopSiteManager: GoogleTopSiteManagerProvider = MockGoogleTopSiteManager(mockSiteData: nil),
-        contileProvider: ContileProviderInterface = MockContileProvider(
-            result: .success(MockContileProvider.emptySuccessData)
+        contileProvider: ContileProviderInterface = MockSponsoredProvider(
+            result: .success(MockSponsoredProvider.emptySuccessData)
+        ),
+        unifiedAdsProvider: UnifiedAdsProviderInterface = MockSponsoredProvider(
+            result: .success(MockSponsoredProvider.emptySuccessData)
         ),
         topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(sites: []),
         searchEngineManager: SearchEnginesManagerProvider = MockSearchEnginesManager(),
@@ -310,13 +405,16 @@ final class TopSitesManagerTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TopSitesManager {
-        let mockProfile = try XCTUnwrap(profile)
+        let mockProfile = try XCTUnwrap(injectedProfile ?? profile)
+        let mockQueue = try XCTUnwrap(dispatchQueue)
         let subject = TopSitesManager(
-            prefs: mockProfile.prefs,
+            profile: mockProfile,
             contileProvider: contileProvider,
+            unifiedAdsProvider: unifiedAdsProvider,
             googleTopSiteManager: googleTopSiteManager,
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
+            dispatchQueue: mockQueue,
             maxTopSites: maxCount
         )
         trackForMemoryLeaks(subject, file: file, line: line)
@@ -347,5 +445,11 @@ final class TopSitesManagerTests: XCTestCase {
             tiles.append(SponsoredTile(contile: tile))
         }
         return tiles
+    }
+
+    private func setupNimbusUnifiedAdsTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.unifiedAds.with { _, _ in
+            return UnifiedAds(enabled: isEnabled)
+        }
     }
 }

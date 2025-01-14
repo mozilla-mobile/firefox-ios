@@ -63,6 +63,7 @@ class EditFolderViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
@@ -180,7 +181,7 @@ class EditFolderViewController: UIViewController,
                                                            for: indexPath) as? OneLineTableViewCell,
                   let folder = viewModel.folderStructures[safe: indexPath.row]
             else { return UITableViewCell() }
-            if folder.guid == Folder.dummyFolderGuid {
+            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
                 configureDesktopBookmarksHeaderCell(cell)
             } else {
                 configureParentFolderCell(cell, folder: folder)
@@ -220,7 +221,7 @@ class EditFolderViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.dummyFolderGuid {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
             return nil
         }
         return indexPath

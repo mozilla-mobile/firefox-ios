@@ -683,6 +683,12 @@
 		A847EEFA289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A858FC272D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Intents.strings; sourceTree = "<group>"; };
+		A858FC282D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A858FC292D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Intro.strings; sourceTree = "<group>"; };
+		A858FC2A2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A858FC2B2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A858FC2C2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A892C8D428BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A892C8D628BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intro.strings; sourceTree = "<group>"; };
 		A892C8D728BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -691,6 +697,12 @@
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A89766D61F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D71F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74A2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Intents.strings"; sourceTree = "<group>"; };
+		A8BDA74B2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74C2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Intro.strings"; sourceTree = "<group>"; };
+		A8BDA74D2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A8BDA74E2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74F2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A8EA0CE4289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A8EA0CE6289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Intro.strings; sourceTree = "<group>"; };
 		A8EA0CE7289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2317,6 +2329,8 @@
 				be,
 				am,
 				gl,
+				"en-CA",
+				scn,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2915,6 +2929,8 @@
 				4369C6E22C0493E800CA4991 /* hy-AM */,
 				43D5D1B72CB3EAD7001137A4 /* ar */,
 				4343874F2CB3EC32009962A9 /* ne-NP */,
+				A8BDA74F2D27124B00E02B59 /* en-CA */,
+				A858FC2C2D271326008B994A /* scn */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3007,6 +3023,8 @@
 				43D535F52959011100A7C85C /* be */,
 				43D302E229B54A120040A4CC /* am */,
 				434B6DC32A2408A400EE7F9A /* gl */,
+				A8BDA74C2D27124B00E02B59 /* en-CA */,
+				A858FC292D271326008B994A /* scn */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -3099,6 +3117,8 @@
 				43D535F62959011100A7C85C /* be */,
 				43D302E329B54A120040A4CC /* am */,
 				434B6DC42A2408A400EE7F9A /* gl */,
+				A8BDA74D2D27124B00E02B59 /* en-CA */,
+				A858FC2A2D271326008B994A /* scn */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3191,6 +3211,8 @@
 				43D535F32959011000A7C85C /* be */,
 				43D302E129B54A120040A4CC /* am */,
 				434B6DC22A2408A400EE7F9A /* gl */,
+				A8BDA74B2D27124B00E02B59 /* en-CA */,
+				A858FC282D271326008B994A /* scn */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3424,6 +3446,8 @@
 				437778062A24092200BD08C5 /* pa-IN */,
 				4379F1D62A24094200FB3E77 /* si */,
 				438F047A2A24096D00960A50 /* tt */,
+				A8BDA74E2D27124B00E02B59 /* en-CA */,
+				A858FC2B2D271326008B994A /* scn */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3517,6 +3541,8 @@
 				E521DDFA29782D3C00655202 /* cy */,
 				43D302E029B54A120040A4CC /* am */,
 				434B6DC12A2408A400EE7F9A /* gl */,
+				A8BDA74A2D27124B00E02B59 /* en-CA */,
+				A858FC272D271326008B994A /* scn */,
 			);
 			name = Intents.intentdefinition;
 			sourceTree = "<group>";
@@ -7172,7 +7198,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 135.0.20241221050300;
+				version = 136.0.20250108050329;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {

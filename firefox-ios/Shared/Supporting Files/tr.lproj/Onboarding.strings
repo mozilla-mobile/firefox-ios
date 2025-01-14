@@ -109,6 +109,9 @@
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Yönet";
 
+/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "%1$@, uygulamayı geliştirmemize yardımcı olmak için %2$@’ya tanı ve etkileşim verileri gönderir. %3$@";
+
 /* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ gizliliğinize önem verir. Ayrıntıları %2$@’nde okuyabilirsiniz.";
 
@@ -128,7 +131,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Çökme raporlarını otomatik olarak gönder";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Cihazınız, donanım yapılandırmanız ve %1$@ uygulamasını nasıl kullandığınızla ilgili veriler tüm %1$@ kullanıcıları için özellikleri, performansı ve kararlılığı iyileştirmemize yardımcı olur. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Cihazınız, donanım yapılandırmanız ve %1$@ uygulamasını nasıl kullandığınızla ilgili veriler tüm kullanıcılarımız için özellikleri, performansı ve kararlılığı iyileştirmemize yardımcı olur. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Teknik verileri ve etkileşim verilerini %@’ya gönderin";

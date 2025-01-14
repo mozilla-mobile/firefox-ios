@@ -7,27 +7,27 @@ import Foundation
 import Redux
 
 /// State for the header cell that is used in the homepage header section
-struct HeaderState: StateType, Equatable {
+struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
-    var showPrivateModeToggle: Bool
+    var showiPadSetup: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
             isPrivate: false,
-            showPrivateModeToggle: true
+            showiPadSetup: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showPrivateModeToggle: Bool
+        showiPadSetup: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
-        self.showPrivateModeToggle = showPrivateModeToggle
+        self.showiPadSetup = showiPadSetup
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -38,23 +38,45 @@ struct HeaderState: StateType, Equatable {
 
         switch action.actionType {
         case HomepageActionType.initialize:
-            // TODO: FXIOS-10259 - Update with felt privacy feature flags 
-            // or confirm we can remove the showPrivateModeToggle check
-            return HeaderState(
-                windowUUID: state.windowUUID,
-                isPrivate: false,
-                showPrivateModeToggle: true
-            )
+            return handleInitializeAction(for: state, with: action)
+        case HomepageActionType.traitCollectionDidChange:
+            return handleTraitCollectionDidChangeAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleInitializeAction(for state: HeaderState, with action: Action) -> HeaderState {
+        guard let homepageAction = action as? HomepageAction,
+              let showiPadSetup = homepageAction.showiPadSetup
+        else {
+            return defaultState(from: state)
+        }
+        return HeaderState(
+            windowUUID: state.windowUUID,
+            isPrivate: false,
+            showiPadSetup: showiPadSetup
+        )
+    }
+
+    private static func handleTraitCollectionDidChangeAction(for state: HeaderState, with action: Action) -> HeaderState {
+        guard let homepageAction = action as? HomepageAction,
+              let showiPadSetup = homepageAction.showiPadSetup
+        else {
+            return defaultState(from: state)
+        }
+        return HeaderState(
+            windowUUID: state.windowUUID,
+            isPrivate: state.isPrivate,
+            showiPadSetup: showiPadSetup
+        )
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
         return HeaderState(
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
-            showPrivateModeToggle: state.showPrivateModeToggle
+            showiPadSetup: state.showiPadSetup
         )
     }
 }

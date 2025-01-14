@@ -33,6 +33,7 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksRefactorFeatureFlagProvider,
+                             BookmarksHandlerDelegate,
                              FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -148,6 +149,10 @@ class BrowserViewController: UIViewController,
     /// Temporary flag for showing no internet connection native error page only.
     var isNICErrorPageEnabled: Bool {
         return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+    }
+
+    var isJSAlertRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
     private var browserViewControllerState: BrowserViewControllerState?
@@ -679,18 +684,26 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
-        switch toast {
-        case .addShortcut,
-                .clearCookies,
-                .addToReadingList,
-                .removeShortcut,
-                .removeFromReadingList,
-                .addBookmark:
+        func showToast() {
             SimpleToast().showAlertWithText(
                 toast.title,
                 bottomContainer: contentContainer,
                 theme: currentTheme()
             )
+        }
+        switch toast {
+        case .addShortcut,
+                .clearCookies,
+                .addToReadingList,
+                .removeShortcut,
+                .removeFromReadingList:
+            showToast()
+        case .addBookmark:
+            if isBookmarkRefactorEnabled {
+                showBookmarkToast(action: .add)
+            } else {
+                showToast()
+            }
         default:
             let viewModel = ButtonToastViewModel(
                 labelText: toast.title,
@@ -775,7 +788,7 @@ class BrowserViewController: UIViewController,
         // We need to update autofill status on sync manager as there could be delay from nimbus
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
-        profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
 
@@ -1003,7 +1016,10 @@ class BrowserViewController: UIViewController,
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
-        showQueuedAlertIfAvailable()
+
+        if !isJSAlertRefactorEnabled {
+            showQueuedAlertIfAvailable()
+        }
 
         prepareURLOnboardingContextualHint()
 
@@ -1052,10 +1068,32 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
         ])
 
-        // TODO: [FXIOS-10334] Needs investigation. Dequeuing JS alerts as part of subview layout is problematic.
-        showQueuedAlertIfAvailable()
+        if isJSAlertRefactorEnabled {
+            // This will be documented with FXIOS-10952
+            checkForJSAlerts()
+        } else {
+            showQueuedAlertIfAvailable()
+        }
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    func checkForJSAlerts() {
+        guard tabManager.selectedTab?.hasJavascriptAlertPrompt() ?? false else { return }
+
+        if presentedViewController == nil {
+            // We can show the alert, let's show it
+            guard let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() else { return }
+            let alertController = nextAlert.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true)
+        } else {
+            // We cannot show the alert right now but there is one queued on the selected tab
+            // check after a delay if we can show it
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.checkForJSAlerts()
+            }
+        }
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -1378,7 +1416,8 @@ class BrowserViewController: UIViewController,
             browserDelegate?.showHomepage(
                 overlayManager: overlayManager,
                 isZeroSearch: inline,
-                statusBarScrollDelegate: statusBarOverlay
+                statusBarScrollDelegate: statusBarOverlay,
+                toastContainer: contentContainer
             )
         } else {
             browserDelegate?.showLegacyHomepage(
@@ -1645,7 +1684,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func addBookmark(url: String, title: String? = nil) {
+    func addBookmark(url: String, title: String? = nil, site: Site? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
             title = url
@@ -1664,21 +1703,38 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-
+        site?.setBookmarked(true)
         showBookmarkToast(action: .add)
     }
 
-    func removeBookmark(url: URL, title: String?) {
+    func removeBookmark(url: URL, title: String?, site: Site? = nil) {
         profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
+            site?.setBookmarked(false)
         }
     }
 
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            if !isBookmarkRefactorEnabled {
+                showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            }
+            // Get the folder title using the recent bookmark folder pref
+            // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
+            else if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
+                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+                profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
+                    guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                    let folderName = bookmarkFolder.title
+                    let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
+                    self.showToast(message: message, toastAction: .bookmarkPage)
+                }
+            // If recent bookmarks folder is nil or the mobile (default) folder
+            } else {
+                showToast(message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel, toastAction: .bookmarkPage)
+            }
         case .remove:
             self.showToast(
                 bookmarkURL,
@@ -2114,8 +2170,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showContextMenu(for: configuration)
         case .trackingProtectionSettings:
             navigationHandler?.show(settings: .contentBlocker)
-        case .customizeHomepage:
-            navigationHandler?.show(settings: .homePage)
+        case .settings(let section):
+            navigationHandler?.show(settings: section)
         case .link:
             guard let url = type.url else {
                 logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
@@ -2125,6 +2181,21 @@ class BrowserViewController: UIViewController,
                 to: url,
                 visitType: .link,
                 isGoogleTopSite: type.isGoogleTopSite ?? false
+            )
+        case .newTab:
+            guard let url = type.url, let isPrivate = type.isPrivate, let selectNewTab = type.selectNewTab else {
+                logger.log("all params need to be set to properly create a new tab", level: .warning, category: .coordinator)
+                return
+            }
+            navigationHandler?.openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        case .shareSheet(let config):
+            navigationHandler?.showShareSheet(
+                shareType: config.shareType,
+                shareMessage: config.shareMessage,
+                sourceView: config.sourceView,
+                sourceRect: config.sourceRect,
+                toastContainer: config.toastContainer,
+                popoverArrowDirection: config.popoverArrowDirection
             )
         }
     }
@@ -2554,6 +2625,14 @@ class BrowserViewController: UIViewController,
     }
 
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
+        // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
+        guard !tabManager.isRestoringTabs else {
+            AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
+                self?.switchToTabForURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
+            }
+            return
+        }
+
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
@@ -2836,8 +2915,8 @@ class BrowserViewController: UIViewController,
                    level: .debug,
                    category: .setup)
 
-        guard hasSync else { return }
-        let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+        guard hasSync, let syncManager = profile.syncManager else { return }
+        let syncStatus = syncManager.checkCreditCardEngineEnablement()
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .settings,
@@ -3538,6 +3617,7 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            tab.cancelQueuedAlerts()
             stopObserving(webView: webView)
             self.scrollController.stopObserving(scrollView: webView.scrollView)
             webView.uiDelegate = nil
@@ -4144,6 +4224,18 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
     }
 }
 
+// MARK: NewJSPromptAlertControllerDelegate
+
+extension BrowserViewController: NewJSPromptAlertControllerDelegate {
+    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController) {
+        logger.log("JS prompt was dismissed. Will dequeue next alert.",
+                   level: .info,
+                   category: .webview)
+
+        checkForJSAlerts()
+    }
+}
+
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
         // Technically is not changing tabs but is loosing focus on urlbar
@@ -4158,6 +4250,7 @@ extension BrowserViewController: TopTabsDelegate {
         let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
+            openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)

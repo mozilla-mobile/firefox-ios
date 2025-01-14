@@ -1,11 +1,11 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
-"Bookmarks.EmptyState.Nested.Body.v135" = "Junci nzingalibbra mentri chi nàvighi, accussì ti l'attrovi fàcili doppu.";
+"Bookmarks.EmptyState.Nested.Body.v135" = "Junci nzingalibbra mentri chi nàvichi, accussì ti l'attrovi fàcili doppu.";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Sta carpetta è vacanti";
 
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
-"Bookmarks.EmptyState.Root.Body.v135" = "Sarba i siti mentri chi nàvighi. Pigghiamu macari i nzingalibbra di l'autri dispusitivi sincrunizzati.";
+"Bookmarks.EmptyState.Root.Body.v135" = "Sarba i siti mentri chi nàvichi. Pigghiamu macari i nzingalibbra di l'autri dispusitivi sincrunizzati.";
 
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
 "Bookmarks.EmptyState.Root.ButtonTitle.v135" = "Trasi nne Sync";
@@ -17,13 +17,13 @@
 "Bookmarks.Menu.AllBookmarks.v131" = "Tutti";
 
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
-"Bookmarks.Menu.DeleteBookmark.v132" = "Cancella u nzingalibbru";
+"Bookmarks.Menu.DeleteBookmark.v132" = "Scancella u nzingalibbru";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Cancillasti “%@”";
 
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
-"Bookmarks.Menu.DeleteFolder.v131" = "Cancella a carpetta";
+"Bookmarks.Menu.DeleteFolder.v131" = "Scancella a carpetta";
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Cancia nzingalibbru";

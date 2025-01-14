@@ -27,7 +27,8 @@ protocol BrowserDelegate: AnyObject {
     func showHomepage(
         overlayManager: OverlayModeManager,
         isZeroSearch: Bool,
-        statusBarScrollDelegate: StatusBarScrollDelegate
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        toastContainer: UIView
     )
 
     /// Show the private homepage to the user as part of felt privacy

@@ -173,7 +173,7 @@ extension String {
                 value: "Edit Bookmark",
                 comment: "Label on the top of the `Edit Bookmarks` screen.")
             public static let EditBookmarkDesktopBookmarksLabel = MZLocalizedString(
-                key: "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v135",
+                key: "Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136",
                 tableName: "Bookmarks",
                 value: "DESKTOP BOOKMARKS",
                 comment: "Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop.")
@@ -187,6 +187,21 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
+            public static let SavedBookmarkToastLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.SavedBookmarkToastLabel.v136",
+                tableName: "Bookmarks",
+                value: "Saved in “%@”",
+                comment: "The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to")
+            public static let SavedBookmarkToastDefaultFolderLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136",
+                tableName: "Bookmarks",
+                value: "Saved in “Bookmarks”",
+                comment: "The label displayed in the toast notification when saving a bookmark via the menu to the default folder. \"Bookmarks\" is the name of the default folder where the bookmark will be saved to.")
+            public static let MoreOptionsA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.MoreOptionsA11yLabel.v136",
+                tableName: "Bookmarks",
+                value: "More options",
+                comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
         }
 
         public struct EmptyState {
@@ -1669,11 +1684,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "To help improve the browser, %@ sends diagnostic and interaction data to %@. %@",
                 comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
-            public static let TermsOfServiceLink = MZLocalizedString(
-                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+            public static let TermsOfUseLink = MZLocalizedString(
+                key: "Onboarding.TermsOfUse.TermsOfUseLink.v136",
                 tableName: "Onboarding",
-                value: "%@ Terms of Service.",
-                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+                value: "%@ Terms of Use.",
+                comment: "Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name.")
             public static let PrivacyNoticeLink = MZLocalizedString(
                 key: "Onboarding.TermsOfService.PrivacyNoticeLink.v135",
                 tableName: "Onboarding",
@@ -5384,10 +5399,10 @@ extension String {
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains how Mozilla send crash reports.")
-    public static let SendCrashReportsSettingMessage = MZLocalizedString(
-        key: "Settings.CrashReports.Message.v135",
+    public static let SendCrashReportsSettingMessageV2 = MZLocalizedString(
+        key: "Settings.CrashReports.Message.v136",
         tableName: "Settings",
-        value: "Crash reports allow us diagnose and fix issues with the browser.",
+        value: "This helps us diagnose and fix issues with the browser.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SendDailyUsagePingSettingTitle = MZLocalizedString(
         key: "Settings.DailyUsagePing.Title.v135",
@@ -7656,6 +7671,16 @@ extension String {
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send daily usage ping.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+            public static let SendCrashReportsSettingMessage = MZLocalizedString(
+                key: "Settings.CrashReports.Message.v135",
+                tableName: "Settings",
+                value: "Crash reports allow us diagnose and fix issues with the browser.",
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
         }
     }
 }

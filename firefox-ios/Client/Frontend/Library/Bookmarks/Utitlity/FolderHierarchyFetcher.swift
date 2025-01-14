@@ -20,7 +20,7 @@ struct Folder: Equatable, Hashable {
     let guid: String
     let indentation: Int
 
-    static let dummyFolderGuid = "DUMMY"
+    static let DesktopFolderHeaderPlaceholderGuid = "DUMMY"
 
     static func localizedTitle(_ guid: String) -> String? {
         return LocalizedRootBookmarkFolderStrings[guid]
@@ -127,7 +127,7 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
         }
         // Find the first desktop folder and prepend a dummy folder object to use for the "DESKTOP BOOKMARKS" header
         if let firstDesktopFolderIndex = folders.firstIndex(where: { BookmarkRoots.DesktopRoots.contains($0.guid) }) {
-            let dummyFolder = Folder(title: "", guid: Folder.dummyFolderGuid, indentation: indent + 2)
+            let dummyFolder = Folder(title: "", guid: Folder.DesktopFolderHeaderPlaceholderGuid, indentation: indent + 2)
             folders.insert(dummyFolder, at: firstDesktopFolderIndex)
         }
     }

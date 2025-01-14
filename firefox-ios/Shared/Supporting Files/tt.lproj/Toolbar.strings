@@ -1,3 +1,12 @@
+/* Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu */
+"Toolbar.Menu.Button.A11y.Label.v135" = "Төп меню";
+
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "Яңа таб";
+
+/* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
+"Toolbar.Tab.CloseThisTab.Button.v130" = "Бу табны ябу";
+
+/* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
+"Toolbar.Tabs.Button.A11y.Label.v135" = "Ачык таблар";
 

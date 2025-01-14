@@ -12,20 +12,23 @@ import Shared
 /// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var topSitesData: [TopSiteState]
-    var numberOfRows: Int
-    var numberOfTilesPerRow: Int
+    let topSitesData: [TopSiteState]
+    let numberOfRows: Int
+    let numberOfTilesPerRow: Int
+    let shouldShowSection: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
         let numberOfRows = Int(preferredNumberOfRows ?? defaultNumberOfRows)
+        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
 
         self.init(
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: 0
+            numberOfTilesPerRow: HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards,
+            shouldShowSection: shouldShowSection
         )
     }
 
@@ -33,12 +36,14 @@ struct TopSitesSectionState: StateType, Equatable {
         windowUUID: WindowUUID,
         topSitesData: [TopSiteState],
         numberOfRows: Int,
-        numberOfTilesPerRow: Int
+        numberOfTilesPerRow: Int,
+        shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
         self.numberOfTilesPerRow = numberOfTilesPerRow
+        self.shouldShowSection = shouldShowSection
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -54,12 +59,14 @@ struct TopSitesSectionState: StateType, Equatable {
             else {
                 return defaultState(from: state)
             }
-
+            let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow ?? state.numberOfTilesPerRow
+            let filteredSites = filter(sites: sites, with: state.numberOfRows, and: numberOfTilesPerRow)
             return TopSitesSectionState(
                 windowUUID: state.windowUUID,
-                topSitesData: sites,
+                topSitesData: filteredSites,
                 numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow
+                numberOfTilesPerRow: numberOfTilesPerRow,
+                shouldShowSection: !filteredSites.isEmpty && state.shouldShowSection
             )
         case TopSitesActionType.updatedNumberOfRows:
             guard let topSitesAction = action as? TopSitesAction,
@@ -68,11 +75,13 @@ struct TopSitesSectionState: StateType, Equatable {
                 return defaultState(from: state)
             }
 
+            let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
             return TopSitesSectionState(
                 windowUUID: state.windowUUID,
-                topSitesData: state.topSitesData,
+                topSitesData: filteredSites,
                 numberOfRows: numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow
+                numberOfTilesPerRow: state.numberOfTilesPerRow,
+                shouldShowSection: state.shouldShowSection
             )
         case TopSitesActionType.updatedNumberOfTilesPerRow:
             guard let topSitesAction = action as? TopSitesAction,
@@ -81,15 +90,45 @@ struct TopSitesSectionState: StateType, Equatable {
                 return defaultState(from: state)
             }
 
+            let filteredSites = filter(sites: state.topSitesData, with: state.numberOfRows, and: numberOfTilesPerRow)
+            return TopSitesSectionState(
+                windowUUID: state.windowUUID,
+                topSitesData: filteredSites,
+                numberOfRows: state.numberOfRows,
+                numberOfTilesPerRow: numberOfTilesPerRow,
+                shouldShowSection: state.shouldShowSection
+            )
+        case TopSitesActionType.toggleShowSectionSetting:
+            guard let topSitesAction = action as? TopSitesAction,
+                  let isEnabled = topSitesAction.isEnabled
+            else {
+                return defaultState(from: state)
+            }
+
             return TopSitesSectionState(
                 windowUUID: state.windowUUID,
                 topSitesData: state.topSitesData,
                 numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: numberOfTilesPerRow
+                numberOfTilesPerRow: state.numberOfTilesPerRow,
+                shouldShowSection: isEnabled
             )
         default:
             return defaultState(from: state)
         }
+    }
+
+    /// Filters the top sites to be displayed in the view based on user preferences and layout configuration.
+    /// - Parameters:
+    ///   - sites: The full list of sites fetched from the top sites manager.
+    ///   - numberOfRows: The maximum number of rows to display, determined by user preferences or default value.
+    ///   - numberOfTilesPerRow: The number of tiles displayed per row, determined by the view's layout.
+    /// - Returns: A list of top sites to be displayed, limited to the specified number of rows and tiles per row.
+    private static func filter(
+        sites: [TopSiteState],
+        with numberOfRows: Int,
+        and numberOfTilesPerRow: Int
+    ) -> [TopSiteState] {
+        return Array(sites.prefix(numberOfRows * numberOfTilesPerRow))
     }
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
@@ -97,7 +136,8 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
         )
     }
 }

@@ -69,12 +69,9 @@ class BaseTestCase: XCTestCase {
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
         if icon.exists {
             icon.press(forDuration: 1.5)
-            mozWaitForElementToExist(springboard.buttons["Remove App"])
-            springboard.buttons["Remove App"].tap()
-            mozWaitForElementToExist(springboard.alerts.buttons["Delete App"])
-            springboard.alerts.buttons["Delete App"].tap()
-            mozWaitForElementToExist(springboard.alerts.buttons["Delete"])
-            springboard.alerts.buttons["Delete"].tap()
+            springboard.buttons["Remove App"].waitAndTap()
+            springboard.alerts.buttons["Delete App"].waitAndTap()
+            springboard.alerts.buttons["Delete"].waitAndTap()
         }
     }
 
@@ -138,7 +135,7 @@ class BaseTestCase: XCTestCase {
 
         if firstRunUI.exists {
             firstRunUI.swipeLeft()
-            XCUIApplication().buttons["Start Browsing"].tap()
+            XCUIApplication().buttons["Start Browsing"].waitAndTap()
         }
     }
 
@@ -294,11 +291,9 @@ class BaseTestCase: XCTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Reader View"])
-        app.buttons["Reader View"].tap()
+        app.buttons["Reader View"].waitAndTap()
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Add to Reading List"])
-        app.buttons["Add to Reading List"].tap()
+        app.buttons["Add to Reading List"].waitAndTap()
     }
 
     func removeContentFromReaderView() {
@@ -310,12 +305,11 @@ class BaseTestCase: XCTestCase {
         // Remove the item from reading list
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.buttons["Remove"])
-        app.buttons["Remove"].tap()
+        app.buttons["Remove"].waitAndTap()
     }
 
      func selectOptionFromContextMenu(option: String) {
-        mozWaitForElementToExist(app.tables["Context Menu"].cells.otherElements[option])
-        app.tables["Context Menu"].cells.otherElements[option].tap()
+        app.tables["Context Menu"].cells.otherElements[option].waitAndTap()
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
 
@@ -323,7 +317,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
+        app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -358,7 +352,7 @@ class BaseTestCase: XCTestCase {
     func unlockLoginsView() {
         // Press continue button on the password onboarding if it's shown
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
-            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
+            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].waitAndTap()
         }
 
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
@@ -398,7 +392,7 @@ class BaseTestCase: XCTestCase {
 
     func dismissSurveyPrompt() {
         if app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists {
-            app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
+            app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
         }
     }
 
@@ -420,14 +414,15 @@ class BaseTestCase: XCTestCase {
         }
         mozWaitForElementToExist(app.cells.staticTexts["Dark"])
         if theme == "Dark" {
-            app.cells.staticTexts["Dark"].tap()
+            app.cells.staticTexts["Dark"].waitAndTap()
         } else {
-            app.cells.staticTexts["Light"].tap()
+            app.cells.staticTexts["Light"].waitAndTap()
         }
-        app.buttons["Settings"].tap()
+        app.buttons["Settings"].waitAndTap()
         navigator.nowAt(SettingsScreen)
         app.buttons["Done"].waitAndTap()
     }
+
     func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
         var elementsDict = [XCUIElement: String]()
         for element in elements {

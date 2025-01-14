@@ -24,7 +24,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
 
         XCTAssertFalse(initialState.headerState.isPrivate)
-        XCTAssertTrue(initialState.headerState.showPrivateModeToggle)
+        XCTAssertFalse(initialState.headerState.showiPadSetup)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -34,15 +34,15 @@ final class HomepageStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
+                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertTrue(newState.headerState.showPrivateModeToggle)
+        XCTAssertTrue(newState.headerState.showiPadSetup)
     }
 
     // MARK: - Private

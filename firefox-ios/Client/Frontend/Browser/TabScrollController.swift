@@ -342,6 +342,7 @@ private extension TabScrollingController {
               let webView = tab?.webView,
               !scrollView.subviews.contains(where: { $0 is PullRefreshView })
         else {
+            pullToRefreshView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             pullToRefreshView?.startObservingContentScroll()
             return
         }

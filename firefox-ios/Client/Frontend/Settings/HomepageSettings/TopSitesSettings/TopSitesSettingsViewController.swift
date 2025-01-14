@@ -45,7 +45,14 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                     prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-                )
+                ) { _ in
+                    store.dispatch(
+                        TopSitesAction(
+                            windowUUID: self.windowUUID,
+                            actionType: TopSitesActionType.toggleShowSponsoredSettings
+                        )
+                    )
+                }
             ]
             let toggleSection = SettingSection(title: nil, children: toggleSettings)
             sections.append(toggleSection)

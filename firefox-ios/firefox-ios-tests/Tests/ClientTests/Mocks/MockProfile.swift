@@ -111,19 +111,25 @@ open class MockProfile: Client.Profile {
     // Read/Writeable properties for mocking
 
     public var files: FileAccessor
-    public var syncManager: ClientSyncManager!
+    public var syncManager: ClientSyncManager?
     public var firefoxSuggest: RustFirefoxSuggestProtocol?
 
     fileprivate let name: String = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
+    private let injectedPinnedSites: MockablePinnedSites?
 
-    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestProtocol? = nil) {
+    init(
+        databasePrefix: String = "mock",
+        firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
+        injectedPinnedSites: MockablePinnedSites? = nil
+    ) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix
         self.firefoxSuggest = firefoxSuggest
+        self.injectedPinnedSites = injectedPinnedSites
 
         do {
             directory = try files.getAndEnsureDirectory()
@@ -242,7 +248,7 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var pinnedSites: PinnedSites = {
-        legacyPlaces
+        injectedPinnedSites ?? legacyPlaces
     }()
 
     public func hasSyncAccount(completion: @escaping (Bool) -> Void) {
@@ -261,7 +267,7 @@ open class MockProfile: Client.Profile {
     public func flushAccount() {}
 
     public func removeAccount() {
-        self.syncManager.onRemovedAccount()
+        self.syncManager?.onRemovedAccount()
     }
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {

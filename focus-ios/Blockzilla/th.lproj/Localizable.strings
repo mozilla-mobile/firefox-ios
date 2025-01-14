@@ -277,6 +277,9 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "มืด";
 
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports" = "รายงานข้อขัดข้องช่วยให้เราวินิจฉัยและแก้ไขปัญหาของเบราว์เซอร์ได้";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
 
@@ -381,6 +384,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "กลุ่มสังคม";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "ส่งรายงานข้อขัดข้องโดยอัตโนมัติ";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";

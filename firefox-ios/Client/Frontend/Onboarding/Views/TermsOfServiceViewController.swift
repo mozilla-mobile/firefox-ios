@@ -113,7 +113,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     // MARK: - View setup
     private func configure() {
         agreementContent.removeAllArrangedViews()
-        let termsOfServiceLink = String(format: .Onboarding.TermsOfService.TermsOfServiceLink, AppName.shortName.rawValue)
+        let termsOfServiceLink = String(format: .Onboarding.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
         let termsOfServiceAgreement = String(format: .Onboarding.TermsOfService.TermsOfServiceAgreement, termsOfServiceLink)
         setupAgreementTextView(with: termsOfServiceAgreement,
                                linkTitle: termsOfServiceLink,

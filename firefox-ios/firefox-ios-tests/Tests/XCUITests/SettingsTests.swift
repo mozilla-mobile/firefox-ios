@@ -26,7 +26,7 @@ class SettingsTests: BaseTestCase {
         }
         let helpMenu = settingsTableView.cells["Help"]
         XCTAssertTrue(helpMenu.isEnabled)
-        helpMenu.tap()
+        helpMenu.waitAndTap()
 
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -60,15 +60,15 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual(value as? String, "0")
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].waitAndTap()
 
         // Check Offer to open copied links, when opening firefox is on
         let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
-        app.navigationBars["Settings"].buttons["Done"].tap()
+        app.navigationBars["Settings"].buttons["Done"].waitAndTap()
 
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
         app.staticTexts["Settings"].waitAndTap()
 
         // Check Offer to open copied links, when opening firefox is on
@@ -99,7 +99,7 @@ class SettingsTests: BaseTestCase {
 
         // Check that tapping on an element does nothing
         mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
-        app.tables.cells.staticTexts["Airmail"].tap()
+        app.tables.cells.staticTexts["Airmail"].waitAndTap()
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
 
         // Check that user can go back from that setting

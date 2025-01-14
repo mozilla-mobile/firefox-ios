@@ -31,12 +31,14 @@ class EditBookmarkCell: UITableViewCell,
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
+        view.adjustsFontSizeToFitWidth = true
     }
     private lazy var urlTextfield: TextField = .build { view in
         view.keyboardType = .URL
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.urlTextFieldDidChane()
         }), for: .editingChanged)
+        view.adjustsFontSizeToFitWidth = true
     }
     var onTitleFieldUpdate: ((String) -> Void)?
     var onURLFieldUpdate: ((String) -> Void)?

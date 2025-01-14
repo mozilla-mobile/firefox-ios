@@ -6,8 +6,14 @@ import Foundation
 import Glean
 
 struct PrivateBrowsingTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func sendDataClearanceTappedTelemetry(didConfirm: Bool) {
         let didConfirmExtra = GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra(didConfirm: didConfirm)
-        GleanMetrics.PrivateBrowsing.dataClearanceIconTapped.record(didConfirmExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.PrivateBrowsing.dataClearanceIconTapped, extras: didConfirmExtra)
     }
 }

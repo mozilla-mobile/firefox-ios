@@ -80,6 +80,7 @@
         "SearchSettingsUITests",
         "SearchTests",
         "SettingsTests",
+        "ShareMenuTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",

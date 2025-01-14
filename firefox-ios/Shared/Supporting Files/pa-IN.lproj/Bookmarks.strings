@@ -7,6 +7,9 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Body.v135" = "ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰੋ ਤਾਂ ਸਾਈਟਾਂ ਨੂੰ ਸੰਭਾਲੋ। ਅਸੀਂ ਹੋਰ ਸਿੰਕ ਕੀਤੇ ਡਿਵਾਈਸਾਂ ਤੋਂ ਬੁੱਕਮਾਰਕ ਵੀ ਲਵਾਂਗੇ।";
 
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
+"Bookmarks.EmptyState.Root.ButtonTitle.v135" = "ਸਿੰਕ ਕਰਨ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ";
+
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Title.v135" = "ਹਾਲੇ ਕੋਈ ਬੁੱਕਮਾਰਕ ਨਹੀਂ ਹੈ";
 
@@ -24,6 +27,9 @@
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਸੋਧੋ";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "ਸੰਭਾਲੋ";
 
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "ਇਸ ਵਿੱਚ ਸੰਭਾਲੋ";

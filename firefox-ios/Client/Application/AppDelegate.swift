@@ -11,7 +11,7 @@ import TabDataStore
 
 import class MozillaAppServices.Viaduct
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -154,7 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             profile.removeAccount()
         }
 
-        profile.syncManager.applicationDidBecomeActive()
+        profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
@@ -164,8 +164,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            // TODO: testing to see if this fixes https://mozilla-hub.atlassian.net/browse/FXIOS-7632
-            // self?.profile.cleanupHistoryIfNeeded()
+            if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
+                self?.profile.cleanupHistoryIfNeeded()
+            }
             self?.ratingPromptManager.updateData()
         }
 
@@ -192,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
-        profile.syncManager.applicationDidEnterBackground()
+        profile.syncManager?.applicationDidEnterBackground()
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.

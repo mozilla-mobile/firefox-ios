@@ -104,7 +104,7 @@ class AppLaunchUtil {
             AppEventQueue.signal(event: .accountManagerInitialized)
         }
 
-        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        // Add swizzle on UIViewControllers to automatically log when there's a new view appearing or disappearing
         UIViewController.loggerSwizzle()
 
         // Add swizzle on top of UIControl to automatically log when there's an action sent

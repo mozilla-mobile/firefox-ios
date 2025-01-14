@@ -31,7 +31,8 @@ final class ContextMenuConfigurationTests: XCTestCase {
         )
         let subject = ContextMenuConfiguration(
             homepageSection: .pocket(nil),
-            item: pocketItem
+            item: pocketItem,
+            toastContainer: UIView()
         )
         XCTAssertEqual(subject.site?.tileURL.absoluteString, "file:///www.example.com/1234")
         XCTAssertEqual(subject.site?.title, "Site 0")
@@ -46,7 +47,8 @@ final class ContextMenuConfigurationTests: XCTestCase {
         )
         let subject = ContextMenuConfiguration(
             homepageSection: .pocket(nil),
-            item: pocketItem
+            item: pocketItem,
+            toastContainer: UIView()
         )
         XCTAssertEqual(subject.site?.tileURL.absoluteString, "file:///www.example.com/1234")
         XCTAssertEqual(subject.site?.title, "Discover Site 0")
@@ -59,8 +61,9 @@ final class ContextMenuConfigurationTests: XCTestCase {
             ), nil
         )
         let subject = ContextMenuConfiguration(
-            homepageSection: .topSites,
-            item: topSiteItem
+            homepageSection: .topSites(4),
+            item: topSiteItem,
+            toastContainer: UIView()
         )
         XCTAssertEqual(subject.site?.tileURL.absoluteString, "www.example.com/1234")
         XCTAssertEqual(subject.site?.title, "Site 0")
@@ -68,8 +71,9 @@ final class ContextMenuConfigurationTests: XCTestCase {
 
     func tests_initialState_forNoItem_returnsExpectedState() {
         let subject = ContextMenuConfiguration(
-            homepageSection: .topSites,
-            item: nil
+            homepageSection: .topSites(4),
+            item: nil,
+            toastContainer: UIView()
         )
         XCTAssertNil(subject.site)
     }

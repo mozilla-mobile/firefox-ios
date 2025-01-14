@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "താങ്കള്‍ സന്ദര്‍ശിക്കുന്ന വെബ്‌സൈറ്റുകള്‍ താങ്കളുടെ സ്ഥലത്തിനായി അപേക്ഷിച്ചേക്കാം.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "ഇത് നിങ്ങൾക്ക് ഫോട്ടോകൾ എടുക്കാനും അപ്ലോഡ് ചെയ്യാനും അനുവദിക്കുന്നു.";
+"NSMicrophoneUsageDescription" = "രേഖപ്പെടത്തി ഉപ്ലോടു് ചെയ്യാൻ വേണ്ടി ഫയർഫോക്സു് താങ്ങളുടെ ശബ്ദഗ്രാഹിയെ ഉപയോഗിക്കാരുണ്ടു്.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ഇത് നിങ്ങൾക്ക് ഫോട്ടോകൾ സംരക്ഷിക്കാൻ അനുവദിക്കുന്നു.";

@@ -1,0 +1,3 @@
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "%2$@ പങ്കിടലുകളിൽ %1$@ ഇറക്കിവയ്ക്കൽ-കണ്ണി ഉൾപ്പെടുത്തുക";
+

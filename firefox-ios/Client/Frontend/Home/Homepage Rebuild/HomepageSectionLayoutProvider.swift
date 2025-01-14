@@ -59,44 +59,23 @@ final class HomepageSectionLayoutProvider {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-    private var dimensionImplementation: TopSitesDimensionImplementation
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
         self.logger = logger
-        self.dimensionImplementation = TopSitesDimensionImplementation(windowUUID: windowUUID)
     }
 
-    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            guard let section = HomepageSection(rawValue: sectionIndex) else {
-                self.logger.log(
-                    "Section should not have been nil, something went wrong",
-                    level: .fatal,
-                    category: .homepage
-                )
-                return nil
-            }
-            return self.createLayoutSection(
-                    for: section,
-                    with: environment.traitCollection,
-                    size: environment.container.effectiveContentSize
-                )
-        }
-    }
-
-    private func createLayoutSection(
+    func createLayoutSection(
         for section: HomepageSection,
-        with traitCollection: UITraitCollection,
-        size: CGSize
+        with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
         case .header:
             return createHeaderSectionLayout(for: traitCollection)
-        case .topSites:
+        case .topSites(let numberOfTilesPerRow):
             return createTopSitesSectionLayout(
                 for: traitCollection,
-                availableWidth: size.width
+                numberOfTilesPerRow: numberOfTilesPerRow
             )
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
@@ -172,16 +151,8 @@ final class HomepageSectionLayoutProvider {
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
-        availableWidth: CGFloat
+        numberOfTilesPerRow: Int
     ) -> NSCollectionLayoutSection {
-        let numberOfTilesPerRow = dimensionImplementation.getNumberOfTilesPerRow(
-            availableWidth: availableWidth,
-            leadingInset: UX.leadingInset(
-                traitCollection: traitCollection
-            ),
-            cellWidth: UX.TopSitesConstants.cellEstimatedSize.width
-        )
-
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),
             heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)

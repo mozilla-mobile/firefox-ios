@@ -8,28 +8,47 @@ import Foundation
 enum BrowserNavigationDestination: Equatable {
     // Native views
     case contextMenu
-    case customizeHomepage
+    case settings(Route.SettingsSection)
     case trackingProtectionSettings
 
     // Webpage views
     case link
+    case newTab
+
+    // System views
+    case shareSheet(ShareSheetConfiguration)
+}
+
+struct ShareSheetConfiguration: Equatable {
+    let shareType: ShareType
+    let shareMessage: ShareMessage?
+    let sourceView: UIView
+    let sourceRect: CGRect?
+    let toastContainer: UIView
+    let popoverArrowDirection: UIPopoverArrowDirection
 }
 
 /// This type exists as a field on the BrowserViewControllerState
 struct NavigationDestination: Equatable {
     let destination: BrowserNavigationDestination
     let url: URL?
+    let isPrivate: Bool?
+    let selectNewTab: Bool?
     let isGoogleTopSite: Bool?
     let contextMenuConfiguration: ContextMenuConfiguration?
 
     init(
         _ destination: BrowserNavigationDestination,
         url: URL? = nil,
+        isPrivate: Bool? = nil,
+        selectNewTab: Bool? = nil,
         isGoogleTopSite: Bool? = nil,
         contextMenuConfiguration: ContextMenuConfiguration? = nil
     ) {
         self.destination = destination
         self.url = url
+        self.isPrivate = isPrivate
+        self.selectNewTab = selectNewTab
         self.isGoogleTopSite = isGoogleTopSite
         self.contextMenuConfiguration = contextMenuConfiguration
     }

@@ -35,16 +35,16 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Sfai";
 
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Cancella";
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Scancella";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
 "Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Cancillari i viscotta e i dati dû situ pi %@ ti putissi fari nèsciri dû situ e sbacantari i to carrelli dâ spisa.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Cancella i viscotta e i dati dî siti";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Scancella i viscotta e i dati dî siti";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Cancella i viscotta e i dati dî siti";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Scancella i viscotta e i dati dî siti";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Cancillasti viscotta e dati dî siti";

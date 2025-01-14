@@ -6,6 +6,7 @@ import Common
 import WebKit
 import Photos
 import Shared
+import Storage
 
 class ActionProviderBuilder {
     private var actions = [UIAction]()
@@ -37,14 +38,14 @@ class ActionProviderBuilder {
             })
     }
 
-    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
+    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuBookmarkLink,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
             ) { _ in
-                addBookmark(url.absoluteString, title)
+                addBookmark(url.absoluteString, title, nil)
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .add,
                                              object: .bookmark,
@@ -53,14 +54,14 @@ class ActionProviderBuilder {
         )
     }
 
-    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
+    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
             ) { _ in
-                removeBookmark(url, title)
+                removeBookmark(url, title, nil)
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .delete,
                                              object: .bookmark,
