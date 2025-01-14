@@ -53,9 +53,10 @@ private extension URL {
     }
 
     var content: String {
-        try? String(data: .init(contentsOf: self), encoding: .utf8)!
+        (try? String(data: .init(contentsOf: self), encoding: .utf8)) ?? ""
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
+// TODO Ecosia Upgrade: Is this script still used?
 Translations().save()

@@ -172,9 +172,7 @@
 		12C11E8D2D2826A600E4DDBF /* EcosiaDebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289252B07C8F000A8FCB3 /* EcosiaDebugSettings.swift */; };
 		12C11E8E2D2826A600E4DDBF /* NTPCustomizationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289272B07C8F000A8FCB3 /* NTPCustomizationSettingsViewController.swift */; };
 		12C11E8F2D2826A600E4DDBF /* EcosiaSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289262B07C8F000A8FCB3 /* EcosiaSettings.swift */; };
-		12C11E902D28273900E4DDBF /* Clean.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289342B07C8F000A8FCB3 /* Clean.swift */; };
 		12C11E912D28273900E4DDBF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289362B07C8F000A8FCB3 /* String.swift */; };
-		12C11E922D28273900E4DDBF /* Validate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289352B07C8F000A8FCB3 /* Validate.swift */; };
 		12C11E932D28274F00E4DDBF /* FeatureManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2893C2B07C8F000A8FCB3 /* FeatureManagement.swift */; };
 		12C11E972D28279C00E4DDBF /* BrazeIntegrationExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E942D28279C00E4DDBF /* BrazeIntegrationExperiment.swift */; };
 		12C11E982D28279C00E4DDBF /* NewsletterCardExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E952D28279C00E4DDBF /* NewsletterCardExperiment.swift */; };
@@ -17005,9 +17003,7 @@
 				8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */,
 				E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */,
 				8A3EF7F42A2FCF5700796E3A /* ExportBrowserDataSetting.swift in Sources */,
-				12C11E902D28273900E4DDBF /* Clean.swift in Sources */,
 				12C11E912D28273900E4DDBF /* String.swift in Sources */,
-				12C11E922D28273900E4DDBF /* Validate.swift in Sources */,
 				8CC6170B2C358BAC001C7688 /* ActionToast.swift in Sources */,
 				2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
