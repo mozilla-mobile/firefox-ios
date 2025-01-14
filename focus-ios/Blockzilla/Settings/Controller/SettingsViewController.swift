@@ -128,7 +128,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let crashToggle = BlockerToggle(
             label: UIConstants.strings.labelCrashReports,
             setting: SettingsToggle.crashToggle,
-            subtitle: UIConstants.strings.detailTextCrashReports
+            subtitle: UIConstants.strings.detailTextCrashReportsV2
         )
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
         let searchSuggestionToggle = BlockerToggle(label: UIConstants.strings.settingsSearchSuggestions, setting: SettingsToggle.enableSearchSuggestions, subtitle: searchSuggestionSubtitle)
