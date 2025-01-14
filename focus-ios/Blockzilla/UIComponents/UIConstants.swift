@@ -402,12 +402,4 @@ struct UIConstants {
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
         static let truncateLeader = "..."
     }
-    
-    struct OldStrings {
-        static let detailTextCrashReports = NSLocalizedString(
-            "Settings.detailTextCrashReports",
-            value: "Crash reports allow us diagnose and fix issues with the browser.",
-            comment: "Description associated with the Crash Reports toggle on settings screen"
-        )
-    }
 }
