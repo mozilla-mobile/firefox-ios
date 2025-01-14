@@ -129,6 +129,22 @@ struct TopSitesSectionState: StateType, Equatable {
         )
     }
 
+    private static func handleToggleShowSectionSettingAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let isEnabled = topSitesAction.isEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: state.topSitesData,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: isEnabled
+        )
+    }
+
     /// Filters the top sites to be displayed in the view based on user preferences and layout configuration.
     /// - Parameters:
     ///   - sites: The full list of sites fetched from the top sites manager.
