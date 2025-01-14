@@ -51,7 +51,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
         /* Ecosia: Update bar tint
         navigationBar.tintColor = theme.colors.textPrimary
         */
-        navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
+        navigationBar.tintColor = theme.colors.actionPrimary
     }
 
     private func setupToolBarAppearance() {

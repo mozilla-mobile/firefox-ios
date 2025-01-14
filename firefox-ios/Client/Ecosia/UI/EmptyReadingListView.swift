@@ -19,6 +19,7 @@ final class EmptyReadingListView: UIView, Themeable {
 
     // MARK: - Themeable Properties
 
+    let windowUUID: UUID
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -57,7 +58,8 @@ final class EmptyReadingListView: UIView, Themeable {
         return nil
     }
 
-    init() {
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(frame: .zero)
         setup()
         applyTheme()
@@ -125,10 +127,10 @@ final class EmptyReadingListView: UIView, Themeable {
     // MARK: - Themeable
 
     func applyTheme() {
-        welcomeLabel.textColor = themeManager.currentTheme.colors.textPrimary
-        readerModeLabel.textColor = themeManager.currentTheme.colors.textSecondary
-        readerModeImageView.tintColor = themeManager.currentTheme.colors.textSecondary
-        readingListLabel.textColor = themeManager.currentTheme.colors.textSecondary
-        readingListImageView.tintColor = themeManager.currentTheme.colors.textSecondary
+        welcomeLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        readerModeLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textSecondary
+        readerModeImageView.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textSecondary
+        readingListLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textSecondary
+        readingListImageView.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textSecondary
     }
 }

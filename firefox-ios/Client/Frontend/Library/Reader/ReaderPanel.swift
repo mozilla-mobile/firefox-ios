@@ -328,7 +328,9 @@ class ReadingListPanel: UITableViewController,
         return scrollView
     }()
 
-    private var emptyStateView = EmptyReadingListView()
+    private lazy var emptyStateView: EmptyReadingListView = {
+        EmptyReadingListView(windowUUID: self.windowUUID)
+    }()
     /* Ecosia: Update Empty State View reference
     private lazy var emptyStateView: UIView = {
         return ReaderPanelEmptyStateView(windowUUID: self.windowUUID)

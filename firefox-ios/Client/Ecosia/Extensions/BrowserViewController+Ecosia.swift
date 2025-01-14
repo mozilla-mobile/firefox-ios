@@ -59,7 +59,7 @@ extension BrowserViewController {
 
     func updateURLBarFollowingPrivateModeUI() {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        urlBar.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 }
 

@@ -25,12 +25,14 @@ final class SearchAreaSetting: Setting {
 
     override var accessibilityIdentifier: String? { return .localized(.searchRegion) }
 
+    let windowUUID: UUID
     init(settings: SettingsTableViewController) {
+        self.windowUUID = settings.windowUUID
         super.init(title: NSAttributedString(string: .localized(.searchRegion), attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(MarketsController(style: .insetGrouped), animated: true)
+        navigationController?.pushViewController(MarketsController(style: .insetGrouped, windowUUID: windowUUID), animated: true)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
@@ -52,12 +54,14 @@ final class SafeSearchSettings: Setting {
 
     override var accessibilityIdentifier: String? { return .localized(.searchRegion) }
 
+    let windowUUID: UUID
     init(settings: SettingsTableViewController) {
+        self.windowUUID = settings.windowUUID
         super.init(title: NSAttributedString(string: .localized(.safeSearch), attributes: [NSAttributedString.Key.foregroundColor: UIColor.legacyTheme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(FilterController(), animated: true)
+        navigationController?.pushViewController(FilterController(windowUUID: windowUUID), animated: true)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
@@ -119,9 +123,15 @@ final class EcosiaPrivacyPolicySetting: Setting {
     override var url: URL? {
         return Environment.current.urlProvider.privacy
     }
-
+    
+    let windowUUID: UUID
+    init(settings: SettingsTableViewController) {
+        self.windowUUID = settings.windowUUID
+        super.init()
+    }
+    
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
+        setUpAndPushSettingsContentViewController(navigationController, url: self.url, windowUUID: windowUUID)
         Analytics.shared.navigation(.open, label: .privacy)
     }
 }
@@ -168,9 +178,15 @@ final class EcosiaTermsSetting: Setting {
     override var url: URL? {
         return Environment.current.urlProvider.terms
     }
+    
+    let windowUUID: UUID
+    init(settings: SettingsTableViewController) {
+        self.windowUUID = settings.windowUUID
+        super.init()
+    }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController, self.url)
+        setUpAndPushSettingsContentViewController(navigationController, url: self.url, windowUUID: windowUUID)
         Analytics.shared.navigation(.open, label: .terms)
     }
 }
@@ -203,14 +219,16 @@ final class HomepageSettings: Setting {
 
     override var accessoryView: UIImageView? { ecosiaDisclosureIndicator }
 
+    let windowUUID: WindowUUID
     init(settings: SettingsTableViewController, settingsDelegate: SettingsDelegate?) {
         self.profile = settings.profile
+        self.windowUUID = settings.windowUUID
         super.init(title: NSAttributedString(string: .localized(.homepage)))
         self.delegate = settingsDelegate
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let customizationViewController = NTPCustomizationSettingsViewController()
+        let customizationViewController = NTPCustomizationSettingsViewController(windowUUID: windowUUID)
         customizationViewController.profile = profile
         customizationViewController.settingsDelegate = delegate
         navigationController?.pushViewController(customizationViewController, animated: true)
@@ -219,9 +237,11 @@ final class HomepageSettings: Setting {
 
 extension Setting {
     // Helper method to set up and push a SettingsContentViewController
-    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?, _ url: URL? = nil) {
+    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?,
+                                                   url: URL? = nil,
+                                                   windowUUID: WindowUUID) {
         if let url = self.url {
-            let viewController = SettingsContentViewController()
+            let viewController = SettingsContentViewController(windowUUID: windowUUID)
             viewController.settingsTitle = self.title
             viewController.url = url
             navigationController?.pushViewController(viewController, animated: true)

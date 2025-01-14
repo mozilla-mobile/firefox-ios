@@ -7,8 +7,8 @@ import Shared
 import Common
 
 final class NTPCustomizationSettingsViewController: SettingsTableViewController {
-    init() {
-        super.init(style: .insetGrouped)
+    init(windowUUID: WindowUUID) {
+        super.init(style: .insetGrouped, windowUUID: windowUUID)
 
         title = .localized(.homepage)
         navigationItem.rightBarButtonItem = .init(title: .localized(.done),
@@ -29,7 +29,7 @@ final class NTPCustomizationSettingsViewController: SettingsTableViewController 
                 return HomePageSettingViewController.TopSitesSettings(settings: self)
             }
             return NTPCustomizationSetting(prefs: profile.prefs,
-                                           theme: themeManager.currentTheme,
+                                           theme: themeManager.getCurrentTheme(for: windowUUID),
                                            config: config)
         }
         return [SettingSection(title: .init(string: .localized(.showOnHomepage)), children: settings)]

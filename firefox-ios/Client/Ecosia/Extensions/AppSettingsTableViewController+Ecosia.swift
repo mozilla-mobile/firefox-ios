@@ -31,7 +31,7 @@ extension AppSettingsTableViewController {
 
     private func getEcosiaDefaultBrowserSection() -> SettingSection {
         .init(footerTitle: .init(string: .localized(.linksFromWebsites)),
-              children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
+              children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])
     }
 
     private func getSearchSection() -> SettingSection {
@@ -39,8 +39,8 @@ extension AppSettingsTableViewController {
         var settings: [Setting] = [
             SearchAreaSetting(settings: self),
             SafeSearchSettings(settings: self),
-            AutoCompleteSettings(prefs: profile.prefs, theme: themeManager.currentTheme),
-            PersonalSearchSettings(prefs: profile.prefs, theme: themeManager.currentTheme)
+            AutoCompleteSettings(prefs: profile.prefs, theme: themeManager.getCurrentTheme(for: windowUUID)),
+            PersonalSearchSettings(prefs: profile.prefs, theme: themeManager.getCurrentTheme(for: windowUUID))
         ]
 
         return .init(title: .init(string: .localized(.search)),
@@ -56,7 +56,7 @@ extension AppSettingsTableViewController {
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
 
         if inactiveTabsAreBuildActive {
-            customizationSettings.append(TabsSetting(theme: themeManager.currentTheme, settingsDelegate: parentCoordinator))
+            customizationSettings.append(TabsSetting(theme: themeManager.getCurrentTheme(for: windowUUID), settingsDelegate: parentCoordinator))
         }
 
         if isSearchBarLocationFeatureEnabled {
@@ -77,7 +77,7 @@ extension AppSettingsTableViewController {
             NoImageModeSetting(settings: self),
             BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.currentTheme,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: "showClipboardBar",
                 defaultValue: false,
                 titleText: .SettingsOfferClipboardBarTitle,
@@ -85,7 +85,7 @@ extension AppSettingsTableViewController {
             ),
             BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.currentTheme,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
                 defaultValue: true,
                 titleText: .SettingsShowLinkPreviewsTitle,
@@ -106,16 +106,16 @@ extension AppSettingsTableViewController {
         let privacySettings = [
             PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator),
             ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator),
-            EcosiaSendAnonymousUsageDataSetting(prefs: profile.prefs, theme: themeManager.currentTheme),
+            EcosiaSendAnonymousUsageDataSetting(prefs: profile.prefs, theme: themeManager.getCurrentTheme(for: windowUUID)),
             BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme,
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
                         prefKey: "settings.closePrivateTabs",
                         defaultValue: false,
                         titleText: .AppSettingsClosePrivateTabsTitle,
                         statusText: .AppSettingsClosePrivateTabsDescription),
             ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator),
-            EcosiaPrivacyPolicySetting(),
-            EcosiaTermsSetting()
+            EcosiaPrivacyPolicySetting(settings: self),
+            EcosiaTermsSetting(settings: self)
         ]
 
         return .init(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
@@ -139,7 +139,7 @@ extension AppSettingsTableViewController {
             ExportBrowserDataSetting(settings: self),
             ForceCrashSetting(settings: self),
             PushBackInstallation(settings: self),
-            OpenFiftyTabsDebugOption(settings: self),
+            OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             ToggleImpactIntro(settings: self),
             ShowTour(settings: self),
             CreateReferralCode(settings: self),

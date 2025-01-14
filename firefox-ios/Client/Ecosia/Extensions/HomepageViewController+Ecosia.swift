@@ -106,7 +106,7 @@ extension HomepageViewController: NTPImpactCellDelegate {
     func impactCellButtonClickedWithInfo(_ info: ClimateImpactInfo) {
         switch info {
         case .referral:
-            let invite = MultiplyImpact(referrals: referrals)
+            let invite = MultiplyImpact(referrals: referrals, windowUUID: windowUUID)
             invite.delegate = self
             let nav = EcosiaNavigation(rootViewController: invite)
             present(nav, animated: true)

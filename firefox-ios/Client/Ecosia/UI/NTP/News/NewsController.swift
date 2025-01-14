@@ -7,13 +7,16 @@ import UIKit
 import Common
 
 final class NewsController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
-    UICollectionViewDelegateFlowLayout, Themeable {
+                            UICollectionViewDelegateFlowLayout, Themeable {
+
     private(set) weak var collection: UICollectionView!
     private var items = [NewsModel]()
     private let images = Images(.init(configuration: .ephemeral))
     private let news = News()
     private let identifier = "news"
     var delegate: SharedHomepageCellDelegate?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: Common.WindowUUID? { return windowUUID }
 
     // MARK: - Themeable Properties
 
@@ -25,7 +28,8 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
 
     required init?(coder: NSCoder) { nil }
 
-    init(items: [NewsModel]) {
+    init(windowUUID: WindowUUID, items: [NewsModel]) {
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         self.items = items
         title = .localized(.ecosiaNews)

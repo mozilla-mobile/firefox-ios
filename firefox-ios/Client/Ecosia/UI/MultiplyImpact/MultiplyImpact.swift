@@ -102,6 +102,8 @@ class MultiplyImpact: UIViewController, Themeable {
 
     // MARK: - Themeable Properties
 
+    let windowUUID: WindowUUID
+    var currentWindowUUID: WindowUUID? { windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -109,8 +111,9 @@ class MultiplyImpact: UIViewController, Themeable {
     // MARK: - Init
 
     required init?(coder: NSCoder) { nil }
-    init(referrals: Referrals) {
+    init(referrals: Referrals, windowUUID: WindowUUID) {
         self.referrals = referrals
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -464,7 +467,8 @@ class MultiplyImpact: UIViewController, Themeable {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.backgroundColor = .legacyTheme.ecosia.modalHeader
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.type == .light ? UIColor.Dark.Text.primary : .legacyTheme.ecosia.primaryBrand
+        navigationController?.navigationBar.tintColor = themeManager
+            .getCurrentTheme(for: currentWindowUUID).type == .light ? UIColor.Dark.Text.primary : .legacyTheme.ecosia.primaryBrand
     }
 
     private func updateInviteLink() {
