@@ -228,7 +228,7 @@ class OneLineTableViewCell: UITableViewCell,
     // To simplify setup, OneLineTableViewCell now has a viewModel
     // Use it for new code, replace when possible in old code
     func configure(viewModel: OneLineTableViewCellViewModel) {
-        self.isAccessoryViewInteractive = viewModel.accessoryView is UIButton
+        isAccessoryViewInteractive = viewModel.accessoryView is UIButton
 
         titleLabel.text = viewModel.title
         accessoryView = createAccessoryView(accessoryView: viewModel.accessoryView)
