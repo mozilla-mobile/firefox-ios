@@ -208,9 +208,9 @@ struct UIConstants {
             value: "Automatically Send Crash Reports",
             comment: "Label for Crash Reports toggle on settings screen"
         )
-        static let detailTextCrashReports = NSLocalizedString(
-            "Settings.detailTextCrashReports",
-            value: "Crash reports allow us diagnose and fix issues with the browser.",
+        static let detailTextCrashReportsV2 = NSLocalizedString(
+            "Settings.detailTextCrashReports.V2",
+            value: "This helps us diagnose and fix issues with the browser.",
             comment: "Description associated with the Crash Reports toggle on settings screen"
         )
 
