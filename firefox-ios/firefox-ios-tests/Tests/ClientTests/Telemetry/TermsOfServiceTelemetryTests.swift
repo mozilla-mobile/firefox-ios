@@ -61,4 +61,3 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.termsOfServiceAccepted)
     }
 }
-
