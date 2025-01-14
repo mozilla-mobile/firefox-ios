@@ -45,7 +45,7 @@ class DependencyHelper {
             pocketAPI: PocketProvider(prefs: profile.prefs)
         )
         AppContainer.shared.register(service: pocketManager)
-        
+
         let gleanLifecycleObserver: GleanLifecycleObserver = appDelegate.gleanLifecycleObserver
         AppContainer.shared.register(service: gleanLifecycleObserver)
 
