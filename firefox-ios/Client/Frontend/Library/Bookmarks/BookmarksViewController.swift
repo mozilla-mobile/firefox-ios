@@ -507,6 +507,7 @@ class BookmarksViewController: SiteTableViewController,
                 viewModel.accessoryView = contextButton
             }
 
+            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell
