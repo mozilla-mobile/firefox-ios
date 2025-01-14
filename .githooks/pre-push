@@ -1,56 +1,58 @@
 #!/bin/sh
 
-echo "Starting Swiftlint Check..."
-swiftlint --strict
-RESULT=$?
+## TODO Ecosia Upgrade: Figure out if this pre-push hook is desired
 
-if [ $RESULT -ne 0 ]; then
-    echo "Violations found. Please fix the issues before pushing."
-    exit 1
-else 
-    echo "🎉  Hooray. No violation. You may proceed."
-fi
+# echo "Starting Swiftlint Check..."
+# swiftlint --strict
+# RESULT=$?
 
-# get the URL of a remote
-get_remote_url() {
-  remote_name=$1
-  git remote get-url "$remote_name"
-}
+# if [ $RESULT -ne 0 ]; then
+#     echo "Violations found. Please fix the issues before pushing."
+#     exit 1
+# else 
+#     echo "🎉  Hooray. No violation. You may proceed."
+# fi
 
-# remote name associated with the restricted URL
-find_remote_name_by_url() {
-  restricted_url="https://github.com/mozilla-mobile/firefox-ios.git"
-  for remote in $(git remote); do
-    remote_url=$(get_remote_url "$remote")
-    if [ "$remote_url" = "$restricted_url" ]; then
-      echo "$remote"
-      return
-    fi
-  done
-  echo ""
-}
+# # get the URL of a remote
+# get_remote_url() {
+#   remote_name=$1
+#   git remote get-url "$remote_name"
+# }
 
-# current tracked remote and branch for the current local branch
-upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-current_tracked_remote=$(echo "$upstream" | cut -d'/' -f1)
-current_tracked_branch=$(echo "$upstream" | cut -d'/' -f2)
+# # remote name associated with the restricted URL
+# find_remote_name_by_url() {
+#   restricted_url="https://github.com/mozilla-mobile/firefox-ios.git"
+#   for remote in $(git remote); do
+#     remote_url=$(get_remote_url "$remote")
+#     if [ "$remote_url" = "$restricted_url" ]; then
+#       echo "$remote"
+#       return
+#     fi
+#   done
+#   echo ""
+# }
 
-echo "Current tracked remote: $current_tracked_remote"
-echo "Current tracked branch: $current_tracked_branch"
+# # current tracked remote and branch for the current local branch
+# upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+# current_tracked_remote=$(echo "$upstream" | cut -d'/' -f1)
+# current_tracked_branch=$(echo "$upstream" | cut -d'/' -f2)
 
-restricted_remote=$(find_remote_name_by_url)
-echo "Restricted remote: $restricted_remote"
+# echo "Current tracked remote: $current_tracked_remote"
+# echo "Current tracked branch: $current_tracked_branch"
 
-# Special Case: remote being pushed to from the first argument of the pre-push hook
-push_remote_my=$1
-echo "Push remote: $restricted_remote"
+# restricted_remote=$(find_remote_name_by_url)
+# echo "Restricted remote: $restricted_remote"
 
-if [ "$current_tracked_branch" = "main" ]; then
-  # if the push remote is the restricted remote
-  if [ "$push_remote_my" = "$restricted_remote" ]; then
-    echo "Direct pushes to the 'main' branch on the specified remote are not allowed."
-    exit 1
-  fi
-fi
+# # Special Case: remote being pushed to from the first argument of the pre-push hook
+# push_remote_my=$1
+# echo "Push remote: $restricted_remote"
 
-exit 0
+# if [ "$current_tracked_branch" = "main" ]; then
+#   # if the push remote is the restricted remote
+#   if [ "$push_remote_my" = "$restricted_remote" ]; then
+#     echo "Direct pushes to the 'main' branch on the specified remote are not allowed."
+#     exit 1
+#   fi
+# fi
+
+# exit 0
