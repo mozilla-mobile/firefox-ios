@@ -828,9 +828,15 @@ public class RustLogins: LoginsProtocol, KeyManager {
     }
 
     private func getKeychainData(rustKeys: RustLoginEncryptionKeys) -> (String?, String?) {
-        let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
-        let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
-        return (key, encryptedCanaryPhrase)
+        var keychainData: (String?, String?) = (nil, nil)
+
+        DispatchQueue.global(qos: .background).sync {
+            let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
+            let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
+            keychainData = (key, encryptedCanaryPhrase)
+        }
+
+        return keychainData
     }
 
     public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
@@ -838,10 +844,10 @@ public class RustLogins: LoginsProtocol, KeyManager {
         let (key, encryptedCanaryPhrase) = getKeychainData(rustKeys: rustKeys)
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
-            self.handleExpectedKeyAction(rustKeys: rustKeys,
-                                            encryptedCanaryPhrase: encryptedCanaryPhrase,
-                                            key: key,
-                                            completion: completion)
+                self.handleExpectedKeyAction(rustKeys: rustKeys,
+                                             encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                             key: key,
+                                             completion: completion)
         case (.some(key), .none):
             self.handleUnexpectedKeyAction(rustKeys: rustKeys, completion: completion)
         case (.none, .some(encryptedCanaryPhrase)):
@@ -941,5 +947,40 @@ public class RustLogins: LoginsProtocol, KeyManager {
         // If none of the above cases apply, we're in a state that shouldn't be
         // possible but is disallowed nonetheless
         completion(.failure(LoginEncryptionKeyError.illegalState as NSError))
+    }
+
+    // MARK: - KeyManager
+
+    /**
+    * Retrieves the encryption key used by the Rust logins component for encrypting and decrypting login data.
+    *
+    * This method is invoked internally by the Rust component whenever encryption or decryption is required.
+    *
+    * **Note on thread safety:**
+    * Each CRUD operation in Rust acquires a mutex lock on the db to ensure thread safety.
+    * Therefore, it's crucial to call `getStoredKey` before performing any such CRUD operations in Swift.
+    * `addLogin` and `updateLogin` are good examples of that.
+    *
+    * **Usage Example:**
+    * ```
+    * public func methodThatRequiresEncDec() {
+    *     ...
+    *     self.getStoredKey {
+    *         ...
+    *         self.storage.someRustMethod()
+    *         ...
+    *     }
+    * }
+    * ```
+    */
+    public func getKey() throws -> Data {
+        let rustKeys = RustLoginEncryptionKeys()
+        let (key, _) = getKeychainData(rustKeys: rustKeys)
+
+        guard let keyData = key?.data(using: .utf8) else {
+            throw LoginsStoreError.MissingKey
+        }
+
+        return keyData
     }
 }
