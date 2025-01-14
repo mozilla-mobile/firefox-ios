@@ -68,6 +68,11 @@
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
+		121E65DF2D36514E00DFBFA2 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4B8E81D38497A00493393 /* BaseTestCase.swift */; };
+		121E65E02D36515700DFBFA2 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
+		121E65E12D36585A00DFBFA2 /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
+		121E65E22D36588400DFBFA2 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		121E65E32D36595900DFBFA2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		124DAE7F2D301B290050104C /* RecoveredLegacyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */; };
 		124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */; };
 		124DAE812D301C550050104C /* LegacyDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */; };
@@ -262,8 +267,6 @@
 		12C11F5C2D2831A400E4DDBF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
 		12C11F5D2D2831A400E4DDBF /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0430A544203B372D00FDF76D /* IntegrationTests.swift */; };
 		12C11F5E2D2831A400E4DDBF /* NavigationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF449A41E7BFE2C00FD7595 /* NavigationTest.swift */; };
-		12C11F5F2D2831C100E4DDBF /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4B8E81D38497A00493393 /* BaseTestCase.swift */; };
-		12C11F602D2831C100E4DDBF /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		12C11F612D2831CF00E4DDBF /* MultiWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */; };
 		12C11F622D2831CF00E4DDBF /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		12C11F632D2831E500E4DDBF /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
@@ -16118,6 +16121,7 @@
 				12C11F0D2D28317500E4DDBF /* DomainAutocompleteTests.swift in Sources */,
 				12C11F0E2D28317500E4DDBF /* HistoryTests.swift in Sources */,
 				12C11F0F2D28317500E4DDBF /* EngagementNotificationTests.swift in Sources */,
+				121E65E02D36515700DFBFA2 /* FxScreenGraph.swift in Sources */,
 				12C11F102D28317500E4DDBF /* DisplaySettingsTests.swift in Sources */,
 				12C11F112D28317500E4DDBF /* FakespotTests.swift in Sources */,
 				12C11F122D28317500E4DDBF /* DownloadsTests.swift in Sources */,
@@ -16137,6 +16141,8 @@
 				12C11F622D2831CF00E4DDBF /* InactiveTabsTest.swift in Sources */,
 				12C11F472D2831A400E4DDBF /* PrivateBrowsingTest.swift in Sources */,
 				12C11F482D2831A400E4DDBF /* URLValidationTests.swift in Sources */,
+				121E65E12D36585A00DFBFA2 /* LaunchArguments.swift in Sources */,
+				121E65E22D36588400DFBFA2 /* AccessibilityIdentifiers.swift in Sources */,
 				12C11F492D2831A400E4DDBF /* TodayWidgetTests.swift in Sources */,
 				12C11F4A2D2831A400E4DDBF /* ReadingListTests.swift in Sources */,
 				12C11F4B2D2831A400E4DDBF /* JumpBackInTests.swift in Sources */,
@@ -16157,10 +16163,12 @@
 				12C11F5A2D2831A400E4DDBF /* TopTabsTest.swift in Sources */,
 				12C11F5B2D2831A400E4DDBF /* NightModeTests.swift in Sources */,
 				12C11F5C2D2831A400E4DDBF /* ToolbarMenuTests.swift in Sources */,
+				121E65E32D36595900DFBFA2 /* ImageIdentifiers.swift in Sources */,
 				12C11F5D2D2831A400E4DDBF /* IntegrationTests.swift in Sources */,
 				12C11F5E2D2831A400E4DDBF /* NavigationTest.swift in Sources */,
 				12C11F172D28317500E4DDBF /* BrowsingPDFTests.swift in Sources */,
 				12C11F182D28317500E4DDBF /* HomeButtonTests.swift in Sources */,
+				121E65DF2D36514E00DFBFA2 /* BaseTestCase.swift in Sources */,
 				12C11F192D28317500E4DDBF /* AuthenticationTest.swift in Sources */,
 				12C11F1A2D28317500E4DDBF /* DataManagementTests.swift in Sources */,
 				12C11F1B2D28317500E4DDBF /* DesktopModeTests.swift in Sources */,
@@ -16905,8 +16913,6 @@
 				8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */,
 				43AB6FA425DC53D30016B015 /* LegacyLabelButtonHeaderView.swift in Sources */,
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
-				12C11F5F2D2831C100E4DDBF /* BaseTestCase.swift in Sources */,
-				12C11F602D2831C100E4DDBF /* FxScreenGraph.swift in Sources */,
 				965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
 				8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */,
