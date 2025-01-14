@@ -56,20 +56,7 @@ struct TopSitesSectionState: StateType, Equatable {
         case TopSitesMiddlewareActionType.retrievedUpdatedSites:
             return handleRetrievedUpdatedSitesAction(action: action, state: state)
         case TopSitesActionType.updatedNumberOfRows:
-            guard let topSitesAction = action as? TopSitesAction,
-                  let numberOfRows = topSitesAction.numberOfRows
-            else {
-                return defaultState(from: state)
-            }
-
-            let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
-            return TopSitesSectionState(
-                windowUUID: state.windowUUID,
-                topSitesData: filteredSites,
-                numberOfRows: numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow,
-                shouldShowSection: state.shouldShowSection
-            )
+            return handleUpdatedNumberOfRowsAction(action: action, state: state)
         case TopSitesActionType.updatedNumberOfTilesPerRow:
             guard let topSitesAction = action as? TopSitesAction,
                   let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
