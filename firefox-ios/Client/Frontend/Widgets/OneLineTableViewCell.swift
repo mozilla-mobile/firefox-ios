@@ -195,7 +195,8 @@ class OneLineTableViewCell: UITableViewCell,
             if isButton {
                 let button = accessoryView as? UIButton
                 var buttonConfig = button?.configuration
-                let image = buttonConfig?.image?.createScaled(CGSize(width: iconSize, height: iconSize))
+                let image = buttonConfig?.image?.createScaled(
+                    CGSize(width: iconSize, height: iconSize)).withRenderingMode(.alwaysTemplate)
                 buttonConfig?.image = image
                 button?.configuration = buttonConfig
             }
