@@ -154,7 +154,7 @@ class EditBookmarkViewController: UIViewController,
 
     func applyTheme() {
         setTheme(theme)
-        tableView.reloadData()
+        reloadTableViewData()
     }
 
     private func setTheme(_ theme: any Theme) {
@@ -187,12 +187,11 @@ class EditBookmarkViewController: UIViewController,
 
         case .folder(let folder, _):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                           for: indexPath) as? OneLineTableViewCell,
-                  !viewModel.isFolderCollapsed
+                                                           for: indexPath) as? OneLineTableViewCell
             else {
                 return UITableViewCell()
             }
-            if folder.guid == Folder.dummyFolderGuid {
+            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
                 self.configureDesktopBookmarksHeaderCell(cell)
             } else {
                 self.configureParentFolderCell(cell, folder: folder)
