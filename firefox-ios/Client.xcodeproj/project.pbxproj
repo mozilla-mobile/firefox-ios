@@ -90,6 +90,10 @@
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		1265098A2CDA32790011BA36 /* BrazeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126509882CDA31890011BA36 /* BrazeServiceTests.swift */; };
 		1285E2B52CC293CA0053506B /* AnalyticsSpyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */; };
+		12AEB1182D36A8C40035D7D8 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
+		12AEB11D2D36BCD30035D7D8 /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */; };
+		12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */; };
+		12AEB1212D36BCD60035D7D8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11F2D36BCD60035D7D8 /* Metrics.swift */; };
 		12C11E252D281BA100E4DDBF /* EcosiaLaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E242D281B8D00E4DDBF /* EcosiaLaunchScreenView.swift */; };
 		12C11E262D281BC300E4DDBF /* EcosiaLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12C11E232D281B8D00E4DDBF /* EcosiaLaunchScreen.xib */; };
 		12C11E272D281BCC00E4DDBF /* EcosiaHomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E212D281B7200E4DDBF /* EcosiaHomepageSectionType.swift */; };
@@ -198,9 +202,6 @@
 		12C11EB22D28292000E4DDBF /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289502B07C8F000A8FCB3 /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift */; };
 		12C11EB92D2829B200E4DDBF /* BookmarksExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289542B07C8F000A8FCB3 /* BookmarksExchange.swift */; };
 		12C11EBA2D2829BC00E4DDBF /* markets.json in Resources */ = {isa = PBXBuildFile; fileRef = 2CB289562B07C8F000A8FCB3 /* markets.json */; };
-		12C11EBB2D282A1900E4DDBF /* FakeNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289592B07C8F000A8FCB3 /* FakeNimbus.swift */; };
-		12C11EBC2D282A1900E4DDBF /* FakeTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289582B07C8F000A8FCB3 /* FakeTelemetry.swift */; };
-		12C11EBD2D282A1900E4DDBF /* FakeSentry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2895A2B07C8F000A8FCB3 /* FakeSentry.swift */; };
 		12C11EC82D282A3D00E4DDBF /* EcosiaInstallType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11EC22D282A3D00E4DDBF /* EcosiaInstallType+Extensions.swift */; };
 		12C11EC92D282A3D00E4DDBF /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11EC42D282A3D00E4DDBF /* Version.swift */; };
 		12C11ECA2D282A3D00E4DDBF /* Version+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11EC52D282A3D00E4DDBF /* Version+Extensions.swift */; };
@@ -2418,6 +2419,9 @@
 		126A40A4A5AFDFD655B0FDF4 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		126F44CCB14373DC7813DE1F /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSpyTests.swift; sourceTree = "<group>"; };
+		12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxNimbus.swift; sourceTree = "<group>"; };
+		12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxNimbusMessaging.swift; sourceTree = "<group>"; };
+		12AEB11F2D36BCD60035D7D8 /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		12C11E132D28128000E4DDBF /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		12C11E142D2812B200E4DDBF /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		12C11E152D2812B200E4DDBF /* EcosiaBeta.ShareTo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.ShareTo.xcconfig; path = Configuration/EcosiaBeta.ShareTo.xcconfig; sourceTree = "<group>"; };
@@ -10018,6 +10022,24 @@
 			path = Analytics;
 			sourceTree = "<group>";
 		};
+		12AEB11A2D36BCBC0035D7D8 /* PersistedGenerated */ = {
+			isa = PBXGroup;
+			children = (
+				12AEB1202D36BCD60035D7D8 /* Metrics */,
+				12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */,
+				12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */,
+			);
+			path = PersistedGenerated;
+			sourceTree = "<group>";
+		};
+		12AEB1202D36BCD60035D7D8 /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				12AEB11F2D36BCD60035D7D8 /* Metrics.swift */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
 		12C11E3F2D28218400E4DDBF /* SeedProgressManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -10647,6 +10669,7 @@
 		2CB288D92B07C8EF00A8FCB3 /* Ecosia */ = {
 			isa = PBXGroup;
 			children = (
+				12AEB11A2D36BCBC0035D7D8 /* PersistedGenerated */,
 				124DAE782D2FD0C90050104C /* RecoveredFromUpgrade */,
 				2C02BE5A2B0E705300FE80C2 /* LaunchScreen */,
 				2CB288DA2B07C8EF00A8FCB3 /* MMP */,
@@ -16764,6 +16787,8 @@
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				DF5D47522A9381C700D6AE74 /* FakespotSettingsCardView.swift in Sources */,
+				12AEB11D2D36BCD30035D7D8 /* FxNimbusMessaging.swift in Sources */,
+				12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
 				12C11E7E2D28261800E4DDBF /* EcosiaNavigation.swift in Sources */,
 				B2DFB7E32B619E2B0004CEA5 /* AddressCellView.swift in Sources */,
@@ -16824,6 +16849,7 @@
 				8AF347E02CADD1C300624036 /* HomepageAction.swift in Sources */,
 				96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */,
 				8A4490922BF3BC2700E7E682 /* MicrosurveyPromptView.swift in Sources */,
+				12AEB1212D36BCD60035D7D8 /* Metrics.swift in Sources */,
 				AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */,
 				219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */,
 				8A3EF7F72A2FCF6D00796E3A /* ExportLogDataSetting.swift in Sources */,
@@ -17357,9 +17383,6 @@
 				8A5D1CB62A30DBB0005AD35C /* DefaultBrowserSetting.swift in Sources */,
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
-				12C11EBB2D282A1900E4DDBF /* FakeNimbus.swift in Sources */,
-				12C11EBC2D282A1900E4DDBF /* FakeTelemetry.swift in Sources */,
-				12C11EBD2D282A1900E4DDBF /* FakeSentry.swift in Sources */,
 				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
 				7ADC1D192C27D35B003ED924 /* ActionProviderBuilder.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
@@ -17438,6 +17461,7 @@
 				0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
 				E1B9A2C22CAD91EF00F6A0E9 /* ToolbarTelemetry.swift in Sources */,
+				12AEB1182D36A8C40035D7D8 /* QRCodeViewController.swift in Sources */,
 				12C11E5B2D28238700E4DDBF /* NTPNewsletterCardCell.swift in Sources */,
 				12C11E5C2D28238700E4DDBF /* NTPNewsletterCardViewModel.swift in Sources */,
 				12C11E5D2D28238700E4DDBF /* NTPConfigurableNudgeCardCell.swift in Sources */,
