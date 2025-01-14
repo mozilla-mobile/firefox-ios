@@ -77,8 +77,9 @@ final class NTPImpactRowView: UIView, Themeable {
     }()
 
     /// A resizable button for performing actions related to the row.
-    private lazy var actionButton: ResizableButton = {
-        let button = ResizableButton()
+    private lazy var actionButton: LegacyResizableButton = {
+        // TODO Ecosia Upgrade: Replace with new ResizableButton
+        let button = LegacyResizableButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         button.titleLabel?.textAlignment = .right
