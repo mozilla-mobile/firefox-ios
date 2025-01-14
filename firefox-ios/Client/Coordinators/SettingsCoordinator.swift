@@ -28,25 +28,33 @@ class SettingsCoordinator: BaseCoordinator,
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let gleanLifecycleObserver: GleanLifecycleObserver
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
-    init(router: Router,
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        router: Router,
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+        profile: Profile = AppContainer.shared.resolve(),
+        tabManager: TabManager,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+    ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.gleanLifecycleObserver = gleanLifecycleObserver
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
-        let settingsViewController = AppSettingsTableViewController(with: profile,
-                                                                    and: tabManager,
-                                                                    settingsDelegate: self,
-                                                                    parentCoordinator: self)
+        let settingsViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            settingsDelegate: self,
+            parentCoordinator: self,
+            gleanLifecycleObserver: gleanLifecycleObserver
+        )
         self.settingsViewController = settingsViewController
         router.setRootViewController(settingsViewController)
     }
