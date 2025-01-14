@@ -24,6 +24,6 @@ struct HomepageTelemetry {
     }
     
     func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
-            gleanWrapper.recordPrivateModeToggle(isPrivateMode: enteringPrivateMode)
+        gleanWrapper.recordPrivateModeToggle(isPrivateMode: enteringPrivateMode)
     }
 }
