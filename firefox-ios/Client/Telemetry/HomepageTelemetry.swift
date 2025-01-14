@@ -18,11 +18,11 @@ class CustomGleanWrapper: GleanWrapperProtocol {
 
 struct HomepageTelemetry {
     private let gleanWrapper: GleanWrapperProtocol
-    
+
     init(gleanWrapper: GleanWrapperProtocol = CustomGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-    
+
     func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
         gleanWrapper.recordPrivateModeToggle(isPrivateMode: enteringPrivateMode)
     }
