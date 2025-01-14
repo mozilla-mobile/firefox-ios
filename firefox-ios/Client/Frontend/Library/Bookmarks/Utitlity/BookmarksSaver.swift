@@ -55,6 +55,11 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                     guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
 
                     if folder.parentGUID == nil {
+                        TelemetryWrapper.recordEvent(category: .action,
+                                                     method: .tap,
+                                                     object: .bookmark,
+                                                     value: .bookmarkAddFolder)
+
                         let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                         return profile.places.createFolder(parentGUID: parentFolderGUID,
                                                            title: folder.title,
