@@ -94,6 +94,7 @@
 		12AEB11D2D36BCD30035D7D8 /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */; };
 		12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */; };
 		12AEB1212D36BCD60035D7D8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11F2D36BCD60035D7D8 /* Metrics.swift */; };
+		12AEB1222D37BE030035D7D8 /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2861AC0A2B90052877D /* SnackBar.swift */; };
 		12C11E252D281BA100E4DDBF /* EcosiaLaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E242D281B8D00E4DDBF /* EcosiaLaunchScreenView.swift */; };
 		12C11E262D281BC300E4DDBF /* EcosiaLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12C11E232D281B8D00E4DDBF /* EcosiaLaunchScreen.xib */; };
 		12C11E272D281BCC00E4DDBF /* EcosiaHomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E212D281B7200E4DDBF /* EcosiaHomepageSectionType.swift */; };
@@ -17160,6 +17161,7 @@
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
 				8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
+				12AEB1222D37BE030035D7D8 /* SnackBar.swift in Sources */,
 				12C11E302D281FB500E4DDBF /* EmptyBookmarksViewDelegate.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
