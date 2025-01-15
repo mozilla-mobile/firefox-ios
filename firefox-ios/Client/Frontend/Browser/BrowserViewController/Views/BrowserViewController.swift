@@ -15,6 +15,8 @@ import Common
 import ComponentLibrary
 import Redux
 import ToolbarKit
+// Ecosia: Import Core
+import Core
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -234,6 +236,9 @@ class BrowserViewController: UIViewController,
         }
         return keyboardPressesHandlerValue
     }
+    
+    // Ecosia: Add Referrals
+    let referrals = Referrals()
 
     init(
         profile: Profile,

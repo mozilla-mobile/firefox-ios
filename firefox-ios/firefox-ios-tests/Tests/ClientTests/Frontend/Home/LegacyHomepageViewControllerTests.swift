@@ -31,11 +31,21 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
+        /* Ecosia: Update HomepageViewController's init
+         let firefoxHomeViewController = LegacyHomepageViewController(
+             profile: profile,
+             toastContainer: UIView(),
+             tabManager: tabManager,
+             overlayManager: overlayManager
+         )
+         */
         let firefoxHomeViewController = LegacyHomepageViewController(
             profile: profile,
             toastContainer: UIView(),
             tabManager: tabManager,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            referrals: .init(),
+            delegate: nil
         )
 
         trackForMemoryLeaks(firefoxHomeViewController)
@@ -49,12 +59,23 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
+        /* Ecosia: Update HomepageViewController's init
+         let subject = LegacyHomepageViewController(
+             profile: profile,
+             toastContainer: UIView(),
+             tabManager: tabManager,
+             overlayManager: overlayManager
+         )
+         */
         let subject = LegacyHomepageViewController(
             profile: profile,
             toastContainer: UIView(),
             tabManager: tabManager,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            referrals: .init(),
+            delegate: nil
         )
+
         XCTAssertFalse(
             try Experiments.createJexlHelper()!.evalJexl(
                 expression: "'homepage_viewed'|eventSum('Days', 1, 0) > 0"

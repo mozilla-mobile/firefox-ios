@@ -66,8 +66,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         // Ecosia: Update TableView to grouped style
         // super.init(windowUUID: tabManager.windowUUID)
-        super.init(style: .insetGrouped)
-        
+        super.init(style: .insetGrouped, windowUUID: tabManager.windowUUID)
+
         self.profile = profile
         self.tabManager = tabManager
         self.settingsDelegate = delegate

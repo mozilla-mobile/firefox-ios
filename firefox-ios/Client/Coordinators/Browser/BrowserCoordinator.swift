@@ -215,7 +215,12 @@ class BrowserCoordinator: BaseCoordinator,
                 isZeroSearch: inline,
                 toastContainer: toastContainer,
                 tabManager: tabManager,
-                overlayManager: overlayManager)
+                overlayManager: overlayManager,
+                // Ecosia: Add Referrals
+                referrals: browserViewController.referrals,
+                // Ecosia: Add HomePageViewControllerDelegate
+                delegate: browserViewController
+            )
             legacyHomepageViewController.homePanelDelegate = homepanelDelegate
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
             legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
