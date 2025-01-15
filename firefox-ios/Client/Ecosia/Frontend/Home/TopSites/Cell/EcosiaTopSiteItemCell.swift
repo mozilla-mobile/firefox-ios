@@ -6,6 +6,7 @@
  Ecosia: This file replaces the one contained in Client/Frontend/Home/TopSites/Cell
  It is done so that we will have minimum conflicts when major updates are needed
  */
+// TODO Ecosia Upgrade: Do we need to update this with the newest TopSiteItemCell?
 
 import Common
 import Foundation
@@ -135,7 +136,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
             imageURL = URL(string: site.imageURL, invalidCharacters: false)
         }
         let viewModel = FaviconImageViewModel(siteURLString: urlRequest,
-                                              faviconURL: imageURL,
                                               faviconCornerRadius: UX.iconCornerRadius)
         imageView.setFavicon(viewModel)
         self.textColor = textColor
