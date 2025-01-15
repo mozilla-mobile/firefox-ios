@@ -5,25 +5,15 @@
 import Foundation
 import Glean
 
-protocol GleanWrapperProtocol {
-    func recordPrivateModeToggle(isPrivateMode: Bool)
-}
-
-class CustomGleanWrapper: GleanWrapperProtocol {
-    func recordPrivateModeToggle(isPrivateMode: Bool) {
-        let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: isPrivateMode)
-        GleanMetrics.Homepage.privateModeToggle.record(isPrivateModeExtra)
-    }
-}
-
 struct HomepageTelemetry {
-    private let gleanWrapper: GleanWrapperProtocol
+    private let gleanWrapper: GleanWrapper
 
-    init(gleanWrapper: GleanWrapperProtocol = CustomGleanWrapper()) {
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
     func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
-        gleanWrapper.recordPrivateModeToggle(isPrivateMode: enteringPrivateMode)
+        let extras = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: extras)
     }
 }
