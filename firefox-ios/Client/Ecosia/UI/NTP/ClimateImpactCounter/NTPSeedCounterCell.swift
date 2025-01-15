@@ -106,7 +106,8 @@ final class NTPSeedCounterCell: UICollectionViewCell, Themeable, ReusableCell {
     }
 
     private func setupSeedCounterViewHostingController() {
-        let swiftUIView = SeedCounterView(progressManagerType: SeedCounterNTPExperiment.progressManagerType.self)
+        let swiftUIView = SeedCounterView(progressManagerType: SeedCounterNTPExperiment.progressManagerType.self,
+                                          windowUUID: currentWindowUUID)
         hostingController = UIHostingController(rootView: swiftUIView)
 
         guard let hostingController else { return }

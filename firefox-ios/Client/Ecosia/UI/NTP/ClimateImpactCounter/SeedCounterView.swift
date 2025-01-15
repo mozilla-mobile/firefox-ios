@@ -14,13 +14,15 @@ struct SeedCounterView: View {
     @State private var level: Int = 1
     @State private var progressValue: CGFloat = 0.0
     @StateObject var theme = ArcTheme()
-    @Environment(\.themeType) var themeVal
+    let windowUUID: WindowUUID?
+    @Environment(\.themeManager) var themeManager
     @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     // MARK: - Init
 
-    init(progressManagerType: SeedProgressManagerProtocol.Type) {
+    init(progressManagerType: SeedProgressManagerProtocol.Type, windowUUID: WindowUUID?) {
         self.progressManagerType = progressManagerType
+        self.windowUUID = windowUUID
         _seedsCollected = State(initialValue: progressManagerType.loadTotalSeedsCollected())
         _level = State(initialValue: progressManagerType.loadCurrentLevel())
         _progressValue = State(initialValue: progressManagerType.calculateInnerProgress())
@@ -44,13 +46,14 @@ struct SeedCounterView: View {
             NotificationCenter.default.addObserver(forName: progressManagerType.progressUpdatedNotification, object: nil, queue: .main) { _ in
                 self.triggerUpdateValues()
             }
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onDisappear {
             NotificationCenter.default.removeObserver(self, name: progressManagerType.progressUpdatedNotification, object: nil)
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
