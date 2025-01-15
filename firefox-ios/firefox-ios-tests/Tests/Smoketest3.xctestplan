@@ -145,6 +145,7 @@
         "SettingsTests\/testOpenSiriOption()",
         "SettingsTests\/testSettingsOptionSubtitles()",
         "ShareMenuTests",
+        "ShareToolbarTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",
