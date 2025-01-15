@@ -290,10 +290,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
     fileprivate var lastRequest: URLRequest?
     var pendingScreenshot = false
+    var isAuthorizedStrippedURL = false
     var url: URL? {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
+                isAuthorizedStrippedURL = true
                 url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
+            } else {
+                isAuthorizedStrippedURL = false
             }
         }
     }

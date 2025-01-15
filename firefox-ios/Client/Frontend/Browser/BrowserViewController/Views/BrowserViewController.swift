@@ -2054,7 +2054,7 @@ class BrowserViewController: UIViewController,
             }
 
             let action = ToolbarAction(
-                url: tab.url?.displayURL,
+                url: tab.url?.displayURL(authorized: tab.isAuthorizedStrippedURL),
                 isPrivate: tab.isPrivate,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,

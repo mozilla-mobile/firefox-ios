@@ -132,7 +132,7 @@ extension URL {
         return self.absoluteDisplayString.replacingOccurrences(of: ".", with: "\u{2024}")
     }
 
-    public var displayURL: URL? {
+    public func displayURL(authorized: Bool) -> URL? {
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests, path.contains("test-fixture/") {
             return self
         }
@@ -150,7 +150,13 @@ extension URL {
         }
 
         if let internalUrl = InternalURL(self), internalUrl.isErrorPage {
-            return internalUrl.originalURLFromErrorPage?.displayURL
+            if authorized || internalUrl.isAuthorized {
+                return internalUrl.originalURLFromErrorPage?.displayURL
+            } else {
+                // If unauthorized, do not display URL from error page 'url' param,
+                // as this could potentially have been an attempt to spoof a website
+                return internalUrl.url
+            }
         }
 
         if !InternalURL.isValid(url: self) {
@@ -158,6 +164,10 @@ extension URL {
         }
 
         return nil
+    }
+
+    public var displayURL: URL? {
+        return displayURL(authorized: false)
     }
 
     /**
