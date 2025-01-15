@@ -260,7 +260,6 @@ public class BottomSheetViewController: UIViewController,
             })
         case .ended:
             let velocity = recognizer.velocity(in: view)
-            print("viewTranslation.y: \(viewTranslation.y), height: \(contentView.bounds.height)")
             if viewTranslation.y >= 200 || viewTranslation.y >= contentView.bounds.height / 2 || velocity.y >= 700 {
                 dismissSheetViewController()
             } else {
