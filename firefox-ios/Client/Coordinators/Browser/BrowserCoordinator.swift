@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import TabDataStore
+import PDFKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -596,6 +597,29 @@ class BrowserCoordinator: BaseCoordinator,
             toastContainer: self.browserViewController.contentContainer,
             popoverArrowDirection: .any
         )
+    }
+
+    func presentSavePDFController() {
+        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
+        webView.createPDF { [weak self] result in
+            switch result {
+            case .success(let data):
+                guard let pdf = PDFDocument(data: data),
+                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
+                    return
+                }
+                pdf.write(to: outputURL)
+                if FileManager.default.fileExists(atPath: outputURL.path) {
+                    let url = URL(fileURLWithPath: outputURL.path)
+                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    self?.present(controller)
+                }
+            case .failure(let error):
+                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                 level: .debug,
+                                 category: .webview)
+            }
+        }
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {

@@ -244,6 +244,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             description += ", \(Preview.SaveToReadingListSubtitle)"
         }
 
+        description += ", \(Preview.SaveAsPDFSubtitle)"
+
         return description
     }
 
@@ -482,6 +484,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 configureBookmarkItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 configureReadingListItem(with: uuid, and: tabInfo),
+                configureSaveAsPDFItem(with: uuid, and: tabInfo),
             ]
         )]
     }
@@ -579,6 +582,34 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         windowUUID: uuid,
                         actionType: actionType,
                         tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureSaveAsPDFItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Save.SaveAsPDF,
+            iconName: Icons.saveAsPDF,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .saveAsPDF,
+                            url: tabInfo.canonicalURL
+                        ),
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
