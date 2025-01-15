@@ -26,7 +26,7 @@ class EditBookmarkCell: UITableViewCell,
         view.distribution = .fillProportionally
         view.spacing = 10.0
     }
-    private lazy var textFieldsDivder: UIView = .build()
+    private lazy var textFieldsDivider: UIView = .build()
     private lazy var titleTextfield: TextField = .build { view in
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
@@ -36,7 +36,7 @@ class EditBookmarkCell: UITableViewCell,
     private lazy var urlTextfield: TextField = .build { view in
         view.keyboardType = .URL
         view.addAction(UIAction(handler: { [weak self] _ in
-            self?.urlTextFieldDidChane()
+            self?.urlTextFieldDidChange()
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
     }
@@ -54,7 +54,7 @@ class EditBookmarkCell: UITableViewCell,
 
     private func setupSubviews() {
         textFieldsContainerView.addArrangedSubview(titleTextfield)
-        textFieldsContainerView.addArrangedSubview(textFieldsDivder)
+        textFieldsContainerView.addArrangedSubview(textFieldsDivider)
         textFieldsContainerView.addArrangedSubview(urlTextfield)
         contentView.addSubviews(faviconImageView, textFieldsContainerView)
 
@@ -70,8 +70,8 @@ class EditBookmarkCell: UITableViewCell,
             faviconImageView.widthAnchor.constraint(equalToConstant: faviconDynamicSize),
             faviconImageView.heightAnchor.constraint(equalToConstant: faviconDynamicSize),
 
-            textFieldsDivder.heightAnchor.constraint(equalToConstant: UX.textFieldDividerHeight),
-            textFieldsDivder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+            textFieldsDivider.heightAnchor.constraint(equalToConstant: UX.textFieldDividerHeight),
+            textFieldsDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                        constant: -UX.textFieldDividerTrailingPadding),
 
             textFieldsContainerView.leadingAnchor.constraint(equalTo: faviconImageView.trailingAnchor,
@@ -100,11 +100,11 @@ class EditBookmarkCell: UITableViewCell,
     func applyTheme(theme: any Theme) {
         urlTextfield.applyTheme(theme: theme)
         titleTextfield.applyTheme(theme: theme)
-        textFieldsDivder.backgroundColor = theme.colors.borderPrimary
+        textFieldsDivider.backgroundColor = theme.colors.borderPrimary
         backgroundColor = theme.colors.layer5
     }
 
-    private func urlTextFieldDidChane() {
+    private func urlTextFieldDidChange() {
         onURLFieldUpdate?(urlTextfield.text ?? "")
     }
 
