@@ -46,7 +46,7 @@ class TrackingProtectionModel {
     let statusBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.statusBodyLabel
     let trackersBlockedButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackersBlockedButton
     let securityStatusButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton
-    let toggleViewLabelsContainerA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewLabelsContainer
+    let toggleViewContainerA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewLabelsContainer
     let toggleViewBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewBodyLabel
     let closeButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton
     let closeButtonA11yLabel = String.Menu.EnhancedTrackingProtection.closeButtonAccessibilityLabel

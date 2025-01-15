@@ -502,7 +502,7 @@ class TrackingProtectionViewController: UIViewController,
             arrowImageA11yId: model.arrowImageA11yId,
             securityStatusButtonA11yId: model.securityStatusButtonA11yId)
         toggleView.setupAccessibilityIdentifiers(
-            toggleViewLabelsContainerA11yId: model.toggleViewLabelsContainerA11yId)
+            toggleViewLabelsContainerA11yId: model.toggleViewContainerA11yId)
         headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
                                            closeButtonA11yId: model.closeButtonA11yId)
         clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId
