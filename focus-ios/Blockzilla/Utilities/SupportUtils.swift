@@ -12,6 +12,7 @@ public enum SupportTopic: CaseIterable {
     case trackingProtection
     case addSearchEngine
     case mobileCrashReports
+    case usagePingSettingsMobile
 
     public var slug: String {
         switch self {
@@ -29,6 +30,8 @@ public enum SupportTopic: CaseIterable {
             return "add-search-engine-ios"
         case .mobileCrashReports:
             return "mobile-crash-reports"
+        case .usagePingSettingsMobile:
+            return "usage-ping-settings-mobile"
         }
     }
 
