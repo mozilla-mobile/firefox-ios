@@ -77,8 +77,7 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                         }
                     }
 
-                default:
-                    return nil
+                default: return nil
                 }
             }()
 
