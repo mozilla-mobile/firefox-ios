@@ -496,14 +496,13 @@ class TrackingProtectionViewController: UIViewController,
         connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
         trackersView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
-            trackersBlockedLabelA11yId: model.trackersBlockedLabelA11yId,
+            trackersBlockedButtonA11yId: model.trackersBlockedButtonA11yId,
             shieldImageA11yId: model.settingsA11yId)
         connectionStatusView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
-            securityStatusLabelA11yId: model.securityStatusLabelA11yId)
+            securityStatusButtonA11yId: model.securityStatusButtonA11yId)
         toggleView.setupAccessibilityIdentifiers(
-            toggleViewTitleLabelA11yId: model.toggleViewTitleLabelA11yId,
-            toggleViewBodyLabelA11yId: model.toggleViewBodyLabelA11yId)
+            toggleViewLabelsContainerA11yId: model.toggleViewLabelsContainerA11yId)
         headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
                                            closeButtonA11yId: model.closeButtonA11yId)
         clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId

@@ -4957,6 +4957,19 @@ extension String {
 extension String {
     public struct Menu {
         public struct EnhancedTrackingProtection {
+            public struct AccessibilityLabels {
+                public static let CloseButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.CloseButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Close",
+                    comment: "The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view.")
+                public static let BackButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.BackButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Back",
+                    comment: "The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view.")
+            }
+
             public static let onTitle = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.On.Title.v128",
                 tableName: "EnhancedTrackingProtection",

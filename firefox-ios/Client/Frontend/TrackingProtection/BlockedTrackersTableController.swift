@@ -81,6 +81,7 @@ class BlockedTrackersTableViewController: UIViewController,
         constraints.removeAll()
         setupNavigationView()
         setupTableView()
+        setupAccessibilityIdentifiers()
         setupHeaderViewActions()
         NSLayoutConstraint.activate(constraints)
     }
@@ -192,6 +193,17 @@ class BlockedTrackersTableViewController: UIViewController,
         navigationView.dismissMenuCallback = { [weak self] in
             self?.navigationController?.dismissVC()
         }
+    }
+
+    // MARK: Accessibility
+    private func setupAccessibilityIdentifiers() {
+        navigationView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
+            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+        )
     }
 
     // MARK: Notifications
