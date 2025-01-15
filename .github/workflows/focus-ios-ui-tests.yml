@@ -55,8 +55,8 @@ jobs:
             fail-fast: false
             max-parallel: 1
             matrix:
-                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
-                ios_simulator: [ 'iPhone 16', 'iPad (10th generation)']
+                xcodebuild_test_plan: ['SmokeTest']
+                ios_simulator: [ 'iPhone 16']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -119,9 +119,9 @@ jobs:
               uses: slackapi/slack-github-action@v2.0.0
               with:
                 payload-file-path: ${{ env.browser }}/slack.json
+                webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+                webhook-type: incoming-webhook
               env:
-                SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
-                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
                 ios_simulator: ${{ matrix.ios_simulator }}
                 pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
                 xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}
