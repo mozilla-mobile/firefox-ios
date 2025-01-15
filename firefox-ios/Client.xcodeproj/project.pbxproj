@@ -50,7 +50,7 @@
 		0B7C1E951F6097AD006A8869 /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */; };
 		0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */; };
 		0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */; };
-		0B8A39EF2D3514C100853E47 /* EditBookmarkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39EE2D3514C100853E47 /* EditBookmarkDataSource.swift */; };
+		0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */; };
 		0B8A39F12D351C2500853E47 /* EditBookmarkDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */; };
 		0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */; };
 		0B8BF3722CA2DA4600E9812D /* EditBookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */; };
@@ -2356,7 +2356,7 @@
 		0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFolderHierarchyFetcherTests.swift; sourceTree = "<group>"; };
 		0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBookmarksSaverTests.swift; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
-		0B8A39EE2D3514C100853E47 /* EditBookmarkDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDataSource.swift; sourceTree = "<group>"; };
+		0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDiffableDataSource.swift; sourceTree = "<group>"; };
 		0B8A39F02D351C2500853E47 /* EditBookmarkDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkDataSourceTests.swift; sourceTree = "<group>"; };
 		0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
 		0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewController.swift; sourceTree = "<group>"; };
@@ -10143,7 +10143,7 @@
 			isa = PBXGroup;
 			children = (
 				0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */,
-				0B8A39EE2D3514C100853E47 /* EditBookmarkDataSource.swift */,
+				0B8A39EE2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift */,
 				0B8BF3742CA2EFC000E9812D /* EditBookmarkCell.swift */,
 				0B3F8C5D2CA4471C00DB5367 /* EditBookmarkViewModel.swift */,
 			);
@@ -16640,7 +16640,7 @@
 				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
-				0B8A39EF2D3514C100853E47 /* EditBookmarkDataSource.swift in Sources */,
+				0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
 				EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */,
 				B236204D2B8673DE000B1DE7 /* AddressScrollView.swift in Sources */,

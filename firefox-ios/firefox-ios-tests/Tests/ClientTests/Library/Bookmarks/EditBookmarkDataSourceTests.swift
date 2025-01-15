@@ -68,8 +68,8 @@ final class EditBookmarkDataSourceTests: XCTestCase {
         XCTAssertEqual(subject.snapshot().itemIdentifiers, tableCells)
     }
 
-    private func createSubject(tableView: UITableView) -> EditBookmarkDataSource {
-        let dataSource = EditBookmarkDataSource(tableView: tableView) { _, _, _ in
+    private func createSubject(tableView: UITableView) -> EditBookmarkDiffableDataSource {
+        let dataSource = EditBookmarkDiffableDataSource(tableView: tableView) { _, _, _ in
             return UITableViewCell()
         }
         trackForMemoryLeaks(dataSource)

@@ -4,10 +4,10 @@
 
 import Foundation
 
-typealias EditBookmarkTableSection = EditBookmarkDataSource.TableSection
-typealias EditBookmarkTableCell = EditBookmarkDataSource.TableCell
+typealias EditBookmarkTableSection = EditBookmarkDiffableDataSource.TableSection
+typealias EditBookmarkTableCell = EditBookmarkDiffableDataSource.TableCell
 
-class EditBookmarkDataSource: UITableViewDiffableDataSource<EditBookmarkTableSection, EditBookmarkTableCell> {
+class EditBookmarkDiffableDataSource: UITableViewDiffableDataSource<EditBookmarkTableSection, EditBookmarkTableCell> {
     enum TableSection: Int, CaseIterable {
         case main
         case selectFolder
