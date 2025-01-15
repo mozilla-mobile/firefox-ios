@@ -259,7 +259,8 @@ public class BottomSheetViewController: UIViewController,
                 self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
-            if viewTranslation.y < 200 {
+            let velocity = recognizer.velocity(in: view)
+            if viewTranslation.y < 100 && velocity.y < 700 {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
                                usingSpringWithDamping: UX.springWithDamping,
