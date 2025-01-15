@@ -260,7 +260,10 @@ public class BottomSheetViewController: UIViewController,
             })
         case .ended:
             let velocity = recognizer.velocity(in: view)
-            if viewTranslation.y < 100 && velocity.y < 700 {
+            print("viewTranslation.y: \(viewTranslation.y), height: \(contentView.bounds.height)")
+            if viewTranslation.y >= 200 || viewTranslation.y >= contentView.bounds.height / 2 || velocity.y >= 700 {
+                dismissSheetViewController()
+            } else {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
                                usingSpringWithDamping: UX.springWithDamping,
@@ -269,8 +272,6 @@ public class BottomSheetViewController: UIViewController,
                                animations: {
                     self.sheetView.transform = .identity
                 })
-            } else {
-                dismissSheetViewController()
             }
         default:
             break
