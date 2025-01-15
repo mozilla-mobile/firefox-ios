@@ -82,7 +82,7 @@ class EditBookmarkViewController: UIViewController,
         }
 
         navigationItem.rightBarButtonItem = saveBarButton
-        // The back button title sometimes doesn't allign with the chevron, force navigation bar layout
+        // The back button title sometimes doesn't align with the chevron, force navigation bar layout
         navigationController?.navigationBar.layoutIfNeeded()
         setupSubviews()
 
@@ -182,7 +182,7 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-            self.configureEditBookmarkCell(cell)
+            configureEditBookmarkCell(cell)
             return cell
 
         case .folder(let folder, _):
@@ -192,20 +192,20 @@ class EditBookmarkViewController: UIViewController,
                 return UITableViewCell()
             }
             if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
-                self.configureDesktopBookmarksHeaderCell(cell)
+                configureDesktopBookmarksHeaderCell(cell)
             } else {
-                self.configureParentFolderCell(cell, folder: folder)
+                configureParentFolderCell(cell, folder: folder)
             }
             return cell
 
         case .newFolder:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
                                                            for: indexPath) as? OneLineTableViewCell,
-                  !self.viewModel.isFolderCollapsed
+                  !viewModel.isFolderCollapsed
             else {
                 return UITableViewCell()
             }
-            self.configureNewFolderCell(cell)
+            configureNewFolderCell(cell)
             return cell
         }
     }
@@ -261,9 +261,9 @@ class EditBookmarkViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionEnum = EditBookmarkTableSection(rawValue: section),
-              sectionEnum == .selectFolder else { return nil }
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier)
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier),
+              let sectionEnum = EditBookmarkTableSection(rawValue: section),
+              sectionEnum == .selectFolder
         else { return nil }
         var configuration = UIListContentConfiguration.plainHeader()
         configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()

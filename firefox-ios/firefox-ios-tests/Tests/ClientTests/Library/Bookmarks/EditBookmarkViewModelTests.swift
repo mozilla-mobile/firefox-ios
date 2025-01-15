@@ -74,7 +74,7 @@ class EditBookmarkViewModelTests: XCTestCase {
         let folder = Folder(title: folder.title, guid: folder.guid, indentation: 0)
 
         subject.selectFolder(folder)
-        // double selecting folder turns true isFolderCollapsed
+        // Double selecting a folder turns isFolderCollapsed to true
         subject.selectFolder(folder)
 
         XCTAssertFalse(subject.shouldShowDisclosureIndicatorForFolder(folder))
