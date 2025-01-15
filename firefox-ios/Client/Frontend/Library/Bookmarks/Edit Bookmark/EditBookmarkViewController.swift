@@ -51,7 +51,7 @@ class EditBookmarkViewController: UIViewController,
     private let viewModel: EditBookmarkViewModel
     private lazy var dataSource: EditBookmarkDiffableDataSource = {
         return EditBookmarkDiffableDataSource(tableView: tableView,
-                                      cellProvider: { [weak self] _, indexPath, item in
+                                              cellProvider: { [weak self] _, indexPath, item in
             return self?.configureCells(at: indexPath, item: item) ?? UITableViewCell()
         })
     }()
