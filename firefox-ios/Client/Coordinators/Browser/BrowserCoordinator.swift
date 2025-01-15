@@ -598,6 +598,14 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func showPrintSheet() {
+        if let webView = browserViewController.tabManager.selectedTab?.webView {
+            let printController = UIPrintInteractionController.shared
+            printController.printFormatter = webView.viewPrintFormatter()
+            printController.present(animated: true, completionHandler: nil)
+        }
+    }
+
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             mainMenuCoordinator.dismissMenuModal(animated: false)
