@@ -15,11 +15,11 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     private let news = News()
     private let identifier = "news"
     var delegate: SharedHomepageCellDelegate?
-    let windowUUID: WindowUUID
-    var currentWindowUUID: Common.WindowUUID? { return windowUUID }
 
     // MARK: - Themeable Properties
-
+    
+    let windowUUID: WindowUUID
+    var currentWindowUUID: Common.WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default

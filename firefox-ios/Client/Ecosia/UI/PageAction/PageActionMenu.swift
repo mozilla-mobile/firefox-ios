@@ -16,7 +16,9 @@ final class PageActionMenu: UIViewController, UIGestureRecognizerDelegate, Theme
     }
 
     // MARK: - Themeable Properties
-
+    
+    let windowUUID: WindowUUID
+    var currentWindowUUID: WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -40,9 +42,10 @@ final class PageActionMenu: UIViewController, UIGestureRecognizerDelegate, Theme
 
     // MARK: - Init
 
-    init(viewModel: PhotonActionSheetViewModel, delegate: PageActionsShortcutsDelegate) {
+    init(viewModel: PhotonActionSheetViewModel, delegate: PageActionsShortcutsDelegate, windowUUID: WindowUUID) {
         self.viewModel = viewModel
         self.delegate = delegate
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
 
         title = viewModel.title

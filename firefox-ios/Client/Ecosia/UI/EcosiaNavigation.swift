@@ -12,6 +12,7 @@ final class EcosiaNavigation: UINavigationController, Themeable {
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var currentWindowUUID: WindowUUID? { (topViewController as? Themeable)?.currentWindowUUID }
 
     // MARK: - Init
 

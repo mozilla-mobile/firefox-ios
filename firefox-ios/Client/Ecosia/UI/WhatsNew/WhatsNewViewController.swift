@@ -65,14 +65,17 @@ final class WhatsNewViewController: UIViewController, Themeable {
     weak var delegate: WhatsNewViewDelegate?
 
     // MARK: - Themeable Properties
-
+    
+    let windowUUID: WindowUUID
+    var currentWindowUUID: WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
-    init(viewModel: WhatsNewViewModel, delegate: WhatsNewViewDelegate?) {
+    init(viewModel: WhatsNewViewModel, delegate: WhatsNewViewDelegate?, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
         self.delegate = delegate
@@ -266,11 +269,13 @@ extension WhatsNewViewController {
 extension WhatsNewViewController {
 
     static func presentOn(_ viewController: UIViewController,
-                          viewModel: WhatsNewViewModel) {
+                          viewModel: WhatsNewViewModel,
+                          windowUUID: WindowUUID) {
 
         guard let whatsNewDelegateViewController = viewController as? WhatsNewViewDelegate else { return }
         let sheet = WhatsNewViewController(viewModel: viewModel,
-                                           delegate: whatsNewDelegateViewController)
+                                           delegate: whatsNewDelegateViewController,
+                                           windowUUID: windowUUID)
         sheet.modalPresentationStyle = .automatic
 
         // iPhone

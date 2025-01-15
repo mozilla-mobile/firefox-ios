@@ -37,7 +37,8 @@ final class WelcomeTour: UIViewController, Themeable {
     private weak var delegate: WelcomeTourDelegate?
 
     // MARK: - Themeable Properties
-
+    
+    var currentWindowUUID: WindowUUID? { return view.currentWindowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default

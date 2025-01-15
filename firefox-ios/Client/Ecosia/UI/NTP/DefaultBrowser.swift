@@ -30,12 +30,15 @@ final class DefaultBrowser: UIViewController, Themeable {
 
     // MARK: - Themeable Properties
 
+    let windowUUID: WindowUUID
+    var currentWindowUUID: WindowUUID? { windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    convenience init(delegate: DefaultBrowserDelegate) {
-        self.init(nibName: nil, bundle: nil)
+    init(windowUUID: WindowUUID, delegate: DefaultBrowserDelegate) {
+        self.windowUUID = windowUUID
+        super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         if traitCollection.userInterfaceIdiom == .pad {
             modalPresentationStyle = .formSheet
@@ -43,10 +46,6 @@ final class DefaultBrowser: UIViewController, Themeable {
         } else {
             modalPresentationCapturesStatusBarAppearance = true
         }
-    }
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
     required init?(coder: NSCoder) { nil }
