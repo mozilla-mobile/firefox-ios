@@ -55,8 +55,8 @@ jobs:
             fail-fast: false
             max-parallel: 1
             matrix:
-                xcodebuild_test_plan: ['SmokeTest']
-                ios_simulator: [ 'iPhone 16']
+              xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
+              ios_simulator: [ 'iPhone 16', 'iPad (10th generation)']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -89,7 +89,6 @@ jobs:
                     -derivedDataPath ~/DerivedData \
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ matrix.xcodebuild_test_plan }} \
-                    -only-testing:XCUITest/CopyPasteTest \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
                     | tee xcodebuild.log | xcpretty _0.3.0_ -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
