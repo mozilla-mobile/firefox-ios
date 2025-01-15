@@ -186,7 +186,8 @@ class URLBarView: UIView,
         let qrCodeImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.qrCode)
         button.setImage(qrCodeImage, for: .normal)
         */
-        button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
+        let qrCodeImage = UIImage.templateImageNamed("menu-ScanQRCode")
+        button.setImage(qrCodeImage, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton
         button.accessibilityLabel = .ScanQRCodeViewTitle
         button.showsLargeContentViewer = true
@@ -321,7 +322,10 @@ class URLBarView: UIView,
             showQRScannerButton,
             bookmarksButton,
             appMenuButton,
+            /* Ecosia: Change `addNewTabButton` to configurable CircleButton
             addNewTabButton,
+             */
+            circleButton,
             forwardButton,
             backButton,
             multiStateButton,
@@ -900,7 +904,10 @@ extension URLBarView: TabToolbarProtocol {
                         tabsButton,
                         bookmarksButton,
                         appMenuButton,
+                        /* Ecosia: Change `addNewTabButton` to configurable CircleButton
                         addNewTabButton,
+                         */
+                        circleButton,
                         progressBar
                     ]
                 } else {
@@ -1124,9 +1131,8 @@ extension URLBarView {
     func updateSearchEngineImage() {
         if inOverlayMode {
             if isPrivate {
-                // Ecosia: Make sure private tab image has alwways the appropriate color
-                // searchIconImageView.image = .init(named: ImageIdentifiers.newPrivateTab)
-                searchIconImageView.image = .templateImageNamed(ImageIdentifiers.newPrivateTab)?.tinted(withColor: locationActiveBorderColor)
+                // TODO Ecosia Upgrade: Is this image correct? Used to be `ImageIdentifiers.newPrivateTab`
+                searchIconImageView.image = .templateImageNamed(StandardImageIdentifiers.Large.privateMode)?.tinted(withColor: locationActiveBorderColor)
             } else {
                 searchIconImageView.image = .init(themed: "searchLogo")
             }
