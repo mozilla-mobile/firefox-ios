@@ -160,7 +160,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
         tableView.allowsSelectionDuringEditing = true
         tableView.dragInteractionEnabled = false
         // Ecosia: Update TableView properties
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer6
         tableView.contentInset.top = 32
     }
 
@@ -714,7 +714,7 @@ extension LegacyBookmarksPanel {
 }
 
 // Ecosia: add bookmarks empty state
-extension BookmarksPanel: EmptyBookmarksViewDelegate {
+extension LegacyBookmarksPanel: EmptyBookmarksViewDelegate {
     func emptyBookmarksViewLearnMoreTapped(_ view: EmptyBookmarksView) {
         libraryPanelDelegate?.libraryPanel(
             didSelectURL: Environment.current.urlProvider.bookmarksHelp,
@@ -728,7 +728,7 @@ extension BookmarksPanel: EmptyBookmarksViewDelegate {
 }
 
 // Ecosia: Tooltip delegate
-extension BookmarksPanel: NTPTooltipDelegate {
+extension LegacyBookmarksPanel: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
         hideBookmarksTooltip()
     }
@@ -746,7 +746,7 @@ extension BookmarksPanel: NTPTooltipDelegate {
 }
 
 // Ecosia: Import Bookmarks Helper
-extension BookmarksPanel {
+extension LegacyBookmarksPanel {
 
     func importBookmarksActionHandler() {
         Analytics.shared.bookmarksPerformImportExport(.import)

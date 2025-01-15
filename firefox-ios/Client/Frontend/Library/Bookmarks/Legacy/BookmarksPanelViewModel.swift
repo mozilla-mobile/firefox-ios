@@ -8,10 +8,16 @@ import Storage
 import Shared
 import Core
 
+/* Ecosia: Import all of MozillaAppServices for legacy code usage
 import class MozillaAppServices.BookmarkFolderData
 import enum MozillaAppServices.BookmarkRoots
+ */
+import MozillaAppServices
 
+/* Ecosia: Inherit NSObject so it can extend UIDocumentPickerDelegate
 class BookmarksPanelViewModel {
+ */
+class BookmarksPanelViewModel: NSObject {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -172,7 +178,7 @@ class BookmarksPanelViewModel {
 // Ecosia: Import Bookmarks Helper
 extension BookmarksPanelViewModel {
 
-    func bookmarkExportSelected(in viewController: BookmarksPanel, onDone: @escaping (Error?) -> Void) {
+    func bookmarkExportSelected(in viewController: LegacyBookmarksPanel, onDone: @escaping (Error?) -> Void) {
         Task {
             self.onExportDoneHandler = onDone
             do {

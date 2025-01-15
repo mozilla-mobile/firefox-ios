@@ -7,6 +7,8 @@ import Core
 import Shared
 import Storage
 
+import class MozillaAppServices.BookmarkFolderData
+
 protocol BookmarksExchangable {
     func export(bookmarks: [Core.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws
     func `import`(from fileURL: URL, in viewController: UIViewController) async throws

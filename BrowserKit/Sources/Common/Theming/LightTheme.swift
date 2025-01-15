@@ -109,4 +109,7 @@ private struct LightColourPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
+
+    // MARK: - Ecosia Legacy Colors
+    var layer6: UIColor = FXColors.White
 }
