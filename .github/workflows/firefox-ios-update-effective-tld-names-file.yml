@@ -43,7 +43,6 @@ jobs:
           echo "create_pr=true" >> $GITHUB_ENV
           cp tmp.dat firefox-ios/Shared/effective_tld_names.dat
           echo "branch_name=refactor-update-effective-tld-names" >> $GITHUB_ENV
-          echo "pr_title=Refactor [vXXX] Update effective_tld_names file $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR updates the effective_tld_names file" >> $GITHUB_ENV
           rm tmp.dat
         fi
@@ -73,7 +72,7 @@ jobs:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: ${{ env.pr_title }}
+        commit-message: "Refactor [v${{ env.next_version }}] Update effective_tld_names file ${{ env.current_date }}"
         title: "Refactor [v${{ env.next_version }}] Update effective_tld_names file ${{ env.current_date }}"
         branch: ${{ env.branch_name }}
         body: ${{ env.pr_body }}
