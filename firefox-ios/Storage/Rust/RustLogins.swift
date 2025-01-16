@@ -1170,4 +1170,10 @@ public class RustLogins: LoginsProtocol {
             }
         }
     }
+
+    private func handleIllegalStateAction(completion: @escaping (Result<String, NSError>) -> Void) {
+        // If none of the above cases apply, we're in a state that shouldn't be
+        // possible but is disallowed nonetheless
+        completion(.failure(LoginEncryptionKeyError.illegalState as NSError))
+    }
 }
