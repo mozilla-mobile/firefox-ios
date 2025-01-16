@@ -4,12 +4,12 @@
 
 import Common
 
-struct TopSitesDimensionImplementation {
+struct TopSitesDimensionCalculator {
     /// Updates the number of tiles (top sites) per row the user will see. This depends on the UI interface the user has.
     /// - Parameter availableWidth: available width size depending on device
     /// - Parameter leadingInset: padding for top site section
     /// - Parameter cellWidth: width of individual top site tiles
-    func getNumberOfTilesPerRow(availableWidth: CGFloat, leadingInset: CGFloat) -> Int {
+    static func numberOfTilesPerRow(availableWidth: CGFloat, leadingInset: CGFloat) -> Int {
         let cellWidth = HomepageSectionLayoutProvider.UX.TopSitesConstants.cellEstimatedSize.width
         var availableWidth = availableWidth - leadingInset * 2
         var numberOfTiles = 0

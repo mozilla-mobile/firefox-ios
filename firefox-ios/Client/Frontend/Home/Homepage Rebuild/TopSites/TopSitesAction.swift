@@ -8,13 +8,11 @@ import Redux
 final class TopSitesAction: Action {
     var topSites: [TopSiteState]?
     var numberOfRows: Int?
-    var numberOfTilesPerRow: Int?
     var isEnabled: Bool?
 
     init(
         topSites: [TopSiteState]? = nil,
         numberOfRows: Int? = nil,
-        numberOfTilesPerRow: Int? = nil,
         isEnabled: Bool? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
@@ -22,7 +20,6 @@ final class TopSitesAction: Action {
         self.isEnabled = isEnabled
         self.topSites = topSites
         self.numberOfRows = numberOfRows
-        self.numberOfTilesPerRow = numberOfTilesPerRow
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -30,7 +27,6 @@ final class TopSitesAction: Action {
 enum TopSitesActionType: ActionType {
     case fetchTopSites
     case updatedNumberOfRows
-    case updatedNumberOfTilesPerRow
     case toggleShowSectionSetting
     case toggleShowSponsoredSettings
 }

@@ -43,7 +43,7 @@ final class HomepageDiffableDataSource:
         }
     }
 
-    func updateSnapshot(state: HomepageState) {
+    func updateSnapshot(state: HomepageState, numberOfCellsPerRow: Int) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
@@ -55,9 +55,9 @@ final class HomepageDiffableDataSource:
         snapshot.appendSections([.messageCard])
         snapshot.appendItems([.messageCard(state.messageState)], toSection: .messageCard)
 
-        if let topSites = getTopSites(with: state.topSitesState, and: textColor) {
-            snapshot.appendSections([.topSites(state.topSitesState.numberOfTilesPerRow)])
-            snapshot.appendItems(topSites, toSection: .topSites(state.topSitesState.numberOfTilesPerRow))
+        if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
+            snapshot.appendSections([.topSites(state.topSitesState.numberOfRows)])
+            snapshot.appendItems(topSites, toSection: .topSites(state.topSitesState.numberOfRows))
         }
 
         if let stories = getPocketStories(with: state.pocketState) {
@@ -87,10 +87,15 @@ final class HomepageDiffableDataSource:
     ///   - textColor: text color from wallpaper configuration
     private func getTopSites(
         with topSitesState: TopSitesSectionState,
-        and textColor: TextColor?
+        and textColor: TextColor?,
+        numberOfCellsPerRow: Int
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.compactMap { .topSite($0, textColor) }
+        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
+            topSitesState.numberOfRows * numberOfCellsPerRow
+        ).compactMap {
+            .topSite($0, textColor)
+        }
         guard !topSites.isEmpty else { return nil }
         return topSites
     }
