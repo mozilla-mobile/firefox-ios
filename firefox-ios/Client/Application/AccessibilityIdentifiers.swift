@@ -471,6 +471,14 @@ struct AccessibilityIdentifiers {
             struct EmptyState {
                 static let signInButton = "BookmarksPanel.RootEmptyState.signInButton"
             }
+
+            struct EditBookmarkView {
+                static let saveButton = "BookmarksPanel.EditBookmarkView.SaveButton"
+            }
+
+            struct EditFolderView {
+                static let saveButton = "BookmarksPanel.EditFolderView.SaveButton"
+            }
         }
 
         struct HistoryPanel {
