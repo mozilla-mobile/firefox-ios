@@ -31,6 +31,10 @@ struct TopSiteState: Hashable, Equatable {
         return site.type.isSponsoredSite
     }
 
+    var type: SiteType {
+        return site.type
+    }
+
     var isGooglePinnedTile: Bool {
         guard case SiteType.pinnedSite(let siteInfo) = site.type else {
             return false

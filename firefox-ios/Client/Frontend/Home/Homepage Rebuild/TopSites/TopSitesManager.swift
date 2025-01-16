@@ -164,7 +164,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
         let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteState) in
-            (topSite.site.url.asURL?.shortDomain == siteDomain) && (topSite.site.type.isPinnedSite)
+            (topSite.site.url.asURL?.shortDomain == siteDomain) && (topSite.type.isPinnedSite)
         }
 
         let shouldAddDefaultEngine = SponsoredTileDataUtility().shouldAdd(
@@ -192,7 +192,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     /// - Parameter otherSites: Comes from fetching the other top sites that are not sponsored or google tile
     /// - Returns: The available space count for the rest of the calculation
     private func getAvailableSpaceCount(with otherSites: [TopSiteState]) -> Int {
-        let pinnedSiteCount = otherSites.filter { $0.site.type.isPinnedSite }.count
+        let pinnedSiteCount = otherSites.filter { $0.type.isPinnedSite }.count
         return maxTopSites - pinnedSiteCount
     }
 
@@ -209,7 +209,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         var previousStates = Set<TopSiteState>()
         return sites.compactMap { (state) -> TopSiteState? in
             // Do not remove sponsored tiles or pinned tiles duplicates
-            guard !state.site.type.isSponsoredSite, !state.site.type.isPinnedSite else {
+            guard !state.type.isSponsoredSite, !state.type.isPinnedSite else {
                 previousStates.insert(state)
                 return state
             }

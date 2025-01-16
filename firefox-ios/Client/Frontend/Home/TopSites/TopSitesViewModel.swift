@@ -93,7 +93,7 @@ class TopSitesViewModel {
                                      extras: extras)
 
         // Sponsored tile specific telemetry
-        if case SiteType.sponsoredSite = homeTopSite.site.type {
+        if case SiteType.sponsoredSite = homeTopSite.type {
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
                 unifiedAdsTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
             } else {
