@@ -253,10 +253,10 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(
-            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
+            app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
         navigator.performAction(Action.CloseTPContextMenu)
         mozWaitForElementToNotExist(
-            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
+            app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
