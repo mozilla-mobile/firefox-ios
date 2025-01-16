@@ -4,6 +4,9 @@
 
 import Foundation
 
+let sendLinkMsg1 = "You are not signed in to your account."
+let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
+
 class ShareToolbarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864270
     func testShareNormalWebsiteTabReminders() {
@@ -41,8 +44,8 @@ class ShareToolbarTests: BaseTestCase {
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
-                app.staticTexts["You are not signed in to your account."],
-                app.staticTexts["Please open Firefox, go to Settings and sign in to continue."]
+                app.staticTexts[sendLinkMsg1],
+                app.staticTexts[sendLinkMsg2]
             ]
         )
     }
@@ -110,8 +113,8 @@ class ShareToolbarTests: BaseTestCase {
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
-                app.staticTexts["You are not signed in to your account."],
-                app.staticTexts["Please open Firefox, go to Settings and sign in to continue."]
+                app.staticTexts[sendLinkMsg1],
+                app.staticTexts[sendLinkMsg2]
             ]
         )
     }
@@ -146,19 +149,5 @@ class ShareToolbarTests: BaseTestCase {
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         app.collectionViews.cells[option].waitAndTap()
-    }
-
-    private func openNewTabAndValidateURLisPaste(url: String) {
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        if #available(iOS 17, *) {
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
-        }
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(urlBar, value: url)
     }
 }

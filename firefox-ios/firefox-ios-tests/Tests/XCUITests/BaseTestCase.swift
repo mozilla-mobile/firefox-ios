@@ -423,6 +423,20 @@ class BaseTestCase: XCTestCase {
         app.buttons["Done"].waitAndTap()
     }
 
+    func openNewTabAndValidateURLisPaste(url: String) {
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        if #available(iOS 17, *) {
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+        }
+        mozWaitForElementToExist(app.tables["Context Menu"])
+        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(urlBar, value: url)
+    }
+
     func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
         var elementsDict = [XCUIElement: String]()
         for element in elements {

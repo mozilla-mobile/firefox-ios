@@ -144,6 +144,7 @@
         "SettingsTests\/testOpenMailAppSettings()",
         "SettingsTests\/testOpenSiriOption()",
         "SettingsTests\/testSettingsOptionSubtitles()",
+        "ShareLongPressTests",
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",

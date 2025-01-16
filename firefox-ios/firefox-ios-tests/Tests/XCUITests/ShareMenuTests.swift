@@ -42,8 +42,8 @@ class ShareMenuTests: BaseTestCase {
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
-                app.staticTexts["You are not signed in to your account."],
-                app.staticTexts["Please open Firefox, go to Settings and sign in to continue."]
+                app.staticTexts[sendLinkMsg1],
+                app.staticTexts[sendLinkMsg2]
             ]
         )
     }
@@ -111,8 +111,8 @@ class ShareMenuTests: BaseTestCase {
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
-                app.staticTexts["You are not signed in to your account."],
-                app.staticTexts["Please open Firefox, go to Settings and sign in to continue."]
+                app.staticTexts[sendLinkMsg1],
+                app.staticTexts[sendLinkMsg2]
             ]
         )
     }
@@ -152,19 +152,5 @@ class ShareMenuTests: BaseTestCase {
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         app.collectionViews.cells[option].waitAndTap()
-    }
-
-    private func openNewTabAndValidateURLisPaste(url: String) {
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        if #available(iOS 17, *) {
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
-        }
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(urlBar, value: url)
     }
 }

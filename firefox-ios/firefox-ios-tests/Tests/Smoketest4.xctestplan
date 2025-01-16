@@ -149,6 +149,7 @@
         "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests",
+        "ShareLongPressTests",
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
