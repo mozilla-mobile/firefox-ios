@@ -137,7 +137,7 @@ open class DefaultSuggestedSites {
             // Override default suggested site URLs with a localized URL for domains in `urlMap` (e.g. localized Amazon)
             if let domainMap = DefaultSuggestedSites.urlMap[site.url],
                let localizedURL = domainMap[locale.identifier] {
-                return Site(copiedFromSite: site, withLocalizedURLString: localizedURL)
+                return Site.copiedFrom(site: site, withLocalizedURLString: localizedURL)
             }
             return site
         } ?? []

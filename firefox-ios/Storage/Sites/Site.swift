@@ -42,12 +42,13 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     // MARK: - Factory Methods
 
     public static func createBasicSite(
+        id: Int? = nil,
         url: String,
         title: String,
         isBookmarked: Bool? = nil,
         faviconResource: SiteImageView.SiteResource? = nil
     ) -> Site {
-        var site = Site(id: UUID().hashValue, url: url, title: title, type: .basic)
+        var site = Site(id: id ?? UUID().hashValue, url: url, title: title, type: .basic)
         site.isBookmarked = isBookmarked
         site.faviconResource = faviconResource
         return site
@@ -93,9 +94,22 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         )
     }
 
+    public static func copiedFrom(site: Site, withLocalizedURLString urlString: String) -> Site {
+        return Site(
+            id: site.id,
+            url: urlString,
+            title: site.title,
+            type: site.type,
+            faviconResource: site.faviconResource,
+            metadata: site.metadata,
+            latestVisit: site.latestVisit,
+            isBookmarked: site.isBookmarked
+        )
+    }
+
     // MARK: - Initializers
 
-    public init(id: Int, url: String, title: String, type: SiteType, faviconResource: SiteImageView.SiteResource? = nil) {
+    private init(id: Int, url: String, title: String, type: SiteType, faviconResource: SiteImageView.SiteResource? = nil) {
         self.id = id
         self.url = url
         self.title = title
@@ -103,7 +117,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.faviconResource = faviconResource
     }
 
-    public init(
+    private init(
         id: Int,
         url: String,
         title: String,
@@ -121,17 +135,6 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.metadata = metadata
         self.latestVisit = latestVisit
         self.isBookmarked = isBookmarked
-    }
-
-    init(copiedFromSite site: Site, withLocalizedURLString urlString: String) {
-        self.id = site.id
-        self.url = urlString
-        self.title = site.title
-        self.type = site.type
-        self.faviconResource = site.faviconResource
-        self.metadata = site.metadata
-        self.latestVisit = site.latestVisit
-        self.isBookmarked = site.isBookmarked
     }
 
     // MARK: - Helpers
