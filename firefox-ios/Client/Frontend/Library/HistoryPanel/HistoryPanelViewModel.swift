@@ -54,15 +54,15 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     // Search
     var isSearchInProgress = false
-    var searchResultSites = [Site]()
+    var searchResultSites = [BasicSite]()
     var searchHistoryPlaceholder: String = .LibraryPanel.History.SearchHistoryPlaceholder
 
     let historyActionables = HistoryActionablesModel.activeActionables
     var visibleSections: [Sections] = []
     // Groups items we should have a single datasource containing sites and groups
-    var searchTermGroups: [ASGroup<Site>] = []
+    var searchTermGroups: [ASGroup<BasicSite>] = []
     // Only individual sites
-    var dateGroupedSites = DateGroupedTableData<Site>(includeLastHour: true)
+    var dateGroupedSites = DateGroupedTableData<BasicSite>(includeLastHour: true)
     var isFetchInProgress = false
     var shouldResetHistory = false
     // Collapsible sections
@@ -127,7 +127,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         }
     }
 
-    func createGroupedSites(sites: [Site]) {
+    func createGroupedSites(sites: [BasicSite]) {
         sites.forEach { site in
             if let latestVisit = site.latestVisit {
                 self.dateGroupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
@@ -156,7 +156,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
                 return
             }
             if let result = result.successValue {
-                self.searchResultSites = result.map { Site(url: $0.url, title: $0.title) }
+                self.searchResultSites = result.map { BasicSite(id: UUID().hashValue, url: $0.url, title: $0.title) }
                 completion(!result.isEmpty)
             }
         }
@@ -185,7 +185,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         currentFetchOffset = 0
 
         searchTermGroups.removeAll()
-        dateGroupedSites = DateGroupedTableData<Site>()
+        dateGroupedSites = DateGroupedTableData<BasicSite>()
         buildVisibleSections()
     }
 
@@ -199,7 +199,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     /// if the section is available (visible) and not hidden returns it if not returns nil
     /// - Parameter group: ASGroup
     /// - Returns: Section where group should be added
-    func shouldAddGroupToSections(group: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
+    func shouldAddGroupToSections(group: ASGroup<BasicSite>) -> HistoryPanelViewModel.Sections? {
         guard let section = groupBelongsToSection(asGroup: group),
                 visibleSections.contains(section),
               !hiddenSections.contains(section) else {
@@ -210,7 +210,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     /// This helps us place an ASGroup<Site> in the correct section.
-    func groupBelongsToSection(asGroup: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
+    func groupBelongsToSection(asGroup: ASGroup<BasicSite>) -> HistoryPanelViewModel.Sections? {
         guard let individualItem = asGroup.groupedItems.last,
               let lastVisit = individualItem.latestVisit
         else { return nil }
@@ -234,7 +234,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         return nil
     }
 
-    func groupsForSection(section: Sections) -> [ASGroup<Site>] {
+    func groupsForSection(section: Sections) -> [ASGroup<BasicSite>] {
         let groups = searchTermGroups.filter { group in
             if let groupInSection = groupBelongsToSection(asGroup: group) {
                 return groupInSection == section
@@ -274,7 +274,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     // MARK: - Private helpers
 
-    private func fetchData(completion: @escaping (([Site]) -> Void)) {
+    private func fetchData(completion: @escaping (([BasicSite]) -> Void)) {
         guard !isFetchInProgress else {
             completion([])
             return

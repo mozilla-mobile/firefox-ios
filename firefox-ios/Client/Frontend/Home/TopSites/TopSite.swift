@@ -8,7 +8,7 @@ import Shared
 
 // Top site UI class, used in the home top site section
 final class TopSite: FeatureFlaggable {
-    var site: Site
+    var site: any SitePr
     var title: String
 
     var sponsoredText: String {

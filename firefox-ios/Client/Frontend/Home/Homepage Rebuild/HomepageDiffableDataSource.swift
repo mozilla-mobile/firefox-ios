@@ -4,12 +4,13 @@
 
 import Common
 import UIKit
+import Storage
 
-typealias HomepageSection = HomepageDiffableDataSource.HomeSection
-typealias HomepageItem = HomepageDiffableDataSource.HomeItem
+typealias HomepageSection<T: SitePr> = HomepageDiffableDataSource<T>.HomeSection
+typealias HomepageItem<T: SitePr> = HomepageDiffableDataSource<T>.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource:
+final class HomepageDiffableDataSource<T: SitePr>:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
 
@@ -32,7 +33,7 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header(HeaderState)
-        case topSite(TopSiteState, TextColor?)
+        case topSite(TopSiteState<T>, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
         case pocketDiscover(PocketDiscoverState)

@@ -22,11 +22,12 @@ public struct SuggestedSite: SitePr {
     }
 
     public init(url: String, title: String, trackingId: Int, faviconResource: SiteImageView.SiteResource? = nil) {
-        self.trackingId = trackingId
         self.id = UUID().hashValue
         self.url = url
         self.title = title
         self.faviconResource = faviconResource
+
+        self.trackingId = trackingId
 
         // FIXME Is this needed?
 //        self.guid = "default" + title // A guid is required in the case the site might become a pinned site

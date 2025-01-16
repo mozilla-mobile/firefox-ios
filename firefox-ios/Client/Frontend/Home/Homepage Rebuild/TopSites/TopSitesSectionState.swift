@@ -6,13 +6,14 @@ import Common
 import Foundation
 import Redux
 import Shared
+import Storage
 
 /// State for the top sites section that is used in the homepage
 /// The state does not only contain the top sites list, but needs to also know about the number of rows
 /// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let topSitesData: [TopSiteState]
+    let topSitesData: [TopSiteState<some SitePr>]
     let numberOfRows: Int
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool

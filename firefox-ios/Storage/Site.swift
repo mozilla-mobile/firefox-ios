@@ -6,20 +6,24 @@ import UIKit
 import Shared
 import SiteImageView
 
+// TODO add pinned Site to here as bool, instead of own type
 public protocol SitePr: Identifiable, Hashable, Equatable {
     var id: Int { get }
     var url: String { get }
     var title: String { get }
 
-    var faviconResource: SiteResource?  { get set }
-    var metadata: PageMetadata?  { get set }
-    var latestVisit: Visit?  { get set }
-    var isBookmarked: Bool?  { get set }
+    var faviconResource: SiteResource? { get set }
+    var metadata: PageMetadata? { get set }
+    var latestVisit: Visit? { get set }
+    var isBookmarked: Bool? { get set }
 
     // Getter Helpers
     var tileURL: URL { get }
     var secondLevelDomain: String? { get }
     var faviconImageCacheKey: String { get }
+
+//    var hashValue: Int { get }
+//    func hash(into hasher: inout Hasher)
 }
 
 /// Provides some default implementation of helpers and methods for a Site.
@@ -47,10 +51,17 @@ public struct BasicSite: SitePr, Codable {
     public var latestVisit: Visit?
     public var isBookmarked: Bool?
 
-    public init(id: Int, url: String, title: String, faviconResource: SiteImageView.SiteResource? = nil) {
+    public init(
+        id: Int,
+        url: String,
+        title: String,
+        isBookmarked: Bool? = nil,
+        faviconResource: SiteImageView.SiteResource? = nil
+    ) {
         self.id = id
         self.url = url
         self.title = title
+        self.isBookmarked = isBookmarked
         self.faviconResource = faviconResource
     }
 

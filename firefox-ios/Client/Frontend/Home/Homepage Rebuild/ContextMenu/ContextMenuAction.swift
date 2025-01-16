@@ -8,10 +8,10 @@ import Redux
 import Storage
 
 final class ContextMenuAction: Action {
-    var site: Site?
+    var site: (any SitePr)?
 
     init(
-        site: Site? = nil,
+        site: (any SitePr)? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {

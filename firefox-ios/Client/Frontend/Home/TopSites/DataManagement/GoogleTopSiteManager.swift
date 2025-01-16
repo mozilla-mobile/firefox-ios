@@ -10,7 +10,7 @@ import SiteImageView
 public protocol GoogleTopSiteManagerProvider {
     var suggestedSiteData: PinnedSite? { get }
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool
-    func removeGoogleTopSite(site: Site)
+    func removeGoogleTopSite(site: any SitePr)
 }
 // Manage the specific Google top site case
 class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
@@ -76,12 +76,11 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     var suggestedSiteData: PinnedSite? {
         guard let url = self.url else { return nil }
 
-        let pinnedSite = PinnedSite(
-            site: Site(url: url, title: "Google"),
+        return PinnedSite(
+            site: BasicSite(id: UUID().hashValue, url: url, title: "Google"),
+            isGoogleTile: true,
             faviconResource: Constants.faviconResource
         )
-        pinnedSite.guid = Constants.googleGUID
-        return pinnedSite
     }
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
@@ -91,12 +90,12 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
         return shouldShow && (hasAdded || hasSpace)
     }
 
-    func removeGoogleTopSite(site: Site) {
-        guard site.guid == GoogleTopSiteManager.Constants.googleGUID else { return }
+    func removeGoogleTopSite(site: any SitePr) {
+        guard let pinnedSite = site as? PinnedSite, pinnedSite.isGoogleTile else { return }
         isHidden = true
     }
 
-    func addGoogleTopSite(sites: inout [Site]) {
+    func addGoogleTopSite(sites: inout [any SitePr]) {
         guard let googleSite = suggestedSiteData else { return }
         sites.insert(googleSite, at: 0)
         hasAdded = true

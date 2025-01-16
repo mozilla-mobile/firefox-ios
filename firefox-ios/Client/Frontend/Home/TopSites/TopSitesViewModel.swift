@@ -17,8 +17,8 @@ class TopSitesViewModel {
     weak var delegate: HomepageDataModelDelegate?
     var isZeroSearch: Bool
     var theme: Theme
-    var tilePressedHandler: ((Site, Bool) -> Void)?
-    var tileLongPressedHandler: ((Site, UIView?) -> Void)?
+    var tilePressedHandler: ((any SitePr, Bool) -> Void)?
+    var tileLongPressedHandler: (((any SitePr, UIView?) -> Void)?
 
     private let profile: Profile
     private var sentImpressionTelemetry = [String: Bool]()

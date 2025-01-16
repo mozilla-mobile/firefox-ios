@@ -7,8 +7,8 @@ import Storage
 import Shared
 
 /// Top site UI class, used in the homepage top site section
-final class TopSiteState: Hashable, Equatable {
-    var site: Site
+struct TopSiteState<T: SitePr>: Hashable, Equatable {
+    var site: T
     var title: String
 
     var sponsoredText: String {
@@ -31,15 +31,18 @@ final class TopSiteState: Hashable, Equatable {
         return (site as? SponsoredTile) != nil
     }
 
+    // FIXME Test this... rename isGooglePinnedSite
     var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+        guard let site = site as? PinnedSite else { return false }
+
+        return site.isGoogleTile
     }
 
     var isGoogleURL: Bool {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
 
-    init(site: Site) {
+    init(site: T) {
         self.site = site
         if let provider = site.metadata?.providerName {
             title = provider.lowercased().capitalized
@@ -72,22 +75,22 @@ final class TopSiteState: Hashable, Equatable {
     }
 
     // MARK: - Equatable
-    static func == (lhs: TopSiteState, rhs: TopSiteState) -> Bool {
-        lhs.site == rhs.site &&
-        lhs.isPinned == rhs.isPinned &&
-        lhs.isSuggested == rhs.isSuggested &&
-        lhs.isSponsoredTile == rhs.isSponsoredTile &&
-        lhs.isGoogleGUID == rhs.isGoogleGUID &&
-        lhs.isGoogleURL == rhs.isGoogleURL
-    }
-
-    // MARK: - Hashable
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.site)
-        hasher.combine(self.isPinned)
-        hasher.combine(self.isSuggested)
-        hasher.combine(self.isSponsoredTile)
-        hasher.combine(self.isGoogleGUID)
-        hasher.combine(self.isGoogleURL)
-    }
+//    static func == (lhs: TopSiteState, rhs: TopSiteState) -> Bool {
+//        lhs.site == rhs.site &&
+//        lhs.isPinned == rhs.isPinned &&
+//        lhs.isSuggested == rhs.isSuggested &&
+//        lhs.isSponsoredTile == rhs.isSponsoredTile &&
+//        lhs.isGoogleGUID == rhs.isGoogleGUID &&
+//        lhs.isGoogleURL == rhs.isGoogleURL
+//    }
+//
+//    // MARK: - Hashable
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(self.site)
+//        hasher.combine(self.isPinned)
+//        hasher.combine(self.isSuggested)
+//        hasher.combine(self.isSponsoredTile)
+//        hasher.combine(self.isGoogleGUID)
+//        hasher.combine(self.isGoogleURL)
+//    }
 }

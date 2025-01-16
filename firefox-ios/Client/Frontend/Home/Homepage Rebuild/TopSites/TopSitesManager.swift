@@ -8,9 +8,11 @@ import Shared
 import Storage
 
 protocol TopSitesManagerInterface {
+    associatedtype T: SitePr
+
     /// Returns a list of top sites state using the top site history manager to fetch the other sites
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
-    func getOtherSites() async -> [TopSiteState]
+    func getOtherSites() async -> [TopSiteState<T>]
 
     /// Returns a list of sponsored tiles using the contile provider
     func fetchSponsoredSites() async -> [SponsoredTile]
@@ -28,14 +30,14 @@ protocol TopSitesManagerInterface {
 
     /// Removes the site out of the top sites.
     /// If site is pinned it removes it from pinned and top sites list.
-    func removeTopSite(_ site: Site)
+    func removeTopSite(_ site: any SitePr)
 
     /// Adds the top site as a pinned tile in the top sites lists.
-    func pinTopSite(_ site: Site)
+    func pinTopSite(_ site: any SitePr)
 
     /// Unpin removes the top site from the location it's in.
     /// The site still can appear in the top sites as unpin.
-    func unpinTopSite(_ site: Site)
+    func unpinTopSite(_ site: any SitePr)
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
@@ -156,7 +158,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
     /// Show the sponsored site only if site is not already present in the pinned sites
     /// and it's not the default search engine
-    private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
+    private func shouldShowSponsoredSite(with sponsoredSite: SponsoredTile, and otherSites: [TopSiteState]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
         let sponsoredSiteIsAlreadyPresent = otherSites.contains {
             ($0.site.url.asURL?.shortDomain == siteDomain) && (($0.site as? PinnedSite) != nil)
@@ -221,23 +223,23 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     // MARK: - Context menu actions
-    func removeTopSite(_ site: Site) {
+    func removeTopSite(_ site: any SitePr) {
         unpinTopSite(site)
         dispatchQueue.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.hideURLFromTopSites(site)
         }
     }
 
-    func pinTopSite(_ site: Site) {
+    func pinTopSite(_ site: any SitePr) {
         _ = profile.pinnedSites.addPinnedTopSite(site)
     }
 
-    func unpinTopSite(_ site: Site) {
+    func unpinTopSite(_ site: any SitePr) {
         googleTopSiteManager.removeGoogleTopSite(site: site)
         topSiteHistoryManager.removeTopSite(site: site)
     }
 
-    private func hideURLFromTopSites(_ site: Site) {
+    private func hideURLFromTopSites(_ site: any SitePr) {
         topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
         // We make sure to remove all history for URL so it doesn't show anymore in the
         // top sites, this is the approach that Android takes too.

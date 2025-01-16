@@ -4,22 +4,36 @@
 
 import Foundation
 import Storage
+import SiteImageView
 
-final class SponsoredTile: Site {
+struct SponsoredTile: SitePr { // FIXME rename to end in `Site`?
+    public var id: Int
+    public var url: String
+    public var title: String
+    public var faviconResource: SiteImageView.SiteResource? // FIXME if these aren't used, can we move to BasicSite only?
+    public var metadata: PageMetadata?
+    public var latestVisit: Visit?
+    public var isBookmarked: Bool?
+
     var tileId: Int
     var impressionURL: String
     var clickURL: String
     var imageURL: String
 
     init(contile: Contile) {
+        self.id = UUID().hashValue
+        self.url = contile.url
+        self.title = contile.name
+        self.faviconResource = nil // FIXME Use contile imageURL?
+
         // Used for telemetry
         self.tileId = contile.id
         self.impressionURL = contile.impressionUrl
         self.clickURL = contile.clickUrl
         self.imageURL = contile.imageUrl
-        super.init(url: contile.url, title: contile.name, bookmarked: nil)
 
+        // FIXME Is this needed?
         // A guid is required in case the site might become a pinned site
-        self.guid = "default" + contile.name
+//        self.guid = "default" + contile.name
     }
 }

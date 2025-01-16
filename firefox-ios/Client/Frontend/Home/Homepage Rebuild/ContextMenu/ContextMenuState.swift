@@ -12,8 +12,8 @@ import Redux
 /// Classes conforming to this protocol can manage adding and removing bookmarks.
 /// Since bookmarks are not using Redux, we use this instead of dispatching an action.
 protocol BookmarksHandlerDelegate: AnyObject {
-    func addBookmark(url: String, title: String?, site: Site?)
-    func removeBookmark(url: URL, title: String?, site: Site?)
+    func addBookmark(url: String, title: String?, site: (any SitePr)?)
+    func removeBookmark(url: URL, title: String?, site: (any SitePr)?)
 }
 
 /// State to populate actions for the `PhotonActionSheet` view
@@ -22,7 +22,7 @@ protocol BookmarksHandlerDelegate: AnyObject {
 /// increasing scope of homepage rebuild project.
 
 struct ContextMenuState {
-    var site: Site?
+    var site: (any SitePr)?
     var actions: [[PhotonRowActions]] = [[]]
 
     private let profile: Profile
@@ -60,7 +60,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Top sites item's context menu actions
-    private func getTopSitesActions(site: Site) -> [PhotonRowActions] {
+    private func getTopSitesActions(site: any SitePr) -> [PhotonRowActions] {
         let topSiteActions: [PhotonRowActions]
         if site is PinnedSite {
             topSiteActions = getPinnedTileActions(site: site)
@@ -72,7 +72,7 @@ struct ContextMenuState {
         return topSiteActions
     }
 
-    private func getPinnedTileActions(site: Site) -> [PhotonRowActions] {
+    private func getPinnedTileActions(site: any SitePr) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getRemovePinTopSiteAction(site: site),
                 getOpenInNewTabAction(siteURL: siteURL),
@@ -81,7 +81,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
-    private func getSponsoredTileActions(site: Site) -> [PhotonRowActions] {
+    private func getSponsoredTileActions(site: any SitePr) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getOpenInNewTabAction(siteURL: siteURL),
                 getOpenInNewPrivateTabAction(siteURL: siteURL),
@@ -90,7 +90,7 @@ struct ContextMenuState {
                 getShareAction(siteURL: site.url)]
     }
 
-    private func getOtherTopSitesActions(site: Site) -> [PhotonRowActions] {
+    private func getOtherTopSitesActions(site: any SitePr) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         return [getPinTopSiteAction(site: site),
                 getOpenInNewTabAction(siteURL: siteURL),
@@ -101,7 +101,7 @@ struct ContextMenuState {
 
     /// This action removes the tile out of the top sites.
     /// If site is pinned, it removes it from pinned and remove from top sites in general.
-    private func getRemoveTopSiteAction(site: Site) -> PhotonRowActions {
+    private func getRemoveTopSiteAction(site: any SitePr) -> PhotonRowActions {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      allowIconScaling: true,
@@ -111,7 +111,7 @@ struct ContextMenuState {
         }).items
     }
 
-    private func getPinTopSiteAction(site: Site) -> PhotonRowActions {
+    private func getPinTopSiteAction(site: any SitePr) -> PhotonRowActions {
         return SingleActionViewModel(title: .PinTopsiteActionTitle2,
                                      iconString: StandardImageIdentifiers.Large.pin,
                                      allowIconScaling: true,
@@ -123,7 +123,7 @@ struct ContextMenuState {
 
     /// This unpin action removes the top site from the location it's in.
     /// The tile can stil appear in the top sites as unpinned.
-    private func getRemovePinTopSiteAction(site: Site) -> PhotonRowActions {
+    private func getRemovePinTopSiteAction(site: any SitePr) -> PhotonRowActions {
         return SingleActionViewModel(title: .UnpinTopsiteActionTitle2,
                                      iconString: StandardImageIdentifiers.Large.pinSlash,
                                      allowIconScaling: true,
@@ -162,7 +162,7 @@ struct ContextMenuState {
     }
 
     // MARK: - Pocket item's context menu actions
-    private func getPocketActions(site: Site) -> [PhotonRowActions] {
+    private func getPocketActions(site: any SitePr) -> [PhotonRowActions] {
         guard let siteURL = site.url.asURL else { return [] }
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL)
         let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
@@ -195,7 +195,7 @@ struct ContextMenuState {
         }.items
     }
 
-    private func getBookmarkAction(site: Site) -> PhotonRowActions {
+    private func getBookmarkAction(site: any SitePr) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
         let isBookmarked = profile.places.isBookmarked(url: site.url).value.successValue ?? false
         if isBookmarked {
@@ -206,7 +206,7 @@ struct ContextMenuState {
         return bookmarkAction.items
     }
 
-    private func getRemoveBookmarkAction(site: Site) -> SingleActionViewModel {
+    private func getRemoveBookmarkAction(site: any SitePr) -> SingleActionViewModel {
         return SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
@@ -224,7 +224,7 @@ struct ContextMenuState {
         })
     }
 
-    private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
+    private func getAddBookmarkAction(site: any SitePr) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle,
                                      iconString: StandardImageIdentifiers.Large.bookmark,
                                      allowIconScaling: true,
@@ -298,7 +298,7 @@ struct ContextMenuState {
         )
     }
 
-    private func dispatchContextMenuAction(site: Site, actionType: ActionType) {
+    private func dispatchContextMenuAction(site: any SitePr, actionType: ActionType) {
         store.dispatch(
             ContextMenuAction(
                 site: site,

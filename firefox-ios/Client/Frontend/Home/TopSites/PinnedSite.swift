@@ -6,11 +6,25 @@ import Foundation
 import Storage
 import SiteImageView
 
-open class PinnedSite: Site {
-    let isPinnedSite = true
+public struct PinnedSite: SitePr {
+    public var id: Int
+    public var url: String
+    public var title: String
+    public var faviconResource: SiteImageView.SiteResource? // FIXME if these aren't used, can we move to BasicSite only?
+    public var metadata: PageMetadata?
+    public var latestVisit: Visit?
+    public var isBookmarked: Bool?
 
-    init(site: Site, faviconResource: SiteResource?) {
-        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, faviconResource: faviconResource)
+    //    public let isPinnedSite = true
+    /// Is the default Google Pinned tile (e.g. `GoogleTopSiteManager.Constants.googleGUID`)
+    public let isGoogleTile: Bool
+
+    init(site: BasicSite, isGoogleTile: Bool, faviconResource: SiteResource?) {
+        self.id = UUID().hashValue
+        self.url = site.url
+        self.title = site.title
+        self.faviconResource = faviconResource
         self.metadata = site.metadata
+        self.isGoogleTile = isGoogleTile
     }
 }

@@ -6,11 +6,11 @@ import Foundation
 import Storage
 
 protocol SponsoredTileDataUtilityInterface {
-    func shouldAdd(site: Site, with searchEngine: OpenSearchEngine?) -> Bool
+    func shouldAdd(site: SponsoredTile, with searchEngine: OpenSearchEngine?) -> Bool
 }
 
 struct SponsoredTileDataUtility: SponsoredTileDataUtilityInterface {
-    func shouldAdd(site: Site, with searchEngine: OpenSearchEngine?) -> Bool {
+    func shouldAdd(site: SponsoredTile, with searchEngine: OpenSearchEngine?) -> Bool {
         guard let defaultSearchEngine = searchEngine,
               let secondLevelDomain = site.secondLevelDomain else { return true }
 

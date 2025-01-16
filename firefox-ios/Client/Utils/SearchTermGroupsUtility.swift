@@ -21,9 +21,9 @@ class SearchTermGroupsUtility {
 
     public static func getSiteGroups(
         with profile: Profile,
-        from sites: [Site],
+        from sites: [BasicSite],
         using ordering: ComparisonResult,
-        completion: @escaping ([ASGroup<Site>]?, _ filteredItems: [Site]) -> Void
+        completion: @escaping ([ASGroup<BasicSite>]?, _ filteredItems: [BasicSite]) -> Void
     ) {
         getGroups(with: profile, from: sites, using: ordering, completion: completion)
     }
@@ -59,7 +59,7 @@ class SearchTermGroupsUtility {
         using ordering: ComparisonResult,
         completion: @escaping ([ASGroup<T>]?, _ filteredItems: [T]) -> Void
     ) {
-        guard items is [Tab] || items is [Site] || items is [HistoryHighlight] else { return completion(nil, [T]()) }
+        guard items is [Tab] || items is [BasicSite] || items is [HistoryHighlight] else { return completion(nil, [T]()) }
 
         let lastTwoWeek = Int64(Date().lastTwoWeek.timeIntervalSince1970)
         profile.places.getHistoryMetadataSince(since: lastTwoWeek).uponQueue(.global()) { result in
@@ -131,7 +131,7 @@ class SearchTermGroupsUtility {
                 .contains(where: { metadata in
                 var stringURL: String = ""
 
-                if let item = item as? Site {
+                if let item = item as? BasicSite {
                     stringURL = item.url
                 } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
                     stringURL = url
@@ -247,7 +247,7 @@ class SearchTermGroupsUtility {
         return group.sorted {
             if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
                 return firstTab.firstCreatedTime < secondTab.firstCreatedTime
-            } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
+            } else if let firstSite = $0 as? BasicSite, let secondSite = $1 as? BasicSite {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
                 return firstSiteATimestamp < secondSiteTimestamp

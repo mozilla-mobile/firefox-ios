@@ -3,27 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Storage
-struct ContextMenuConfiguration: Equatable {
-    var homepageSection: HomepageSection
+struct ContextMenuConfiguration<T: SitePr>: Equatable {
+    var homepageSection: HomepageSection<T>
     var sourceView: UIView?
     var toastContainer: UIView
 
-    var site: Site? {
+    var site: (any SitePr)? {
         switch item {
         case .topSite(let state, _):
             return state.site
         case .pocket(let state):
-            return Site(url: state.url?.absoluteString ?? "",
-                        title: state.title)
+            return BasicSite(id: UUID().hashValue, url: state.url?.absoluteString ?? "", title: state.title)
         case .pocketDiscover(let state):
-            return Site(url: state.url?.absoluteString ?? "",
-                        title: state.title)
+            return BasicSite(id: UUID().hashValue, url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
         }
     }
 
-    private var item: HomepageItem?
+    private var item: HomepageItem<T>?
 
     init(
         homepageSection: HomepageSection,

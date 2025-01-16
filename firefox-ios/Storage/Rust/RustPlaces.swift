@@ -673,12 +673,12 @@ extension RustPlaces {
     public func getTopFrecentSiteInfos(
         limit: Int,
         thresholdOption: FrecencyThresholdOption
-    ) -> Deferred<Maybe<[any SitePr]>> {
+    ) -> Deferred<Maybe<[BasicSite]>> {
         let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
 
-        let returnValue = Deferred<Maybe<[any SitePr]>>()
+        let returnValue = Deferred<Maybe<[BasicSite]>>()
         deferred.upon { result in
             guard let result = result.successValue else {
                 returnValue.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
@@ -703,9 +703,9 @@ extension RustPlaces {
         limit: Int,
         offset: Int,
         excludedTypes: VisitTransitionSet
-    ) -> Deferred<Maybe<Cursor<any SitePr>>> {
+    ) -> Deferred<Maybe<Cursor<BasicSite>>> {
         let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
-        let result = Deferred<Maybe<Cursor<any SitePr>>>()
+        let result = Deferred<Maybe<Cursor<BasicSite>>>()
         deferred.upon { visitInfos in
             guard let visitInfos = visitInfos.successValue else {
                 result.fill(Maybe(failure: visitInfos.failureValue ?? "Unknown Error"))

@@ -42,7 +42,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with site: Site) {
+    func configure(with site: any SitePr) {
         imageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain

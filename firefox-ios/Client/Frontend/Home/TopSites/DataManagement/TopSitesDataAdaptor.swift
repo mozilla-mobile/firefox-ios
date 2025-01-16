@@ -29,7 +29,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue")
 
     // Raw data to build top sites with
-    private var historySites: [Site] = []
+    private var historySites: [any SitePr] = []
     private var contiles: [Contile] = []
 
     private let maxTopSites = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
@@ -179,7 +179,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         return Int(preferredNumberOfRows ?? defaultNumberOfRows)
     }
 
-    func addSponsoredTiles(sites: inout [Site],
+    func addSponsoredTiles(sites: inout [any SitePr],
                            shouldAddGoogle: Bool,
                            availableSpaceCount: Int) {
         let sponsoredTileSpaces = getSponsoredNumberTiles(shouldAddGoogle: shouldAddGoogle,
@@ -192,10 +192,12 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         }
     }
 
-    private func countPinnedSites(sites: [Site]) -> Int {
+    private func countPinnedSites(sites: [any SitePr]) -> Int {
         var pinnedSites = 0
         sites.forEach {
-            if $0 as? PinnedSite != nil { pinnedSites += 1 }
+            if $0 as? PinnedSite != nil {
+                pinnedSites += 1
+            }
         }
         return pinnedSites
     }
@@ -206,7 +208,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0)
     }
 
-    private func addGoogleTopSite(sites: inout [Site]) {
+    private func addGoogleTopSite(sites: inout [any SitePr]) {
         googleTopSiteManager.addGoogleTopSite(sites: &sites)
     }
 
@@ -228,7 +230,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 }
 
 // MARK: Site Array extension
-private extension Array where Element == Site {
+private extension Array where Element == any SitePr {
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
@@ -265,7 +267,7 @@ private extension Array where Element == Site {
     // Ex: A default site is present but user has recent history site of the same site.
     // That recent history tile won't be added.
     mutating func removeDuplicates() {
-        var alreadyThere = Set<Site>()
+        var alreadyThere = Set<any SitePr>()
         let uniqueSites = compactMap { (site) -> Site? in
             // Do not remove sponsored tiles or pinned tiles duplicates
             guard (site as? SponsoredTile) == nil && (site as? PinnedSite) == nil else {

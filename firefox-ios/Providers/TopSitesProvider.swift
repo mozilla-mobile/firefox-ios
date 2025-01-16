@@ -13,10 +13,10 @@ import enum MozillaAppServices.FrecencyThresholdOption
 protocol TopSitesProvider {
     /// Get top sites from frecency and pinned tiles
     func getTopSites(numberOfMaxItems: Int,
-                     completion: @escaping ([Site]?) -> Void)
+                     completion: @escaping ([any SitePr]?) -> Void)
 
     /// Fetches the default top sites
-    func defaultTopSites(_ prefs: Prefs) -> [Site]
+    func defaultTopSites(_ prefs: Prefs) -> [any SitePr]
 
     /// Default maximum number of items fetched for frecency
     static var numberOfMaxItems: Int { get }
@@ -27,7 +27,7 @@ protocol TopSitesProvider {
 
 extension TopSitesProvider {
     func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
-                     completion: @escaping ([Site]?) -> Void) {
+                     completion: @escaping ([any SitePr]?) -> Void) {
         getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
     }
 
@@ -45,8 +45,8 @@ class TopSitesProviderImplementation: TopSitesProvider {
     private let placesFetcher: RustPlaces
     private let prefs: Prefs
 
-    private var frecencySites = [Site]()
-    private var pinnedSites = [Site]()
+    private var frecencySites = [BasicSite]()
+    private var pinnedSites = [BasicSite]()
 
     init(
         placesFetcher: RustPlaces,
@@ -59,7 +59,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
     }
 
     func getTopSites(numberOfMaxItems: Int,
-                     completion: @escaping ([Site]?) -> Void) {
+                     completion: @escaping ([any SitePr]?) -> Void) {
         let group = DispatchGroup()
         getFrecencySites(group: group, numberOfMaxItems: numberOfMaxItems)
         getPinnedSites(group: group)
@@ -70,7 +70,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
         }
     }
 
-    func defaultTopSites(_ prefs: Prefs) -> [Site] {
+    func defaultTopSites(_ prefs: Prefs) -> [any SitePr] {
         let suggested = DefaultSuggestedSites.defaultSites()
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
@@ -116,20 +116,20 @@ private extension TopSitesProviderImplementation {
             }
     }
 
-    func calculateTopSites(completion: ([Site]?) -> Void) {
+    func calculateTopSites(completion: ([any SitePr]?) -> Void) {
         // Filter out frecency history which resulted from sponsored tiles clicks
         let sites = SponsoredContentFilterUtility().filterSponsoredSites(from: frecencySites)
 
         // How sites are merged together. We compare against the url's base domain.
         // Example m.youtube.com is compared against `youtube.com`
-        let unionOnURL = { (site: Site) -> String in
+        let unionOnURL = { (site: any SitePr) -> String in
             return URL(string: site.url, invalidCharacters: false)?.normalizedHost ?? ""
         }
 
         // Fetch the default sites
         let defaultSites = defaultTopSites(prefs)
         // Create PinnedSite objects. Used by the view layer to tell topsites apart
-        let pinnedSites: [Site] = pinnedSites.map({ PinnedSite(site: $0, faviconResource: nil) })
+        let pinnedSites: [any SitePr] = pinnedSites.map({ PinnedSite(site: $0, isGoogleTile: false, faviconResource: nil) })
         // Merge default topsites with a user's topsites.
         let mergedSites = sites.union(defaultSites, f: unionOnURL)
         // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites
@@ -137,7 +137,7 @@ private extension TopSitesProviderImplementation {
         let allSites = pinnedSites + duplicateFreeList
 
         // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
-        let newSites = allSites.map { site -> Site in
+        let newSites = allSites.map { site -> any SitePr in
             if let site = site as? PinnedSite {
                 return site
             }

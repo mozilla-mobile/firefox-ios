@@ -12,7 +12,7 @@ import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
-    func addBookmark(url: String, title: String?, site: Site?)
+    func addBookmark(url: String, title: String?, site: (any SitePr)?)
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
