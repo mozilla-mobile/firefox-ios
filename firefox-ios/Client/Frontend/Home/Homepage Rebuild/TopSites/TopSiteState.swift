@@ -20,15 +20,15 @@ struct TopSiteState: Hashable, Equatable {
     }
 
     var isPinned: Bool {
-        return site.type.isPinnedSite
+        return site.isPinnedSite
     }
 
     var isSuggested: Bool {
-        return site.type.isSuggestedSite
+        return site.isSuggestedSite
     }
 
     var isSponsored: Bool {
-        return site.type.isSponsoredSite
+        return site.isSponsoredSite
     }
 
     var type: SiteType {
@@ -60,7 +60,7 @@ struct TopSiteState: Hashable, Equatable {
 
     func impressionTracking(position: Int) {
         // Only sending sponsored tile impressions for now
-        guard site.type.isSponsoredSite else { return }
+        guard site.isSponsoredSite else { return }
 
         SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
     }

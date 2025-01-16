@@ -133,7 +133,7 @@ private extension TopSitesProviderImplementation {
         // Merge default topsites with a user's topsites.
         let mergedSites = sites.union(defaultSites, f: unionOnURL)
         // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites
-        let duplicateFreeList = pinnedSites.union(mergedSites, f: unionOnURL).filter { !$0.type.isPinnedSite }
+        let duplicateFreeList = pinnedSites.union(mergedSites, f: unionOnURL).filter { !$0.isPinnedSite }
         let allSites = pinnedSites + duplicateFreeList
 
         // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites

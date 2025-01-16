@@ -44,7 +44,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     public static func createBasicSite(
         url: String,
         title: String,
-        isBookmarked: Bool? = false,
+        isBookmarked: Bool? = nil,
         faviconResource: SiteImageView.SiteResource? = nil
     ) -> Site {
         var site = Site(id: UUID().hashValue, url: url, title: title, type: .basic)
@@ -132,6 +132,20 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         self.metadata = site.metadata
         self.latestVisit = site.latestVisit
         self.isBookmarked = site.isBookmarked
+    }
+
+    // MARK: - Helpers
+
+    public var isPinnedSite: Bool {
+        return type.isPinnedSite
+    }
+
+    public var isSponsoredSite: Bool {
+        return type.isSponsoredSite
+    }
+
+    public var isSuggestedSite: Bool {
+        return type.isSuggestedSite
     }
 
     // MARK: - Encode & Decode

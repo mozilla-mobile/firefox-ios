@@ -271,7 +271,7 @@ private extension Array where Element == Site {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in
             // Do not remove sponsored tiles or pinned tiles duplicates
-            guard !site.type.isSponsoredSite, !site.type.isPinnedSite else {
+            guard !site.isSponsoredSite, !site.isPinnedSite else {
                 alreadyThere.insert(site)
                 return site
             }
@@ -291,7 +291,7 @@ private extension Array where Element == Site {
     // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
         let siteDomain = site.url.asURL?.shortDomain
-        return !filter { ($0.url.asURL?.shortDomain == siteDomain) && $0.type.isPinnedSite }.isEmpty
+        return !filter { ($0.url.asURL?.shortDomain == siteDomain) && $0.isPinnedSite }.isEmpty
     }
 }
 
