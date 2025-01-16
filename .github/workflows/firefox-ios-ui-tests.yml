@@ -188,7 +188,7 @@ jobs:
         with:
           payload-file-path: ${{ env.browser }}/slack.json
           payload-templated: true
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
           webhook-type: incoming-webhook
         env:
           ios_simulator: ${{ matrix.ios_simulator }}
@@ -272,7 +272,7 @@ jobs:
           with:
             payload-file-path: ${{ env.browser }}/slack.json
             payload-templated: true
-            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
             webhook-type: incoming-webhook
           env:
             ios_simulator: ${{ matrix.ios_simulator }}
