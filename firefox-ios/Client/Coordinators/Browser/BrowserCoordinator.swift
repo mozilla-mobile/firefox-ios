@@ -49,7 +49,6 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
-    private let gleanLifecycleObserver: GleanLifecycleObserver
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
@@ -62,8 +61,7 @@ class BrowserCoordinator: BaseCoordinator,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -72,7 +70,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
-        self.gleanLifecycleObserver = gleanLifecycleObserver
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -447,8 +444,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         let settingsCoordinator = SettingsCoordinator(
             router: settingsRouter,
-            tabManager: tabManager,
-            gleanLifecycleObserver: gleanLifecycleObserver
+            tabManager: tabManager
         )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)

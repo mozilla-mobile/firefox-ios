@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-class MockGleanUsageReportingApi: GleanUsageReportingApi {
+final class MockGleanUsageReportingApi: GleanUsageReportingApi {
     var setUsageReasonCalled = false
     var submitPingCalled = false
     var startTrackingDurationCalled = false
@@ -32,7 +32,7 @@ class MockGleanUsageReportingApi: GleanUsageReportingApi {
     }
 }
 
-class MockGleanLifecycleObserver: GleanLifecycleObserver {
+final class MockGleanLifecycleObserver: GleanLifecycleObserver {
     var startObservingCalled = false
     var stopObservingCalled = false
     var handleForegroundEventCalled = false
@@ -55,7 +55,7 @@ class MockGleanLifecycleObserver: GleanLifecycleObserver {
     }
 }
 
-class GleanLifecycleObserverTests: XCTestCase {
+final class GleanLifecycleObserverTests: XCTestCase {
     var mockGleanUsageReportingApi: MockGleanUsageReportingApi!
     var gleanLifecycleObserver: GleanLifecycleObserver!
     let notificationCenter = NotificationCenter()

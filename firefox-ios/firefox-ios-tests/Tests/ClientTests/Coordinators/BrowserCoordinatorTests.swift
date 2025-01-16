@@ -1260,8 +1260,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                                          tabManager: tabManager,
                                          profile: profile,
                                          glean: glean,
-                                         applicationHelper: applicationHelper,
-                                         gleanLifecycleObserver: MockGleanLifecycleObserver())
+                                         applicationHelper: applicationHelper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
