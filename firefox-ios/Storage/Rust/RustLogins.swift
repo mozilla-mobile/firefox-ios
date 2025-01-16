@@ -1080,9 +1080,7 @@ public class RustLogins: LoginsProtocol {
             case (.none, .none):
                 self.handleFirstTimeCallOrClearedKeychainAction(rustKeys: rustKeys, completion: completion)
             default:
-                // If none of the above cases apply, we're in a state that shouldn't be
-                // possible but is disallowed nonetheless
-                completion(.failure(LoginEncryptionKeyError.illegalState as NSError))
+                self.handleIllegalStateAction(completion: completion)
             }
         }
     }
