@@ -209,6 +209,7 @@
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests",
+        "ShareLongPressTests",
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",

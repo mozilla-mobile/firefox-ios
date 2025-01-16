@@ -109,6 +109,7 @@
         "SettingsTests\/testImageOnOff()",
         "SettingsTests\/testOpenMailAppSettings()",
         "SettingsTests\/testOpenSiriOption()",
+        "ShareLongPressTests",
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
