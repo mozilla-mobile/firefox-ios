@@ -23,15 +23,23 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         self.networking = networking
         self.logger = logger
     }
-
+    
+    /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
     func sendImpressionTelemetry(tileSite: Site, position: Int) {
-        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
+        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
 
         sendTelemetry(urlString: siteInfo.impressionURL, position: position)
     }
 
+    /// Click telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
     func sendClickTelemetry(tileSite: Site, position: Int) {
-        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else { return }
+        guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
 
         sendTelemetry(urlString: siteInfo.clickURL, position: position)
     }

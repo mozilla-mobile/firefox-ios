@@ -12,8 +12,12 @@ struct SponsoredTileTelemetry {
     // Source is only new tab at the moment, more source could be added later
     static let source = "newtab"
 
+    /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
     static func sendImpressionTelemetry(tileSite: Site, position: Int) {
-        guard case let .sponsoredSite(siteInfo) = tileSite.type else { return }
+        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
 
         let extra = GleanMetrics.TopSites.ContileImpressionExtra(
             position: Int32(position),
@@ -27,8 +31,12 @@ struct SponsoredTileTelemetry {
         GleanMetrics.Pings.shared.topsitesImpression.submit()
     }
 
+    /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
     static func sendClickTelemetry(tileSite: Site, position: Int) {
-        guard case let .sponsoredSite(siteInfo) = tileSite.type else { return }
+        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
 
         let extra = GleanMetrics.TopSites.ContileClickExtra(
             position: Int32(position),
