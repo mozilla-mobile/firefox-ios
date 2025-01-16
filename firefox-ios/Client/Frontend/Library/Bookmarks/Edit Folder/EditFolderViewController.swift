@@ -51,6 +51,7 @@ class EditFolderViewController: UIViewController,
             target: self,
             action: #selector(saveButtonAction)
         )
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.EditFolderView.saveButton
         return button
     }()
 
