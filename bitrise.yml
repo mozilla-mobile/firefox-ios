@@ -824,6 +824,7 @@ workflows:
             set -x
             gem install fastlane -v 2.226.0
             fastlane -version
+            xcodebuild -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
