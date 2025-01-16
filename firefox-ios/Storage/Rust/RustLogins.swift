@@ -1069,10 +1069,10 @@ public class RustLogins: LoginsProtocol {
         getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
             switch(key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
-                self.handleExpectedKey(rustKeys: rustKeys,
-                                       encryptedCanaryPhrase: encryptedCanaryPhrase,
-                                       key: key,
-                                       completion: completion)
+                self.handleExpectedKeyAction(rustKeys: rustKeys,
+                                             encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                             key: key,
+                                             completion: completion)
             case (.some(key), .none):
                 // The key is present, but we didn't expect it to be there.
 
@@ -1129,10 +1129,10 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
-    private func handleExpectedKey(rustKeys: RustLoginEncryptionKeys,
-                                   encryptedCanaryPhrase: String?,
-                                   key: String?,
-                                   completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleExpectedKeyAction(rustKeys: RustLoginEncryptionKeys,
+                                         encryptedCanaryPhrase: String?,
+                                         key: String?,
+                                         completion: @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, and it is.
         do {
             let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
