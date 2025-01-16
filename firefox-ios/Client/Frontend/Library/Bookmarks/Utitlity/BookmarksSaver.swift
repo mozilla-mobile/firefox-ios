@@ -31,31 +31,6 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                 case .bookmark:
                     return saveBookmark(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
                 case .folder:
-                    guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
-
-                    if folder.parentGUID == nil {
-                        TelemetryWrapper.recordEvent(category: .action,
-                                                     method: .tap,
-                                                     object: .bookmark,
-                                                     value: .bookmarkAddFolder)
-
-                        let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
-                        return profile.places.createFolder(parentGUID: parentFolderGUID,
-                                                           title: folder.title,
-                                                           position: position).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
-                                                    : deferMaybe(result.successValue)
-                        }
-                    } else {
-                        let position: UInt32? = parentFolderGUID == folder.parentGUID ? folder.position : nil
-                        return profile.places.updateBookmarkNode( guid: folder.guid,
-                                                                  parentGUID: parentFolderGUID,
-                                                                  position: position,
-                                                                  title: folder.title).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
-                        }
-                    }
-
                     return saveFolder(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
                 default:
                     return nil
