@@ -1078,7 +1078,7 @@ public class RustLogins: LoginsProtocol {
             case (.none, .some(encryptedCanaryPhrase)):
                 self.handleMissingKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
-                self.handleFirstTimeCallOrClearedKeychain(rustKeys: rustKeys, completion: completion)
+                self.handleFirstTimeCallOrClearedKeychainAction(rustKeys: rustKeys, completion: completion)
             default:
                 // If none of the above cases apply, we're in a state that shouldn't be
                 // possible but is disallowed nonetheless
@@ -1136,8 +1136,8 @@ public class RustLogins: LoginsProtocol {
         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
     }
 
-    private func handleFirstTimeCallOrClearedKeychain(rustKeys: RustLoginEncryptionKeys,
-                                                      completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleFirstTimeCallOrClearedKeychainAction(rustKeys: RustLoginEncryptionKeys,
+                                                            completion: @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
 
