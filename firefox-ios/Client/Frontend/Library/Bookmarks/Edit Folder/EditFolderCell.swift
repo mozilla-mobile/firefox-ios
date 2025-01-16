@@ -60,6 +60,6 @@ class EditFolderCell: UITableViewCell,
 
     func applyTheme(theme: any Theme) {
         titleTextField.applyTheme(theme: theme)
-        contentView.backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer5
     }
 }

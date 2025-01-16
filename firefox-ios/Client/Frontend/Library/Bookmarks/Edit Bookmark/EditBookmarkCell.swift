@@ -101,7 +101,7 @@ class EditBookmarkCell: UITableViewCell,
         urlTextfield.applyTheme(theme: theme)
         titleTextfield.applyTheme(theme: theme)
         textFieldsDivder.backgroundColor = theme.colors.borderPrimary
-        contentView.backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer5
     }
 
     private func urlTextFieldDidChane() {

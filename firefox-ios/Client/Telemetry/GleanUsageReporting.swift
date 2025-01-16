@@ -57,16 +57,13 @@ class GleanLifecycleObserver {
     private let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving: Bool = false
     private let notificationCenter: NotificationCenter
-    private let metrics: GleanMetrics.Type
 
     init(
         gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting(),
-        notificationCenter: NotificationCenter = .default,
-        metrics: GleanMetrics.Type = GleanMetrics.self
+        notificationCenter: NotificationCenter = .default
     ) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
         self.notificationCenter = notificationCenter
-        self.metrics = metrics
     }
 
     func startObserving() {

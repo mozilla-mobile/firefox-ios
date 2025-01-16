@@ -99,6 +99,7 @@
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "ShareMenuTests",
+        "ShareToolbarTests",
         "SiteLoadTest",
         "SyncUITests",
         "ThirdPartySearchTest",
