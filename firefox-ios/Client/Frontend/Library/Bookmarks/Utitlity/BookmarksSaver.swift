@@ -50,10 +50,8 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                             return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
                         }
                     }
-
                 case .folder:
                     guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
-
                     if folder.parentGUID == nil {
                         let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                         return profile.places.createFolder(parentGUID: parentFolderGUID,
