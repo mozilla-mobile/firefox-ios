@@ -28,6 +28,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.applicationHelper = MockApplicationHelper()
         self.mockSettingsDelegate = MockSettingsDelegate()
         self.mockParentCoordinator = MockSettingsFlowDelegate()
+        self.mockGleanLifecycleObserver = MockGleanLifecycleObserver()
     }
 
     override func tearDown() {
