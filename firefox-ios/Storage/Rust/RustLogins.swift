@@ -1074,7 +1074,7 @@ public class RustLogins: LoginsProtocol {
                                              key: key,
                                              completion: completion)
             case (.some(key), .none):
-                self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
+                self.handleUnexpectedKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .some(encryptedCanaryPhrase)):
                 self.handleMissingKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
@@ -1144,8 +1144,8 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
-    private func handleUnexpectedKey(rustKeys: RustLoginEncryptionKeys,
-                                     completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleUnexpectedKeyAction(rustKeys: RustLoginEncryptionKeys,
+                                           completion: @escaping (Result<String, NSError>) -> Void) {
         // The key is present, but we didn't expect it to be there.
 
         self.logger.log("Logins key lost due to storage malfunction, new one generated",
