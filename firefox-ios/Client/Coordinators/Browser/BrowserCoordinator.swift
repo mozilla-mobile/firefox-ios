@@ -49,6 +49,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
+    private let gleanLifecycleObserver: GleanLifecycleObserver
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
@@ -61,7 +62,8 @@ class BrowserCoordinator: BaseCoordinator,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          glean: GleanWrapper = DefaultGleanWrapper(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()) {
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -70,6 +72,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
+        self.gleanLifecycleObserver = gleanLifecycleObserver
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -442,7 +445,11 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
+        let settingsCoordinator = SettingsCoordinator(
+            router: settingsRouter,
+            tabManager: tabManager,
+            gleanLifecycleObserver: gleanLifecycleObserver
+        )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
