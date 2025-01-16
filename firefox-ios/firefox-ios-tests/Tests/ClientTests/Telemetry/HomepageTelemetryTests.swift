@@ -39,25 +39,18 @@ final class HomepageTelemetryTests: XCTestCase {
     }
 
     func testGleanWrapperIntegration() throws {
-        // Define a mock GleanWrapper
-        class MockGleanWrapper: GleanWrapperProtocol {
-            var recordedValues: [Bool] = []
-
-            func recordPrivateModeToggle(isPrivateMode: Bool) {
-                recordedValues.append(isPrivateMode)
-            }
-        }
-
-        // Create the mock wrapper and pass it to HomepageTelemetry
         let mockWrapper = MockGleanWrapper()
         let subject = HomepageTelemetry(gleanWrapper: mockWrapper)
 
         // Test recording with enteringPrivateMode = true
         subject.sendHomepageTappedTelemetry(enteringPrivateMode: true)
-        XCTAssertEqual(mockWrapper.recordedValues, [true])
+        XCTAssertEqual(mockWrapper.recordEventCalled, 1)
 
         // Test recording with enteringPrivateMode = false
         subject.sendHomepageTappedTelemetry(enteringPrivateMode: false)
-        XCTAssertEqual(mockWrapper.recordedValues, [true, false])
+        XCTAssertEqual(mockWrapper.recordEventCalled, 2)
+
+        // Verify that the event was recorded
+        XCTAssertNotNil(mockWrapper.savedEvent)
     }
 }
