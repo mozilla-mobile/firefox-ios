@@ -24,7 +24,7 @@ from requests.packages.urllib3.util.retry import Retry
 
 CONFIG = {
     "URI_WEBSITE": "https://www.iana.org/assignments/uri-schemes/uri-schemes-1.csv",
-    "IOS_URI_PATH": "firefox-ios/Shared/Extensions/",
+    "IOS_URI_PATH": "BrowserKit/Sources/Shared/Extensions/",
     "IOS_URIS_FILE": "URLExtensions.swift",
     "RETRIES": 2,
     "BACKOFF_FACTOR": 0.3,

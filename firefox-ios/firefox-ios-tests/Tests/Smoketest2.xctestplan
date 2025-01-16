@@ -110,6 +110,7 @@
         "SettingsTests\/testOpenMailAppSettings()",
         "SettingsTests\/testOpenSiriOption()",
         "ShareMenuTests",
+        "ShareToolbarTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",

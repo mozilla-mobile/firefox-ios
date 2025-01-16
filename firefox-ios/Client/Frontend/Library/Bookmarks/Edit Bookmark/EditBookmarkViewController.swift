@@ -230,6 +230,7 @@ class EditBookmarkViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicatorForFolder(folder)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.accessibilityTraits = .button
         cell.customization = .regular
         cell.applyTheme(theme: theme)
     }

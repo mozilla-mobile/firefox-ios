@@ -1749,6 +1749,8 @@ class BrowserViewController: UIViewController,
     internal func openBookmarkEditPanel() {
         guard !profile.isShutdown else { return }
 
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
+
         // Open refactored bookmark edit view
         if isBookmarkRefactorEnabled {
             guard let url = tabManager.selectedTab?.url else { return }
@@ -1762,13 +1764,6 @@ class BrowserViewController: UIViewController,
             }
         // Open legacy bookmark edit view
         } else {
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .change,
-                object: .bookmark,
-                value: .addBookmarkToast
-            )
-
             // Fetch the last added bookmark in the mobile folder, which is the default location for all bookmarks
             // added on mobile when the bookmark refactor is not enabled
             profile.places.getBookmarksTree(

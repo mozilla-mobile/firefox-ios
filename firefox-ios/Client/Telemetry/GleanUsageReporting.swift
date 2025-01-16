@@ -42,7 +42,7 @@ class GleanUsageReporting: GleanUsageReportingApi {
 class GleanLifecycleObserver {
     private let gleanUsageReportingApi: GleanUsageReportingApi
     private var id: TimerId?
-    private var isObserving: Bool = false
+    private var isObserving = false
 
     init(gleanUsageReportingApi: GleanUsageReportingApi = GleanUsageReporting()) {
         self.gleanUsageReportingApi = gleanUsageReportingApi
