@@ -34,6 +34,7 @@ class CertificatesViewController: UIViewController,
     // MARK: - UI
     struct UX {
         static let titleLabelMargin = 8.0
+        static let titleLabelTopMargin = 2.0
         static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
@@ -43,19 +44,20 @@ class CertificatesViewController: UIViewController,
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
         label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
     }
 
     private let headerView: NavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.CertificatesScreen.headerView
     }
 
-    // TODO: FXIOS-9980 Tracking Protection Certificates Screen tableView header text is a little bit cutted off
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
         tableView.register(CertificatesHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
         tableView.sectionHeaderTopPadding = 0
+        tableView.separatorInset = .zero
     }
 
     // MARK: - Variables
@@ -140,9 +142,6 @@ class CertificatesViewController: UIViewController,
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.heightAnchor.constraint(
-                greaterThanOrEqualToConstant: UX.titleLabelMinHeight
-            ),
             titleLabel.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: UX.titleLabelMargin
@@ -152,7 +151,8 @@ class CertificatesViewController: UIViewController,
                 constant: -UX.titleLabelMargin
             ),
             titleLabel.topAnchor.constraint(
-                equalTo: headerView.bottomAnchor
+                equalTo: headerView.bottomAnchor,
+                constant: UX.titleLabelTopMargin
             )
         ])
     }
