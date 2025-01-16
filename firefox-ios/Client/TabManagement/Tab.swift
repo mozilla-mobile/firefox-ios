@@ -293,11 +293,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isURLAuthorized = false
     var url: URL? {
         didSet {
-            if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
-                isURLAuthorized = true
-                url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
-            } else {
-                isURLAuthorized = false
+            let internalURL = InternalURL(url)
+            isURLAuthorized = (internalURL?.isAuthorized == true)
+            if isURLAuthorized {
+                url = URL(string: internalURL!.stripAuthorization, invalidCharacters: false)
             }
         }
     }
