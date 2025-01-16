@@ -23,6 +23,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
@@ -103,9 +104,9 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate(viewConstraints)
     }
 
-    func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusLabelA11yId: String) {
+    func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusButtonA11yId: String) {
         connectionDetailArrow.accessibilityIdentifier = arrowImageA11yId
-        connectionStatusLabel.accessibilityIdentifier = securityStatusLabelA11yId
+        connectionButton.accessibilityIdentifier = securityStatusButtonA11yId
     }
 
     func adjustLayout() {
@@ -136,6 +137,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
                              theme: Theme) {
         connectionStatusImage.image = image
         connectionStatusLabel.text = text
+        connectionButton.accessibilityLabel = text
         connectionStatusImage.tintColor = theme.colors.iconSecondary
         connectionDetailArrow.isHidden = !isConnectionSecure
     }

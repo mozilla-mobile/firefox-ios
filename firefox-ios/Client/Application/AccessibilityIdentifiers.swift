@@ -125,9 +125,9 @@ struct AccessibilityIdentifiers {
             static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
             static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
             static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
-            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
-            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
-            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let trackersBlockedButton = "TrackingProtection.TrackersBlockedButton"
+            static let securityStatusButton = "TrackingProtection.ConnectionSecurityStatusButton"
+            static let toggleViewLabelsContainer = "TrackingProtection.ToggleViewLabelsContainer"
             static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
@@ -139,6 +139,9 @@ struct AccessibilityIdentifiers {
             static let containerView = "TrackingProtectionDetails.BaseView"
             static let connectionView = "TrackingProtectionDetails.ConnectionView"
             static let certificatesButton = "TrackingProtectionDetails.CertificatesButton"
+            static let closeButton = "TrackingProtectionDetails.CloseButton"
+            static let backButton = "TrackingProtectionDetails.BackButton"
+            static let titleLabel = "TrackingProtectionDetails.TitleLabel"
         }
 
         struct BlockedTrackers {
