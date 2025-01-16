@@ -4,12 +4,11 @@
 
 import Foundation
 
-class ShareMenuTests: BaseTestCase {
-    // https://mozilla.testrail.io/index.php?/cases/view/2863631
-    func testShareNormalWebsiteTabViaReminders() {
-        // Coudn't find a way to tap on reminders on iOS 16
+class ShareToolbarTests: BaseTestCase {
+    // https://mozilla.testrail.io/index.php?/cases/view/2864270
+    func testShareNormalWebsiteTabReminders() {
         if #available(iOS 17, *) {
-            reachShareMenuLayoutAndSelectOption(option: "Reminders")
+            tapToolbarShareButtonAndSelectOption(option: "Reminders")
             // The URL of the website is added in a new reminder
             waitForElementsToExist(
                 [
@@ -20,9 +19,9 @@ class ShareMenuTests: BaseTestCase {
         }
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864049
+    // https://mozilla.testrail.io/index.php?/cases/view/2864279
     func testShareNormalWebsitePrint() {
-        reachShareMenuLayoutAndSelectOption(option: "Print")
+        tapToolbarShareButtonAndSelectOption(option: "Print")
         // The Print dialog appears
         waitForElementsToExist(
             [
@@ -36,9 +35,9 @@ class ShareMenuTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864047
+    // https://mozilla.testrail.io/index.php?/cases/view/2864277
     func testShareNormalWebsiteSendLinkToDevice() {
-        reachShareMenuLayoutAndSelectOption(option: "Send Link to Device")
+        tapToolbarShareButtonAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
@@ -48,9 +47,9 @@ class ShareMenuTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864048
+    // https://mozilla.testrail.io/index.php?/cases/view/2864278
     func testShareNormalWebsiteMarkup() {
-        reachShareMenuLayoutAndSelectOption(option: "Markup")
+        tapToolbarShareButtonAndSelectOption(option: "Markup")
         // The Markup tool opens
         waitForElementsToExist(
             [
@@ -63,13 +62,13 @@ class ShareMenuTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864046
+    // https://mozilla.testrail.io/index.php?/cases/view/2864276
     func testShareNormalWebsiteCopyUrl() {
-        reachShareMenuLayoutAndSelectOption(option: "Copy")
+        tapToolbarShareButtonAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: url_3)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864073
+    // https://mozilla.testrail.io/index.php?/cases/view/2864301
     func testShareWebsiteReaderModeReminders() {
         if #available(iOS 17, *) {
             reachReaderModeShareMenuLayoutAndSelectOption(option: "Reminders")
@@ -83,7 +82,7 @@ class ShareMenuTests: BaseTestCase {
         }
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864082
+    // https://mozilla.testrail.io/index.php?/cases/view/2864310
     func testShareWebsiteReaderModePrint() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         // The Print dialog appears
@@ -99,13 +98,13 @@ class ShareMenuTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864079
+    // https://mozilla.testrail.io/index.php?/cases/view/2864307
     func testShareWebsiteReaderModeCopy() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864080
+    // https://mozilla.testrail.io/index.php?/cases/view/2864308
     func testShareWebsiteReaderModeSendLink() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
@@ -117,7 +116,7 @@ class ShareMenuTests: BaseTestCase {
         )
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864081
+    // https://mozilla.testrail.io/index.php?/cases/view/2864309
     func testShareWebsiteReaderModeMarkup() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         // The Markup tool opens
@@ -138,19 +137,14 @@ class ShareMenuTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
-        navigator.goto(ToolsBrowserTabMenu)
-        // Tap the Share button in the menu
-        navigator.performAction(Action.ShareBrowserTabMenuOption)
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         app.collectionViews.cells[option].waitAndTap()
     }
 
-    private func reachShareMenuLayoutAndSelectOption(option: String) {
-        // Open a website in the browser
+    private func tapToolbarShareButtonAndSelectOption(option: String) {
         navigator.openURL(url_3)
-        waitForTabsButton()
-        navigator.goto(ToolsBrowserTabMenu)
-        // Tap the Share button in the menu
-        navigator.performAction(Action.ShareBrowserTabMenuOption)
+        waitUntilPageLoad()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         app.collectionViews.cells[option].waitAndTap()
     }
 

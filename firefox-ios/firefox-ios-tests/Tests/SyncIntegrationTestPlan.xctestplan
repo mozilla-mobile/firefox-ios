@@ -99,6 +99,7 @@
         "SearchTests",
         "SettingsTests",
         "ShareMenuTests",
+        "ShareToolbarTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",

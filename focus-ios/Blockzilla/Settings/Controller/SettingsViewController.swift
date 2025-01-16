@@ -14,7 +14,7 @@ import DesignSystem
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case defaultBrowser, general, privacy, usageData, crashReports, studies, search, siri, integration, mozilla, secret
+        case defaultBrowser, general, privacy, usageData, crashReports, studies, dailyUsagePing, search, siri, integration, mozilla, secret
 
         var headerText: String? {
             switch self {
@@ -29,6 +29,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
             case .secret: return nil
             case .crashReports: return nil
+            case .dailyUsagePing: return nil
             }
         }
 
@@ -39,17 +40,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 .privacy,
                 .usageData,
                 .studies,
-                .crashReports
-            ]
-            
-            // FXIOS-10900 Add the TOS section to the list of sections
-
-            sections.append(contentsOf: [
+                .dailyUsagePing,
+                .crashReports,
                 .search,
                 .siri,
                 integration,
                 .mozilla
-            ])
+            ]
 
             if Settings.getToggle(.displaySecretMenu) {
                 sections.append(.secret)
@@ -130,6 +127,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             setting: SettingsToggle.crashToggle,
             subtitle: UIConstants.strings.detailTextCrashReportsV2
         )
+        let dailyUsageToggle = BlockerToggle(
+            label: UIConstants.strings.labelDailyUsagePing,
+            setting: SettingsToggle.dailyUsagePing,
+            subtitle: UIConstants.strings.detailTextDailyUsagePing
+        )
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
         let searchSuggestionToggle = BlockerToggle(label: UIConstants.strings.settingsSearchSuggestions, setting: SettingsToggle.enableSearchSuggestions, subtitle: searchSuggestionSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
@@ -147,6 +149,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         if let studiesIndex = getSectionIndex(Section.studies) {
             toggles[studiesIndex] = [0: studiesToggle]
+        }
+        if let dailyUsageIndex = getSectionIndex(.dailyUsagePing) {
+            toggles[dailyUsageIndex] = [0: dailyUsageToggle]
         }
         if let crashIndex = getSectionIndex(.crashReports) {
             toggles[crashIndex] = [0: crashToggle]
@@ -384,6 +389,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.textLabel?.text = "Internal Settings"
         case .crashReports:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
+        case .dailyUsagePing:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
         cell.textLabel?.textColor = .primaryText
@@ -408,6 +415,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .mozilla: return 3
         case .secret: return 1
         case .crashReports: return 1
+        case .dailyUsagePing: return 1
         }
     }
 
@@ -432,7 +440,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 getSectionIndex(.usageData): #selector(tappedLearnMoreFooter),
                 getSectionIndex(.search): #selector(tappedLearnMoreSearchSuggestionsFooter),
                 getSectionIndex(.studies): #selector(tappedLearnMoreStudies),
-                getSectionIndex(.crashReports): #selector(tappedLearnMoreCrashReports)
+                getSectionIndex(.crashReports): #selector(tappedLearnMoreCrashReports),
+                getSectionIndex(.dailyUsagePing): #selector(tappedLearnMoreDailyUsagePing)
             ]
             if let selector = learnMoreActions[section] {
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
@@ -547,6 +556,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     @objc func tappedLearnMoreCrashReports() {
         tappedFooter(forSupportTopic: .mobileCrashReports)
+    }
+    
+    @objc func tappedLearnMoreDailyUsagePing() {
+        tappedFooter(forSupportTopic: .usagePingSettingsMobile)
     }
 
     @objc
