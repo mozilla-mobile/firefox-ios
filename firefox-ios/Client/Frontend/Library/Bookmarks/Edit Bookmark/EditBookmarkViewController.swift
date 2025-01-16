@@ -251,6 +251,7 @@ class EditBookmarkViewController: UIViewController,
         cell.indentationLevel = 0
         cell.accessoryType = .none
         cell.selectionStyle = .default
+        cell.accessibilityTraits = .button
         cell.customization = .newFolder
         cell.applyTheme(theme: theme)
     }
