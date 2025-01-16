@@ -202,7 +202,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {}
+            // We don't need to do anything after this call completes
+            _ = self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
 
             let url = URL(string: site.url)
             self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
