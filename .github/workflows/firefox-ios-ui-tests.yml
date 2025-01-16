@@ -4,8 +4,8 @@ on:
     workflow_dispatch: {}
 env:
     browser: firefox-ios
-    xcode_version: 16.1
-    ios_version: 18.1
+    xcode_version: 16.2
+    ios_version: 18.2
     ios_simulator_default: iPhone 16
     xcodebuild_scheme: Fennec
     xcodebuild_target: Client
@@ -184,12 +184,13 @@ jobs:
           retention-days: 90
       - name: Report to Slack
         id: slack
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload-file-path: ${{ env.browser }}/slack.json
+          payload-templated: true
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
           pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
           xcodebuild_test_plan: Smoketests
@@ -267,12 +268,13 @@ jobs:
             retention-days: 90
         - name: Report to Slack
           id: slack
-          uses: slackapi/slack-github-action@v1.26.0
+          uses: slackapi/slack-github-action@v2.0.0
           with:
             payload-file-path: ${{ env.browser }}/slack.json
+            payload-templated: true
+            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
           env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
             ios_simulator: ${{ matrix.ios_simulator }}
             pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
             xcodebuild_test_plan: FullFunctionalTestPlan
