@@ -109,8 +109,29 @@
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Hallitse";
 
+/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Selaimen parantamiseksi %1$@ lähettää diagnostiikka- ja vuorovaikutustietoja %2$@lle. %3$@";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "Lue lisää.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Lue lisää";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Lähetä kaatumisilmoitukset automaattisesti";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Lähetä teknistä ja vuorovaikutustietoa %@lle";
+
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Auta meitä parantamaan %@ia";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "Nopeaa ja turvallista verkkoselailua";
+
+/* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
+"Onboarding.TermsOfService.Title.v135" = "Tervetuloa %@iin";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klassinen taustakuva";

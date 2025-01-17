@@ -115,6 +115,9 @@
 /* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ passer på dit privatliv. Læs mere i vores %2$@";
 
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "privatlivserklæring.";
+
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "Læs mere.";
 
@@ -127,6 +130,9 @@
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Send automatisk fejlrapporter";
 
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Data om din enhed, hardwarekonfiguration og hvordan du bruger %1$@ hjælper med at forbedre funktioner, ydeevne og stabilitet for alle. %2$@";
+
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Send tekniske data og data om brug til %@";
 
@@ -138,6 +144,9 @@
 
 /* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Ved at fortsætte accepterer du %@";
+
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "tjenestevilkår for %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
 "Onboarding.TermsOfService.Title.v135" = "Velkommen til %@";
