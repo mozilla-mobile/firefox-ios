@@ -251,7 +251,7 @@
 "Done" = "സമ്പൂര്‍ണം";
 
 /* Panel accessibility label */
-"Downloads" = "ഡൌണ്‍ലോഡുകള്‍";
+"Downloads" = "ഇറക്കിവയ്ക്കലുകൾ";
 
 /* The label of the button the user will press to start downloading a file */
 "Downloads.Alert.DownloadNow" = "ഇപ്പോള്‍ ഇറക്കിവയ്ക്കുക";
@@ -260,7 +260,7 @@
 "Downloads.CancelDialog.Cancel" = "റദ്ദാക്കുക";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "ഈ ഡൗണ്‍ലോഡ് റദ്ദാക്കണമെന്ന് ഉറപ്പാ​ണോ?";
+"Downloads.CancelDialog.Message" = "ഈ ഇറക്കിവയ്ക്കൽ റദ്ദാക്കണമെന്ന് ഉറപ്പാ​ണോ?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "തുടരുക";
@@ -1285,8 +1285,26 @@
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "ചുവർകടലാസു്";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കുപ്പിക്കല്ലു് രചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കടല്ത്തീരക്കുന്നുകളുള്ള രചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, ആകാശനീല രചന.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "തനതു തെളിഞ്ഞ ചുവർകടലാസു്.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കിഴക്കരചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, സന്ധ്യക്കുന്നരചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ക്ലാസിക് %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ആദ്യ തിര";

@@ -264,7 +264,13 @@ class CertificatesViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        // TODO: FXIOS-9829 Enhanced Tracking Protection certificates details screen accessibility identifiers
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
+            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+        )
     }
 
     // MARK: View Transitions

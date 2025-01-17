@@ -38,7 +38,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Очистить";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Удаление кук и данных сайтов для %@ может привести к разрегистрации вас на веб-сайтах и очищению корзины покупок.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Удаление кук и данных сайтов для %@ может привести к выходу из аккаунта на веб-сайтах и очищению корзины покупок.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Удалить куки и данные сайтов";

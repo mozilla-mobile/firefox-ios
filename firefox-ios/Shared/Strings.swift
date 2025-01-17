@@ -197,6 +197,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Saved in “Bookmarks”",
                 comment: "The label displayed in the toast notification when saving a bookmark via the menu to the default folder. \"Bookmarks\" is the name of the default folder where the bookmark will be saved to.")
+            public static let MoreOptionsA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.MoreOptionsA11yLabel.v136",
+                tableName: "Bookmarks",
+                value: "More options",
+                comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
         }
 
         public struct EmptyState {
@@ -212,10 +217,10 @@ extension String {
                     value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
                 public static let ButtonTitle = MZLocalizedString(
-                    key: "Bookmarks.EmptyState.Root.ButtonTitle.v135",
+                    key: "Bookmarks.EmptyState.Root.ButtonTitle.v136",
                     tableName: "Bookmarks",
                     value: "Sign in to Sync",
-                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data")
+                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, \"Sync\" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS")
             }
             public struct Nested {
                 public static let Title = MZLocalizedString(
@@ -4952,6 +4957,19 @@ extension String {
 extension String {
     public struct Menu {
         public struct EnhancedTrackingProtection {
+            public struct AccessibilityLabels {
+                public static let CloseButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.CloseButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Close",
+                    comment: "The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view.")
+                public static let BackButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.BackButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Back",
+                    comment: "The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view.")
+            }
+
             public static let onTitle = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.On.Title.v128",
                 tableName: "EnhancedTrackingProtection",
@@ -5394,10 +5412,10 @@ extension String {
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains how Mozilla send crash reports.")
-    public static let SendCrashReportsSettingMessage = MZLocalizedString(
-        key: "Settings.CrashReports.Message.v135",
+    public static let SendCrashReportsSettingMessageV2 = MZLocalizedString(
+        key: "Settings.CrashReports.Message.v136",
         tableName: "Settings",
-        value: "Crash reports allow us diagnose and fix issues with the browser.",
+        value: "This helps us diagnose and fix issues with the browser.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SendDailyUsagePingSettingTitle = MZLocalizedString(
         key: "Settings.DailyUsagePing.Title.v135",
@@ -7671,6 +7689,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "%@ Terms of Service.",
                 comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+            public static let SendCrashReportsSettingMessage = MZLocalizedString(
+                key: "Settings.CrashReports.Message.v135",
+                tableName: "Settings",
+                value: "Crash reports allow us diagnose and fix issues with the browser.",
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
         }
     }
 }

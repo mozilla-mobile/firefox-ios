@@ -164,6 +164,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     private func setupCallbacks() {
         crashReportsSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendCrashReports)
+            TermsOfServiceTelemetry().automaticCrashReportsSwitched(to: value)
         }
 
         technicalDataSwitch.switchCallback = { [weak self] value in
@@ -171,6 +172,7 @@ final class PrivacyPreferencesViewController: UIViewController,
             if !value {
                 GleanMetrics.Pings.shared.onboardingOptOut.submit()
             }
+            TermsOfServiceTelemetry().technicalInteractionDataSwitched(to: value)
         }
 
         crashReportsSwitch.learnMoreCallBack = { [weak self] in

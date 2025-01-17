@@ -126,7 +126,12 @@ class ShareManager: NSObject, FeatureFlaggable {
             } else {
                 // For feature parity with Safari, we use this provider to decide to which apps we should (or should not)
                 // share a display title and/or subject line
-                activityItems.append(TitleActivityItemProvider(title: tab.displayTitle))
+                activityItems.append(
+                    TitleActivityItemProvider(
+                        title: tab.displayTitle,
+                        applySentFromFirefoxTreatment: isSentFromFirefoxEnabled
+                    )
+                )
             }
         }
 

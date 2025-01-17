@@ -207,6 +207,7 @@ class EditFolderViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.accessibilityTraits = .button
         cell.customization = .regular
         cell.applyTheme(theme: theme)
     }

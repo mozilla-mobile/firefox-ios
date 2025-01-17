@@ -50,10 +50,12 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - Terms of Service
     private func presentTermsOfService(with manager: TermsOfServiceManager,
                                        isFullScreen: Bool) {
+        TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
         let viewController = TermsOfServiceViewController(profile: profile, windowUUID: windowUUID)
         viewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
             manager.setAccepted()
+            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
 
             let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
             manager.shouldSendTechnicalData(value: sendTechnicalData)

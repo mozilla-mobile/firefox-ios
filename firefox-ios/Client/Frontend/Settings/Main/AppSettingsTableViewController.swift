@@ -49,6 +49,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
+    private let gleanLifecycleObserver: GleanLifecycleObserver
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -60,16 +61,20 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var studiesToggleSetting: BoolSetting?
 
     // MARK: - Initializers
-    init(with profile: Profile,
-         and tabManager: TabManager,
-         settingsDelegate: SettingsDelegate,
-         parentCoordinator: SettingsFlowDelegate,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         logger: Logger = DefaultLogger.shared) {
+    init(
+        with profile: Profile,
+        and tabManager: TabManager,
+        settingsDelegate: SettingsDelegate,
+        parentCoordinator: SettingsFlowDelegate,
+        gleanLifecycleObserver: GleanLifecycleObserver,
+        appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+        applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
+        self.gleanLifecycleObserver = gleanLifecycleObserver
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
@@ -227,8 +232,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile"),
                 isToSEnabled: isTermsOfServiceFeatureEnabled
             )
-            sendDailyUsagePingSettings.shouldSendData = { value in
-                // TODO: FXIOS-10469 Firefox iOS: DAU Ping Setting
+            sendDailyUsagePingSettings.shouldSendData = { [weak self] value in
+                if value {
+                    self?.gleanLifecycleObserver.startObserving()
+                } else {
+                    self?.gleanLifecycleObserver.stopObserving()
+                }
             }
             sendDailyUsagePingSetting = sendDailyUsagePingSettings
         } else {
@@ -262,7 +271,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator,
             title: .SendCrashReportsSettingTitle,
-            message: String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue),
+            message: String(format: .SendCrashReportsSettingMessageV2, MozillaName.shortName.rawValue),
             linkedText: isTermsOfServiceFeatureEnabled ? .SendCrashReportsSettingLinkV2 : .SendCrashReportsSettingLink,
             prefKey: AppConstants.prefSendCrashReports,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,

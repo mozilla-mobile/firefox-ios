@@ -116,12 +116,13 @@ jobs:
                 retention-days: 90
             - name: Report to Slack
               id: slack
-              uses: slackapi/slack-github-action@v1.26.0
+              uses: slackapi/slack-github-action@v2.0.0
               with:
                 payload-file-path: ${{ env.browser }}/slack.json
+                payload-templated: true
+                webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+                webhook-type: incoming-webhook
               env:
-                SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
-                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
                 ios_simulator: ${{ matrix.ios_simulator }}
                 pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
                 xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}

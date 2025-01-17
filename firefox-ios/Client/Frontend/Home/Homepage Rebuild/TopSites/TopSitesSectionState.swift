@@ -54,67 +54,83 @@ struct TopSitesSectionState: StateType, Equatable {
 
         switch action.actionType {
         case TopSitesMiddlewareActionType.retrievedUpdatedSites:
-            guard let topSitesAction = action as? TopSitesAction,
-                  let sites = topSitesAction.topSites
-            else {
-                return defaultState(from: state)
-            }
-            let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow ?? state.numberOfTilesPerRow
-            let filteredSites = filter(sites: sites, with: state.numberOfRows, and: numberOfTilesPerRow)
-            return TopSitesSectionState(
-                windowUUID: state.windowUUID,
-                topSitesData: filteredSites,
-                numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: numberOfTilesPerRow,
-                shouldShowSection: !filteredSites.isEmpty && state.shouldShowSection
-            )
+            return handleRetrievedUpdatedSitesAction(action: action, state: state)
         case TopSitesActionType.updatedNumberOfRows:
-            guard let topSitesAction = action as? TopSitesAction,
-                  let numberOfRows = topSitesAction.numberOfRows
-            else {
-                return defaultState(from: state)
-            }
-
-            let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
-            return TopSitesSectionState(
-                windowUUID: state.windowUUID,
-                topSitesData: filteredSites,
-                numberOfRows: numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow,
-                shouldShowSection: state.shouldShowSection
-            )
+            return handleUpdatedNumberOfRowsAction(action: action, state: state)
         case TopSitesActionType.updatedNumberOfTilesPerRow:
-            guard let topSitesAction = action as? TopSitesAction,
-                  let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
-            else {
-                return defaultState(from: state)
-            }
-
-            let filteredSites = filter(sites: state.topSitesData, with: state.numberOfRows, and: numberOfTilesPerRow)
-            return TopSitesSectionState(
-                windowUUID: state.windowUUID,
-                topSitesData: filteredSites,
-                numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: numberOfTilesPerRow,
-                shouldShowSection: state.shouldShowSection
-            )
+            return handleUpdatedNumberOfTilesPerRowAction(action: action, state: state)
         case TopSitesActionType.toggleShowSectionSetting:
-            guard let topSitesAction = action as? TopSitesAction,
-                  let isEnabled = topSitesAction.isEnabled
-            else {
-                return defaultState(from: state)
-            }
-
-            return TopSitesSectionState(
-                windowUUID: state.windowUUID,
-                topSitesData: state.topSitesData,
-                numberOfRows: state.numberOfRows,
-                numberOfTilesPerRow: state.numberOfTilesPerRow,
-                shouldShowSection: isEnabled
-            )
+            return handleToggleShowSectionSettingAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleRetrievedUpdatedSitesAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let sites = topSitesAction.topSites
+        else {
+            return defaultState(from: state)
+        }
+        let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow ?? state.numberOfTilesPerRow
+        let filteredSites = filter(sites: sites, with: state.numberOfRows, and: numberOfTilesPerRow)
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: filteredSites,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: numberOfTilesPerRow,
+            shouldShowSection: !filteredSites.isEmpty && state.shouldShowSection
+        )
+    }
+
+    private static func handleUpdatedNumberOfRowsAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let numberOfRows = topSitesAction.numberOfRows
+        else {
+            return defaultState(from: state)
+        }
+
+        let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: filteredSites,
+            numberOfRows: numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func handleUpdatedNumberOfTilesPerRowAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
+        else {
+            return defaultState(from: state)
+        }
+
+        let filteredSites = filter(sites: state.topSitesData, with: state.numberOfRows, and: numberOfTilesPerRow)
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: filteredSites,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func handleToggleShowSectionSettingAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let topSitesAction = action as? TopSitesAction,
+              let isEnabled = topSitesAction.isEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: state.topSitesData,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: isEnabled
+        )
     }
 
     /// Filters the top sites to be displayed in the view based on user preferences and layout configuration.
