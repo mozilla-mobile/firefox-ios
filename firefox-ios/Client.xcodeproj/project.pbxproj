@@ -25,8 +25,6 @@
 		0A76936B2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76936A2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift */; };
 		0A93C8AA2C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */; };
 		0A93C8AC2C870E7100BEA143 /* TrackingProtectionToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */; };
-		0ABCD45B2D355260005D704A /* TermsOfServiceTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */; };
-		0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */; };
 		0AC659272BF35854005C614A /* FxAWebViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */; };
 		0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */; };
 		0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */; };
@@ -2334,8 +2332,6 @@
 		0A7D41DB98DDB127A2B8C544 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Menu.strings; sourceTree = "<group>"; };
 		0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionConnectionStatusView.swift; sourceTree = "<group>"; };
 		0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionToggleView.swift; sourceTree = "<group>"; };
-		0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetry.swift; sourceTree = "<group>"; };
-		0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetryTests.swift; sourceTree = "<group>"; };
 		0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModelTests.swift; sourceTree = "<group>"; };
 		0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxAWebViewModel.swift; sourceTree = "<group>"; };
 		0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCenteredTableViewCell.swift; sourceTree = "<group>"; };
@@ -12120,7 +12116,6 @@
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
-				0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */,
 				8AC225642B6D3FA400CDA7FD /* HomepageTelemetryTests.swift */,
 				E1B9A2C32CADA78300F6A0E9 /* ToolbarTelemetryTests.swift */,
 				0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */,
@@ -13113,7 +13108,6 @@
 				435D660423D794B90046EFA2 /* UpdateViewModel.swift */,
 				74B420C82A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift */,
 				C8CD80DB2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift */,
-				0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */,
 				81020C932BB5B026007B8481 /* OnboardingMultipleChoiceButtonViewModel.swift */,
 			);
 			path = Models;
@@ -16809,7 +16803,6 @@
 				E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */,
 				8A3EF7F42A2FCF5700796E3A /* ExportBrowserDataSetting.swift in Sources */,
 				8CC6170B2C358BAC001C7688 /* ActionToast.swift in Sources */,
-				0ABCD45B2D355260005D704A /* TermsOfServiceTelemetry.swift in Sources */,
 				2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
 				C855728229AE7F1700AF32B0 /* SurveySurfaceManager.swift in Sources */,
@@ -17260,7 +17253,6 @@
 				213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */,
 				8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */,
 				8A7653C228A2E57D00924ABF /* PocketDataAdaptorTests.swift in Sources */,
-				0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */,
 				C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */,
 				E1AEC176286E0CF500062E29 /* JumpBackInViewModelTests.swift in Sources */,
 				8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */,
