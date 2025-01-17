@@ -58,12 +58,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        if !iPad() {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
-            longPressOnPdfLink()
-        } else {
-            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
-        }
+        longPressOnPdfLink()
 
         waitForElementsToExist(
             [
@@ -85,12 +80,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        if !iPad() {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
-            longPressOnPdfLink()
-        } else {
-            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
-        }
+        longPressOnPdfLink()
 
         mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
         app.buttons["Add to Reading List"].tap()
