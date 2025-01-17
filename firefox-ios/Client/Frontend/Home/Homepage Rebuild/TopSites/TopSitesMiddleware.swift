@@ -92,7 +92,7 @@ final class TopSitesMiddleware {
         sponsoredTiles: [Site],
         numberOfTilesPerRow: Int? = nil
     ) async {
-        let topSites = await self.topSitesManager.recalculateTopSites(
+        let topSites = self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
             sponsoredSites: sponsoredSites
         )
