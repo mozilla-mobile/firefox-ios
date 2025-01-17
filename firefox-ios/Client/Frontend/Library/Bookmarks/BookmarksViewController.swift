@@ -29,6 +29,7 @@ class BookmarksViewController: SiteTableViewController,
     let viewModel: BookmarksPanelViewModel
     var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
@@ -556,11 +557,7 @@ class BookmarksViewController: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "swipe"])
+            strongSelf.bookmarksTelemetry.deleteBookmark()
             completion(true)
         }
 
@@ -737,11 +734,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "long-press"])
+            self.bookmarksTelemetry.deleteBookmark()
         }).items
         actions.append(removeAction)
 
