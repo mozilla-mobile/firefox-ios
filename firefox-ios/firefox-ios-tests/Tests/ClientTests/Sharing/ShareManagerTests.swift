@@ -356,10 +356,9 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 5)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
-        XCTAssertEqual(
-            itemForTitleActivity as? String,
-            testWebpageDisplayTitle,
-            "When no explicit share message is set, we expect to see the webpage's title."
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
         )
         XCTAssertTrue(itemForShareActivity is NSNull)
     }
@@ -407,15 +406,14 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 5)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentB)
-        XCTAssertEqual(
-            itemForTitleActivity as? String,
-            testWebpageDisplayTitle,
-            "When no explicit share message is set, we expect to see the webpage's title."
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
         )
         XCTAssertTrue(itemForShareActivity is NSNull)
     }
 
-    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactOtherShares() throws {
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactMail() throws {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
         let mailActivity = UIActivity.ActivityType.mail
@@ -459,6 +457,55 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertTrue(
             itemForTitleActivity is NSNull,
             "When no explicit share message, TitleActivityItemProvider item should not be shared to excluded activity Mail."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactAirDrop() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let mailActivity = UIActivity.ActivityType.airDrop
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: mailActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(
+            itemForTitleActivity as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
         )
         XCTAssertTrue(itemForShareActivity is NSNull)
     }
@@ -621,10 +668,9 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 5)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
-        XCTAssertEqual(
-            itemForTitleActivity as? String,
-            testWebpageDisplayTitle,
-            "When no explicit share message is set, we expect to see the webpage's title."
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "With Sent from Firefox shares to WhatsApp, never append an additional title."
         )
         XCTAssertTrue(itemForShareActivity is NSNull)
     }

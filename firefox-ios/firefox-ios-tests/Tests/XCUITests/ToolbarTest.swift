@@ -60,7 +60,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         waitUntilPageLoad()
@@ -71,7 +71,7 @@ class ToolbarTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[website1["label"]!])
-        app.cells.element(boundBy: 0).tap()
+        app.cells.element(boundBy: 0).waitAndTap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled.
@@ -94,7 +94,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Simulate pressing on backspace key should remove the text
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.typeText("\u{8}")
 
         let value = urlBarAddress.value
@@ -149,7 +149,7 @@ class ToolbarTests: BaseTestCase {
             if #available(iOS 16, *) {
                 navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
                 navigator.performAction(Action.OpenNewTabFromTabTray)
-                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
                 validateAddNewTabButtonOnToolbar(isPrivate: true)
             }
         }

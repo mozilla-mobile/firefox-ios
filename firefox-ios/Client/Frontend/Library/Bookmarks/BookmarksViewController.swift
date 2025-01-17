@@ -387,7 +387,7 @@ class BookmarksViewController: SiteTableViewController,
         buttonConfig.automaticallyUpdateForSelection = true
         let contextButton = UIButton()
         contextButton.configuration = buttonConfig
-        contextButton.frame = CGRect(width: 44, height: 44)
+        contextButton.accessibilityLabel = .Bookmarks.Menu.MoreOptionsA11yLabel
 
         return contextButton
     }
@@ -508,6 +508,7 @@ class BookmarksViewController: SiteTableViewController,
                 viewModel.accessoryView = contextButton
             }
 
+            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell

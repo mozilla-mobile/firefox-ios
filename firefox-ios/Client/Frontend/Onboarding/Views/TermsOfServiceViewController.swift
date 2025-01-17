@@ -252,16 +252,19 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     // MARK: - Button actions
     @objc
     private func presentTermsOfService(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServiceLinkTapped()
         presentLink(with: URL(string: Links.termsOfService))
     }
 
     @objc
     private func presentPrivacyNotice(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServicePrivacyNoticeLinkTapped()
         presentLink(with: URL(string: Links.privacyNotice))
     }
 
     @objc
     private func presentManagePreferences(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServiceManageLinkTapped()
         let managePreferencesVC = PrivacyPreferencesViewController(profile: profile, windowUUID: windowUUID)
         if UIDevice.current.userInterfaceIdiom != .phone {
             managePreferencesVC.modalPresentationStyle = .formSheet

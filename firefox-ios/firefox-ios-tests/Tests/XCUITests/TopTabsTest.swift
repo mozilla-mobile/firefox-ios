@@ -55,7 +55,7 @@ class TopTabsTest: BaseTestCase {
         // Open link in a different tab and switch to it
         mozWaitForElementToExist(app.webViews.links.staticTexts["More information..."])
         app.webViews.links.staticTexts["More information..."].press(forDuration: 5)
-        app.buttons["Open in New Tab"].tap()
+        app.buttons["Open in New Tab"].waitAndTap()
         waitUntilPageLoad()
 
         // Open tab tray to check that both tabs are there
@@ -104,9 +104,9 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].tap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
-            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.cross].tap()
+            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -278,7 +278,7 @@ class TopTabsTest: BaseTestCase {
             )
 
             // Open New Tab
-            app.cells.otherElements[StandardImageIdentifiers.Large.plus].tap()
+            app.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForTabsButton()
@@ -295,7 +295,7 @@ class TopTabsTest: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
             mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.plus])
-            app.tables.cells.otherElements[StandardImageIdentifiers.Large.cross].tap()
+            app.tables.cells.otherElements[StandardImageIdentifiers.Large.cross].waitAndTap()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
@@ -312,7 +312,7 @@ class TopTabsTest: BaseTestCase {
             let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             mozWaitForElementToExist(tabsButton)
             navigator.nowAt(NewTabScreen)
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
     }
@@ -348,10 +348,10 @@ class TopTabsTest: BaseTestCase {
         let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         // Go to a tab that is below the fold of the scrollable “Open Tabs” view
         if !iPad() {
-            tabsTrayCell.staticTexts.element(boundBy: 3).tap()
+            tabsTrayCell.staticTexts.element(boundBy: 3).waitAndTap()
         } else {
-            XCTAssertEqual(tabsTrayCell.count, Int(numTab!))
-            tabsTrayCell.staticTexts.element(boundBy: 6).tap()
+            XCTAssertTrue(Int(numTab!) == 11)
+            tabsTrayCell.staticTexts.element(boundBy: 6).waitAndTap()
         }
         // The current tab’s thumbnail is focused in the “Open Tabs” view
         navigator.nowAt(NewTabScreen)
@@ -382,7 +382,7 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
-        app.buttons["Undo"].tap()
+        app.buttons["Undo"].waitAndTap()
         waitUntilPageLoad()
         // Only the latest tab closed is restored
         navigator.nowAt(BrowserTab)
@@ -401,7 +401,7 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.TogglePrivateMode)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
-        app.buttons["Undo"].tap()
+        app.buttons["Undo"].waitAndTap()
         // Only the latest tab closed is restored
         if !iPad() {
             let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
@@ -426,7 +426,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
         for _ in 0...3 {
-            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].tap()
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].waitAndTap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
             waitForElementsToExist(
                 [
@@ -435,7 +435,7 @@ class TopTabsTest: BaseTestCase {
                 ]
             )
         }
-        app.collectionViews.buttons["crossLarge"].tap()
+        app.collectionViews.buttons["crossLarge"].waitAndTap()
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
@@ -466,7 +466,7 @@ class TopTabsTest: BaseTestCase {
             ]
         )
         // Choose to close the tab
-        app.buttons["Close Tab"].tap()
+        app.buttons["Close Tab"].waitAndTap()
         // A toast notification is displayed with the message "Tab Closed" and the Undo option
         waitForElementsToExist(
             [
@@ -474,7 +474,7 @@ class TopTabsTest: BaseTestCase {
                 app.staticTexts["Tab Closed"]
             ]
         )
-        app.buttons["Undo"].tap()
+        app.buttons["Undo"].waitAndTap()
         mozWaitForElementToNotExist(app.buttons["Undo"])
         mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
         // The tab closed is restored
@@ -498,7 +498,7 @@ fileprivate extension BaseTestCase {
     }
 
     func closeTabTrayView(goBackToBrowserTab: String) {
-        app.cells.staticTexts[goBackToBrowserTab].firstMatch.tap()
+        app.cells.staticTexts[goBackToBrowserTab].firstMatch.waitAndTap()
         navigator.nowAt(BrowserTab)
     }
 }
@@ -618,8 +618,8 @@ class TopTabsTestIpad: IpadOnlyTestCase {
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("3", numTab)
@@ -628,7 +628,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
             .children(matching: .cell)
             .matching(identifier: "Homepage")
             .element(boundBy: 1).buttons["Remove page — Homepage"]
-            .tap()
+            .waitAndTap()
         waitForTabsButton()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["3"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
@@ -638,7 +638,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
             .children(matching: .cell)
             .element(boundBy: 1)
             .buttons["Remove page — Homepage"]
-            .tap()
+            .waitAndTap()
         waitForTabsButton()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["1"])

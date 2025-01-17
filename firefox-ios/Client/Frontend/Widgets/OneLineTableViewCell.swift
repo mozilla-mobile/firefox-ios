@@ -36,10 +36,9 @@ class OneLineTableViewCell: UITableViewCell,
         static let shortLeadingMargin: CGFloat = 5
         static let longLeadingMargin: CGFloat = 13
         static let cornerRadius: CGFloat = 5
-        static let accessoryViewTrailingPaddingForImage: CGFloat = 16
-        // Icon buttons typically have a minimum padding of 44px, so for them to be vertically aligned with image
-        // accessory views (24px width), they would need 10px less trailing padding
-        static let accessoryViewTrailingPaddingForButton: CGFloat = 6
+        static let accessoryViewIconSize: CGFloat = 24
+        static let accessoryViewSize: CGFloat = 44
+        static let accessoryViewTrailingPadding: CGFloat = 6
     }
 
     var reorderControlImageView: UIImageView? {
@@ -69,6 +68,8 @@ class OneLineTableViewCell: UITableViewCell,
         separatorLine.isHidden = true
     }
 
+    var isAccessoryViewInteractive = false
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -90,9 +91,7 @@ class OneLineTableViewCell: UITableViewCell,
         updateReorderControl()
 
         if let accessoryView {
-            let accessoryPadding = accessoryView is UIButton ? UX.accessoryViewTrailingPaddingForButton
-                                                             : UX.accessoryViewTrailingPaddingForImage
-            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - accessoryPadding
+            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - UX.accessoryViewTrailingPadding
         }
     }
 
@@ -183,6 +182,40 @@ class OneLineTableViewCell: UITableViewCell,
         selectedBackgroundView = selectedView
     }
 
+    private func createAccessoryView(accessoryView: UIView?) -> UIView? {
+        guard let accessoryView else { return nil }
+        let isButton = accessoryView is UIButton
+        let iconSize = min(UIFontMetrics.default.scaledValue(for: UX.accessoryViewIconSize), UX.accessoryViewIconSize * 2)
+        let accessoryViewSize = isButton ? UX.accessoryViewSize : iconSize
+
+        let customAccessoryView: UIView = {
+            let view = UIView()
+            view.addSubview(accessoryView)
+
+            if isButton {
+                let button = accessoryView as? UIButton
+                var buttonConfig = button?.configuration
+                let image = buttonConfig?.image?.createScaled(
+                    CGSize(width: iconSize, height: iconSize)).withRenderingMode(.alwaysTemplate)
+                buttonConfig?.image = image
+                button?.configuration = buttonConfig
+            }
+
+            accessoryView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                accessoryView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                accessoryView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                accessoryView.widthAnchor.constraint(equalToConstant: accessoryViewSize),
+                accessoryView.heightAnchor.constraint(equalToConstant: accessoryViewSize)
+            ])
+
+            return view
+        }()
+
+        customAccessoryView.frame = CGRect(x: 0, y: 0, width: UX.accessoryViewSize, height: UX.accessoryViewSize)
+        return customAccessoryView
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
 
@@ -196,10 +229,12 @@ class OneLineTableViewCell: UITableViewCell,
     // To simplify setup, OneLineTableViewCell now has a viewModel
     // Use it for new code, replace when possible in old code
     func configure(viewModel: OneLineTableViewCellViewModel) {
+        isAccessoryViewInteractive = viewModel.accessoryView is UIButton
+
         titleLabel.text = viewModel.title
-        accessoryView = viewModel.accessoryView
+        accessoryView = createAccessoryView(accessoryView: viewModel.accessoryView)
         accessoryType = viewModel.accessoryType
-        editingAccessoryView = viewModel.editingAccessoryView
+        editingAccessoryView =  createAccessoryView(accessoryView: viewModel.editingAccessoryView)
 
         if let image = viewModel.leftImageView {
             leftImageView.manuallySetImage(image)

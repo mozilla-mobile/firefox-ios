@@ -14,6 +14,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var mockSettingsDelegate: MockSettingsDelegate!
     private var mockParentCoordinator: MockSettingsFlowDelegate!
+    private var mockGleanLifecycleObserver: MockGleanLifecycleObserver!
 
     override func setUp() {
         super.setUp()
@@ -27,6 +28,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.applicationHelper = MockApplicationHelper()
         self.mockSettingsDelegate = MockSettingsDelegate()
         self.mockParentCoordinator = MockSettingsFlowDelegate()
+        self.mockGleanLifecycleObserver = MockGleanLifecycleObserver()
     }
 
     override func tearDown() {
@@ -136,6 +138,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
                                                      and: tabManager,
                                                      settingsDelegate: mockSettingsDelegate,
                                                      parentCoordinator: mockParentCoordinator,
+                                                     gleanLifecycleObserver: mockGleanLifecycleObserver,
                                                      appAuthenticator: appAuthenticator,
                                                      applicationHelper: applicationHelper)
         trackForMemoryLeaks(subject)

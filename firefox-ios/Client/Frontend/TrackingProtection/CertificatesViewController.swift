@@ -208,6 +208,7 @@ class CertificatesViewController: UIViewController,
             }
         }
         headerView.configure(withItems: items, theme: currentTheme())
+        headerView.setupAccessibilityIdentifiers()
         return headerView
     }
 
@@ -222,6 +223,7 @@ class CertificatesViewController: UIViewController,
         }
 
         let certificate = model.certificates[model.selectedCertificateIndex]
+        cell.setupAccessibilityIdentifiers()
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
@@ -240,7 +242,8 @@ class CertificatesViewController: UIViewController,
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
                                        (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)],
+                               isIssuerName: true)
             }
 
         case .validity:
@@ -264,7 +267,16 @@ class CertificatesViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        // TODO: FXIOS-9829 Enhanced Tracking Protection certificates details screen accessibility identifiers
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: A11y.backButton
+        )
+        titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
+        certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
     // MARK: View Transitions

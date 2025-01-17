@@ -726,6 +726,7 @@ class SearchViewController: SiteTableViewController,
                 appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
                                             height: SearchViewControllerUX.AppendButtonSize)
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.isAccessoryViewInteractive = true
                 cell = oneLineCell
             }
         case .openedTabs:

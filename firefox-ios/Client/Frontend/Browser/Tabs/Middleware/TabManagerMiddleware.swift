@@ -352,6 +352,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
+    @MainActor
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
         // In non-private mode, if:

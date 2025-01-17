@@ -107,7 +107,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
-        app.textFields["HomeAsCustomURLTextField"].tap()
+        app.textFields["HomeAsCustomURLTextField"].waitAndTap()
         if #unavailable(iOS 16) {
             sleep(2)
         }
@@ -181,12 +181,12 @@ class HomePageSettingsUITests: BaseTestCase {
         )
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].tap()
+        app.staticTexts["Shortcuts"].waitAndTap()
         XCTAssertTrue(app.switches["Shortcuts"].exists)
-        app.switches["Shortcuts"].tap()
+        app.switches["Shortcuts"].waitAndTap()
 
         navigator.goto(NewTabScreen)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
 
         mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
@@ -251,12 +251,12 @@ class HomePageSettingsUITests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
         }
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Validation for when Jump In section is not displayed
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        app.tables.cells.switches["Jump Back In"].tap()
-        app.buttons["Done"].tap()
+        app.tables.cells.switches["Jump Back In"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
@@ -273,7 +273,7 @@ class HomePageSettingsUITests: BaseTestCase {
             navigator.performAction(Action.GoToHomePage)
         }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.performAction(Action.ToggleRecentlySaved)
         if !iPad() {
             navigator.performAction(Action.ClickSearchButton)
@@ -297,7 +297,7 @@ class HomePageSettingsUITests: BaseTestCase {
         checkBookmarks()
         app.scrollViews
             .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-            .staticTexts[urlExampleLabel].tap()
+            .staticTexts[urlExampleLabel].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         unbookmark()
@@ -378,7 +378,7 @@ class HomePageSettingsUITests: BaseTestCase {
                 app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage]
             )
         }
-        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
+        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].waitAndTap()
         // Verify default settings
         waitForElementsToExist(
             [
@@ -434,16 +434,16 @@ class HomePageSettingsUITests: BaseTestCase {
 
     private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].tap()
+        app.staticTexts["Shortcuts"].waitAndTap()
         app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2", "3", "4"]
         for i in 0...3 {
             XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
         }
-        app.tables.cells.element(boundBy: row).tap()
-        app.buttons["Shortcuts"].tap()
+        app.tables.cells.element(boundBy: row).waitAndTap()
+        app.buttons["Shortcuts"].waitAndTap()
         navigator.goto(NewTabScreen)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         mozWaitForElementToExist(app.links["TopSitesCell"])
         let totalTopSites = app.links.matching(identifier: "TopSitesCell").count
         XCTAssertTrue(totalTopSites > minBoundary)

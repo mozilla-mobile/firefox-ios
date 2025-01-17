@@ -84,11 +84,12 @@ open class DefaultSuggestedSites {
                 )
             )
         ],
-        "zh_CN": [ // FIXME Do we still want this as a special case localization? Android doesn't compile this vers. anymore
+        "zh_CN": [ // FXIOS-11064 Do we still want this as a special case localization? Android doesn't compile this anymore
             Site.createSuggestedSite(
                 url: "http://mozilla.com.cn",
                 title: "火狐社区",
                 trackingId: 700,
+                // FXIOS-11064 We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "http://mozilla.com.cn/favicon.ico")!)
             ),
             Site.createSuggestedSite(
@@ -124,7 +125,7 @@ open class DefaultSuggestedSites {
                 """,
                 title: "京东",
                 trackingId: 705,
-                // FIXME We need a higher quality favicon link
+                // FXIOS-11064 We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
          ]

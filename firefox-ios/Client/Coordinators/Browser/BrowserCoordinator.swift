@@ -442,7 +442,10 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
+        let settingsCoordinator = SettingsCoordinator(
+            router: settingsRouter,
+            tabManager: tabManager
+        )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)

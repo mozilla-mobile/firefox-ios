@@ -15,7 +15,9 @@ enum SettingsToggle: String, Equatable {
     case showHomeScreenTips = "HomeScreenTips"
     case safari = "Safari"
     case sendAnonymousUsageData = "SendAnonymousUsageData"
+    case dailyUsagePing = "DailyUsagePing"
     case studies = "Studies"
+    case crashToggle = "CrashToggle"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
     case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
     case enableSearchSuggestions = "enableSearchSuggestions"
@@ -64,6 +66,8 @@ struct Settings {
         case .enableCustomDomainAutocomplete: return true
         case .enableSearchSuggestions: return false
         case .displaySecretMenu: return false
+        case .crashToggle: return true
+        case .dailyUsagePing: return true
         }
     }
 

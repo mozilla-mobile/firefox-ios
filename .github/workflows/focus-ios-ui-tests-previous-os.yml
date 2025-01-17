@@ -148,12 +148,13 @@ jobs:
           retention-days: 90
       - name: Report to Slack (SmokeTests)
         id: slack-smoketests
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload-file-path: ${{ env.browser }}/slack-smoketests.json
+          payload-templated: true
+          webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+          webhook-type: incoming-webhook
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
           ios_version: ${{ matrix.ios_version }}
           pass_fail:  ${{ steps.run-smoketests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
@@ -165,12 +166,13 @@ jobs:
           sha: ${{ github.sha }}
       - name: Report to Slack (FullFunctionalTests)
         id: slack-fullfunctionaltests
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload-file-path: ${{ env.browser }}/slack-fullfunctionaltests.json
+          payload-templated: true
+          webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+          webhook-type: incoming-webhook
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
           ios_version: ${{ matrix.ios_version }}
           pass_fail:  ${{ steps.run-fullfunctionaltests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
