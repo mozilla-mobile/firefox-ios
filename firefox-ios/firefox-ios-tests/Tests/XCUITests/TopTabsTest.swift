@@ -350,8 +350,13 @@ class TopTabsTest: BaseTestCase {
         if !iPad() {
             tabsTrayCell.staticTexts.element(boundBy: 3).tap()
         } else {
+<<<<<<< HEAD
             XCTAssertEqual(tabsTrayCell.count, Int(numTab!))
             tabsTrayCell.staticTexts.element(boundBy: 6).tap()
+=======
+            XCTAssertTrue(Int(numTab!) == 11)
+            tabsTrayCell.staticTexts.element(boundBy: 6).waitAndTap()
+>>>>>>> 250df85ed (Fixes MTE-4140 - for multiple ipad failures (#24200))
         }
         // The current tab’s thumbnail is focused in the “Open Tabs” view
         navigator.nowAt(NewTabScreen)
