@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Glean
 
 // MARK: - Settings Flow Delegate Protocol
 
@@ -236,6 +237,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 if value {
                     self?.gleanLifecycleObserver.startObserving()
                 } else {
+                    GleanMetrics.Pings.shared.usageDeletionRequest.submit()
                     self?.gleanLifecycleObserver.stopObserving()
                 }
             }
