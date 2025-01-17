@@ -44,7 +44,6 @@
         "BookmarksTests\/testDesktopFoldersArePresent()",
         "BookmarksTests\/testUndoDeleteBookmark()",
         "BrowsingPDFTests\/testBookmarkPDF()",
-        "BrowsingPDFTests\/testOpenLinkFromPDF()",
         "BrowsingPDFTests\/testPinPDFtoTopSites()",
         "ClipBoardTests\/testClipboardPasteAndGo()",
         "CreditCardsTests\/testAccessingTheCreditCardsSection()",
