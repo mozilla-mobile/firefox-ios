@@ -7,7 +7,11 @@ import Glean
 
 struct BookmarksTelemetry {
     private let gleanWrapper: GleanWrapper
-    private let label = "bookmarks-panel"
+
+    enum EventLabel: String {
+        case bookmarksPanel = "bookmarks-panel"
+        case topSites = "top-sites"
+    }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
@@ -18,10 +22,11 @@ struct BookmarksTelemetry {
     }
 
     func deleteBookmark() {
-        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.delete, label: label)
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.delete,
+                                 label: EventLabel.bookmarksPanel.rawValue)
     }
 
-    func openBookmarksPanel() {
-        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: label)
+    func openBookmarksSite(eventValue: EventLabel) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: eventValue.rawValue)
     }
 }
