@@ -42,6 +42,7 @@ class EditFolderViewController: UIViewController,
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
         view.tableHeaderView = headerSpacerView
+        view.keyboardDismissMode = .onDrag
     }
 
     private lazy var saveBarButton: UIBarButtonItem =  {
