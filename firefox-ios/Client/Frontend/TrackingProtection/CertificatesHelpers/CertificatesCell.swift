@@ -81,6 +81,13 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         }
     }
 
+    // MARK: Accessibility
+    func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        sectionLabel.accessibilityIdentifier = A11y.sectionLabel
+        allSectionItemsStackView.accessibilityIdentifier = A11y.allSectionItems
+    }
+
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer5
         sectionLabel.textColor = theme.colors.textPrimary
@@ -92,6 +99,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         itemLabel.textAlignment = isTitle ? .right : .left
         itemLabel.numberOfLines = 0
         itemLabel.lineBreakMode = .byWordWrapping
+        itemLabel.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.itemLabel
         if isUnderlined, !isTitle {
             let attributedString = NSAttributedString(
                 string: title,

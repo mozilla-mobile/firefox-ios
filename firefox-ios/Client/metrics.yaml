@@ -1538,6 +1538,93 @@ key_commands:
 
 # Onboarding metrics
 onboarding:
+  terms_of_service_card:
+    type: event
+    description: |
+      User viewed the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_accepted:
+    type: event
+    description: |
+      User clicked accept button on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_link_clicked:
+    type: event
+    description: |
+      User clicked the terms of service link on the onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_manage_link_clicked:
+    type: event
+    description: |
+      User clicked the manage link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_privacy_notice_link_clicked:
+    type: event
+    description: |
+      User clicked the privacy policy link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  toggle_technical_interaction_data:
+    type: event
+    description: |
+      User toggled the preference to share technical and interaction data from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the technical interaction data switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  toggle_automatic_crash_reports:
+    type: event
+    description: |
+      User toggled the preference to automatically send crash reports from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the automatic crash reports switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
   card_view:
     type: event
     description: |

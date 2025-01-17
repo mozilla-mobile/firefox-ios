@@ -48,4 +48,10 @@ class CertificatesHeaderView: UITableViewHeaderFooterView, ReusableCell {
 
         headerStackView.backgroundColor = theme.colors.layer5
     }
+
+    // MARK: Accessibility
+    func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        headerStackView.accessibilityIdentifier = A11y.tableViewHeader
+    }
 }

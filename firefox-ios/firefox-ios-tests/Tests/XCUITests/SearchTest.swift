@@ -469,6 +469,7 @@ class SearchTests: BaseTestCase {
         } else {
             mozWaitForElementToNotExist(app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft])
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables.cells.firstMatch)
             XCTAssertTrue(app.tables.cells.count <= 3)
         }
     }

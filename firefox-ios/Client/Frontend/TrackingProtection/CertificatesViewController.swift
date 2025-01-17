@@ -208,6 +208,7 @@ class CertificatesViewController: UIViewController,
             }
         }
         headerView.configure(withItems: items, theme: currentTheme())
+        headerView.setupAccessibilityIdentifiers()
         return headerView
     }
 
@@ -222,6 +223,7 @@ class CertificatesViewController: UIViewController,
         }
 
         let certificate = model.certificates[model.selectedCertificateIndex]
+        cell.setupAccessibilityIdentifiers()
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
@@ -265,13 +267,16 @@ class CertificatesViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
         headerView.setupAccessibility(
             closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
-            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
             backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+            backButtonA11yId: A11y.backButton
         )
+        titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
+        certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
     // MARK: View Transitions

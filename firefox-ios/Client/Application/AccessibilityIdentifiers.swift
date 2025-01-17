@@ -142,6 +142,12 @@ struct AccessibilityIdentifiers {
             static let closeButton = "TrackingProtectionDetails.CloseButton"
             static let backButton = "TrackingProtectionDetails.BackButton"
             static let titleLabel = "TrackingProtectionDetails.TitleLabel"
+            static let certificatesTitleLabel = "TrackingProtectionDetails.CertificatesTitleLabel"
+            static let tableView = "TrackingProtectionDetails.TableView"
+            static let tableViewHeader = "TrackingProtectionDetails.TableViewHeader"
+            static let sectionLabel = "TrackingProtectionDetails.SectionLabel"
+            static let allSectionItems = "TrackingProtectionDetails.AllSectionItems"
+            static let itemLabel = "TrackingProtectionDetails.ItemLabel"
         }
 
         struct BlockedTrackers {

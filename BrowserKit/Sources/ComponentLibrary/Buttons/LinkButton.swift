@@ -59,6 +59,16 @@ open class LinkButton: UIButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
+    public func applyUnderline(underlinedText: String) {
+        let attributedString = NSAttributedString(
+            string: underlinedText,
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+        )
+        setAttributedTitle(attributedString, for: .normal)
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
