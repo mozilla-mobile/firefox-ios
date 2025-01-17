@@ -62,15 +62,21 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(theme: Theme, sectionTitle: String, items: CertificateItems) {
+    func configure(theme: Theme, sectionTitle: String, items: CertificateItems, isIssuerName: Bool = false) {
         applyTheme(theme: theme)
         sectionLabel.text = sectionTitle
         for (key, value) in items {
+            let isUnderlined = isIssuerName && key == .Menu.EnhancedTrackingProtection.certificateCommonName
             let stackView = getSectionItemStackView()
-            let titleLabel = getItemLabel(theme: theme, with: key, isTitle: true)
+            let titleLabel = getItemLabel(theme: theme, with: key, isTitle: true, isUnderlined: isUnderlined)
             titleLabel.widthAnchor.constraint(equalToConstant: UX.sectionLabelWidth).isActive = true
             stackView.addArrangedSubview(titleLabel)
-            stackView.addArrangedSubview(getItemLabel(theme: theme, with: value, isTitle: false))
+            stackView.addArrangedSubview(getItemLabel(
+                theme: theme,
+                with: value,
+                isTitle: false,
+                isUnderlined: isUnderlined
+            ))
             allSectionItemsStackView.addArrangedSubview(stackView)
         }
     }
@@ -80,14 +86,24 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         sectionLabel.textColor = theme.colors.textPrimary
     }
 
-    private func getItemLabel(theme: Theme, with title: String, isTitle: Bool) -> UILabel {
-        let itemLabel: UILabel = .build { label in
-            label.font = FXFontStyles.Bold.headline.scaledFont()
-            label.textColor = isTitle ? theme.colors.textSecondary : theme.colors.textPrimary
-            label.text = title
-            label.textAlignment = isTitle ? .right : .left
-            label.numberOfLines = 0
-            label.lineBreakMode = .byWordWrapping
+    private func getItemLabel(theme: Theme, with title: String, isTitle: Bool, isUnderlined: Bool) -> UILabel {
+        let itemLabel: UILabel = .build()
+        itemLabel.font = FXFontStyles.Bold.headline.scaledFont()
+        itemLabel.textAlignment = isTitle ? .right : .left
+        itemLabel.numberOfLines = 0
+        itemLabel.lineBreakMode = .byWordWrapping
+        if isUnderlined, !isTitle {
+            let attributedString = NSAttributedString(
+                string: title,
+                attributes: [
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ]
+            )
+            itemLabel.textColor = theme.colors.textAccent
+            itemLabel.attributedText = attributedString
+        } else {
+            itemLabel.textColor = isTitle ? theme.colors.textSecondary : theme.colors.textPrimary
+            itemLabel.text = title
         }
         return itemLabel
     }
