@@ -73,7 +73,12 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     var pinnedSiteData: Site? {
         guard let url = self.url else { return nil }
 
-        let pinnedSite = Site.createPinnedSite(url: url, title: "Google", isGooglePinnedTile: true)
+        let pinnedSite = Site.createPinnedSite(
+            url: url,
+            title: "Google",
+            isGooglePinnedTile: true,
+            faviconResource: Constants.faviconResource
+        )
 
         return pinnedSite
     }

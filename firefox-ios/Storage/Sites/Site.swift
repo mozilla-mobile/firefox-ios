@@ -13,7 +13,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     public let type: SiteType
 
     // MARK: - Other information
-    public var faviconResource: SiteImageView.SiteResource?
+    public var faviconResource: SiteResource?
     public var metadata: PageMetadata?
     public var latestVisit: Visit?
     public var isBookmarked: Bool?
@@ -46,7 +46,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         url: String,
         title: String,
         isBookmarked: Bool? = nil,
-        faviconResource: SiteImageView.SiteResource? = nil
+        faviconResource: SiteResource? = nil
     ) -> Site {
         var site = Site(id: id ?? UUID().hashValue, url: url, title: title, type: .basic)
         site.isBookmarked = isBookmarked
@@ -62,7 +62,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         url: String,
         title: String,
         trackingId: Int,
-        faviconResource: SiteImageView.SiteResource? = nil
+        faviconResource: SiteResource? = nil
     ) -> Site {
         let siteInfo = SuggestedSiteInfo(trackingId: trackingId)
         return Site(
@@ -74,9 +74,20 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         )
     }
 
-    public static func createPinnedSite(url: String, title: String, isGooglePinnedTile: Bool) -> Site {
+    public static func createPinnedSite(
+        url: String,
+        title: String,
+        isGooglePinnedTile: Bool,
+        faviconResource: SiteResource? = nil
+    ) -> Site {
         let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
-        return Site(id: UUID().hashValue, url: url, title: title, type: .pinnedSite(siteInfo))
+        return Site(
+            id: UUID().hashValue,
+            url: url,
+            title: title,
+            type: .pinnedSite(siteInfo),
+            faviconResource: faviconResource
+        )
     }
 
     public static func createPinnedSite(fromSite site: Site, isGooglePinnedTile: Bool = false) -> Site {
@@ -109,7 +120,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
 
     // MARK: - Initializers
 
-    private init(id: Int, url: String, title: String, type: SiteType, faviconResource: SiteImageView.SiteResource? = nil) {
+    private init(id: Int, url: String, title: String, type: SiteType, faviconResource: SiteResource? = nil) {
         self.id = id
         self.url = url
         self.title = title
@@ -122,7 +133,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         url: String,
         title: String,
         type: SiteType,
-        faviconResource: SiteImageView.SiteResource? = nil,
+        faviconResource: SiteResource? = nil,
         metadata: PageMetadata? = nil,
         latestVisit: Visit? = nil,
         isBookmarked: Bool? = nil
@@ -190,7 +201,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         let type = (try? values.decode(SiteType.self, forKey: .type)) ?? .basic
 
         // Optional properties
-        let faviconResource = try? values.decode(SiteImageView.SiteResource.self, forKey: .faviconResource)
+        let faviconResource = try? values.decode(SiteResource.self, forKey: .faviconResource)
 
         self.init(id: id ?? UUID().hashValue, url: url, title: title, type: type, faviconResource: faviconResource)
     }

@@ -155,14 +155,17 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         case .pinnedSite, .suggestedSite:
             imageResource = topSite.site.faviconResource
         default:
-            if let siteURL = URL(string: siteURLString),
-               let domainNoTLD = siteURL.baseDomain?.split(separator: ".").first,
-               domainNoTLD == "google" {
-                // Exception for Google top sites, which all return blurry low quality favicons that on the home screen.
-                // Return our bundled G icon for all of the Google Suite.
-                // Parse example: "https://drive.google.com/drive/home" > "drive.google.com" > "google"
-                imageResource = GoogleTopSiteManager.Constants.faviconResource
-            }
+            break
+        }
+
+        if imageResource == nil,
+           let siteURL = URL(string: siteURLString),
+           let domainNoTLD = siteURL.baseDomain?.split(separator: ".").first,
+           domainNoTLD == "google" {
+            // Exception for Google top sites, which all return blurry low quality favicons that on the home screen.
+            // Return our bundled G icon for all of the Google Suite.
+            // Parse example: "https://drive.google.com/drive/home" > "drive.google.com" > "google"
+            imageResource = GoogleTopSiteManager.Constants.faviconResource
         }
 
         let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
