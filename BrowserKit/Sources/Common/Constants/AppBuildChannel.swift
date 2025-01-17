@@ -5,9 +5,9 @@
 import Foundation
 
 public enum AppBuildChannel: String {
-    case release
-    case beta
-    case developer
+    case release = "RELEASE"
+    case beta = "BETA"
+    case developer = "FENNEC"
 
     // Used for unknown cases
     case other
