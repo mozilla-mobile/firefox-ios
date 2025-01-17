@@ -70,11 +70,15 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var isZeroSearch: Bool {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
+            /* Ecosia: Remove bookmarks section
             bookmarksViewModel.isZeroSearch = isZeroSearch
-            // Ecosia: Remove `jumpBackIn` section reference
-            // jumpBackInViewModel.isZeroSearch = isZeroSearch
-            // Ecosia: Remove History Highlights and Pocket
-            // pocketViewModel.isZeroSearch = isZeroSearch
+             */
+            /* Ecosia: Remove `jumpBackIn` section reference
+            jumpBackInViewModel.isZeroSearch = isZeroSearch
+             */
+            /* Ecosia: Remove History Highlights and Pocket
+            pocketViewModel.isZeroSearch = isZeroSearch
+             */
         }
     }
 
@@ -107,16 +111,19 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     // Ecosia: Remove message Card  from HomePage
     // var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    // TODO Ecosia upgrade: Check if we want to remove the new `bookmarksViewModel`
+    /* Ecosia Remove bookmarks section
     var bookmarksViewModel: BookmarksViewModel
-    // Ecosia: Remove `jumpBackIn` section reference
-    // var jumpBackInViewModel: JumpBackInViewModel
+     */
+    /* Ecosia: Remove `jumpBackIn` section reference
+    var jumpBackInViewModel: JumpBackInViewModel
+     */
     /* Ecosia: Remove History Highlights and Pocket
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
      */
-    // Ecosia: Remove `customizeHome` reference
-    // var customizeButtonViewModel: CustomizeHomepageSectionViewModel
+    /* Ecosia: Remove `customizeHome` reference
+    var customizeButtonViewModel: CustomizeHomepageSectionViewModel
+     */
 
     var shouldDisplayHomeTabBanner: Bool {
         false
@@ -184,9 +191,11 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
          */
+        /* Ecosia: Remove bookmarks section
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
                                                      theme: theme,
                                                      wallpaperManager: wallpaperManager)
+         */
         /* Ecosia: Remove History Highlights and Pocket
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
@@ -238,15 +247,21 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         // Ecosia: Add Ecosia's ViewModels delegates
         newsViewModel.dataModelDelegate = self
         topSiteViewModel.delegate = self
+        /* Ecosia Remove bookmarks section
         bookmarksViewModel.delegate = self
-        // Ecosia: Remove History Highlights and Pocket
-        // historyHighlightsViewModel.delegate = self
-        // Ecosia: Remove History Highlights and Pocket
-        // pocketViewModel.delegate = self
-        // Ecosia: Remove `jumpBackIn` section reference
-        // jumpBackInViewModel.delegate = self
-        // Ecosia: Remove message Card  from HomePage
-        // messageCardViewModel.delegate = self
+         */
+        /* Ecosia: Remove History Highlights and Pocket
+        historyHighlightsViewModel.delegate = self
+         */
+        /* Ecosia: Remove History Highlights and Pocket
+        pocketViewModel.delegate = self
+         */
+        /* Ecosia: Remove `jumpBackIn` section reference
+        jumpBackInViewModel.delegate = self
+         */
+        /* Ecosia: Remove message Card  from HomePage
+        messageCardViewModel.delegate = self
+         */
 
         /* Ecosia: Remove `jumpBackIn` section reference
         Task {

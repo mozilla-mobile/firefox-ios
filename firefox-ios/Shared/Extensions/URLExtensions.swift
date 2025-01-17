@@ -196,8 +196,14 @@ extension URL {
         return urls[0] == urls[1]
     }
 
+    /* Ecosia: Create homepage url constant
     public var isFxHomeUrl: Bool {
         return absoluteString.hasPrefix("internal://local/about/home")
+    }
+     */
+    public static let homepageUrlString = "internal://local/about/home"
+    public var isFxHomeUrl: Bool {
+        return absoluteString.hasPrefix(URL.homepageUrlString)
     }
 }
 

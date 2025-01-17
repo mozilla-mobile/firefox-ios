@@ -672,13 +672,13 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
 
         guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
-                for: indexPath) as? LabelButtonHeaderView
+                withReuseIdentifier: LegacyLabelButtonHeaderView.cellIdentifier,
+                for: indexPath) as? LegacyLabelButtonHeaderView
         else { return UICollectionReusableView() }
 
         // Configure header only if section is shown
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
-        headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
+        headerView.configure(viewModel: headerViewModel, theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -747,6 +747,7 @@ private extension LegacyHomepageViewController {
             )
         }
 
+        /* Ecosia: Remove `bookmarks` reference
         // Bookmarks
         viewModel.bookmarksViewModel.headerButtonAction = { [weak self] button in
             self?.openBookmarks(button)
@@ -759,6 +760,7 @@ private extension LegacyHomepageViewController {
                 sectionType: .bookmarks
             )
         }
+         */
 
         /* Ecosia: Remove `jumpBackIn` reference
         // Jumpback in
@@ -1038,12 +1040,6 @@ extension LegacyHomepageViewController: HomepageViewModelDelegate {
                             level: .debug,
                             category: .legacyHomepage)
         }
-    }
-}
-
-extension HomepageViewController: NTPSeedCounterDelegate {
-    func didTapSeedCounter() {
-        SeedCounterNTPExperiment.trackTapOnSeedCounter()
     }
 }
 

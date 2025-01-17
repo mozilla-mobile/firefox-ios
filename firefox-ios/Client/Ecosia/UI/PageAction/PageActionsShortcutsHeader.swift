@@ -28,14 +28,14 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
     let home = Panel(title: .localized(.home),
                      image: UIImage(named: StandardImageIdentifiers.Large.home),
                      tag: 0)
-    let newTab = Panel(title: .AppMenu.NewTab,
+    let newTab = Panel(title: .LegacyAppMenu.NewTab,
                        image: UIImage(named: StandardImageIdentifiers.Large.plus),
                        tag: 1)
-    let share = Panel(title: .AppMenu.Share,
-                      image: UIImage(named: ImageIdentifiers.share),
+    let share = Panel(title: .LegacyAppMenu.Share,
+                      image: UIImage(named: StandardImageIdentifiers.Large.share),
                       tag: 2)
-    let settings = Panel(title: .AppMenu.AppMenuSettingsTitleString,
-                         image: UIImage(named: ImageIdentifiers.settings),
+    let settings = Panel(title: .LegacyAppMenu.AppMenuSettingsTitleString,
+                         image: UIImage(named: StandardImageIdentifiers.Large.settings),
                          tag: 3)
 
     override init(reuseIdentifier: String?) {

@@ -9,6 +9,8 @@ import Shared
 import Storage
 import Redux
 import TabDataStore
+// Ecosia: Import Core
+import Core
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -250,7 +252,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         switch route {
+        /* Ecosia: Add referrals
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
+         */
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .referrals:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -305,6 +310,15 @@ class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
+
+        // Ecosia: Add referrals
+        case let .referrals(code):
+            User.shared.referrals.pendingClaim = code
+            // on first start, browser is not in view hierarchy yet
+            guard !User.shared.firstTime else { return }
+            browserViewController.openBlankNewTab(focusLocationField: false)
+            // Intro logic will trigger claiming referral
+            browserViewController.presentIntroViewController()
         }
     }
 
@@ -433,7 +447,10 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func openDebugTestTabs(count: Int) {
+        /* Ecosia: Update debug Tabs URL
         guard let url = URL(string: "https://www.mozilla.org") else { return }
+         */
+        guard let url = URL(string: "https://www.ecosia.org") else { return }
         browserViewController.debugOpen(numberOfNewTabs: count, at: url)
     }
 

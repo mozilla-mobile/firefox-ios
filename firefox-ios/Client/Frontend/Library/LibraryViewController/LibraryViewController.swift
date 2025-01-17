@@ -359,12 +359,12 @@ class LibraryViewController: UIViewController, Themeable {
         segmentControlToolbar.barTintColor = theme.colors.layer1
          */
         view.backgroundColor = theme.colors.layer3
-        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer6
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
-        navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer6
-        navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer6
-        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = themeManager.currentTheme.colors.layer6
+        navigationController?.navigationBar.barTintColor = theme.colors.layer6
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        navigationController?.navigationBar.backgroundColor = theme.colors.layer6
+        navigationController?.toolbar.barTintColor = theme.colors.layer6
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
+        segmentControlToolbar.barTintColor = theme.colors.layer6
 
         segmentControlToolbar.tintColor = theme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false

@@ -76,9 +76,12 @@ class LaunchCoordinator: BaseCoordinator,
             if !introViewModel.isDismissable {
                 introViewController.isModalInPresentation = true
             }
+            /* Ecosia: Remove completion
             router.present(introViewController, animated: true) {
                 introViewController.closeOnboarding()
             }
+             */
+            router.present(introViewController, animated: true)
         }
     }
 

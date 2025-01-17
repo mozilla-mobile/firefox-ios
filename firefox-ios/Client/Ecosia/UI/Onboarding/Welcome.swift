@@ -47,8 +47,10 @@ final class Welcome: UIViewController {
         addBackground()
         addStack()
 
+        /* TODO Ecosia Upgrade: Is this still needed?
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         (themeManager as? EcosiaThemeManager)?.updateLegacyThemeIfSystemThemeON()
+         */
 
         Task.detached {
             // Fetching FinancialReports async as some onboarding steps might use it

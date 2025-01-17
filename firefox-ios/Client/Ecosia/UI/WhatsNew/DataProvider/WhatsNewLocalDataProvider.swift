@@ -66,7 +66,7 @@ final class WhatsNewLocalDataProvider: WhatsNewDataProvider {
                          subtitle: .localized(.whatsNewSecondItemDescription9_0_0))
         ],
         Version("10.0.0")!: [
-            WhatsNewItem(image: UIImage(named: ImageIdentifiers.zoomIn),
+            WhatsNewItem(image: UIImage(named: StandardImageIdentifiers.Large.pageZoom),
                          title: .localized(.whatsNewFirstItemTitle10_0_0),
                          subtitle: .localized(.whatsNewFirstItemDescription10_0_0)),
             WhatsNewItem(image: UIImage(named: StandardImageIdentifiers.Large.lock),

@@ -21,8 +21,8 @@ final class NTPCustomizationCell: UICollectionViewCell, Themeable, ReusableCell 
         button.setTitle(.localized(.customizeHomepage), for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.setImage(.init(named: ImageIdentifiers.settings)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.setImage(.init(named: ImageIdentifiers.settings)?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+        button.setImage(.init(named: StandardImageIdentifiers.Large.settings)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(.init(named: StandardImageIdentifiers.Large.settings)?.withRenderingMode(.alwaysTemplate), for: .highlighted)
         button.imageView?.contentMode = .scaleAspectFit
         button.setInsets(forContentPadding: .init(top: UX.verticalInset, left: UX.horizontalInset, bottom: UX.verticalInset, right: UX.horizontalInset),
                          imageTitlePadding: UX.imageTitlePadding)

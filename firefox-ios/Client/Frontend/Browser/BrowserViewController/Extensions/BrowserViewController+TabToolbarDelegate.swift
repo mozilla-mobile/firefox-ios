@@ -340,6 +340,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
 // MARK: - ToolbarActionMenuDelegate
 extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
+    /*
+     Ecosia: Add ToolBarActionMenuDelegate additional delegate function
+     to handle the opening of URLs as part of the current tab
+     */
+    func openURLInCurrentTab(_ url: URL?) {
+        guard let url else { return }
+        tabManager.selectedTab?.loadRequest(URLRequest(url: url))
+    }
+
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }

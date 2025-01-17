@@ -328,8 +328,11 @@ extension TabCell {
         backgroundHolder.backgroundColor = UIColor.legacyTheme.tabTray.cellBackground
         screenshotView.backgroundColor = UIColor.legacyTheme.tabTray.screenshotBackground
 
-        let activeBGColor = state.isPrivate ? UIColor.legacyTheme.ecosia.tabSelectedPrivateBackground : UIColor.legacyTheme.ecosia.tabSelectedBackground
-        title.backgroundColor = isSelectedTab ? activeBGColor : UIColor.legacyTheme.ecosia.tabBackground
+        let isPrivate = tabModel?.isPrivate == true
+        let activeBGColor = isPrivate ?
+            UIColor.legacyTheme.ecosia.tabSelectedPrivateBackground :
+            UIColor.legacyTheme.ecosia.tabSelectedBackground
+        headerView.backgroundColor = isSelectedTab ? activeBGColor : UIColor.legacyTheme.ecosia.tabBackground
 
         titleText.textColor = isSelectedTab ? UIColor.legacyTheme.ecosia.primaryTextInverted : UIColor.legacyTheme.ecosia.primaryText
         favicon.tintColor = isSelectedTab ? UIColor.legacyTheme.ecosia.primaryTextInverted : UIColor.legacyTheme.ecosia.primaryText

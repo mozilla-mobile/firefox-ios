@@ -8,10 +8,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 enum HomepageSectionType: Int, CaseIterable {
     case climateImpactCounter
-    case logoHeader
+    case homepageHeader
     case newsletterCard
     case libraryShortcuts
     case topSites
@@ -23,7 +24,7 @@ enum HomepageSectionType: Int, CaseIterable {
     var cellIdentifier: String {
         switch self {
         case .climateImpactCounter: return NTPSeedCounterCell.cellIdentifier
-        case .logoHeader: return NTPLogoCell.cellIdentifier
+        case .homepageHeader: return NTPLogoCell.cellIdentifier
         case .newsletterCard: return NTPNewsletterCardCell.cellIdentifier
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
@@ -59,7 +60,7 @@ private let MinimumInsets: CGFloat = 16
 extension HomepageSectionType {
     var customizableConfig: CustomizableNTPSettingConfig? {
         switch self {
-        case .logoHeader, .newsletterCard, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
+        case .homepageHeader, .newsletterCard, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
         case .topSites: return .topSites
         case .impact: return .climateImpact
         case .aboutEcosia: return .aboutEcosia
@@ -92,7 +93,7 @@ extension HomepageSectionType {
                                            leading: horizontal,
                                            bottom: bottomSpacing,
                                            trailing: horizontal)
-        case .logoHeader, .climateImpactCounter:
+        case .homepageHeader, .climateImpactCounter:
             return .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         }
     }

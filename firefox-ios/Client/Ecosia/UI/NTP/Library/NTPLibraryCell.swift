@@ -21,10 +21,10 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
 
         var title: String {
             switch self {
-            case .bookmarks: return .AppMenu.AppMenuBookmarksTitleString
-            case .history: return .AppMenu.AppMenuHistoryTitleString
-            case .readingList: return .AppMenu.AppMenuReadingListTitleString
-            case .downloads: return .AppMenu.AppMenuDownloadsTitleString
+            case .bookmarks: return .LegacyAppMenu.AppMenuBookmarksTitleString
+            case .history: return .LegacyAppMenu.AppMenuHistoryTitleString
+            case .readingList: return .LegacyAppMenu.AppMenuReadingListTitleString
+            case .downloads: return .LegacyAppMenu.AppMenuDownloadsTitleString
             }
         }
 

@@ -97,7 +97,7 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         selectedView.backgroundColor = theme.colors.layer5Hover
         // Ecosia: Update button's color
         // roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        roundedButton.setTitleColor(theme.colors.iconWarning, for: .normal)
+        roundedButton.setTitleColor(theme.colors.iconCritical, for: .normal)
         roundedButton.backgroundColor = theme.colors.layer3
         roundedButton.tintColor = theme.colors.textPrimary
         let image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.delete)

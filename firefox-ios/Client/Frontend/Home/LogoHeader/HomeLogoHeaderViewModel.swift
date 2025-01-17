@@ -89,7 +89,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 }
 
-extension HomeLogoHeaderViewModel: HomepageSectionHandler {
+extension HomepageHeaderViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         /* Ecosia: Cell as NTPLogoCell

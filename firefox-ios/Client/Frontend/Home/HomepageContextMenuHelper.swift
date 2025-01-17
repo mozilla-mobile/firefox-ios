@@ -182,7 +182,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /* Ecosia: Receive `Site` in addition to `URL`. Required for tracking.
     private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
     */
-    private func getOpenInNewTabAction(siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
+    private func getOpenInNewTabAction(site: Site, siteURL: URL, sectionType: HomepageSectionType) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .OpenInNewTabContextMenuTitle,
             iconString: StandardImageIdentifiers.Large.plus,

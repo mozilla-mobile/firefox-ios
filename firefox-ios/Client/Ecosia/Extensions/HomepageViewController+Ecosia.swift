@@ -13,7 +13,7 @@ protocol SharedHomepageCellDelegate: AnyObject {
     func openLink(url: URL)
 }
 
-extension HomepageViewController: SharedHomepageCellDelegate {
+extension LegacyHomepageViewController: SharedHomepageCellDelegate {
     func openLink(url: URL) {
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
     }
@@ -23,7 +23,7 @@ protocol SharedHomepageCellLayoutDelegate: AnyObject {
     func invalidateLayout(at indexPaths: [IndexPath])
 }
 
-extension HomepageViewController: SharedHomepageCellLayoutDelegate {
+extension LegacyHomepageViewController: SharedHomepageCellLayoutDelegate {
     func invalidateLayout(at indexPaths: [IndexPath]) {
         let context = UICollectionViewLayoutInvalidationContext()
         context.invalidateItems(at: indexPaths)
@@ -31,7 +31,7 @@ extension HomepageViewController: SharedHomepageCellLayoutDelegate {
     }
 }
 
-extension HomepageViewController: NTPTooltipDelegate {
+extension LegacyHomepageViewController: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
         handleTooltipTapped(tooltip)
     }
@@ -64,7 +64,7 @@ extension HomepageViewController: NTPTooltipDelegate {
     }
 }
 
-extension HomepageViewController: NTPLibraryDelegate {
+extension LegacyHomepageViewController: NTPLibraryDelegate {
     func libraryCellOpenBookmarks() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
     }
@@ -82,7 +82,7 @@ extension HomepageViewController: NTPLibraryDelegate {
     }
 }
 
-extension HomepageViewController: NTPConfigurableNudgeCardCellDelegate {
+extension LegacyHomepageViewController: NTPConfigurableNudgeCardCellDelegate {
     func nudgeCardRequestToPerformAction(for cardType: HomepageSectionType) {
         switch cardType {
         case .newsletterCard:
@@ -102,7 +102,7 @@ extension HomepageViewController: NTPConfigurableNudgeCardCellDelegate {
     }
 }
 
-extension HomepageViewController: NTPImpactCellDelegate {
+extension LegacyHomepageViewController: NTPImpactCellDelegate {
     func impactCellButtonClickedWithInfo(_ info: ClimateImpactInfo) {
         switch info {
         case .referral:
@@ -116,9 +116,9 @@ extension HomepageViewController: NTPImpactCellDelegate {
     }
 }
 
-extension HomepageViewController: NTPNewsCellDelegate {
+extension LegacyHomepageViewController: NTPNewsCellDelegate {
     func openSeeAllNews() {
-        let news = NewsController(items: viewModel.newsViewModel.items)
+        let news = NewsController(windowUUID: windowUUID, items: viewModel.newsViewModel.items)
         news.delegate = self
         let nav = EcosiaNavigation(rootViewController: news)
         present(nav, animated: true)
@@ -126,9 +126,15 @@ extension HomepageViewController: NTPNewsCellDelegate {
     }
 }
 
-extension HomepageViewController: NTPCustomizationCellDelegate {
+extension LegacyHomepageViewController: NTPCustomizationCellDelegate {
     func openNTPCustomizationSettings() {
         Analytics.shared.ntpCustomisation(.click, label: .customize)
         browserNavigationHandler?.show(settings: .homePage)
+    }
+}
+
+extension LegacyHomepageViewController: NTPSeedCounterDelegate {
+    func didTapSeedCounter() {
+        SeedCounterNTPExperiment.trackTapOnSeedCounter()
     }
 }

@@ -41,8 +41,9 @@ extension BrowserViewController {
     }
 
     private func setupFindInPage() {
-        // Ecosia: Custom UI for FindInPageBar
-        // let findInPageBar = FindInPageBar()
+        /* Ecosia: Custom UI for FindInPageBar
+        let findInPageBar = FindInPageBar()
+         */
         let findInPageBar = EcosiaFindInPageBar()
         self.findInPageBar = findInPageBar
         findInPageBar.delegate = self
@@ -55,7 +56,10 @@ extension BrowserViewController {
             greaterThanOrEqualToConstant: UIConstants.ToolbarHeight
         ).isActive = true
 
+        /* Ecosia: EcosiaFindInPageBar.applyTheme needs no arguments
         findInPageBar.applyTheme(theme: currentTheme())
+         */
+        findInPageBar.applyTheme()
 
         updateViewConstraints()
 
@@ -67,8 +71,9 @@ extension BrowserViewController {
         findInPageBar.layoutIfNeeded()
     }
 
-    // Ecosia: Custom UI for FindInPageBar
-    // private func removeFindInPage(_ findInPageBar: FindInPageBar, tab: Tab? = nil) {
+    /* Ecosia: Custom UI for FindInPageBar
+    private func removeFindInPage(_ findInPageBar: FindInPageBar, tab: Tab? = nil) {
+     */
     private func removeFindInPage(_ findInPageBar: EcosiaFindInPageBar, tab: Tab? = nil) {
         findInPageBar.endEditing(true)
         let tab = tab ?? tabManager.selectedTab
@@ -133,7 +138,7 @@ extension BrowserViewController: EcosiaFindInPageBarDelegate, FindInPageHelperDe
     }
 
     func findInPageDidPressClose(_ findInPage: EcosiaFindInPageBar) {
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
     }
 
     fileprivate func find(_ text: String, function: String) {

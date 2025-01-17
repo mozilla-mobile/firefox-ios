@@ -124,7 +124,9 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
 
                 DispatchQueue.main.async {
                     self.updateUIWithBookmarksAsSitesResults(queries: queries,
+                                                             /* Ecosia: Remove Glean
                                                              timerid: timerid,
+                                                              */
                                                              historyHighlightsEnabled: historyHighlightsEnabled,
                                                              oldValue: oldValue)
                 }
@@ -133,7 +135,9 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     }
 
     private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
+                                                     /* Ecosia: Remove Glean
                                                      timerid: TimerId,
+                                                      */
                                                      historyHighlightsEnabled: Bool,
                                                      oldValue: String) {
         let results = queries

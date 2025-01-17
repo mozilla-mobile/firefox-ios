@@ -698,7 +698,7 @@ class HistoryPanel: UIViewController,
         /* Ecosia: Update search bar tint color
         searchbar.tintColor = theme.colors.textPrimary
         */
-        searchbar.tintColor = themeManager.currentTheme.colors.textPrimary
+        searchbar.tintColor = theme.colors.textPrimary
 
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: theme.colors.textPrimary

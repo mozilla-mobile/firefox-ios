@@ -706,8 +706,8 @@ class SearchViewController: SiteTableViewController,
                                    for section: SearchListSection,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         // Ecosia: It makes sense to call applyTheme here to let it do the first setup and then override the values appropriately
-        oneLineCell.applyTheme(theme: themeManager.currentTheme)
-        twoLineCell.applyTheme(theme: themeManager.currentTheme)
+        oneLineCell.applyTheme(theme: currentTheme())
+        twoLineCell.applyTheme(theme: currentTheme())
 
         var cell = UITableViewCell()
         switch section {
@@ -748,7 +748,7 @@ class SearchViewController: SiteTableViewController,
                 /* Ecosia: Update tintColor
                 appendButton.tintColor = currentTheme().colors.iconPrimary
                 */
-                appendButton.tintColor = themeManager.currentTheme.colors.textPrimary
+                appendButton.tintColor = currentTheme().colors.textPrimary
 
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil

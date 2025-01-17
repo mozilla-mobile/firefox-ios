@@ -103,7 +103,7 @@ class SettingsCoordinator: BaseCoordinator,
              viewController.profile = profile
              return viewController
              */
-            let customizationViewController = NTPCustomizationSettingsViewController()
+            let customizationViewController = NTPCustomizationSettingsViewController(windowUUID: windowUUID)
             customizationViewController.profile = profile
             customizationViewController.settingsDelegate = self
             return customizationViewController
@@ -188,7 +188,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     // Ecosia: SettingsDelegate
     func reloadHomepage() {
-        (parentCoordinator as? BrowserCoordinator)?.homepageViewController?.reloadView()
+        (parentCoordinator as? BrowserCoordinator)?.legacyHomepageViewController?.reloadView()
     }
 
     // MARK: - SettingsFlowDelegate
@@ -324,7 +324,7 @@ class SettingsCoordinator: BaseCoordinator,
          viewController.profile = profile
          router.push(viewController)
          */
-        let customizationViewController = NTPCustomizationSettingsViewController()
+        let customizationViewController = NTPCustomizationSettingsViewController(windowUUID: windowUUID)
         customizationViewController.profile = profile
         customizationViewController.settingsDelegate = self
         router.push(customizationViewController)

@@ -85,7 +85,10 @@ class BrowserViewController: UIViewController,
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
+    /* Ecosia: Custom UI for FindInPageBar
     var findInPageBar: FindInPageBar?
+     */
+    var findInPageBar: EcosiaFindInPageBar?
     var zoomPageBar: ZoomPageBar?
     var microsurvey: MicrosurveyPromptView?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
@@ -236,9 +239,13 @@ class BrowserViewController: UIViewController,
         }
         return keyboardPressesHandlerValue
     }
-    
-    // Ecosia: Add Referrals
+
+    // Ecosia: Add Referrals and WhatsNew
+    let whatsNewDataProvider = WhatsNewLocalDataProvider()
     let referrals = Referrals()
+
+    // Ecosia: Make `menuHelper` available at class level
+    var menuHelper: MainMenuActionHelper?
 
     init(
         profile: Profile,
@@ -417,7 +424,9 @@ class BrowserViewController: UIViewController,
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
+            /* Ecosia: Remove `addNewTabButton`
             toolbar.addNewTabButton.isHidden = showNavToolbar
+             */
 
             if showNavToolbar {
                 toolbar.isHidden = false
@@ -2289,6 +2298,9 @@ class BrowserViewController: UIViewController,
             }
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
+
+        // Ecosia: Make `menuHelper` available at class level
+        self.menuHelper = menuHelper
     }
 
     func didTapOnShare(from view: UIView) {

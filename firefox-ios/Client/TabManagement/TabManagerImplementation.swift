@@ -9,6 +9,9 @@ import Common
 import Shared
 import WebKit
 
+// Ecosia: Used to get last visited sites
+import struct MozillaAppServices.VisitTransitionSet
+
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
 class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsProvider {
@@ -109,12 +112,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         tabs = [Tab]()
         Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
-            let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
+            var windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
 
             // TODO Ecosia Upgrade: Do we want to keep this?
             /* Ecosia: Upgrading from v9.x to v10.0.0 caused an issue where migrated URLs were blank.
-             To fix that for users that had already upgraded we need to run `restoreMigratedv10TabsMissingUrlIfNeeded` once.
-             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
+            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
              */
             if shouldRestoreMigratedv10TabsMissingUrl {
                 windowData = await restoreMigratedv10TabsMissingUrlIfNeeded(window: windowData)
@@ -653,7 +655,6 @@ extension TabManagerImplementation {
             )
         }
         return WindowData(id: window.id,
-                          isPrimary: window.isPrimary,
                           activeTabId: window.activeTabId,
                           tabData: restoredTabs)
     }
