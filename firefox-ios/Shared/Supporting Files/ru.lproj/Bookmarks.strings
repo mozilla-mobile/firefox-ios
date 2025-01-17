@@ -7,9 +7,6 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Body.v135" = "Сохраняйте сайты при просмотре. Мы также будем получать закладки с других синхронизируемых устройств.";
 
-/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
-"Bookmarks.EmptyState.Root.ButtonTitle.v135" = "Войти в Синхронизацию";
-
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Title.v135" = "Закладок ещё нет";
 

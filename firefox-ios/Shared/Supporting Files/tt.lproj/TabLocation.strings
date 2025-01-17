@@ -2,6 +2,12 @@
 "Address.Bar.Reload.A11y.Hint.v124" = "Күбрәк опцияләр өчен ике тапкыр басып, тотып торыгыз";
 
 /* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Бәйләнеш хәвефсез түгел. Күзәтелүдән көчәйтелгән саклау сүнгән.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Хәвефсез бәйләнеш. Күзәтелүдән көчәйтелгән саклау сүнгән.";
+
+/* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Бәйләнеш хәвефсез түгел";
 
 /* Accessibility label for the security icon in url bar */

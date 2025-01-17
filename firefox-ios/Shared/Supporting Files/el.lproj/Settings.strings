@@ -73,6 +73,9 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Μάθετε περισσότερα";
 
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
+
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Μάθετε περισσότερα.";
 
