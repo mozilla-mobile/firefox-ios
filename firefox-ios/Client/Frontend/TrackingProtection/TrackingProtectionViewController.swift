@@ -402,6 +402,7 @@ class TrackingProtectionViewController: UIViewController,
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
+        settingsLinkButton.applyUnderline(underlinedText: model.settingsButtonTitle)
     }
 
     private func setupProtectionSettingsView() {
