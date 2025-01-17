@@ -193,13 +193,12 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     }
 
     private func countPinnedSites(sites: [Site]) -> Int {
-        var pinnedSitesCount = 0
-        sites.forEach { site in
-            if case SiteType.pinnedSite = site.type {
-                pinnedSitesCount += 1
+        return sites.filter {
+            if case SiteType.pinnedSite = $0.type {
+                return true
             }
-        }
-        return pinnedSitesCount
+            return false
+        }.count
     }
 
     // MARK: - Google Tile
