@@ -75,6 +75,13 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         }
     }
 
+    // MARK: Accessibility
+    func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        sectionLabel.accessibilityIdentifier = A11y.sectionLabel
+        allSectionItemsStackView.accessibilityIdentifier = A11y.allSectionItems
+    }
+
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer5
         sectionLabel.textColor = theme.colors.textPrimary
@@ -88,6 +95,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
             label.textAlignment = isTitle ? .right : .left
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
+            label.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.itemLabel
         }
         return itemLabel
     }
