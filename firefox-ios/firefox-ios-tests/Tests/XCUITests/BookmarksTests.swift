@@ -435,7 +435,7 @@ class BookmarksTests: BaseTestCase {
 
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
-        scrollToElement(bookMarkCell)
+        app.swipeUp()
         bookMarkCell.press(forDuration: 1.5)
     }
 
