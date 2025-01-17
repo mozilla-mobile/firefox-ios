@@ -97,10 +97,10 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
             let tabData = TabData(
                 id: savedTabUUID,
                 title: savedTab.title,
-                /* Ecosia: `savedTab.url` is sometimes not there after migration, so we fallback to the last url from the session data history
+                /* TODO Ecosia Upgrade: Do we still want the logic to restore tabs?
+                savedTab.url?.absoluteString ?? savedTab.sessionData?.urls.last?.absoluteString ?? ""
+                 */
                 siteUrl: savedTab.url?.absoluteString ?? "",
-                */
-                siteUrl: savedTab.url?.absoluteString ?? savedTab.sessionData?.urls.last?.absoluteString ?? "",
                 faviconURL: savedTab.faviconURL,
                 isPrivate: savedTab.isPrivate,
                 lastUsedTime: Date.fromTimestamp(Date().toTimestamp()),

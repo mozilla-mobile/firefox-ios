@@ -95,6 +95,10 @@
 		12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */; };
 		12AEB1212D36BCD60035D7D8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11F2D36BCD60035D7D8 /* Metrics.swift */; };
 		12AEB1222D37BE030035D7D8 /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2861AC0A2B90052877D /* SnackBar.swift */; };
+		12AEB1232D37CC4A0035D7D8 /* LegacyTabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52E1D925F5961F0092204C /* LegacyTabTrayViewController.swift */; };
+		12AEB1242D37CC6F0035D7D8 /* TabTrayButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */; };
+		12AEB1262D3A51670035D7D8 /* LegacySessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB1252D3A51670035D7D8 /* LegacySessionData.swift */; };
+		12AEB1282D3A568D0035D7D8 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB1272D3A568D0035D7D8 /* SessionRestoreHandler.swift */; };
 		12C11E252D281BA100E4DDBF /* EcosiaLaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E242D281B8D00E4DDBF /* EcosiaLaunchScreenView.swift */; };
 		12C11E262D281BC300E4DDBF /* EcosiaLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12C11E232D281B8D00E4DDBF /* EcosiaLaunchScreen.xib */; };
 		12C11E272D281BCC00E4DDBF /* EcosiaHomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E212D281B7200E4DDBF /* EcosiaHomepageSectionType.swift */; };
@@ -2423,6 +2427,8 @@
 		12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxNimbus.swift; sourceTree = "<group>"; };
 		12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxNimbusMessaging.swift; sourceTree = "<group>"; };
 		12AEB11F2D36BCD60035D7D8 /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		12AEB1252D3A51670035D7D8 /* LegacySessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacySessionData.swift; sourceTree = "<group>"; };
+		12AEB1272D3A568D0035D7D8 /* SessionRestoreHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRestoreHandler.swift; sourceTree = "<group>"; };
 		12C11E132D28128000E4DDBF /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		12C11E142D2812B200E4DDBF /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		12C11E152D2812B200E4DDBF /* EcosiaBeta.ShareTo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.ShareTo.xcconfig; path = Configuration/EcosiaBeta.ShareTo.xcconfig; sourceTree = "<group>"; };
@@ -10008,8 +10014,10 @@
 			isa = PBXGroup;
 			children = (
 				124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */,
-				124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */,
+				12AEB1252D3A51670035D7D8 /* LegacySessionData.swift */,
 				124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */,
+				124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */,
+				12AEB1272D3A568D0035D7D8 /* SessionRestoreHandler.swift */,
 			);
 			path = RecoveredFromUpgrade;
 			sourceTree = "<group>";
@@ -16589,6 +16597,7 @@
 				8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */,
 				8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */,
 				C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */,
+				12AEB1262D3A51670035D7D8 /* LegacySessionData.swift in Sources */,
 				EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */,
 				124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
@@ -16682,6 +16691,7 @@
 				12C11ED22D282AEC00E4DDBF /* BrazeService.swift in Sources */,
 				12C11ED32D282AEC00E4DDBF /* APNConsent.swift in Sources */,
 				219A0FD52ACC8506009A6D1A /* InactiveTabsCell.swift in Sources */,
+				12AEB1282D3A568D0035D7D8 /* SessionRestoreHandler.swift in Sources */,
 				8A1CBB992BE01839008BE4D4 /* MicrosurveyPromptState.swift in Sources */,
 				23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */,
 				C82A94F2269F68ED00624AA7 /* LegacyFeatureFlagsManager.swift in Sources */,
@@ -17006,6 +17016,7 @@
 				8C2937712BF79F0300146613 /* EditAddressViewController.swift in Sources */,
 				0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
+				12AEB1232D37CC4A0035D7D8 /* LegacyTabTrayViewController.swift in Sources */,
 				8A093D7D2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift in Sources */,
 				96EA9454293655BF00123345 /* AppSession+Enums.swift in Sources */,
 				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
@@ -17301,6 +17312,7 @@
 				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,
 				8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */,
+				12AEB1242D37CC6F0035D7D8 /* TabTrayButtonExtensions.swift in Sources */,
 				43D16B7A29831C7F009F8279 /* CreditCardAutofillToggle.swift in Sources */,
 				12C11E2E2D281E9300E4DDBF /* PageActionsShortcutsHeader.swift in Sources */,
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
