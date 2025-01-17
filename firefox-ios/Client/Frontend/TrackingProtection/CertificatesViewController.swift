@@ -242,7 +242,8 @@ class CertificatesViewController: UIViewController,
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
                                        (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)],
+                               isIssuerName: true)
             }
 
         case .validity:
