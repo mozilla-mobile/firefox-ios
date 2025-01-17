@@ -822,8 +822,9 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.219.0
+            gem install fastlane -v 2.226.0
             fastlane -version
+            xcodebuild -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
@@ -845,7 +846,7 @@ workflows:
       the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-15.4.x
+        stack: osx-xcode-16.2.x-edge
         machine_type_id: g2-m1.8core
   L10nScreenshotsTests:
     steps:
@@ -868,7 +869,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.219.0
+            gem install fastlane -v 2.226.0
             fastlane -version
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
@@ -890,7 +891,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-15.4.x
+        stack: osx-xcode-16.2.x-edge
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
