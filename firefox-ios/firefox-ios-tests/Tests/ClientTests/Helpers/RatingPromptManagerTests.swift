@@ -286,7 +286,7 @@ private extension RatingPromptManagerTests {
     }
 
     func createSite(number: Int) -> Site {
-        return Site(id: number, url: "http://s\(number)ite\(number).com/foo", title: "A \(number)", type: .basic)
+        return Site.createBasicSite(id: number, url: "http://s\(number)ite\(number).com/foo", title: "A \(number)")
     }
 
     var ratingPromptOpenCount: Int {

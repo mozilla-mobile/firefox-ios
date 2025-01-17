@@ -59,6 +59,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     }
 
     public static func createSuggestedSite(
+        id: Int? = nil,
         url: String,
         title: String,
         trackingId: Int,
@@ -66,7 +67,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     ) -> Site {
         let siteInfo = SuggestedSiteInfo(trackingId: trackingId)
         return Site(
-            id: UUID().hashValue,
+            id: id ?? UUID().hashValue,
             url: url,
             title: title,
             type: .suggestedSite(siteInfo),
@@ -75,6 +76,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     }
 
     public static func createPinnedSite(
+        id: Int? = nil,
         url: String,
         title: String,
         isGooglePinnedTile: Bool,
@@ -82,7 +84,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
     ) -> Site {
         let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
         return Site(
-            id: UUID().hashValue,
+            id: id ?? UUID().hashValue,
             url: url,
             title: title,
             type: .pinnedSite(siteInfo),
@@ -90,6 +92,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         )
     }
 
+    /// Note: This *copies* the pre-existing Site's ID.
     public static func createPinnedSite(fromSite site: Site, isGooglePinnedTile: Bool = false) -> Site {
         let siteInfo = PinnedSiteInfo(isGooglePinnedTile: isGooglePinnedTile)
 
@@ -105,6 +108,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable {
         )
     }
 
+    /// Note: This *copies* the pre-existing Site's ID.
     public static func copiedFrom(site: Site, withLocalizedURLString urlString: String) -> Site {
         return Site(
             id: site.id,
