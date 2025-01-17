@@ -13108,7 +13108,6 @@
 				435D660423D794B90046EFA2 /* UpdateViewModel.swift */,
 				74B420C82A1D0D7A00370E53 /* OnboardingInstructionsPopupInfoModel.swift */,
 				C8CD80DB2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift */,
-				0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */,
 				81020C932BB5B026007B8481 /* OnboardingMultipleChoiceButtonViewModel.swift */,
 			);
 			path = Models;
