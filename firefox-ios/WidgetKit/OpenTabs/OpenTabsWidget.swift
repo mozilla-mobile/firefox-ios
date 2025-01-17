@@ -47,6 +47,7 @@ struct OpenTabsView: View {
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
+                    Spacer()
                 }.padding(.horizontal)
             }
 
