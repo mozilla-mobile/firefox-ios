@@ -549,9 +549,9 @@ extension LegacyBookmarksPanel: LibraryPanelContextMenu {
 
         let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
-                                                 tapHandler: { _ in
-            self.deleteBookmarkNodeAtIndexPath(indexPath)
-            self.bookmarksTelemetry.deleteBookmark()
+                                                 tapHandler: { [weak self] _ in
+            self?.deleteBookmarkNodeAtIndexPath(indexPath)
+            self?.bookmarksTelemetry.deleteBookmark()
         }).items
         actions.append(removeAction)
 

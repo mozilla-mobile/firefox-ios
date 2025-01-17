@@ -21,7 +21,7 @@ struct BookmarksTelemetry {
         gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.delete, label: label)
     }
 
-    func openBookmarksPanel(isSwipeGesture: Bool) {
+    func openBookmarksPanel() {
         gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: label)
     }
 }
