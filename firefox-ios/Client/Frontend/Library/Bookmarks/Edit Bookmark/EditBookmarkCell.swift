@@ -72,7 +72,7 @@ class EditBookmarkCell: UITableViewCell,
 
             textFieldsDivider.heightAnchor.constraint(equalToConstant: UX.textFieldDividerHeight),
             textFieldsDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                       constant: -UX.textFieldDividerTrailingPadding),
+                                                        constant: -UX.textFieldDividerTrailingPadding),
 
             textFieldsContainerView.leadingAnchor.constraint(equalTo: faviconImageView.trailingAnchor,
                                                              constant: UX.textFieldContainerLeadingPadding),
