@@ -5,8 +5,7 @@
 import Common
 import UIKit
 
-public class CloseButton: UIButton,
-                          Notifiable {
+public class CloseButton: UIButton, Notifiable {
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
 
     private var viewModel: CloseButtonViewModel?
@@ -36,20 +35,23 @@ public class CloseButton: UIButton,
         heightConstraint?.isActive = true
         widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
         widthConstraint?.isActive = true
-        updateButtonSizeForDyanimcFont()
+        updateButtonSizeForDynamicFont()
     }
 
     public func configure(viewModel: CloseButtonViewModel,
                           notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        setupNotifications(forObserver: self, observing: [
+            UIContentSizeCategory.didChangeNotification,
+            Notification.Name("CloseAllPopupDismissedNotification")
+        ])
 
         self.viewModel = viewModel
         accessibilityIdentifier = viewModel.a11yIdentifier
         accessibilityLabel = viewModel.a11yLabel
     }
 
-    private func updateButtonSizeForDyanimcFont() {
+    private func updateButtonSizeForDynamicFont() {
         let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width), UX.closeButtonSize.width)
         let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height), UX.closeButtonSize.height)
         heightConstraint?.constant = dynamicHeight
@@ -61,13 +63,20 @@ public class CloseButton: UIButton,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            updateButtonSizeForDyanimcFont()
+            updateButtonSizeForDynamicFont()
+        case Notification.Name("CloseAllPopupDismissedNotification"):
+            resetStateAfterPopupDismissed()
         default:
             break
         }
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
+    private func resetStateAfterPopupDismissed() {
+        // Reset state or view model if needed
+        print("Popup dismissed. Resetting CloseButton state if necessary.")
     }
-}
+
+    deinit {
+        notificationCenter.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
+        notificationCenter.removeObserver(self, name: Notification.Name("CloseAllPopupDismissedNotification"), object: nil)
+    }
