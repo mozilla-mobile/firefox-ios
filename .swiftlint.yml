@@ -142,8 +142,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
   - Package.swift
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
-  # Temporarly ignore focus-ios folder
-  - focus-ios/
+  # Focus specific
+  - Blockzilla/Generated/
+  - focus-ios-tests/tools/Localizations
 
 included:
   - /Users/vagrant/git
