@@ -1,0 +1,204 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+require "base64"
+
+opt_out_usage
+
+fastlane_version "2.210.0"
+
+default_platform :ios
+
+target_name = "Client"
+target_folder_path = "firefox-ios/#{target_name}"
+project_path = "#{target_folder_path}.xcodeproj"
+pbx_project_file = "#{project_path}/project.pbxproj"
+
+if ENV['IS_CIRCLECI']
+  import_build_tools(
+    url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
+    clone_folder: "../build-tools",
+  )
+  ENV["IPA_PATH"] = "/Users/distiller/project/#{target_name}.ipa"
+  ENV["DSYM_PATH"] = "/Users/distiller/project/#{target_name}.app.dSYM.zip"
+end
+
+platform :ios do
+  before_all do
+    setup_circle_ci
+  end
+
+  desc "Build Ecosia App"
+  lane :build_ecosia_app do
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo'], 
+      type: "adhoc",
+      readonly: true
+    )
+    increment_build_number(
+      build_number: ENV["CIRCLE_BUILD_NUM"]
+    )
+    gym(
+      scheme: "Ecosia",
+      project: project_path,
+      export_method: "ad-hoc",
+      configuration: "Development_AppCenter",
+      export_options: {iCloudContainerEnvironment: 'Development'}
+    )
+  end
+
+  desc "Upload to Browserstack AppAutomate"
+  lane :upload_to_browserstack do
+    ensure_env_vars(
+      env_vars: [
+        'IPA_PATH', 
+        'BROWSERSTACK_USERNAME',
+        'BROWSERSTACK_ACCESS_KEY']
+    )
+    upload_to_browserstack_app_automate(
+      browserstack_username: ENV["BROWSERSTACK_USERNAME"],
+      browserstack_access_key: ENV["BROWSERSTACK_ACCESS_KEY"],
+      file_path: ENV["IPA_PATH"]
+    )
+  end
+
+  desc "Upload to MS App-Center"
+  lane :upload_to_appcenter do
+    ensure_env_vars(
+      env_vars: [
+        'IPA_PATH',
+        'DSYM_PATH',
+        'APPCENTER_API_TOKEN',
+        'APPCENTER_OWNER_NAME']
+    )
+    appcenter_upload(
+      api_token: ENV["APPCENTER_API_TOKEN"],
+      owner_name: ENV["APPCENTER_OWNER_NAME"],
+      app_name: "iOS-FF-Beta",
+      file: ENV["IPA_PATH"],
+      dsym: ENV["DSYM_PATH"],
+      should_clip: false,
+      release_notes: ENV["CIRCLE_BRANCH"],
+      notify_testers: false
+    )
+  end
+  
+  desc "Testflight build for Beta Channel"
+  lane :testflight_beta do
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp.firefox', 'com.ecosia.ecosiaapp.firefox.WidgetKit', 'com.ecosia.ecosiaapp.firefox.ShareTo'], 
+      type: 'appstore',
+      readonly: true
+    )
+    gym(
+      scheme: "Ecosia",
+      export_method: "app-store",
+      configuration: "Development_TestFlight"
+    )
+    pilot(
+      skip_waiting_for_build_processing: true, 
+      apple_id: "1541358670",
+      itc_provider: "33YMRSYD2L"
+    )
+  end
+
+  desc "Creates an API KEY to add as step in other lanes"
+  private_lane :inject_appstore_connect_api do
+
+    app_store_connect_api_key(
+      key_id: ENV["FASTLANE_APPSTORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["FASTLANE_APPSTORE_CONNECT_KEY_ISSUER_ID"],
+      key_content: Base64.decode64(ENV["FASTLANE_APPSTORE_CONNECT_KEY_CONTENT"])
+    )
+
+  end
+
+  desc "Testflight build for Live Channel"
+  lane :testflight_live do
+
+    version_number = get_xcconfig_value(
+      path: "#{target_folder_path}/Configuration/Common.xcconfig",
+      name: 'MARKETING_VERSION'
+    )
+
+    ci_run_build_number = ENV["CIRCLE_BUILD_NUM"]
+
+    udpated_build_number = increment_build_number(
+      build_number: ci_run_build_number
+    )
+
+    match(
+      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo'],
+      type: 'appstore',
+      readonly: true
+    )
+
+    gym(
+      scheme: "Ecosia",
+      export_method: "app-store",
+      configuration: "Release"
+    )
+
+    inject_appstore_connect_api
+    
+    pilot(
+      apple_id: "670881887",
+      itc_provider: "33YMRSYD2L",
+      distribute_external: true,
+      notify_external_testers: true,
+      changelog: "Our brand new iOS release is now ready to test. It includes many bug fixes and stability improvements. Happy testing! 🌳💚",
+      groups: "Ecosia Team"
+    )
+
+    tag_and_push(
+      version_number: version_number,
+      build_number: udpated_build_number
+    )
+
+  end
+
+  desc 'Upload release notes to the AppStore'
+  lane :upload_release_notes do
+    
+    inject_appstore_connect_api
+
+    version_number = get_xcconfig_value(
+      path: "#{target_folder_path}/Configuration/Common.xcconfig",
+      name: 'MARKETING_VERSION'
+    )
+
+    upload_to_app_store(
+      force: true, # Set to true to skip the verification via HTML preview file
+      app_version: version_number
+    )
+
+  end
+
+  desc 'This lane performs the expected git steps when releasing'
+  private_lane :tag_and_push do |options|
+    
+    version_number = options[:version_number]
+    build_number = options[:build_number]
+
+    add_git_tag(
+      tag: "v_#{version_number}_#{build_number}",
+      force: true
+    )
+
+    push_to_git_remote
+
+  end
+
+  desc 'Store the derived data path into a file'
+  private_lane :save_derived_data_path do |options|
+
+    derived_data_path_to_save = options[:derived_data_path]
+    derived_data_path_file = "/var/tmp/derived_data_path.txt"
+
+    UI.message("Saving #{derived_data_path_to_save} into #{derived_data_path_file}")
+
+    File.open(derived_data_path_file, 'w') { |file| file.write(options[:derived_data_path]) }
+
+  end
+
+end
