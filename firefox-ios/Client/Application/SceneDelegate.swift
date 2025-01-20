@@ -227,7 +227,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+            self?.logger.log("Start up flow and restoration done, will handle route",
+                             level: .info,
+                             category: .coordinator)
             sceneCoordinator.findAndHandle(route: route)
         }
     }
