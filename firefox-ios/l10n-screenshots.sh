@@ -34,7 +34,7 @@ for lang in $LOCALES; do
     echo "$(date) Snapshotting $lang"
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project firefox-ios/Client.xcodeproj --scheme L10nSnapshotTests \
-        --number_of_retries 0 \
+        --number_of_retries 3 \
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
         --derived_data_path l10n-screenshots-dd \
@@ -46,7 +46,7 @@ for lang in $LOCALES; do
     if [ "$?" != "0" ]; then
         echo "Fastlane exited with code: $?"
         exit $?
-    elif grep -q "** TEST FAILED **"; then
+    elif grep -q "TEST FAILED" "output.txt"; then
         echo "Test/compilation failed"
         exit 1
     elif grep -q "Caught error" "output.txt"; then
