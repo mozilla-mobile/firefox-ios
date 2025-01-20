@@ -90,6 +90,8 @@
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		1265098A2CDA32790011BA36 /* BrazeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126509882CDA31890011BA36 /* BrazeServiceTests.swift */; };
 		1285E2B52CC293CA0053506B /* AnalyticsSpyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */; };
+		12A536342D3E637800924CB0 /* DownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* DownloadHelper.swift */; };
+		12A536352D3E63A200924CB0 /* GlobalTabEventHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */; };
 		12AEB1182D36A8C40035D7D8 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
 		12AEB11D2D36BCD30035D7D8 /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */; };
 		12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */; };
@@ -16767,6 +16769,7 @@
 				21618A8C2A438A0900A5189E /* ActiveScreenAction.swift in Sources */,
 				E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */,
 				8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */,
+				12A536352D3E63A200924CB0 /* GlobalTabEventHandlers.swift in Sources */,
 				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
 				21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* LegacyTabCell.swift in Sources */,
@@ -17070,6 +17073,7 @@
 				EBB89507219398E500EB91A0 /* ContentBlocker.swift in Sources */,
 				216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */,
 				12C11E932D28274F00E4DDBF /* FeatureManagement.swift in Sources */,
+				12A536342D3E637800924CB0 /* DownloadHelper.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */,
 				8AABB92D2C64F77000F1FE51 /* LoginProvider.swift in Sources */,
 				21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */,
