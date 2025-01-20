@@ -26,11 +26,13 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
         let impressionURL = tile.impressionURL
         sendTelemetry(urlString: impressionURL, position: position)
+        sendLegacyImpressionTelemetry(tile: tile, position: position)
     }
 
     func sendClickTelemetry(tile: SponsoredTile, position: Int) {
         let clickURL = tile.clickURL
         sendTelemetry(urlString: clickURL, position: position)
+        sendLegacyClickTelemetry(tile: tile, position: position)
     }
 
     private func sendTelemetry(urlString: String, position: Int) {
@@ -66,5 +68,17 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
                            category: .legacyHomepage)
             }
         }
+    }
+
+    // MARK: Legacy telemetry
+    // FXIOS-11121 While we are migrating to the new Unified Ads telemetry system, we should
+    // keep sending the legacy telemetry Glean pings
+
+    private func sendLegacyImpressionTelemetry(tile: SponsoredTile, position: Int) {
+        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
+    }
+
+    private func sendLegacyClickTelemetry(tile: SponsoredTile, position: Int) {
+        SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
     }
 }
