@@ -92,6 +92,7 @@
 		1285E2B52CC293CA0053506B /* AnalyticsSpyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1285E2B42CC293CA0053506B /* AnalyticsSpyTests.swift */; };
 		12A536342D3E637800924CB0 /* DownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* DownloadHelper.swift */; };
 		12A536352D3E63A200924CB0 /* GlobalTabEventHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */; };
+		12A536372D3E89BF00924CB0 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 12A536362D3E89BF00924CB0 /* GCDWebServers */; };
 		12AEB1182D36A8C40035D7D8 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
 		12AEB11D2D36BCD30035D7D8 /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11C2D36BCD30035D7D8 /* FxNimbusMessaging.swift */; };
 		12AEB11E2D36BCD30035D7D8 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AEB11B2D36BCD30035D7D8 /* FxNimbus.swift */; };
@@ -9777,6 +9778,7 @@
 				2C69DA812C62459200D7F69F /* Core in Frameworks */,
 				2C6C908F2C614A6C007D9B43 /* SnapshotTesting in Frameworks */,
 				2C69DA7B2C6225C400D7F69F /* Common in Frameworks */,
+				12A536372D3E89BF00924CB0 /* GCDWebServers in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15174,6 +15176,7 @@
 				2C6C908E2C614A6C007D9B43 /* SnapshotTesting */,
 				2C69DA7A2C6225C400D7F69F /* Common */,
 				2C69DA802C62459200D7F69F /* Core */,
+				12A536362D3E89BF00924CB0 /* GCDWebServers */,
 			);
 			productName = EcosiaSnapshotTests;
 			productReference = 2C6C90822C614A16007D9B43 /* EcosiaSnapshotTests.xctest */;
@@ -26266,6 +26269,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 126509832CD925B30011BA36 /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
 			productName = BrazeUI;
+		};
+		12A536362D3E89BF00924CB0 /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
 		};
 		12C11F082D28306100E4DDBF /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
