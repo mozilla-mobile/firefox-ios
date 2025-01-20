@@ -16,7 +16,7 @@ protocol ShareTelemetry {
 }
 
 struct DefaultShareTelemetry: ShareTelemetry {
-    private let gleanWrapper: gleanWrapper
+    private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper

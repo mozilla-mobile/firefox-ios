@@ -138,6 +138,6 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func createSubject() -> ShareTelemetry {
-        return DefaultShareTelemetry(gleanWrapper: gleanWrapper)
+        return DefaultShareTelemetry(gleanWrapper: GleanWrapper)
     }
 }
