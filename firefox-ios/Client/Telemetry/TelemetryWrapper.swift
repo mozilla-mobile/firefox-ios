@@ -823,8 +823,6 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.viewList[from.rawValue].add()
         case (.action, .add, .bookmark, let from?, _):
             GleanMetrics.Bookmarks.add[from.rawValue].add()
-        case (.action, .change, .bookmark, let from?, _):
-            GleanMetrics.Bookmarks.edit[from.rawValue].add()
         case(.information, .view, .mobileBookmarks, .doesHaveMobileBookmarks, _):
             GleanMetrics.Bookmarks.hasMobileBookmarks.set(true)
         case(.information, .view, .mobileBookmarks, .doesNotHaveMobileBookmarks, _):

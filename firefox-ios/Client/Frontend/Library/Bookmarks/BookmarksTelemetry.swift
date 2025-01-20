@@ -26,7 +26,11 @@ struct BookmarksTelemetry {
                                  label: EventLabel.bookmarksPanel.rawValue)
     }
 
-    func openBookmarksSite(eventValue: EventLabel) {
-        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: eventValue.rawValue)
+    func openBookmarksSite(eventLabel: EventLabel) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: eventLabel.rawValue)
+    }
+
+    func editBookmark(eventLabel: EventLabel) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.edit, label: eventLabel.rawValue)
     }
 }

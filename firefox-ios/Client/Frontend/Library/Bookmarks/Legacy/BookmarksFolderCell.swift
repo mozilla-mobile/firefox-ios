@@ -105,7 +105,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         }
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         let bookmarksTelemetry = BookmarksTelemetry()
-        bookmarksTelemetry.openBookmarksSite(eventValue: BookmarksTelemetry.EventLabel.bookmarksPanel)
+        bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.bookmarksPanel)
     }
 }
 

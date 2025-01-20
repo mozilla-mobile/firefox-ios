@@ -45,11 +45,22 @@ final class BookmarksTelemetryTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
     }
 
-    func testRecordBookmark_WhenOpenPanel_ThenGleanIsCalled() throws {
-        subject?.openBookmarksSite(eventValue: BookmarksTelemetry.EventLabel.bookmarksPanel)
+    func testRecordBookmark_WhenOpenedSite_ThenGleanIsCalled() throws {
+        subject?.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? LabeledMetricType<CounterMetricType>)
         let expectedMetricType = type(of: GleanMetrics.Bookmarks.open)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(gleanWrapper.recordLabelCalled, 1)
+    }
+
+    func testRecordBookmark_WhenEditedSite_ThenGleanIsCalled() throws {
+        subject?.editBookmark(eventLabel: .bookmarksPanel)
+
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? LabeledMetricType<CounterMetricType>)
+        let expectedMetricType = type(of: GleanMetrics.Bookmarks.edit)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
