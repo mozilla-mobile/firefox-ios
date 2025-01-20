@@ -92,6 +92,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 }
                 enhancedTrackingProtectionMenuVC.asPopover = true
                 guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+                trackingProtectionNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
                 router.present(trackingProtectionNavController, animated: true, completion: nil)
             } else {
                 guard let trackingProtectionNavController = trackingProtectionNavController else { return }
