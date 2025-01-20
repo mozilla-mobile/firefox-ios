@@ -36,7 +36,8 @@ platform :ios do
       readonly: true
     )
     increment_build_number(
-      build_number: ENV["CIRCLE_BUILD_NUM"]
+      build_number: ENV["CIRCLE_BUILD_NUM"],
+      xcodeproj: project_path
     )
     gym(
       scheme: "Ecosia",
