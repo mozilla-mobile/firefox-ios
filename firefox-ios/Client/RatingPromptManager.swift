@@ -42,19 +42,17 @@ final class RatingPromptManager {
     }
 
     /// Show the in-app rating prompt if needed
-    /// - Parameter date: Request at a certain date - Useful for unit tests
-    func showRatingPromptIfNeeded(at date: Date = Date()) {
+    func showRatingPromptIfNeeded() {
         if shouldShowPrompt {
-            requestRatingPrompt(at: date)
-            userDefaults.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
+            requestRatingPrompt()
             userDefaults.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
         }
     }
 
     /// Update rating prompt data
-    func updateData() {
+    func updateData(currentDate: Date = Date()) {
         if logger.crashedLastLaunch {
-            userDefaults.set(Date(), forKey: UserDefaultsKey.keyLastCrashDateKey.rawValue)
+            userDefaults.set(currentDate, forKey: UserDefaultsKey.keyLastCrashDateKey.rawValue)
         }
     }
 
@@ -96,7 +94,7 @@ final class RatingPromptManager {
         get {
             userDefaults.object(
                 forKey: UserDefaultsKey.keyRatingPromptThreshold.rawValue
-            ) as? Int ?? 0
+            ) as? Int ?? Constants.firstThreshold
         }
         set { userDefaults.set(newValue, forKey: UserDefaultsKey.keyRatingPromptThreshold.rawValue) }
     }
@@ -104,6 +102,7 @@ final class RatingPromptManager {
     func reset() {
         lastRequestDate = nil
         requestCount = 0
+        threshold = 0
     }
 
     // MARK: Private
@@ -116,8 +115,6 @@ final class RatingPromptManager {
         // Required: has not crashed in the last 3 days
         guard !hasCrashedInLast3Days() else { return false }
 
-        let launchCount = prefs.intForKey(PrefsKeys.Session.Count) ?? 0
-
         var daysSinceLastRequest = 0
         if let previousRequest = lastRequestDate {
             daysSinceLastRequest = Calendar.current.numberOfDaysBetween(previousRequest, and: Date())
@@ -126,12 +123,13 @@ final class RatingPromptManager {
         }
 
         // Required: More than `minDaysBetweenReviewRequest` since last request
-        if daysSinceLastRequest < Constants.minDaysBetweenReviewRequest {
+        guard daysSinceLastRequest >= Constants.minDaysBetweenReviewRequest else {
             return false
         }
 
         // Required: Launch count is greater than or equal to threshold
-        if launchCount <= threshold {
+        let launchCount = prefs.intForKey(PrefsKeys.Session.Count) ?? 0
+        guard launchCount >= threshold else {
             return false
         }
 
@@ -148,8 +146,8 @@ final class RatingPromptManager {
         return true
     }
 
-    private func requestRatingPrompt(at date: Date) {
-        lastRequestDate = date
+    private func requestRatingPrompt() {
+        lastRequestDate = Date()
         requestCount += 1
 
         logger.log("Rating prompt is being requested, this is the \(requestCount) number of time the request is made",

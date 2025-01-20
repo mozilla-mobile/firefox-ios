@@ -16,6 +16,7 @@ class RatingPromptManagerTests: XCTestCase {
     var prefs: MockProfilePrefs!
     var logger: CrashingMockLogger!
     var userDefaults: MockUserDefaults!
+    var subject: RatingPromptManager!
 
     override func setUp() {
         super.setUp()
@@ -24,63 +25,131 @@ class RatingPromptManagerTests: XCTestCase {
         logger = CrashingMockLogger()
         urlOpenerSpy = URLOpenerSpy()
         userDefaults = MockUserDefaults()
+        subject = RatingPromptManager(prefs: prefs, logger: logger, userDefaults: userDefaults)
     }
 
     override func tearDown() {
         prefs.clearAll()
+        subject.reset()
         prefs = nil
         logger = nil
         urlOpenerSpy = nil
         userDefaults = nil
+        subject = nil
 
         super.tearDown()
     }
 
     func testShouldShowPrompt_forceShow() {
-        let subject = createSubject()
         userDefaults.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_requiredAreFalse_returnsFalse() {
-        let subject = createSubject()
         prefs.setInt(0, forKey: PrefsKeys.Session.Count)
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
-    func testShouldShowPrompt_withRequiredRequirementsAndOneOptional_returnsTrue() {
-        let subject = createSubject()
+    func testShouldShowPrompt_withRequiredRequirements_returnsTrue() {
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
-    func testShouldShowPrompt_lessThanSession5_returnsFalse() {
-        let subject = createSubject()
-        prefs.setInt(0, forKey: PrefsKeys.Session.Count)
-        subject.showRatingPromptIfNeeded()
-        XCTAssertEqual(ratingPromptOpenCount, 0)
-    }
-
     func testShouldShowPrompt_loggerHasCrashedInLastSession_returnsFalse() {
-        let subject = createSubject()
         logger?.enableCrashOnLastLaunch = true
+        subject.updateData()
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
 
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
-    // MARK: Number of times asked
+    func testShouldShowPrompt_loggerHasCrashedYesterday_returnsFalse() {
+        logger?.enableCrashOnLastLaunch = true
+        subject.updateData(currentDate: Date().dayBefore)
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
+    }
+
+    func testShouldShowPrompt_loggerHasCrashedLastWeek_returnsTrue() {
+        logger?.enableCrashOnLastLaunch = true
+        subject.updateData(currentDate: Date().lastWeek)
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
+    }
+
+    func testShouldShowPrompt_currentLastRequestDate_returnsFalse() {
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+        userDefaults.set(Date(), forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
+    }
+
+    func testShouldShowPrompt_pastDateLastRequestDate_returnsTrue() {
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+        let pastDate = Calendar.current.date(byAdding: .day, value: -61, to: Date()) ?? Date()
+        userDefaults.set(pastDate, forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
+    }
 
     func testShouldShowPrompt_hasRequestedInTheLastTwoWeeks_returnsFalse() {
-        let subject = createSubject()
-        subject.showRatingPromptIfNeeded(at: Date().lastTwoWeek)
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+        let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
+        userDefaults.set(twoWeeksAgo,
+                         forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue)
+
+        subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
+    }
+
+    func testShouldShowPrompt_hasNotReachedSecondThreshold_returnsFalse() {
+        userDefaults.set(RatingPromptManager.Constants.secondThreshold,
+                         forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptThreshold.rawValue)
+        prefs.setInt(31, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
+    }
+
+    func testShouldShowPrompt_reachedSecondThreshold_returnsTrue() {
+        userDefaults.set(RatingPromptManager.Constants.secondThreshold,
+                         forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptThreshold.rawValue)
+        prefs.setInt(91, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
+    }
+
+    func testShouldShowPrompt_hasNotReachedThirdThreshold_returnsFalse() {
+        userDefaults.set(RatingPromptManager.Constants.thirdThreshold,
+                         forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptThreshold.rawValue)
+        prefs.setInt(91, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 0)
+    }
+
+    func testShouldShowPrompt_reachedThirdThreshold_returnsTrue() {
+        userDefaults.set(RatingPromptManager.Constants.thirdThreshold,
+                         forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptThreshold.rawValue)
+        prefs.setInt(121, forKey: PrefsKeys.Session.Count)
+
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_requestCountTwiceCountIsAtOne() {
-        let subject = createSubject()
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
         subject.showRatingPromptIfNeeded()
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 1)
@@ -100,20 +169,14 @@ class RatingPromptManagerTests: XCTestCase {
 
     // MARK: - Setup helpers
 
-    func createSubject(file: StaticString = #file, line: UInt = #line) -> RatingPromptManager {
-        let subject = RatingPromptManager(prefs: prefs, logger: logger, userDefaults: userDefaults)
-        trackForMemoryLeaks(subject, file: file, line: line)
-        return subject
-    }
-
     var ratingPromptOpenCount: Int {
-        UserDefaults.standard.object(
+        userDefaults.object(
             forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue
         ) as? Int ?? 0
     }
 
     var lastCrashDateKey: Date? {
-        UserDefaults.standard.object(
+        userDefaults.object(
             forKey: RatingPromptManager.UserDefaultsKey.keyLastCrashDateKey.rawValue
         ) as? Date
     }
