@@ -42,6 +42,7 @@ for lang in $LOCALES; do
         --erase_simulator --localize_simulator \
         --devices "iPhone 16" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
+        --xcodebuild_formatter xcbeautify \
         $EXTRA_FAST_LANE_ARGS | tee output.txt
     if [ "$?" != "0" ]; then
         echo "Fastlane exited with code: $?"
