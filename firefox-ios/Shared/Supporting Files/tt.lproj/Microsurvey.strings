@@ -1,3 +1,24 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "Дәвам итү";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "Ябу";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name. */
+"Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@ логотибы";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
+"Microsurvey.Prompt.TitleLabel.v127" = "Безгә %@-ны яхшыртырга ярдәм итегез. Бер минут кына кирәк.";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
+"Microsurvey.Survey.Button.v127" = "Җибәрү";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
+"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "Ябу";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "Фикерегез өчен рәхмәт!";
+
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
 "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "Сораулык тәмамланды";
 

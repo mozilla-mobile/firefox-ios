@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Poročila o sesutjih nam omogočajo diagnosticiranje in odpravljanje težav z brskalnikom.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "To nam omogoča diagnosticiranje in odpravljanje težav z brskalnikom.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Samodejno pošlji poročila o sesutjih";
 

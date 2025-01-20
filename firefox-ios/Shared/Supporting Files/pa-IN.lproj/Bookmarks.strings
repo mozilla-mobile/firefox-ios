@@ -7,8 +7,8 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Body.v135" = "ਜਦੋਂ ਤੁਸੀਂ ਬਰਾਊਜ਼ ਕਰੋ ਤਾਂ ਸਾਈਟਾਂ ਨੂੰ ਸੰਭਾਲੋ। ਅਸੀਂ ਹੋਰ ਸਿੰਕ ਕੀਤੇ ਡਿਵਾਈਸਾਂ ਤੋਂ ਬੁੱਕਮਾਰਕ ਵੀ ਲਵਾਂਗੇ।";
 
-/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
-"Bookmarks.EmptyState.Root.ButtonTitle.v135" = "ਸਿੰਕ ਕਰਨ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ";
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "ਸਿੰਕ ਕਰਨ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Title.v135" = "ਹਾਲੇ ਕੋਈ ਬੁੱਕਮਾਰਕ ਨਹੀਂ ਹੈ";
