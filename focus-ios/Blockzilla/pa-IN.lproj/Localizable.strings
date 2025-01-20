@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "ਗੂੜ੍ਹਾ";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "ਕਰੈਸ਼ ਰਿਪੋਰਟਾਂ ਸਾਨੂੰ ਬਰਾਊਜ਼ਰ ਬਾਰੇ ਪੜਤਾਲ ਕਰਨ ਅਤੇ ਮਸਲੇ ਠੀਕ ਕਰਨ ਲਈ ਮਦਦ ਕਰਦੀਆਂ ਹਨ।";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "ਤੁਹਾਡੇ ਵਲੋਂ ਐਡਰੈਸ ਪੱਟੀ ਵਿੱਚ ਲਿਖੀ ਲਿਖਤ %@ ਤੁਹਾਡੇ ਖੋਜ ਇੰਜਣ ਨੂੰ ਭੇਜੇਗਾ।";
 

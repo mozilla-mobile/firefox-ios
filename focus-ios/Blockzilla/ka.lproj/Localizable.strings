@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "მუქი";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "უეცარი გათიშვის შეტყობინებები გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
 
