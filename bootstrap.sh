@@ -51,7 +51,7 @@ chmod +x .git/hooks/*
 ./content_blocker_update.sh
 
 # Ecosia: Create Staging.xcconfig if not existing
-file_path="Client/Configuration/Staging.xcconfig"
+file_path="firefox-ios/Client/Configuration/Staging.xcconfig"
 
 # Check if the file exists
 if [ ! -f "$file_path" ]; then

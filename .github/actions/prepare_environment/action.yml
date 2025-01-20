@@ -56,7 +56,7 @@ runs:
 
     - name: Extract Staging XCConfig
       shell: bash
-      run: echo "$STAGING_XCCONFIG" | base64 --decode > Client/Configuration/Staging.xcconfig
+      run: echo "$STAGING_XCCONFIG" | base64 --decode > firefox-ios/Client/Configuration/Staging.xcconfig
 
     - name: Run bootstrap script
       shell: bash
