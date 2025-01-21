@@ -72,6 +72,8 @@ final class HomepageSectionLayoutProvider {
         switch section {
         case .header:
             return createHeaderSectionLayout(for: traitCollection)
+        case .messageCard:
+            return createMessageCardSectionLayout(for: traitCollection)
         case .topSites(let numberOfTilesPerRow):
             return createTopSitesSectionLayout(
                 for: traitCollection,
@@ -103,6 +105,27 @@ final class HomepageSectionLayoutProvider {
             leading: leadingInset,
             bottom: UX.HeaderConstants.bottomSpacing,
             trailing: leadingInset)
+
+        return section
+    }
+
+    private func createMessageCardSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(180))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(180))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: horizontalInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: horizontalInset)
 
         return section
     }

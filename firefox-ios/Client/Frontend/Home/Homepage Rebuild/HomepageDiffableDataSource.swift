@@ -15,6 +15,7 @@ final class HomepageDiffableDataSource:
     typealias NumberOfTilesPerRow = Int
     enum HomeSection: Hashable {
         case header
+        case messageCard
         case topSites(NumberOfTilesPerRow)
         case pocket(TextColor?)
         case customizeHomepage
@@ -22,6 +23,7 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header(HeaderState)
+        case messageCard(MessageCardState)
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
@@ -31,6 +33,7 @@ final class HomepageDiffableDataSource:
         static var cellTypes: [ReusableCell.Type] {
             return [
                 HomepageHeaderCell.self,
+                HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 PocketStandardCell.self,
@@ -47,6 +50,10 @@ final class HomepageDiffableDataSource:
 
         snapshot.appendSections([.header])
         snapshot.appendItems([.header(state.headerState)], toSection: .header)
+
+        // TODO: FXIOS-11133 - Handle whether to show / hide message card from message card manager
+        snapshot.appendSections([.messageCard])
+        snapshot.appendItems([.messageCard(state.messageState)], toSection: .messageCard)
 
         if let topSites = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(state.topSitesState.numberOfTilesPerRow)])

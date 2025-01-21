@@ -1075,6 +1075,9 @@
 		8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD9F22C3D7B3E001A2C5A /* FeatureFlagsSettings.swift */; };
 		8AEAD9F52C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD9F42C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift */; };
 		8AEAD9F92C3DB0CD001A2C5A /* MicrosurveyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD9F62C3DB0BF001A2C5A /* MicrosurveyTests.swift */; };
+		8AED23042D40002D000FF624 /* MessageCardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23032D40002A000FF624 /* MessageCardState.swift */; };
+		8AED23062D400098000FF624 /* HomepageMessageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23052D400098000FF624 /* HomepageMessageCardCell.swift */; };
+		8AED23082D4012B8000FF624 /* MessageCardStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23072D4012B1000FF624 /* MessageCardStateTests.swift */; };
 		8AED23C527AC1F9500DE7E97 /* BaseAlphaStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED23C427AC1F9500DE7E97 /* BaseAlphaStackView.swift */; };
 		8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */; };
 		8AEDB11529F9F00400F2A53B /* SceneContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEDB11429F9F00400F2A53B /* SceneContainer.swift */; };
@@ -7899,6 +7902,9 @@
 		8AEAD9F22C3D7B3E001A2C5A /* FeatureFlagsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsSettings.swift; sourceTree = "<group>"; };
 		8AEAD9F42C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsDebugViewController.swift; sourceTree = "<group>"; };
 		8AEAD9F62C3DB0BF001A2C5A /* MicrosurveyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyTests.swift; sourceTree = "<group>"; };
+		8AED23032D40002A000FF624 /* MessageCardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardState.swift; sourceTree = "<group>"; };
+		8AED23052D400098000FF624 /* HomepageMessageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardCell.swift; sourceTree = "<group>"; };
+		8AED23072D4012B1000FF624 /* MessageCardStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardStateTests.swift; sourceTree = "<group>"; };
 		8AED23C427AC1F9500DE7E97 /* BaseAlphaStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAlphaStackView.swift; sourceTree = "<group>"; };
 		8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPanelViewModelTests.swift; sourceTree = "<group>"; };
 		8AEDB11429F9F00400F2A53B /* SceneContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneContainer.swift; sourceTree = "<group>"; };
@@ -11722,6 +11728,7 @@
 		8A552AC22CB43A7000564C98 /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				8AED23072D4012B1000FF624 /* MessageCardStateTests.swift */,
 				8AEF41612D15EDBA0013925D /* TopSitesMiddlewareTests.swift */,
 				8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */,
 				8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */,
@@ -11856,6 +11863,7 @@
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8AED23022D400020000FF624 /* MessageCard */,
 				8A62B15B2CED40800045F46E /* ContextMenu */,
 				8A454D3D2CB9B896009436D9 /* TopSites */,
 				8A454D2A2CB7079A009436D9 /* Header */,
@@ -12306,6 +12314,15 @@
 				8AE9FD252CF662FF001053EE /* UnifiedAdsProvider.swift */,
 			);
 			path = UnifiedAds;
+			sourceTree = "<group>";
+		};
+		8AED23022D400020000FF624 /* MessageCard */ = {
+			isa = PBXGroup;
+			children = (
+				8AED23032D40002A000FF624 /* MessageCardState.swift */,
+				8AED23052D400098000FF624 /* HomepageMessageCardCell.swift */,
+			);
+			path = MessageCard;
 			sourceTree = "<group>";
 		};
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
@@ -16544,6 +16561,7 @@
 				96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */,
 				8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */,
 				0B8BF3722CA2DA4600E9812D /* EditBookmarkViewController.swift in Sources */,
+				8AED23042D40002D000FF624 /* MessageCardState.swift in Sources */,
 				F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */,
 				2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */,
 				21618A8C2A438A0900A5189E /* ActiveScreenAction.swift in Sources */,
@@ -16564,6 +16582,7 @@
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
 				81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */,
+				8AED23062D400098000FF624 /* HomepageMessageCardCell.swift in Sources */,
 				C8BD87602A0C248000CD803A /* OnboardingButtonsModel.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
@@ -17328,6 +17347,7 @@
 				8C8D8C7A2AA067AD00490D32 /* FakespotCoordinatorTests.swift in Sources */,
 				C8E531CA29E5F7D300E03FEF /* URLScannerTests.swift in Sources */,
 				5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */,
+				8AED23082D4012B8000FF624 /* MessageCardStateTests.swift in Sources */,
 				8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */,
 				8AF10D9129D7761A0086351D /* MockLaunchScreenManager.swift in Sources */,
 				5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */,

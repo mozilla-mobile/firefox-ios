@@ -366,6 +366,16 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
+        case .messageCard(let state):
+            guard let messageCardCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageMessageCardCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            messageCardCell.configure(state: state, theme: currentTheme)
+            return messageCardCell
         case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
