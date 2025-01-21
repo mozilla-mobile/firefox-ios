@@ -91,3 +91,26 @@ usage-reporting:
     include_info_sections: false
     ping_schedule:
       - baseline
+
+onboarding-opt-out:
+  description: |
+    This ping is submitted when a user opts out of 
+    usage-reporting during the onboarding process. 
+    It is sent immediately upon opting out of Telemetry/Usage Tracking (T/UT) 
+    at ToS consent. This ping will only ever be sent during the 
+    initial onboarding flow. 
+    If the global telemetry preference is disabled, this ping 
+    includes specific settings to ensure it can still be submitted.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24101
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false
