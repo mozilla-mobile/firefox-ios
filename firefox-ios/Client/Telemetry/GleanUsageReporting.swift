@@ -55,7 +55,7 @@ class GleanUsageReporting: GleanUsageReportingApi {
 
 class GleanLifecycleObserver {
     private let gleanUsageReportingApi: GleanUsageReportingApi
-    private var isObserving: Bool = false
+    private var isObserving = false
     private let notificationCenter: NotificationCenter
 
     init(

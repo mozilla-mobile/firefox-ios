@@ -75,7 +75,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-02")
-        navigator.back()
     }
 
     @MainActor
@@ -92,8 +91,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
         navigator.goto(Intro_FxASignin)
         mozWaitForElementToExist(app.navigationBars.staticTexts["FxASingin.navBar"])
         snapshot("FxASignInScreen-01")

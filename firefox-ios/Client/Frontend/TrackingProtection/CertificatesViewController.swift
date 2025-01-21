@@ -34,6 +34,7 @@ class CertificatesViewController: UIViewController,
     // MARK: - UI
     struct UX {
         static let titleLabelMargin = 8.0
+        static let titleLabelTopMargin = 2.0
         static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
@@ -43,19 +44,20 @@ class CertificatesViewController: UIViewController,
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
         label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
     }
 
     private let headerView: NavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.CertificatesScreen.headerView
     }
 
-    // TODO: FXIOS-9980 Tracking Protection Certificates Screen tableView header text is a little bit cutted off
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
         tableView.register(CertificatesHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
         tableView.sectionHeaderTopPadding = 0
+        tableView.separatorInset = .zero
     }
 
     // MARK: - Variables
@@ -140,9 +142,6 @@ class CertificatesViewController: UIViewController,
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.heightAnchor.constraint(
-                greaterThanOrEqualToConstant: UX.titleLabelMinHeight
-            ),
             titleLabel.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: UX.titleLabelMargin
@@ -152,7 +151,8 @@ class CertificatesViewController: UIViewController,
                 constant: -UX.titleLabelMargin
             ),
             titleLabel.topAnchor.constraint(
-                equalTo: headerView.bottomAnchor
+                equalTo: headerView.bottomAnchor,
+                constant: UX.titleLabelTopMargin
             )
         ])
     }
@@ -208,6 +208,7 @@ class CertificatesViewController: UIViewController,
             }
         }
         headerView.configure(withItems: items, theme: currentTheme())
+        headerView.setupAccessibilityIdentifiers()
         return headerView
     }
 
@@ -222,6 +223,7 @@ class CertificatesViewController: UIViewController,
         }
 
         let certificate = model.certificates[model.selectedCertificateIndex]
+        cell.setupAccessibilityIdentifiers()
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
@@ -240,7 +242,8 @@ class CertificatesViewController: UIViewController,
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
                                        (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)],
+                               isIssuerName: true)
             }
 
         case .validity:
@@ -264,13 +267,16 @@ class CertificatesViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
         headerView.setupAccessibility(
             closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
-            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
             backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+            backButtonA11yId: A11y.backButton
         )
+        titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
+        certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
     // MARK: View Transitions

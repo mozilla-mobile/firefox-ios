@@ -176,7 +176,7 @@ final class PrivacyPreferencesViewController: UIViewController,
         }
 
         crashReportsSwitch.learnMoreCallBack = { [weak self] in
-            self?.presentLink(with: SupportUtils.URLForTopic("mobile-crash-reports"))
+            self?.presentLink(with: SupportUtils.URLForTopic("ios-crash-reports"))
         }
         technicalDataSwitch.learnMoreCallBack = { [weak self] in
             self?.presentLink(with: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"))
