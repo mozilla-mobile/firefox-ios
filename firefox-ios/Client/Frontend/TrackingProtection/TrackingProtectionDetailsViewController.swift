@@ -175,6 +175,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
+        viewCertificatesButton.applyUnderline(underlinedText: model.viewCertificatesButtonTitle)
         baseView.addArrangedSubview(viewCertificatesButton)
     }
 

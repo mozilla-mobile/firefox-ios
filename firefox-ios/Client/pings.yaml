@@ -101,7 +101,7 @@ onboarding-opt-out:
     initial onboarding flow. 
     If the global telemetry preference is disabled, this ping 
     includes specific settings to ensure it can still be submitted.
-  include_client_id: true
+  include_client_id: false
   send_if_empty: true
   bugs:
     - https://mozilla-hub.atlassian.net/browse/FXIOS-10902

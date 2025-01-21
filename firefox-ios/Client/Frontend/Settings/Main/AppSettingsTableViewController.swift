@@ -277,7 +277,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             linkedText: isTermsOfServiceFeatureEnabled ? .SendCrashReportsSettingLinkV2 : .SendCrashReportsSettingLink,
             prefKey: AppConstants.prefSendCrashReports,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
-            learnMoreURL: SupportUtils.URLForTopic("mobile-crash-reports"),
+            learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports"),
             isToSEnabled: isTermsOfServiceFeatureEnabled
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings

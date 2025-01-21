@@ -34,6 +34,7 @@ class EditBookmarkViewController: UIViewController,
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
         view.tableHeaderView = headerSpacerView
+        view.keyboardDismissMode = .onDrag
     }
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -251,6 +252,7 @@ class EditBookmarkViewController: UIViewController,
         cell.indentationLevel = 0
         cell.accessoryType = .none
         cell.selectionStyle = .default
+        cell.accessibilityTraits = .button
         cell.customization = .newFolder
         cell.applyTheme(theme: theme)
     }

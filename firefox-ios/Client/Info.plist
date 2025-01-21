@@ -51,6 +51,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CHANNEL</key>
+	<string>$(CHANNEL)</string>
 	<key>INIntentsSupported</key>
 	<array>
 		<string>QuickActionIntent</string>
