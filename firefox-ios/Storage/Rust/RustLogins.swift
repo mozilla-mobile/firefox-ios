@@ -532,14 +532,36 @@ public class RustLogins: LoginsProtocol, KeyManager {
         }
     }
 
-    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
-        return listLogins().bind { result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
+    public func hasLogins(completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
             }
 
-            return deferMaybe((result.successValue?.count ?? 0) > 0)
+            do {
+                let isEmpty = try self.storage?.isEmpty() ?? true
+                completionHandler(.success(!isEmpty))
+            } catch let error as NSError {
+                completionHandler(.failure(error))
+            }
         }
+    }
+
+    /// TODO(FXIOS-5603): We should remove this once we cleanup all deferred uses
+    /// and use hasLogins instead
+    public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
+        let deferred = Deferred<Maybe<Bool>>()
+        self.hasLogins { result in
+            switch result {
+            case .success(let hasLogins):
+                deferred.fill(Maybe(success: hasLogins))
+            case .failure(let error):
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
+            }
+        }
+        return deferred
     }
 
     public func listLogins() -> Deferred<Maybe<[Login]>> {
@@ -586,6 +608,7 @@ public class RustLogins: LoginsProtocol, KeyManager {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
