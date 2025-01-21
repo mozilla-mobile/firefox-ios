@@ -8,21 +8,24 @@ import XCTest
 @testable import Client
 
 final class TabTrayStateTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-//        DependencyHelperMock().bootstrapDependencies()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-//        DependencyHelperMock().reset()
+    
+    func testInitialState() {
+        let initialState = createSubject()
+        
+        XCTAssertEqual(initialState.isPrivateMode, false)
+        XCTAssertEqual(initialState.selectedPanel, .tabs)
+        XCTAssertEqual(initialState.hasSyncableAccount, false)
+        XCTAssertEqual(initialState.shouldDismiss, false)
+        XCTAssertEqual(initialState.shareURL, nil)
+        XCTAssertEqual(initialState.normalTabsCount, "0")
+        XCTAssertEqual(initialState.showCloseConfirmation, false)
     }
     
     func testDidLoadTabTrayAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
 
-        let action = getAction(for: .didLoadTabTray)
+        let action = getTabTrayAction(for: .didLoadTabTray)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.isPrivateMode, false)
@@ -38,7 +41,7 @@ final class TabTrayStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
 
-        let action = getAction(for: .changePanel)
+        let action = getTabTrayAction(for: .changePanel)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.isPrivateMode, false)
@@ -53,9 +56,8 @@ final class TabTrayStateTests: XCTestCase {
     func testDismissTabTrayAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
-        XCTAssertEqual(initialState.shouldDismiss, false)
 
-        let action = getAction(for: .dismissTabTray)
+        let action = getTabTrayAction(for: .dismissTabTray)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.isPrivateMode, false)
@@ -70,11 +72,172 @@ final class TabTrayStateTests: XCTestCase {
     func testFirefoxAccountChangedAction() {
         let initialState = createSubject(panelType: .privateTabs)
         let reducer = tabTrayReducer()
-        let action = getAction(for: .firefoxAccountChanged)
+        
+        let action = getTabTrayAction(for: .firefoxAccountChanged)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.isPrivateMode, true)
         XCTAssertEqual(newState.selectedPanel, .privateTabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testTabTrayDidLoadAction() {
+        let initialState = createSubject(panelType: .syncedTabs)
+        let reducer = tabTrayReducer()
+        
+        let action = getTabTrayAction(for: .firefoxAccountChanged)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .syncedTabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testDidLoadTabPanelAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelMiddleWareAction(for: .didLoadTabPanel)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+
+    func testDidChangeTabPanelAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelMiddleWareAction(for: .didChangeTabPanel)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testDidRefreshTabsAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelMiddleWareAction(for: .refreshTabs)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testRefreshInactiveTabsAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelMiddleWareAction(for: .refreshInactiveTabs)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testShowToastAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelMiddleWareAction(for: .showToast)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testCloseAllTabsAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelViewAction(for: .closeAllTabs)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, true)
+    }
+    
+    func testShowShareSheetAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelViewAction(for: .showShareSheet)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testTabPanelDidLoadAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelViewAction(for: .tabPanelDidLoad)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
+        XCTAssertEqual(newState.hasSyncableAccount, false)
+        XCTAssertEqual(newState.shouldDismiss, false)
+        XCTAssertEqual(newState.shareURL, nil)
+        XCTAssertEqual(newState.normalTabsCount, "0")
+        XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testCloseTabAction() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let action = getTabPanelViewAction(for: .closeTab)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.isPrivateMode, false)
+        XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
         XCTAssertEqual(newState.shareURL, nil)
@@ -91,7 +254,16 @@ final class TabTrayStateTests: XCTestCase {
         return TabTrayState.reducer
     }
 
-    private func getAction(for actionType: TabTrayActionType) -> TabTrayAction {
+    private func getTabTrayAction(for actionType: TabTrayActionType) -> TabTrayAction {
         return  TabTrayAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
+    
+    private func getTabPanelMiddleWareAction(for actionType: TabPanelMiddlewareActionType) -> TabPanelMiddlewareAction {
+        return  TabPanelMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+    
+    private func getTabPanelViewAction(for actionType: TabPanelViewActionType) -> TabPanelViewAction {
+        return  TabPanelViewAction(panelType: .tabs, windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
 }
+
