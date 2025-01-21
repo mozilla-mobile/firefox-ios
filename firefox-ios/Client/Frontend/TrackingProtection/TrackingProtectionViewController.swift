@@ -147,6 +147,7 @@ class TrackingProtectionViewController: UIViewController,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         scrollView.delegate = self
+        updateViewDetails()
     }
 
     override func viewDidLayoutSubviews() {
@@ -160,7 +161,8 @@ class TrackingProtectionViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateViewDetails()
+        updateBlockedTrackersCount()
+        updateConnectionStatus()
         applyTheme()
         getCertificates(for: model.url) { [weak self] certificates in
             if let certificates {
@@ -436,9 +438,6 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.setupDetails(subtitle: model.websiteTitle,
                                      title: model.displayTitle,
                                      icon: headerIcon)
-
-        updateBlockedTrackersCount()
-        updateConnectionStatus()
 
         toggleView.setupDetails(isOn: !model.isURLSafelisted())
         model.isProtectionEnabled = toggleView.toggleIsOn
