@@ -142,7 +142,7 @@ final class RouteBuilder: FeatureFlaggable {
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
-            RatingPromptManager.isBrowserDefault = true
+            DefaultBrowserUtil.isBrowserDefault = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
         } else {
