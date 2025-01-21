@@ -277,6 +277,8 @@
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
 		21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA46692B04130500AAAB2D /* TabsPanelState.swift */; };
 		21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */; };
+		21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */; };
+		21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */; };
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
@@ -2703,6 +2705,8 @@
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
 		21EA46692B04130500AAAB2D /* TabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelState.swift; sourceTree = "<group>"; };
 		21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayDiffableDataSourceTests.swift; sourceTree = "<group>"; };
+		21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTelemetry.swift; sourceTree = "<group>"; };
+		21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTelemetryTests.swift; sourceTree = "<group>"; };
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -10150,6 +10154,7 @@
 				0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */,
 				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
 				0B7CF8842CAC1B7000DC02F8 /* Legacy */,
+				21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -11587,6 +11592,7 @@
 				0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */,
 				C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */,
 				0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */,
+				21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -16307,6 +16313,7 @@
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedTableViewController.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
 				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
 				ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */,
@@ -17499,6 +17506,7 @@
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
 				E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */,
 				C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */,
+				21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,
 				8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */,
