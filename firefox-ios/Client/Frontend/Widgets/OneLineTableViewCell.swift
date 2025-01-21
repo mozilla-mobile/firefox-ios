@@ -258,7 +258,7 @@ class OneLineTableViewCell: UITableViewCell,
 
         switch customization {
         case .regular:
-            accessoryView?.tintColor = accessoryView is UIButton ? theme.colors.iconPrimary : theme.colors.iconSecondary
+            accessoryView?.tintColor = isAccessoryViewInteractive ? theme.colors.iconPrimary : theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:
