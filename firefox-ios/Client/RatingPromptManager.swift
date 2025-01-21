@@ -168,7 +168,7 @@ final class RatingPromptManager {
             forKey: UserDefaultsKey.keyLastCrashDateKey.rawValue
         ) as? Date else { return false }
 
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        let threeDaysAgo = Date(timeIntervalSinceNow: -(3 * 24 * 60 * 60))
         return lastCrashDate >= threeDaysAgo
     }
 }
