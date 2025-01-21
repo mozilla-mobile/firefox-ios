@@ -77,9 +77,4 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func clearTest() {
         TelemetryContextualIdentifier.clearUserDefaults()
     }
-
-    /// Helper function to cast a value to `AnyHashable`.
-    private func asAnyHashable<T>(_ value: T) -> AnyHashable? {
-        return value as? AnyHashable
-    }
 }
