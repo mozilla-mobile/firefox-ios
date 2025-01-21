@@ -64,19 +64,12 @@ public class CloseButton: UIButton, Notifiable {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
             updateButtonSizeForDynamicFont()
-        case Notification.Name("CloseAllPopupDismissedNotification"):
-            resetStateAfterPopupDismissed()
         default:
             break
         }
     }
 
-    private func resetStateAfterPopupDismissed() {
-        // Reset state or view model if needed
-        print("Popup dismissed. Resetting CloseButton state if necessary.")
-    }
-
     deinit {
-        notificationCenter.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
-        notificationCenter.removeObserver(self, name: Notification.Name("CloseAllPopupDismissedNotification"), object: nil)
+        notificationCenter.removeObserver(self)
     }
+}
