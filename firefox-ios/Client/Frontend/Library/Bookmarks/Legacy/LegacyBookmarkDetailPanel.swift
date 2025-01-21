@@ -379,10 +379,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .bookmark,
-                                             value: .bookmarkAddFolder)
+                let bookmarksTelemetry = BookmarksTelemetry()
+                bookmarksTelemetry.addBookmarkFolder()
 
                 return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid,
                                                    title: bookmarkItemOrFolderTitle,
