@@ -54,7 +54,7 @@ final class TopSiteState: Hashable, Equatable {
         // Only sending sponsored tile impressions for now
         guard let tile = site as? SponsoredTile else { return }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tile: tile, position: position)
     }
 
     func getTelemetrySiteType() -> String {

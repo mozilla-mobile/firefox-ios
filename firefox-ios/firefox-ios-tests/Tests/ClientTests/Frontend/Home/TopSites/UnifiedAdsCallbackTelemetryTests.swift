@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import XCTest
 
 @testable import Client
@@ -10,16 +11,19 @@ import XCTest
 class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     private var networking: MockContileNetworking!
     private var logger: MockLogger!
+    private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
         networking = MockContileNetworking()
         logger = MockLogger()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
         networking = nil
         logger = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
@@ -39,10 +43,46 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.clickURL)")
     }
 
+    func testLegacyImpressionTelemetry() {
+        let subject = createSubject()
+        subject.sendImpressionTelemetry(tile: tile, position: 1)
+
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+    }
+
+    func testLegacyClickTelemetry() {
+        let subject = createSubject()
+        subject.sendClickTelemetry(tile: tile, position: 1)
+
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+    }
+
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsCallbackTelemetry {
-        let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking, logger: logger)
+        let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking,
+                                                         logger: logger,
+                                                         gleanWrapper: gleanWrapper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

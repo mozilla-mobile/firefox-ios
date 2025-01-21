@@ -12,15 +12,18 @@ protocol UnifiedAdsCallbackTelemetry {
 }
 
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
-    private var networking: ContileNetworking
-    private var logger: Logger
+    private let networking: ContileNetworking
+    private let logger: Logger
+    private let sponsoredTileTelemetry: SponsoredTileTelemetry
 
     init(
         networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry()
     ) {
         self.networking = networking
         self.logger = logger
+        self.sponsoredTileTelemetry = sponsoredTileTelemetry
     }
 
     func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
@@ -75,10 +78,10 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     // keep sending the legacy telemetry Glean pings
 
     private func sendLegacyImpressionTelemetry(tile: SponsoredTile, position: Int) {
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
+        sponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
     }
 
     private func sendLegacyClickTelemetry(tile: SponsoredTile, position: Int) {
-        SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
+        sponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: true)
     }
 }
