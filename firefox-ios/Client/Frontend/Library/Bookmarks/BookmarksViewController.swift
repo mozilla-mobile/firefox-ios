@@ -557,7 +557,7 @@ class BookmarksViewController: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            strongSelf.bookmarksTelemetry.deleteBookmark()
+            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -734,7 +734,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
-            self.bookmarksTelemetry.deleteBookmark()
+            self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
         }).items
         actions.append(removeAction)
 

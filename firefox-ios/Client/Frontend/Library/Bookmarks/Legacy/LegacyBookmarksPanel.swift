@@ -483,7 +483,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            strongSelf.bookmarksTelemetry.deleteBookmark()
+            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -551,7 +551,7 @@ extension LegacyBookmarksPanel: LibraryPanelContextMenu {
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { [weak self] _ in
             self?.deleteBookmarkNodeAtIndexPath(indexPath)
-            self?.bookmarksTelemetry.deleteBookmark()
+            self?.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
         }).items
         actions.append(removeAction)
 

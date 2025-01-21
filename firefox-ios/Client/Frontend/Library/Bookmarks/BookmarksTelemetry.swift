@@ -11,26 +11,35 @@ struct BookmarksTelemetry {
     enum EventLabel: String {
         case bookmarksPanel = "bookmarks-panel"
         case topSites = "top-sites"
+        case activityStream = "activity-stream"
+        case contextMenu = "page-action-menu"
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
-    func addBookmarkFolder() {
-        gleanWrapper.recordEvent(for: GleanMetrics.Bookmarks.folderAdd)
+    func addBookmark(eventLabel: EventLabel) {
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.add,
+                                 label: eventLabel.rawValue)
     }
 
-    func deleteBookmark() {
+    func deleteBookmark(eventLabel: EventLabel) {
         gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.delete,
-                                 label: EventLabel.bookmarksPanel.rawValue)
+                                 label: eventLabel.rawValue)
     }
 
     func openBookmarksSite(eventLabel: EventLabel) {
-        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open, label: eventLabel.rawValue)
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.open,
+                                 label: eventLabel.rawValue)
     }
 
     func editBookmark(eventLabel: EventLabel) {
-        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.edit, label: eventLabel.rawValue)
+        gleanWrapper.recordLabel(for: GleanMetrics.Bookmarks.edit,
+                                 label: eventLabel.rawValue)
     }
+
+     func addBookmarkFolder() {
+         gleanWrapper.recordEvent(for: GleanMetrics.Bookmarks.folderAdd)
+     }
 }
