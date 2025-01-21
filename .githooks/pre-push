@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## TODO Ecosia Upgrade: Figure out if this pre-push hook is desired
+## Ecosia: Comment out pre-commit hook. This is handled as a check step on PRs.
 
 # echo "Starting Swiftlint Check..."
 # swiftlint --strict
