@@ -502,6 +502,7 @@ class BookmarksViewController: SiteTableViewController,
 
                 let contextButton = createContextButton()
                 contextButton.addAction(UIAction { [weak self] _ in
+                    guard let indexPath = tableView.indexPath(for: cell) else { return }
                     self?.presentContextMenu(for: indexPath)
                 }, for: .touchUpInside)
                 viewModel.accessoryView = contextButton
