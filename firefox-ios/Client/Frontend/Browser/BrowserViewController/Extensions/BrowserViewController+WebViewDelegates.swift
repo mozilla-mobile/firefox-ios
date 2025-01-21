@@ -655,7 +655,10 @@ extension BrowserViewController: WKNavigationDelegate {
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
-
+        if responseURL?.isFileURL ?? false {
+            decisionHandler(.allow)
+            return
+        }
         tabManager[webView]?.mimeType = response.mimeType
         notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
@@ -766,7 +769,12 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType != MIMEType.HTML, let request = request {
+            if response.mimeType == MIMEType.PDF, let request {
+                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                decisionHandler(.cancel)
+                return
+            }
+            if response.mimeType != MIMEType.HTML, let request {
                 tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             } else {
                 tab.temporaryDocument = nil
@@ -778,6 +786,32 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         decisionHandler(.allow)
+    }
+
+    func handlePDFResponse(_ webView: WKWebView,
+                           tab: Tab,
+                           response: URLResponse,
+                           request: URLRequest) {
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        cookieStore.getAllCookies { [weak tab, weak webView] cookies in
+            let tempPDF = PDFTemporaryDocument(
+                filename: response.suggestedFilename,
+                request: request,
+                cookies: cookies
+            )
+            tempPDF.onDownloadProgressUpdate = { [weak self] progress in
+                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                                   of: webView,
+                                   change: [.newKey: progress],
+                                   context: nil)
+            }
+            tempPDF.onDownloadToURL = { [weak webView] url in
+                webView?.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+            }
+            guard let webView else { return }
+            tempPDF.downloadDocument(webView)
+            tab?.temporaryDocument = tempPDF
+        }
     }
 
     /// Tells the delegate that an error occurred during navigation.

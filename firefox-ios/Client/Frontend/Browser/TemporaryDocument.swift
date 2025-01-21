@@ -4,22 +4,23 @@
 
 import Foundation
 import Shared
+import WebKit
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
 protocol TemporaryDocument {
+    var filename: String { get set }
     func getURL(completionHandler: @escaping ((URL?) -> Void))
     func getDownloadedURL() async -> URL?
 }
 
 class DefaultTemporaryDocument: NSObject, TemporaryDocument {
-    fileprivate let request: URLRequest
-    fileprivate let filename: String
+    var filename: String
 
-    fileprivate var session: URLSession?
-
-    fileprivate var downloadTask: URLSessionDownloadTask?
-    fileprivate var localFileURL: URL?
+    private let request: URLRequest
+    private var session: URLSession?
+    private var downloadTask: URLSessionDownloadTask?
+    private var localFileURL: URL?
 
     init(preflightResponse: URLResponse, request: URLRequest) {
         self.request = request
@@ -115,5 +116,166 @@ class DefaultTemporaryDocument: NSObject, TemporaryDocument {
             }
         })
         downloadTask?.resume()
+    }
+}
+
+typealias VoidReturnParameterCallback<T> = (T) -> Void
+
+class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDelegate {
+    private var localFileURL: URL?
+    private lazy var session: URLSession = {
+        return URLSession(
+            configuration: .defaultMPTCP,
+            delegate: self,
+            delegateQueue: temporaryDocumentOperationQueue
+        )
+    }()
+    private var webViewGoBackToken: NSKeyValueObservation?
+
+    let request: URLRequest
+    var filename: String
+    var onDownloadToURL: VoidReturnParameterCallback<URL>?
+    var onDownloadProgressUpdate: VoidReturnParameterCallback<Double>?
+
+    init(
+        filename: String?,
+        request: URLRequest,
+        cookies: [HTTPCookie],
+        session: URLSession? = nil
+    ) {
+        self.request = Self.applyCookiesToRequest(request, cookies: cookies)
+        self.filename = filename ?? "unknown"
+        super.init()
+        
+        if let session {
+            self.session = session
+        }
+    }
+
+    /// Returns:
+    /// Modified request with Cookies header field
+    private static func applyCookiesToRequest(_ request: URLRequest, cookies: [HTTPCookie]) -> URLRequest {
+        var rawHeaderCookies = cookies.reduce("") { partialResult, cookie in
+            if let domain = request.url?.baseDomain, cookie.domain.contains(domain) {
+                return partialResult.appending("\(cookie.name)=\(cookie.value); ")
+            }
+            return partialResult
+        }
+        if rawHeaderCookies.count >= 2 {
+            // Removes the last ; and space char since not needed for the request
+            rawHeaderCookies.removeLast(2)
+        }
+        var headers = request.allHTTPHeaderFields ?? [:]
+        headers["Cookie"] = rawHeaderCookies
+        var request = request
+        request.allHTTPHeaderFields = headers
+
+        return request
+    }
+
+    func getURL(completionHandler: @escaping ((URL?) -> Void)) {
+        if let tempFile = queryTempFile() {
+            completionHandler(tempFile)
+            return
+        }
+        let task = session.downloadTask(with: request) { [weak self] location, response, error in
+            guard let location else { return }
+            if let tempFileURL = self?.storeTempDownloadFile(at: location) {
+                self?.localFileURL = tempFileURL
+                completionHandler(tempFileURL)
+            } else {
+                completionHandler(nil)
+            }
+        }
+        task.resume()
+    }
+    
+    func getDownloadedURL() async -> URL? {
+        if let tempFile = queryTempFile() {
+            return tempFile
+        }
+        let response = try? await session.download(for: request)
+        guard let location = response?.0, let tempFileURL = storeTempDownloadFile(at: location) else { return nil }
+
+        return tempFileURL
+    }
+
+    func downloadDocument(_ webView: WKWebView) {
+        if let tempFile = queryTempFile() {
+            ensureMainThread { [weak self] in
+                self?.onDownloadToURL?(tempFile)
+            }
+            return
+        }
+        let task = session.downloadTask(with: request)
+        webViewGoBackToken = webView.observe(\.canGoBack, changeHandler: { [weak task] _, _ in
+            task?.cancel()
+        })
+        task.resume()
+    }
+
+    private func queryTempFile() -> URL? {
+        if let localFileURL {
+            return localFileURL
+        }
+        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        if FileManager.default.fileExists(atPath: tempFileURL.path) {
+            localFileURL = tempFileURL
+            return tempFileURL
+        }
+        return nil
+    }
+
+    private func storeTempDownloadFile(at url: URL) -> URL? {
+        // By default the downloaded file is stored in the temp directory
+        let tempDirectory = url.deletingPathExtension().deletingLastPathComponent()
+        let tempFileURL = tempDirectory.appendingPathComponent(filename)
+
+        try? FileManager.default.createDirectory(
+            at: tempDirectory,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
+        try? FileManager.default.removeItem(at: tempFileURL)
+
+        do {
+            try FileManager.default.moveItem(at: url, to: tempFileURL)
+            localFileURL = tempFileURL
+            return tempFileURL
+        } catch {
+            return nil
+        }
+    }
+
+    deinit {
+        if let tempFileURL = queryTempFile() {
+            try? FileManager.default.removeItem(at: tempFileURL)
+        }
+        if let webViewGoBackToken {
+            webViewGoBackToken.invalidate()
+            self.webViewGoBackToken = nil
+        }
+    }
+
+    // MARK: - URLSessionDownloadDelegate
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard let url = storeTempDownloadFile(at: location) else { return }
+        ensureMainThread { [weak self] in
+            self?.onDownloadToURL?(url)
+        }
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        ensureMainThread { [weak self] in
+            self?.onDownloadProgressUpdate?(progress)
+        }
     }
 }

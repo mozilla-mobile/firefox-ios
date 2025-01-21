@@ -1898,10 +1898,15 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
-                if isToolbarRefactorEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+                let progress = if let progress = change?[.newKey] as? Double {
+                    progress
                 } else {
-                    legacyUrlBar?.updateProgressBar(Float(webView.estimatedProgress))
+                    webView.estimatedProgress
+                }
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: progress)
+                } else {
+                    legacyUrlBar?.updateProgressBar(Float(progress))
                 }
                 setupMiddleButtonStatus(isLoading: true)
             } else {
