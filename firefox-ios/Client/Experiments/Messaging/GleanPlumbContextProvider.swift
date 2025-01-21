@@ -36,7 +36,7 @@ class GleanPlumbContextProvider {
     }
 
     private var isDefaultBrowser: Bool {
-        return userDefaults.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
+        return userDefaults.bool(forKey: DefaultBrowserUtil.UserDefaultsKey.keyIsBrowserDefault.rawValue)
     }
 
     private var numberOfAppLaunches: Int32 {
