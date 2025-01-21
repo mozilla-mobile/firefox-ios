@@ -30,9 +30,10 @@ final class MessageCardStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertNil(initialState.title)
-        XCTAssertNil(initialState.description)
-        XCTAssertNil(initialState.buttonLabel)
+        XCTAssertEqual(newState.title, "Switch Your Default Browser")
+        let expectedDescription = "Set links from websites, emails, and Messages to open automatically in Firefox."
+        XCTAssertEqual(newState.description, expectedDescription)
+        XCTAssertEqual(newState.buttonLabel, "Learn How")
     }
     // MARK: - Private
     private func createSubject() -> MessageCardState {
