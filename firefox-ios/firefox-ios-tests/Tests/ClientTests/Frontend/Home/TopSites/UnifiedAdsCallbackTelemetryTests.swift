@@ -43,7 +43,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.clickURL)")
     }
 
-    func testLegacyImpressionTelemetry() {
+    func testLegacyImpressionTelemetry() throws {
         let subject = createSubject()
         subject.sendImpressionTelemetry(tile: tile, position: 1)
 
@@ -58,9 +58,26 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
         XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+
+        // Ensuring we call the right metrics type
+        let firstSavedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileImpressionExtra>
+        )
+        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileImpression)
+        let firstResultMetricType = type(of: firstSavedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
+                                                 resultMetric: firstResultMetricType)
+        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
+        let secondResultMetricType = type(of: secondSavedMetric)
+        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
+                                                       resultMetric: secondResultMetricType)
+        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }
 
-    func testLegacyClickTelemetry() {
+    func testLegacyClickTelemetry() throws {
         let subject = createSubject()
         subject.sendClickTelemetry(tile: tile, position: 1)
 
@@ -75,6 +92,23 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         }
         XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
         XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+
+        // Ensuring we call the right metrics type
+        let firstSavedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileClickExtra>
+        )
+        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileClick)
+        let firstResultMetricType = type(of: firstSavedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
+                                                 resultMetric: firstResultMetricType)
+        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
+        let secondResultMetricType = type(of: secondSavedMetric)
+        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
+                                                       resultMetric: secondResultMetricType)
+        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }
 
     // MARK: - Helper functions
