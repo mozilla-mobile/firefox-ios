@@ -30,7 +30,7 @@ struct SeedProgressView: View {
             )
             .offset(y: -UX.seedLineWidth * 2)
 
-            Image("seedIcon")
+            Image(decorative: "seedIcon")
                 .resizable()
                 .frame(width: UX.seedIconWidthHeight, height: UX.seedIconWidthHeight)
                 .offset(y: UX.seedIconBottomOffset)

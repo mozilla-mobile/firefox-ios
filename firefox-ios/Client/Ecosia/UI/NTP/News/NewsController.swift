@@ -17,7 +17,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     var delegate: SharedHomepageCellDelegate?
 
     // MARK: - Themeable Properties
-    
+
     let windowUUID: WindowUUID
     var currentWindowUUID: Common.WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }

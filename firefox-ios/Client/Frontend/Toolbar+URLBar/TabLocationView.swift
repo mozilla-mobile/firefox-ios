@@ -538,7 +538,6 @@ extension TabLocationView: ThemeApplicable {
         reloadButton.applyTheme(theme: theme)
 
         // TODO Ecosia Upgrade: There is no more `menuBadge` which we updated color, was it renamed?
-        
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
             .withTintColor(theme.colors.actionPrimary),

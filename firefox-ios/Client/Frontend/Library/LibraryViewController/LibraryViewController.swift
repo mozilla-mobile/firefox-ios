@@ -348,7 +348,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        
+
         /* Ecosia: Update background from layer1
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1

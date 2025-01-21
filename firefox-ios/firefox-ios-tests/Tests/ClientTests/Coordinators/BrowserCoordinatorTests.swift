@@ -109,11 +109,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         )
          */
         let secondHomepage = LegacyHomepageViewController(profile: profile,
-                                                    toastContainer: UIView(),
-                                                    tabManager: tabManager,
-                                                    overlayManager: overlayModeManager,
-                                                    referrals: .init(),
-                                                    delegate: nil)
+                                                          toastContainer: UIView(),
+                                                          tabManager: tabManager,
+                                                          overlayManager: overlayModeManager,
+                                                          referrals: .init(),
+                                                          delegate: nil)
 
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
         XCTAssertNotNil(subject.legacyHomepageViewController)

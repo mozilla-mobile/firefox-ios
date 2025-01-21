@@ -198,7 +198,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.backgroundColor = colors.layer3
         */
         view.backgroundColor = currentTheme.type == .dark ? .Dark.Background.primary : .Light.Background.primary
-        
+
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary

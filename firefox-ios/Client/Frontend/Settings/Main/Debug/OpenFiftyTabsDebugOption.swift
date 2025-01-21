@@ -22,10 +22,9 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
         )
         */
         return NSAttributedString(
-            string: "Open 50 `ecosia.org` tabs ⚠️", 
+            string: "Open 50 `ecosia.org` tabs ⚠️",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
         )
-
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

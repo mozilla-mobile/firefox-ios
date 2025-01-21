@@ -65,7 +65,7 @@ final class WhatsNewViewController: UIViewController, Themeable {
     weak var delegate: WhatsNewViewDelegate?
 
     // MARK: - Themeable Properties
-    
+
     let windowUUID: WindowUUID
     var currentWindowUUID: WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }

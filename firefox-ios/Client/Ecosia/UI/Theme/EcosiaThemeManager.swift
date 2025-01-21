@@ -23,16 +23,16 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - Variables
-    
+
     private var windows: [WindowUUID: UIWindow] = [:]
     private var privateBrowsingState: [WindowUUID: Bool] = [:]
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
-    
+
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
     private var sharedContainerIdentifier: String
-    
+
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
@@ -69,7 +69,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
                            observing: [UIScreen.brightnessDidChangeNotification,
                                        UIApplication.didBecomeActiveNotification])
     }
-    
+
     // MARK: - Themeing general functions
     public func getCurrentTheme(for window: WindowUUID?) -> Theme {
         guard let window else {
@@ -79,7 +79,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
 
         return getThemeFrom(type: determineThemeType(for: window))
     }
-    
+
     public func applyThemeUpdatesToWindows() {
         allWindowUUIDs.forEach {
             applyThemeChanges(for: $0, using: determineThemeType(for: $0))
@@ -91,7 +91,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         updateSavedTheme(to: newTheme)
         applyThemeUpdatesToWindows()
     }
-    
+
     public func getUserManualTheme() -> ThemeType {
         guard let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
               let savedTheme = ThemeType(rawValue: savedThemeDescription)
@@ -99,7 +99,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
 
         return savedTheme
     }
-    
+
     // MARK: - System theme functions
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
@@ -109,7 +109,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     private func getThemeTypeBasedOnSystem() -> ThemeType {
         return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
-    
+
     // MARK: - Private theme functions
     public func setPrivateTheme(isOn: Bool, for window: WindowUUID) {
         guard getPrivateThemeIsOn(for: window) != isOn else { return }
@@ -120,7 +120,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     public func getPrivateThemeIsOn(for window: WindowUUID) -> Bool {
         return privateBrowsingState[window] ?? false
     }
-    
+
     // MARK: - Automatic brightness theme functions
     public func setAutomaticBrightness(isOn: Bool) {
         guard automaticBrightnessIsOn != isOn else { return }
@@ -136,7 +136,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     private func getThemeTypeBasedOnBrightness() -> ThemeType {
         return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
     }
-    
+
     // MARK: - Window specific functions
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
@@ -156,7 +156,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - Private helper methods
-    
+
     private func updateSavedTheme(to newTheme: ThemeType) {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
@@ -168,7 +168,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         self.windows[window]?.overrideUserInterfaceStyle = style
         notifyCurrentThemeDidChange(for: window)
     }
-    
+
     private func notifyCurrentThemeDidChange(for window: WindowUUID) {
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(
@@ -177,7 +177,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
             )
         }
     }
-    
+
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
         if nightModeIsOn { return .nightMode }
@@ -186,7 +186,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
 
         return getUserManualTheme()
     }
-    
+
     private func getThemeFrom(type: ThemeType) -> Theme {
         switch type {
         case .light:
@@ -199,7 +199,6 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
             return EcosiaLightTheme()
         }
     }
-    
 
     // TODO Ecosia Upgrade: Is migration still needed?
     private func migrateDefaultsToUseStandard() {
@@ -232,12 +231,13 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     }
 }
 
-// TODO Ecosia Upgrade: Is this still needed?
-//extension EcosiaThemeManager {
-//
-//    func updateLegacyThemeIfSystemThemeON() {
-//        if LegacyThemeManager.instance.systemThemeIsOn {
-//            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
-//        }
-//    }
-//}
+/* TODO Ecosia Upgrade: Is this still needed?
+extension EcosiaThemeManager {
+
+    func updateLegacyThemeIfSystemThemeON() {
+        if LegacyThemeManager.instance.systemThemeIsOn {
+            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
+        }
+    }
+}
+*/

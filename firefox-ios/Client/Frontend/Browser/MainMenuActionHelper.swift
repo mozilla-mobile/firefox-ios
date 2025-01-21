@@ -749,7 +749,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Share,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
-            
+
             // Ecosia: if we have nothing to share we share Ecosia Root URL
             // guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
             guard let tab = self.selectedTab else { return }

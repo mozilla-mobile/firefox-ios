@@ -123,13 +123,13 @@ final class EcosiaPrivacyPolicySetting: Setting {
     override var url: URL? {
         return Environment.current.urlProvider.privacy
     }
-    
+
     let windowUUID: UUID
     init(settings: SettingsTableViewController) {
         self.windowUUID = settings.windowUUID
         super.init()
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         setUpAndPushSettingsContentViewController(navigationController, url: self.url, windowUUID: windowUUID)
         Analytics.shared.navigation(.open, label: .privacy)
@@ -178,7 +178,7 @@ final class EcosiaTermsSetting: Setting {
     override var url: URL? {
         return Environment.current.urlProvider.terms
     }
-    
+
     let windowUUID: UUID
     init(settings: SettingsTableViewController) {
         self.windowUUID = settings.windowUUID

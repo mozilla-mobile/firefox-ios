@@ -53,7 +53,7 @@ class SiteTableViewController: UIViewController,
             SiteTableViewHeader.self,
             forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier
         )
-        
+
         /* Enable layout margins
         table.layoutMargins = .zero
         */

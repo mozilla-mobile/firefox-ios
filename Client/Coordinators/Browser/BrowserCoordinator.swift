@@ -187,8 +187,6 @@ class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
-        // Ecosia: Add Referrals route
-        case 
         case let .searchQuery(query):
             handle(query: query)
             return true
@@ -305,7 +303,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func handleSettings(with section: Route.SettingsSection) -> Bool {
-        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return false // route is handled with existing child coordinator
         }
 
@@ -434,7 +432,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFakespotFlow(productURL: URL) {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
             return // flow is already handled
         }
         let coordinator = FakespotCoordinator(router: router)
@@ -504,7 +502,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTabTray() {
-        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator}) else {
+        guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
 

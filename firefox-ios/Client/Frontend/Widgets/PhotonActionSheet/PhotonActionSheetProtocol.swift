@@ -22,7 +22,7 @@ extension PhotonActionSheetProtocol {
                           from view: UIView) {
         // TODO: Regression testing needed here.
         guard let uuid = view.currentWindowUUID else { return }
-        
+
         // Ecosia: Ecosia: custom UI/UX for main menu
         guard !viewModel.isMainMenu else {
 

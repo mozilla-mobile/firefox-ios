@@ -136,6 +136,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - .build/
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
   - firefox-ios/Client/Generated
+  # Ecosia: Include persisted generated
+  - firefox-ios/Client/Ecosia/PersistedGenerated
   - firefox-ios/fastlane/
   - firefox-ios/FxA
   - firefox-ios/FxAClient

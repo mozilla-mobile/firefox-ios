@@ -69,7 +69,7 @@ struct OpenTabsView: View {
             /* Ecosia: Update image and color
             Image(decorative: StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white)
             */
-            Image("openEcosia")
+            Image(decorative: "openEcosia")
                 .foregroundColor(.init("PrimaryText"))
             Text("Open Firefox") // TODO Ecosia Upgrade: Don't we need to update this text? (was already Firefox, prbably should use `String.OpenFirefoxLabel`)
                 /* Ecosia: update color
@@ -99,7 +99,7 @@ struct OpenTabsView: View {
                         /* Ecosia: Update image
                         Image(decorative: StandardImageIdentifiers.Small.externalLink)
                         */
-                        Image("openEcosia")
+                        Image(decorative: "openEcosia")
                         Text(String.OpenFirefoxLabel)
                             /* Ecosia: Update color
                             .foregroundColor(Color.white).lineLimit(1)
@@ -124,7 +124,7 @@ struct OpenTabsView: View {
                             Image(decorative: StandardImageIdentifiers.Small.externalLink)
                                 .foregroundColor(Color.white)
                             */
-                            Image("openEcosia")
+                            Image(decorative: "openEcosia")
                                 .foregroundColor(.init("PrimaryText"))
                                 .frame(width: 16, height: 16)
                             Text(

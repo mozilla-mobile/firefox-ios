@@ -18,19 +18,19 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
     static var current: String? {
         items.first(where: { $0.0 == User.shared.adultFilter }).map { $0.1 }
     }
-    
+
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init()
     }
-    
+
     required init?(coder: NSCoder) {
         self.windowUUID = nil
         super.init(coder: coder)
     }
-    
+
     // MARK: - Themeable Properties
-    
+
     let windowUUID: WindowUUID?
     var currentWindowUUID: Common.WindowUUID? { return windowUUID }
     var themeManager: ThemeManager { AppContainer.shared.resolve() }

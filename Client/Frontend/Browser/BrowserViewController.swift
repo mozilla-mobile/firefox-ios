@@ -1056,7 +1056,7 @@ class BrowserViewController: UIViewController,
         libraryViewController.setupOpenPanel(panelType: panel ?? . bookmarks)
 
         // Reset history panel pagination to get latest history visit
-        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: {$0.panelType == .history}),
+        if let historyPanel = libraryViewController.viewModel.panelDescriptors.first(where: { $0.panelType == .history }),
            let vcPanel = historyPanel.viewController as? HistoryPanel {
             vcPanel.viewModel.shouldResetHistory = true
         }
@@ -1579,8 +1579,7 @@ class BrowserViewController: UIViewController,
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let selectedTabWebview = tabManager.selectedTab?.webView
-        let controller = helper.createActivityViewController(selectedTabWebview) {
-            [unowned self] completed, activityType in
+        let controller = helper.createActivityViewController(selectedTabWebview) { [unowned self] completed, activityType in
             switch activityType {
             case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
@@ -1827,8 +1826,7 @@ class BrowserViewController: UIViewController,
     }
 
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
-        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) {
-            existingCard, error in
+        self.profile.autofill.checkForCreditCardExistance(cardNumber: fieldValues.ccNumberLast4) { existingCard, error in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
                     if CoordinatorFlagManager.isCredentialAutofillCoordinatorEnabled {
@@ -2278,7 +2276,7 @@ extension BrowserViewController: TabManagerDelegate {
         bottomContentStackView.removeAllArrangedViews()
         if let bars = selected?.bars {
             bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded()})
+                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
             }
         }
 
@@ -2823,7 +2821,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }

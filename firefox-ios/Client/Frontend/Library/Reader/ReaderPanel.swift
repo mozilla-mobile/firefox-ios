@@ -336,7 +336,7 @@ class ReadingListPanel: UITableViewController,
         return ReaderPanelEmptyStateView(windowUUID: self.windowUUID)
     }()
      */
-    
+
     @objc
     fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }

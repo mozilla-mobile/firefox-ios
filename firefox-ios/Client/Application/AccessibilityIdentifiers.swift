@@ -816,7 +816,7 @@ public struct AccessibilityIdentifiers {
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
     }
-    
+
     // Ecosia: Custom accessibility identifiers
     struct Ecosia {
         static let logo = "ecosia-logo"

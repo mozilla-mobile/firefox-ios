@@ -94,7 +94,7 @@ class SearchViewController: SiteTableViewController,
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
         */
         super.init(profile: profile, windowUUID: tabManager.windowUUID, style: .insetGrouped)
-        
+
         viewModel.delegate = self
 
         tableView.sectionHeaderTopPadding = 0
@@ -618,7 +618,7 @@ class SearchViewController: SiteTableViewController,
                 }
             }
         }
-        
+
         // Ecosia: Update cell background
         cell.backgroundColor = .legacyTheme.ecosia.ntpImpactBackground
     }

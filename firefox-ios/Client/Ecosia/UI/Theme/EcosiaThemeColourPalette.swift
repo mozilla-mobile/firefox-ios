@@ -28,16 +28,16 @@ public struct EcosiaDarkTheme: Theme {
 }
 
 private class EcosiaDarkColourPalette: EcosiaLightColourPalette {
-    
+
     override var fallbackTheme: Theme {
         DarkTheme()
     }
-    
+
     override var layer1: UIColor { .legacyTheme.ecosia.primaryBackground }
 }
 
 private class EcosiaLightColourPalette: ThemeColourPalette {
-    
+
     // TODO Ecosia Upgrade: Review new colors and older ones that are no longer on the protocol
     var layerInformation: UIColor { fallbackTheme.colors.layerInformation }
     var layerSuccess: UIColor { fallbackTheme.colors.layerSuccess }

@@ -182,7 +182,7 @@ class OneLineTableViewCell: UITableViewCell,
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.iconSecondary
         leftImageView.tintColor = theme.colors.textPrimary
-        
+
         // Ecosia: update tint color
         tintColor = UIColor.legacyTheme.ecosia.primaryButton
     }

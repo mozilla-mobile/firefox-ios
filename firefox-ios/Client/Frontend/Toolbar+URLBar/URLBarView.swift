@@ -267,7 +267,7 @@ class URLBarView: UIView,
 
     var profile: Profile
     let windowUUID: WindowUUID
-    
+
     /* Ecosia: Remove private mode badge
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
         imageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
