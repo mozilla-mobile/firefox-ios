@@ -274,11 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Tartalomkövetők blokkolása";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message" = "Ez segít a Mozillának az aktív felhasználók megbecslésében.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Napi használati ping";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Sötét";
 
 /* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Az összeomlás-jelentések lehetővé teszik a böngésző hibáinak diagnosztizálását és javítását.";
+"Settings.detailTextCrashReports.V2" = "Ez segít diagnosztizálni és javítani a böngészővel kapcsolatos problémákat.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "A %@ elküldi a címsávba írt szöveget a keresőszolgáltatásának.";
