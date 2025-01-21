@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tywyll";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Mae adroddiadau chwalu'n ein galluogi i wneud diagnosis a thrwsio problemau gyda'r porwr.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "Bydd %@ yn anfon yr hyn rydych yn ei deipio yn y bar cyfeiriad i'ch peiriant chwilio.";
 

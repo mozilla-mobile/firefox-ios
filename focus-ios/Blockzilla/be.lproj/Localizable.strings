@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Цёмная";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Справаздачы аб збоях дазваляюць дыягнаставаць і выпраўляць праблемы з браўзерам.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ будзе адпраўляць правайдару пошуку тэкст, які вы ўводзіце ў адрасны радок.";
 
