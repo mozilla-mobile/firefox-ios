@@ -26511,6 +26511,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
+				kind = exactVersion;
 				version = 136.0.20250121100536;
 			};
 		};
