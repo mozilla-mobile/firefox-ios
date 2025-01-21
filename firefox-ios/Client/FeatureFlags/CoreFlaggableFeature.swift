@@ -13,7 +13,6 @@ enum CoreFeatureFlagID {
     case adjustEnvironmentProd
     case useMockData
     case useStagingContileAPI
-    case useStagingSponsoredPocketStoriesAPI
     case useStagingFakespotAPI
 }
 
