@@ -33,4 +33,9 @@ extension XCTestCase {
         let returnValue = try await asyncMethod()
         return try XCTUnwrap(returnValue, file: file, line: line)
     }
+
+    /// Helper function to cast a value to `AnyHashable`.
+    func asAnyHashable<T>(_ value: T) -> AnyHashable? {
+        return value as? AnyHashable
+    }
 }
