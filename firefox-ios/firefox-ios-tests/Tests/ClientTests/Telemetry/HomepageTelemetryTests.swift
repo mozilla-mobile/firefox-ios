@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Glean
 import XCTest
 
 @testable import Client
@@ -12,30 +11,30 @@ final class HomepageTelemetryTests: XCTestCase {
         super.setUp()// Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
         // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     func testPrivateModeShortcutToggleTappedInNormalMode() throws {
-        let subject = HomepageTelemetry()
+        let mockWrapper = MockGleanWrapper()
+        let subject = HomepageTelemetry(gleanWrapper: mockWrapper)
 
         subject.sendHomepageTappedTelemetry(enteringPrivateMode: true)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Homepage.privateModeToggle)
+        XCTAssertEqual(mockWrapper.recordEventCalled, 1)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Homepage.privateModeToggle.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private_mode"], "true")
+        let savedEvent = try XCTUnwrap(mockWrapper.savedEvent as? GleanEvent)
+        XCTAssertEqual(savedEvent.extra?["is_private_mode"], "true")
     }
 
     func testPrivateModeShortcutToggleTappedInPrivateMode() throws {
-        let subject = HomepageTelemetry()
+        let mockWrapper = MockGleanWrapper() // Use the existing MockGleanWrapper
+        let subject = HomepageTelemetry(gleanWrapper: mockWrapper)
 
         subject.sendHomepageTappedTelemetry(enteringPrivateMode: false)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Homepage.privateModeToggle)
+        XCTAssertEqual(mockWrapper.recordEventCalled, 1)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Homepage.privateModeToggle.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private_mode"], "false")
+        let savedEvent = try XCTUnwrap(mockWrapper.savedEvent as? GleanEvent)
+        XCTAssertEqual(savedEvent.extra?["is_private_mode"], "false")
     }
 
     func testGleanWrapperIntegration() throws {
@@ -52,5 +51,13 @@ final class HomepageTelemetryTests: XCTestCase {
 
         // Verify that the event was recorded
         XCTAssertNotNil(mockWrapper.savedEvent)
+    }
+}
+
+class GleanEvent {
+    let extra: [String: String]?
+
+    init(extra: [String: String]?) {
+        self.extra = extra
     }
 }
