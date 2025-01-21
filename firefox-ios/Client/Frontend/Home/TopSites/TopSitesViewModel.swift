@@ -80,10 +80,8 @@ class TopSitesViewModel {
         // Bookmarks from topSites
         let isBookmarkedSite = profile.places.isBookmarked(url: homeTopSite.site.url).value.successValue ?? false
         if isBookmarkedSite {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .open,
-                                         object: .bookmark,
-                                         value: .openBookmarksFromTopSites)
+            let bookmarksTelemetry = BookmarksTelemetry()
+            bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.topSites)
         }
 
         TelemetryWrapper.recordEvent(category: .action,

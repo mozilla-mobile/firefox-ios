@@ -504,6 +504,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
+        - lint_config_file: ""  # Don't pass a config file to make use of nested configurations
     - deploy-to-bitrise-io@2.9.2: {}
     - script@1:
         inputs:

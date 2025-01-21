@@ -6,6 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 import Shared
+import Glean
 
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
@@ -168,6 +169,9 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         technicalDataSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
+            if !value {
+                GleanMetrics.Pings.shared.onboardingOptOut.submit()
+            }
             TermsOfServiceTelemetry().technicalInteractionDataSwitched(to: value)
         }
 
