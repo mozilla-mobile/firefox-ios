@@ -287,3 +287,14 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         configure()
     }
 }
+
+// MARK: UIViewController setup
+extension TermsOfServiceViewController {
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+}
