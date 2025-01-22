@@ -97,8 +97,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         kvoToken?.invalidate()
     }
 
-    func configure(state: MessageCardState, theme: Theme) {
-        applyGleanMessage(with: state.title, description: state.description, buttonLabel: state.buttonLabel)
+    func configure(with config: MessageCardConfiguration, theme: Theme) {
+        applyGleanMessage(with: config.title, description: config.description, buttonLabel: config.buttonLabel)
         applyTheme(theme: theme)
         ctaButton.applyTheme(theme: theme)
     }

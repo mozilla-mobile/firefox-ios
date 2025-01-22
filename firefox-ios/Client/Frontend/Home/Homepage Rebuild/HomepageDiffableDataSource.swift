@@ -23,7 +23,7 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header(HeaderState)
-        case messageCard(MessageCardState)
+        case messageCard(MessageCardConfiguration)
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
@@ -51,9 +51,10 @@ final class HomepageDiffableDataSource:
         snapshot.appendSections([.header])
         snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
-        // TODO: FXIOS-11133 - Handle whether to show / hide message card from message card manager
-        snapshot.appendSections([.messageCard])
-        snapshot.appendItems([.messageCard(state.messageState)], toSection: .messageCard)
+        if let configuration = state.messageState.messageCardConfiguration {
+            snapshot.appendSections([.messageCard])
+            snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
+        }
 
         if let topSites = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(state.topSitesState.numberOfTilesPerRow)])
