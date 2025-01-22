@@ -998,12 +998,9 @@ public class RustLogins: LoginsProtocol, KeyManager {
     */
     public func getKey() throws -> Data {
         let rustKeys = RustLoginEncryptionKeys()
-        let (key, _) = getKeychainData(rustKeys: rustKeys)
-
-        guard let keyData = key?.data(using: .utf8) else {
+        guard let keyData = rustKeys.keychain.data(forKey: rustKeys.loginPerFieldKeychainKey) else {
             throw LoginsStoreError.MissingKey
         }
-
         return keyData
     }
 }
