@@ -29,13 +29,18 @@ class ShareToolbarTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
                 app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
+                app.staticTexts["Orientation"]
             ]
         )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["Layout"])
+        }
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.staticTexts["Options"])
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Print Options"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864277
@@ -57,12 +62,18 @@ class ShareToolbarTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
+                app.buttons["Redo"]
             ]
         )
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.buttons["PKPalette-Multicolor-Swatch"])
+        }
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.buttons["autofill"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Colour picker"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864276
@@ -92,13 +103,18 @@ class ShareToolbarTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
                 app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
+                app.staticTexts["Orientation"]
             ]
         )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["Layout"])
+        }
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.staticTexts["Options"])
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Print Options"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864307
@@ -126,12 +142,18 @@ class ShareToolbarTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
+                app.buttons["Redo"]
             ]
         )
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.buttons["PKPalette-Multicolor-Swatch"])
+        }
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.buttons["autofill"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Colour picker"])
+        }
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
@@ -141,13 +163,21 @@ class ShareToolbarTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            app.collectionViews.cells[option].waitAndTap()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 
     private func tapToolbarShareButtonAndSelectOption(option: String) {
         navigator.openURL(url_3)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            app.collectionViews.cells[option].waitAndTap()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 }
