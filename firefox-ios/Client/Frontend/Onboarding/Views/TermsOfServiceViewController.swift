@@ -111,6 +111,14 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     }
 
     // MARK: - View setup
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     private func configure() {
         agreementContent.removeAllArrangedViews()
         let termsOfServiceLink = String(format: .Onboarding.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
@@ -285,16 +293,5 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         subtitleLabel.textColor = theme.colors.textSecondary
         confirmationButton.applyTheme(theme: theme)
         configure()
-    }
-}
-
-// MARK: UIViewController setup
-extension TermsOfServiceViewController {
-    override var shouldAutorotate: Bool {
-        return false
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
     }
 }
