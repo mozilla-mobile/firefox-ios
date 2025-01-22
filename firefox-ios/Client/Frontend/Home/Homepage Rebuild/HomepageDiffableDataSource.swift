@@ -56,8 +56,8 @@ final class HomepageDiffableDataSource:
         snapshot.appendItems([.messageCard(state.messageState)], toSection: .messageCard)
 
         if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
-            snapshot.appendSections([.topSites(state.topSitesState.numberOfRows)])
-            snapshot.appendItems(topSites, toSection: .topSites(state.topSitesState.numberOfRows))
+            snapshot.appendSections([.topSites(numberOfCellsPerRow)])
+            snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
         }
 
         if let stories = getPocketStories(with: state.pocketState) {

@@ -207,7 +207,7 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
-        guard self.homepageState != state else { return }
+        self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
         dataSource?.updateSnapshot(state: state, numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth))
     }
@@ -308,8 +308,7 @@ final class HomepageViewController: UIViewController,
 
             return sectionProvider.createLayoutSection(
                 for: section,
-                with: environment.traitCollection,
-                size: environment.container.contentSize
+                with: environment.traitCollection
             )
         }
         return layout

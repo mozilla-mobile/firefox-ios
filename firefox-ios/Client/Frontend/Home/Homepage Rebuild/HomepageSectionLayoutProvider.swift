@@ -67,19 +67,17 @@ final class HomepageSectionLayoutProvider {
 
     func createLayoutSection(
         for section: HomepageSection,
-        with traitCollection: UITraitCollection,
-        size: CGSize
+        with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
         case .header:
             return createHeaderSectionLayout(for: traitCollection)
         case .messageCard:
             return createMessageCardSectionLayout(for: traitCollection)
-        case .topSites(let numberOfRows):
+        case .topSites(let numberOfTilesPerRow):
             return createTopSitesSectionLayout(
                 for: traitCollection,
-                size: size,
-                numberOfRows: numberOfRows
+                numberOfTilesPerRow: numberOfTilesPerRow
             )
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
@@ -176,16 +174,8 @@ final class HomepageSectionLayoutProvider {
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
-        size: CGSize,
-        numberOfRows: Int
+        numberOfTilesPerRow: Int
     ) -> NSCollectionLayoutSection {
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
-            availableWidth: size.width,
-            leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
-                traitCollection: traitCollection
-            )
-        )
-
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),
             heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
