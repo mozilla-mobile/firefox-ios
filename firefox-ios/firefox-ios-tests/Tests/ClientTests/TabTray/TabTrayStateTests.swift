@@ -4,11 +4,11 @@
 
 import Redux
 import XCTest
+import Common
 
 @testable import Client
 
 final class TabTrayStateTests: XCTestCase {
-    
     func testInitialState() {
         let initialState = createSubject()
         
@@ -229,6 +229,7 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
     
+    //test for unimplemented TabPanelViewActionType
     func testCloseTabAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
@@ -243,6 +244,23 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
+    }
+    
+    func testDefaultState() {
+        let initialState = createSubject()
+        let reducer = tabTrayReducer()
+        
+        let unknownAction = getUnknownAction()
+        let newState = reducer(initialState, unknownAction)
+        
+        XCTAssertEqual(newState, initialState, "State should remain unchanged when an unknown action is passed")
+        XCTAssertEqual(initialState.isPrivateMode, newState.isPrivateMode)
+        XCTAssertEqual(initialState.selectedPanel, newState.selectedPanel)
+        XCTAssertEqual(initialState.hasSyncableAccount, newState.hasSyncableAccount)
+        XCTAssertEqual(initialState.shouldDismiss, newState.shouldDismiss)
+        XCTAssertEqual(initialState.shareURL, newState.shareURL)
+        XCTAssertEqual(initialState.normalTabsCount, newState.normalTabsCount)
+        XCTAssertEqual(initialState.showCloseConfirmation, newState.showCloseConfirmation)
     }
 
     // MARK: - Private
@@ -264,6 +282,21 @@ final class TabTrayStateTests: XCTestCase {
     
     private func getTabPanelViewAction(for actionType: TabPanelViewActionType) -> TabPanelViewAction {
         return  TabPanelViewAction(panelType: .tabs, windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+    
+    private func getUnknownAction() -> UnknownMockAction {
+        return  UnknownMockAction(windowUUID: .XCTestDefaultUUID, actionType: MockActionType())
+    }
+    
+    private class UnknownMockAction: Action {
+        override init(windowUUID: WindowUUID, actionType: ActionType) {
+             super.init(windowUUID: windowUUID,
+                        actionType: actionType)
+        }
+    }
+    
+    private struct MockActionType: ActionType {
+        let description = "Unknown Action"
     }
 }
 
