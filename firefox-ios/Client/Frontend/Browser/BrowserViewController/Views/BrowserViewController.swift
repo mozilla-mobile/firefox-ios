@@ -1937,6 +1937,12 @@ class BrowserViewController: UIViewController,
             // Ensure we do have a URL from that observer
             guard let url = webView.url else { return }
 
+            // Security safety check (Bugzilla #1933079)
+            if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+                tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
+                return
+            }
+
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
