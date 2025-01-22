@@ -28,6 +28,12 @@
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       shouldUseLaunchSchemeArgsEnv = "YES"
       systemAttachmentLifetime = "keepAlways">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:firefox-ios-tests/Tests/L10nSnapshotTests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -57,6 +63,57 @@
                referenceType = "1">
             </LocationScenarioReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7BEB64401C7345600092C02E"
+               BuildableName = "L10nSnapshotTests.xctest"
+               BlueprintName = "L10nSnapshotTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SelectedTests>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/test3ReloadButtonContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testBookmarksTableContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testETPperSite()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testHistoryTableContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testIntro()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testMenuOnTopSites()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testPrivateBrowsingTabsEmptyState()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testSettings()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testSettingsETP()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testTakeMarketingScreenshots()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testTopSitesMenu()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testWebViewAuthenticationDialog()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite1SnapshotTests/testWebViewContextMenu()">
+               </Test>
+            </SelectedTests>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -85,15 +142,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7BEB64401C7345600092C02E"
-            BuildableName = "L10nSnapshotTests.xctest"
-            BlueprintName = "L10nSnapshotTests"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "FirefoxBetaEnterprise">

@@ -669,6 +669,7 @@
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
+		78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */; };
 		78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
 		7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */; };
@@ -7361,6 +7362,7 @@
 		78784AF7A74084713651DC6D /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
 		78CD409D8D95F94C1738A444 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = L10nSnapshotTests.xctestplan; sourceTree = "<group>"; };
 		78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsTest.swift; sourceTree = "<group>"; };
 		78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestTest.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		797548C8B7F6A801A090D219 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -13687,6 +13689,7 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
@@ -15645,6 +15648,7 @@
 				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */,
 				1D91C1842CF11EA500B24960 /* disconnect-block-cryptomining.json in Resources */,
+				78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
 				E1AF3562286DE5F800960045 /* Smoketest2.xctestplan in Resources */,
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,

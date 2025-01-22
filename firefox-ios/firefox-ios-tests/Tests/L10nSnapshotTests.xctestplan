@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "7F6634E8-01BE-4D91-A69C-2535D9BA6F5C",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "selectedTests" : [
+        "L10nSuite1SnapshotTests\/test3ReloadButtonContextMenu()",
+        "L10nSuite1SnapshotTests\/testBookmarksTableContextMenu()",
+        "L10nSuite1SnapshotTests\/testETPperSite()",
+        "L10nSuite1SnapshotTests\/testHistoryTableContextMenu()",
+        "L10nSuite1SnapshotTests\/testIntro()",
+        "L10nSuite1SnapshotTests\/testMenuOnTopSites()",
+        "L10nSuite1SnapshotTests\/testPrivateBrowsingTabsEmptyState()",
+        "L10nSuite1SnapshotTests\/testSettings()",
+        "L10nSuite1SnapshotTests\/testSettingsETP()",
+        "L10nSuite1SnapshotTests\/testTakeMarketingScreenshots()",
+        "L10nSuite1SnapshotTests\/testTopSitesMenu()",
+        "L10nSuite1SnapshotTests\/testWebViewAuthenticationDialog()",
+        "L10nSuite1SnapshotTests\/testWebViewContextMenu()",
+        "L10nSuite2SnapshotTests\/testFxASignInPage()",
+        "L10nSuite2SnapshotTests\/testLoginDetails()",
+        "L10nSuite2SnapshotTests\/testLongPressOnTextOptions()",
+        "L10nSuite2SnapshotTests\/testMenuOnWebPage()",
+        "L10nSuite2SnapshotTests\/testPageMenuOnWebPage()",
+        "L10nSuite2SnapshotTests\/testPanelsEmptyState()",
+        "L10nSuite2SnapshotTests\/testURLBar()",
+        "L10nSuite2SnapshotTests\/testURLBarContextMenu()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "7BEB64401C7345600092C02E",
+        "name" : "L10nSnapshotTests"
+      }
+    }
+  ],
+  "version" : 1
+}
