@@ -147,6 +147,7 @@ class TrackingProtectionViewController: UIViewController,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         scrollView.delegate = self
+        updateViewDetails()
     }
 
     override func viewDidLayoutSubviews() {
@@ -160,7 +161,8 @@ class TrackingProtectionViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateViewDetails()
+        updateBlockedTrackersCount()
+        updateConnectionStatus()
         applyTheme()
         getCertificates(for: model.url) { [weak self] certificates in
             if let certificates {
@@ -402,6 +404,7 @@ class TrackingProtectionViewController: UIViewController,
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
+        settingsLinkButton.applyUnderline(underlinedText: model.settingsButtonTitle)
     }
 
     private func setupProtectionSettingsView() {
@@ -435,9 +438,6 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.setupDetails(subtitle: model.websiteTitle,
                                      title: model.displayTitle,
                                      icon: headerIcon)
-
-        updateBlockedTrackersCount()
-        updateConnectionStatus()
 
         toggleView.setupDetails(isOn: !model.isURLSafelisted())
         model.isProtectionEnabled = toggleView.toggleIsOn
@@ -496,14 +496,13 @@ class TrackingProtectionViewController: UIViewController,
         connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
         trackersView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
-            trackersBlockedLabelA11yId: model.trackersBlockedLabelA11yId,
+            trackersBlockedButtonA11yId: model.trackersBlockedButtonA11yId,
             shieldImageA11yId: model.settingsA11yId)
         connectionStatusView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
-            securityStatusLabelA11yId: model.securityStatusLabelA11yId)
+            securityStatusButtonA11yId: model.securityStatusButtonA11yId)
         toggleView.setupAccessibilityIdentifiers(
-            toggleViewTitleLabelA11yId: model.toggleViewTitleLabelA11yId,
-            toggleViewBodyLabelA11yId: model.toggleViewBodyLabelA11yId)
+            toggleViewLabelsContainerA11yId: model.toggleViewContainerA11yId)
         headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
                                            closeButtonA11yId: model.closeButtonA11yId)
         clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId

@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-    lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -37,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
+    lazy var gleanLifecycleObserver = GleanLifecycleObserver()
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -167,7 +167,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
                 self?.profile.cleanupHistoryIfNeeded()
             }
-            self?.ratingPromptManager.updateData()
         }
 
         DispatchQueue.global().async { [weak self] in

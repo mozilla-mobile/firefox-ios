@@ -142,7 +142,7 @@ final class RouteBuilder: FeatureFlaggable {
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
-            RatingPromptManager.isBrowserDefault = true
+            DefaultBrowserUtil.isBrowserDefault = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
         } else {
@@ -158,8 +158,7 @@ final class RouteBuilder: FeatureFlaggable {
 
         // If the user activity has a webpageURL, it's a deep link or an old history item.
         // Use the URL to create a new search tab.
-        if let url = userActivity.webpageURL,
-           isBrowsingActivity(userActivity) {
+        if let url = userActivity.webpageURL {
             return .search(url: url, isPrivate: false)
         }
 
@@ -204,15 +203,6 @@ final class RouteBuilder: FeatureFlaggable {
             }
         case .qrCode:
             return .action(action: .showQRCode)
-        }
-    }
-
-    private func isBrowsingActivity(_ userActivity: NSUserActivity) -> Bool {
-        if featureFlags.isFeatureEnabled(.universalLinks, checking: .buildOnly) {
-            return userActivity.activityType == NSUserActivityTypeBrowsingWeb ||
-            userActivity.activityType == browsingActivityType
-        } else {
-            return true
         }
     }
 

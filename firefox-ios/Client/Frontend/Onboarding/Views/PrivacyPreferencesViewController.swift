@@ -6,6 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 import Shared
+import Glean
 
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
@@ -163,14 +164,19 @@ final class PrivacyPreferencesViewController: UIViewController,
     private func setupCallbacks() {
         crashReportsSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendCrashReports)
+            TermsOfServiceTelemetry().automaticCrashReportsSwitched(to: value)
         }
 
         technicalDataSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
+            if !value {
+                GleanMetrics.Pings.shared.onboardingOptOut.submit()
+            }
+            TermsOfServiceTelemetry().technicalInteractionDataSwitched(to: value)
         }
 
         crashReportsSwitch.learnMoreCallBack = { [weak self] in
-            self?.presentLink(with: SupportUtils.URLForTopic("mobile-crash-reports"))
+            self?.presentLink(with: SupportUtils.URLForTopic("ios-crash-reports"))
         }
         technicalDataSwitch.learnMoreCallBack = { [weak self] in
             self?.presentLink(with: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"))

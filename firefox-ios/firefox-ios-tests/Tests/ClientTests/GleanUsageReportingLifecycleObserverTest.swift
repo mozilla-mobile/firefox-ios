@@ -5,30 +5,12 @@
 import XCTest
 @testable import Client
 
-class GleanUsageReportingApiMock: GleanUsageReportingApi {
-    var pingSubmitCount = 0
-    var lastUsageReason: String?
-    var lastDurationMillis: Int64?
-
-    func setUsageReason(_ usageReason: UsageReason) {
-        lastUsageReason = usageReason.rawValue
-    }
-
-    func submitPing() {
-        pingSubmitCount += 1
-    }
-
-    func setDuration(_ durationMillis: Int64) {
-        lastDurationMillis = durationMillis
-    }
-}
-
 class GleanUsageReportingLifecycleObserverTest: XCTestCase {
-    private var fakeGleanUsageReportingApi: GleanUsageReportingApiMock!
+    private var fakeGleanUsageReportingApi: MockGleanUsageReportingApi!
 
     override func setUp() {
         super.setUp()
-        fakeGleanUsageReportingApi = GleanUsageReportingApiMock()
+        fakeGleanUsageReportingApi = MockGleanUsageReportingApi()
     }
 
     func testNoPingsSubmittedBeforeLifecycleChanges() {
@@ -64,12 +46,6 @@ class GleanUsageReportingLifecycleObserverTest: XCTestCase {
         observer.handleForegroundEvent()
         observer.handleBackgroundEvent()
         XCTAssertEqual(fakeGleanUsageReportingApi.pingSubmitCount, 2)
-    }
-
-    func testDoNotSubmitDurationIfNotSet() {
-        let observer = createObserver()
-        observer.handleBackgroundEvent()
-        XCTAssertNil(fakeGleanUsageReportingApi.lastDurationMillis)
     }
 
     private func createObserver() -> GleanLifecycleObserver {

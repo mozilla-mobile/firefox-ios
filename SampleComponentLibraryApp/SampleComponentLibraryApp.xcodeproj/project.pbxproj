@@ -241,10 +241,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8A2FE6782A55EE3F0036B6AF /* Build configuration list for PBXNativeTarget "SampleComponentLibraryApp" */;
 			buildPhases = (
+				8A2FE6922A55F1880036B6AF /* Swiftlint */,
 				8A2FE64A2A55EE3D0036B6AF /* Sources */,
 				8A2FE64C2A55EE3D0036B6AF /* Resources */,
 				8A2FE64B2A55EE3D0036B6AF /* Frameworks */,
-				8A2FE6922A55F1880036B6AF /* Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -321,7 +321,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

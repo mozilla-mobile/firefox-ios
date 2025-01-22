@@ -108,4 +108,53 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
         let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
         _ = await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
     }
+
+    private func saveBookmark(bookmark: FxBookmarkNode, parentFolderGUID: String) -> Deferred<Maybe<GUID?>>? {
+        guard let bookmark = bookmark as? BookmarkItemData else { return deferMaybe(nil) }
+
+        if bookmark.parentGUID == nil {
+            let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
+            return profile.places.createBookmark(parentGUID: parentFolderGUID,
+                                                 url: bookmark.url,
+                                                 title: bookmark.title,
+                                                 position: position).bind { result in
+                return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
+                                        : deferMaybe(result.successValue)
+            }
+        } else {
+            let position: UInt32? = parentFolderGUID == bookmark.parentGUID ? bookmark.position : nil
+            return profile.places.updateBookmarkNode(guid: bookmark.guid,
+                                                     parentGUID: parentFolderGUID,
+                                                     position: position,
+                                                     title: bookmark.title,
+                                                     url: bookmark.url).bind { result in
+                return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
+            }
+        }
+    }
+
+    private func saveFolder(bookmark: FxBookmarkNode, parentFolderGUID: String) -> Deferred<Maybe<GUID?>>? {
+        guard let folder = bookmark as? BookmarkFolderData else { return deferMaybe(nil) }
+
+        if folder.parentGUID == nil {
+            let bookmarksTelemetry = BookmarksTelemetry()
+            bookmarksTelemetry.addBookmarkFolder()
+
+            let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
+            return profile.places.createFolder(parentGUID: parentFolderGUID,
+                                               title: folder.title,
+                                               position: position).bind { result in
+                return result.isFailure ? deferMaybe(BookmarkDetailPanelError())
+                                        : deferMaybe(result.successValue)
+            }
+        } else {
+            let position: UInt32? = parentFolderGUID == folder.parentGUID ? folder.position : nil
+            return profile.places.updateBookmarkNode( guid: folder.guid,
+                                                      parentGUID: parentFolderGUID,
+                                                      position: position,
+                                                      title: folder.title).bind { result in
+                return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : deferMaybe(nil)
+            }
+        }
+    }
 }

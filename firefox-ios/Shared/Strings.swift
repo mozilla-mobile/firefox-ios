@@ -217,10 +217,10 @@ extension String {
                     value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
                 public static let ButtonTitle = MZLocalizedString(
-                    key: "Bookmarks.EmptyState.Root.ButtonTitle.v135",
+                    key: "Bookmarks.EmptyState.Root.ButtonTitle.v136",
                     tableName: "Bookmarks",
                     value: "Sign in to Sync",
-                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data")
+                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, \"Sync\" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS")
             }
             public struct Nested {
                 public static let Title = MZLocalizedString(
@@ -4957,6 +4957,19 @@ extension String {
 extension String {
     public struct Menu {
         public struct EnhancedTrackingProtection {
+            public struct AccessibilityLabels {
+                public static let CloseButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.CloseButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Close",
+                    comment: "The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view.")
+                public static let BackButton = MZLocalizedString(
+                    key: "MainMenu.Account.AccessibilityLabels.BackButton.v137",
+                    tableName: "EnhancedTrackingProtection",
+                    value: "Back",
+                    comment: "The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view.")
+            }
+
             public static let onTitle = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.On.Title.v128",
                 tableName: "EnhancedTrackingProtection",

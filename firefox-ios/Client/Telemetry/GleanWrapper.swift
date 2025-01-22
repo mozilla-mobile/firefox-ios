@@ -8,7 +8,6 @@ import Glean
 protocol GleanWrapper {
     func handleDeeplinkUrl(url: URL)
     func setUpload(isEnabled: Bool)
-    func submitPing()
 
     // MARK: Glean Metrics
 
@@ -20,6 +19,7 @@ protocol GleanWrapper {
     func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
+    func recordUrl(for metric: UrlMetricType, value: String)
 
     func incrementNumerator(for metric: RateMetricType, amount: Int32)
     func incrementDenominator(for metric: RateMetricType, amount: Int32)
@@ -31,6 +31,10 @@ protocol GleanWrapper {
                       timerId: GleanTimerId)
     func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
                                  timerId: GleanTimerId)
+
+    // MARK: Pings
+
+    func submit<ReasonCodesEnum>(ping: Ping<ReasonCodesEnum>) where ReasonCodesEnum: ReasonCodes
 }
 
 /// Glean wrapper to abstract Glean from our application
@@ -47,10 +51,6 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func setUpload(isEnabled: Bool) {
         glean.setCollectionEnabled(isEnabled)
-    }
-
-    func submitPing() {
-        GleanMetrics.Pings.shared.firstSession.submit()
     }
 
     // MARK: Glean Metrics
@@ -88,6 +88,10 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
+    func recordUrl(for metric: UrlMetricType, value: String) {
+        metric.set(value)
+    }
+
     // MARK: RateMetricType
 
     func incrementNumerator(for metric: RateMetricType, amount: Int32) {
@@ -112,5 +116,11 @@ struct DefaultGleanWrapper: GleanWrapper {
     func stopAndAccumulateTiming(for metric: TimingDistributionMetricType,
                                  timerId: GleanTimerId) {
         metric.stopAndAccumulate(timerId)
+    }
+
+    // MARK: Pings
+
+    func submit<ReasonCodesEnum>(ping: Ping<ReasonCodesEnum>) where ReasonCodesEnum: ReasonCodes {
+        ping.submit()
     }
 }

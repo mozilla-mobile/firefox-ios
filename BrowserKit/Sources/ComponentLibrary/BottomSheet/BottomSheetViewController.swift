@@ -259,7 +259,10 @@ public class BottomSheetViewController: UIViewController,
                 self.sheetView.transform = CGAffineTransform(translationX: 0, y: self.viewTranslation.y)
             })
         case .ended:
-            if viewTranslation.y < 200 {
+            let velocity = recognizer.velocity(in: view)
+            if viewTranslation.y >= 200 || viewTranslation.y >= contentView.bounds.height / 2 || velocity.y >= 700 {
+                dismissSheetViewController()
+            } else {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
                                usingSpringWithDamping: UX.springWithDamping,
@@ -268,8 +271,6 @@ public class BottomSheetViewController: UIViewController,
                                animations: {
                     self.sheetView.transform = .identity
                 })
-            } else {
-                dismissSheetViewController()
             }
         default:
             break

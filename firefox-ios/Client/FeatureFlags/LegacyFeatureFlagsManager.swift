@@ -158,15 +158,11 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         coreFeatures[.useMockData] = useMockData
 
         let useStagingContileAPI = CoreFlaggableFeature(withID: .useStagingContileAPI,
-                                                        enabledFor: [.beta, .developer])
-        let useStagingSponsoredPocketStoriesAPI = CoreFlaggableFeature(withID: .useStagingSponsoredPocketStoriesAPI,
-                                                                       enabledFor: [.beta, .developer])
-
+                                                        enabledFor: [.developer])
         let useStagingFakespotAPI = CoreFlaggableFeature(withID: .useStagingFakespotAPI,
                                                          enabledFor: [])
 
         coreFeatures[.useStagingContileAPI] = useStagingContileAPI
-        coreFeatures[.useStagingSponsoredPocketStoriesAPI] = useStagingSponsoredPocketStoriesAPI
         coreFeatures[.useStagingFakespotAPI] = useStagingFakespotAPI
     }
 }
