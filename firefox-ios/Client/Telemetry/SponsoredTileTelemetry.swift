@@ -9,10 +9,10 @@ import Storage
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events
 protocol SponsoredTileTelemetry {
-    func sendImpressionTelemetry(tile: SponsoredTile,
+    func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool)
-    func sendClickTelemetry(tile: SponsoredTile,
+    func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool)
 }
@@ -21,13 +21,13 @@ extension SponsoredTileTelemetry {
     func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool = false) {
-        sendImpressionTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
+        sendImpressionTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
     }
 
     func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool = false) {
-        sendClickTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
+        sendClickTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
     }
 }
 
@@ -80,6 +80,11 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
     func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool = false) {
+        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
+
         let extra = GleanMetrics.TopSites.ContileClickExtra(
             position: Int32(position),
             source: DefaultSponsoredTileTelemetry.source

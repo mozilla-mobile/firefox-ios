@@ -56,7 +56,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     func testLegacyImpressionTelemetry() throws {
         let subject = createSubject()
-        subject.sendImpressionTelemetry(tile: tile, position: 1)
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
@@ -90,7 +90,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     func testLegacyClickTelemetry() throws {
         let subject = createSubject()
-        subject.sendClickTelemetry(tile: tile, position: 1)
+        subject.sendClickTelemetry(tileSite: tileSite, position: 1)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)

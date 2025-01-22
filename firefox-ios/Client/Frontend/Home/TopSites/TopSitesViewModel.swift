@@ -69,12 +69,12 @@ class TopSitesViewModel {
         guard !hasSentImpressionForTile(homeTopSite) else { return }
 
         // Only sending sponsored tile impressions for now
-        guard let tile = homeTopSite.site as? SponsoredTile else { return }
+        guard homeTopSite.isSponsored else { return }
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: homeTopSite.site, position: position)
         } else {
-            sponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: homeTopSite.site, position: position)
         }
     }
 

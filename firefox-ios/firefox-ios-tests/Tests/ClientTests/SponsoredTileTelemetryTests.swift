@@ -31,7 +31,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
-        subject.sendImpressionTelemetry(tile: topSite, position: 2)
+        subject.sendImpressionTelemetry(tileSite: topSite, position: 2)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
@@ -54,7 +54,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
-        subject.sendClickTelemetry(tile: topSite, position: 3)
+        subject.sendClickTelemetry(tileSite: topSite, position: 3)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
