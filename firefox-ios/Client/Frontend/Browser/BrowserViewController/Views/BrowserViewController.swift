@@ -3718,6 +3718,11 @@ extension BrowserViewController: HomePanelDelegate {
                                 theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
+                let toolbarAction = ToolbarAction(
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.cancelEdit
+                )
+                store.dispatch(toolbarAction)
                 self.tabManager.selectTab(tab)
             }
         })
