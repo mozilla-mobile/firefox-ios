@@ -90,8 +90,12 @@ class OneLineTableViewCell: UITableViewCell,
         super.layoutSubviews()
         updateReorderControl()
 
+        // Position the accessory at the trailing edge of the cell, accounting for safe area and padding
         if let accessoryView {
-            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - UX.accessoryViewTrailingPadding
+            accessoryView.frame.origin.x = frame.width
+            - accessoryView.frame.width
+            - UX.accessoryViewTrailingPadding
+            - safeAreaInsets.right
         }
     }
 
