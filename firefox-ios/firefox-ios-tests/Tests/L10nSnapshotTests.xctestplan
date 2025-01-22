@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "E8531BAA-6B58-46CF-827B-7A30FEF28AD0",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testRepetitionMode" : "retryOnFailure",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "L10nPermissionStringsSnapshotTests",
+        "L10nPermissionStringsSnapshotTests\/testNSLocationWhenInUseUsageDescription()",
+        "ScreenGraphTest",
+        "ScreenGraphTest\/testSimpleToggleAction()",
+        "ScreenGraphTest\/testUserStateChanges()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "7BEB64401C7345600092C02E",
+        "name" : "L10nSnapshotTests"
+      }
+    }
+  ],
+  "version" : 1
+}
