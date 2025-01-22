@@ -183,7 +183,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-
     func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         featureFlags.set(feature: .bookmarksRefactor, to: true)
