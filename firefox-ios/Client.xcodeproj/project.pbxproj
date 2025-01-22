@@ -1256,6 +1256,7 @@
 		B2FEA68F2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEA68E2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift */; };
 		B2FEA6912B4661BE0058E616 /* AddressAutofillToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEA6902B4661BE0058E616 /* AddressAutofillToggle.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
+		BA03AE592D41715900C7FA7B /* MockMZKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA03AE582D41714B00C7FA7B /* MockMZKeychainWrapper.swift */; };
 		BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */; };
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
@@ -8443,6 +8444,7 @@
 		B9CF4F8ABA948EB090A67608 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		B9D74DA988462CC14EF29D8B /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Menu.strings; sourceTree = "<group>"; };
 		B9F246E38F80F257C59CEC4A /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		BA03AE582D41714B00C7FA7B /* MockMZKeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMZKeychainWrapper.swift; sourceTree = "<group>"; };
 		BA05405089CFDC6097258640 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoExtensionsTest.swift; sourceTree = "<group>"; };
 		BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebKit.swift; sourceTree = "<group>"; };
@@ -10643,6 +10645,7 @@
 		2FCAE21B1ABB51F800877008 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				BA03AE582D41714B00C7FA7B /* MockMZKeychainWrapper.swift */,
 				D37DE2821CA2047500A5EC69 /* CertStore.swift */,
 				28C4AB711AD42D4300D9ACE3 /* Clients.swift */,
 				2FCAE2411ABB531100877008 /* Cursor.swift */,
@@ -16023,6 +16026,7 @@
 				B2999FED2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift in Sources */,
 				15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */,
 				285D3B901B4386520035FD22 /* SQLiteQueue.swift in Sources */,
+				BA03AE592D41715900C7FA7B /* MockMZKeychainWrapper.swift in Sources */,
 				394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */,
 				B2999FEF2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,

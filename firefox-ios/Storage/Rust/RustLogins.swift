@@ -205,10 +205,21 @@ public enum LoginEncryptionKeyError: Error {
     case dbRecordCountVerificationError(String)
 }
 
+/// Running tests on Bitrise code that reads/writes to keychain silently fails.
+/// SecItemAdd status: -34018 - A required entitlement isn't present.
+/// This should be removed if we ever have keychain support on our CI.
+class KeychainManager {
+    static var shared: MZKeychainWrapper = {
+        AppConstants.isRunningTest
+            ? MockMZKeychainWrapper.shared
+            : MZKeychainWrapper.sharedClientAppContainerKeychain
+    }()
+}
+
 public class RustLoginEncryptionKeys {
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
 
-    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain = KeychainManager.shared
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 
