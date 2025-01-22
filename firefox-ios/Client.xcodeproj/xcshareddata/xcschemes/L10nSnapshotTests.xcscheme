@@ -28,6 +28,12 @@
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       shouldUseLaunchSchemeArgsEnv = "YES"
       systemAttachmentLifetime = "keepAlways">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:firefox-ios-tests/Tests/L10nSnapshotTests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -85,15 +91,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7BEB64401C7345600092C02E"
-            BuildableName = "L10nSnapshotTests.xctest"
-            BlueprintName = "L10nSnapshotTests"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "FirefoxBetaEnterprise">

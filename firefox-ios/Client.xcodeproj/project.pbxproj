@@ -7360,7 +7360,6 @@
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
 		78CD409D8D95F94C1738A444 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		78CD8C982D40BD4700CA1BBF /* L10nSnapshotTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = L10nSnapshotTests.xctestplan; path = "firefox-ios-tests/Tests/L10nSnapshotTests.xctestplan"; sourceTree = SOURCE_ROOT; };
-		78CD8C992D40BD8100CA1BBF /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = SOURCE_ROOT; };
 		78CD8C9B2D40BDBD00CA1BBF /* L10nSnapshotTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = L10nSnapshotTests.xctestplan; sourceTree = "<group>"; };
 		78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsTest.swift; sourceTree = "<group>"; };
 		78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestTest.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -11259,7 +11258,6 @@
 		7B3632D21C2983F000D12AF9 /* L10nSnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
-				78CD8C982D40BD4700CA1BBF /* L10nSnapshotTests.xctestplan */,
 				E40AFC641DD0F25500DA5651 /* L10nBaseSnapshotTests.swift */,
 				D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */,
 				E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */,
@@ -13690,7 +13688,6 @@
 			isa = PBXGroup;
 			children = (
 				78CD8C9B2D40BDBD00CA1BBF /* L10nSnapshotTests.xctestplan */,
-				78CD8C992D40BD8100CA1BBF /* TestPlan.xctestplan */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
@@ -15647,7 +15644,6 @@
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
-				78CD8C9A2D40BD8100CA1BBF /* TestPlan.xctestplan in Resources */,
 				1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */,
 				78CD8C9C2D40BDBD00CA1BBF /* L10nSnapshotTests.xctestplan in Resources */,
 				1D91C1842CF11EA500B24960 /* disconnect-block-cryptomining.json in Resources */,
