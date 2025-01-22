@@ -106,15 +106,19 @@ class RootViewControllerModel {
             lockIconButtonA11yId: "lockButton",
             lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
-            urlTextFieldA11yId: "urlTextField",
+            urlTextFieldA11yId: "urlTestField",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Large.lock,
+            lockIconNeedsTheming: false,
+            safeListedURLImageName: StandardImageIdentifiers.Small.notificationDotFill,
             url: url,
             droppableUrl: nil,
             searchTerm: nil,
             isEditing: false,
-            isScrollingDuringEdit: false,
-            shouldSelectSearchTerm: false)
+            didStartTyping: false,
+            shouldShowKeyboard: true,
+            shouldSelectSearchTerm: false
+        )
 
         // FXIOS-8947: Use scroll position
         return AddressToolbarContainerModel(

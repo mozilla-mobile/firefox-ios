@@ -249,6 +249,8 @@ class RootViewController: UIViewController,
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {}
 
+    func addressToolbarNeedsSearchReset() {}
+
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
