@@ -198,6 +198,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
     }
+}
 
 extension BookmarksPanelViewModelTests {
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
