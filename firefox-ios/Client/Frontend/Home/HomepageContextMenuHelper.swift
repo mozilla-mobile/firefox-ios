@@ -37,6 +37,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     init(
         viewModel: HomepageViewModel,
@@ -207,8 +208,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
 
             let url = URL(string: site.url)
             self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
-
-            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
+            self.bookmarksTelemetry.deleteBookmark(eventLabel: .activityStream)
         })
     }
 
@@ -232,8 +232,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                                                                  toApplication: .shared)
 
             self.delegate?.homePanelDidRequestBookmarkToast(url: nil, action: .add)
-
-            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
+            self.bookmarksTelemetry.addBookmark(eventLabel: .activityStream)
         })
     }
 

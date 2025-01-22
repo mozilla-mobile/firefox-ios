@@ -428,7 +428,7 @@ class BaseTestCase: XCTestCase {
         if #available(iOS 17, *) {
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         } else {
-            navigator.performAction(Action.CloseURLBarOpen)
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
         }
         mozWaitForElementToExist(app.tables["Context Menu"])

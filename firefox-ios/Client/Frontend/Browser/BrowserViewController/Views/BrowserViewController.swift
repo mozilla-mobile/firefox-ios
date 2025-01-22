@@ -272,7 +272,6 @@ class BrowserViewController: UIViewController,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
@@ -281,7 +280,7 @@ class BrowserViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.ratingPromptManager = ratingPromptManager
+        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
@@ -345,6 +344,9 @@ class BrowserViewController: UIViewController,
             guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
+
+        ratingPromptManager.updateData()
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     @objc
@@ -1932,6 +1934,12 @@ class BrowserViewController: UIViewController,
 
             // Ensure we do have a URL from that observer
             guard let url = webView.url else { return }
+
+            // Security safety check (Bugzilla #1933079)
+            if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+                tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
+                return
+            }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -3714,6 +3722,11 @@ extension BrowserViewController: HomePanelDelegate {
                                 theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
+                let toolbarAction = ToolbarAction(
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.cancelEdit
+                )
+                store.dispatch(toolbarAction)
                 self.tabManager.selectTab(tab)
             }
         })

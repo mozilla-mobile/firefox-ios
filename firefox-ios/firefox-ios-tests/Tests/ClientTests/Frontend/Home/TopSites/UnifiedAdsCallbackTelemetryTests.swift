@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import XCTest
 import Storage
 
@@ -11,16 +12,19 @@ import Storage
 class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     private var networking: MockContileNetworking!
     private var logger: MockLogger!
+    private var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
         networking = MockContileNetworking()
         logger = MockLogger()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
         networking = nil
         logger = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
@@ -50,10 +54,81 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(siteInfo.clickURL)")
     }
 
+    func testLegacyImpressionTelemetry() throws {
+        let subject = createSubject()
+        subject.sendImpressionTelemetry(tile: tile, position: 1)
+
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+
+        // Ensuring we call the right metrics type
+        let firstSavedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileImpressionExtra>
+        )
+        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileImpression)
+        let firstResultMetricType = type(of: firstSavedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
+                                                 resultMetric: firstResultMetricType)
+        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
+        let secondResultMetricType = type(of: secondSavedMetric)
+        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
+                                                       resultMetric: secondResultMetricType)
+        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+    }
+
+    func testLegacyClickTelemetry() throws {
+        let subject = createSubject()
+        subject.sendClickTelemetry(tile: tile, position: 1)
+
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 0)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 2)
+
+        // Ensuring we call the right metrics type
+        let firstSavedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.TopSites.ContileClickExtra>
+        )
+        let expectedFirstMetricType = type(of: GleanMetrics.TopSites.contileClick)
+        let firstResultMetricType = type(of: firstSavedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedFirstMetricType,
+                                                 resultMetric: firstResultMetricType)
+        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+
+        let secondSavedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[1] as? StringMetricType)
+        let expectedSecondMetricType = type(of: GleanMetrics.TopSites.contileAdvertiser)
+        let secondResultMetricType = type(of: secondSavedMetric)
+        let secondDebugMessage = TelemetryDebugMessage(expectedMetric: expectedSecondMetricType,
+                                                       resultMetric: secondResultMetricType)
+        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+    }
+
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsCallbackTelemetry {
-        let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking, logger: logger)
+        let sponsoredTileTelemetry = DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
+        let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking,
+                                                         logger: logger,
+                                                         sponsoredTileTelemetry: sponsoredTileTelemetry)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

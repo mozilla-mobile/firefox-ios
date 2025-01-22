@@ -47,7 +47,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case unifiedAds
     case unifiedSearch
-    case universalLinks
     case toolbarRefactor
     case toolbarOneTapNewTab
     case toolbarNavigationHint
@@ -138,7 +137,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
-                .universalLinks,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
                 .toolbarNavigationHint,

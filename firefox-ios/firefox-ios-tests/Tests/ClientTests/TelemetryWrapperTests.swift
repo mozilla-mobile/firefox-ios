@@ -16,7 +16,7 @@ class TelemetryWrapperTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         // Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to puth them in a state in which they can collect data.
+        // tests in order to put them in a state in which they can collect data.
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
@@ -29,15 +29,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     // MARK: - Bookmarks
-
-    func test_userAddedBookmarkFolder_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .bookmark,
-                                     value: .bookmarkAddFolder)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Bookmarks.folderAdd)
-    }
 
     func test_hasMobileBookmarks_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .information,
@@ -75,18 +66,6 @@ class TelemetryWrapperTests: XCTestCase {
         testQuantityMetricSuccess(metric: GleanMetrics.Bookmarks.mobileBookmarksCount,
                                   expectedValue: 13,
                                   failureMessage: "Incorrect mobile bookmarks quantity returned.")
-    }
-
-    func test_topSitesTileIsBookmarked_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .open,
-                                     object: .bookmark,
-                                     value: .openBookmarksFromTopSites)
-
-        testLabeledMetricSuccess(metric: GleanMetrics.Bookmarks.open)
-
-        let label = TelemetryWrapper.EventValue.openBookmarksFromTopSites.rawValue
-        XCTAssertNotNil(GleanMetrics.Bookmarks.open[label].testGetValue())
     }
 
     // MARK: - Top Site

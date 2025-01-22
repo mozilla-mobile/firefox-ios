@@ -13,15 +13,18 @@ protocol UnifiedAdsCallbackTelemetry {
 }
 
 final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
-    private var networking: ContileNetworking
-    private var logger: Logger
+    private let networking: ContileNetworking
+    private let logger: Logger
+    private let sponsoredTileTelemetry: SponsoredTileTelemetry
 
     init(
         networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry()
     ) {
         self.networking = networking
         self.logger = logger
+        self.sponsoredTileTelemetry = sponsoredTileTelemetry
     }
 
     /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
@@ -32,6 +35,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
 
         sendTelemetry(urlString: siteInfo.impressionURL, position: position)
+        sendLegacyImpressionTelemetry(tileSite: tileSite, position: position)
     }
 
     /// Click telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
@@ -42,6 +46,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
 
         sendTelemetry(urlString: siteInfo.clickURL, position: position)
+        sendLegacyClickTelemetry(tileSite: tileSite, position: position)
     }
 
     private func sendTelemetry(urlString: String, position: Int) {
@@ -77,5 +82,17 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
                            category: .legacyHomepage)
             }
         }
+    }
+
+    // MARK: Legacy telemetry
+    // FXIOS-11121 While we are migrating to the new Unified Ads telemetry system, we should
+    // keep sending the legacy telemetry Glean pings
+
+    private func sendLegacyImpressionTelemetry(tileSite: Site, position: Int) {
+        sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: true)
+    }
+
+    private func sendLegacyClickTelemetry(tileSite: Site, position: Int) {
+        sponsoredTileTelemetry.sendClickTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: true)
     }
 }

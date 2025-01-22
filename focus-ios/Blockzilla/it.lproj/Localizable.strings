@@ -274,11 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Blocca contenuti traccianti";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message" = "Questo consente a Mozilla di stimare il numero di utenti attivi.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping di utilizzo giornaliero";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Scuro";
 
 /* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "I rapporti sugli arresti anomali ci consentono di diagnosticare e risolvere problemi con il browser.";
+"Settings.detailTextCrashReports.V2" = "Questo ci aiuta a diagnosticare e risolvere problemi con il browser.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ invierà ciò che digiti nella barra degli indirizzi al motore di ricerca in uso.";

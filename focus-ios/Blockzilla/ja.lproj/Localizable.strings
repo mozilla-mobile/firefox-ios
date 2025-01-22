@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Dark";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "クラッシュレポートによって、ブラウザーの問題を診断し、修正することができます。";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
 

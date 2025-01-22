@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Dark";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Crash reports allow us diagnose and fix issues with the browser.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ will send what you type in the address bar to your search engine.";
 

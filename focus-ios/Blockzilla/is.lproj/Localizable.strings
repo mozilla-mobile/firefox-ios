@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Dökkt";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Hrunskýrslur gera okkur kleift að greina og laga vandamál í vafranum.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ mun senda það sem þú skrifar í slóðina yfir á leitarvélina þína.";
 

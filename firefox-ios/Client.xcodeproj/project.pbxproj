@@ -277,6 +277,8 @@
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
 		21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA46692B04130500AAAB2D /* TabsPanelState.swift */; };
 		21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */; };
+		21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */; };
+		21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */; };
 		21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */; };
 		21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */; };
 		21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */; };
@@ -666,6 +668,7 @@
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
+		78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */; };
 		78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
 		7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */; };
@@ -1051,8 +1054,6 @@
 		8ADC2A212A3399DC00543DAA /* YourRightsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A202A3399DC00543DAA /* YourRightsSetting.swift */; };
 		8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADEC6822A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift */; };
 		8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */; };
-		8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */; };
-		8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */; };
 		8AE0BF4F2819B10E00F33EC4 /* TopSitesSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0BF4E2819B10E00F33EC4 /* TopSitesSettingsViewController.swift */; };
 		8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */; };
 		8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */; };
@@ -1134,6 +1135,7 @@
 		8CC6170B2C358BAC001C7688 /* ActionToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC6170A2C358BAC001C7688 /* ActionToast.swift */; };
 		8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
+		8CDA04872D351783004C333C /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 8CDA04862D351783004C333C /* pings.yaml */; };
 		8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4312B8C76AE0026530B /* LoginStorage.swift */; };
 		8CE1E4372B8C76C80026530B /* LoginAutofillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4332B8C76C80026530B /* LoginAutofillView.swift */; };
 		8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4342B8C76C80026530B /* LoginListViewModel.swift */; };
@@ -2703,6 +2705,8 @@
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
 		21EA46692B04130500AAAB2D /* TabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelState.swift; sourceTree = "<group>"; };
 		21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayDiffableDataSourceTests.swift; sourceTree = "<group>"; };
+		21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTelemetry.swift; sourceTree = "<group>"; };
+		21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTelemetryTests.swift; sourceTree = "<group>"; };
 		21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsModel.swift; sourceTree = "<group>"; };
 		21F2A2D32B0D194A00626AEC /* TabsPanelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelStateTests.swift; sourceTree = "<group>"; };
 		21FA8FAD2AE856460013B815 /* TabsCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -7360,6 +7364,7 @@
 		78784AF7A74084713651DC6D /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
 		78CD409D8D95F94C1738A444 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = L10nSnapshotTests.xctestplan; sourceTree = "<group>"; };
 		78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsTest.swift; sourceTree = "<group>"; };
 		78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestTest.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		797548C8B7F6A801A090D219 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -7877,8 +7882,6 @@
 		8ADC2A202A3399DC00543DAA /* YourRightsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourRightsSetting.swift; sourceTree = "<group>"; };
 		8ADEC6822A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewControllerTests.swift; sourceTree = "<group>"; };
 		8ADED7EB27691351009C19E6 /* CalendarExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionsTests.swift; sourceTree = "<group>"; };
-		8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounter.swift; sourceTree = "<group>"; };
-		8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CumulativeDaysOfUseCounterTests.swift; sourceTree = "<group>"; };
 		8AE0BF4E2819B10E00F33EC4 /* TopSitesSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSettingsViewController.swift; sourceTree = "<group>"; };
 		8AE1E1CA27B18F560024C45E /* SearchBarSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewController.swift; sourceTree = "<group>"; };
 		8AE1E1CC27B191110024C45E /* SearchBarSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewModel.swift; sourceTree = "<group>"; };
@@ -7978,6 +7981,7 @@
 		8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportResponse.swift; sourceTree = "<group>"; };
 		8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModelTests.swift; sourceTree = "<group>"; };
 		8CD04F1485CE61A3B3237248 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		8CDA04862D351783004C333C /* pings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
 		8CE041B18298F668144B225A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CE1E4312B8C76AE0026530B /* LoginStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStorage.swift; sourceTree = "<group>"; };
 		8CE1E4332B8C76C80026530B /* LoginAutofillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutofillView.swift; sourceTree = "<group>"; };
@@ -10149,6 +10153,7 @@
 				0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */,
 				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
 				0B7CF8842CAC1B7000DC02F8 /* Legacy */,
+				21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -11534,7 +11539,6 @@
 		8A1E3BE028CBAC1F003388C4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8ADED7EF276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift */,
 				8A13FA8E2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift */,
 				961D6B822995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift */,
 				C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */,
@@ -11585,6 +11589,7 @@
 				0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */,
 				C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */,
 				0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */,
+				21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -13686,6 +13691,7 @@
 		E15A8B2B286CFD48004BB2B8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				EAF79C172A6F0B9500251CA4 /* ExperimentIntegrationTests.xctestplan */,
@@ -14064,7 +14070,6 @@
 				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
 				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
 				8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */,
-				8ADED7ED276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift */,
 				C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */,
 				C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */,
 				F85C7F112721048E004BDBA4 /* Layout.swift */,
@@ -14369,6 +14374,7 @@
 				7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */,
 				74821FFD1DB6D3AC00EEEA72 /* MailSchemes.plist */,
 				ACD605D124B35EEE00EE4454 /* metrics.yaml */,
+				8CDA04862D351783004C333C /* pings.yaml */,
 				C87D8B7E2818331900A6307D /* Nimbus */,
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				216A0D6F2A40D0E4008077BA /* Redux */,
@@ -15656,12 +15662,14 @@
 				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */,
 				1D91C1842CF11EA500B24960 /* disconnect-block-cryptomining.json in Resources */,
+				78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
 				E1AF3562286DE5F800960045 /* Smoketest2.xctestplan in Resources */,
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
+				8CDA04872D351783004C333C /* pings.yaml in Resources */,
 				8A5CDEED27E510F500CC60FF /* pocketglobalfeed.json in Resources */,
 				8A1A93582B757C7C0069C190 /* gradient.json in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
@@ -15913,7 +15921,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nif which swiftlint > /dev/null; then\n    for file in $MODIFIED_FILES; do\n        swiftlint lint \"${SRCROOT}/../${file}\" --config \"${SRCROOT}/../.swiftlint.yml\"\n    done\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16314,6 +16322,7 @@
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedTableViewController.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
 				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
 				ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */,
@@ -16403,7 +16412,6 @@
 				8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */,
 				0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */,
 				602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */,
-				8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */,
 				7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */,
 				4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */,
 				E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */,
@@ -17447,7 +17455,6 @@
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
-				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
 				E1B9A2C42CADA78300F6A0E9 /* ToolbarTelemetryTests.swift in Sources */,
@@ -17506,6 +17513,7 @@
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
 				E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */,
 				C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */,
+				21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,
 				8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */,
@@ -24715,7 +24723,6 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -24986,6 +24993,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
@@ -25293,6 +25304,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
@@ -25305,6 +25320,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
@@ -25317,6 +25336,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
@@ -25585,6 +25608,10 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				PRODUCT_NAME = L10nSnapshotTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
@@ -26505,7 +26532,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 136.0.20250117050350;
+				version = 136.0.20250118050318;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

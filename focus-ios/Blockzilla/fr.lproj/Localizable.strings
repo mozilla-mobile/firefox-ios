@@ -277,9 +277,6 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Sombre";
 
-/* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "Les rapports de plantage nous permettent de diagnostiquer et de corriger des problèmes avec le navigateur.";
-
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ enverra ce que vous saisissez dans la barre d’adresse à votre moteur de recherche.";
 

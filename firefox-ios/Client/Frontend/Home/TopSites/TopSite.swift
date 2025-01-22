@@ -58,17 +58,6 @@ final class TopSite: FeatureFlaggable {
 
     // MARK: Telemetry
 
-    func impressionTracking(position: Int, unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry) {
-        // Only sending sponsored tile impressions for now
-        guard site.isSponsoredSite else { return }
-
-        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
-        } else {
-            SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
-        }
-    }
-
     func getTelemetrySiteType() -> String {
         if isGooglePinnedTile {
             return "google"

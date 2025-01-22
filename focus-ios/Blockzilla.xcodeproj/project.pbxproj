@@ -2503,7 +2503,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n    swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 		D5D067F9252F939600C35227 /* Glean */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7198,7 +7198,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 136.0.20250117050350;
+				version = 136.0.20250118050318;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {

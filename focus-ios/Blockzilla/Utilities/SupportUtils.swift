@@ -29,7 +29,7 @@ public enum SupportTopic: CaseIterable {
         case .addSearchEngine:
             return "add-search-engine-ios"
         case .mobileCrashReports:
-            return "mobile-crash-reports"
+            return "ios-crash-reports"
         case .usagePingSettingsMobile:
             return "usage-ping-settings-mobile"
         }

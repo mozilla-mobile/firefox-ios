@@ -33,11 +33,13 @@ class TopSitesViewModel {
     private let googleTopSiteManager: GoogleTopSiteManager
     private var wallpaperManager: WallpaperManager
     private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
+    private let sponsoredTileTelemetry: SponsoredTileTelemetry
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,
          wallpaperManager: WallpaperManager,
+         sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry(),
          unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry()) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
@@ -52,6 +54,7 @@ class TopSitesViewModel {
         topSitesDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
         self.unifiedAdsTelemetry = unifiedAdsTelemetry
+        self.sponsoredTileTelemetry = sponsoredTileTelemetry
         adaptor.delegate = self
     }
 
@@ -64,7 +67,15 @@ class TopSitesViewModel {
 
     func sendImpressionTelemetry(_ homeTopSite: TopSite, position: Int) {
         guard !hasSentImpressionForTile(homeTopSite) else { return }
-        homeTopSite.impressionTracking(position: position, unifiedAdsTelemetry: unifiedAdsTelemetry)
+
+        // Only sending sponsored tile impressions for now
+        guard let tile = homeTopSite.site as? SponsoredTile else { return }
+
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        } else {
+            sponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        }
     }
 
     private func topSitePressTracking(homeTopSite: TopSite, position: Int) {
@@ -80,10 +91,8 @@ class TopSitesViewModel {
         // Bookmarks from topSites
         let isBookmarkedSite = profile.places.isBookmarked(url: homeTopSite.site.url).value.successValue ?? false
         if isBookmarkedSite {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .open,
-                                         object: .bookmark,
-                                         value: .openBookmarksFromTopSites)
+            let bookmarksTelemetry = BookmarksTelemetry()
+            bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.topSites)
         }
 
         TelemetryWrapper.recordEvent(category: .action,
@@ -97,7 +106,7 @@ class TopSitesViewModel {
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
                 unifiedAdsTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
             } else {
-                SponsoredTileTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
+                sponsoredTileTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
             }
         }
     }

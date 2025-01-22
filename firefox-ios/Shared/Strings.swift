@@ -1664,10 +1664,10 @@ extension String {
                 tableName: "Onboarding",
                 value: "Fast and secure web browsing",
                 comment: "Subtitle for the Terms of Service screen in the onboarding process.")
-            public static let AgreementButtonTitle = MZLocalizedString(
-                key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
+            public static let AgreementButtonTitleV2 = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v136",
                 tableName: "Onboarding",
-                value: "Agree and continue",
+                value: "Agree and Continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let TermsOfServiceAgreement = MZLocalizedString(
                 key: "Onboarding.TermsOfService.TermsOfServiceAgreement.v135",
@@ -7694,6 +7694,11 @@ extension String {
                 tableName: "Settings",
                 value: "Crash reports allow us diagnose and fix issues with the browser.",
                 comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
+            public static let AgreementButtonTitle = MZLocalizedString(
+                key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
+                tableName: "Onboarding",
+                value: "Agree and continue",
+                comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
         }
     }
 }

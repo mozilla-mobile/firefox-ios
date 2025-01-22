@@ -62,7 +62,7 @@ struct TopSiteState: Hashable, Equatable {
         // Only sending sponsored tile impressions for now
         guard site.isSponsoredSite else { return }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tileSite: site, position: position)
+        DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
     func getTelemetrySiteType() -> String {

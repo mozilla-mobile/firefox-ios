@@ -102,8 +102,8 @@ line_length:
   ignores_interpolated_strings: true
 
 closure_body_length:
-  warning: 60
-  error: 60
+  warning: 53
+  error: 53
 
 file_header:
   required_string: |
@@ -142,8 +142,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
   - Package.swift
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
-  # Temporarly ignore focus-ios folder
-  - focus-ios/
+  # Focus specific
+  - focus-ios/Blockzilla/Generated
+  - focus-ios-tests/tools/Localizations
 
 included:
   - /Users/vagrant/git
