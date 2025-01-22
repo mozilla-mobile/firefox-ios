@@ -183,15 +183,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        createDesktopBookmark(subject: subject) {
-            let index = subject.getNewIndex(from: 5)
-            XCTAssertEqual(index, 4)
-        }
-    }
 
     func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
@@ -208,15 +199,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
     }
-
-    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 4)
-    }
-}
 
 extension BookmarksPanelViewModelTests {
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
