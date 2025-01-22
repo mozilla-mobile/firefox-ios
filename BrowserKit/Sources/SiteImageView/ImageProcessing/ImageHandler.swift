@@ -96,7 +96,7 @@ class DefaultImageHandler: ImageHandler {
         }
     }
 
-    // MARK: Private
+    // MARK: - Private
 
     private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
@@ -117,7 +117,13 @@ class DefaultImageHandler: ImageHandler {
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
-            return await fallbackToLetterFavicon(imageModel: imageModel)
+            let isServerError = ServerErrorHelper.extractServerError(error)
+
+            if isServerError {
+                return await fallbackToLetterFavicon(imageModel: imageModel, isServerError: true)
+            } else {
+                return await fallbackToLetterFavicon(imageModel: imageModel, isServerError: false)
+            }
         }
     }
 
@@ -131,7 +137,7 @@ class DefaultImageHandler: ImageHandler {
         }
     }
 
-    private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
+    private func fallbackToLetterFavicon(imageModel: SiteImageModel, isServerError: Bool) async -> UIImage {
         do {
             var siteString = imageModel.cacheKey
             if imageModel.siteURL.scheme == "internal", imageModel.siteURL.lastPathComponent == "home" {
@@ -141,9 +147,10 @@ class DefaultImageHandler: ImageHandler {
             }
 
             let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
-            // FIXME FXIOS-11063 Do we really want to cache letter icons and never attempt to get a favicon again?
-            //                   We can drop into here on a network timeout.
-            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+
+            if isServerError {
+                await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            }
             return image
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
