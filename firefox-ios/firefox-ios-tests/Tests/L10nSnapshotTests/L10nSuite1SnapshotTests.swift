@@ -6,7 +6,7 @@ import XCTest
 import Shared
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
-    var noSkipIntroTest = ["testIntro"]
+    var noSkipIntroTest = ["testIntro", "testToS"]
 
     var currentScreen = 0
     var rootA11yId: String {
@@ -32,7 +32,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testIntro() {
         mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
-        snapshot("TermsOfService-1")
+        snapshot("Onboarding-0")
 
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
@@ -79,6 +79,28 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForElementToExist(app.webViews["contentView"])
         snapshot("Homescreen-first-visit")
+    }
+
+    @MainActor
+    func testToS() {
+        mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
+        mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
+        mozWaitForElementToExist(app.buttons["TermsOfService.ManageDataCollectionAgreement"])
+
+        // Manage
+        app.buttons["TermsOfService.ManageDataCollectionAgreement"].tap()
+        mozWaitForElementToExist(app.otherElements["PopoverDismissRegion"])
+        mozWaitForElementToExist(app.buttons["TermsOfService.PrivacyNotice.DoneButton"])
+        snapshot("TermsOfService-1")
+        app.buttons["TermsOfService.PrivacyNotice.DoneButton"].tap()
+
+        // Set as default browser
+        mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        mozWaitForElementToExist(app.buttons[".DefaultBrowserSettings.PrimaryButton"])
+        snapshot("TermsOfService-2")
     }
 
     func testWebViewContextMenu () throws {
