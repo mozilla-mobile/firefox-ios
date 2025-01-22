@@ -601,6 +601,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
+        (temporaryDocument as? PDFTemporaryDocument)?.invalidateSession()
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
@@ -1101,10 +1102,11 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, UIGestureRecognizerDelegate {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
+    var lastTouchedPoint: CGPoint = .zero
     let windowUUID: WindowUUID
 
     override var inputAccessoryView: UIView? {
@@ -1147,6 +1149,19 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(frame: frame, configuration: configuration)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        tapGesture.delegate = self
+        addGestureRecognizer(tapGesture)
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+
+    @objc
+    private func onTap(_ gesture: UITapGestureRecognizer) {
+        lastTouchedPoint = gesture.location(in: self)
+        print(lastTouchedPoint)
     }
 
     required init?(coder: NSCoder) {

@@ -6,8 +6,6 @@ import XCTest
 @testable import Client
 
 final class PDFTemporaryDocumentTests: XCTestCase {
-
-
     private func createSubject() -> PDFTemporaryDocument {
         return PDFTemporaryDocument()
     }

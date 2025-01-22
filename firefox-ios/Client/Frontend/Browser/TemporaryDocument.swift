@@ -121,8 +121,160 @@ class DefaultTemporaryDocument: NSObject, TemporaryDocument {
 
 typealias VoidReturnParameterCallback<T> = (T) -> Void
 
+import Common
+
+class PDFLoadingView: UIView {
+    private var document: PDFTemporaryDocument?
+    private var observedTokens = [NSKeyValueObservation]()
+    private let pdfIcon = UIImageView(image: UIImage(named: "pdf"))
+    private let loadingView = UIActivityIndicatorView(style: .large)
+    private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+    private let filenameLabel = UILabel()
+    private var isAnimating = false
+    private let theme: Theme
+
+    init(frame: CGRect, theme: Theme) {
+        self.theme = theme
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private struct UX {
+        static let pdfIconSize: CGFloat = 100
+    }
+
+    // MARK: - Layout
+
+    private func setup() {
+        backgroundColor = .clear
+        backgroundView.alpha = 0.0
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(backgroundView)
+        NSLayoutConstraint.activate([
+            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+
+        pdfIcon.contentMode = .scaleAspectFit
+        pdfIcon.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(pdfIcon)
+        NSLayoutConstraint.activate([
+            pdfIcon.centerXAnchor.constraint(equalTo: centerXAnchor),
+            pdfIcon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -30.0),
+            pdfIcon.widthAnchor.constraint(equalToConstant: UX.pdfIconSize),
+            pdfIcon.heightAnchor.constraint(equalToConstant: UX.pdfIconSize)
+        ])
+
+        filenameLabel.alpha = 0.0
+        filenameLabel.translatesAutoresizingMaskIntoConstraints = false
+        filenameLabel.text = "Loading... \(document?.filename ?? "")"
+        filenameLabel.textColor = theme.colors.textPrimary
+
+        addSubview(filenameLabel)
+        NSLayoutConstraint.activate([
+            filenameLabel.topAnchor.constraint(equalTo: pdfIcon.bottomAnchor, constant: 12.0),
+            filenameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+        ])
+
+        loadingView.alpha = 0.0
+        loadingView.color = theme.colors.iconPrimary
+        loadingView.startAnimating()
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(loadingView)
+        NSLayoutConstraint.activate([
+            loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingView.topAnchor.constraint(equalTo: filenameLabel.bottomAnchor, constant: 12.0)
+        ])
+    }
+
+    func addToSuperview(_ view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(self)
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topAnchor.constraint(equalTo: view.topAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        if let touchPoint = (view as? TabWebView)?.lastTouchedPoint {
+            let pdfIconPosition = CGPoint(x: touchPoint.x - frame.width / 2,
+                                          y: touchPoint.y - frame.height / 2 - (UX.pdfIconSize * 0.2 / 2.0))
+            pdfIcon.transform = CGAffineTransform(translationX: pdfIconPosition.x, y: pdfIconPosition.y).scaledBy(x: 0.2, y: 0.2)
+        }
+        UIView.animate(withDuration: 0.6, delay: 0.0) {
+            self.isAnimating = true
+            self.pdfIcon.transform = .identity
+        } completion: { _ in
+            UIView.animate(withDuration: 0.3) {
+                self.backgroundView.alpha = 1
+                self.filenameLabel.alpha = 1
+                self.loadingView.alpha = 1
+            } completion: { _ in
+                self.isAnimating = false
+                if self.document?.localFileURL != nil {
+                    self.removeLoadingView()
+                }
+            }
+        }
+    }
+
+    private func removeLoadingView() {
+        guard !self.isAnimating else { return }
+        guard let url = document?.localFileURL else { return }
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let data = try? Data(contentsOf: url) else { return }
+            ensureMainThread {
+                let webView = self.superview as? WKWebView
+                webView?.load(data, mimeType: "application/pdf", characterEncodingName: "", baseURL: url)
+            }
+        }
+    }
+
+    // MARK: - Actions
+
+    func setDocument(_ document: PDFTemporaryDocument) {
+        self.document = document
+        filenameLabel.text = document.filename
+        setupObservers()
+        self.document?.download()
+    }
+
+    private func setupObservers() {
+        let documentLoadLocalURL = document?.observe(\.localFileURL) { [weak self] _, _ in
+            self?.removeLoadingView()
+            self?.document?.invalidateSession()
+        }
+        if let documentLoadLocalURL {
+            observedTokens.append(documentLoadLocalURL)
+        }
+        guard let webView = superview as? WKWebView else { return }
+        let goBackToken = webView.observe(\.canGoBack) { [weak self] _, _ in
+            self?.removeLoadingView()
+            self?.document?.invalidateSession()
+        }
+        let goForwardToken = webView.observe(\.canGoForward) { [weak self] _, _ in
+            self?.removeLoadingView()
+            self?.document?.invalidateSession()
+        }
+        observedTokens.append(contentsOf: [goBackToken, goForwardToken])
+    }
+
+    deinit {
+        observedTokens.forEach {
+            $0.invalidate()
+        }
+    }
+}
+
 class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDelegate {
-    private var localFileURL: URL?
     private lazy var session: URLSession = {
         return URLSession(
             configuration: .defaultMPTCP,
@@ -130,10 +282,11 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
             delegateQueue: temporaryDocumentOperationQueue
         )
     }()
-    private var webViewGoBackToken: NSKeyValueObservation?
+    private var currentDownloadTask: URLSessionDownloadTask?
 
     let request: URLRequest
     var filename: String
+    @objc dynamic var localFileURL: URL?
     var onDownloadToURL: VoidReturnParameterCallback<URL>?
     var onDownloadProgressUpdate: VoidReturnParameterCallback<Double>?
 
@@ -146,7 +299,7 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.filename = filename ?? "unknown"
         super.init()
-        
+
         if let session {
             self.session = session
         }
@@ -189,7 +342,7 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
         }
         task.resume()
     }
-    
+
     func getDownloadedURL() async -> URL? {
         if let tempFile = queryTempFile() {
             return tempFile
@@ -200,18 +353,15 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
         return tempFileURL
     }
 
-    func downloadDocument(_ webView: WKWebView) {
+    func download() {
         if let tempFile = queryTempFile() {
             ensureMainThread { [weak self] in
                 self?.onDownloadToURL?(tempFile)
             }
             return
         }
-        let task = session.downloadTask(with: request)
-        webViewGoBackToken = webView.observe(\.canGoBack, changeHandler: { [weak task] _, _ in
-            task?.cancel()
-        })
-        task.resume()
+        currentDownloadTask = session.downloadTask(with: request)
+        currentDownloadTask?.resume()
     }
 
     private func queryTempFile() -> URL? {
@@ -247,13 +397,14 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
         }
     }
 
+    func invalidateSession() {
+        currentDownloadTask?.cancel()
+        session.invalidateAndCancel()
+    }
+
     deinit {
         if let tempFileURL = queryTempFile() {
             try? FileManager.default.removeItem(at: tempFileURL)
-        }
-        if let webViewGoBackToken {
-            webViewGoBackToken.invalidate()
-            self.webViewGoBackToken = nil
         }
     }
 
@@ -264,6 +415,10 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
         ensureMainThread { [weak self] in
             self?.onDownloadToURL?(url)
         }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+
     }
 
     func urlSession(

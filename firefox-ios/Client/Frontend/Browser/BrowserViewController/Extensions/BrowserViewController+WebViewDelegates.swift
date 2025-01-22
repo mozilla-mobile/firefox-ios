@@ -655,10 +655,7 @@ extension BrowserViewController: WKNavigationDelegate {
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
-        if responseURL?.isFileURL ?? false {
-            decisionHandler(.allow)
-            return
-        }
+
         tabManager[webView]?.mimeType = response.mimeType
         notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
@@ -792,24 +789,22 @@ extension BrowserViewController: WKNavigationDelegate {
                            tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
+        let pdfLoadingView = PDFLoadingView(frame: webView.bounds, theme: currentTheme())
+        pdfLoadingView.addToSuperview(webView)
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
-        cookieStore.getAllCookies { [weak tab, weak webView] cookies in
+        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = PDFTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
                 cookies: cookies
             )
-            tempPDF.onDownloadProgressUpdate = { [weak self] progress in
+            tempPDF.onDownloadProgressUpdate = { progress in
                 self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
                                    of: webView,
                                    change: [.newKey: progress],
                                    context: nil)
             }
-            tempPDF.onDownloadToURL = { [weak webView] url in
-                webView?.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
-            }
-            guard let webView else { return }
-            tempPDF.downloadDocument(webView)
+            pdfLoadingView.setDocument(tempPDF)
             tab?.temporaryDocument = tempPDF
         }
     }
@@ -1025,7 +1020,16 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-
+        if webView.url?.isFileURL ?? false {
+            let loadingView = webView.subviews.first {
+                $0 is PDFLoadingView
+            }
+            UIView.animate(withDuration: 0.6, animations: {
+                loadingView?.alpha = 0
+            }) { _ in
+                loadingView?.removeFromSuperview()
+            }
+        }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
