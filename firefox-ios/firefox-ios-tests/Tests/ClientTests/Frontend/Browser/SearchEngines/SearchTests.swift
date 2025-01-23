@@ -72,6 +72,8 @@ class SearchTests: XCTestCase {
             withExtendedLifetime(client) {
                 if error != nil {
                     XCTFail("Error: \(error?.description ?? "nil")")
+                    query1.fulfill()
+                    return
                 }
 
                 XCTAssertEqual(response![0], "foo")
@@ -88,6 +90,8 @@ class SearchTests: XCTestCase {
             withExtendedLifetime(client) {
                 if error != nil {
                     XCTFail("Error: \(error?.description ?? "nil")")
+                    query2.fulfill()
+                    return
                 }
 
                 XCTAssertEqual(response![0], "foo bar soap")

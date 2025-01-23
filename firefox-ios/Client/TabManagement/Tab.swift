@@ -12,12 +12,16 @@ import WebKit
 private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
-    var recent = tabs.first
+    guard var recent = tabs.first else {
+        return nil
+    }
+
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > recent.lastExecutedTime {
             recent = tab
         }
     }
+
     return recent
 }
 
@@ -62,7 +66,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
-class Tab: NSObject, ThemeApplicable {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -74,6 +78,22 @@ class Tab: NSObject, ThemeApplicable {
                 _isPrivate = newValue
             }
         }
+    }
+
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    var isNormal: Bool {
+        return !isPrivate
+    }
+
+    var isNormalActive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isActive : true)
+    }
+
+    var isNormalAndInactive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isInactive : false)
     }
 
     /// The window associated with the tab (where the tab lives and will be displayed).
@@ -253,8 +273,8 @@ class Tab: NSObject, ThemeApplicable {
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     var bars = [SnackBar]()
-    var lastExecutedTime: Timestamp?
-    var firstCreatedTime: Timestamp?
+    var lastExecutedTime: Timestamp
+    var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -321,6 +341,9 @@ class Tab: NSObject, ThemeApplicable {
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
 
+    /// Used to retain a reference to an AR 3D model preview until display ends
+    var quickLookPreviewHelper: OpenQLPreviewHelper?
+
     /// Returns true if this tab's URL is known, and it's longer than we want to store.
     var urlIsTooLong: Bool {
         guard let url = self.url else {
@@ -349,10 +372,6 @@ class Tab: NSObject, ThemeApplicable {
             guard nightMode != oldValue else { return }
 
             webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
-            // For WKWebView background color to take effect, isOpaque must be false,
-            // which is counter-intuitive. Default is true. The color is previously
-            // set to black in the WKWebView init.
-            webView?.isOpaque = !nightMode
 
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
@@ -402,13 +421,50 @@ class Tab: NSObject, ThemeApplicable {
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
+    private var newAlertQueue = [NewJSAlertInfo]()
+
+    var onLoading: VoidReturnCallback?
+    private var webViewLoadingObserver: NSKeyValueObservation?
 
     var profile: Profile
+
+    /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isInactive: Bool {
+        let currentDate = Date()
+        let inactiveDate: Date
+
+        // Check if we're debugging for inactive tabs to easily test in code
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let option = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
+        switch option {
+        case .normal:
+            // Normal operation when no debug setting overrides the inactive tabs timeout
+            inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
+        case .tenSeconds:
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        case .oneMinute:
+            inactiveDate = Calendar.current.date(byAdding: .minute, value: -1, to: currentDate) ?? Date()
+        case .twoMinutes:
+            inactiveDate = Calendar.current.date(byAdding: .minute, value: -2, to: currentDate) ?? Date()
+        }
+
+        // If the tabDate is older than our inactive date cutoff, return true
+        let tabDate = Date.fromTimestamp(lastExecutedTime)
+        return tabDate <= inactiveDate
+    }
+
+    /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isActive: Bool {
+        return !isInactive
+    }
 
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         tabCreatedTime: Date = Date(),
          logger: Logger = DefaultLogger.shared) {
         self.nightMode = false
         self.windowUUID = windowUUID
@@ -416,12 +472,12 @@ class Tab: NSObject, ThemeApplicable {
         self.profile = profile
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
+        self.lastExecutedTime = tabCreatedTime.toTimestamp()
+        self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
-        let tabCreatedTime = Date().toTimestamp()
-        self.lastExecutedTime = tabCreatedTime
-        self.firstCreatedTime = tabCreatedTime
+
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
@@ -445,7 +501,7 @@ class Tab: NSObject, ThemeApplicable {
                 URL: displayURL,
                 title: tab.title ?? tab.displayTitle,
                 history: history,
-                lastUsed: tab.lastExecutedTime ?? 0,
+                lastUsed: tab.lastExecutedTime,
                 icon: icon,
                 inactive: inactive
             )
@@ -469,7 +525,6 @@ class Tab: NSObject, ThemeApplicable {
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
-
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = true
@@ -478,9 +533,6 @@ class Tab: NSObject, ThemeApplicable {
             if #available(iOS 16.4, *) {
                 webView.isInspectable = true
             }
-
-            // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
-            webView.backgroundColor = .black
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -527,12 +579,20 @@ class Tab: NSObject, ThemeApplicable {
             )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
+            webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
+                self?.onLoading?()
+            }
         }
     }
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(URLRequest(url: url))
+            if let internalURL = InternalURL(url),
+               internalURL.isAboutHomeURL {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            } else {
+                webView.load(URLRequest(url: url))
+            }
         }
 
         if let interactionState = interactionState {
@@ -541,6 +601,7 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     deinit {
+        webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
@@ -633,7 +694,8 @@ class Tab: NSObject, ThemeApplicable {
     func reload(bypassCache: Bool = false) {
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
-            webView?.replaceLocation(with: page)
+            let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+            webView?.load(request)
             return
         }
 
@@ -650,7 +712,8 @@ class Tab: NSObject, ThemeApplicable {
             }
         }
 
-        if let webView, webView.url != nil {
+        // Do not reload from origin for homepage internal URLs
+        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
             webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
@@ -818,6 +881,27 @@ class Tab: NSObject, ThemeApplicable {
         return alertQueue.removeFirst()
     }
 
+    func cancelQueuedAlerts() {
+        newAlertQueue.forEach { alert in
+            alert.cancel()
+        }
+    }
+
+    /// Queues a JS Alert for later display
+    /// Do not call completionHandler until the alert is displayed and dismissed
+    func newQueueJavascriptAlertPrompt(_ alert: NewJSAlertInfo) {
+        newAlertQueue.append(alert)
+    }
+
+    func newDequeueJavascriptAlertPrompt() -> NewJSAlertInfo? {
+        guard !newAlertQueue.isEmpty else { return nil }
+        return newAlertQueue.removeFirst()
+    }
+
+    func hasJavascriptAlertPrompt() -> Bool {
+        return !newAlertQueue.isEmpty
+    }
+
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -857,6 +941,27 @@ class Tab: NSObject, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
+        webView?.applyTheme(theme: theme)
+        webView?.underPageBackgroundColor = nightMode ? .black : nil
+    }
+
+    // MARK: - Static Helpers
+
+    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
+    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    func isSameTypeAs(_ otherTab: Tab) -> Bool {
+        switch (self.isPrivate, otherTab.isPrivate) {
+        case (true, true):
+            // Two private tabs are always lumped together in the same type regardless of their last execution time
+            return true
+        case (false, false):
+            // Two normal tabs are only the same type if they're both active, or both inactive
+            return isInactiveTabsEnabled
+                ? self.isActive == otherTab.isActive
+                : true
+        default:
+            return false
+        }
     }
 }
 
@@ -1071,6 +1176,17 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
+    // swiftlint:disable unneeded_override
+#if compiler(>=6)
+    override func evaluateJavaScript(
+        _ javaScriptString: String,
+        completionHandler: (
+            @MainActor @Sendable (Any?, (any Error)?) -> Void
+        )? = nil
+    ) {
+        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+#else
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     /// We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
@@ -1079,6 +1195,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
+#endif
+    // swiftlint:enable unneeded_override
 
     // MARK: - ThemeApplicable
 

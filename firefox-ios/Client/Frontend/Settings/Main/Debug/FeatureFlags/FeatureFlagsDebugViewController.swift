@@ -4,11 +4,13 @@
 
 import Common
 import Foundation
+import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
 final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
+        self.profile = profile
         self.title = "Feature Flags"
     }
 
@@ -21,31 +23,113 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagToggleSettings() -> SettingSection {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let microsurveySetting = FeatureFlagsBoolSetting(
-            with: .microsurvey,
-            titleText: NSAttributedString(
-                string: "Enable Microsurvey",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            statusText: NSAttributedString(
-                string: "Toggle to reset microsurvey expiration",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        ) { [weak self] _ in
-            UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
-            self?.reloadView()
-        }
-        let closeRemoteTabsSetting = getCloseRemoteTabSetting(theme)
-        return SettingSection(title: nil, children: [microsurveySetting, closeRemoteTabsSetting])
+        return SettingSection(
+            title: nil,
+            children: [
+                FeatureFlagsBoolSetting(
+                    with: .bookmarksRefactor,
+                    titleText: format(string: "Enable Bookmarks Redesign"),
+                    statusText: format(string: "Toggle to use the new bookmarks design")
+                ) { [weak self] _ in
+                    guard let self else { return }
+                    self.reloadView()
+                    let isBookmarksRefactorEnabled = self.featureFlags.isFeatureEnabled(.bookmarksRefactor,
+                                                                                        checking: .buildOnly)
+                    self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+                },
+                FeatureFlagsBoolSetting(
+                    with: .closeRemoteTabs,
+                    titleText: format(string: "Enable Close Remote Tabs"),
+                    statusText: format(string: "Toggle to enable closing tabs remotely feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .microsurvey,
+                    titleText: format(string: "Enable Microsurvey"),
+                    statusText: format(string: "Toggle to reset microsurvey expiration")
+                ) { [weak self] _ in
+                    UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .homepageRebuild,
+                    titleText: format(string: "Enable New Homepage"),
+                    statusText: format(string: "Toggle to use the new homepage")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .menuRefactor,
+                    titleText: format(string: "Enable New Menu"),
+                    statusText: format(string: "Toggle to use the new menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .trackingProtectionRefactor,
+                    titleText: format(string: "Enable New Tracking Protection"),
+                    statusText: format(string: "Toggle to use the new tracking protection")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .nativeErrorPage,
+                    titleText: format(string: "Enable Native Error Page"),
+                    statusText: format(string: "Toggle to display natively created error pages")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .noInternetConnectionErrorPage,
+                    titleText: format(string: "Enable NIC Native Error Page"),
+                    statusText: format(string: "Toggle to display natively created no internet connection error page")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .toolbarRefactor,
+                    titleText: format(string: "Toolbar Redesign"),
+                    statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedAds,
+                    titleText: format(string: "Enable Unified Ads"),
+                    statusText: format(string: "Toggle to use unified ads API")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedSearch,
+                    titleText: format(string: "Enable Unified Search"),
+                    statusText: format(string: "Toggle to use unified search within the new toolbar")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .passwordGenerator,
+                    titleText: format(string: "Enable Password Generator"),
+                    statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .sentFromFirefox,
+                    titleText: format(string: "Enable Sent from Firefox"),
+                    statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                }
+            ]
+        )
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let flags = NimbusFeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
-            return Setting(title: NSAttributedString(
-                string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-            )
+            return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }
         return SettingSection(
             title: NSAttributedString(string: "Build only status"),
@@ -53,22 +137,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         )
     }
 
-    private func getCloseRemoteTabSetting(_ theme: Theme) -> FeatureFlagsBoolSetting {
-        FeatureFlagsBoolSetting(
-            with: .closeRemoteTabs,
-            titleText: NSAttributedString(
-                string: "Enable Close Remote Tabs",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            statusText: NSAttributedString(
-                string: "Toggle to enable closing tabs remotely feature",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        ) { [weak self] _ in
-            self?.reloadView()
-        }
-    }
-
     private func reloadView() {
         self.settings = self.generateSettings()
         self.tableView.reloadData()
+    }
+
+    private func format(string: String) -> NSAttributedString {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        return NSAttributedString(
+            string: string,
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 }

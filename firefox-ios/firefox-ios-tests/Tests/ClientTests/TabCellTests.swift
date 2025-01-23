@@ -29,14 +29,14 @@ class TabCellTests: XCTestCase {
     func testConfigureTabAXLabel() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil, delegate: cellDelegate)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate, a11yId: "")
         XCTAssert(cell.accessibilityLabel!.contains(state.tabTitle))
     }
 
     func testConfigureTabAXHint() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil, delegate: cellDelegate)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate, a11yId: "")
         XCTAssertEqual(cell.accessibilityHint!,
                        String.TabTraySwipeToCloseAccessibilityHint)
     }
@@ -44,13 +44,14 @@ class TabCellTests: XCTestCase {
     func testConfigureTabSelectedState() {
         let cell = TabCell(frame: .zero)
         let state = createDefaultState()
-        cell.configure(with: state, theme: nil, delegate: cellDelegate)
+        cell.configure(with: state, theme: nil, delegate: cellDelegate, a11yId: "")
         XCTAssertEqual(cell.isSelectedTab,
                        state.isSelected)
     }
 
     private func createDefaultState() -> TabModel {
-        return TabModel(tabUUID: "0022-22D3",
+        let tabUUID = "0022-22D3"
+        return TabModel(tabUUID: tabUUID,
                         isSelected: false,
                         isPrivate: false,
                         isFxHomeTab: false,

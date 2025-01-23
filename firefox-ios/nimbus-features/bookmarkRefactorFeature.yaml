@@ -1,0 +1,18 @@
+features:
+  bookmark-refactor-feature:
+    description: >
+      The Feature for managing the roll out of the Bookmark refactor feature
+    variables:
+      enabled:
+        description: >
+          Enables the bookmark refactor feature
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
+

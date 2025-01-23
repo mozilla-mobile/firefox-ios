@@ -7,7 +7,7 @@ import Common
 import UIKit
 
 public class ContextualHintView: UIView, ThemeApplicable {
-    private var viewModel: ContextualHintViewModel!
+    private var viewModel: ContextualHintViewModel?
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
@@ -34,10 +34,18 @@ public class ContextualHintView: UIView, ThemeApplicable {
         button.configuration?.contentInsets = UX.closeButtonInsets
     }
 
+    private lazy var titleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.headline.scaledFont()
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+    }
+
     private lazy var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var actionButton: LinkButton = .build { button in
@@ -94,6 +102,10 @@ public class ContextualHintView: UIView, ThemeApplicable {
         scrollView.addSubview(contentContainer)
         contentContainer.addSubview(stackView)
 
+        if !viewModel.title.isEmpty {
+            titleLabel.text = viewModel.title
+            stackView.addArrangedSubview(titleLabel)
+        }
         stackView.addArrangedSubview(descriptionLabel)
         if viewModel.isActionType { stackView.addArrangedSubview(actionButton) }
 
@@ -101,6 +113,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
     }
 
     private func setupConstraints() {
+        guard let viewModel else { return }
+
         let isArrowUp = viewModel.arrowDirection == .up
         let topPadding = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
         let closeButtonPadding = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
@@ -139,18 +153,21 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
     @objc
     private func didTapCloseButton(sender: UIButton) {
-        viewModel.closeButtonAction?(sender)
+        viewModel?.closeButtonAction?(sender)
     }
 
     @objc
     private func didTapActionButton(sender: UIButton) {
-        viewModel.actionButtonAction?(sender)
+        viewModel?.actionButtonAction?(sender)
     }
 
     public func applyTheme(theme: Theme) {
         closeButton.tintColor = theme.colors.textOnDark
+        titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
+
+        guard let viewModel else { return }
 
         if viewModel.isActionType {
             let textAttributes: [NSAttributedString.Key: Any] = [

@@ -111,19 +111,25 @@ open class MockProfile: Client.Profile {
     // Read/Writeable properties for mocking
 
     public var files: FileAccessor
-    public var syncManager: ClientSyncManager!
+    public var syncManager: ClientSyncManager?
     public var firefoxSuggest: RustFirefoxSuggestProtocol?
 
     fileprivate let name: String = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
+    private let injectedPinnedSites: MockablePinnedSites?
 
-    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestProtocol? = nil) {
+    init(
+        databasePrefix: String = "mock",
+        firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
+        injectedPinnedSites: MockablePinnedSites? = nil
+    ) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix
         self.firefoxSuggest = firefoxSuggest
+        self.injectedPinnedSites = injectedPinnedSites
 
         do {
             directory = try files.getAndEnsureDirectory()
@@ -169,8 +175,8 @@ open class MockProfile: Client.Profile {
         return CertStore()
     }()
 
-    public lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files)
+    public lazy var searchEnginesManager: SearchEnginesManager = {
+        return SearchEnginesManager(prefs: self.prefs, files: self.files, engineProvider: MockSearchEngineProvider())
     }()
 
     public lazy var prefs: Prefs = {
@@ -242,7 +248,7 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var pinnedSites: PinnedSites = {
-        legacyPlaces
+        injectedPinnedSites ?? legacyPlaces
     }()
 
     public func hasSyncAccount(completion: @escaping (Bool) -> Void) {
@@ -261,7 +267,7 @@ open class MockProfile: Client.Profile {
     public func flushAccount() {}
 
     public func removeAccount() {
-        self.syncManager.onRemovedAccount()
+        self.syncManager?.onRemovedAccount()
     }
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
@@ -286,6 +292,18 @@ open class MockProfile: Client.Profile {
 
     public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
+    }
+
+    public func addTabToCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func flushTabCommands(toDeviceId: String?) {
+        return
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {

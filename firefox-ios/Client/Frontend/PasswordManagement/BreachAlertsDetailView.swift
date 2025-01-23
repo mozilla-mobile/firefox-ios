@@ -218,18 +218,18 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         let colors = theme.colors
         layer.shadowColor = colors.shadowDefault.cgColor
         backgroundColor = colors.layer2
-        titleIcon.tintColor = colors.iconWarning
-        titleLabel.textColor = colors.textWarning
-        breachDateLabel.textColor = colors.textWarning
-        descriptionLabel.textColor = colors.textWarning
+        titleIcon.tintColor = colors.iconCritical
+        titleLabel.textColor = colors.textCritical
+        breachDateLabel.textColor = colors.textCritical
+        descriptionLabel.textColor = colors.textCritical
         goToLabel.attributedText = getAttributedText(
             for: breachLink,
-            with: colors.textWarning
+            with: colors.textCritical
         )
         learnMoreButton.setAttributedTitle(
             getAttributedText(
                 for: .BreachAlertsLearnMore,
-                with: colors.textWarning
+                with: colors.textCritical
             ),
             for: .normal
         )

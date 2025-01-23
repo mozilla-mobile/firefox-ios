@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Storage
 import SiteImageView
 import Shared
 
@@ -124,6 +123,7 @@ extension BookmarksCell: Blurrable {
     func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
+            rootContainer.layoutIfNeeded()
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()

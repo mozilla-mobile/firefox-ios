@@ -25,8 +25,20 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
 
     func configure(_ model: AddressToolbarContainerModel,
                    toolbarDelegate: AddressToolbarDelegate) {
-        compactToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
-        regularToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
+        compactToolbar.configure(
+            state: model.state,
+            toolbarDelegate: toolbarDelegate,
+            leadingSpace: 0,
+            trailingSpace: 0,
+            isUnifiedSearchEnabled: false
+        )
+        regularToolbar.configure(
+            state: model.state,
+            toolbarDelegate: toolbarDelegate,
+            leadingSpace: 0,
+            trailingSpace: 0,
+            isUnifiedSearchEnabled: false
+        )
     }
 
     override func becomeFirstResponder() -> Bool {

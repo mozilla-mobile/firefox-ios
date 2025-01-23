@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import Storage
 import Glean
 import Common
 import ComponentLibrary
@@ -36,76 +35,13 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(isVisible: false)
 
-        if isTabTrayRefactorEnabled {
-            let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-            let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
-            navigationHandler?.showTabTray(selectedPanel: selectedSegment)
-        } else {
-            willNavigateAway()
-            showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
-                                            focusedSegment: focusedSegment)
-        }
-    }
-
-    private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                                                 focusedSegment: TabTrayPanelType? = nil) {
-        tabTrayViewController = LegacyTabTrayViewController(
-            tabTrayDelegate: self,
-            profile: profile,
-            tabToFocus: tabToFocus,
-            tabManager: tabManager,
-            overlayManager: overlayManager,
-            focusedSegment: focusedSegment)
-        (tabTrayViewController as? LegacyTabTrayViewController)?.qrCodeNavigationHandler = navigationHandler
-        tabTrayViewController?.openInNewTab = { url, isPrivate in
-            let tab = self.tabManager.addTab(
-                URLRequest(url: url),
-                afterTab: self.tabManager.selectedTab,
-                isPrivate: isPrivate
-            )
-            // If we are showing toptabs a user can just use the top tab bar
-            // If in overlay mode switching doesnt correctly dismiss the homepanels
-            guard !self.topTabsVisible,
-                  !self.isToolbarRefactorEnabled,
-                  !self.urlBar.inOverlayMode else { return }
-            // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
-                                                 buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: self.currentTheme(),
-                                    completion: { buttonPressed in
-                if buttonPressed {
-                    self.tabManager.selectTab(tab)
-                }
-            })
-            self.show(toast: toast)
-        }
-
-        tabTrayViewController?.didSelectUrl = { url, visitType in
-            guard let tab = self.tabManager.selectedTab else { return }
-            self.finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
-        }
-
-        guard self.tabTrayViewController != nil else { return }
-
-        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!,
-                                                                     windowUUID: windowUUID)
-        navigationController.presentationController?.delegate = tabTrayViewController
-
-        self.present(navigationController, animated: true, completion: nil)
-
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
-
-        // App store review in-app prompt
-        ratingPromptManager.showRatingPromptIfNeeded()
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
+        navigationHandler?.showTabTray(selectedPanel: selectedSegment)
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
-    }
-
-    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        didTapOnShare(from: shareView)
     }
 
     internal func dismissFakespotIfNeeded(animated: Bool = true) {
@@ -194,9 +130,9 @@ extension BrowserViewController: URLBarDelegate {
 
     func locationActionsForURLBar() -> [AccessibleAction] {
         if UIPasteboard.general.hasStrings {
-            return [pasteGoAction, pasteAction, copyAddressAction]
+            return [pasteGoAction, pasteAction, copyAddressAction].compactMap { $0 }
         } else {
-            return [copyAddressAction]
+            return [copyAddressAction].compactMap { $0 }
         }
     }
 
@@ -206,7 +142,7 @@ extension BrowserViewController: URLBarDelegate {
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
-        if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
+        if let query = profile.searchEnginesManager.queryForSearchURL(searchURL as URL?) {
             return (query, true)
         } else {
             return (url?.absoluteString, false)
@@ -219,7 +155,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
         guard let selectedTab = tabManager.selectedTab else { return }
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -255,7 +191,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
-        guard let engine = profile.searchEngines.defaultEngine,
+        guard let engine = profile.searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
@@ -264,6 +200,9 @@ extension BrowserViewController: URLBarDelegate {
 
         let conversionMetrics = UserConversionMetrics()
         conversionMetrics.didPerformSearch()
+
+        Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
+
         GleanMetrics.Search
             .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()

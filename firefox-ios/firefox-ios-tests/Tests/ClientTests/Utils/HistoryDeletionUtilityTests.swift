@@ -534,7 +534,7 @@ private extension HistoryDeletionUtilityTests {
         let urlString = "https://www.\(name).com/\(path)"
         let urlTitle = "\(name) test"
 
-        return Site(url: urlString, title: urlTitle)
+        return Site.createBasicSite(url: urlString, title: urlTitle)
     }
 
     func addToLocalHistory(

@@ -4,8 +4,9 @@
 
 import Foundation
 
-struct ErrorPageModel {
+struct ErrorPageModel: Equatable {
     let errorTitle: String
-    let errorDecription: String
-    let errorCode: String
+    let errorDescription: String
+    let foxImageName: String
+    let url: URL?
 }

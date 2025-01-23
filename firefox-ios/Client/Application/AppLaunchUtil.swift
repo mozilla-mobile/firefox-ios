@@ -14,13 +14,20 @@ class AppLaunchUtil {
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
+    private let termsOfServiceManager: TermsOfServiceManager
+    private let gleanLifecycleObserver: GleanLifecycleObserver
 
-    init(logger: Logger = DefaultLogger.shared,
-         profile: Profile) {
+    init(
+        logger: Logger = DefaultLogger.shared,
+        profile: Profile,
+        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+    ) {
         self.logger = logger
         self.profile = profile
 //        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
+        self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
+        self.gleanLifecycleObserver = gleanLifecycleObserver
     }
 
     func setUpPreLaunchDependencies() {
@@ -30,12 +37,33 @@ class AppLaunchUtil {
             logger.copyLogsToDocuments()
         }
 
-        TelemetryWrapper.shared.setup(profile: profile)
-        recordStartUpTelemetry()
+        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
-        logger.setup(sendUsageData: sendUsageData)
+        // Initialize the feature flag subsystem.
+        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
+        // i.e. this must be run before initializing those systems.
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+
+        // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
+        let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
+
+        if termsOfServiceManager.isFeatureEnabled {
+            // Two cases:
+            // 1. when ToS screen has been presented and user accepted it
+            // 2. or when ToS screen is not presented because is not fresh install
+            let isTermsOfServiceAccepted = termsOfServiceManager.isAccepted || !introScreenManager.shouldShowIntroScreen
+            logger.setup(sendCrashReports: sendCrashReports && isTermsOfServiceAccepted)
+            if isTermsOfServiceAccepted {
+                TelemetryWrapper.shared.setup(profile: profile)
+                TelemetryWrapper.shared.recordStartUpTelemetry()
+            }
+
+            gleanLifecycleObserver.startObserving()
+        } else {
+            logger.setup(sendCrashReports: sendCrashReports)
+            TelemetryWrapper.shared.setup(profile: profile)
+            TelemetryWrapper.shared.recordStartUpTelemetry()
+        }
 
         setUserAgent()
 
@@ -49,10 +77,10 @@ class AppLaunchUtil {
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionEvent()
 
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Contile, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
+        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
+                                                                                checking: .buildOnly),
+                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
@@ -78,18 +106,12 @@ class AppLaunchUtil {
             }
         }
 
-        // RustFirefoxAccounts doesn't have access to the feature flags
-        // So we check the nimbus flag here before sending it to the startup
-        var fxaFeatures: RustFxAFeatures = []
-        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.closeRemoteTabs, checking: .buildAndUser) {
-            fxaFeatures.insert(.closeRemoteTabs)
-        }
-        RustFirefoxAccounts.startup(prefs: profile.prefs, features: fxaFeatures) { _ in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
         }
 
-        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        // Add swizzle on UIViewControllers to automatically log when there's a new view appearing or disappearing
         UIViewController.loggerSwizzle()
 
         // Add swizzle on top of UIControl to automatically log when there's an action sent
@@ -138,7 +160,7 @@ class AppLaunchUtil {
     }
 
     private func initializeExperiments() {
-        Experiments.intialize()
+        Experiments.initialize()
     }
 
     private func updateSessionCount() {
@@ -203,22 +225,6 @@ class AppLaunchUtil {
             self.logger.log("History Migration skipped",
                             level: .debug,
                             category: .sync)
-        }
-    }
-
-    private func recordStartUpTelemetry() {
-        let isEnabled: Bool = (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
-                               (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true)
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .sponsoredShortcuts,
-                                     extras: [TelemetryWrapper.EventExtraKey.preference.rawValue: isEnabled])
-
-        if logger.crashedLastLaunch {
-            TelemetryWrapper.recordEvent(category: .information,
-                                         method: .error,
-                                         object: .app,
-                                         value: .crashedLastLaunch)
         }
     }
 

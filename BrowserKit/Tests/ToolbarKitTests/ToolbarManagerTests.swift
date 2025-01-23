@@ -18,7 +18,7 @@ final class ToolbarManagerTests: XCTestCase {
 
     func testAddressToolbarBorderPositionWhenTopPlacementAndNotScrolledThenShouldDisplayNoBorder() {
         let subject = createSubject()
-        XCTAssertNil(subject.getAddressBorderPosition(
+        XCTAssertEqual(AddressToolbarBorderPosition.none, subject.getAddressBorderPosition(
             for: .top,
             isPrivate: false,
             scrollY: 0))

@@ -90,6 +90,8 @@ def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
         'extensions.update.enabled': False,
         'extensions.update.notifyUser': False,
         'identity.fxaccounts.autoconfig.uri': fxa_urls['content'],
+        'identity.fxaccounts.contextParam': 'fx_desktop_v3',
+        'identity.fxaccounts.oauth.enabled': False,
         'testing.tps.skipPingValidation': True,
         'services.sync.firstSync': 'notReady',
         'services.sync.lastversion': '1.0',

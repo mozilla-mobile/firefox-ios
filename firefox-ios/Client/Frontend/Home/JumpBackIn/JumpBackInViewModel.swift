@@ -99,8 +99,9 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private func updateSectionLayout(for traitCollection: UITraitCollection,
-                                     isPortrait: Bool = UIWindow.isPortrait,
-                                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                                     isPortrait: Bool,
+                                     device: UIUserInterfaceIdiom,
+                                     orientation: UIDeviceOrientation) {
         let isPhoneInLandscape = device == .phone && !isPortrait
         let isPadInPortrait = device == .pad && isPortrait
         let isPadInLandscapeTwoThirdSplit = isPadInLandscapeSplit(split: 2/3, isPortrait: isPortrait, device: device)
@@ -138,7 +139,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private func isPadInLandscapeSplit(split: CGFloat,
-                                       isPortrait: Bool = UIWindow.isPortrait,
+                                       isPortrait: Bool,
                                        device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
         guard device == .pad,
               !isPortrait,
@@ -187,7 +188,7 @@ private extension JumpBackInViewModel {
 private extension JumpBackInViewModel {
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
-        let site = Site(url: itemURL, title: item.displayTitle)
+        let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
@@ -197,7 +198,7 @@ private extension JumpBackInViewModel {
 
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
         let itemURL = item.tab.URL.absoluteString
-        let site = Site(url: itemURL, title: item.tab.title)
+        let site = Site.createBasicSite(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
         let image = UIImage(named: StandardImageIdentifiers.Large.syncTabs)
 
@@ -349,10 +350,14 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                     orientation: UIDeviceOrientation = UIDevice.current.orientation) {
+        // UIDevice is not always returning the correct orientation so we check against the window orientation as well
+        let isPortrait = orientation.isPortrait || isPortrait
         updateSectionLayout(for: traitCollection,
                             isPortrait: isPortrait,
-                            device: device)
+                            device: device,
+                            orientation: orientation)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: isSyncTabFeatureEnabled,
             device: device
@@ -360,7 +365,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
         logger.log("JumpBackIn section shouldShow \(shouldShow)",
                    level: .debug,
-                   category: .homepage)
+                   category: .legacyHomepage)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -429,13 +434,13 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = onLongPressTileAction else { return }
 
-        var site = Site(url: "", title: "")
+        var site = Site.createBasicSite(url: "", title: "")
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
             if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
-                site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
+                site = Site.createBasicSite(url: item.url?.absoluteString ?? "", title: item.title ?? "")
             }
         } else if hasSyncedTab {
-            site = Site(
+            site = Site.createBasicSite(
                 url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "",
                 title: mostRecentSyncedTab?.tab.title ?? ""
             )
@@ -452,7 +457,7 @@ extension JumpBackInViewModel: JumpBackInDelegate {
             await self.updateJumpBackInData()
             logger.log("JumpBack didLoadNewData and section shouldShow \(self.shouldShow)",
                        level: .debug,
-                       category: .homepage)
+                       category: .legacyHomepage)
             reloadView()
         }
     }

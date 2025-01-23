@@ -9,7 +9,6 @@ import Storage
 import Shared
 import Common
 
-@MainActor
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
@@ -81,6 +80,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: - Jump back in layout
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_compactJumpBackIn() async {
         let subject = createSubject()
 
@@ -97,6 +97,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_compactSyncedTab() async {
         let subject = createSubject()
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
@@ -115,6 +116,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .compactSyncedTab)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_compactJumpBackInAndSyncedTab() async {
         let subject = createSubject()
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
@@ -135,6 +137,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackInAndSyncedTab)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_mediumIphone() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -155,6 +158,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_mediumWithSyncedTabIphone() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -175,6 +179,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .mediumWithSyncedTab)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_mediumIpad() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -195,6 +200,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_mediumWithSyncedTabIpad() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -215,6 +221,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .mediumWithSyncedTab)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_regularIpad() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -236,6 +243,7 @@ class JumpBackInViewModelTests: XCTestCase {
     }
 
     // This case should never happen on a real device
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_regularIphone() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -255,6 +263,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .regular)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIpad() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -276,6 +285,7 @@ class JumpBackInViewModelTests: XCTestCase {
     }
 
     // This case should never happen on a real device
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIphone() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -296,6 +306,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .regularWithSyncedTab)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_mediumWithSyncedTabIphone_hasNoSyncedTabFallsIntoMediumLayout() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -315,6 +326,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
+    @MainActor
     func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIpad_hasNoSyncedTabFallsIntoRegularLayout() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -334,6 +346,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionLayout, .regular)
     }
 
+    @MainActor
     func testUpdateLayoutSectionBeforeRefreshData() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -381,6 +394,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: Refresh data
 
+    @MainActor
     func testRefreshData_noData() async {
         let subject = createSubject()
         subject.didLoadNewData()
@@ -391,6 +405,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNil(subject.mostRecentSyncedTab)
     }
 
+    @MainActor
     func testRefreshData_jumpBackInList() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -403,6 +418,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNil(subject.mostRecentSyncedTab)
     }
 
+    @MainActor
     func testRefreshData_syncedTab() async {
         let subject = createSubject()
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
@@ -417,6 +433,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: - End to end
 
+    @MainActor
     func testCompactJumpBackIn_withThreeJumpBackInTabs() async {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -439,6 +456,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertFalse(jumpBackIn.tabs.contains(tab3), "The third tab doesn't appear")
     }
 
+    @MainActor
     func testCompactJumpBackIn_withOneJumpBackInTabs() async {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         await adaptor.setRecentTabs(recentTabs: [tab1])
@@ -457,6 +475,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertEqual(jumpBackIn.tabs[0], tab1)
     }
 
+    @MainActor
     func testCompactJumpBackInAndSyncedTab_withThreeJumpBackInTabsAndARemoteTabs() async {
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -483,6 +502,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNotNil(syncTab, "iPhone portrait will show 1 sync tab")
     }
 
+    @MainActor
     func testMediumIphone_withThreeJumpbackInTabs() async {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -508,6 +528,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNil(syncTab)
     }
 
+    @MainActor
     func testMediumWithSyncedTabIphone_withSyncTabAndJumpbackInTabs() async {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -536,6 +557,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     // MARK: Did load new data
 
+    @MainActor
     func testDidLoadNewData_noNewData() async {
         let subject = createSubject()
         subject.didLoadNewData()
@@ -545,6 +567,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNil(subject.recentSyncedTab)
     }
 
+    @MainActor
     func testDidLoadNewData_recentTabs() async {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -556,6 +579,7 @@ class JumpBackInViewModelTests: XCTestCase {
         XCTAssertNil(subject.recentSyncedTab)
     }
 
+    @MainActor
     func testDidLoadNewData_syncedTab() async {
         let subject = createSubject()
         await adaptor.setSyncedTab(syncedTab: JumpBackInSyncedTab(client: remoteClient, tab: remoteTab))

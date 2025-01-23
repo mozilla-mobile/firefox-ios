@@ -44,3 +44,73 @@ fx-suggest:
     - lina@mozilla.com
     - ttran@mozilla.com
     - najiang@mozilla.com
+
+dau-reporting:
+  description: |
+    Minimal ping to measure DAU.
+    Sent on the baseline schedule.
+
+    **NOTE**: This ping is deprecated and replaced by the `usage-reporting` ping.
+  include_client_id: true
+  send_if_empty: true
+  bugs:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+  data_reviews:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  reasons:
+    dirty_startup: |
+      The ping was submitted at startup, because the application process was
+      killed before the Glean SDK had the chance to generate this ping, before
+      becoming inactive, in the last session.
+    inactive: |
+      The ping was submitted when becoming inactive.
+    active: |
+      The ping was submitted when the application became active again,
+      which includes when the application starts.
+
+usage-reporting:
+  description: |
+    Minimal ping to measure DAU.
+    Sent on the baseline schedule.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1921440
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1929832
+  data_reviews:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1921440
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    include_info_sections: false
+    ping_schedule:
+      - baseline
+
+onboarding-opt-out:
+  description: |
+    This ping is submitted when a user opts out of 
+    usage-reporting during the onboarding process. 
+    It is sent immediately upon opting out of Telemetry/Usage Tracking (T/UT) 
+    at ToS consent. This ping will only ever be sent during the 
+    initial onboarding flow. 
+    If the global telemetry preference is disabled, this ping 
+    includes specific settings to ensure it can still be submitted.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24101
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false

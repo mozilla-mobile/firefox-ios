@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Storage
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
@@ -25,7 +24,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
         // such as its TabManager instance, which also has the window UUID property as a convenience.
-        let reserved = windowManager.reserveNextAvailableWindowUUID()
+        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
+        let reserved = windowManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
         self.reservedWindowUUID = reserved
         self.window = sceneSetupHelper.configureWindowFor(scene,
                                                           windowUUID: reserved.uuid,
@@ -99,6 +99,9 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
+    // No implementation needed as LaunchScreenViewController is not calling this coordinator method
+    func finishedLoadingLaunchOrder() { }
+
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
@@ -137,6 +140,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     // MARK: - LaunchCoordinatorDelegate
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
+        router.dismiss(animated: true)
+        remove(child: coordinator)
+    }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true)

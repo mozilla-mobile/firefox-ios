@@ -14,8 +14,8 @@ final class MicrosurveyStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testDismissSurveyAction() {
@@ -24,7 +24,7 @@ final class MicrosurveyStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.shouldDismiss, false)
 
-        let action = getAction(for: .dismissSurvey)
+        let action = getAction(for: .closeSurvey)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.shouldDismiss, true)
@@ -37,7 +37,7 @@ final class MicrosurveyStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.showPrivacy, false)
 
-        let action = getAction(for: .navigateToPrivacyNotice)
+        let action = getAction(for: .tapPrivacyNotice)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.showPrivacy, true)
@@ -53,7 +53,7 @@ final class MicrosurveyStateTests: XCTestCase {
         return MicrosurveyState.reducer
     }
 
-    private func getAction(for actionType: MicrosurveyMiddlewareActionType) -> MicrosurveyMiddlewareAction {
-        return  MicrosurveyMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyAction {
+        return  MicrosurveyAction(surveyId: "", windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }

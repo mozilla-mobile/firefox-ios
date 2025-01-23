@@ -8,11 +8,16 @@ class FirefoxSuggestTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
         navigator.openURL("www.example.com")
+        waitUntilPageLoad()
         navigator.createNewTab()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("ex")
-        mozWaitForElementToExist(app.tables["SiteTable"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
-        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
+        urlBarAddress.typeText("ex")
+        waitForElementsToExist(
+            [
+            app.tables["SiteTable"],
+            app.tables["SiteTable"].staticTexts["Google Search"],
+            app.tables["SiteTable"].staticTexts["Firefox Suggest"]
+            ]
+        )
     }
 }

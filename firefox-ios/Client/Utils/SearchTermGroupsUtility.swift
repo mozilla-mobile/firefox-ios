@@ -227,7 +227,7 @@ class SearchTermGroupsUtility {
             let orderedItems = orderItemsIn(group: $0.value)
             var timestamp: Timestamp = 0
             if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
-                timestamp = tab.firstCreatedTime ?? 0
+                timestamp = tab.firstCreatedTime
             }
 
             // Base timestamp on score to order historyHighlight properly
@@ -246,9 +246,7 @@ class SearchTermGroupsUtility {
     private static func orderItemsIn<T: Equatable>(group: [T]) -> [T] {
         return group.sorted {
             if let firstTab = $0 as? Tab, let secondTab = $1 as? Tab {
-                let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
-                let secondTabTimestamp = secondTab.firstCreatedTime ?? 0
-                return firstTabTimestamp < secondTabTimestamp
+                return firstTab.firstCreatedTime < secondTab.firstCreatedTime
             } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)

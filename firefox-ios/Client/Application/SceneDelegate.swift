@@ -4,11 +4,8 @@
 
 import UIKit
 import CoreSpotlight
-import Storage
 import Shared
-import Sync
 import UserNotifications
-import Account
 import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -20,7 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
-    var logger: Logger = DefaultLogger.shared
+
+    private let logger: Logger = DefaultLogger.shared
+    private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -87,6 +86,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Resume previously stopped downloads for, and on, THIS scene only.
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.resumeAll(for: uuid)
+            AppEventQueue.wait(for: .tabRestoration(uuid)) {
+                self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
+            }
         }
     }
 
@@ -101,6 +103,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.pauseAll(for: uuid)
+            tabErrorTelemetryHelper.recordTabCountForBackgroundedScene(uuid)
         }
     }
 
@@ -138,6 +141,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
+
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
@@ -217,7 +227,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+            self?.logger.log("Start up flow and restoration done, will handle route",
+                             level: .info,
+                             category: .coordinator)
             sceneCoordinator.findAndHandle(route: route)
         }
     }

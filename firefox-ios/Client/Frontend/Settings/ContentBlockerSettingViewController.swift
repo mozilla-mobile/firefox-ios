@@ -7,7 +7,8 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class ContentBlockerSettingViewController: SettingsTableViewController {
+class ContentBlockerSettingViewController: SettingsTableViewController,
+                                           Notifiable {
     private struct UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
@@ -45,6 +46,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        linkButton.isHidden = currentBlockingStrength == .strict
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -69,33 +72,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
-                    let extras = [
-                        TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                        TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
-                    ]
-                    TelemetryWrapper.recordEvent(
-                        category: .action,
-                        method: .change,
-                        object: .setting,
-                        extras: extras
-                    )
+                    self.linkButton.isHidden = option == .strict
 
-                    if option == .strict {
-                        self.linkButton.isHidden = true
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .tap,
-                            object: .trackingProtectionMenu,
-                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue]
-                        )
-                    } else {
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .tap,
-                            object: .trackingProtectionMenu,
-                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"]
-                        )
-                    }
+                    self.recordEventOnChecked(option: option)
                 })
 
             let uuid = windowUUID
@@ -111,27 +90,32 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             return setting
         }
 
-        let enabledSetting = BoolSetting(
-            prefs: profile.prefs,
-            prefKey: ContentBlockingConfig.Prefs.EnabledKey,
-            defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
-            attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
-                TabContentBlocker.prefsChanged()
-                strengthSetting.forEach { item in
-                    item.enabled = enabled
-                }
-                self?.tableView.reloadData()
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .trackingProtectionMenu,
-                                             extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
-        }
+        var sections: [SettingSection] = []
 
-        let firstSection = SettingSection(
-            title: nil,
-            footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter),
-            children: [enabledSetting]
-        )
+        if let profile {
+            let enabledSetting = BoolSetting(
+                prefs: profile.prefs,
+                prefKey: ContentBlockingConfig.Prefs.EnabledKey,
+                defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
+                attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
+                    TabContentBlocker.prefsChanged()
+                    strengthSetting.forEach { item in
+                        item.enabled = enabled
+                    }
+                    self?.tableView.reloadData()
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .trackingProtectionMenu,
+                                                 extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
+            }
+
+            let firstSection = SettingSection(
+                title: nil,
+                footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter),
+                children: [enabledSetting]
+            )
+            sections.append(firstSection)
+        }
 
         let optionalFooterTitle = NSAttributedString(string: .TrackingProtectionLevelFooter)
 
@@ -143,7 +127,38 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             footerTitle: optionalFooterTitle,
             children: strengthSetting
         )
-        return [firstSection, secondSection]
+        sections.append(secondSection)
+
+        return sections
+    }
+
+    private func recordEventOnChecked(option: BlockingStrength) {
+        let extras = [
+            TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+            TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
+        ]
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .change,
+            object: .setting,
+            extras: extras
+        )
+
+        if option == .strict {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .trackingProtectionMenu,
+                extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue]
+            )
+        } else {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .trackingProtectionMenu,
+                extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"]
+            )
+        }
     }
 
     // The first section header gets a More Info link
@@ -164,7 +179,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             linkButton.configure(viewModel: linkButtonViewModel)
 
             linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-            linkButton.isHidden = false
 
             defaultFooter.stackView.addArrangedSubview(linkButton)
 
@@ -199,5 +213,19 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         super.applyTheme()
         let currentTheme = currentTheme()
         linkButton.applyTheme(theme: currentTheme)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            tableView.reloadData()
+        default:
+            break
+        }
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }

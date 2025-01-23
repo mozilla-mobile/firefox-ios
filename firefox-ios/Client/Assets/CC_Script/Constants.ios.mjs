@@ -32,6 +32,9 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.heuristics.captureOnPageNavigation": false,
   "extensions.formautofill.focusOnAutofill": false,
   "extensions.formautofill.test.ignoreVisibilityCheck": false,
+  "extensions.formautofill.heuristics.autofillSameOriginWithTop": false,
+  "signon.generation.confidenceThreshold": 0.75,
+  "extensions.formautofill.ml.experiment.enabled": false,
 };
 
 // Used Mimic the behavior of .getAutocompleteInfo()

@@ -93,14 +93,11 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
             } catch {
                 logger.log("WallpaperStorageUtility decoding error: \(error.localizedDescription)",
                            level: .warning,
-                           category: .homepage)
+                           category: .legacyHomepage)
             }
         }
 
-        return Wallpaper(id: "fxDefault",
-                         textColor: nil,
-                         cardColor: nil,
-                         logoTextColor: nil)
+        return Wallpaper.baseWallpaper
     }
 
     public func fetchImageNamed(_ name: String) throws -> UIImage? {

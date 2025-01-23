@@ -5,7 +5,7 @@
 "New Tab" = "Novi tab";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Ovo vam omogućava slikanje i otpremanje fotografija.";
+"NSCameraUsageDescription" = "Firefox koristi vašu kameru za skeniranje QR kodova i snimanje fotografija i video zapisa.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox zahtijeva Face ID za pristup vašim sačuvanim lozinkama i načinima plaćanja.";
@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećujete mogu zahtjevati vašu lokaciju.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Ovo vam omogućava snimanje i otpremanje videa.";
+"NSMicrophoneUsageDescription" = "Firefox koristi vaš mikrofon za snimanje i prijenos zvuka.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ovo vam omogućava da sačuvate fotografije.";

@@ -30,17 +30,20 @@ class PocketViewModel {
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
     private var prefs: Prefs
+    private let logger: Logger
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
          prefs: Prefs,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         logger: Logger = DefaultLogger.shared) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
     }
 
     // The dimension of a cell
@@ -48,7 +51,7 @@ class PocketViewModel {
     func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                            isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
         if device == .pad {
-            return .absolute(PocketStandardCell.UX.cellWidth) // iPad
+            return .absolute(LegacyPocketStandardCell.UX.cellWidth) // iPad
         } else if isLandscape {
             return .fractionalWidth(UX.fractionalWidthiPhoneLandscape)
         } else {
@@ -62,11 +65,11 @@ class PocketViewModel {
 
     private func getSitesDetail(for index: Int) -> Site {
         if isStoryCell(index: index) {
-            return Site(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
-                        title: pocketStoriesViewModels[index].title)
+            return Site.createBasicSite(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
+                                        title: pocketStoriesViewModels[index].title)
         } else {
-            return Site(url: PocketProvider.MoreStoriesURL.absoluteString,
-                        title: .FirefoxHomepage.Pocket.DiscoverMore)
+            return Site.createBasicSite(url: PocketProvider.MoreStoriesURL.absoluteString,
+                                        title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
     }
 
@@ -140,23 +143,23 @@ extension PocketViewModel: HomepageViewModelProtocol {
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
+            heightDimension: .estimated(LegacyPocketStandardCell.UX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: getWidthDimension(),
-            heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
+            heightDimension: .estimated(LegacyPocketStandardCell.UX.cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = PocketStandardCell.UX.interItemSpacing
+        group.interItemSpacing = LegacyPocketStandardCell.UX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: 0,
             bottom: 0,
-            trailing: PocketStandardCell.UX.interGroupSpacing)
+            trailing: LegacyPocketStandardCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -208,15 +211,25 @@ extension PocketViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketStandardCell.cellIdentifier,
-                                                          for: indexPath) as! PocketStandardCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
+                                                                for: indexPath) as? LegacyPocketStandardCell else {
+                logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .legacyHomepage)
+                return UICollectionViewCell()
+            }
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
             cell.configure(viewModel: viewModel, theme: theme)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
-                                                          for: indexPath) as! PocketDiscoverCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
+                                                                for: indexPath) as? PocketDiscoverCell else {
+                logger.log("Failed to dequeue PocketDiscoverCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .legacyHomepage)
+                return UICollectionViewCell()
+            }
             cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
         }

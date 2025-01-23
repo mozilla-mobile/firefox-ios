@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 
 class PerformanceTests: BaseTestCase {
     let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive",
@@ -87,8 +88,12 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton)
-        mozWaitForElementToExist(tabsButtonNumber)
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -96,10 +101,8 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton)
-            tabsButton.tap()
-            mozWaitForElementToExist(doneButton)
-            doneButton.tap()
+            tabsButton.waitAndTap()
+            doneButton.waitAndTap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
@@ -111,8 +114,12 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton)
-        mozWaitForElementToExist(tabsButtonNumber)
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -120,10 +127,8 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton)
-            tabsButton.tap()
-            mozWaitForElementToExist(doneButton)
-            doneButton.tap()
+            tabsButton.waitAndTap()
+            doneButton.waitAndTap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()

@@ -27,7 +27,6 @@ class FakespotViewController: UIViewController,
         static let betaCornerRadius: CGFloat = 8
         static let betaHorizontalSpace: CGFloat = 6
         static let betaVerticalSpace: CGFloat = 4
-        static let closeButtonWidthHeight: CGFloat = 30
         static let scrollViewTopSpacing: CGFloat = 12
         static let scrollContentTopPadding: CGFloat = 16
         static let scrollContentBottomPadding: CGFloat = 40
@@ -326,8 +325,6 @@ class FakespotViewController: UIViewController,
             closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
             closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
 
             betaLabel.topAnchor.constraint(equalTo: betaView.topAnchor, constant: UX.betaVerticalSpace),
             betaLabel.leadingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: UX.betaHorizontalSpace),
@@ -346,7 +343,7 @@ class FakespotViewController: UIViewController,
             // calculate the width if auto-layout doesn't have it yet
             availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
         }
-        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
+        availableTitleStackWidth -= closeButton.frame.width + UX.titleCloseSpacing // remove close button and spacing
         let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
 
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory

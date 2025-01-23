@@ -1,0 +1,114 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Азеиԥш хьӡы";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Ақалақь";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Ажәабжьҳәаҩ";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "Аиҿкаара";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "Асубиеқт Альтернативтә хьӡқәа";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS ахьӡ";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "Амаҭәар ахьӡ";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "Асертификат";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Алабҿабара";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Аус ауеит";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Аус ауеит";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Аԥыхра";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Аилкаара";
+
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "%@ азы акукиқәеи асаит адыррақәеи раԥыхра иахҟьаны асаитқәа рҟынтәи уҭыҵыр алшоит, насгьы уаахәаратә кәырҷыжь ҭацәхар алшоит.";
+
+/* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Акукиқәеи асаит адыррақәеи ԥыхтәуп";
+
+/* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Акукиқәеи асаит адыррақәеи ԥыхтәуп";
+
+/* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Акукиқәеи асаит адыррақәеи ԥыхуп";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Амениу амаӡареи ашәарҭадареи арктәуп";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Ишәарҭам аимадара";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Ишәарҭам аимадара";
+
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Ашьҭаԥшыгақәа ҳԥыхьамшәеит";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Аҵакы ашьҭаҵара: %@";
+
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Асаитқәа рыбжьара ашьҭаҵаратә кукиқәа: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Анацәашьҭақәа реизгаҩцәа: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Асоциалтә медиа ашьҭаҵаҩцәа: %@";
+
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Ашьҭаҵаҩцәа аанкылоуп: %@";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Ишьақәырӷәӷәоуп %@ ала";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Асертификат абара";
+
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ аус ауам. Ҳара иҳабжьаҳгоит ахьчара еиҭа аркра.";
+
+/* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
+"Menu.EnhancedTrackingProtection.Off.Title.v128" = "Уара ахьчара аҿыхуп";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "Уара ухьчоуп. Акы ҳгәаҳҭар, адырра шәаҳҭоит.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Шәеимадара шәарҭам.";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Ари асаит аҿы шәгәышәҽаныз";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ агәҽанҵараҿы";
+
+/* The title for the privacy settings button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "Амаӡара аопциақәа";
+
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Еиӷьтәу ашьҭаԥшра ахьчара";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Ахьчара Ҿыцуп. Ҳара иҳабжьаҳгоит уи даҽазнык иаркырц.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Ари асаит аҿы акы аус амуазар, уи аҿыхра шәҽазышәшәа.";
+

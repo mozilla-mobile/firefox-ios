@@ -1,11 +1,11 @@
 # Firefox iOS integration tests
 
-To run these tests you will need [Python 3][] and [pipenv][] installed. Once
+To run these tests you will need [Python 3.12][] and [pipenv][] installed. Once
 you have these, make sure you're in the `SyncIntegrationTests` directory and
 run the following:
 
 ```
-$ pipenv install
+$ pipenv install --python 3.12
 $ pipenv run pytest
 ```
 

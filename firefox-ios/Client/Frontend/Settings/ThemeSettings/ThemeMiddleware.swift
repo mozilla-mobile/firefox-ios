@@ -27,6 +27,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             self.resolveThemeSettingsViewActionType(action: action)
         } else if let action = action as? PrivateModeAction {
             self.resolvePrivateModeAction(action: action)
+        } else if let action = action as? MainMenuAction {
+            self.resolveMainMenuAction(action: action)
         }
     }
 
@@ -35,6 +37,15 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         case PrivateModeActionType.privateModeUpdated:
             updatePrivateMode(with: action)
 
+        default:
+            break
+        }
+    }
+
+    private func resolveMainMenuAction(action: MainMenuAction) {
+        switch action.actionType {
+        case MainMenuDetailsActionType.tapToggleNightMode:
+            updateNightMode()
         default:
             break
         }
@@ -111,6 +122,11 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         guard let manualThemeType = action.manualThemeType else { return }
         themeManager.setManualTheme(to: manualThemeType)
         dispatchMiddlewareAction(from: action, to: .manualThemeChanged)
+    }
+
+    func updateNightMode() {
+        NightModeHelper.toggle()
+        themeManager.applyThemeUpdatesToWindows()
     }
 
     private func dispatchMiddlewareAction(

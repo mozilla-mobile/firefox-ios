@@ -8,7 +8,7 @@ Download on the [App Store](https://itunes.apple.com/app/id1055677337).
 
 ## Main Branch
 
-This branch works with Xcode 15.4 and supports iOS 15.0 and newer.
+This branch works with Xcode 16.1 and supports iOS 15.0 and newer.
 
 Pull requests should be submitted with `main` as the base branch.
 
@@ -18,7 +18,7 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
 
 ## Build Instructions
 
-1. Install Xcode 15.3 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
 2. Clone the repository:
 
   ```shell

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+/* TODO(issam, FXIOS-10123): switch to nest rules once the min supported version is >= 17.2 */
 :root {
   --background-surface: #f9f9fb;
   --background-primary: #ffffff;
@@ -28,42 +29,42 @@ body {
 
 form {
   display: grid;
+}
 
-  input,
-  textarea,
-  select {
-    order: 2;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    background-color: transparent;
-    color: var(--text-primary);
-    font: -apple-system-body;
-  }
+label {
+  background-color: var(--background-primary);
+  border-bottom: 0.5px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 68px;
+  padding: 11px 16px;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight interaction */
+}
 
-  textarea {
-    overflow: hidden;
-    resize: none;
-  }
+label input,
+label textarea,
+label select {
+  order: 2;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--text-primary);
+  font: -apple-system-body;
+}
 
-  label {
-    background-color: var(--background-primary);
-    border-bottom: 0.5px solid var(--border-primary);
-    display: flex;
-    flex-direction: column;
-    min-height: 68px;
-    padding: 11px 16px;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight interaction */
+label textarea {
+  overflow: hidden;
+  resize: none;
+}
 
-    span {
-      font: -apple-system-subheadline;
-      color: var(--text-secondary);
-    }
-  }
+label span {
+  font: -apple-system-subheadline;
+  color: var(--text-secondary);
 }

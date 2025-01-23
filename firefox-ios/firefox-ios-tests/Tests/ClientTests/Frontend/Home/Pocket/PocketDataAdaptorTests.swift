@@ -6,6 +6,7 @@ import XCTest
 @testable import Client
 
 class PocketDataAdaptorTests: XCTestCase {
+    private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     var mockNotificationCenter: MockNotificationCenter!
     var mockPocketAPI: MockPocketAPI!
 
@@ -21,14 +22,15 @@ class PocketDataAdaptorTests: XCTestCase {
         mockPocketAPI = nil
     }
 
-    func testEmptyData() {
+    func testEmptyData() async throws {
         mockPocketAPI = MockPocketAPI(result: .success([]))
         let subject = createSubject()
         let data = subject.getPocketData()
+        try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(data.count, 0, "Data should be null")
     }
 
-    func testGetPocketData() {
+    func testGetPocketData() async throws {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -37,6 +39,7 @@ class PocketDataAdaptorTests: XCTestCase {
         mockPocketAPI = MockPocketAPI(result: .success(stories))
         let subject = createSubject()
         let data = subject.getPocketData()
+        try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
 }

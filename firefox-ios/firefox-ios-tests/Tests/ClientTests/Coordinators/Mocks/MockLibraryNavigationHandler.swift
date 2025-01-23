@@ -8,6 +8,8 @@ import Foundation
 
 class MockLibraryNavigationHandler: LibraryNavigationHandler {
     var didStartCalled = 0
+    var didSetNavigationBarHiddenValue = false
+    var didSetNavigationBarHiddenCalled = 0
     var didShareLibraryItemCalled = 0
 
     func start(panelType: LibraryPanelType, navigationController: UINavigationController) {
@@ -16,5 +18,10 @@ class MockLibraryNavigationHandler: LibraryNavigationHandler {
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
         didShareLibraryItemCalled += 1
+    }
+
+    func setNavigationBarHidden(_ value: Bool) {
+        didSetNavigationBarHiddenValue = value
+        didSetNavigationBarHiddenCalled += 1
     }
 }

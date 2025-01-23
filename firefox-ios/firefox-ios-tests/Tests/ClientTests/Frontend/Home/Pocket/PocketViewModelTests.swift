@@ -19,6 +19,10 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
+        // Due to changes allow certain custom pings to implement their own opt-out
+        // independent of Glean, custom pings may need to be registered manually in
+        // tests in order to puth them in a state in which they can collect data.
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
     }
 
@@ -48,7 +52,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        collectionView.register(cellType: PocketStandardCell.self)
+        collectionView.register(cellType: LegacyPocketStandardCell.self)
 
         _ = subject.configure(collectionView, at: IndexPath(item: 0, section: 0))
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Pocket.sectionImpressions,
@@ -77,13 +81,13 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     func testDimensioniPadPortrait() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .pad, isLandscape: false)
-        XCTAssertEqual(dimension, .absolute(PocketStandardCell.UX.cellWidth))
+        XCTAssertEqual(dimension, .absolute(LegacyPocketStandardCell.UX.cellWidth))
     }
 
     func testDimensioniPadLandscape() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .pad, isLandscape: true)
-        XCTAssertEqual(dimension, .absolute(PocketStandardCell.UX.cellWidth))
+        XCTAssertEqual(dimension, .absolute(LegacyPocketStandardCell.UX.cellWidth))
     }
 
     // MARK: - Standard cell
@@ -93,10 +97,10 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-        collectionView.register(cellType: PocketStandardCell.self)
+        collectionView.register(cellType: LegacyPocketStandardCell.self)
 
         let cell = try XCTUnwrap(subject.configure(collectionView,
-                                                   at: IndexPath(item: 0, section: 0)) as? PocketStandardCell)
+                                                   at: IndexPath(item: 0, section: 0)) as? LegacyPocketStandardCell)
         XCTAssertNotNil(cell)
     }
 

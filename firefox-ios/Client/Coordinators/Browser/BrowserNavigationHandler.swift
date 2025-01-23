@@ -7,6 +7,7 @@ import Storage
 import WebKit
 
 import struct MozillaAppServices.CreditCard
+import enum MozillaAppServices.VisitType
 
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
@@ -24,19 +25,20 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// - Parameter homepanelSection: The section to be displayed.
     func show(homepanelSection: Route.HomepanelSection)
 
-    /// Shows the share extension.
+    /// Shows the share sheet.
     ///
-    /// - Parameter url: The url to be shared.
+    /// - Parameter shareType: The content to be shared.
+    /// - Parameter shareMessage: An optional plain text message to be shared.
     /// - Parameter sourceView: The reference view to show the popoverViewController.
-    /// - Parameter sourceRect: An optional rect to use for ipad popover presentation
-    /// - Parameter toastContainer: The view in which is displayed the toast results
-    ///                             from actions in the share extension
+    /// - Parameter sourceRect: An optional rect to use for ipad popover presentation.
+    /// - Parameter toastContainer: The view in which is displayed the toast results from actions in the share extension.
     /// - Parameter popoverArrowDirection: The arrow direction for the view controller presented as popover.
-    func showShareExtension(url: URL,
-                            sourceView: UIView,
-                            sourceRect: CGRect?,
-                            toastContainer: UIView,
-                            popoverArrowDirection: UIPopoverArrowDirection)
+    func showShareSheet(shareType: ShareType,
+                        shareMessage: ShareMessage?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection)
 
     /// Initiates the modal presentation of the Fakespot flow for analyzing the authenticity of a product's reviews.
     /// - Parameter productURL: The URL of the product for which the reviews will be analyzed.
@@ -92,27 +94,27 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     func showMicrosurvey(model: MicrosurveyModel)
 
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo)
+
     /// Shows the app menu
     func showMainMenu()
+
+    /// Shows the toolbar's search engine selection bottom sheet (iPhone) or popup (iPad)
+    func showSearchEngineSelection(forSourceView sourceView: UIView)
+
+    /// Navigates from home page to a new link
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool)
+
+    /// Navigates to our custom context menu (Photon Action Sheet)
+    func showContextMenu(for configuration: ContextMenuConfiguration)
+
+    /// Navigates to the edit bookmark view
+    func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode)
+
+    func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
 }
 
 extension BrowserNavigationHandler {
-    func showShareExtension(
-        url: URL,
-        sourceView: UIView,
-        sourceRect: CGRect? = nil,
-        toastContainer: UIView,
-        popoverArrowDirection: UIPopoverArrowDirection = .up
-    ) {
-        showShareExtension(
-            url: url,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            toastContainer: toastContainer,
-            popoverArrowDirection: popoverArrowDirection
-        )
-    }
-
     func show(settings: Route.SettingsSection) {
         show(settings: settings, onDismiss: nil)
     }

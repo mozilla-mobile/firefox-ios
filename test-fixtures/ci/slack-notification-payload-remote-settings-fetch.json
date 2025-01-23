@@ -1,0 +1,39 @@
+{
+    "attachments": [
+        {
+            "color": "${{ env.JOB_STATUS_COLOR }}",
+            "blocks": [
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "GitHub Action :github: remote settings fetch",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Status: ${{ env.JOB_STATUS }}\n Logs: <${{ env.JOB_LOG_URL }}|Build Logs>"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": ":testops-notify: created by <www.go.com|Mobile Test Engineering>"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

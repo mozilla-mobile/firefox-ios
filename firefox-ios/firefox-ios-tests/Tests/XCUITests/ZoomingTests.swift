@@ -36,7 +36,7 @@ class ZoomingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         validateZoomActions()
@@ -54,7 +54,7 @@ class ZoomingTests: BaseTestCase {
         zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
         zoomOut()
-        zoomOutButton.tap()
+        zoomOutButton.waitAndTap()
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
     }
@@ -66,7 +66,7 @@ class ZoomingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         validateZoomLevelOnSwitchingTabs()
@@ -112,8 +112,7 @@ class ZoomingTests: BaseTestCase {
     private func selectTabTrayWebsites(tab: Int) {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.collectionViews.staticTexts.element)
-        app.collectionViews.staticTexts.element(boundBy: tab).tap()
+        app.collectionViews.staticTexts.element(boundBy: tab).waitAndTap()
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom
         navigator.nowAt(BrowserTab)
@@ -138,8 +137,12 @@ class ZoomingTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(PageZoom)
         // The zoom bar is displayed
-        mozWaitForElementToExist(zoomInButton)
-        mozWaitForElementToExist(zoomOutButton)
+        waitForElementsToExist(
+            [
+                zoomInButton,
+                zoomOutButton
+            ]
+        )
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
         // Tap on + and - buttons
@@ -148,24 +151,29 @@ class ZoomingTests: BaseTestCase {
         swipeUp()
         swipeDown()
         zoomOut()
-        zoomOutButton.tap()
+        zoomOutButton.waitAndTap()
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
         // Switch the device orientation to landscape
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         zoomOutLandscape()
         zoomInLandscape()
-        zoomInButton.tap()
+        zoomInButton.waitAndTap()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel])
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
     }
 
     func zoomIn() {
+        // If there are multiple matches for this element, then both the normal tab and the private tab views may be
+        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
+        let viewCount = app.buttons.matching(identifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel).count
+        XCTAssertLessThanOrEqual(viewCount, 1, "Too many matches")
+
         for i in 0...3 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomInButton.tap()
+            zoomInButton.waitAndTap()
             mozWaitForElementToExist(bookOfMozillaTxt)
             let currentTextSize = bookOfMozillaTxt.frame.size.height
             XCTAssertTrue(currentTextSize != previoustTextSize)
@@ -177,7 +185,7 @@ class ZoomingTests: BaseTestCase {
         for i in 0...2 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomOutButton.tap()
+            zoomOutButton.waitAndTap()
             mozWaitForElementToExist(bookOfMozillaTxt)
             let currentTextSize = bookOfMozillaTxt.frame.size.height
             XCTAssertTrue(currentTextSize != previoustTextSize)
@@ -189,7 +197,7 @@ class ZoomingTests: BaseTestCase {
         for i in 0...2 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomOutButton.tap()
+            zoomOutButton.waitAndTap()
             mozWaitForElementToExist(bookOfMozillaTxt)
             let currentTextSize = bookOfMozillaTxt.frame.size.height
             XCTAssertTrue(currentTextSize != previoustTextSize)
@@ -201,7 +209,7 @@ class ZoomingTests: BaseTestCase {
         for i in 0...1 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomInButton.tap()
+            zoomInButton.waitAndTap()
             mozWaitForElementToExist(bookOfMozillaTxt)
             let currentTextSize = bookOfMozillaTxt.frame.size.height
             XCTAssertTrue(currentTextSize != previoustTextSize)
@@ -211,13 +219,13 @@ class ZoomingTests: BaseTestCase {
 
     private func tapZoomInButton(tapCount: Int) {
         for _ in 1...tapCount {
-            zoomInButton.tap()
+            zoomInButton.waitAndTap()
         }
     }
 
     private func tapZoomOutButton(tapCount: Int) {
         for _ in 1...tapCount {
-            zoomOutButton.tap()
+            zoomOutButton.waitAndTap()
         }
     }
 

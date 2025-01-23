@@ -139,3 +139,6 @@
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "Informação de endereço atualizada";
 
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "Endereço guardado";
+

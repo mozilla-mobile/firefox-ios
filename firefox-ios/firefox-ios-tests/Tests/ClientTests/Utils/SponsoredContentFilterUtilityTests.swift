@@ -131,14 +131,14 @@ extension SponsoredContentFilterUtilityTests {
                      sponsoredSitesCount: Int) -> [Site] {
         var sites = [Site]()
         (0..<normalSitesCount).forEach { index in
-            let site = Site(url: normalURL,
-                            title: "")
+            let site = Site.createBasicSite(url: normalURL,
+                                            title: "")
             sites.append(site)
         }
 
         (0..<sponsoredSitesCount).forEach { index in
-            let site = Site(url: SponsoredContentFilterUtilityTests.sponsoredStandardURL,
-                            title: "")
+            let site = Site.createBasicSite(url: SponsoredContentFilterUtilityTests.sponsoredStandardURL,
+                                            title: "")
             sites.append(site)
         }
 

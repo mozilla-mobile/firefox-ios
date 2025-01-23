@@ -74,21 +74,16 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // Function added to wait for AccountManager initialization to get
     // if the user is Sign in with Sync Account to decide which cards to show
     func hasSyncableAccount(completion: @escaping () -> Void) {
-        profile.hasSyncAccount { result in
-            self.hasSyncableAccount = result
-            ensureMainThread {
-                completion()
-            }
+        hasSyncableAccount = profile.hasAccount()
+        ensureMainThread {
+            completion()
         }
     }
 
     func hasSyncableAccount() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            profile.hasSyncAccount { hasSync in
-                self.hasSyncableAccount = hasSync
-                continuation.resume(returning: hasSync)
-            }
-        }
+        let hasSync = profile.hasAccount()
+        hasSyncableAccount = hasSync
+        return hasSync
     }
 
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {

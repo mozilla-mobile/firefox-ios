@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "ᱟᱢ ᱴᱷᱮᱱ ᱚᱞᱜᱟ ᱱᱟᱶᱟ ᱠᱷᱟᱛᱟ ᱟᱹᱭᱩᱨᱢᱤᱫ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱜᱟ ᱥᱟᱫᱷᱚᱱ ᱡᱩᱰᱟᱹᱣ ᱵᱟᱹᱱᱩᱜᱟ ᱾";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "ᱟᱢ ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱨᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱵᱚᱱᱩᱢ-ᱟ ᱾";
+

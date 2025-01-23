@@ -67,7 +67,7 @@ class MenuBuilderHelper {
             ]
         )
         fileMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
         }
 
         let findMenu = UIMenu(
@@ -90,7 +90,7 @@ class MenuBuilderHelper {
             ]
         )
         findMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
         }
 
         var viewMenuChildren: [UIMenuElement] = [
@@ -137,7 +137,7 @@ class MenuBuilderHelper {
 
         let viewMenu = UIMenu(options: .displayInline, children: viewMenuChildren)
         viewMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
         }
 
         let historyMenu = UIMenu(
@@ -253,10 +253,8 @@ class MenuBuilderHelper {
             ]
         )
 
-        if #available(iOS 15, *) {
-            windowMenu.children.forEach {
-                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
-            }
+        windowMenu.children.forEach {
+            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
         }
 
         builder.insertChild(applicationMenu, atStartOfMenu: .application)

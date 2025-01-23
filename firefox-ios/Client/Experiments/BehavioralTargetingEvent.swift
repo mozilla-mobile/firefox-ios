@@ -4,8 +4,11 @@
 
 import Foundation
 
+// This events are used for behavioral targeting for our experiments
+// https://experimenter.info/mobile-behavioral-targeting
 struct BehavioralTargetingEvent {
-    static let syncLoginCompletion = "sync.login_completed_view"
-    static let homepageViewed = "homepage_viewed"
     static let appForeground = "app_cycle.foreground"
+    static let homepageViewed = "homepage_viewed"
+    static let performedSearch = "performed_search"
+    static let syncLoginCompletion = "sync.login_completed_view"
 }

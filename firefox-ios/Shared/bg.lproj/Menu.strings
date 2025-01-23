@@ -13,6 +13,9 @@
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "Настройки";
 
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "Докладване на проблем със страницата";
+
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Споделяне на страницата…";
 

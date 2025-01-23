@@ -5,24 +5,24 @@
 import Storage
 import AuthenticationServices
 
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 
 extension LoginRecord {
     public var passwordCredentialIdentity: ASPasswordCredentialIdentity {
-        let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
+        let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.origin, type: .URL)
         return ASPasswordCredentialIdentity(
             serviceIdentifier: serviceIdentifier,
-            user: self.decryptedUsername,
+            user: self.username,
             recordIdentifier: self.id
         )
     }
 
     public var passwordCredential: ASPasswordCredential {
-        return ASPasswordCredential(user: self.decryptedUsername, password: self.decryptedPassword)
+        return ASPasswordCredential(user: self.username, password: self.password)
     }
 }
 
-extension LoginRecord: Comparable {
+extension LoginRecord: Swift.Comparable {
     public static func < (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
         lhs.hostname.titleFromHostname < rhs.hostname.titleFromHostname
     }

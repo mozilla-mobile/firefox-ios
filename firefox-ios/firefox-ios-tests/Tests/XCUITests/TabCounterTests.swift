@@ -11,7 +11,7 @@ class TabCounterTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        var tabsOpen = app.buttons["Show Tabs"].value
+        var tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.createNewTab()
@@ -21,7 +21,7 @@ class TabCounterTests: BaseTestCase {
         }
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
 
         // Check only for iPhone, for iPad there is not counter in tab tray
@@ -40,7 +40,7 @@ class TabCounterTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        var tabsOpen = app.buttons["Show Tabs"].value
+        var tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.createNewTab()
@@ -51,7 +51,7 @@ class TabCounterTests: BaseTestCase {
         }
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
 
         navigator.goto(TabTray)
@@ -59,7 +59,7 @@ class TabCounterTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"]
                 .collectionViews.cells.element(boundBy: 0)
-                .buttons[StandardImageIdentifiers.Large.cross].tap()
+                .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
             let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
             mozWaitForElementToExist(navBarTabTrayButton)
@@ -68,14 +68,14 @@ class TabCounterTests: BaseTestCase {
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
             app.otherElements["Tabs Tray"].cells
-                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].tap()
+                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         }
 
-        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()
+        app.otherElements["Tabs Tray"].cells.element(boundBy: 0).waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)

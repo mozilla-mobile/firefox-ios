@@ -4,11 +4,15 @@
 
 import Common
 import Shared
+import UIKit
+import Foundation
 
 class MockThemeManager: ThemeManager {
+    var getCurrentThemeCallCount = 0
     private var currentThemeStorage: Theme = LightTheme()
 
     func getCurrentTheme(for window: UUID?) -> Theme {
+        getCurrentThemeCallCount += 1
         return currentThemeStorage
     }
 

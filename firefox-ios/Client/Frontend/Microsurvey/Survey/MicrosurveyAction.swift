@@ -16,7 +16,6 @@ final class MicrosurveyAction: Action {
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
-final class MicrosurveyMiddlewareAction: Action { }
 
 enum MicrosurveyActionType: ActionType {
     case closeSurvey
@@ -24,9 +23,4 @@ enum MicrosurveyActionType: ActionType {
     case tapPrivacyNotice
     case surveyDidAppear
     case confirmationViewed
-}
-
-enum MicrosurveyMiddlewareActionType: ActionType {
-    case dismissSurvey
-    case navigateToPrivacyNotice
 }

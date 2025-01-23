@@ -7,11 +7,17 @@ import Common
 
 class NightModeTests: BaseTestCase {
     private func checkNightModeOn() {
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
+        navigator.goto(ToolsBrowserTabMenu)
+        mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
+        XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn off Night Mode")
+        // Turn off night mode
+        app.tables.cells["MainMenu.NightModeOn"].waitAndTap()
     }
 
     private func checkNightModeOff() {
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
+        navigator.goto(ToolsBrowserTabMenu)
+        mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
+        XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn on Night Mode")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307056
@@ -19,16 +25,13 @@ class NightModeTests: BaseTestCase {
         let url1 = "test-example.html"
         // Go to a webpage, and select night mode on and off, check it's applied or not
         navigator.openURL(path(forTestPage: url1))
-
+        waitUntilPageLoad()
         // turn on the night mode
         navigator.performAction(Action.ToggleNightMode)
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // checking night mode on or off
         checkNightModeOn()
-
-        // turn off the night mode
-        navigator.performAction(Action.ToggleNightMode)
 
         // checking night mode on or off
         navigator.nowAt(BrowserTab)

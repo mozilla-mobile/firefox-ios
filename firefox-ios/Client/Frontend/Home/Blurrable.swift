@@ -17,6 +17,6 @@ extension Blurrable {
     var shouldApplyWallpaperBlur: Bool {
         guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
 
-        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+        return WallpaperManager().currentWallpaper.hasImage
     }
 }

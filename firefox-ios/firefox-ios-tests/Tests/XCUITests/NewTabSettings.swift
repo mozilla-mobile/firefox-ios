@@ -12,10 +12,14 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-        mozWaitForElementToExist(app.tables.cells["Firefox Home"])
-        mozWaitForElementToExist(app.tables.cells["Blank Page"])
-        mozWaitForElementToExist(app.tables.cells["NewTabAsCustomURL"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["New Tab"],
+                app.tables.cells["Firefox Home"],
+                app.tables.cells["Blank Page"],
+                app.tables.cells["NewTabAsCustomURL"]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
@@ -29,11 +33,10 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
@@ -45,11 +48,11 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
 
         // Now check if it switches to FF Home
@@ -57,7 +60,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307029
@@ -71,7 +74,10 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed
         app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
-        let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as! String
+        guard let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as? String else {
+            XCTFail("Failed to retreive the value from 'NewTabAsCustomURLTextField' text field")
+            return
+        }
         mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         XCTAssertEqual(valueTyped, "mozilla.org")
         // Open new page and check that the custom url is used
@@ -80,7 +86,8 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Check that website is open
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "mozilla")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
@@ -142,10 +149,11 @@ class NewTabSettingsTest: BaseTestCase {
         // Open new page and check that the custom url is used and he keyboard is not raised up
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "mozilla")
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         validateKeyboardIsRaisedAndDismissed()
 
@@ -153,25 +161,25 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        mozWaitForValueContains(url, value: "mozilla")
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         validateKeyboardIsRaisedAndDismissed()
     }
 
     private func validateKeyboardIsRaisedAndDismissed() {
         // The keyboard is raised up
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         // Tap the back button
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         // The keyboard is dismissed and the URL is unfocused
-        mozWaitForElementToExist(app.textFields["url"])
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForElementToExist(url)
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
     }
 }

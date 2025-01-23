@@ -63,7 +63,7 @@ class StatusBarOverlay: UIView,
     func resetState(isHomepage: Bool) {
         savedIsHomepage = isHomepage
         // We only need no status bar for one edge case
-        let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.type != .defaultWallpaper && isBottomSearchBar
+        let needsNoStatusBar = isHomepage && wallpaperManager.currentWallpaper.hasImage && isBottomSearchBar
         scrollOffset = needsNoStatusBar ? 0 : 1
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }

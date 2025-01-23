@@ -54,11 +54,12 @@ jobs:
         - name: Send Slack notification if tests fail
           if: '${{ !cancelled() && !github.event.pull_request.head.repo.fork }}'
           id: slack
-          uses: slackapi/slack-github-action@v1.26.0
+          uses: slackapi/slack-github-action@v2.0.0
           with:
             payload-file-path: "./test-fixtures/ci/slack-notification-payload-autofill-test.json"
+            payload-templated: true
+            webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+            webhook-type: incoming-webhook
           env:
             JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
             JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

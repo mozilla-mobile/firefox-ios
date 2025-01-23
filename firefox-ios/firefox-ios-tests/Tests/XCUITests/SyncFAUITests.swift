@@ -22,18 +22,18 @@ class SyncUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.sync])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()
     }
 
     private func verifyFxASigninScreen() {
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
-        )
-        mozWaitForElementToExist(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+        waitForElementsToExist(
+            [
+                app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+            ]
         )
 
         // Verify the placeholdervalues here for the textFields
@@ -79,7 +79,7 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePasswordNewAccount)
         // Switching to the next text field is required to determine if the message still appears or not
-        app.webViews.secureTextFields.element(boundBy: 0).tap()
+        app.webViews.secureTextFields.element(boundBy: 0).waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts["At least 8 characters"])
     }
 
@@ -118,9 +118,9 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 1))
         navigator.performAction(Action.FxATypePasswordNewAccount)
         let passMessage = "Your password is currently hidden."
-        mozWaitForElementToExist(app.webViews.buttons[passMessage])
+        mozWaitForElementToExist(app.webViews.switches[passMessage])
         // Remove the password typed, Show (password) option should not be shown
-        app.keyboards.keys["delete"].tap()
+        app.keyboards.keys["delete"].waitAndTap()
         mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }
 
@@ -131,12 +131,13 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
+        waitForElementsToExist(
+            [
+                app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+                app.buttons["Ready to Scan"],
+                app.buttons["Use Email Instead"]]
         )
-        mozWaitForElementToExist(app.buttons["Ready to Scan"])
-        mozWaitForElementToExist(app.buttons["Use Email Instead"])
-        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
-        mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].waitAndTap()
+        mozWaitForElementToExist(app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 }

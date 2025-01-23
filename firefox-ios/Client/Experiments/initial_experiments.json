@@ -75,7 +75,12 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-03-05T16:11:17.007782Z"
+      "publishedDate": "2024-03-05T16:11:17.007782Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     },
     {
       "schemaVersion": "1.12.0",
@@ -138,46 +143,42 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": null
+      "publishedDate": null,
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-splash-screen-timing-test-release",
-      "id": "ios-splash-screen-timing-test-release",
+      "slug": "long-term-holdback-2025-h1-growth-ios",
+      "id": "long-term-holdback-2025-h1-growth-ios",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "iOS Splash Screen Timing Test Release",
-      "userFacingDescription": "Adds a splash screen prior to first-run onboarding and gauges the impact to retention.",
-      "isEnrollmentPaused": true,
+      "userFacingName": "Long term holdback 2025 H1 Growth iOS",
+      "userFacingDescription": "Long-term holdback for growth experiments",
+      "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-splash-screen-release-2",
+        "namespace": "ios-no-feature-ios-release-2",
         "start": 0,
         "count": 10000,
         "total": 10000
       },
       "featureIds": [
-        "splash-screen"
+        "no-feature-ios"
       ],
       "probeSets": [],
-      "outcomes": [
-        {
-          "slug": "onboarding",
-          "priority": "primary"
-        },
-        {
-          "slug": "default_browser",
-          "priority": "secondary"
-        }
-      ],
+      "outcomes": [],
       "branches": [
         {
-          "slug": "control",
-          "ratio": 1,
+          "slug": "delivery",
+          "ratio": 19,
           "feature": {
             "featureId": "this-is-included-for-mobile-pre-96-support",
             "enabled": false,
@@ -185,17 +186,14 @@
           },
           "features": [
             {
-              "featureId": "splash-screen",
+              "featureId": "no-feature-ios",
               "enabled": true,
-              "value": {
-                "enabled": true,
-                "maximum_duration_ms": 0
-              }
+              "value": {}
             }
           ]
         },
         {
-          "slug": "treatment-a",
+          "slug": "holdback",
           "ratio": 1,
           "feature": {
             "featureId": "this-is-included-for-mobile-pre-96-support",
@@ -204,46 +202,29 @@
           },
           "features": [
             {
-              "featureId": "splash-screen",
+              "featureId": "no-feature-ios",
               "enabled": true,
-              "value": {
-                "enabled": true,
-                "maximum_duration_ms": 1500
-              }
-            }
-          ]
-        },
-        {
-          "slug": "treatment-b",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "splash-screen",
-              "enabled": true,
-              "value": {
-                "enabled": true,
-                "maximum_duration_ms": 2000
-              }
+              "value": {}
             }
           ]
         }
       ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('125.2.0') >= 0)))",
-      "startDate": "2024-04-19",
-      "enrollmentEndDate": "2024-05-30",
+      "targeting": "((is_already_enrolled) || ((app_version|versionCompare('123.!') >= 0)))",
+      "startDate": "2024-12-12",
+      "enrollmentEndDate": null,
       "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 14,
-      "referenceBranch": "control",
+      "proposedDuration": 100,
+      "proposedEnrollment": 100,
+      "referenceBranch": "holdback",
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-04-19T18:09:09.240697Z"
+      "publishedDate": "2024-12-12T20:37:24.603794Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     }
   ]
 }

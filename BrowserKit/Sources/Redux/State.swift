@@ -7,4 +7,9 @@ import Foundation
 /// Defines the entire application state including the UI state and any model state that you used in the app.
 /// This state is stored inside of the `Store`, then you have views and other subscribers that will get notified
 /// every single time that state updates into the entire app.
-public protocol StateType {}
+public protocol StateType {
+    /// Returns a default State by clearing any transient data from previous one.
+    ///
+    /// All the state properties that have a default value into the initializer should be restore to default.
+    static func defaultState(from state: Self) -> Self
+}

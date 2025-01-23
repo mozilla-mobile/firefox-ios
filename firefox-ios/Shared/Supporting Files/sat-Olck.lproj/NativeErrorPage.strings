@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "ᱫᱚᱦᱲᱟ ᱞᱟᱫᱤ";
+
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "%@ ᱨᱮᱱ ᱢᱟᱞᱤᱠ ᱫᱚ ᱱᱚᱣᱟ ᱵᱮᱥ ᱞᱮᱠᱟ ᱵᱟᱭ ᱥᱮᱴ ᱟᱯ ᱟᱠᱟᱫᱟ ᱟᱨ ᱨᱟᱠᱷᱟ ᱡᱚᱯᱲᱟᱣ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "ᱦᱩᱥᱤᱭᱟᱹᱨ ᱛᱟᱦᱮᱱ ᱢᱮ ᱾  ᱡᱟᱦᱟᱱᱟᱜ ᱜᱮ ᱴᱷᱤᱠ ᱵᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "ᱮᱴᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱡᱚᱯᱲᱟᱣ ᱨᱮᱭᱟᱜ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ᱾ ᱟᱢᱟᱜ ᱢᱚᱰᱮᱢ ᱵᱟᱝᱠᱷᱟᱱ ᱨᱟᱣᱴᱟᱨ ᱧᱮᱞ ᱵᱤᱰᱟᱹᱣ ᱢᱮ ᱾ Wi-Fi ᱥᱟᱶ ᱰᱤᱥᱠᱚᱱᱮᱠᱴ ᱟᱨ ᱫᱚᱦᱲᱟ ᱡᱚᱯᱲᱟᱣ ᱢᱮ ᱾";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱚᱱᱮᱠᱥᱚᱱ ᱨᱮ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
+

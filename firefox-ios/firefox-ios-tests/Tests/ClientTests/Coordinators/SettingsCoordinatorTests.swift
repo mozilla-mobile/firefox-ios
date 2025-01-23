@@ -210,8 +210,8 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testDelegatesAreSet() {
         let subject = createSubject()
 
-        XCTAssertNotNil(subject.settingsViewController.settingsDelegate)
-        XCTAssertNotNil(subject.settingsViewController.parentCoordinator)
+        XCTAssertNotNil(subject.settingsViewController?.settingsDelegate)
+        XCTAssertNotNil(subject.settingsViewController?.parentCoordinator)
     }
 
     func testHandleRouteCalled_whenCreditCardRouteIsSet() {
@@ -533,9 +533,11 @@ final class SettingsCoordinatorTests: XCTestCase {
 
     // MARK: - Helper
     func createSubject() -> SettingsCoordinator {
-        let subject = SettingsCoordinator(router: mockRouter,
-                                          wallpaperManager: wallpaperManager,
-                                          tabManager: MockTabManager()
+        let subject = SettingsCoordinator(
+            router: mockRouter,
+            wallpaperManager: wallpaperManager,
+            tabManager: MockTabManager(),
+            gleanLifecycleObserver: MockGleanLifecycleObserver()
         )
         trackForMemoryLeaks(subject)
         return subject

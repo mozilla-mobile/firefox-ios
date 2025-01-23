@@ -14,6 +14,7 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         let toNewStatus = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly) ? "OFF" : "ON"
         return NSAttributedString(string: "Toggle inactive tabs \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -22,7 +23,6 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
-        LegacyInactiveTabModel.hasRunInactiveTabFeatureBefore = false
         settingsDelegate?.askedToReload()
     }
 }

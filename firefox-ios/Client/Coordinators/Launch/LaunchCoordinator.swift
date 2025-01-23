@@ -4,8 +4,10 @@
 
 import Common
 import Foundation
+import Shared
 
 protocol LaunchCoordinatorDelegate: AnyObject {
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator)
     func didFinishLaunch(from coordinator: LaunchCoordinator)
 }
 
@@ -32,6 +34,8 @@ class LaunchCoordinator: BaseCoordinator,
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
+        case .termsOfService(let manager):
+            presentTermsOfService(with: manager, isFullScreen: isFullScreen)
         case .intro(let manager):
             presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
         case .update(let viewModel):
@@ -41,6 +45,34 @@ class LaunchCoordinator: BaseCoordinator,
         case .survey(let manager):
             presentSurvey(with: manager)
         }
+    }
+
+    // MARK: - Terms of Service
+    private func presentTermsOfService(with manager: TermsOfServiceManager,
+                                       isFullScreen: Bool) {
+        TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
+        let viewController = TermsOfServiceViewController(profile: profile, windowUUID: windowUUID)
+        viewController.didFinishFlow = { [weak self] in
+            guard let self = self else { return }
+            manager.setAccepted()
+            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+
+            let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            manager.shouldSendTechnicalData(value: sendTechnicalData)
+            self.profile.prefs.setBool(sendTechnicalData, forKey: AppConstants.prefSendUsageData)
+
+            let sendCrashReports = profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true
+            self.profile.prefs.setBool(sendCrashReports, forKey: AppConstants.prefSendCrashReports)
+            self.logger.setup(sendCrashReports: sendCrashReports)
+
+            TelemetryWrapper.shared.setup(profile: profile)
+            TelemetryWrapper.shared.recordStartUpTelemetry()
+
+            self.parentCoordinator?.didFinishTermsOfService(from: self)
+        }
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        router.present(viewController, animated: false)
     }
 
     // MARK: - Intro

@@ -17,15 +17,14 @@ class ToolbarButton: UIButton, ThemeApplicable {
         static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
-    private(set) var foregroundColorNormal: UIColor = .clear
-    private(set) var foregroundColorHighlighted: UIColor = .clear
-    private(set) var foregroundColorDisabled: UIColor = .clear
-    private(set) var backgroundColorNormal: UIColor = .clear
+    private var foregroundColorNormal: UIColor = .clear
+    private var foregroundColorHighlighted: UIColor = .clear
+    private var foregroundColorDisabled: UIColor = .clear
+    private var backgroundColorNormal: UIColor = .clear
 
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?
 
-    private var shouldDisplayAsHighlighted = false
     private var onLongPress: ((UIButton) -> Void)?
 
     override init(frame: CGRect) {
@@ -43,20 +42,29 @@ class ToolbarButton: UIButton, ThemeApplicable {
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
         configureCustomA11yActionIfNeeded(for: element)
-        shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
+        isSelected = element.isSelected
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
-                              handler: { _ in
+                              handler: { [weak self] _ in
+            guard let self else { return }
             element.onSelected?(self)
+            UIAccessibility.post(notification: .announcement, argument: element.a11yLabel)
         })
 
         config.image = image
         isEnabled = element.isEnabled
+        isAccessibilityElement = true
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
+        // Remove all existing actions for .touchUpInside before adding the new one
+        // This ensures that we do not accumulate multiple actions for the same event,
+        // which can cause the action to be called multiple times when the button is tapped.
+        // By removing all existing actions first, we guarantee that only the new action
+        // will be associated with the .touchUpInside event.
+        removeTarget(nil, action: nil, for: .touchUpInside)
         addAction(action, for: .touchUpInside)
 
         showsLargeContentViewer = true
@@ -68,6 +76,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
             addBadgeIcon(imageName: badgeName)
             if let maskImageName = element.maskImageName {
                 addMaskIcon(maskImageName: maskImageName)
+            }
+        } else {
+            // Remove badge & mask icons
+            imageView?.subviews.forEach { view in
+                guard view as? UIImageView != nil else { return }
+                view.removeFromSuperview()
             }
         }
         layoutIfNeeded()
@@ -86,7 +100,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ?
+            updatedConfiguration.baseForegroundColor = isSelected ?
                                                        foregroundColorHighlighted :
                                                        foregroundColorNormal
         }
@@ -175,7 +189,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInfo
+        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
 
         setNeedsUpdateConfiguration()

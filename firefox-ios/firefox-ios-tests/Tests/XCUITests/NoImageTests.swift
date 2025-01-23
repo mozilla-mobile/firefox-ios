@@ -9,9 +9,9 @@ class NoImageTests: BaseTestCase {
         let noImageStatusMode = app.otherElements.tables.cells.switches["NoImageModeStatus"]
         mozWaitForElementToExist(noImageStatusMode)
         if showImages {
-            XCTAssertEqual(noImageStatusMode.value as! String, "0")
+            XCTAssertEqual(noImageStatusMode.value as? String, "0")
         } else {
-            XCTAssertEqual(noImageStatusMode.value as! String, "1")
+            XCTAssertEqual(noImageStatusMode.value as? String, "1")
         }
     }
 

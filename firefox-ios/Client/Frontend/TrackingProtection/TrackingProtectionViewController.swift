@@ -7,54 +7,24 @@ import UIKit
 import Common
 import ComponentLibrary
 import SiteImageView
+import Redux
 
 struct TPMenuUX {
-    struct Fonts {
-        static let websiteTitle: TextStyling = FXFontStyles.Regular.headline
-        static let viewTitleLabels: TextStyling = FXFontStyles.Regular.body
-        static let detailsLabel: TextStyling = FXFontStyles.Regular.caption1
-        static let minorInfoLabel: TextStyling = FXFontStyles.Regular.subheadline
-    }
-
     struct UX {
-        static let baseCellHeight: CGFloat = 44
         static let popoverTopDistance: CGFloat = 16
         static let horizontalMargin: CGFloat = 16
         static let viewCornerRadius: CGFloat = 8
         static let headerLabelDistance: CGFloat = 2.0
-        static let headerLinesLimit: Int = 2
-        static let foxImageSize: CGFloat = 100
         static let iconSize: CGFloat = 24
-        static let protectionViewBottomSpacing: CGFloat = 70
-        static let siteDomainLabelsVerticalSpacing: CGFloat = 12
-        static let connectionDetailsLabelBottomSpacing: CGFloat = 28
         static let connectionDetailsHeaderMargins: CGFloat = 8
-        static let faviconImageSize: CGFloat = 40
-        static let closeButtonSize: CGFloat = 30
-        static let faviconCornerRadius: CGFloat = 5
-        static let scrollContentHorizontalPadding: CGFloat = 16
-
-        static let trackersLabelConstraintConstant = 16.0
-        static let connectionStatusLabelConstraintConstant = 16.0
-        static let toggleLabelsContainerConstraintConstant = 16.0
-
+        static let faviconCornerRadius: CGFloat = 16
+        static let clearDataButtonTopDistance: CGFloat = 32
         static let clearDataButtonCornerRadius: CGFloat = 12
-        static let clearDataButtonBorderWidth: CGFloat = 1
-        static let settingsLinkButtonBottomSpacing: CGFloat = 32
-        static let connectionDetailsStackSpacing = 15.0
-
+        static let clearDataButtonBorderWidth: CGFloat = 0
+        static let settingsLinkButtonBottomSpacing: CGFloat = 16
         static let modalMenuCornerRadius: CGFloat = 12
         struct Line {
-            static let height: CGFloat = 1
-        }
-        struct TrackingDetails {
-            static let baseDistance: CGFloat = 20
-            static let imageMargins: CGFloat = 10
-            static let bottomDistance: CGFloat = 350
-            static let viewCertButtonTopDistance: CGFloat = 8.0
-        }
-        struct BlockedTrackers {
-            static let headerDistance: CGFloat = 8
+            static let height: CGFloat = 0.5
         }
     }
 }
@@ -64,9 +34,13 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
     func didFinish()
 }
 
-// TODO: FXIOS-9726 #21369 - Refactor/Split TrackingProtectionViewController UI into more custom views
-class TrackingProtectionViewController: UIViewController, Themeable, Notifiable, UIScrollViewDelegate, BottomSheetChild {
+class TrackingProtectionViewController: UIViewController,
+                                        Themeable,
+                                        Notifiable,
+                                        StoreSubscriber,
+                                        UIScrollViewDelegate {
     var themeManager: ThemeManager
+    var profile: Profile?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
@@ -74,98 +48,22 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     weak var enhancedTrackingProtectionMenuDelegate: TrackingProtectionMenuDelegate?
 
-    private var faviconHeightConstraint: NSLayoutConstraint?
-    private var faviconWidthConstraint: NSLayoutConstraint?
     private var foxImageHeightConstraint: NSLayoutConstraint?
-    private var shieldImageHeightConstraint: NSLayoutConstraint?
-    private var lockImageHeightConstraint: NSLayoutConstraint?
-    private var trackersLabelTopConstraint: NSLayoutConstraint?
-    private var trackersLabelBottomConstraint: NSLayoutConstraint?
-
-    private var trackersArrowHeightConstraint: NSLayoutConstraint?
-    private var connectionArrowHeightConstraint: NSLayoutConstraint?
 
     private lazy var scrollView: UIScrollView = .build { scrollView in
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
     }
 
-    private let baseView: UIView = .build { view in
-        view.translatesAutoresizingMaskIntoConstraints = false
-    }
+    private let baseView: UIView = .build()
 
     // MARK: UI components Header View
-    private let headerContainer: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    private lazy var headerLabelsContainer: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .leading
-        stack.axis = .vertical
-        stack.spacing = TPMenuUX.UX.headerLabelDistance
-    }
-
-    private var favicon: FaviconImageView = .build { favicon in
-        favicon.manuallySetImage(
-            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
-    }
-
-    private let siteDisplayTitleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.headline.scaledFont()
-        label.numberOfLines = TPMenuUX.UX.headerLinesLimit
-        label.adjustsFontForContentSizeCategory = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-    }
-
-    private let siteDomainLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-    }
-
-    private var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
-    }
+    private var headerContainer: HeaderView = .build()
 
     // MARK: Connection Details View
-    private let connectionDetailsHeaderView: UIView = .build { view in
-        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.masksToBounds = true
-    }
-    private let connectionDetailsContentView: UIView = .build { view in
-        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        view.layer.masksToBounds = true
-    }
-
-    private let foxStatusImage: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFit
-        image.clipsToBounds = true
-    }
-
-    private var connectionDetailsLabelsContainer: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.distribution = .fillProportionally
-        stack.alignment = .leading
-        stack.axis = .vertical
-        stack.spacing = TPMenuUX.UX.connectionDetailsStackSpacing
-    }
-
-    private var connectionDetailsTitleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
-
-    private let connectionDetailsStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
+    private var connectionDetailsHeaderView: TrackingProtectionConnectionDetailsView = .build()
 
     // MARK: Blocked Trackers View
+    private var trackersView: TrackingProtectionBlockedTrackersView = .build()
     private var trackersConnectionContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .fillProportionally
@@ -173,91 +71,12 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         stack.axis = .vertical
     }
 
-    private let trackersView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    private let shieldImage: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFit
-        image.clipsToBounds = true
-        image.layer.masksToBounds = true
-        image.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
-            .withRenderingMode(.alwaysTemplate)
-    }
-
-    private let trackersLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
-
-    private let trackersDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
-            .withRenderingMode(.alwaysTemplate)
-            .imageFlippedForRightToLeftLayoutDirection()
-        image.transform = CGAffineTransform(rotationAngle: .pi)
-    }
-
-    private let trackersHorizontalLine: UIView = .build { _ in }
-    private let trackersButton: UIButton = .build { button in }
-
     // MARK: Connection Status View
-    private let connectionView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    private let connectionStatusImage: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFit
-        image.clipsToBounds = true
-        image.layer.masksToBounds = true
-    }
-
-    private let connectionStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
-
-    private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
-            .withRenderingMode(.alwaysTemplate)
-            .imageFlippedForRightToLeftLayoutDirection()
-        image.transform = CGAffineTransform(rotationAngle: .pi)
-    }
-
-    private let connectionButton: UIButton = .build { button in }
-    private let connectionHorizontalLine: UIView = .build { _ in }
+    private let connectionStatusView: TrackingProtectionConnectionStatusView = .build()
+    private let connectionHorizontalLine: UIView = .build()
 
     // MARK: Toggle View
-    private let toggleView: UIView = .build { view in
-        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        view.backgroundColor = .clear
-        view.translatesAutoresizingMaskIntoConstraints = false
-    }
-    private let toggleLabelsContainer: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.distribution = .fill
-        stack.alignment = .leading
-        stack.axis = .vertical
-        stack.spacing = TPMenuUX.UX.headerLabelDistance
-    }
-
-    private let toggleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
-
-    private let toggleSwitch: UISwitch = .build { toggleSwitch in
-        toggleSwitch.isEnabled = true
-    }
-
-    private let toggleStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-    }
+    private let toggleView: TrackingProtectionToggleView = .build()
 
     // MARK: Clear Cookies View
     private lazy var clearCookiesButton: TrackingProtectionButton = .build { button in
@@ -279,13 +98,15 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: - Variables
 
-    private var viewModel: TrackingProtectionModel
+    private var model: TrackingProtectionModel
+    private var trackingProtectionState: TrackingProtectionState
+    private var blockedTrackersVC: BlockedTrackersTableViewController?
     private var hasSetPointOrigin = false
     private var pointOrigin: CGPoint?
     var asPopover = false
 
     private var toggleContainerShouldBeHidden: Bool {
-        return !viewModel.globalETPIsEnabled
+        return !model.globalETPIsEnabled
     }
 
     private var protectionViewTopConstraint: NSLayoutConstraint?
@@ -293,14 +114,22 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: - View lifecycle
 
     init(viewModel: TrackingProtectionModel,
+         profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.viewModel = viewModel
+        self.model = viewModel
+        self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        trackingProtectionState = TrackingProtectionState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+        subscribeToRedux()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     @available(*, unavailable)
@@ -318,11 +147,12 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         scrollView.delegate = self
+        updateViewDetails()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.view.invalidateIntrinsicContentSize() // Adjusts size based on content.
+        self.view.invalidateIntrinsicContentSize()
         if !hasSetPointOrigin {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
@@ -331,14 +161,26 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateViewDetails()
-        updateProtectionViewStatus()
+        updateBlockedTrackersCount()
+        updateConnectionStatus()
         applyTheme()
-        getCertificates(for: viewModel.url) { [weak self] certificates in
-            if let certs = certificates {
-                self?.viewModel.certificates = certs
+        getCertificates(for: model.url) { [weak self] certificates in
+            if let certificates {
+                ensureMainThread {
+                    self?.model.certificates = certificates
+                }
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        notificationCenter.post(name: .TrackingProtectionViewControllerDidAppear, withObject: windowUUID)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        notificationCenter.post(name: .TrackingProtectionViewControllerDidDismiss, withObject: windowUUID)
     }
 
     private func setupView() {
@@ -347,8 +189,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         setupHeaderView()
         setupContentView()
         setupConnectionHeaderView()
-        setupBlockedTrackersView()
-        setupConnectionStatusView()
+        setupTrackersConnectionView()
         setupToggleView()
         setupClearCookiesButton()
         setupProtectionSettingsView()
@@ -356,6 +197,62 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         NSLayoutConstraint.activate(constraints)
         setupAccessibilityIdentifiers()
+    }
+
+    // MARK: Redux
+    func newState(state: TrackingProtectionState) {
+        trackingProtectionState = state
+        if let navDestination = state.navigateTo {
+            switch navDestination {
+            case .home:
+                navigationController?.popToRootViewController(animated: true)
+            case .back:
+                navigationController?.popViewController(animated: true)
+            case .close:
+                enhancedTrackingProtectionMenuDelegate?.didFinish()
+            case .settings:
+                showSettings()
+            }
+        }
+        if let displayView = state.displayView {
+            switch displayView {
+            case .blockedTrackersDetails:
+                showBlockedTrackersController()
+            case .trackingProtectionDetails:
+                showTrackersDetailsController()
+            case .certificatesDetails:
+                break
+            case .clearCookiesAlert:
+                onTapClearCookiesAndSiteData()
+            }
+        }
+        if trackingProtectionState.shouldClearCookies {
+            clearCookies()
+        } else if trackingProtectionState.shouldUpdateBlockedTrackerStats {
+            updateBlockedTrackersCount()
+        } else if trackingProtectionState.shouldUpdateConnectionStatus {
+            updateConnectionStatus()
+        }
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .trackingProtection)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return TrackingProtectionState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .trackingProtection)
+        store.dispatch(action)
     }
 
     // MARK: Content View
@@ -385,74 +282,30 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: Header Setup
     private func setupHeaderView() {
-        headerLabelsContainer.addArrangedSubview(siteDisplayTitleLabel)
-        headerLabelsContainer.addArrangedSubview(siteDomainLabel)
-
-        headerContainer.addSubviews(favicon, headerLabelsContainer, closeButton)
         view.addSubview(headerContainer)
-
-        faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.faviconImageSize)
-        faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: TPMenuUX.UX.faviconImageSize)
-        let topDistance = asPopover ? TPMenuUX.UX.popoverTopDistance : 0
-
         let headerConstraints = [
             headerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerContainer.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: topDistance
-            ),
-
-            favicon.leadingAnchor.constraint(
-                equalTo: headerContainer.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            favicon.centerYAnchor.constraint(equalTo: headerContainer.centerYAnchor),
-            faviconHeightConstraint!,
-            faviconWidthConstraint!,
-
-            headerLabelsContainer.topAnchor.constraint(
-                equalTo: headerContainer.topAnchor,
-                constant: TPMenuUX.UX.siteDomainLabelsVerticalSpacing
-            ),
-            headerLabelsContainer.bottomAnchor.constraint(
-                equalTo: headerContainer.bottomAnchor,
-                constant: -TPMenuUX.UX.siteDomainLabelsVerticalSpacing
-            ),
-            headerLabelsContainer.leadingAnchor.constraint(
-                equalTo: favicon.trailingAnchor,
-                constant: TPMenuUX.UX.siteDomainLabelsVerticalSpacing
-            ),
-            headerLabelsContainer.trailingAnchor.constraint(
-                equalTo: closeButton.leadingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-
-            closeButton.trailingAnchor.constraint(
-                equalTo: headerContainer.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            closeButton.topAnchor.constraint(
-                equalTo: headerContainer.topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
+                constant: asPopover ? TPMenuUX.UX.popoverTopDistance : 0
+            )
         ]
-
         constraints.append(contentsOf: headerConstraints)
+        headerContainer.closeButtonCallback = { [weak self] in
+            self?.enhancedTrackingProtectionMenuDelegate?.didFinish()
+        }
+        headerContainer.setupAccessibility(
+            closeButtonA11yLabel: model.closeButtonA11yLabel,
+            closeButtonA11yId: model.closeButtonA11yId
+        )
+        headerContainer.updateHeaderLineView(isHidden: true)
     }
 
     // MARK: Connection Status Header Setup
     private func setupConnectionHeaderView() {
-        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsTitleLabel)
-        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsStatusLabel)
-        connectionDetailsContentView.addSubviews(foxStatusImage, connectionDetailsLabelsContainer)
-        connectionDetailsHeaderView.addSubview(connectionDetailsContentView)
-
         baseView.addSubviews(connectionDetailsHeaderView)
         let connectionHeaderConstraints = [
-            // Section
             connectionDetailsHeaderView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -461,242 +314,78 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 equalTo: view.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            connectionDetailsHeaderView.topAnchor.constraint(equalTo: baseView.topAnchor,
-                                                             constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
-            // Content
-            connectionDetailsContentView.leadingAnchor.constraint(
-                equalTo: connectionDetailsHeaderView.leadingAnchor,
-                constant: TPMenuUX.UX.connectionDetailsHeaderMargins
-            ),
-            connectionDetailsContentView.trailingAnchor.constraint(
-                equalTo: connectionDetailsHeaderView.trailingAnchor,
-                constant: -TPMenuUX.UX.connectionDetailsHeaderMargins
-            ),
-            connectionDetailsContentView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.topAnchor,
-                                                              constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
-            connectionDetailsContentView.bottomAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor,
-                                                                 constant: -TPMenuUX.UX.connectionDetailsHeaderMargins / 2),
-            // Image
-            foxStatusImage.leadingAnchor.constraint(
-                equalTo: connectionDetailsContentView.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            foxStatusImage.topAnchor.constraint(
-                equalTo: connectionDetailsContentView.topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            foxStatusImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.foxImageSize),
-            foxStatusImage.widthAnchor.constraint(equalToConstant: TPMenuUX.UX.foxImageSize),
-
-            // Labels
-            connectionDetailsLabelsContainer.topAnchor.constraint(
-                equalTo: connectionDetailsContentView.topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            connectionDetailsLabelsContainer.bottomAnchor.constraint(
-                equalTo: connectionDetailsContentView.bottomAnchor,
-                constant: -TPMenuUX.UX.connectionDetailsLabelBottomSpacing / 2
-            ),
-            connectionDetailsLabelsContainer.leadingAnchor.constraint(equalTo: foxStatusImage.trailingAnchor,
-                                                                      constant: TPMenuUX.UX.siteDomainLabelsVerticalSpacing),
-            connectionDetailsLabelsContainer.trailingAnchor.constraint(equalTo:
-                                                                        connectionDetailsContentView.trailingAnchor,
-                                                                       constant: -TPMenuUX.UX.horizontalMargin),
-            connectionDetailsLabelsContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.foxImageSize),
+            connectionDetailsHeaderView.topAnchor.constraint(
+                equalTo: baseView.topAnchor,
+                constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
         ]
-
         constraints.append(contentsOf: connectionHeaderConstraints)
     }
 
-    // MARK: Blocked Trackers Setup
-    private func setupBlockedTrackersView() {
-        trackersView.addSubviews(shieldImage, trackersLabel, trackersDetailArrow, trackersButton, trackersHorizontalLine)
+    // MARK: Trackers Connection Setup
+    private func setupTrackersConnectionView() {
         baseView.addSubview(trackersConnectionContainer)
+        baseView.addSubview(connectionHorizontalLine)
         trackersConnectionContainer.addArrangedSubview(trackersView)
-
-        shieldImageHeightConstraint = shieldImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
-        trackersArrowHeightConstraint = trackersDetailArrow.heightAnchor.constraint(
-            equalToConstant: TPMenuUX.UX.iconSize
-        )
-
-        trackersLabelTopConstraint = trackersLabel.topAnchor.constraint(
-            equalTo: trackersView.topAnchor,
-            constant: TPMenuUX.UX.trackersLabelConstraintConstant)
-        trackersLabelBottomConstraint = trackersLabel.bottomAnchor.constraint(
-            equalTo: trackersView.bottomAnchor,
-            constant: -TPMenuUX.UX.trackersLabelConstraintConstant)
-
-        let blockedTrackersConstraints = [
-            trackersView.leadingAnchor.constraint(
+        trackersConnectionContainer.addArrangedSubview(connectionStatusView)
+        let trackersConnectionConstraints = [
+            trackersView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
+            connectionStatusView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
+            trackersConnectionContainer.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            trackersView.trailingAnchor.constraint(
+            trackersConnectionContainer.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor, constant: 0),
-
-            shieldImage.leadingAnchor.constraint(
-                equalTo: trackersView.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            shieldImage.centerYAnchor.constraint(equalTo: trackersView.centerYAnchor),
-            shieldImage.heightAnchor.constraint(equalTo: shieldImage.widthAnchor),
-            shieldImageHeightConstraint!,
-            trackersLabel.leadingAnchor.constraint(
-                equalTo: shieldImage.trailingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            trackersLabel.trailingAnchor.constraint(
-                equalTo: trackersDetailArrow.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-
-            trackersDetailArrow.trailingAnchor.constraint(
-                equalTo: connectionView.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            trackersDetailArrow.centerYAnchor.constraint(equalTo: trackersView.centerYAnchor),
-            trackersArrowHeightConstraint!,
-            trackersDetailArrow.widthAnchor.constraint(equalTo: trackersDetailArrow.heightAnchor),
-
-            trackersButton.leadingAnchor.constraint(equalTo: trackersView.leadingAnchor),
-            trackersButton.topAnchor.constraint(equalTo: trackersView.topAnchor),
-            trackersButton.trailingAnchor.constraint(equalTo: trackersView.trailingAnchor),
-            trackersButton.bottomAnchor.constraint(equalTo: trackersView.bottomAnchor),
-
-            trackersHorizontalLine.leadingAnchor.constraint(equalTo: trackersLabel.leadingAnchor),
-            trackersHorizontalLine.trailingAnchor.constraint(equalTo: trackersView.trailingAnchor,
-                                                             constant: -TPMenuUX.UX.connectionDetailsHeaderMargins),
-            trackersHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
-            trackersView.bottomAnchor.constraint(equalTo: trackersHorizontalLine.bottomAnchor),
-        ]
-
-        if let trackersLabelTopConstraint, let trackersLabelBottomConstraint {
-            constraints.append(trackersLabelTopConstraint)
-            constraints.append(trackersLabelBottomConstraint)
-        }
-
-        constraints.append(contentsOf: blockedTrackersConstraints)
-    }
-
-    // MARK: Connection Status Setup
-    private func setupConnectionStatusView() {
-        connectionView.addSubviews(connectionStatusImage, connectionStatusLabel, connectionDetailArrow)
-        connectionView.addSubviews(connectionButton, connectionHorizontalLine)
-        trackersConnectionContainer.addArrangedSubview(connectionView)
-
-        lockImageHeightConstraint = connectionStatusImage.widthAnchor.constraint(
-            equalToConstant: TPMenuUX.UX.iconSize
-        )
-        connectionArrowHeightConstraint = connectionDetailArrow.heightAnchor.constraint(
-            equalToConstant: TPMenuUX.UX.iconSize
-        )
-        let connectionConstraints = [
-            connectionView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            connectionView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            connectionView.topAnchor.constraint(equalTo: trackersView.bottomAnchor, constant: 0),
-
-            connectionStatusImage.leadingAnchor.constraint(
-                equalTo: connectionView.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            connectionStatusImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            lockImageHeightConstraint!,
-            connectionStatusImage.heightAnchor.constraint(equalTo: connectionView.widthAnchor),
-
-            connectionStatusLabel.leadingAnchor.constraint(
-                equalTo: connectionStatusImage.trailingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor,
-                                                       constant: TPMenuUX.UX.connectionStatusLabelConstraintConstant),
-            connectionStatusLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor,
-                                                          constant: -TPMenuUX.UX.connectionStatusLabelConstraintConstant),
-            connectionStatusLabel.trailingAnchor.constraint(
-                equalTo: connectionDetailArrow.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-
-            connectionDetailArrow.trailingAnchor.constraint(
-                equalTo: connectionView.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            connectionDetailArrow.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            connectionArrowHeightConstraint!,
-            connectionDetailArrow.widthAnchor.constraint(equalTo: connectionDetailArrow.heightAnchor),
-
-            connectionButton.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor),
-            connectionButton.topAnchor.constraint(equalTo: connectionView.topAnchor),
-            connectionButton.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor),
-            connectionButton.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor),
-
-            connectionHorizontalLine.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor),
-            connectionHorizontalLine.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor),
+            trackersConnectionContainer.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
+            connectionHorizontalLine.topAnchor.constraint(equalTo: trackersConnectionContainer.bottomAnchor),
+            connectionHorizontalLine.leadingAnchor.constraint(equalTo: trackersConnectionContainer.leadingAnchor),
+            connectionHorizontalLine.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
             connectionHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
-            connectionView.bottomAnchor.constraint(equalTo: connectionHorizontalLine.bottomAnchor),
         ]
-
-        constraints.append(contentsOf: connectionConstraints)
+        constraints.append(contentsOf: trackersConnectionConstraints)
+        trackersView.trackersButtonCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowBlockedTrackers)
+            )
+        }
+        connectionStatusView.connectionStatusButtonCallback = { [weak self] in
+            guard let self, model.connectionSecure else { return }
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails)
+            )
+        }
     }
 
     // MARK: Toggle View Setup
     private func setupToggleView() {
-        toggleLabelsContainer.addArrangedSubview(toggleLabel)
-        toggleLabelsContainer.addArrangedSubview(toggleStatusLabel)
-        toggleView.addSubviews(toggleLabelsContainer, toggleSwitch)
         baseView.addSubview(toggleView)
-
         let toggleConstraints = [
             toggleView.leadingAnchor.constraint(equalTo: baseView.leadingAnchor,
                                                 constant: TPMenuUX.UX.horizontalMargin),
             toggleView.trailingAnchor.constraint(equalTo: baseView.trailingAnchor,
                                                  constant: -TPMenuUX.UX.horizontalMargin),
             toggleView.topAnchor.constraint(
-                equalTo: connectionView.bottomAnchor,
+                equalTo: connectionHorizontalLine.bottomAnchor,
                 constant: 0
-            ),
-
-            toggleLabelsContainer.leadingAnchor.constraint(
-                equalTo: toggleView.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            toggleLabelsContainer.trailingAnchor.constraint(
-                equalTo: toggleSwitch.leadingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            toggleLabelsContainer.topAnchor.constraint(
-                equalTo: toggleView.topAnchor,
-                constant: TPMenuUX.UX.toggleLabelsContainerConstraintConstant
-            ),
-            toggleLabelsContainer.bottomAnchor.constraint(
-                equalTo: toggleView.bottomAnchor,
-                constant: -TPMenuUX.UX.toggleLabelsContainerConstraintConstant
-            ),
-
-            toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
-            toggleSwitch.trailingAnchor.constraint(
-                equalTo: toggleView.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
             )
         ]
-
         constraints.append(contentsOf: toggleConstraints)
-        toggleSwitch.actions(forTarget: self, forControlEvent: .valueChanged)
-        view.bringSubviewToFront(toggleSwitch)
+        toggleView.toggleSwitchedCallback = { [weak self] in
+            // site is safelisted if site ETP is disabled
+            self?.model.toggleSiteSafelistStatus()
+            self?.updateProtectionViewStatus()
+        }
     }
 
     // MARK: Clear Cookies Button Setup
     private func setupClearCookiesButton() {
-        let clearCookiesViewModel = TrackingProtectionButtonModel(title: viewModel.clearCookiesButtonTitle,
-                                                                  a11yIdentifier: viewModel.clearCookiesButtonA11yId)
+        let clearCookiesViewModel = TrackingProtectionButtonModel(title: model.clearCookiesButtonTitle,
+                                                                  a11yIdentifier: model.clearCookiesButtonA11yId)
         clearCookiesButton.configure(viewModel: clearCookiesViewModel)
         baseView.addSubview(clearCookiesButton)
 
@@ -711,26 +400,39 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             ),
             clearCookiesButton.topAnchor.constraint(
                 equalTo: toggleView.bottomAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            clearCookiesButton.bottomAnchor.constraint(
-                equalTo: settingsLinkButton.topAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
+                constant: TPMenuUX.UX.clearDataButtonTopDistance
+            )
         ]
         constraints.append(contentsOf: clearCookiesButtonConstraints)
     }
 
     // MARK: Settings View Setup
-    private func setupProtectionSettingsView() {
-        let settingsButtonViewModel = LinkButtonViewModel(title: viewModel.settingsButtonTitle,
-                                                          a11yIdentifier: viewModel.settingsA11yId)
+    private func configureProtectionSettingsView() {
+        let settingsButtonViewModel = LinkButtonViewModel(
+            title: model.settingsButtonTitle,
+            a11yIdentifier: model.settingsA11yId,
+            font: FXFontStyles.Regular.footnote.scaledFont()
+        )
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
+        settingsLinkButton.applyUnderline(underlinedText: model.settingsButtonTitle)
+    }
+
+    private func setupProtectionSettingsView() {
+        configureProtectionSettingsView()
         baseView.addSubviews(settingsLinkButton)
 
         let protectionConstraints = [
-            settingsLinkButton.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
-            settingsLinkButton.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
+            settingsLinkButton.leadingAnchor.constraint(
+                equalTo: baseView.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            settingsLinkButton.trailingAnchor.constraint(
+                equalTo: baseView.trailingAnchor
+            ),
+            settingsLinkButton.topAnchor.constraint(
+                equalTo: clearCookiesButton.bottomAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
             settingsLinkButton.bottomAnchor.constraint(
                 equalTo: baseView.bottomAnchor,
                 constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
@@ -741,40 +443,40 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     private func updateViewDetails() {
-        favicon.setFavicon(FaviconImageViewModel(siteURLString: viewModel.url.absoluteString,
-                                                 faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius))
+        let headerIcon = FaviconImageViewModel(siteURLString: model.url.absoluteString,
+                                               faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius)
+        headerContainer.setupDetails(subtitle: model.websiteTitle,
+                                     title: model.displayTitle,
+                                     icon: headerIcon)
 
-        siteDomainLabel.text = viewModel.websiteTitle
-        siteDisplayTitleLabel.text = viewModel.displayTitle
-        trackersLabel.text = getTrackerString()
-        shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
-            .withRenderingMode(.alwaysTemplate)
-        connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: currentTheme().type)
-        connectionStatusLabel.text = viewModel.connectionStatusString
-        toggleSwitch.isOn = viewModel.isSiteETPEnabled
-        viewModel.isProtectionEnabled = toggleSwitch.isOn
-        toggleLabel.text = .Menu.EnhancedTrackingProtection.switchTitle
-        toggleStatusLabel.text = toggleSwitch.isOn ?
-            .Menu.EnhancedTrackingProtection.switchOnText : .Menu.EnhancedTrackingProtection.switchOffText
-        connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
-        connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
-        foxStatusImage.image = viewModel.connectionDetailsImage
+        toggleView.setupDetails(isOn: !model.isURLSafelisted())
+        model.isProtectionEnabled = toggleView.toggleIsOn
+        updateProtectionViewStatus()
     }
 
-    private func getTrackerString() -> String {
-        if let trackersNumber = viewModel.contentBlockerStats?.total, trackersNumber > 0 {
-            return String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
-                          String(trackersNumber))
-        } else {
-            return .Menu.EnhancedTrackingProtection.noTrackersLabel
-        }
+    private func updateBlockedTrackersCount() {
+        model.contentBlockerStats = model.selectedTab?.contentBlocker?.stats
+        blockedTrackersVC?.model.contentBlockerStats = model.selectedTab?.contentBlocker?.stats
+        blockedTrackersVC?.applySnapshot()
+        trackersView.setupDetails(for: model.contentBlockerStats?.total)
+        updateConnectionStatus()
+    }
+
+    private func updateConnectionStatus() {
+        model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
+        connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
+                                                 text: model.connectionStatusString,
+                                                 isConnectionSecure: model.connectionSecure,
+                                                 theme: currentTheme())
+        connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
+                                                 status: model.connectionDetailsHeader,
+                                                 image: model.connectionDetailsImage)
     }
 
     private func setupViewActions() {
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        connectionButton.addTarget(self, action: #selector(connectionDetailsTapped), for: .touchUpInside)
-        trackersButton.addTarget(self, action: #selector(blockedTrackersTapped), for: .touchUpInside)
-        toggleSwitch.addTarget(self, action: #selector(trackingProtectionToggleTapped), for: .valueChanged)
+        trackersView.setupActions()
+        connectionStatusView.setupActions()
+        toggleView.setupActions()
     }
 
     // MARK: Notifications
@@ -801,29 +503,29 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        foxStatusImage.accessibilityIdentifier = viewModel.foxImageA11yId
-        trackersDetailArrow.accessibilityIdentifier = viewModel.arrowImageA11yId
-        trackersLabel.accessibilityIdentifier = viewModel.trackersBlockedLabelA11yId
-        connectionDetailArrow.accessibilityIdentifier = viewModel.arrowImageA11yId
-        shieldImage.accessibilityIdentifier = viewModel.shieldImageA11yId
-        connectionStatusLabel.accessibilityIdentifier = viewModel.securityStatusLabelA11yId
-        toggleLabel.accessibilityIdentifier = viewModel.toggleViewTitleLabelA11yId
-        toggleStatusLabel.accessibilityIdentifier = viewModel.toggleViewBodyLabelA11yId
-        clearCookiesButton.accessibilityIdentifier = viewModel.clearCookiesButtonA11yId
-        settingsLinkButton.accessibilityIdentifier = viewModel.settingsA11yId
+        connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
+        trackersView.setupAccessibilityIdentifiers(
+            arrowImageA11yId: model.arrowImageA11yId,
+            trackersBlockedButtonA11yId: model.trackersBlockedButtonA11yId,
+            shieldImageA11yId: model.settingsA11yId)
+        connectionStatusView.setupAccessibilityIdentifiers(
+            arrowImageA11yId: model.arrowImageA11yId,
+            securityStatusButtonA11yId: model.securityStatusButtonA11yId)
+        toggleView.setupAccessibilityIdentifiers(
+            toggleViewLabelsContainerA11yId: model.toggleViewContainerA11yId)
+        headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
+                                           closeButtonA11yId: model.closeButtonA11yId)
+        clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId
+        settingsLinkButton.accessibilityIdentifier = model.settingsA11yId
     }
 
     private func adjustLayout() {
-        let faviconSize = TPMenuUX.UX.faviconImageSize // to avoid line length warnings
-        let iconSize = TPMenuUX.UX.iconSize
-        faviconHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
-        faviconWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
-
-        shieldImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
-        trackersArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
-
-        lockImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
-        connectionArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
+        headerContainer.adjustLayout(isWebsiteIcon: true)
+        trackersView.adjustLayout()
+        connectionStatusView.adjustLayout()
+        connectionDetailsHeaderView.adjustLayout()
+        toggleView.adjustLayout()
+        configureProtectionSettingsView()
 
         if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
             headerContainer.layoutIfNeeded()
@@ -840,39 +542,58 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     // MARK: - Button actions
-    @objc
-    func closeButtonTapped() {
-        enhancedTrackingProtectionMenuDelegate?.didFinish()
-    }
-
-    @objc
-    func connectionDetailsTapped() {
-        // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
-        //        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
-        //                                                                windowUUID: windowUUID)
-        //        detailsVC.modalPresentationStyle = .pageSheet
-        //        self.present(detailsVC, animated: true)
-    }
-
-    @objc
-    func blockedTrackersTapped() {}
 
     @objc
     func trackingProtectionToggleTapped() {
         // site is safelisted if site ETP is disabled
-        viewModel.toggleSiteSafelistStatus()
+        model.toggleSiteSafelistStatus()
         updateProtectionViewStatus()
     }
 
     @objc
     private func didTapClearCookiesAndSiteData() {
-        viewModel.onTapClearCookiesAndSiteData(controller: self)
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.tappedShowClearCookiesAlert)
+        )
     }
 
     @objc
     func protectionSettingsTapped() {
-        enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.tappedShowSettings)
+        )
     }
+
+    private func showBlockedTrackersController() {
+        blockedTrackersVC = BlockedTrackersTableViewController(with: model.getBlockedTrackersModel(),
+                                                               windowUUID: windowUUID)
+        self.navigationController?.pushViewController(blockedTrackersVC ?? UIViewController(), animated: true)
+    }
+
+    private func showTrackersDetailsController() {
+        let detailsVC = TrackingProtectionDetailsViewController(with: model.getDetailsModel(),
+                                                                windowUUID: windowUUID)
+        self.navigationController?.pushViewController(detailsVC, animated: true)
+    }
+
+    private func showSettings() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.trackingProtectionSettings),
+                windowUUID: self.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnTrackingProtection
+            )
+        )
+    }
+
+    // MARK: Clear Cookies Alert
+    func onTapClearCookiesAndSiteData() {
+        model.onTapClearCookiesAndSiteData(controller: self)
+    }
+
+    func clearCookies() {}
 
     // MARK: - Gesture Recognizer
     private func addGestureRecognizer() {
@@ -911,29 +632,24 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
-    func willDismiss() {
-    }
-
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
-        if toggleSwitch.isOn {
-            toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOnText
-            trackersView.isHidden = false
-            trackersLabelTopConstraint?.constant = TPMenuUX.UX.trackersLabelConstraintConstant
-            trackersLabelBottomConstraint?.constant = -TPMenuUX.UX.trackersLabelConstraintConstant
-            viewModel.isProtectionEnabled = true
+        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
+            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText)
+            trackersView.setVisibility(isHidden: false)
+            model.isProtectionEnabled = true
         } else {
-            toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOffText
-            trackersView.isHidden = true
-            trackersLabelTopConstraint?.constant = 0
-            trackersLabelBottomConstraint?.constant = 0
-            viewModel.isProtectionEnabled = false
+            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOffText)
+            trackersView.setVisibility(isHidden: true)
+            model.isProtectionEnabled = false
         }
-
-        connectionDetailsContentView.backgroundColor = viewModel.getConnectionDetailsBackgroundColor(theme: currentTheme())
-        foxStatusImage.image = viewModel.connectionDetailsImage
-        connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
-        connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
+        toggleView.setToggleSwitchVisibility(with: !isContentBlockingConfigEnabled)
+        connectionDetailsHeaderView.setupDetails(color: model.getConnectionDetailsBackgroundColor(theme: currentTheme()),
+                                                 title: model.connectionDetailsTitle,
+                                                 status: model.connectionDetailsHeader,
+                                                 image: model.connectionDetailsImage)
+        adjustLayout()
     }
 }
 
@@ -942,36 +658,14 @@ extension TrackingProtectionViewController {
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer1
-        closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .tinted(withColor: theme.colors.iconSecondary)
-        closeButton.setImage(buttonImage, for: .normal)
-        connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
-        trackersView.backgroundColor = theme.colors.layer2
-        trackersDetailArrow.tintColor = theme.colors.iconSecondary
-        shieldImage.tintColor = theme.colors.iconPrimary
-        connectionView.backgroundColor = theme.colors.layer2
-        connectionDetailArrow.tintColor = theme.colors.iconSecondary
-        connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
-        connectionDetailsContentView.backgroundColor = toggleSwitch.isOn ?
-        currentTheme().colors.layerAccentPrivateNonOpaque : theme.colors.layer3
-        headerContainer.tintColor = theme.colors.layer2
-        siteDomainLabel.textColor = theme.colors.textSecondary
-        siteDisplayTitleLabel.textColor = theme.colors.textPrimary
-        if viewModel.connectionSecure {
-            connectionStatusImage.tintColor = theme.colors.iconPrimary
-        }
-        toggleView.backgroundColor = theme.colors.layer2
-        toggleSwitch.tintColor = theme.colors.actionPrimary
-        toggleSwitch.onTintColor = theme.colors.actionPrimary
-        toggleStatusLabel.textColor = theme.colors.textSecondary
-
-        trackersHorizontalLine.backgroundColor = theme.colors.borderPrimary
+        view.backgroundColor = theme.colors.layer3
+        headerContainer.applyTheme(theme: theme)
+        connectionDetailsHeaderView.applyTheme(theme: theme)
+        trackersView.applyTheme(theme: theme)
+        connectionStatusView.applyTheme(theme: theme)
         connectionHorizontalLine.backgroundColor = theme.colors.borderPrimary
-
+        toggleView.applyTheme(theme: theme)
         clearCookiesButton.applyTheme(theme: theme)
-        clearCookiesButton.layer.borderColor = theme.colors.borderPrimary.cgColor
         settingsLinkButton.applyTheme(theme: theme)
         setNeedsStatusBarAppearanceUpdate()
     }

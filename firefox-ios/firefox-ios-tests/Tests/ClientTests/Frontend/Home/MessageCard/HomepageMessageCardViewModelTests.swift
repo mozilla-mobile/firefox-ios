@@ -218,7 +218,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
 }
 
 // MARK: SpyHomepageMessageCardCell
-class SpyHomepageMessageCardCell: HomepageMessageCardCell {
+class SpyHomepageMessageCardCell: LegacyHomepageMessageCardCell {
     var configureCalled = 0
     override func configure(viewModel: HomepageMessageCardViewModel, theme: Theme) {
         configureCalled += 1

@@ -4,7 +4,7 @@ This is the subdirectory that contains the Firefox for iOS application.
 
 ## Main branch
 
-Firefox for iOS works with [Xcode 15.4](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 15.0 and above.
+Firefox for iOS works with [Xcode 16.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.6 and supports iOS 15.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -16,7 +16,7 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
 
 ## Building the code
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
     ```shell
     brew update

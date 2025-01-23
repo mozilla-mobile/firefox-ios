@@ -5,6 +5,7 @@
 @testable import Client
 import Sync
 import Storage
+import Shared
 import XCTest
 
 class RustSyncManagerTests: XCTestCase {
@@ -210,5 +211,19 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
         XCTAssertFalse(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
+    }
+
+    func test_applicationDidBecomeActive_updateSignInPrefs() throws {
+        rustSyncManager.applicationDidBecomeActive()
+        let value = try XCTUnwrap(profile.prefs.boolForKey(PrefsKeys.Sync.signedInFxaAccount))
+        XCTAssertFalse(value)
+    }
+
+    func test_onRemovedAccount_updatePrefs() throws {
+        _ = rustSyncManager.onRemovedAccount()
+        let signedInStatus = try XCTUnwrap(profile.prefs.boolForKey(PrefsKeys.Sync.signedInFxaAccount))
+        let syncedDevicesCount = try XCTUnwrap(profile.prefs.intForKey(PrefsKeys.Sync.numberOfSyncedDevices))
+        XCTAssertFalse(signedInStatus)
+        XCTAssertEqual(syncedDevicesCount, 0)
     }
 }

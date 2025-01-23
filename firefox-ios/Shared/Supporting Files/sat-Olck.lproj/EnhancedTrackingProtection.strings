@@ -1,0 +1,114 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "ᱥᱤᱫᱷᱨᱚᱬ ᱧᱩᱛᱩᱢ";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "ᱫᱤᱥᱚᱢ";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "ᱮᱢ ᱪᱟᱞᱤᱭᱟᱹ ᱧᱩᱛᱩᱢ";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "ᱜᱟᱶᱛᱟ";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "ᱥᱟᱛᱟᱢ Alt ᱧᱩᱛᱩᱢᱠᱚ";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS ᱧᱩᱛᱩᱢ";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "ᱥᱟᱛᱟᱢ ᱨᱮᱭᱟᱜ ᱧᱩᱛᱩᱢ";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "ᱯᱚᱨᱢᱟᱱ ᱥᱟᱠᱟᱢ";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "ᱯᱩᱥᱴᱟᱹᱣᱚᱠᱛᱚ";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "ᱛᱟᱭᱚᱢ ᱛᱮ ᱵᱟᱝᱟ";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "ᱢᱟᱲᱟᱝ ᱛᱮ ᱵᱟᱝᱟ";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "ᱯᱷᱟᱨᱪᱟ";
+
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "ᱠᱩᱠᱤᱡᱽ ᱚᱪᱚᱜ ᱟᱨ ᱥᱟᱭᱤᱴ ᱰᱟᱴᱟ %@ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱠᱷᱚᱱ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱟᱨ ᱥᱚᱯᱤᱝ ᱠᱟᱨᱴ ᱥᱟᱯᱷᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾";
+
+/* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "ᱠᱩᱠᱤᱡᱽ ᱠᱚ ᱟᱨ ᱥᱟᱭᱤᱴ ᱰᱟᱴᱟ ᱠᱚ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ";
+
+/* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "ᱠᱩᱠᱤᱡᱽ ᱠᱚ ᱟᱨ ᱥᱟᱭᱤᱴ ᱰᱟᱴᱟ ᱠᱚ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ";
+
+/* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "ᱠᱩᱠᱤᱡᱽ ᱟᱨ ᱥᱟᱭᱤᱴ ᱰᱟᱴᱟ ᱚᱪᱚᱜ ᱮᱱᱟ";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "ᱯᱨᱟᱭᱣᱮᱥᱤ ᱟᱨ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱢᱮᱱᱩ ᱵᱚᱱᱫᱚᱭ ᱢᱮ";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "ᱡᱟᱯᱛᱤ ᱡᱚᱱᱚᱲᱟᱣ";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "ᱡᱩᱲᱟᱹᱣ ᱵᱟᱭ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟ";
+
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "ᱯᱟᱧᱡᱟᱠᱩᱜ ᱵᱟᱠᱚ ᱧᱟᱢ ᱞᱮᱱᱟ";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "ᱯᱟᱧᱡᱟ ᱡᱤᱱᱤᱥ: %@";
+
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "ᱠᱨᱚᱥᱼᱥᱟᱭᱤᱴ ᱜᱷᱮᱨ ᱮᱥᱮᱫ ᱠᱩᱠᱤ ᱺ %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "ᱴᱤᱯᱟᱹᱪᱷᱟᱯᱠᱚ ᱟᱜ ᱺ %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "ᱥᱟᱸᱣᱛᱟ ᱢᱤᱰᱤᱭᱟ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱠᱚ ᱺ %@";
+
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "ᱴᱨᱮᱠᱟᱨ ᱠᱚ ᱵᱞᱚᱠ ᱮᱱᱟ: %@";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "ᱫᱟᱨᱟᱭ ᱛᱮ ᱧᱮᱞ ᱢᱮᱲᱟᱣ %@";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "ᱯᱚᱨᱢᱟᱱ ᱥᱟᱠᱟᱢ ᱧᱮᱞ ᱢᱮ";
+
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ ᱫᱚ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱠᱟᱱᱟᱭ ᱾  ᱟᱞᱮ ᱫᱚ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱫᱚᱦᱲᱟ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱞᱮ ᱥᱚᱞᱦᱟ ᱮᱫᱟ᱾";
+
+/* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
+"Menu.EnhancedTrackingProtection.Off.Title.v128" = "ᱟᱢ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱠᱚ ᱵᱚᱱᱫᱚ ᱠᱮᱫᱟᱢ";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "ᱟᱢ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟᱢ ᱾  ᱡᱩᱫᱤ ᱟᱞᱮ ᱡᱟᱦᱟᱱᱟᱜ ᱞᱮ ᱧᱮᱞ ᱧᱟᱢ ᱠᱮᱫᱟ, ᱟᱞᱮ ᱟᱢ ᱞᱮ ᱵᱟᱰᱟᱭ ᱚᱪᱚ ᱢᱮᱭᱟ ᱾";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "ᱟᱢᱟᱜ ᱡᱩᱲᱟᱣ ᱫᱚ ᱵᱟᱝ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱜᱮᱭᱟ ᱾";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "ᱱᱟᱶᱟ ᱥᱟᱭᱤᱴ ᱨᱮ ᱥᱟᱵᱫᱷᱟᱱ ᱛᱟᱦᱮᱸᱱ ᱢᱮ ᱾";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱨᱮ ᱢᱮᱱᱟᱜ ᱠᱟᱹᱫᱮᱭᱟ";
+
+/* The title for the privacy settings button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "ᱱᱤᱥᱚᱱ ᱥᱟᱡᱟᱣᱠᱚ";
+
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱫᱚ ᱵᱚᱱᱫᱚ ᱜᱮᱭᱟ ᱾  ᱟᱞᱮ ᱩᱱᱠᱩ ᱫᱚᱦᱲᱟ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱞᱮ ᱮᱢᱟᱫ ᱠᱚᱣᱟ ᱾";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "ᱡᱩᱫᱤ ᱱᱚᱶᱟ ᱥᱟᱭᱤᱴ ᱨᱮ ᱡᱟᱦᱟᱱᱟᱜ ᱨᱟᱹᱯᱩᱫ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ, ᱮᱱᱠᱷᱟᱱ ᱚᱱᱟ ᱵᱚᱱᱫᱚ ᱨᱮᱭᱟᱜ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ ᱾";
+

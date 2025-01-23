@@ -31,22 +31,22 @@ class FakespotMessageCardViewModel: ObservableObject {
 
         func primaryButtonBackground(theme: Theme) -> UIColor {
             switch self {
-            case .confirmation: return theme.colors.actionConfirmation
+            case .confirmation: return theme.colors.actionSuccess
             case .warning: return theme.colors.actionWarning
-            case .info: return theme.colors.actionInfo
+            case .info: return theme.colors.actionInformation
             case .infoLoading: return theme.colors.actionSecondary
-            case .error: return theme.colors.actionError
+            case .error: return theme.colors.actionCritical
             case .infoTransparent: return theme.colors.actionSecondary
             }
         }
 
         func cardBackground(theme: Theme) -> UIColor {
             switch self {
-            case .confirmation: return theme.colors.layerConfirmation
+            case .confirmation: return theme.colors.layerSuccess
             case .warning: return theme.colors.layerWarning
-            case .info: return theme.colors.layerInfo
+            case .info: return theme.colors.layerInformation
             case .infoLoading: return .clear
-            case .error: return theme.colors.layerError
+            case .error: return theme.colors.layerCritical
             case .infoTransparent: return .clear
             }
         }

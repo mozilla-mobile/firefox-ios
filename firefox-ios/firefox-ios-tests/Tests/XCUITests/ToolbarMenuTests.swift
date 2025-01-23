@@ -17,15 +17,21 @@ class ToolbarMenuTests: BaseTestCase {
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let firstPocketCell = app.collectionViews.cells["PocketCell"].firstMatch
-        let bookmarksButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
-        mozWaitForElementToExist(hamburgerMenu)
-        mozWaitForElementToExist(firstPocketCell)
+        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let forwardButton = app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
+        let searchField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        waitForElementsToExist(
+            [
+                hamburgerMenu,
+                firstPocketCell,
+                backButton,
+                forwardButton,
+                searchField,
+                tabsButton
+            ]
+        )
         if iPad() {
-            mozWaitForElementToExist(bookmarksButton)
-            XCTAssertTrue(
-                hamburgerMenu.isRightOf(rightElement: bookmarksButton),
-                "Menu button is not on the right side of bookmarks button"
-            )
+            mozWaitForElementToExist(firstPocketCell)
             XCTAssertTrue(
                 hamburgerMenu.isAbove(element: firstPocketCell),
                 "Menu button is not above the pocket cells area"
@@ -42,48 +48,46 @@ class ToolbarMenuTests: BaseTestCase {
             )
         }
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         validateMenuOptions()
+        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
         XCUIDevice.shared.orientation = .landscapeLeft
-        mozWaitForElementToExist(hamburgerMenu)
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForElementToExist(app.webViews["contentView"])
-        if iPad() {
-            mozWaitForElementToExist(bookmarksButton)
-            XCTAssertTrue(
-                hamburgerMenu.isRightOf(rightElement: bookmarksButton),
-                "Menu button is not on the right side of bookmarks button"
-            )
-        } else {
-            mozWaitForElementToExist(tabsButton)
-            XCTAssertTrue(
-                hamburgerMenu.isRightOf(rightElement: tabsButton),
-                "Menu button is not on the right side of tabs button"
-            )
-        }
-        mozWaitForElementToExist(firstPocketCell)
+        waitForElementsToExist(
+            [
+                hamburgerMenu,
+                firstPocketCell,
+                backButton,
+                forwardButton,
+                searchField,
+                tabsButton
+            ]
+        )
+        XCTAssertTrue(
+            hamburgerMenu.isRightOf(rightElement: tabsButton),
+            "Menu button is not on the right side of tabs button"
+        )
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),
             "Menu button is not below the pocket cells area"
         )
-        hamburgerMenu.tap()
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        hamburgerMenu.waitAndTap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         validateMenuOptions()
-        app.otherElements["PopoverDismissRegion"].tap()
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
+        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
     }
 
     private func validateMenuOptions() {
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.download])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.readingList])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.login])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.edit])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.passwords]
+            ]
+        )
     }
 }

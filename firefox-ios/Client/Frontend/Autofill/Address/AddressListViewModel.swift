@@ -35,7 +35,10 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     private let logger: Logger
 
-    var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
+    var isEditingFeatureEnabled: Bool {
+        AddressLocaleFeatureValidator.isValidRegion() ||
+        featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly)
+    }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
@@ -56,6 +59,24 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     let editAddressWebViewManager: WebViewPreloadManaging
+
+    var cancelButtonLabel: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillCancelButton :
+            .Addresses.Settings.Edit.CloseNavBarButtonLabel
+    }
+
+    var primaryButtonLabel: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillSaveButton :
+            .Addresses.Settings.Edit.EditNavBarButtonLabel
+    }
+
+    var editNavigationbarTitle: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillEditAddressTitle :
+            .Addresses.Settings.Edit.AutofillViewAddressTitle
+    }
 
     // MARK: - Initializer
 
@@ -145,13 +166,13 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     private func updateLocal(id: String, updatedAddress: UpdatableAddressFields) {
-        self.addressProvider.updateAddress(id: id, address: updatedAddress) { result in
+        self.addressProvider.updateAddress(id: id, address: updatedAddress) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    self.presentToast?(.updated)
+                    self?.presentToast?(.updated)
                 case .failure:
-                    self.presentToast?(
+                    self?.presentToast?(
                         .error(
                             .update(action: { [weak self] in
                                 self?.destination = .edit(
@@ -177,8 +198,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                         )
                     )
                 }
-                self.destination = nil
-                self.fetchAddresses()
+                self?.destination = nil
+                self?.fetchAddresses()
             }
         }
     }
@@ -199,13 +220,13 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     private func saveLocal(address: UpdatableAddressFields) {
-        self.addressProvider.addAddress(address: address) { result in
+        self.addressProvider.addAddress(address: address) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    self.presentToast?(.saved)
+                    self?.presentToast?(.saved)
                 case .failure:
-                    self.presentToast?(
+                    self?.presentToast?(
                         .error(
                             .save(action: { [weak self] in
                                 self?.destination = .add(
@@ -231,8 +252,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                         )
                     )
                 }
-                self.destination = nil
-                self.fetchAddresses()
+                self?.destination = nil
+                self?.fetchAddresses()
             }
         }
     }

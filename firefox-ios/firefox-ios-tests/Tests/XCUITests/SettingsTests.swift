@@ -9,9 +9,9 @@ class SettingsTests: BaseTestCase {
         let noImageStatusMode = app.otherElements.tables.cells.switches["NoImageModeStatus"]
         mozWaitForElementToExist(noImageStatusMode)
         if showImages {
-            XCTAssertEqual(noImageStatusMode.value as! String, "0")
+            XCTAssertEqual(noImageStatusMode.value as? String, "0")
         } else {
-            XCTAssertEqual(noImageStatusMode.value as! String, "1")
+            XCTAssertEqual(noImageStatusMode.value as? String, "1")
         }
     }
 
@@ -26,13 +26,14 @@ class SettingsTests: BaseTestCase {
         }
         let helpMenu = settingsTableView.cells["Help"]
         XCTAssertTrue(helpMenu.isEnabled)
-        helpMenu.tap()
+        helpMenu.waitAndTap()
 
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "support.mozilla.org")
         mozWaitForElementToExist(app.webViews.staticTexts["Firefox for iOS Support"])
 
-        let numTabs = app.buttons["Show Tabs"].value
+        let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
 
@@ -59,17 +60,16 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual(value as? String, "0")
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].waitAndTap()
 
         // Check Offer to open copied links, when opening firefox is on
         let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
-        app.navigationBars["Settings"].buttons["Done"].tap()
+        app.navigationBars["Settings"].buttons["Done"].waitAndTap()
 
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        let settingsmenuitemCell = app.tables.otherElements["Settings"]
-        settingsmenuitemCell.tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
+        app.staticTexts["Settings"].waitAndTap()
 
         // Check Offer to open copied links, when opening firefox is on
         let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
@@ -99,7 +99,7 @@ class SettingsTests: BaseTestCase {
 
         // Check that tapping on an element does nothing
         mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
-        app.tables.cells.staticTexts["Airmail"].tap()
+        app.tables.cells.staticTexts["Airmail"].waitAndTap()
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
 
         // Check that user can go back from that setting
@@ -154,7 +154,10 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
             table.cells[settingsQuery.ClearData.title], app.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
-            table.cells[settingsQuery.ShowIntroduction.title], table.cells[settingsQuery.SendAnonymousUsageData.title],
+            table.cells[settingsQuery.ShowIntroduction.title],
+            table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
+            table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
+            table.cells[settingsQuery.SendData.sendCrashReportsTitle],
             table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],
             table.cells[settingsQuery.PrivacyPolicy.title], table.cells[settingsQuery.SendFeedback.title],
             table.cells[settingsQuery.Help.title], table.cells[settingsQuery.RateOnAppStore.title],

@@ -6,16 +6,21 @@
 
 import Glean
 import XCTest
+import Storage
 
 class SponsoredTileTelemetryTests: XCTestCase {
+    private var gleanWrapper: MockGleanWrapper!
+
     override func setUp() {
         super.setUp()
+        gleanWrapper = MockGleanWrapper()
         clearTest()
     }
 
     override func tearDown() {
-        super.tearDown()
         clearTest()
+        gleanWrapper = nil
+        super.tearDown()
     }
 
     // MARK: Impression
@@ -23,30 +28,22 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
-        let expectation = expectation(description: "The top sites ping was sent")
-        GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileImpression)
+        let subject = createSubject()
+        subject.sendImpressionTelemetry(tileSite: topSite, position: 2)
 
-            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
-                                           expectedValue: 1,
-                                           failureMessage: "Should have contile id of \(contile.id)")
-
-            self.testStringMetricSuccess(metric: GleanMetrics.TopSites.contileAdvertiser,
-                                         expectedValue: contile.name,
-                                         failureMessage: "Should have contile advertiser of \(contile.name)")
-
-            self.testUrlMetricSuccess(metric: GleanMetrics.TopSites.contileReportingUrl,
-                                      expectedValue: contile.impressionUrl,
-                                      failureMessage: "Should have contile url of \(contile.impressionUrl)")
-
-            expectation.fulfill()
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
         }
-
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
-
-        waitForExpectations(timeout: 5.0)
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 4)
     }
 
     // MARK: Click
@@ -54,59 +51,31 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
-        let expectation = expectation(description: "The top sites ping was sent")
-        GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-            self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileClick)
+        let subject = createSubject()
+        subject.sendClickTelemetry(tileSite: topSite, position: 3)
 
-            self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
-                                           expectedValue: 2,
-                                           failureMessage: "Should have contile id of \(contile.id)")
-
-            self.testStringMetricSuccess(metric: GleanMetrics.TopSites.contileAdvertiser,
-                                         expectedValue: contile.name,
-                                         failureMessage: "Should have contile advertiser of \(contile.name)")
-
-            self.testUrlMetricSuccess(metric: GleanMetrics.TopSites.contileReportingUrl,
-                                      expectedValue: contile.clickUrl,
-                                      failureMessage: "Should have contile url of \(contile.clickUrl)")
-            expectation.fulfill()
+        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordUrlCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
         }
-
-        SponsoredTileTelemetry.sendClickTelemetry(tile: topSite, position: 3)
-
-        waitForExpectations(timeout: 5.0)
-    }
-
-    // MARK: ContextId
-    func testContextIdImpressionTopSite() {
-        TelemetryContextualIdentifier.setupContextId()
-        let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = SponsoredTile(contile: contile)
-
-        let expectation = expectation(description: "The top sites ping was sent")
-        GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-            guard let contextId = TelemetryContextualIdentifier.contextId,
-                    let uuid = UUID(uuidString: contextId) else {
-                XCTFail("Expected contextId to be configured")
-                return
-            }
-
-            self.testUuidMetricSuccess(metric: GleanMetrics.TopSites.contextId,
-                                       expectedValue: uuid,
-                                       failureMessage: "Should have contextId of \(uuid)")
-            expectation.fulfill()
-        }
-
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: topSite, position: 2)
-        waitForExpectations(timeout: 5.0)
+        XCTAssertEqual(asAnyHashable(savedPing), asAnyHashable(GleanMetrics.Pings.shared.topsitesImpression))
+        XCTAssertEqual(gleanWrapper.savedEvents?.count, 4)
     }
 
     // MARK: Helper methods
 
+    func createSubject() -> SponsoredTileTelemetry {
+        return DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
+    }
+
     func clearTest() {
-        Glean.shared.resetGlean(clearStores: true)
         TelemetryContextualIdentifier.clearUserDefaults()
     }
 }

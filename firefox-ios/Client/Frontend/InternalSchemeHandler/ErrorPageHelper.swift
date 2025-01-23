@@ -148,10 +148,57 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-class ErrorPageHandler: InternalSchemeResponse {
+class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
+    // When nativeErrorPage feature flag is true, only create
+    // html page with gray background similar to homepage or private homepage.
+    // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
+    var isNativeErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+    }
+
+    var isNICErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+    }
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
+        guard let url = request.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let code = components.valueForQuery("code"),
+              let errCode = Int(code) else {
+            return nil
+        }
+
+        /// Used for checking if current error code is for no internet connection
+        let noInternetErrorCode = Int(
+            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
+        )
+
+        if isNativeErrorPageEnabled {
+            return responseForNativeErrorPage(request: request)
+        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) {
+            return responseForNativeErrorPage(request: request)
+        } else {
+            return responseForErrorWebPage(request: request)
+        }
+    }
+
+    func responseForNativeErrorPage(request: URLRequest) -> (URLResponse, Data)? {
+        guard let url = request.url else { return nil }
+        let response = InternalSchemeHandler.response(forUrl: url)
+        // Blank page with a color matching the background of the panels which
+        // is displayed for a split-second until the panel shows.
+        let html = """
+            <!DOCTYPE html>
+            <html>
+              <body></body>
+            </html>
+        """
+        guard let data = html.data(using: .utf8) else { return nil }
+        return (response, data)
+    }
+
+    func responseForErrorWebPage(request: URLRequest) -> (URLResponse, Data)? {
         guard let requestUrl = request.url,
               let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage
         else { return nil }

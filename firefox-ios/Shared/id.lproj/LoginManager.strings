@@ -40,6 +40,9 @@
 /* Hide password text selection menu item */
 "Hide" = "Sembunyikan";
 
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "Sandi dihapus";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "Info masuk akan dihapus secara permanen.";
 
@@ -51,6 +54,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Tidak ada info masuk ditemukan";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Tidak ada sandi ditemukan";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Buka & Isi";

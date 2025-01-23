@@ -125,7 +125,7 @@ struct CreditCardInputField: View {
 
     func applyTheme(theme: Theme) {
         let color = theme.colors
-        errorColor = Color(color.textWarning)
+        errorColor = Color(color.textCritical)
         titleColor = Color(color.textSecondary)
         textFieldColor = Color(color.textPrimary)
         backgroundColor = Color(color.layer2)

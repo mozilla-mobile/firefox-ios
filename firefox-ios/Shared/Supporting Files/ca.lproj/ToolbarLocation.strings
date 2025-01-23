@@ -1,6 +1,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top. */
 "ContextualHints.Toolbar.Bottom.Description.v107" = "Poseu la barra d'eines a la part superior, si és més del vostre estil.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history */
+"ContextualHints.Toolbar.Navigation.Description.v132" = "Manteniu premudes les fletxes per saltar entre les pàgines de l’historial d’aquesta pestanya.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
 "ContextualHints.Toolbar.Top.Description.v107" = "Poseu la barra d'eines a la part inferior, si és més del vostre estil.";
 

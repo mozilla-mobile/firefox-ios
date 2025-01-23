@@ -68,6 +68,10 @@ class AppInfo {
 
     static let isKlar: Bool = AppInfo.productName.contains("Klar")
 
+    static var appScheme: String {
+        AppInfo.isKlar ? "firefox-klar" : "firefox-focus"
+    }
+
     static let config: AppConfig = AppInfo.isKlar ? KlarAppConfig() : FocusAppConfig()
 
     open class func isSimulator() -> Bool {

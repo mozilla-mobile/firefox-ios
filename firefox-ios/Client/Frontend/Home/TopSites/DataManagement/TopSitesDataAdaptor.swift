@@ -38,6 +38,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
+    private let unifiedAdsProvider: UnifiedAdsProviderInterface
     private let dispatchGroup: DispatchGroupInterface
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
@@ -49,6 +50,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
+         unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
@@ -56,6 +58,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
+        self.unifiedAdsProvider = unifiedAdsProvider
         self.notificationCenter = notificationCenter
         self.dispatchGroup = dispatchGroup
         topSiteHistoryManager.delegate = self
@@ -124,13 +127,25 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         guard shouldLoadSponsoredTiles else { return }
 
         dispatchGroup.enter()
-        contileProvider.fetchContiles { [weak self] result in
-            if case .success(let contiles) = result {
-                self?.contiles = contiles
-            } else {
-                self?.contiles = []
+
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsProvider.fetchTiles { [weak self] result in
+                if case .success(let unifiedTiles) = result {
+                    self?.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
+                } else {
+                    self?.contiles = []
+                }
+                self?.dispatchGroup.leave()
             }
-            self?.dispatchGroup.leave()
+        } else {
+            contileProvider.fetchContiles { [weak self] result in
+                if case .success(let contiles) = result {
+                    self?.contiles = contiles
+                } else {
+                    self?.contiles = []
+                }
+                self?.dispatchGroup.leave()
+            }
         }
     }
 
@@ -173,16 +188,17 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         if sponsoredTileSpaces > 0 {
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
-                                    defaultSearchEngine: profile.searchEngines.defaultEngine)
+                                    defaultSearchEngine: profile.searchEnginesManager.defaultEngine)
         }
     }
 
     private func countPinnedSites(sites: [Site]) -> Int {
-        var pinnedSites = 0
-        sites.forEach {
-            if $0 as? PinnedSite != nil { pinnedSites += 1 }
-        }
-        return pinnedSites
+        return sites.filter {
+            if case SiteType.pinnedSite = $0.type {
+                return true
+            }
+            return false
+        }.count
     }
 
     // MARK: - Google Tile
@@ -229,7 +245,8 @@ private extension Array where Element == Site {
 
         for (index, _) in contiles.enumerated() {
             guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
-            let site = SponsoredTile(contile: contile)
+
+            let site = Site.createSponsoredSite(fromContile: contile)
 
             // Show the next sponsored site if site is already present in the pinned sites
             // or if it's the default search engine
@@ -253,7 +270,7 @@ private extension Array where Element == Site {
         var alreadyThere = Set<Site>()
         let uniqueSites = compactMap { (site) -> Site? in
             // Do not remove sponsored tiles or pinned tiles duplicates
-            guard (site as? SponsoredTile) == nil && (site as? PinnedSite) == nil else {
+            guard !site.isSponsoredSite, !site.isPinnedSite else {
                 alreadyThere.insert(site)
                 return site
             }
@@ -273,7 +290,7 @@ private extension Array where Element == Site {
     // We don't add a sponsored tile if that domain site is already pinned by the user.
     private func siteIsAlreadyPresent(site: Site) -> Bool {
         let siteDomain = site.url.asURL?.shortDomain
-        return !filter { ($0.url.asURL?.shortDomain == siteDomain) && (($0 as? PinnedSite) != nil) }.isEmpty
+        return !filter { ($0.url.asURL?.shortDomain == siteDomain) && $0.isPinnedSite }.isEmpty
     }
 }
 

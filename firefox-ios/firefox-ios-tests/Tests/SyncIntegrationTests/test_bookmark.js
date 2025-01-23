@@ -14,7 +14,7 @@ var phases = { "phase1": "profile1" };
 // expected bookmark state
 var bookmarksExpected = {
 "mobile": [{
-  uri: "http://www.example.com/",
+  uri: "https://www.example.com/",
   title: "Example Domain"}]
 };
 

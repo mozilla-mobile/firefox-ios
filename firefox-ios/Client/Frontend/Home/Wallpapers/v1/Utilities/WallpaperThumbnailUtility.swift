@@ -39,7 +39,7 @@ class WallpaperThumbnailUtility {
 
         collections.forEach { collection in
             collection.wallpapers.forEach { wallpaper in
-                if wallpaper.type != .defaultWallpaper && wallpaper.thumbnail == nil {
+                if wallpaper.hasImage && wallpaper.thumbnail == nil {
                     missingThumbnails[wallpaper.id] = wallpaper.thumbnailID
                 }
             }
@@ -56,7 +56,7 @@ class WallpaperThumbnailUtility {
         } catch {
             logger.log("Wallpaper thumbnail update error: \(error.localizedDescription)",
                        level: .warning,
-                       category: .homepage)
+                       category: .legacyHomepage)
         }
     }
 
@@ -82,7 +82,7 @@ class WallpaperThumbnailUtility {
 
         collections.forEach { collection in
             collection.wallpapers.forEach { wallpaper in
-                if wallpaper.type == .defaultWallpaper || wallpaper.thumbnail != nil {
+                if wallpaper.type == .none || wallpaper.thumbnail != nil {
                     numberOfAvailableThumbs += 1
                 }
             }

@@ -49,6 +49,9 @@
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "已清除 Cookie 與網站資料";
 
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "關閉「隱私權與安全性」選單";
+
 /* Text to let users know that the current website is secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "安全連線";
 
@@ -57,6 +60,9 @@
 
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "找不到追蹤器";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "追蹤用內容：%@";
 
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "跨網站追蹤 Cookie：%@";
@@ -72,6 +78,9 @@
 
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "由 %@ 驗證";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "檢視憑證";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ 已關閉，建議您重新開啟保護。";
@@ -96,9 +105,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "加強型追蹤保護";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "已關閉保護，建議您重新開啟。";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "已關閉保護，建議您重新開啟。";

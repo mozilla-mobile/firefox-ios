@@ -54,7 +54,7 @@ final class SceneCoordinatorTests: XCTestCase {
         subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
+        XCTAssertNotNil(subject.childCoordinators.first as? LaunchCoordinator)
     }
 
     func testLaunchWithLaunchType_launchFromBrowser() {
@@ -62,7 +62,7 @@ final class SceneCoordinatorTests: XCTestCase {
         subject.launchWith(launchType: .defaultBrowser)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
+        XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
 
     func testLaunchBrowser_onlyStartsOnce() {
@@ -71,18 +71,18 @@ final class SceneCoordinatorTests: XCTestCase {
         subject.launchBrowser()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
+        XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
 
     func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
         let subject = createSubject()
         subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
 
-        let childLaunchCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? LaunchCoordinator)
+        let childLaunchCoordinator = try XCTUnwrap(subject.childCoordinators.first as? LaunchCoordinator)
         subject.didFinishLaunch(from: childLaunchCoordinator)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
+        XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
     }
 
     func testHandleRoute_launchNotFinished_routeSaved() {
@@ -104,7 +104,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertNil(coordinator)
         XCTAssertNotNil(subject.savedRoute)
-        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators.first as? BrowserCoordinator)
         XCTAssertNotNil(browserCoordinator.savedRoute)
     }
 
@@ -113,7 +113,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
         subject.start()
         subject.launchBrowser()
-        let browserCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? BrowserCoordinator)
+        let browserCoordinator = try XCTUnwrap(subject.childCoordinators.first as? BrowserCoordinator)
         browserCoordinator.browserHasLoaded()
         let coordinator = subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
 
@@ -130,7 +130,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertTrue(result)
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
+        XCTAssertNotNil(subject.childCoordinators.first as? LaunchCoordinator)
     }
 
     // MARK: - Helpers

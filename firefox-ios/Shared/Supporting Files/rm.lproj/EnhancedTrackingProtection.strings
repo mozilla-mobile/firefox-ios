@@ -49,6 +49,9 @@
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Allontanà cookies e datas da websites";
 
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Serrar il menu «Protecziun da datas e segirezza»";
+
 /* Text to let users know that the current website is secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Connexiun segirada";
 
@@ -57,6 +60,9 @@
 
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Na chattà nagins fastizaders";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Cuntegn che fastizescha: %@";
 
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Cookies che fastizeschan tranter websites: %@";
@@ -72,6 +78,9 @@
 
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Verifitgà da %@";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Mussar il certificat";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ è ord funcziun. Nus recumandain da puspè activar las protecziuns.";
@@ -96,9 +105,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protecziun avanzada cunter il fastizar";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Las protecziuns èn DEACTIVADAS. Nus recumandain da las reactivar.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Las protecziuns èn DEACTIVADAS. Nus recumandain da las reactivar.";

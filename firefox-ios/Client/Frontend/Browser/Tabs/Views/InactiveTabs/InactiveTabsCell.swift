@@ -31,8 +31,17 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
         setupView()
 
         titleLabel.text = inactiveTabsModel.title
+
+        // FXIOS-9938 Right now, passing the faviconURL means each of these websites is caching favicon URLs and images based
+        // on the full favicon URL path and not the short domain. This can be improved but will require some reworking.
+        // For now, the consequence is that Inactive tab favicons have to be downloaded when viewed for the first time.
+        var siteResource: SiteResource?
+        if let faviconURLString = inactiveTabsModel.favIconURL,
+           let faviconURL = URL(string: faviconURLString) {
+            siteResource = .remoteURL(url: faviconURL)
+        }
         leftImageView.setFavicon(FaviconImageViewModel(siteURLString: inactiveTabsModel.url?.absoluteString,
-                                                       faviconURL: URL(string: inactiveTabsModel.favIconURL ?? ""),
+                                                       siteResource: siteResource,
                                                        faviconCornerRadius: InactiveTabsCell.UX.faviconCornerRadius))
     }
 

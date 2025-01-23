@@ -40,7 +40,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
-    private var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private lazy var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     // MARK: - UI
 
@@ -65,6 +65,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1
         label.font = FXFontStyles.Bold.caption1.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -80,8 +82,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        animator = SwipeAnimator(animatingView: self)
+        closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
 
@@ -90,14 +92,14 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
-                                        target: self.animator,
+                                        target: animator,
                                         selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
 
         headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.contentView.addSubview(self.closeButton)
-        headerView.contentView.addSubview(self.titleText)
-        headerView.contentView.addSubview(self.favicon)
+        headerView.contentView.addSubview(closeButton)
+        headerView.contentView.addSubview(titleText)
+        headerView.contentView.addSubview(favicon)
 
         setupConstraints()
     }
@@ -105,12 +107,12 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate) {
+    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
         self.tabModel = tabModel
         self.delegate = delegate
 
         if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
-            self.animator?.delegate = swipeAnimatorDelegate
+            animator?.delegate = swipeAnimatorDelegate
         }
 
         animator?.animateBackToCenter()
@@ -119,6 +121,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
+        accessibilityIdentifier = a11yId
 
         let identifier = StandardImageIdentifiers.Large.globe
         if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {

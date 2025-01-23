@@ -21,78 +21,80 @@ struct TopSitesWidget: Widget {
 }
 
 struct TopSitesView: View {
+    private struct UX {
+        static let widgetBackgroundColor = Color(red: 0.11, green: 0.11, blue: 0.13)
+        static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
+        static let itemCornerRadius: CGFloat = 5.0
+        static let iconScale: CGFloat = 1.0
+        static let minimumRowSpacing: CGFloat = 12.0
+    }
+
     let entry: TopSitesEntry
-
-    @ViewBuilder
-    func topSitesItem(_ site: WidgetKitTopSiteModel) -> some View {
-        let url = site.url
-
-        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            if entry.favicons[site.imageKey] != nil {
-                (entry.favicons[site.imageKey])!.resizable().frame(width: 60, height: 60).mask(maskShape)
-            } else {
-                Rectangle()
-                    .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
-                    .frame(width: 60, height: 60)
-            }
-        }
-    }
-
-    var maskShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: 5)
-    }
-
-    var emptySquare: some View {
-        maskShape
-            .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
-            .frame(width: 60, height: 60)
-            .background(Color.clear).frame(maxWidth: .infinity)
-    }
 
     var body: some View {
         VStack {
-            HStack {
-                if entry.sites.isEmpty {
-                    ForEach(0..<4, id: \.self) { _ in
-                        emptySquare
-                    }
-                } else if entry.sites.count > 3 {
-                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
-                        topSitesItem(tab)
-                            .background(Color.clear).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-
-                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
-                        emptySquare
-                    }
-                }
-            }.padding([.top, .horizontal])
-            Spacer()
-            HStack {
-                if entry.sites.count > 7 {
-                    ForEach(entry.sites[4...7], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    // Ensure there is at least a single site in the second row
-                    if entry.sites.count > 4 {
-                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
-                            topSitesItem(tab).frame(maxWidth: .infinity)
+            // Make a grid with 4 columns
+            GeometryReader { provider in
+                // There are 2 rows and the height of them is half of the widget height
+                // So they occupy the whole available space
+                let rowSize = provider.size.height / 2
+                let itemSize = calculateIconSize(provider: provider, rowSize: rowSize)
+                LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) },
+                          spacing: 0,
+                          content: {
+                    ForEach(0..<8) { index in
+                        if let site = entry.sites[safe: index] {
+                            topSitesItem(site, iconSize: itemSize)
+                                .frame(height: rowSize)
+                        } else {
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(height: rowSize)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: UX.itemCornerRadius)
+                                        .fill(UX.emptySquareFillColor)
+                                        .frame(width: itemSize, height: itemSize)
+                                }
                         }
                     }
-
-                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
-                        emptySquare
-                    }
-                }
-            }.padding([.bottom, .horizontal])
+                })
+            }
+            .padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color)
+        .widgetBackground(UX.widgetBackgroundColor)
+    }
+
+    @ViewBuilder
+    private func topSitesItem(_ site: WidgetTopSite, iconSize: CGFloat) -> some View {
+        let url = site.url
+        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
+            Group {
+                if let image = entry.favicons[site.faviconImageCacheKey] {
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Rectangle()
+                        .fill(UX.emptySquareFillColor)
+                }
+            }
+            .frame(width: iconSize, height: iconSize)
+            .clipShape(RoundedRectangle(cornerRadius: UX.itemCornerRadius))
+        }
+    }
+
+    private func calculateIconSize(provider: GeometryProxy, rowSize: CGFloat) -> CGFloat {
+        let dynamicIconScale = UIFontMetrics.default.scaledValue(for: UX.iconScale)
+        // since the widget has 2 rows and the height of each row is half of the widget size.
+        // it is set that the icon height is 4 times smaller then widget height.
+        // That is the standard size for the icon and can be adjust modifyng UX.iconScale.
+        // it adapts also to dynamic font scale by scaling the UX.iconScale value
+        let iconHeight = (provider.size.height / 4) * dynamicIconScale
+        if iconHeight > (rowSize - UX.minimumRowSpacing) {
+            return rowSize - UX.minimumRowSpacing
+        }
+        return iconHeight
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

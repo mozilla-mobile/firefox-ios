@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "사생활 보호 모드";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "사생활 보호 모드";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "사생활 보호 모드를 켜거나 끔";
 

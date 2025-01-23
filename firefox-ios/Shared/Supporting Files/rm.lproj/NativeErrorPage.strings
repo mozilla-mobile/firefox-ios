@@ -1,8 +1,8 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Rechargiar";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Ina errur SSL è succedida. Igl è impussibel da stabilir ina connexiun segira cun il server.";
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "Il possessur da %@ n’ha betg configurà endretg la website ed i n’è betg pussaivel da stabilir ina connexiun segirada.";
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Sajas precaut. I para da dar in problem.";

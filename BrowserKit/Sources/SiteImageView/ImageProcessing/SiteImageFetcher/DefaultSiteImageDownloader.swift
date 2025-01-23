@@ -6,28 +6,12 @@ import Foundation
 import Kingfisher
 import Common
 
-class DefaultSiteImageDownloader: ImageDownloader, SiteImageDownloader {
-    var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
-    var timeoutDelay: UInt64 { return 10 }
+class DefaultSiteImageDownloader: ImageDownloader, @unchecked Sendable, SiteImageDownloader {
+    var timeoutDelay: Double { return 10 }
     var logger: Logger
 
     init(name: String = "default", logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         super.init(name: name)
-    }
-
-    func downloadImage(with url: URL,
-                       completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
-    ) -> DownloadTask? {
-        return downloadImage(with: url,
-                             options: nil,
-                             completionHandler: { result in
-            switch result {
-            case .success(let value):
-                completionHandler?(.success(value))
-            case .failure(let error):
-                completionHandler?(.failure(error))
-            }
-        })
     }
 }

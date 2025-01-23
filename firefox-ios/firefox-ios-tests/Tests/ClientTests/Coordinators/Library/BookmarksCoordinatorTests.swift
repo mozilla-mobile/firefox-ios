@@ -19,6 +19,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         profile = MockProfile()
         parentCoordinator = MockLibraryCoordinatorDelegate()
         navigationHandler = MockLibraryNavigationHandler()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -30,45 +31,138 @@ final class BookmarksCoordinatorTests: XCTestCase {
         navigationHandler = nil
     }
 
-    func testStart() {
+    // MARK: Legacy Bookmarks
+
+    func testStart_legacy() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
 
         subject.start(from: folder)
 
-        XCTAssertTrue(router.pushedViewController is BookmarksPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarksPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarksDetail_forFolder() {
+    func testShowBookmarksDetail_forFolder_legacy() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
 
         subject.showBookmarkDetail(for: folder, folder: folder)
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarkDetail_forBookmarkCreation() {
+    func testShowBookmarkDetail_forBookmarkCreation_legacy() {
         let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarkDetail_forFolderCreation() {
+    func testShowBookmarkDetail_forFolderCreation_legacy() {
         let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+    // MARK: Bookmark refactor
+
+    func testStart() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let folder = LocalDesktopFolder()
+
+        subject.start(from: folder)
+
+        XCTAssertTrue(router.pushedViewController is BookmarksViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarksDetail_forFolder() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let folder = LocalDesktopFolder()
+
+        subject.showBookmarkDetail(for: folder, folder: folder)
+
+        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarkDetail_forBookmarkCreation() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+
+        subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
+
+        XCTAssertTrue(router.pushedViewController is EditBookmarkViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarkDetail_forFolderCreation() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+
+        subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
+
+        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    // MARK: Sign in
+
+    func testShowSignInViewController() {
+        let subject = createSubject()
+
+        subject.showSignIn()
+        let presentedViewController = router.presentedViewController as? UINavigationController
+        XCTAssertTrue(presentedViewController?.visibleViewController is FirefoxAccountSignInViewController)
+        XCTAssertEqual(router.presentCalled, 1)
+    }
+
+    func testShowQRCode_addsQRCodeChildCoordinator() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+    }
+
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(router.presentCalled, 1)
+        XCTAssertTrue(router.presentedViewController is QRCodeNavigationController)
+    }
+
+    // MARK: Did finish
+
+    func testDidFinishCalled() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+        subject.showQRCode(delegate: delegate)
+
+        guard let qrCodeCoordinator = subject.childCoordinators.first(where: {
+            $0 is QRCodeCoordinator
+        }) as? QRCodeCoordinator else {
+            XCTFail("QRCodeCoordinator expected to be found")
+            return
+        }
+
+        subject.didFinish(from: qrCodeCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 0)
+    }
+
+    // MARK: Share sheet
+
+    func testShowShareSheet_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 
         subject.shareLibraryItem(
@@ -81,13 +175,16 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(navigationHandler.didShareLibraryItemCalled, 1)
     }
 
-    private func createSubject() -> BookmarksCoordinator {
+    // MARK: Helper methods
+
+    private func createSubject(isBookmarkRefactorEnabled: Bool = false) -> BookmarksCoordinator {
         let subject = BookmarksCoordinator(
             router: router,
             profile: profile,
             windowUUID: .XCTestDefaultUUID,
-            parentCoordinator: parentCoordinator,
-            navigationHandler: navigationHandler
+            libraryCoordinator: parentCoordinator,
+            libraryNavigationHandler: navigationHandler,
+            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         trackForMemoryLeaks(subject)
         return subject

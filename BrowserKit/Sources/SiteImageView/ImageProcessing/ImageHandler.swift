@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
@@ -38,6 +39,7 @@ class DefaultImageHandler: ImageHandler {
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
+    private var logger: Logger = DefaultLogger.shared
 
     init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
@@ -51,9 +53,32 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
+            if case let .bundleAsset(assetName, _) = imageModel.siteResource {
+                return try loadDefaultFaviconFromBundle(assetName: assetName)
+            }
+
+            // The default images are stored with the cache key as name, try to load it from bundle
+            if let image = try? getBundleImage(assetName: imageModel.cacheKey) {
+                return image
+            }
+
             return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
+        }
+    }
+
+    private func loadDefaultFaviconFromBundle(assetName: String) throws -> UIImage {
+        do {
+            return try getBundleImage(assetName: assetName)
+        } catch {
+            logger.log(
+                "Could not get image from bundle",
+                level: .warning,
+                category: .images,
+                extra: ["assetName": assetName]
+            )
+            throw error
         }
     }
 
@@ -75,10 +100,20 @@ class DefaultImageHandler: ImageHandler {
 
     private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
-            guard let faviconURL = imageModel.resourceURL else {
+            guard let resourceType = imageModel.siteResource else {
                 throw SiteImageError.noFaviconURLFound
             }
-            let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
+
+            let imageURL: URL
+            switch resourceType {
+            case .bundleAsset(let assetName, let forRemoteResource):
+                assertionFailure("You shouldn't be trying to fetch a bundled asset image! \(assetName)")
+                imageURL = forRemoteResource
+            case .remoteURL(let faviconURL):
+                imageURL = faviconURL
+            }
+
+            let image = try await faviconFetcher.fetchFavicon(from: imageURL)
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
@@ -106,12 +141,23 @@ class DefaultImageHandler: ImageHandler {
             }
 
             let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
-            // FIXME Do we really want to cache letter icons and never attempt to get a favicon again?
-            //       We can drop into here on a network timeout.
+            // FIXME FXIOS-11063 Do we really want to cache letter icons and never attempt to get a favicon again?
+            //                   We can drop into here on a network timeout.
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
+    }
+
+    private func getBundleImage(assetName: String) throws -> UIImage {
+        // try to load it first from main app bundle then fallback on package one
+        if let image = UIImage(named: assetName, in: .main, with: nil) {
+            return image
+        }
+        if let image = UIImage(named: assetName, in: .module, with: nil) {
+            return image
+        }
+        throw SiteImageError.noImageInBundle
     }
 }

@@ -146,11 +146,22 @@ extension SQLiteReadingList: ReadingList {
     }
 
     fileprivate class func ReadingListItemFactory(_ row: SDRow) -> ReadingListItem {
-        let id = row["client_id"] as! Int
+        guard let id = row["client_id"] as? Int,
+              let url = row["url"] as? String,
+              let title = row["title"] as? String,
+              let addedBy = row["added_by"] as? String else {
+            return ReadingListItem(
+                id: 0,
+                lastModified: 0,
+                url: "",
+                title: "",
+                addedBy: "",
+                unread: false,
+                archived: false,
+                favorite: false
+            )
+        }
         let lastModified = row.getTimestamp("client_last_modified")!
-        let url = row["url"] as! String
-        let title = row["title"] as! String
-        let addedBy = row["added_by"] as! String
         let archived = row.getBoolean("archived")
         let unread = row.getBoolean("unread")
         let favorite = row.getBoolean("favorite")

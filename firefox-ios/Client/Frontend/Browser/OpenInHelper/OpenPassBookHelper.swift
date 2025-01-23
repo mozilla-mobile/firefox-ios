@@ -30,7 +30,7 @@ class OpenPassBookHelper {
     private let presenter: Presenter
     private let cookieStore: WKHTTPCookieStore
     private lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent,
-                                              configuration: .ephemeral)
+                                              configuration: .ephemeralMPTCP)
     private let logger: Logger
 
     init(response: URLResponse,

@@ -19,8 +19,8 @@ class SnackButton: UIButton, ThemeApplicable {
     let callback: SnackBarCallback?
     var bar: SnackBar?
 
-    private var highlightedTintColor: UIColor!
-    private var normalTintColor: UIColor!
+    private var highlightedTintColor: UIColor?
+    private var normalTintColor: UIColor?
 
     let separator: UIView = .build()
 

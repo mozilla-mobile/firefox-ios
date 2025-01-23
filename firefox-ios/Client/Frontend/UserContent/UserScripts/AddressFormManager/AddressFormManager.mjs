@@ -58,7 +58,8 @@ const init = (record, l10nStrings, isDarkTheme = false) => {
   );
 
   document.querySelectorAll("textarea").forEach((textarea) => {
-    autoResizeTextarea(textarea);
+    const rowHeight = document.querySelector("input").clientHeight;
+    autoResizeTextarea(textarea, rowHeight);
     textarea.addEventListener("input", () => autoResizeTextarea(textarea));
   });
 

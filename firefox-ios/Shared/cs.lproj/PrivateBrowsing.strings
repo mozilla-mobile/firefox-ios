@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Anonymní režim";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Anonymní prohlížení";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Zapne nebo vypne anonymní režim";
 

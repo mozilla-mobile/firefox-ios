@@ -10,6 +10,7 @@ class MockNotificationCenter: NotificationProtocol {
     var postCallCount = 0
     var addObserverCallCount = 0
     var removeObserverCallCount = 0
+    var observers: [NSNotification.Name] = []
 
     var savePostName: NSNotification.Name?
     var savePostObject: Any?
@@ -38,6 +39,8 @@ class MockNotificationCenter: NotificationProtocol {
         object anObject: Any?
     ) {
         addObserverCallCount += 1
+        guard let aName else { return }
+        observers.append(aName)
     }
 
     func addObserver(
@@ -46,6 +49,8 @@ class MockNotificationCenter: NotificationProtocol {
         using block: @escaping (Notification) -> Void
     ) -> NSObjectProtocol? {
         addObserverCallCount += 1
+        guard let name else { return nil }
+        observers.append(name)
         return nil
     }
 

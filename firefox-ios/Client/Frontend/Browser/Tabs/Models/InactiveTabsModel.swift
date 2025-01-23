@@ -4,15 +4,27 @@
 
 import Foundation
 
-struct InactiveTabsModel: Equatable {
-    var tabUUID: TabUUID
-    var title: String
-    var url: URL?
+struct InactiveTabsModel: Equatable, Identifiable, Hashable {
+    var id: String { return tabUUID }
+    let tabUUID: TabUUID
+    let title: String
+    let url: URL?
     var favIconURL: String?
 
     var displayURL: String {
         guard let url = url else { return title }
 
         return url.absoluteString
+    }
+
+    static func emptyState(
+        tabUUID: TabUUID,
+        title: String
+    ) -> InactiveTabsModel {
+        return InactiveTabsModel(
+            tabUUID: tabUUID,
+            title: title,
+            url: nil
+        )
     }
 }

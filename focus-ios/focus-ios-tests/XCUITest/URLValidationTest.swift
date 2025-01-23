@@ -29,10 +29,10 @@ class URLValidationTest: BaseTestCase {
     private func loadAndValidateURL(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()
-        mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
         if !iPad() {
             mozWaitForElementToExist(app.buttons["Menu"])
         }
+        XCTAssertTrue(app.otherElements.staticTexts.elementContainingText("Mozilla").exists)
         mozWaitForElementToExist(app.textFields["URLBar.urlText"])
         waitForValueContains(app.textFields["URLBar.urlText"], value: "www.mozilla.org")
     }

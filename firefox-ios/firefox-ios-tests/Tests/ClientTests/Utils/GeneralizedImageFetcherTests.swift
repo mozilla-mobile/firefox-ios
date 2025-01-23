@@ -112,7 +112,7 @@ extension GeneralizedImageFetcherTests {
     }
 
     func getGeneralizedImageFetcher(file: StaticString = #filePath, line: UInt = #line) -> GeneralizedImageFetcher {
-        let configuration = URLSessionConfiguration.ephemeral
+        let configuration = URLSessionConfiguration.ephemeralMPTCP
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))

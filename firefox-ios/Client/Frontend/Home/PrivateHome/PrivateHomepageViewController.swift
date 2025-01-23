@@ -89,8 +89,8 @@ final class PrivateHomepageViewController:
         return messageCard
     }()
 
-    private lazy var homepageHeaderCell: HomepageHeaderCell = {
-        let header = HomepageHeaderCell()
+    private lazy var homepageHeaderCell: LegacyHomepageHeaderCell = {
+        let header = LegacyHomepageHeaderCell()
         header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         header.configure(with: headerViewModel)
         return header
@@ -209,7 +209,7 @@ final class PrivateHomepageViewController:
         guard let privateBrowsingURL = SupportUtils.URLForPrivateBrowsingLearnMore else {
             self.logger.log("Failed to retrieve URL from SupportUtils.URLForPrivateBrowsingLearnMore",
                             level: .debug,
-                            category: .homepage)
+                            category: .legacyHomepage)
             return
         }
         parentCoordinator?.homePanelDidRequestToOpenInNewTab(

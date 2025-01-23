@@ -13,7 +13,7 @@ class CustomSearchError: MaybeErrorType {
         case DuplicateEngine, FormInput
     }
 
-    var reason: Reason!
+    var reason: Reason
 
     internal var description: String {
         return "Search Engine Not Added"
@@ -69,7 +69,7 @@ class CustomSearchViewController: SettingsTableViewController {
             do {
                 let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
                 self.spinnerView.stopAnimating()
-                self.profile.searchEngines.addSearchEngine(engine)
+                self.profile?.searchEnginesManager.addSearchEngine(engine)
 
                 CATransaction.begin() // Use transaction to call callback after animation has been completed
                 CATransaction.setCompletionBlock(self.successCallback)
@@ -124,7 +124,8 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     private func engineExists(name: String, template: String) -> Bool {
-        return profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
+        guard let profile else { return false }
+        return profile.searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
         }
     }
@@ -309,7 +310,9 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
+
+        guard let theme else { return }
+        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textCritical
         textField.textColor = color
     }
 

@@ -14,12 +14,6 @@ enum ShortcutType: String {
     case openLastBookmark = "OpenLastBookmark"
     case qrCode = "QRCode"
 
-    init?(fullType: String) {
-        guard let last = fullType.components(separatedBy: ".").last else { return nil }
-
-        self.init(rawValue: last)
-    }
-
     var type: String {
         return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
     }
@@ -35,12 +29,6 @@ struct QuickActionInfos {
 
 // MARK: - QuickActions
 protocol QuickActions {
-    func addDynamicApplicationShortcutItemOfType(
-        _ type: ShortcutType,
-        fromShareItem shareItem: ShareItem,
-        toApplication application: UIApplication
-    )
-
     func addDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         withUserData userData: [String: String],
@@ -64,25 +52,7 @@ extension QuickActions {
 }
 
 struct QuickActionsImplementation: QuickActions {
-    private let logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
-
     // MARK: Administering Quick Actions
-    func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
-                                                 fromShareItem shareItem: ShareItem,
-                                                 toApplication application: UIApplication) {
-        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
-        if let title = shareItem.title {
-            userData[QuickActionInfos.tabTitleKey] = title
-        }
-        addDynamicApplicationShortcutItemOfType(type,
-                                                withUserData: userData,
-                                                toApplication: application)
-    }
-
     func addDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         withUserData userData: [String: String] = [String: String](),

@@ -85,6 +85,21 @@ class NotificationManagerTests: XCTestCase {
         XCTAssertEqual(self.center.pendingRequests.count, 1)
     }
 
+    func testCloseRemoteTabNotification() {
+        let notificationContent = UNMutableNotificationContent()
+        // Test with the categoryIdentify being the close remote tab identifier
+        notificationContent.categoryIdentifier = NotificationCloseTabs.notificationCategoryId
+        let request = UNNotificationRequest(identifier: "id1",
+                                            content: notificationContent,
+                                            trigger: nil)
+
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                XCTFail("Error adding notification request: \(error)")
+            }
+        }
+    }
+
     // MARK: - Helpers
 
     private func buildRequest(title: String, body: String, id: String) -> UNNotificationRequest {

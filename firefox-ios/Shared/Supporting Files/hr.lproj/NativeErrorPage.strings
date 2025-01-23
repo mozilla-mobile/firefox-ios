@@ -1,0 +1,12 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Učitaj ponovo";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Oprez. Nešto nije u redu.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Pokušaj se povezati na jednom drugom uređaju. Provjeri modem ili router. Prekini vezu i ponovo se spoji na Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Čini se da postoji problem s tvojom internetskom vezom.";
+

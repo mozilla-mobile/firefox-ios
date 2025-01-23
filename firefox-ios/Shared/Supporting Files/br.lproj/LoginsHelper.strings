@@ -1,3 +1,6 @@
+/* Button to not save the user's password in the logins helper */
+"LoginsHelper.DontSave.Button.v122" = "Diwezhatoc’h";
+
 /* Button to not update the user's password in the logins helper */
 "LoginsHelper.DontUpdate.Button.v122" = "Diwezhatoc’h";
 

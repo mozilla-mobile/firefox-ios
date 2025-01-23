@@ -39,13 +39,24 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: Variables
     weak var delegate: TabLocationViewDelegate?
-    var longPressRecognizer: UILongPressGestureRecognizer!
-    var tapRecognizer: UITapGestureRecognizer!
-    var contentView: UIStackView!
+
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
+        longPressRecognizer.delegate = self
+        return longPressRecognizer
+    }()
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
+        tapRecognizer.delegate = self
+        return tapRecognizer
+    }()
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
     let windowUUID: WindowUUID
+    let logger: Logger
+
+    var isTrackingProtectionDisplayed: Bool = false
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
@@ -79,6 +90,24 @@ class TabLocationView: UIView, FeatureFlaggable {
             setReaderModeState(newReaderModeState)
         }
     }
+
+    lazy var contentView: UIStackView = {
+        let space1px = UIView.build()
+        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        let subviews = [
+            trackingProtectionButton,
+            space1px,
+            urlTextField,
+            shoppingButton,
+            readerModeButton,
+            reloadButton
+        ]
+        let contentView = UIStackView(arrangedSubviews: subviews)
+        contentView.distribution = .fill
+        contentView.alignment = .center
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
 
     lazy var urlTextField: URLTextField = .build { urlTextField in
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
@@ -169,45 +198,32 @@ class TabLocationView: UIView, FeatureFlaggable {
         return reloadButton
     }()
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
+        self.logger = logger
         super.init(frame: .zero)
         setupNotifications(
             forObserver: self,
             observing: [
                 .FakespotViewControllerDidDismiss,
-                .FakespotViewControllerDidAppear
+                .FakespotViewControllerDidAppear,
+                .TrackingProtectionViewControllerDidDismiss,
+                .TrackingProtectionViewControllerDidAppear
             ]
         )
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
-        longPressRecognizer.delegate = self
-
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
-        tapRecognizer.delegate = self
 
         addGestureRecognizer(longPressRecognizer)
         addGestureRecognizer(tapRecognizer)
 
-        let space1px = UIView.build()
-        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
-
-        let subviews = [
-            trackingProtectionButton,
-            space1px,
-            urlTextField,
-            shoppingButton,
-            readerModeButton,
-            reloadButton
-        ]
-        contentView = UIStackView(arrangedSubviews: subviews)
-        contentView.distribution = .fill
-        contentView.alignment = .center
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
-        contentView.edges(equalTo: self)
 
         NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
             trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             shoppingButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
@@ -440,7 +456,7 @@ private extension TabLocationView {
             self.trackingProtectionButton.isHidden = true
         }
 
-        if wasHidden != readerModeButton.isHidden {
+        if wasHidden != readerModeButton.isHidden && !isTrackingProtectionDisplayed {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
                 // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
@@ -467,6 +483,10 @@ extension TabLocationView: Notifiable {
             shoppingButton.isSelected = false
         case .FakespotViewControllerDidAppear:
             shoppingButton.isSelected = true
+        case .TrackingProtectionViewControllerDidDismiss:
+            isTrackingProtectionDisplayed = false
+        case .TrackingProtectionViewControllerDidAppear:
+            isTrackingProtectionDisplayed = true
         default: break
         }
     }
@@ -538,6 +558,7 @@ extension TabLocationView: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     func tabDidChangeContentBlocking(_ tab: Tab) {
+        logger.log("Tab did change content blocking", level: .info, category: .adblock)
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in

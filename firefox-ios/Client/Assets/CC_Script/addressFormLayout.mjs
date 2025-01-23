@@ -88,8 +88,8 @@ function* convertLayoutToUI(fields, l10nStrings) {
     const fieldTag = item.options
       ? "select"
       : item.multiline
-      ? "textarea"
-      : "input";
+        ? "textarea"
+        : "input";
 
     const fieldUI = {
       label: {

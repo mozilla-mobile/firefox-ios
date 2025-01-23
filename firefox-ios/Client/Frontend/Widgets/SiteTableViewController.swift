@@ -186,7 +186,7 @@ class SiteTableViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
-        navigationController?.navigationBar.tintColor = theme.colors.iconAction
+        navigationController?.navigationBar.tintColor = theme.colors.iconAccent
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: theme.colors.textPrimary
         ]

@@ -5,7 +5,7 @@
 import Foundation
 import Common
 import Shared
-import SiteImageView
+import ComponentLibrary
 
 import Security
 import CryptoKit
@@ -20,8 +20,11 @@ struct CertificateKeys {
 
 typealias CertificateItems = [(key: String, value: String)]
 
-class CertificatesViewController: UIViewController, Themeable, UITableViewDelegate, UITableViewDataSource {
-    private enum CertificatesItemType: Int {
+class CertificatesViewController: UIViewController,
+                                  Themeable,
+                                  UITableViewDelegate,
+                                  UITableViewDataSource {
+    private enum CertificatesItemType: Int, CaseIterable {
         case subjectName
         case issuerName
         case validity
@@ -30,53 +33,55 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 
     // MARK: - UI
     struct UX {
-        static let headerStackViewSpacing = 16.0
         static let titleLabelMargin = 8.0
-        static let titleLabelTopMargin = 20.0
+        static let titleLabelTopMargin = 2.0
+        static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
-        static let tableViewSpacerTopMargin = 20.0
-        static let tableViewSpacerHeight = 1.0
-        static let tableViewTopMargin = 20.0
     }
 
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
     }
 
-    private let headerStackView: UIStackView = .build { stack in
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.spacing = UX.headerStackViewSpacing
+    private let headerView: NavigationHeaderView = .build { header in
+        header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.CertificatesScreen.headerView
     }
-
-    private let tableViewTopSpacer: UIView = .build()
 
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
+        tableView.register(CertificatesHeaderView.self,
+                           forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
+        tableView.sectionHeaderTopPadding = 0
+        tableView.separatorInset = .zero
     }
 
     // MARK: - Variables
     private var constraints = [NSLayoutConstraint]()
-    var viewModel: CertificatesViewModel
+    var model: CertificatesModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    private let logger: Logger
 
     // MARK: - View Lifecycle
 
-    init(with viewModel: CertificatesViewModel,
+    init(with viewModel: CertificatesModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.viewModel = viewModel
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
+        self.model = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -101,84 +106,110 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         applyTheme()
     }
 
+    // MARK: View Setup
     private func setupView() {
-        constraints.removeAll()
+        setupHeaderView()
         setupTitleConstraints()
-        setupCertificatesHeaderView()
         setupCertificatesTableView()
         setupAccessibilityIdentifiers()
-        NSLayoutConstraint.activate(constraints)
     }
 
+    // MARK: Header View Setup
+    private func setupHeaderView() {
+        view.addSubview(headerView)
+        NSLayoutConstraint.activate([
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: TPMenuUX.UX.popoverTopDistance
+            )
+        ])
+        setupHeaderViewActions()
+    }
+
+    // MARK: Header Actions
+    private func setupHeaderViewActions() {
+        headerView.backToMainMenuCallback = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        headerView.dismissMenuCallback = { [weak self] in
+            self?.navigationController?.dismissVC()
+        }
+    }
+
+    // MARK: Title Setup
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.titleLabelMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.titleLabelMargin),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.titleLabelTopMargin)
+            titleLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: UX.titleLabelMargin
+            ),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -UX.titleLabelMargin
+            ),
+            titleLabel.topAnchor.constraint(
+                equalTo: headerView.bottomAnchor,
+                constant: UX.titleLabelTopMargin
+            )
         ])
     }
 
-    private func setupCertificatesHeaderView() {
-        // TODO: FXIOS-9834 Add tab indicator for table view tabs and hide/unhide it on selection
-        for (index, certificate) in viewModel.certificates.enumerated() {
-            let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
-            if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
-                let button: UIButton = .build { [weak self] button in
-                    button.setTitle(commonName, for: .normal)
-                    button.setTitleColor(self?.currentTheme().colors.textPrimary, for: .normal)
-                    button.configuration?.titleLineBreakMode = .byWordWrapping
-                    button.titleLabel?.numberOfLines = 2
-                    button.titleLabel?.textAlignment = .center
-                    button.tag = index
-                    button.addTarget(self, action: #selector(self?.certificateButtonTapped(_:)), for: .touchUpInside)
-                }
-                headerStackView.addArrangedSubview(button)
-            }
-        }
-
-        view.addSubview(headerStackView)
-
-        NSLayoutConstraint.activate([
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                     constant: UX.headerStackViewMargin),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                      constant: -UX.headerStackViewMargin),
-            headerStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                 constant: UX.headerStackViewTopMargin)
-        ])
-    }
-
+    // MARK: TableView Setup
     private func setupCertificatesTableView() {
         certificatesTableView.delegate = self
         certificatesTableView.dataSource = self
-        view.addSubview(tableViewTopSpacer)
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
-            tableViewTopSpacer.topAnchor.constraint(equalTo: headerStackView.bottomAnchor,
-                                                    constant: UX.tableViewSpacerTopMargin),
-            tableViewTopSpacer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableViewTopSpacer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableViewTopSpacer.heightAnchor.constraint(equalToConstant: UX.tableViewSpacerHeight),
-
-            certificatesTableView.topAnchor.constraint(equalTo: tableViewTopSpacer.bottomAnchor,
-                                                       constant: UX.tableViewTopMargin),
-            certificatesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            certificatesTableView.topAnchor.constraint(
+                equalTo: titleLabel.bottomAnchor
+            ),
+            certificatesTableView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: UX.headerStackViewMargin
+            ),
+            certificatesTableView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -UX.headerStackViewMargin
+            ),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
-    @objc
-    private func certificateButtonTapped(_ sender: UIButton) {
-        viewModel.selectedCertificateIndex = sender.tag
-        certificatesTableView.reloadData()
-    }
-
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard !viewModel.certificates.isEmpty else { return 0 }
-        return 4
+        guard !model.certificates.isEmpty else { return 0 }
+        return CertificatesItemType.allCases.count
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
+            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+                       level: .fatal,
+                       category: .certificate)
+            return UIView()
+        }
+        var items: [CertificatesHeaderItem] = []
+        for (index, certificate) in model.certificates.enumerated() {
+            let certificateValues = certificate.subject.description.getDictionary()
+            if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
+                let item: CertificatesHeaderItem = .build()
+                item.configure(theme: self.currentTheme(),
+                               title: commonName,
+                               isSelected: model.selectedCertificateIndex == index) { [weak self] in
+                    guard let self else { return }
+                    self.model.selectedCertificateIndex = index
+                    self.certificatesTableView.reloadData()
+                }
+                items.append(item)
+            }
+        }
+        headerView.configure(withItems: items, theme: currentTheme())
+        headerView.setupAccessibilityIdentifiers()
+        return headerView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -187,22 +218,23 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             return UITableViewCell()
         }
 
-        guard !viewModel.certificates.isEmpty else {
+        guard !model.certificates.isEmpty else {
             return cell
         }
 
-        let certificate = viewModel.certificates[viewModel.selectedCertificateIndex]
+        let certificate = model.certificates[model.selectedCertificateIndex]
+        cell.setupAccessibilityIdentifiers()
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
-            if let commonName = viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName] {
+            if let commonName = certificate.subject.description.getDictionary()[CertificateKeys.commonName] {
                 cell.configure(theme: currentTheme(),
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
         case .issuerName:
-            let issuerData = viewModel.getCertificateValues(from: "\(certificate.issuer)")
+            let issuerData = certificate.issuer.description.getDictionary()
             if let country = issuerData[CertificateKeys.country],
                let organization = issuerData[CertificateKeys.organization],
                let commonName = issuerData[CertificateKeys.commonName] {
@@ -210,7 +242,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
                                        (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)],
+                               isIssuerName: true)
             }
 
         case .validity:
@@ -218,15 +251,15 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateValidity,
                            items: [
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotBefore,
-                                certificate.notValidBefore.toRFC822String()),
+                             certificate.notValidBefore.toRFC822String()),
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotAfter,
-                                certificate.notValidAfter.toRFC822String())
+                             certificate.notValidAfter.toRFC822String())
                            ])
 
         case .subjectAltName:
             cell.configure(theme: currentTheme(),
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectAltNames,
-                           items: viewModel.getDNSNames(for: certificate))
+                           items: model.getDNSNames(for: certificate))
         case .none: break
         }
         return cell
@@ -234,7 +267,16 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        // TODO: FXIOS-9829 Enhanced Tracking Protection certificates details screen accessibility identifiers
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: A11y.backButton
+        )
+        titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
+        certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
     // MARK: View Transitions
@@ -251,12 +293,14 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     }
 
     private func adjustLayout() {
+        headerView.adjustLayout()
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
 
     private func updateViewDetails() {
-        self.certificatesTableView.reloadData()
+        certificatesTableView.reloadData()
+        headerView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
     }
 
     // MARK: - Actions
@@ -269,10 +313,9 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 extension CertificatesViewController {
     func applyTheme() {
         let theme = currentTheme()
-        overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer5
+        view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
-        tableViewTopSpacer.backgroundColor = theme.colors.layer1
-        setNeedsStatusBarAppearanceUpdate()
+        titleLabel.backgroundColor = theme.colors.layer5
+        headerView.applyTheme(theme: theme)
     }
 }

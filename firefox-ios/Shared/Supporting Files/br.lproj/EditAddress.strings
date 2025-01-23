@@ -139,3 +139,6 @@
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "Titouroù ar chomlec’h hizivaet";
 
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "Chomlec’h enrollet";
+

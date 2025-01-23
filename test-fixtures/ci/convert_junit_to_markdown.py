@@ -179,9 +179,9 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
             markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = is_smoke)
     
     if tests_info['total_tests'] == 0:
-        markdown += '## :boom: No tests executed :boom:'
+        markdown += '__:boom: No tests executed :boom:__'
     elif markdown == '':
-        markdown += '## :tada: No test failures :tada:'
+        markdown += '__:tada: No test failures :tada:__'
     else:
         tests_info_markdown = ''
         if is_smoke:

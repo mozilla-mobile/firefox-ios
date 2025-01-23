@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Storage
 import Redux
 import Shared
 
@@ -32,6 +31,10 @@ class TabTrayViewController: UIViewController,
             static let width: CGFloat = 343
         }
 
+        struct Toast {
+            static let undoDelay = DispatchTimeInterval.seconds(0)
+            static let undoDuration = DispatchTimeInterval.seconds(3)
+        }
         static let fixedSpaceWidth: CGFloat = 32
     }
 
@@ -71,6 +74,12 @@ class TabTrayViewController: UIViewController,
         let index = tabTrayState.selectedPanel.rawValue
         return childPanelControllers[index]
     }
+
+    var toolbarHeight: CGFloat {
+        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
+    }
+
+    var shownToast: Toast?
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -281,18 +290,31 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
+        guard state != tabTrayState else { return }
+
         tabTrayState = state
-        updateTabCountImage(count: state.normalTabsCount)
-        segmentedControl.selectedSegmentIndex = state.selectedPanel.rawValue
+
+        updateTabCountImage(count: tabTrayState.normalTabsCount)
+        segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
-        if let url = tabTrayState.shareURL {
-            navigationHandler?.shareTab(url: url, sourceView: self.view)
-        }
+
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
+        }
+
+        if let toastType = tabTrayState.toastType {
+            presentToast(toastType: toastType) { [weak self] undoClose in
+                guard let self else { return }
+
+                // Undo the action described by the toast
+                if let action = toastType.reduxAction(for: self.windowUUID), undoClose {
+                    store.dispatch(action)
+                }
+                self.shownToast = nil
+            }
         }
     }
 
@@ -413,6 +435,42 @@ class TabTrayViewController: UIViewController,
         button.accessibilityIdentifier = a11yId
         button.accessibilityLabel = a11yLabel
         return button
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
+    private func presentToast(toastType: ToastType, completion: @escaping (Bool) -> Void) {
+        if let currentToast = shownToast {
+            currentToast.dismiss(false)
+        }
+
+        if toastType.reduxAction(for: windowUUID) != nil {
+            let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: currentTheme(),
+                                    completion: { buttonPressed in
+                                        completion(buttonPressed)
+                                    })
+            toast.showToast(viewController: self,
+                            delay: UX.Toast.undoDelay,
+                            duration: UX.Toast.undoDuration) { toast in
+                                [
+                                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                                                  constant: -self.toolbarHeight)
+                                ]
+            }
+            shownToast = toast
+        } else {
+            let toast = SimpleToast()
+            toast.showAlertWithText(toastType.title,
+                                    bottomContainer: view,
+                                    theme: currentTheme(),
+                                    bottomConstraintPadding: -toolbarHeight)
+        }
     }
 
     // MARK: Child panels

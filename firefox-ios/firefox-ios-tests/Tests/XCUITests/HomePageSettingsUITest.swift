@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import Shared
 
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
@@ -14,8 +15,7 @@ let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: BaseTestCase {
     private func enterWebPageAsHomepage(text: String) {
-        app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].typeText(text)
+        app.textFields["HomeAsCustomURLTextField"].tapAndTypeText(text)
         let value = app.textFields["HomeAsCustomURLTextField"].value
         XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
     }
@@ -43,10 +43,14 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
-        mozWaitForElementToExist(app.navigationBars["Homepage"])
-        mozWaitForElementToExist(app.tables.otherElements["OPENING SCREEN"])
-        mozWaitForElementToExist(app.tables.otherElements["INCLUDE ON HOMEPAGE"])
-        mozWaitForElementToExist(app.tables.otherElements["CURRENT HOMEPAGE"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["Homepage"],
+                app.tables.otherElements["OPENING SCREEN"],
+                app.tables.otherElements["INCLUDE ON HOMEPAGE"],
+                app.tables.otherElements["CURRENT HOMEPAGE"]
+            ]
+        )
 
         // Opening Screen
         XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
@@ -89,11 +93,12 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         // Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
-        mozWaitForElementToExist(homePageMenuItem)
-        homePageMenuItem.tap()
+        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        homePageMenuItem.waitAndTap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "example")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
@@ -102,7 +107,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
-        app.textFields["HomeAsCustomURLTextField"].tap()
+        app.textFields["HomeAsCustomURLTextField"].waitAndTap()
         if #unavailable(iOS 16) {
             sleep(2)
         }
@@ -114,8 +119,7 @@ class HomePageSettingsUITests: BaseTestCase {
             textField.press(forDuration: 3)
             nrOfTaps -= 1
         }
-        mozWaitForElementToExist(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
+        app.menuItems["Paste"].waitAndTap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)
@@ -134,14 +138,21 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields["url"])
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "mozilla.org")
 
         // Now after setting History, make sure FF home is set
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        navigator.nowAt(HomeSettings)
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.collectionViews.cells.staticTexts
+            .elementContainingText("Mozilla - Internet for people").exists)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307031
@@ -158,11 +169,9 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-
-        // Workaround needed after Xcode 11.3 update Issue 5937
-        // Lets check only that website is open
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "mozilla.org")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -172,14 +181,14 @@ class HomePageSettingsUITests: BaseTestCase {
         )
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].tap()
+        app.staticTexts["Shortcuts"].waitAndTap()
         XCTAssertTrue(app.switches["Shortcuts"].exists)
-        app.switches["Shortcuts"].tap()
+        app.switches["Shortcuts"].waitAndTap()
 
         navigator.goto(NewTabScreen)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
 
-        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        mozWaitForElementToNotExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
     }
 
@@ -204,10 +213,10 @@ class HomePageSettingsUITests: BaseTestCase {
 
     // Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
+        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        XCTAssertTrue(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
         let numberOfTopSites = app
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            .links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             .collectionViews
             .cells
             .count
@@ -222,19 +231,17 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             navigator.performAction(Action.CloseURLBarOpen)
         }
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn]
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
+                app.otherElements
+                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+                    .staticTexts[urlExampleLabel]]
         )
-        mozWaitForElementToExist(app.otherElements
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-            .staticTexts[urlExampleLabel])
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn]
-        )
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
         // Tab tray is open with recently open tab
         if !iPad() {
             mozWaitForElementToExist(
@@ -244,12 +251,12 @@ class HomePageSettingsUITests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
         }
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // Validation for when Jump In section is not displayed
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        app.tables.cells.switches["Jump Back In"].tap()
-        app.buttons["Done"].tap()
+        app.tables.cells.switches["Jump Back In"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
@@ -259,29 +266,38 @@ class HomePageSettingsUITests: BaseTestCase {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
         addContentToReaderView()
-        navigator.performAction(Action.GoToHomePage)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.performAction(Action.ToggleRecentlySaved)
-        // On iPad we have the homepage button always present,
-        // on iPhone we have the search button instead when we're on a new tab page
-        navigator.performAction(Action.ClickSearchButton)
-        mozWaitForElementToNotExist(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-        )
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.ClickSearchButton)
+            mozWaitForElementToNotExist(
+                app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
+            )
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+            navigator.performAction(Action.CloseURLBarOpen)
+        } else {
+            navigator.nowAt(HomeSettings)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             navigator.performAction(Action.CloseURLBarOpen)
         }
         checkBookmarks()
         app.scrollViews
             .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-            .staticTexts[urlExampleLabel].tap()
+            .staticTexts[urlExampleLabel].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         unbookmark()
@@ -325,7 +341,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //                .staticTexts[urlMozillaLabel].exists
 //        )
 //        if !iPad() {
-//            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton], timeout: 3)
 //            navigator.performAction(Action.CloseURLBarOpen)
 //        }
 //        navigator.nowAt(NewTabScreen)
@@ -362,17 +378,14 @@ class HomePageSettingsUITests: BaseTestCase {
                 app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage]
             )
         }
-        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
+        app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].waitAndTap()
         // Verify default settings
-        mozWaitForElementToExist(
+        waitForElementsToExist(
+            [
             app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
-            timeout: TIMEOUT_LONG
-        )
-        mozWaitForElementToExist(
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always]
-        )
-        mozWaitForElementToExist(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always],
             app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled]
+            ]
         )
         mozWaitForElementToExist(
             app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours]
@@ -394,7 +407,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //            "1"
 //        )
         XCTAssertEqual(
-            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String,
+            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
             "1"
         )
     }
@@ -421,19 +434,18 @@ class HomePageSettingsUITests: BaseTestCase {
 
     private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
         navigator.goto(HomeSettings)
-        app.staticTexts["Shortcuts"].tap()
-        mozWaitForElementToExist(app.staticTexts["Rows"])
-        app.staticTexts["Rows"].tap()
+        app.staticTexts["Shortcuts"].waitAndTap()
+        app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2", "3", "4"]
         for i in 0...3 {
             XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
         }
-        app.tables.cells.element(boundBy: row).tap()
-        app.buttons["Shortcuts"].tap()
+        app.tables.cells.element(boundBy: row).waitAndTap()
+        app.buttons["Shortcuts"].waitAndTap()
         navigator.goto(NewTabScreen)
-        app.buttons["Done"].tap()
-        mozWaitForElementToExist(app.cells["TopSitesCell"])
-        let totalTopSites = app.cells.matching(identifier: "TopSitesCell").count
+        app.buttons["Done"].waitAndTap()
+        mozWaitForElementToExist(app.links["TopSitesCell"])
+        let totalTopSites = app.links.matching(identifier: "TopSitesCell").count
         XCTAssertTrue(totalTopSites > minBoundary)
         XCTAssertTrue(totalTopSites < maxBoundary)
     }
@@ -443,8 +455,8 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.openURL(website)
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.pin])
-        app.tables.otherElements[StandardImageIdentifiers.Large.pin].tap()
+        // Tap on Save item
+        navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)

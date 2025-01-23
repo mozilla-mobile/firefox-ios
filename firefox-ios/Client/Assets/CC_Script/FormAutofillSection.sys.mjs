@@ -10,21 +10,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
   OSKeyStore: "resource://gre/modules/OSKeyStore.sys.mjs",
 });
 
-/**
- * To help us classify sections, we want to know what fields can appear
- * multiple times in a row.
- * Such fields, like `address-line{X}`, should not break sections.
- */
-const MULTI_FIELD_NAMES = [
-  "address-level3",
-  "address-level2",
-  "address-level1",
-  "tel",
-  "postal-code",
-  "email",
-  "street-address",
-];
-
 class FormSection {
   static ADDRESS = "address";
   static CREDIT_CARD = "creditCard";
@@ -179,18 +164,14 @@ export class FormAutofillSection {
 
     const autofillableSections = [];
     for (const section of sections) {
-      // We don't support csc field, so remove csc fields from section
-      const fieldDetails = section.fieldDetails.filter(
-        f => !["cc-csc"].includes(f.fieldName)
-      );
-      if (!fieldDetails.length) {
+      if (!section.fieldDetails.length) {
         continue;
       }
 
       const autofillableSection =
         section.type == FormSection.ADDRESS
-          ? new FormAutofillAddressSection(fieldDetails)
-          : new FormAutofillCreditCardSection(fieldDetails);
+          ? new FormAutofillAddressSection(section.fieldDetails)
+          : new FormAutofillCreditCardSection(section.fieldDetails);
 
       if (ignoreInvalid && !autofillableSection.isValidSection()) {
         continue;
@@ -236,42 +217,30 @@ export class FormAutofillSection {
       }
 
       if (candidateSection) {
-        let createNewSection = true;
+        // The field will still be placed in a new section if it is a duplicate of
+        // an existing field, unless it is a duplicate of the previous field. This
+        // allows for fields that might commonly appear twice such as a verification
+        // email field, an invisible field that appears next to the user-visible field,
+        // and simple cases where a page error where a field name is reused twice.
+        let isDuplicate = candidateSection.fieldDetails.find(
+          f => f.fieldName == cur.fieldName && f.isVisible && cur.isVisible
+        );
 
-        // We might create a new section instead of placing the field in the candidate section if
-        // the section already has a field with the same field name.
-        // We also check visibility for both the fields with the same field name because we don't
-        // want to create a new section for an invisible field.
-        if (
-          candidateSection.fieldDetails.find(
-            f => f.fieldName == cur.fieldName && f.isVisible && cur.isVisible
-          )
-        ) {
-          // For some field type, it is common to have multiple fields in one section, for example,
-          // email. In that case, we will not create a new section even when the candidate section
-          // already has a field with the same field name.
+        if (isDuplicate) {
           const [last] = candidateSection.fieldDetails.slice(-1);
           if (last.fieldName == cur.fieldName) {
-            if (
-              MULTI_FIELD_NAMES.includes(cur.fieldName) ||
-              (last.part && last.part + 1 == cur.part)
-            ) {
-              createNewSection = false;
-            }
+            isDuplicate = false;
           }
-        } else {
-          // The field doesn't exist in the candidate section, add it.
-          createNewSection = false;
         }
 
-        if (!createNewSection) {
-          candidateSection.addField(fieldDetails[i]);
+        if (!isDuplicate) {
+          candidateSection.addField(cur);
           continue;
         }
       }
 
       // Create a new section
-      sections.push(new FormSection([fieldDetails[i]]));
+      sections.push(new FormSection([cur]));
     }
 
     return sections;
@@ -294,7 +263,11 @@ export class FormAutofillSection {
     };
 
     for (const detail of this.fieldDetails) {
-      const { filledValue } = formFilledData.get(detail.elementId);
+      // Do not save security code.
+      if (detail.fieldName == "cc-csc") {
+        continue;
+      }
+      const { filledValue } = formFilledData.get(detail.elementId) ?? {};
 
       if (
         !filledValue ||
@@ -319,6 +292,29 @@ export class FormAutofillSection {
     return data;
   }
 
+  /**
+   * Heuristics to determine which fields to autofill when a section contains
+   * multiple fields of the same type.
+   */
+  getAutofillFields() {
+    return this.fieldDetails.filter(fieldDetail => {
+      // We don't save security code, but if somehow the profile has securty code,
+      // make sure we don't autofill it.
+      if (fieldDetail.fieldName == "cc-csc") {
+        return false;
+      }
+
+      // When both visible and invisible elements exist, we only autofill the
+      // visible element.
+      if (!fieldDetail.isVisible) {
+        return !this.fieldDetails.some(
+          field => field.fieldName == fieldDetail.fieldName && field.isVisible
+        );
+      }
+      return true;
+    });
+  }
+
   /*
    * For telemetry
    */
@@ -327,7 +323,6 @@ export class FormAutofillSection {
       return;
     }
 
-    lazy.AutofillTelemetry.recordDetectedSectionCount(this.fieldDetails);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "detected",
       this.flowId,
@@ -363,7 +358,8 @@ export class FormAutofillSection {
   }
 
   onSubmitted(formFilledData) {
-    lazy.AutofillTelemetry.recordSubmittedSectionCount(this.fieldDetails, 1);
+    this.submitted = true;
+
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "submitted",
       this.flowId,
@@ -384,6 +380,29 @@ export class FormAutofillSection {
    */
   getFieldDetailByElementId(elementId) {
     return this.fieldDetails.find(detail => detail.elementId == elementId);
+  }
+
+  /**
+   * Groups an array of field details by their browsing context IDs.
+   *
+   * @param {Array} fieldDetails
+   *        Array of fieldDetails object
+   *
+   * @returns {object}
+   *        An object keyed by BrowsingContext Id, value is an array that
+   *        contains all fieldDetails with the same BrowsingContext id.
+   */
+  static groupFieldDetailsByBrowsingContext(fieldDetails) {
+    const detailsByBC = {};
+    for (const fieldDetail of fieldDetails) {
+      const bcid = fieldDetail.browsingContextId;
+      if (detailsByBC[bcid]) {
+        detailsByBC[bcid].push(fieldDetail);
+      } else {
+        detailsByBC[bcid] = [fieldDetail];
+      }
+    }
+    return detailsByBC;
   }
 }
 

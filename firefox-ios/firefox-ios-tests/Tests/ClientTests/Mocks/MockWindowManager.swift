@@ -42,8 +42,8 @@ final class MockWindowManager: WindowManager {
         wrappedManager.windowWillClose(uuid: uuid)
     }
 
-    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID {
-        wrappedManager.reserveNextAvailableWindowUUID()
+    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID {
+        wrappedManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {

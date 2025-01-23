@@ -142,19 +142,34 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
+        accessibilityTraits = .link
 
         let siteURLString = topSite.site.url
-        var imageURL: URL?
+        var imageResource: SiteResource?
 
-        if let site = topSite.site as? SponsoredTile {
-            imageURL = URL(string: site.imageURL, invalidCharacters: false)
-        } else if let site = topSite.site as? PinnedSite, let urlString = site.faviconURL {
-            imageURL = URL(string: urlString, invalidCharacters: false)
-        } else if let site = topSite.site as? SuggestedSite {
-            imageURL = URL(string: site.faviconUrl, invalidCharacters: false)
+        switch topSite.type {
+        case .sponsoredSite(let siteInfo):
+            if let url = URL(string: siteInfo.imageURL, invalidCharacters: false) {
+                imageResource = .remoteURL(url: url)
+            }
+        case .pinnedSite, .suggestedSite:
+            imageResource = topSite.site.faviconResource
+        default:
+            break
         }
+
+        if imageResource == nil,
+           let siteURL = URL(string: siteURLString),
+           let domainNoTLD = siteURL.baseDomain?.split(separator: ".").first,
+           domainNoTLD == "google" {
+            // Exception for Google top sites, which all return blurry low quality favicons that on the home screen.
+            // Return our bundled G icon for all of the Google Suite.
+            // Parse example: "https://drive.google.com/drive/home" > "drive.google.com" > "google"
+            imageResource = GoogleTopSiteManager.Constants.faviconResource
+        }
+
         let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
-                                              faviconURL: imageURL)
+                                              siteResource: imageResource)
         imageView.setFavicon(viewModel)
         self.textColor = textColor
 
@@ -227,7 +242,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private func configureSponsoredSite(_ topSite: TopSite) {
-        guard topSite.isSponsoredTile else { return }
+        guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
     }
@@ -259,6 +274,7 @@ extension TopSiteItemCell: ThemeApplicable {
 extension TopSiteItemCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
+            rootContainer.layoutIfNeeded()
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             // If blur is disabled set background color

@@ -37,9 +37,6 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ბოლოს მონახულებული";
 
-/* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "მალსახმობები";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "რიგის მითითება";
 
@@ -356,7 +353,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "პარამეტრები";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ჩვენი დამფინანსებლები და თქვენი პირადულობა";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "ჩვენი დამკვეთები და თქვენი პირადულობა";
 
 /* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "დასინქრონებული ჩანართის გახსნა";
@@ -368,10 +365,10 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "ამოკრეფილი ჩანართები";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
-"FirefoxHomepage.Pocket.Sponsored.v103" = "დაფინანსებული";
+"FirefoxHomepage.Pocket.Sponsored.v103" = "დამკვეთისგან";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
-"FirefoxHomepage.Shortcuts.Sponsored.v100" = "დაფინანსებული";
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "დამკვეთისგან";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "მომდევნო";
@@ -653,7 +650,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "ვრცლად";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "თვითშევსებით სარგებლობისთვის Firefox-ში, ჩართული უნდა გქონდეთ მოწყობილობის კოდი.";
+"Logins.PasscodeRequirement.Warning" = "თვითშევსებით სარგებლობისთვის Firefox-ში, მოწყობილობაზე ჩართული უნდა იყოს შესვლის კოდი.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "თან წაიყოლეთ თქვენი პაროლები ყველგან";
@@ -756,6 +753,9 @@
 
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ისტორია";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "ახალი პირადი ჩანართი";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "ახალი ჩანართი";
@@ -1144,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "მისამართი (%s აღნიშნავს საძიებო ტექსტს)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "გარე პროგრამების გახსნის შეზღუდვა";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "საიტების ყველა მონაცემის წაშლა";
 
@@ -1262,7 +1265,7 @@
 "Settings.Home.Option.Shortcuts" = "მალსახმობები";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
-"Settings.Home.Option.StartAtHome.AfterFourHours" = "საწყისი გვერდი ოთხი საათის უქმობის შემდეგ";
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "საწყისი გვერდი ოთხი საათი უქმობისას";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Always" = "საწყისი გვერდი";
@@ -1274,7 +1277,7 @@
 "Settings.Home.Option.StartAtHome.Never" = "ბოლო ჩანართი";
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
-"Settings.Home.Option.StartAtHome.Title" = "საწყისი ეკრანი";
+"Settings.Home.Option.StartAtHome.Title" = "გახსნისას";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title.v101" = "ჩაემატოს საწყის გვერდზე";
@@ -1349,7 +1352,7 @@
 "Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "მალსახმობები";
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "დაფინანსებული მალსახმობები";
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "დამკვეთის მალსახმობები";
 
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "გამორთ.";
@@ -1399,8 +1402,8 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox-ის გახსნისას";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox-ის გახსნისას";
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "როცა იხსნება %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "აღებულ ბმულებზე გადასვლის შემოთავაზება";
@@ -1415,7 +1418,7 @@
 "Settings.Passwords.FingerPrintReason.v103" = "პაროლებთან წვდომა თითის ანაბეჭდით.";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "თქვენი პაროლების დასაცავად გამოიყენება Face ID, Touch ID ან მოწყობილობის კოდი.";
+"Settings.Passwords.OnboardingMessage.v103" = "თქვენი პაროლების დასაცავად გამოიყენება სახის ამომცნობი, შეხების ამომცნობი ან შესვლის კოდი.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "პაროლების შენახვა";

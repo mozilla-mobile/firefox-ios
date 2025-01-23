@@ -34,7 +34,7 @@ class SwipeAnimator: NSObject {
     private var prevOffset: CGPoint?
     private let params: SwipeAnimationParameters
 
-    private var panGestureRecogniser: UIPanGestureRecognizer!
+    private var panGestureRecogniser: UIPanGestureRecognizer?
 
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
@@ -49,9 +49,10 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(didPan))
-        animatingView.addGestureRecognizer(self.panGestureRecogniser)
-        self.panGestureRecogniser.delegate = self
+        let panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(didPan))
+        panGestureRecogniser.delegate = self
+        animatingView.addGestureRecognizer(panGestureRecogniser)
+        self.panGestureRecogniser = panGestureRecogniser
     }
 }
 
@@ -75,13 +76,15 @@ extension SwipeAnimator {
         // Calculate the edge to calculate distance from
         let translation = velocity.x >= 0 ? animatingView.frame.width : -animatingView.frame.width
         let timeStep = TimeInterval(abs(translation) / speed)
-        self.delegate?.swipeAnimator(self)
         UIView.animate(
             withDuration: timeStep,
             animations: {
                 animatingView.transform = self.transformForTranslation(translation)
                 animatingView.alpha = self.alphaForDistanceFromCenter(abs(translation))
-            }, completion: { finished in
+            }, completion: { [weak self] finished in
+                if let self {
+                    delegate?.swipeAnimator(self)
+                }
                 if finished {
                     animatingView.alpha = 0
                 }
@@ -111,7 +114,7 @@ extension SwipeAnimator {
 // MARK: Selectors
 extension SwipeAnimator {
     @objc
-    func didPan(_ recognizer: UIPanGestureRecognizer!) {
+    func didPan(_ recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: animatingView)
 
         switch recognizer.state {
@@ -160,7 +163,9 @@ extension SwipeAnimator: UIGestureRecognizerDelegate {
     @objc
     func gestureRecognizerShouldBegin(_ recognizer: UIGestureRecognizer) -> Bool {
         let cellView = recognizer.view
-        let panGesture = recognizer as! UIPanGestureRecognizer
+        guard let panGesture = recognizer as? UIPanGestureRecognizer else {
+            return false
+        }
         let translation = panGesture.translation(in: cellView?.superview)
         return abs(translation.x) > abs(translation.y)
     }

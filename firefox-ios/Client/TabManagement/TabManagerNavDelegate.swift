@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import WebKit
+@preconcurrency import WebKit
 import Shared
 
 // WKNavigationDelegates must implement NSObjectProtocol
@@ -14,7 +14,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         delegates.insert(delegate)
     }
 
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
         for delegate in delegates {
             delegate.webView?(webView, didCommit: navigation)
         }
@@ -22,7 +22,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(
         _ webView: WKWebView,
-        didFail navigation: WKNavigation!,
+        didFail navigation: WKNavigation?,
         withError error: Error
     ) {
         for delegate in delegates {
@@ -32,7 +32,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(
         _ webView: WKWebView,
-        didFailProvisionalNavigation navigation: WKNavigation!,
+        didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
         for delegate in delegates {
@@ -40,7 +40,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         for delegate in delegates {
             delegate.webView?(webView, didFinish: navigation)
         }
@@ -70,13 +70,13 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?) {
         for delegate in delegates {
             delegate.webView?(webView, didReceiveServerRedirectForProvisionalNavigation: navigation)
         }
     }
 
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         for delegate in delegates {
             delegate.webView?(webView, didStartProvisionalNavigation: navigation)
         }

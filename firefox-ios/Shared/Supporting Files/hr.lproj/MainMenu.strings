@@ -1,0 +1,285 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Pronađi što trebaš brže, od privatnog pregledavanja do spremanja radnji.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "Novo: poboljšan izbornik";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Natrag";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Zatvori";
+
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Prijavi se za sinkroniziranje lozinki, kartica i više";
+
+/* On the main menu, at the top, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v131" = "Sinkroniziraj lozinke, kartice i više";
+
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "Prijava";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
+"MainMenu.Account.SyncError.Description.v131" = "Sinkronizacija je pauzirana";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "Ponovo se prijavi za sinkronizaciju";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Zabilješke";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Preuzimanja";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Povijest";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Lozinke";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Zabilješke";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "Preuzimanja";
+
+/* On the main menu, the title for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.History.Title.v131" = "Povijest";
+
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Lozinke";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Prilagodi početnu stranicu";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Dobij pomoć";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Postavke";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Novo u aplikaciji %@";
+
+/* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Prilagodi početnu stranicu";
+
+/* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "Dobij pomoć";
+
+/* On the main menu, the title for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.Settings.Title.v131" = "Postavke";
+
+/* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.WhatsNew.Title.v131" = "Novo u aplikaciji %@";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Početna stranica";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Dodaj na početni ekran";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Prečac";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Dodaj u prečace";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Dodaj zabilješku";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Zabilježi ovu stranicu";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Uredi zabilješku";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Ukloni s popisa za čitanje";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Ukloni iz prečaca";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Spremi kao PDF";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Popis za čitanje";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Spremi u popis za čitanje";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Početni ekran";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Dodaj na početni ekran";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Prečac";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Dodaj u prečace";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Dodaj zabilješku";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Zabilježi ovu stranicu";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Uredi zabilješku";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Ukloni s popisa za čitanje";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Ukloni iz prečaca";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Title.v131" = "Spremi kao PDF";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.SaveToReadingList.Subtitle.v131" = "Popis čitanja";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Spremi u popis čitanja";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Isključi noćni modus";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Uključi noćni modus";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Noćni modus";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Ispiši";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Ispiši";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Isključi prikaz čitača";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Uključi prikaz čitača";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Prikaz čitača";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool and is indicating that under the Tools submenu, a Report (Report Broken Site) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "Prijavi";
+
+/* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "Prijavi neispravnu web stranicu";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Share tool and is indicating that under the Tools submenu, a Share (to someone else) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "Dijeli";
+
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "Dijeli";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zumiraj";
+
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Zumiranje (%@)";
+
+/* On the main menu, the title for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Isključi noćni modus";
+
+/* On the main menu, the title for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.NightMode.On.Title.v131" = "Uključi noćni modus";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Noćni modus";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Ispiši";
+
+/* On the main menu, the title for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.Print.Title.v131" = "Ispiši";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "Isključi prikaz čitača";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "Uključi prikaz čitača";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "Prikaz čitača";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Prijavi";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Dijeli";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v131" = "Dijeli";
+
+/* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
+"MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "Zumiraj";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.Zoom.Title.v131" = "Zumiranje (%@)";
+
+/* The accessibility label for the Main Menu. */
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "Glavni izbornik";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "Nova privatna kartica";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "Nova kartica";
+
+/* On the main menu, the title for the action that will create a new private tab. */
+"MainMenu.TabsSection.NewPrivateTab.Title.v131" = "Nova privatna kartica";
+
+/* On the main menu, the title for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.NewTab.Title.v131" = "Nova kartica";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Pronađi na stranici";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Spremi";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Podizbornik „Spremi”";
+
+/* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Prebaci na prikaz web stranice za računala";
+
+/* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "Prebaci na prikaz web stranice za mobilne uređaje";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Alati";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Podizbornik „Alati”";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPage.Title.v131" = "Pronađi na stranici …";
+
+/* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Spremi";
+
+/* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Prebaci na prikaz web stranice za računala";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "Prebaci na prikaz web stranice za mobilne uređaje";
+
+/* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Alati";
+

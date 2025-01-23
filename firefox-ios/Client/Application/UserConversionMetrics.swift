@@ -23,7 +23,7 @@ class UserConversionMetrics {
         self.userDefaults = userDefaults
     }
 
-    public func didStartNewSession() {
+    func didStartNewSession() {
         guard shouldRecordMetric() else { return }
         appOpenTimestamps.append(Date())
         if shouldActivateProfile() {
@@ -31,7 +31,7 @@ class UserConversionMetrics {
         }
     }
 
-    public func didPerformSearch() {
+    func didPerformSearch() {
         guard shouldRecordMetric() else { return }
         searchesTimestamps.append(Date())
         if shouldActivateProfile() {

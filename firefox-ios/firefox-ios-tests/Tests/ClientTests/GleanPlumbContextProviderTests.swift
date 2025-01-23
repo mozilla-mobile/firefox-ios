@@ -22,9 +22,10 @@ class GleanPlumbContextProviderTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
+        profile = nil
         userDefaults = nil
         contextProvider = nil
+        super.tearDown()
     }
 
     func testNumberOfLaunches_withFirstLaunch() {
@@ -39,6 +40,27 @@ class GleanPlumbContextProviderTests: XCTestCase {
         let context = contextProvider.createAdditionalDeviceContext()
         let numberOfAppLaunches = context["number_of_app_launches"] as? Int32
         XCTAssertEqual(numberOfAppLaunches, 2)
+    }
+
+    func testCreateAdditionalDeviceContext_withNumberOfSyncedDevices() {
+        profile.prefs.setInt(2, forKey: PrefsKeys.Sync.numberOfSyncedDevices)
+        let context = contextProvider.createAdditionalDeviceContext()
+        let numberOfSyncedDevices = context["number_of_sync_devices"] as? Int32
+        XCTAssertEqual(numberOfSyncedDevices, 2)
+    }
+
+    func testCreateAdditionalDeviceContext_withSignedInCheck_returnTrue() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.Sync.signedInFxaAccount)
+        let context = contextProvider.createAdditionalDeviceContext()
+        let signedInFxaAccountStatus = context["is_fxa_signed_in"] as? Bool
+        XCTAssertEqual(signedInFxaAccountStatus, true)
+    }
+
+    func testCreateAdditionalDeviceContext_withSignedInCheck_returnFalse() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.Sync.signedInFxaAccount)
+        let context = contextProvider.createAdditionalDeviceContext()
+        let signedInFxaAccountStatus = context["is_fxa_signed_in"] as? Bool
+        XCTAssertEqual(signedInFxaAccountStatus, false)
     }
 
     func testIsInactiveNewUser_noFirstAppUse() {

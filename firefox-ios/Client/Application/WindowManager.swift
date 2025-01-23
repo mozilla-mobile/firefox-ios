@@ -56,7 +56,7 @@ protocol WindowManager {
     /// windows are being restored concurrently, we never supply the same UUID
     /// to more than one window.
     /// - Returns: a UUID for the next window to be opened.
-    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID
+    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
@@ -165,7 +165,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         windowOrderingPriority = prefs
     }
 
-    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID {
+    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
         guard !AppConstants.isRunningUITests else {
             return ReservedWindowUUID(uuid: WindowUUID.DefaultUITestingUUID, isNew: false)
@@ -195,11 +195,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
         // On iPhone devices, we expect there only to ever be a single window. If there
         // are >1 windows we've encountered some type of unexpected state.
-        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
-
         let result: ReservedWindowUUID
-        // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
-        if !isIpad && !AppConstants.isRunningUnitTest {
+        if !isIpad {
             // We should always have either a single UUID on disk or no UUIDs because this is a brand new app install
             if onDiskUUIDs.isEmpty {
                 result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)

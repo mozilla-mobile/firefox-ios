@@ -6,9 +6,14 @@ import UIKit
 import WebKit
 import SwiftUI
 import Common
+import Shared
 import struct MozillaAppServices.UpdatableAddressFields
 
-class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
+class EditAddressViewController: UIViewController,
+                                 WKNavigationDelegate,
+                                 WKScriptMessageHandler,
+                                 Themeable,
+                                 KeyboardHelperDelegate {
     private lazy var removeButton: RemoveAddressButton = {
         let button = RemoveAddressButton()
         button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
@@ -55,6 +60,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         setupWebView()
         setupRemoveButton()
         listenForThemeChange(view)
+        KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -78,6 +84,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         guard let webView else { return }
         view.addSubview(stackView)
         stackView.addArrangedSubview(webView)
+        stackView.isLayoutMarginsRelativeArrangement = true
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -119,23 +126,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
         guard let webView else { return }
         webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
-            if let error = error {
-                self?.logger.log(
-                    "JavaScript execution error",
-                    level: .warning,
-                    category: .autofill,
-                    description: "JavaScript execution error: \(error.localizedDescription)"
-                )
-                return
-            }
-
-            guard let resultDict = result as? [String: Any] else {
-                self?.logger.log(
-                    "Result is nil or not a dictionary",
-                    level: .warning,
-                    category: .autofill,
-                    description: "Result is nil or not a dictionary"
-                )
+            guard let resultDict = self?.unwrapGetCurrentFormDataResult(result: result,
+                                                                        error: error,
+                                                                        logger: self?.logger) else {
                 return
             }
 
@@ -156,11 +149,35 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         }
     }
 
+    private func unwrapGetCurrentFormDataResult(result: Any?, error: (any Error)?, logger: Logger?) -> [String: Any]? {
+        if let error {
+            logger?.log(
+                "JavaScript execution error",
+                level: .warning,
+                category: .autofill,
+                description: "JavaScript execution error: \(error.localizedDescription)"
+            )
+            return nil
+        }
+
+        guard let result = result as? [String: Any] else {
+            logger?.log(
+                "Result is nil or not a dictionary",
+                level: .warning,
+                category: .autofill,
+                description: "Result is nil or not a dictionary"
+            )
+            return nil
+        }
+
+        return result
+    }
+
     private func evaluateJavaScript(_ jsCode: String) {
         guard let webView else { return }
-        webView.evaluateJavaScript(jsCode) { result, error in
+        webView.evaluateJavaScript(jsCode) { [weak self] result, error in
             if let error = error {
-                self.logger.log(
+                self?.logger.log(
                     "JavaScript execution error",
                     level: .warning,
                     category: .autofill,
@@ -194,12 +211,24 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         alertController.addAction(UIAlertAction(
             title: String.Addresses.Settings.Edit.RemoveButtonTitle,
             style: .destructive,
-            handler: { _ in
-                self.model.removeConfimationButtonTap()
+            handler: { [weak self] _ in
+                self?.model.removeConfimationButtonTap()
             }
         ))
 
         self.present(alertController, animated: true, completion: nil)
+    }
+
+    // MARK: - KeyboardHelperDelegate
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(view)
+        // Adjust stackView's bottom inset when the keyboard appears
+        stackView.layoutMargins.bottom = removeButton.isHidden ? 0 : coveredHeight
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        // Reset the bottom inset when the keyboard hides
+        stackView.layoutMargins.bottom = 0
     }
 }
 

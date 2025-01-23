@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Ааигәа акы ԥшаа. Мамзаргьы аинтерес зҵоу акы аԥшаара.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Раԥхьатәи аԥшаара алагара";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Хаҭалатәи аԥшаара %@ аҟны удыррақәа еиқәнархаӡом, насгьы иҵәаху амҩаԥгаҩцәа ааннакылоит.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Ашьҭа нмыжькәа ауеб аԥшаара";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Аԥшаара еиқәырхоу акукиқәеи аҭоурыхи рыда %@ аҟны.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Иԥышәшәа хатә ԥшаара";
+

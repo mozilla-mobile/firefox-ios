@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Am modh prìobhaideach";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Brabhsadh prìobhaideach";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Cuiridh seo am modh prìobhaideach air no dheth";
 

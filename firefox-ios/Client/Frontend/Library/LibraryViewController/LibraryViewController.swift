@@ -4,7 +4,6 @@
 
 import Common
 import Shared
-import Storage
 import UIKit
 
 extension LibraryViewController: UIToolbarDelegate {
@@ -13,7 +12,7 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
-class LibraryViewController: UIViewController, Themeable {
+class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatureFlagProvider {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -93,12 +92,17 @@ class LibraryViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
         listenForThemeChange(view)
-        setupNotifications(forObserver: self, observing: [.LibraryPanelStateDidChange])
+        setupNotifications(forObserver: self,
+                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -133,16 +137,22 @@ class LibraryViewController: UIViewController, Themeable {
 
     func updateViewWithState() {
         setupButtons()
+        updateSegmentControl()
     }
 
-    fileprivate func updateTitle() {
-        if let newTitle = viewModel.selectedPanel?.title {
+    /// The Library title can be updated from some subpanels navigation actions
+    /// - Parameter subpanelTitle: The title coming from a subpanel, optional as by default we set the title to be
+    /// the selectedPanel.title
+    private func updateTitle(subpanelTitle: String? = nil) {
+        if let subpanelTitle {
+            navigationItem.title = subpanelTitle
+        } else if let newTitle = viewModel.selectedPanel?.title {
             navigationItem.title = newTitle
         }
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
-        return panel.bottomToolbarItems.isEmpty
+        return panel.bottomToolbarItems.isEmpty || (navigationController?.isNavigationBarHidden ?? false)
     }
 
     func setupLibraryPanel(_ panel: UIViewController,
@@ -237,10 +247,10 @@ class LibraryViewController: UIViewController, Themeable {
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            libraryPanel.view.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
-            libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            libraryPanel.view.topAnchor.constraint(equalTo: controllerContainerView.topAnchor),
+            libraryPanel.view.leadingAnchor.constraint(equalTo: controllerContainerView.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: controllerContainerView.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: controllerContainerView.trailingAnchor)
         ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
@@ -325,6 +335,23 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
     }
 
+    private func updateSegmentControl() {
+        guard isBookmarkRefactorEnabled else { return }
+        let panelState = getCurrentPanelState()
+
+        switch panelState {
+        case .bookmarks(state: .inFolderEditMode):
+            let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
+            affectedOptions.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(false, forSegmentAt: librarySegmentOption.rawValue)
+            }
+        default:
+            LibraryPanelType.allCases.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(true, forSegmentAt: librarySegmentOption.rawValue)
+            }
+        }
+    }
+
     func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -333,7 +360,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
@@ -346,6 +373,14 @@ class LibraryViewController: UIViewController, Themeable {
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
     }
+
+    func setNavigationBarHidden(_ value: Bool) {
+        navigationController?.setToolbarHidden(value, animated: true)
+        navigationController?.setNavigationBarHidden(value, animated: false)
+        let controlbarHeight = segmentControlToolbar.frame.height
+        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+        controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+    }
 }
 
 // MARK: Notifiable
@@ -354,6 +389,9 @@ extension LibraryViewController: Notifiable {
         switch notification.name {
         case .LibraryPanelStateDidChange:
             setupButtons()
+            updateSegmentControl()
+        case .LibraryPanelBookmarkTitleChanged:
+            updateTitle(subpanelTitle: notification.userInfo?["title"] as? String)
         default: break
         }
     }

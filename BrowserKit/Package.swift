@@ -6,9 +6,11 @@ let package = Package(
     name: "BrowserKit",
     platforms: [
         .iOS(.v15),
-        .macOS(.v10_14)
+        .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
@@ -34,6 +36,9 @@ let package = Package(
             name: "MenuKit",
             targets: ["MenuKit"]),
         .library(
+            name: "UnifiedSearchKit",
+            targets: ["UnifiedSearchKit"]),
+        .library(
             name: "ContentBlockingGenerator",
             targets: ["ContentBlockingGenerator"]),
         .executable(
@@ -46,7 +51,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.11.0"),
+            exact: "8.1.3"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -55,30 +60,45 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.35.0"),
-        .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
-                 branch: "master")
+            exact: "8.36.0"),
+        .package(
+            url: "https://github.com/nbhasin2/GCDWebServer.git",
+            branch: "master"),
+        .package(
+            url: "https://github.com/swhitty/SwiftDraw",
+            exact: "0.17.0"),
     ],
     targets: [
+        .target(name: "Shared",
+                dependencies: ["Common",
+                               "WebEngine"],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
-            dependencies: ["Common"],
+            dependencies: ["Common", "SiteImageView"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"]),
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher", "Common"],
+            dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
+            exclude: ["README.md"],
+            resources: [.process("BundledTopSitesFavicons.xcassets")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView"]),
+            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
+            resources: [
+                .copy("Resources/mozilla.ico"),
+                .copy("Resources/hackernews.svg")
+            ]
+        ),
         .target(
             name: "Common",
             dependencies: ["Dip",
                            "SwiftyBeaver",
-                           .product(name: "Sentry", package: "sentry-cocoa")],
+                           .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",
@@ -114,11 +134,15 @@ let package = Package(
             dependencies: ["ToolbarKit"]),
         .target(
             name: "MenuKit",
-            dependencies: ["Common"],
+            dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"]),
+        .target(
+            name: "UnifiedSearchKit",
+            dependencies: ["Common", "ComponentLibrary", "MenuKit"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),

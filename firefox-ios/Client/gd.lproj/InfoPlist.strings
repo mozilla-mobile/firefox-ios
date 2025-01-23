@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Feumaidh Firefox Face ID mus fhaigh e cothrom air na faclan-faire is dòighean pàighidh a shàbhail thu.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Dh’fhaoidte gun iarr làraichean-lìn air an tadhal thu d’ ionad.";
 

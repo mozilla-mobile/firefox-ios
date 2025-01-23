@@ -13,7 +13,7 @@ var phases = { "phase1": "profile1" };
 
 // expected tabs state
 var tabs1 = [
-    { uri: "http://example.com/",
+    { uri: "https://example.com/",
       profile: "Fennec (administrator) on iOS"
     }
 ];

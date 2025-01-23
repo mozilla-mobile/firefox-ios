@@ -19,6 +19,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    var deleteHandler: (() -> Void)?
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -174,7 +175,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             }
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailUsername,
-                description: viewModel.login.decryptedUsername,
+                description: viewModel.login.username,
                 keyboardType: .emailAddress,
                 returnKeyType: .next,
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
@@ -190,7 +191,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             }
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailPassword,
-                description: viewModel.login.decryptedPassword,
+                description: viewModel.login.password,
                 displayDescriptionAsPassword: true,
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: isEditingFieldData)
@@ -342,8 +343,9 @@ extension PasswordDetailViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.sendLoginsDeletedTelemetry()
                 self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
-                    DispatchQueue.main.async {
-                        _ = self.navigationController?.popViewController(animated: true)
+                    DispatchQueue.main.async { [weak self] in
+                        _ = self?.navigationController?.popViewController(animated: true)
+                        self?.deleteHandler?()
                     }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -352,7 +354,7 @@ extension PasswordDetailViewController {
         }
     }
 
-    func onProfileDidFinishSyncing() {
+    func onProfileDidFinishSyncing(completion: @escaping () -> Void) {
         // Reload details after syncing.
         viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
             DispatchQueue.main.async {
@@ -364,6 +366,7 @@ extension PasswordDetailViewController {
                 case .failure:
                     break
                 }
+                completion()
             }
         }
     }
@@ -396,31 +399,29 @@ extension PasswordDetailViewController {
             return
         }
 
-        guard username != viewModel.login.decryptedUsername || password != viewModel.login.decryptedPassword else {
+        guard username != viewModel.login.username || password != viewModel.login.password else {
             self.tableView.reloadData()
             return
         }
 
         let updatedLogin = LoginEntry(
-            fromLoginEntryFlattened: LoginEntryFlattened(
-                id: viewModel.login.id,
-                hostname: viewModel.login.hostname,
-                password: password,
-                username: username,
+                origin: viewModel.login.hostname,
                 httpRealm: viewModel.login.httpRealm,
-                formSubmitUrl: viewModel.login.formSubmitUrl,
+                formActionOrigin: viewModel.login.formSubmitUrl,
                 usernameField: viewModel.login.usernameField,
-                passwordField: viewModel.login.passwordField
-            )
+                passwordField: viewModel.login.passwordField,
+                password: password,
+                username: username
         )
 
         if updatedLogin.isValid.isSuccess {
             viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin) { [weak self] _ in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
-                    self.onProfileDidFinishSyncing()
-                    // Required to get UI to reload with changed state
-                    self.tableView.reloadData()
+                    self.onProfileDidFinishSyncing {
+                        // Required to get UI to reload with changed state
+                        self.tableView.reloadData()
+                    }
                     self.sendLoginsModifiedTelemetry()
                 }
             }

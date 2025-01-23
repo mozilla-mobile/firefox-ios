@@ -28,7 +28,7 @@ struct WallpaperFilePathProvider {
         guard let keyDirectoryPath = folderPath(forKey: metadataKey) else {
             logger.log("WallpaperFilePathProtocol - error fetching keyed directory path for application",
                        level: .debug,
-                       category: .homepage)
+                       category: .legacyHomepage)
             return nil
         }
 
@@ -47,7 +47,7 @@ struct WallpaperFilePathProvider {
         guard let keyDirectoryPath = folderPath(forKey: key) else {
             logger.log("WallpaperFilePathProvider - error fetching keyed directory path for application",
                        level: .debug,
-                       category: .homepage)
+                       category: .legacyHomepage)
             return nil
         }
 
@@ -76,7 +76,7 @@ struct WallpaperFilePathProvider {
         else {
             logger.log("WallpaperFilePathProvider - error fetching basePath for application",
                        level: .debug,
-                       category: .homepage)
+                       category: .legacyHomepage)
             return nil
         }
 
@@ -96,7 +96,7 @@ struct WallpaperFilePathProvider {
             } catch {
                 logger.log("Could not create directory at \(directoryPath.absoluteString)",
                            level: .debug,
-                           category: .homepage)
+                           category: .legacyHomepage)
             }
         }
     }

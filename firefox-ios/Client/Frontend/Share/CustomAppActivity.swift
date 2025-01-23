@@ -9,14 +9,11 @@ import Shared
 // App-specific share sheet actions
 enum CustomActivityAction {
     case sendToDevice
-    case copyLink
 
     var title: String {
         switch self {
         case .sendToDevice:
             return .ShareSheet.SendToDeviceButtonTitle
-        case .copyLink:
-            return .ShareSheet.CopyButtonTitle
         }
     }
 
@@ -24,8 +21,6 @@ enum CustomActivityAction {
         switch self {
         case .sendToDevice:
             return UIImage(named: StandardImageIdentifiers.Large.deviceDesktopSend)
-        case .copyLink:
-            return UIImage(named: StandardImageIdentifiers.Large.link)
         }
     }
 
@@ -34,8 +29,6 @@ enum CustomActivityAction {
         switch self {
         case .sendToDevice:
             activityType = ".sendToDevice"
-        case .copyLink:
-            activityType = ".copyLink"
         }
 
         return UIActivity.ActivityType(rawValue: "\(AppInfo.bundleIdentifier)\(activityType)")
@@ -70,7 +63,9 @@ class CustomAppActivity: UIActivity, AppActivityProtocol {
 
     init(activityType: CustomActivityAction, url: URL) {
         self.appActivityType = activityType
-        self.url = url
+        self.url = url.isReaderModeURL
+                   ? (url.decodeReaderModeURL ?? url)
+                   : url
         super.init()
     }
 }

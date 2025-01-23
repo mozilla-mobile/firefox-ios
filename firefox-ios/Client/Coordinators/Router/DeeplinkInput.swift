@@ -12,6 +12,7 @@ enum DeeplinkInput {
         case fxaSignIn = "fxa-signin"
         case openUrl = "open-url"
         case openText = "open-text"
+        case sharesheet = "share-sheet"
         case glean
         case widgetMediumTopSitesOpenUrl = "widget-medium-topsites-open-url"
         case widgetSmallQuickLinkOpenUrl = "widget-small-quicklink-open-url"

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Storage
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
     func didDismissTabTray(from coordinator: TabTrayCoordinator)
@@ -11,14 +10,13 @@ protocol TabTrayCoordinatorDelegate: AnyObject {
 
 protocol TabTrayNavigationHandler: AnyObject {
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
-    func shareTab(url: URL, sourceView: UIView)
 }
 
 class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
-    private var tabTrayViewController: TabTrayViewController!
+    private var tabTrayViewController: TabTrayViewController?
     private let profile: Profile
     private let tabManager: TabManager
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
@@ -33,22 +31,30 @@ class TabTrayCoordinator: BaseCoordinator,
         initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
+    func dismissChildTabTrayPanels() {
+        // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
+        guard let childVCs = tabTrayViewController?.currentPanel?.viewControllers else { return }
+        childVCs.forEach { ($0 as? TabDisplayPanelViewController)?.removeTabPanel() }
+    }
+
     private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
-        tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
+        let tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
+
+        self.tabTrayViewController = tabTrayViewController
     }
 
     func start(with tabTraySection: TabTrayPanelType) {
-        tabTrayViewController.setupOpenPanel(panelType: tabTraySection)
+        tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
     }
 
     private func makeChildPanels() -> [UINavigationController] {
         let windowUUID = tabManager.windowUUID
-        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false, windowUUID: windowUUID)
-        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: windowUUID)
+        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: windowUUID)
+        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true, windowUUID: windowUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
@@ -87,24 +93,6 @@ class TabTrayCoordinator: BaseCoordinator,
         add(child: remoteTabsCoordinator)
         remoteTabsCoordinator.parentCoordinator = self
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
-    }
-
-    func shareTab(url: URL, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
-        let coordinator = makeShareExtensionCoordinator()
-        coordinator.start(url: url, sourceView: sourceView)
-    }
-
-    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
-        let coordinator = ShareExtensionCoordinator(
-            alertContainer: UIView(),
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: coordinator)
-        return coordinator
     }
 
     // MARK: - ParentCoordinatorDelegate

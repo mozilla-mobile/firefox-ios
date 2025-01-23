@@ -21,9 +21,9 @@ final class MicrosurveyPromptMiddleware {
         case MicrosurveyPromptActionType.showPrompt:
             self.checkIfMicrosurveyShouldShow(windowUUID: windowUUID)
         case MicrosurveyPromptActionType.closePrompt:
-            self.dismissPrompt(windowUUID: windowUUID)
+            self.dismissPrompt()
         case MicrosurveyPromptActionType.continueToSurvey:
-            self.openSurvey(windowUUID: windowUUID)
+            self.openSurvey()
         default:
            break
         }
@@ -47,21 +47,11 @@ final class MicrosurveyPromptMiddleware {
         microsurveyManager.handleMessageDisplayed()
     }
 
-    private func dismissPrompt(windowUUID: WindowUUID) {
-        let newAction = MicrosurveyPromptMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.dismissPrompt
-        )
-        store.dispatch(newAction)
+    private func dismissPrompt() {
         microsurveyManager.handleMessageDismiss()
     }
 
-    private func openSurvey(windowUUID: WindowUUID) {
-        let newAction = MicrosurveyPromptMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.openSurvey
-        )
-        store.dispatch(newAction)
+    private func openSurvey() {
         microsurveyManager.handleMessagePressed()
     }
 }

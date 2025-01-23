@@ -67,6 +67,7 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     func finishEditing(shouldCancelLoading: Bool) {
+        guard inOverlayMode else { return }
         leaveOverlayMode(reason: .finished, shouldCancelLoading: shouldCancelLoading)
     }
 

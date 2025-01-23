@@ -1,6 +1,9 @@
 /* Title for the cancel button in the remove address alert. */
 "Addresses.EditAddress.Alert.CancelButton.v129" = "අවලංගු";
 
+/* Message explaining the consequences of removing an address from all synced devices. */
+"Addresses.EditAddress.Alert.Message.v129" = "ඔබගේ සියළුම සමමුහූර්ත උපාංග වලින් ලිපිනය ඉවත් කෙරේ.";
+
 /* Title for the remove button in the remove address alert. */
 "Addresses.EditAddress.Alert.RemoveButton.v129" = "ඉවත් කරන්න";
 
@@ -64,6 +67,12 @@
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
 "Addresses.EditAddress.AutofillAddressState.v129" = "ප්‍රාන්තය";
 
+/* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
+"Addresses.EditAddress.AutofillAddressTel.v129" = "දුරකථනය";
+
+/* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
+"Addresses.EditAddress.AutofillAddressZip.v129" = "තැපැල් කේතය";
+
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
 "Addresses.EditAddress.AutofillCancelButton.v129" = "අවලංගු";
 
@@ -87,4 +96,25 @@
 
 /* Title for button that offers the user the option to remove an address. */
 "Addresses.EditAddress.RemoveAddressButtonTitle.v129" = "ලිපිනය ඉවත් කරන්න";
+
+/* Toast message confirming that an address has been successfully removed. */
+"Addresses.Toast.AddressRemovedConfirmation.v129" = "ලිපිනය ඉවත් කෙරිණි";
+
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "ලිපිනය සුරැකිණි";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "ලිපිනය සුරැකීමට නොහැකි විය";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "ලිපිනය ඉවත් කිරීමට නොහැකි විය";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "නැවත";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "ලිපින තොරතුරු යාවත්කාලීන විය";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "ලිපිනය සුරැකිණි";
 

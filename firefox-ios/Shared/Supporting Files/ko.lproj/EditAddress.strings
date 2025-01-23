@@ -139,3 +139,6 @@
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "주소 정보가 업데이트되었습니다.";
 
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "주소 저장됨";
+

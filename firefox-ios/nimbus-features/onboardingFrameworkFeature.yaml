@@ -134,7 +134,7 @@ features:
               card-type: basic
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v120
-              body: Onboarding/Onboarding.Sync.Description.v120
+              body: Onboarding/Onboarding.Sync.Description.v123
               image: sync-devices
               buttons:
                 primary:
@@ -425,13 +425,17 @@ enums:
           Will request to allow notifications from the user
       set-default-browser:
         description: >
-          Will send the user to settings to set Firefox as their default browser
+          Will send the user to settings to set Firefox as their default browser and advance to next card
       open-instructions-popup:
         description: >
           Will open up a popup with instructions for something
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+      open-ios-fx-settings:
+        description: >
+          Will take the user to the default browser settings
+          in the iOS system settings
       end-onboarding:
         description: >
           Will end the onboarding on a set card
@@ -469,6 +473,9 @@ enums:
       sync-devices:
         description: >
           Corresponding to the sync-devices image
+      set-default-steps:
+        description: >
+          Corresponding to the set to default steps image
       set-to-dock:
         description: >
           Corresponding to the set to dock image

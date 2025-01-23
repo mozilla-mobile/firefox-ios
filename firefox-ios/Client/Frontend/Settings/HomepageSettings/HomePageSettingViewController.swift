@@ -10,8 +10,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
-    var currentNewTabChoice: NewTabPage!
-    var currentStartAtHomeSetting: StartAtHomeSetting!
+    var currentNewTabChoice: NewTabPage?
+    var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
 
@@ -88,7 +88,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            guard let currentNewTabChoice = self.currentNewTabChoice else { return }
+            self.prefs.setString(currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
 
@@ -111,8 +112,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             isChecked: { return !showTopSites.isChecked() },
             settingDidChange: { (string) in
                 self.currentNewTabChoice = NewTabPage.homePage
-                self.prefs.setString(self.currentNewTabChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
-                self.tableView.reloadData()
+                onFinished()
             })
 
         showWebPage.alignTextFieldToNatural()
@@ -132,36 +132,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             format: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStoriesSubtitle,
             PocketAppName.shortName.rawValue)
 
-        let pocketSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
-            defaultValue: true,
-            titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
-            statusText: pocketStatusText
-        )
-
         let jumpBackInSetting = BoolSetting(
             with: .jumpBackIn,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
-        )
-
-        let bookmarksSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
-            defaultValue: true,
-            titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
         )
 
         let historyHighlightsSetting = BoolSetting(
             with: .historyHighlights,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.RecentlyVisited)
         )
-        let wallpaperSetting = WallpaperSettings(settings: self,
-                                                 settingsDelegate: settingsDelegate,
-                                                 tabManager: tabManager,
-                                                 wallpaperManager: wallpaperManager)
 
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
@@ -170,17 +149,48 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(jumpBackInSetting)
         }
 
-        sectionItems.append(bookmarksSetting)
+        if let profile {
+            let bookmarksSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
+                defaultValue: true,
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
+            )
+            sectionItems.append(bookmarksSetting)
+        }
 
         if isHistoryHighlightsSectionEnabled {
             sectionItems.append(historyHighlightsSetting)
         }
 
-        if isPocketSectionEnabled {
+        if isPocketSectionEnabled, let profile {
+            let pocketSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
+                defaultValue: true,
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
+                statusText: pocketStatusText
+            ) { value in
+                store.dispatch(
+                    PocketAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: PocketActionType.toggleShowSectionSetting
+                    )
+                )
+            }
             sectionItems.append(pocketSetting)
         }
 
-        if isWallpaperSectionEnabled {
+        if isWallpaperSectionEnabled, let tabManager {
+            let wallpaperSetting = WallpaperSettings(
+                settings: self,
+                settingsDelegate: settingsDelegate,
+                tabManager: tabManager,
+                wallpaperManager: wallpaperManager
+            )
             sectionItems.append(wallpaperSetting)
         }
 
@@ -256,7 +266,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
     class TopSitesSettings: Setting, FeatureFlaggable {
-        var profile: Profile
+        var profile: Profile?
         let windowUUID: WindowUUID
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -265,10 +275,18 @@ extension HomePageSettingViewController {
         }
         override var style: UITableViewCell.CellStyle { return .value1 }
 
-        override var status: NSAttributedString {
+        override var status: NSAttributedString? {
+            guard let profile else { return nil }
             let areShortcutsOn = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true
             typealias Shortcuts = String.Settings.Homepage.Shortcuts
             let status: String = areShortcutsOn ? Shortcuts.ToggleOn : Shortcuts.ToggleOff
+            store.dispatch(
+                TopSitesAction(
+                    isEnabled: areShortcutsOn,
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.toggleShowSectionSetting
+                )
+            )
             return NSAttributedString(string: String(format: status))
         }
 

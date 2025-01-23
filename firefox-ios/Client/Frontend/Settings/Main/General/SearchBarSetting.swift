@@ -9,6 +9,7 @@ class SearchBarSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -23,8 +24,9 @@ class SearchBarSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController,
+         profile: Profile,
          settingsDelegate: GeneralSettingsDelegate?) {
-        self.viewModel = SearchBarSettingsViewModel(prefs: settings.profile.prefs)
+        self.viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
         self.settingsDelegate = settingsDelegate
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(

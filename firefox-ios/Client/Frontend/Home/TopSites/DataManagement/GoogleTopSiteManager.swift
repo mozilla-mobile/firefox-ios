@@ -5,19 +5,23 @@
 import Shared
 import UIKit
 import Storage
+import SiteImageView
 
+public protocol GoogleTopSiteManagerProvider {
+    var pinnedSiteData: Site? { get }
+    func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool
+    func removeGoogleTopSite(site: Site)
+}
 // Manage the specific Google top site case
-class GoogleTopSiteManager {
+class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     struct Constants {
-        // A guid is required in the case the site might become a pinned site
-        static let googleGUID = "DefaultGoogleGUID"
-
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
 
-        // Google favicon URL
-        static let faviconUrl = "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png"
+        // Google favicon
+        private static let faviconUrl = URL(string: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png")!
+        static let faviconResource: SiteResource = .bundleAsset(name: "google", forRemoteResource: faviconUrl)
 
         // The number of tiles taken by Google top site manager
         static let reservedSpaceCount = 1
@@ -66,31 +70,37 @@ class GoogleTopSiteManager {
         self.prefs = prefs
     }
 
-    var suggestedSiteData: PinnedSite? {
+    var pinnedSiteData: Site? {
         guard let url = self.url else { return nil }
 
-        let pinnedSite = PinnedSite(
-            site: Site(url: url, title: "Google"),
-            faviconURL: Constants.faviconUrl
+        let pinnedSite = Site.createPinnedSite(
+            url: url,
+            title: "Google",
+            isGooglePinnedTile: true,
+            faviconResource: Constants.faviconResource
         )
-        pinnedSite.guid = Constants.googleGUID
+
         return pinnedSite
     }
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
     // Add it when pinned websites are less than max pinned sites
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
-        let shouldShow = !isHidden && suggestedSiteData != nil
+        let shouldShow = !isHidden && pinnedSiteData != nil
         return shouldShow && (hasAdded || hasSpace)
     }
 
     func removeGoogleTopSite(site: Site) {
-        guard site.guid == GoogleTopSiteManager.Constants.googleGUID else { return }
+        guard case SiteType.pinnedSite(let siteInfo) = site.type,
+              siteInfo.isGooglePinnedTile else {
+            return
+        }
+
         isHidden = true
     }
 
     func addGoogleTopSite(sites: inout [Site]) {
-        guard let googleSite = suggestedSiteData else { return }
+        guard let googleSite = pinnedSiteData else { return }
         sites.insert(googleSite, at: 0)
         hasAdded = true
     }

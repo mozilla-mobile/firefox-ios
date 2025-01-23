@@ -42,25 +42,25 @@ class SponsoredTileDataUtilityTests: XCTestCase {
 
     // MARK: Tests
     func testShouldAdd_doesntFilterSite() {
-        let siteToNotFilter = Site(url: "https://www.hello.com", title: "hello", bookmarked: false, guid: nil)
+        let siteToNotFilter = Site.createBasicSite(url: "https://www.hello.com", title: "hello", isBookmarked: false)
         let shouldAdd = subject.shouldAdd(site: siteToNotFilter, with: searchEngine)
         XCTAssertTrue(shouldAdd)
     }
 
     func testShouldAdd_filterSite() {
-        let siteToFilter = Site(url: "https://www.test.com", title: "test", bookmarked: false, guid: nil)
+        let siteToFilter = Site.createBasicSite(url: "https://www.test.com", title: "test", isBookmarked: false)
         let shouldAdd = subject.shouldAdd(site: siteToFilter, with: searchEngine)
         XCTAssertFalse(shouldAdd)
     }
 
     func testShouldAdd_filterSite_whenCaseInsentiveIsUsed() {
-        let siteToFilter = Site(url: "https://www.test.com", title: "test", bookmarked: false, guid: nil)
+        let siteToFilter = Site.createBasicSite(url: "https://www.test.com", title: "test", isBookmarked: false)
         let shouldAdd = subject.shouldAdd(site: siteToFilter, with: caseInsensitiveSearchEngine)
         XCTAssertFalse(shouldAdd)
     }
 
     func testShouldAdd_filterSite_whenTldIsIncluded() {
-        let siteToFilter = Site(url: "https://www.test.com", title: "test", bookmarked: false, guid: nil)
+        let siteToFilter = Site.createBasicSite(url: "https://www.test.com", title: "test", isBookmarked: false)
         let shouldAdd = subject.shouldAdd(site: siteToFilter, with: tldIncludedSearchEngine)
         XCTAssertFalse(shouldAdd)
     }

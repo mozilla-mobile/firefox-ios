@@ -118,7 +118,7 @@ class FaviconURLHandlerTests: XCTestCase {
         return SiteImageModel(id: UUID(),
                               imageType: .favicon,
                               siteURL: siteURL,
-                              resourceURL: nil,
+                              siteResource: nil,
                               image: nil)
     }
 }

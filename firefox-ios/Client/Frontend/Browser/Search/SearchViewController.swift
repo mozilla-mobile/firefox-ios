@@ -21,6 +21,8 @@ private struct SearchViewControllerUX {
     static let FaviconSize: CGFloat = 29
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
+
+    static let AppendButtonSize: CGFloat = 44
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
@@ -53,6 +55,7 @@ class SearchViewController: SiteTableViewController,
     var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager
+    private let logger: Logger
 
     var searchTelemetry: SearchTelemetry?
 
@@ -85,10 +88,12 @@ class SearchViewController: SiteTableViewController,
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
+        self.logger = logger
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
         viewModel.delegate = self
 
@@ -300,6 +305,7 @@ class SearchViewController: SiteTableViewController,
             let engineButton: UIButton = .build()
             engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = .scaleAspectFit
+            engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
             engineButton.imageView?.layer.cornerRadius = 4
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
@@ -327,7 +333,7 @@ class SearchViewController: SiteTableViewController,
                 ]
             )
 
-            if engine === self.viewModel.searchEngines?.quickSearchEngines.last {
+            if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
                 engineButton.trailingAnchor.constraint(
                     equalTo: searchEngineScrollViewContent.trailingAnchor
                 ).isActive = true
@@ -435,7 +441,7 @@ class SearchViewController: SiteTableViewController,
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
-            guard let defaultEngine = viewModel.searchEngines?.defaultEngine else { return }
+            guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
             searchTelemetry?.selectedResult = .searchSuggest
             // Assume that only the default search engine can provide search suggestions.
@@ -524,7 +530,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
-            title = viewModel.searchEngines?.defaultEngine?.headerSearchTitle ?? ""
+            title = viewModel.searchEnginesManager?.defaultEngine?.headerSearchTitle ?? ""
         default:  title = ""
         }
 
@@ -537,14 +543,24 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let twoLineImageOverlayCell = tableView.dequeueReusableCell(
+        guard let twoLineImageOverlayCell = tableView.dequeueReusableCell(
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
-        ) as! TwoLineImageOverlayCell
-        let oneLineTableViewCell = tableView.dequeueReusableCell(
+        ) as? TwoLineImageOverlayCell else {
+            logger.log("Failed to dequeue TwoLineImageOverlayCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
+        guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! OneLineTableViewCell
+        ) as? OneLineTableViewCell else {
+            logger.log("Failed to dequeue OneLineTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,
                                  for: SearchListSection(rawValue: indexPath.section)!,
@@ -575,28 +591,14 @@ class SearchViewController: SiteTableViewController,
                     }
                 }
             case .history:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    if viewModel.shouldShowBrowsingHistorySuggestions {
-                        let site = viewModel.historySites[indexPath.row]
-                        if searchTelemetry?.visibleData.contains(site) == false {
-                            searchTelemetry?.visibleData.append(site)
-                        }
-                    }
-                } else {
+                if viewModel.shouldShowBrowsingHistorySuggestions {
                     let site = viewModel.historySites[indexPath.row]
                     if searchTelemetry?.visibleData.contains(site) == false {
                         searchTelemetry?.visibleData.append(site)
                     }
                 }
             case .bookmarks:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    if viewModel.shouldShowBookmarksSuggestions {
-                        let site = viewModel.bookmarkSites[indexPath.row]
-                        if searchTelemetry?.visibleData.contains(site) == false {
-                            searchTelemetry?.visibleData.append(site)
-                        }
-                    }
-                } else {
+                if viewModel.shouldShowBookmarksSuggestions {
                     let site = viewModel.bookmarkSites[indexPath.row]
                     if searchTelemetry?.visibleData.contains(site) == false {
                         searchTelemetry?.visibleData.append(site)
@@ -610,9 +612,12 @@ class SearchViewController: SiteTableViewController,
                     searchTelemetry?.visibleSearchHighlights.append(highlightItem)
                 }
             case .firefoxSuggestions:
-                let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
-                if searchTelemetry?.visibleFirefoxSuggestions.contains(where: { $0.url == firefoxSuggestion.url }) == false {
-                    searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
+                    if searchTelemetry?.visibleFirefoxSuggestions
+                        .contains(where: { $0.url == firefoxSuggestion.url }) == false {
+                        searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                    }
                 }
             }
         }
@@ -626,18 +631,10 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             return viewModel.filteredOpenedTabs.count
         case .remoteTabs:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
-            } else {
-                return viewModel.filteredRemoteClientTabs.count
-            }
+            return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
-            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                                checking: .buildAndUser) else { return viewModel.historySites.count }
             return viewModel.shouldShowBrowsingHistorySuggestions ? viewModel.historySites.count : 0
         case .bookmarks:
-            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                                checking: .buildAndUser) else { return viewModel.bookmarkSites.count }
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .searchHighlights:
             return viewModel.searchHighlights.count
@@ -726,8 +723,10 @@ class SearchViewController: SiteTableViewController,
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = currentTheme().colors.iconPrimary
-                appendButton.sizeToFit()
+                appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
+                                            height: SearchViewControllerUX.AppendButtonSize)
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.isAccessoryViewInteractive = true
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -746,11 +745,6 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .remoteTabs:
-            if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                              checking: .buildAndUser) {
-                viewModel.model.shouldShowSyncedTabsSuggestions = true
-                viewModel.model.shouldShowPrivateModeFirefoxSuggestions = true
-            }
             if viewModel.shouldShowSyncedTabsSuggestions,
                viewModel.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
@@ -767,17 +761,7 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .history:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                if viewModel.shouldShowBrowsingHistorySuggestions {
-                    let site = viewModel.historySites[indexPath.row]
-                    configureBookmarksAndHistoryCell(
-                        twoLineCell,
-                        site.title,
-                        site.url
-                    )
-                    cell = twoLineCell
-                }
-            } else {
+            if viewModel.shouldShowBrowsingHistorySuggestions {
                 let site = viewModel.historySites[indexPath.row]
                 configureBookmarksAndHistoryCell(
                     twoLineCell,
@@ -788,24 +772,13 @@ class SearchViewController: SiteTableViewController,
             }
 
         case .bookmarks:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                if viewModel.shouldShowBookmarksSuggestions {
-                    let site = viewModel.bookmarkSites[indexPath.row]
-                    configureBookmarksAndHistoryCell(
-                        twoLineCell,
-                        site.title,
-                        site.url,
-                        site.bookmarked ?? false
-                    )
-                    cell = twoLineCell
-                }
-            } else {
+            if viewModel.shouldShowBookmarksSuggestions {
                 let site = viewModel.bookmarkSites[indexPath.row]
                 configureBookmarksAndHistoryCell(
                     twoLineCell,
                     site.title,
                     site.url,
-                    site.bookmarked ?? false
+                    site.isBookmarked ?? false
                 )
                 cell = twoLineCell
             }

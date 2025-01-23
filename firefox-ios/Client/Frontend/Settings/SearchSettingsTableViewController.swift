@@ -40,7 +40,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private let profile: Profile
-    private let model: SearchEngines
+    private let model: SearchEnginesManager
+    private let logger: Logger
 
     var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
         return !model.shouldShowBookmarksSuggestions &&
@@ -80,9 +81,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
-    init(profile: Profile, windowUUID: WindowUUID) {
+    init(profile: Profile,
+         windowUUID: WindowUUID,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
-        model = profile.searchEngines
+        self.logger = logger
+        model = profile.searchEnginesManager
 
         super.init(windowUUID: windowUUID)
     }
@@ -140,31 +144,35 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! ThemedSubtitleTableViewCell
+        ) as? ThemedSubtitleTableViewCell else {
+            logger.log("Failed to dequeue ThemedSubtitleTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
 
-        var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
 
         switch section {
         case .defaultEngine:
-                engine = model.defaultEngine
-                cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
-                cell.accessibilityValue = engine.shortName
-                cell.textLabel?.text = engine.shortName
-                cell.imageView?.image = engine.image.createScaled(IconSize)
-                cell.imageView?.layer.cornerRadius = 4
-                cell.imageView?.layer.masksToBounds = true
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            guard let engine = model.defaultEngine else { break }
+            cell.editingAccessoryType = .disclosureIndicator
+            cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
+            cell.accessibilityValue = engine.shortName
+            cell.textLabel?.text = engine.shortName
+            cell.imageView?.image = engine.image.createScaled(IconSize)
+            cell.imageView?.layer.cornerRadius = 4
+            cell.imageView?.layer.masksToBounds = true
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         case .alternateEngines:
             // The default engine is not an alternate search engine.
             let index = indexPath.item + 1
             if index < model.orderedEngines.count {
-                engine = model.orderedEngines[index]
+                let engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
                 let toggle = ThemedSwitch()
@@ -260,34 +268,38 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
-                    defaultValue: model.shouldShowFirefoxSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
-                        AppName.shortName.rawValue
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleEnableNonSponsoredSuggestions)
-                )
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
+                        defaultValue: model.shouldShowFirefoxSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                            AppName.shortName.rawValue
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleEnableNonSponsoredSuggestions)
+                    )
+                }
 
             case FirefoxSuggestItem.sponsored.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
-                    defaultValue: model.shouldShowSponsoredSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
-                        AppName.shortName.rawValue
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleEnableSponsoredSuggestions)
-                )
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
+                        defaultValue: model.shouldShowSponsoredSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                            AppName.shortName.rawValue
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleEnableSponsoredSuggestions)
+                    )
+                }
 
 //            case FirefoxSuggestItem.privateSuggestions.rawValue:
 //                buildSettingWith(
@@ -330,11 +342,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        sectionsToDisplay = [.defaultEngine, .alternateEngines, .searchEnginesSuggestions]
-
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-            sectionsToDisplay.append(.firefoxSuggestSettings)
-        }
+        sectionsToDisplay = [
+            .defaultEngine,
+            .alternateEngines,
+            .searchEnginesSuggestions,
+            .firefoxSuggestSettings
+        ]
         return sectionsToDisplay.count
     }
 
@@ -352,7 +365,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
             ? SearchSuggestItem.allCases.count : 1
         case .firefoxSuggestSettings:
-            return FirefoxSuggestItem.allCases.count
+            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            ? FirefoxSuggestItem.allCases.count : 3
         }
     }
 

@@ -55,7 +55,6 @@ protocol URLBarDelegate: AnyObject {
     // Returns either (search query, true) or (url, false).
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
-    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
     func urlBarPresentCFR(at sourceView: UIView)
 }
 
@@ -89,7 +88,7 @@ class URLBarView: UIView,
     }
 
     var parent: UIStackView?
-    var searchEngines: SearchEngines?
+    var searchEnginesManager: SearchEnginesManager?
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
@@ -245,7 +244,7 @@ class URLBarView: UIView,
     init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
         self.windowUUID = windowUUID
-        self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+        self.searchEnginesManager = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
         commonInit()
     }
@@ -255,7 +254,7 @@ class URLBarView: UIView,
     }
 
     func searchEnginesDidUpdate() {
-        let engineID = profile.searchEngines.defaultEngine?.engineID ?? "custom"
+        let engineID = profile.searchEnginesManager.defaultEngine?.engineID ?? "custom"
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .change,
@@ -264,9 +263,12 @@ class URLBarView: UIView,
             extras: [TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engineID]
         )
 
-        self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
-        self.searchIconImageView.largeContentTitle = profile.searchEngines.defaultEngine?.shortName
+        self.searchIconImageView.image = profile.searchEnginesManager.defaultEngine?.image
+        self.searchIconImageView.largeContentTitle = profile.searchEnginesManager.defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil
+
+        guard let name = profile.searchEnginesManager.defaultEngine?.shortName else { return }
+        self.searchIconImageView.accessibilityLabel = String(format: .AddressToolbar.SearchEngineA11yLabel, name)
     }
 
     fileprivate func commonInit() {
@@ -291,7 +293,7 @@ class URLBarView: UIView,
             addSubview($0)
         }
 
-        profile.searchEngines.delegate = self
+        profile.searchEnginesManager.delegate = self
 
         privateModeBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)
@@ -380,8 +382,6 @@ class URLBarView: UIView,
     }
 
     override func updateConstraints() {
-        super.updateConstraints()
-
         line.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.top.equalTo(self)
@@ -467,6 +467,7 @@ class URLBarView: UIView,
                 )
             }
         }
+        super.updateConstraints()
     }
 
     @objc
@@ -832,10 +833,6 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
-    }
-
-    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {
-        delegate?.urlBarDidPressShare(self, shareView: button)
     }
 
     func tabLocationViewPresentCFR(at sourceView: UIView) {

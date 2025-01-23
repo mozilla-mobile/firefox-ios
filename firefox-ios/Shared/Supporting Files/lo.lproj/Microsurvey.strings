@@ -1,0 +1,3 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "ປິດ";
+

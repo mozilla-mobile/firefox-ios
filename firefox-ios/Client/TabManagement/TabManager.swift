@@ -21,13 +21,13 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
+    var selectedTabUUID: UUID? { get }
     var backupCloseTab: BackupCloseTab? { get set }
     var backupCloseTabs: [Tab] { get set }
-    var normalTabs: [Tab] { get }
+    var normalTabs: [Tab] { get } // Includes active and inactive tabs
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
-    var tabDisplayType: TabDisplayType { get set }
     subscript(index: Int) -> Tab? { get }
     subscript(webView: WKWebView) -> Tab? { get }
 
@@ -59,9 +59,10 @@ protocol TabManager: AnyObject {
                                          isPrivate: Bool,
                                          previousTabUUID: TabUUID)
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
-    func addTab(_ request: URLRequest!,
+    func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
@@ -91,11 +92,11 @@ protocol TabManager: AnyObject {
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
-    /// Async Remove all inactive tabs, used when user closes all inactive tabs and TabTrayFlagManager is enabled
+    /// Async Remove all inactive tabs, used when user closes all inactive tabs
     func removeAllInactiveTabs() async
 
     /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
-    func undoCloseInactiveTabs()
+    func undoCloseInactiveTabs() async
 }
 
 extension TabManager {
@@ -129,7 +130,7 @@ extension TabManager {
     }
 
     @discardableResult
-    func addTab(_ request: URLRequest! = nil,
+    func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false

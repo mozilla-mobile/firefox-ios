@@ -61,7 +61,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     func setURL(_ viewModel: FaviconImageViewModel) {
         guard let siteURLString = viewModel.siteURLString,
-              let siteURL = URL(string: siteURLString, invalidCharacters: false) ?? viewModel.faviconURL,
+              let siteURL = URL(string: siteURLString, invalidCharacters: false),
               canMakeRequest(with: siteURLString)
         else { return }
 
@@ -77,7 +77,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
         let model = SiteImageModel(id: id,
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: viewModel.faviconURL)
+                                   siteResource: viewModel.siteResource)
         updateImage(model: model)
     }
 

@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Privémodus";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Privénavigatie";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Zet privémodus aan of uit";
 

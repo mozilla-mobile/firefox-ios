@@ -25,41 +25,8 @@ struct CreditCardSettingsEmptyView: View {
                 .edgesIgnoringSafeArea(.all)
             GeometryReader { proxy in
                 ScrollView {
-                    VStack {
-                        CreditCardAutofillToggle(
-                            windowUUID: windowUUID,
-                            textColor: toggleTextColor,
-                            model: toggleModel)
-                        .background(Color.white)
-                        .padding(.top, 25)
-                        Spacer()
-                        Image(StandardImageIdentifiers.Large.creditCard)
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(imageColor)
-                            .frame(width: 200, height: 200)
-                            .aspectRatio(contentMode: .fit)
-                            .fixedSize()
-                            .padding([.top], 10)
-                            .accessibility(hidden: true)
-                        Text(String(format: .CreditCard.Settings.EmptyListTitle,
-                                    AppName.shortName.rawValue))
-                        .preferredBodyFont(size: 22)
-                        .foregroundColor(titleTextColor)
-                        .multilineTextAlignment(.center)
-                        .padding(.leading, 10)
-                        .padding(.trailing, 10)
-                        Text(String.CreditCard.Settings.EmptyListDescription)
-                            .preferredBodyFont(size: 16)
-                            .foregroundColor(subTextColor)
-                            .multilineTextAlignment(.center)
-                            .padding(.leading, 10)
-                            .padding(.trailing, 10)
-                            .padding([.top], -5)
-                        Spacer()
-                        Spacer()
-                    }
-                    .frame(minHeight: proxy.size.height)
+                    scrollViewContent
+                        .frame(minHeight: proxy.size.height)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -71,6 +38,59 @@ struct CreditCardSettingsEmptyView: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+    }
+
+    private var scrollViewContent: some View {
+        return VStack {
+            creditCardAutofillToggle
+            Spacer()
+            creditCardImage
+            emptyListTitle
+            emptyListDescription
+            Spacer()
+            Spacer()
+        }
+    }
+
+    private var creditCardAutofillToggle: some View {
+        return CreditCardAutofillToggle(
+            windowUUID: windowUUID,
+            textColor: toggleTextColor,
+            model: toggleModel)
+        .background(Color.white)
+        .padding(.top, 25)
+    }
+
+    private var creditCardImage: some View {
+        return Image(StandardImageIdentifiers.Large.creditCard)
+            .resizable()
+            .renderingMode(.template)
+            .foregroundColor(imageColor)
+            .frame(width: 200, height: 200)
+            .aspectRatio(contentMode: .fit)
+            .fixedSize()
+            .padding([.top], 10)
+            .accessibility(hidden: true)
+    }
+
+    private var emptyListTitle: some View {
+        return Text(String(format: .CreditCard.Settings.EmptyListTitle,
+                           AppName.shortName.rawValue))
+        .preferredBodyFont(size: 22)
+        .foregroundColor(titleTextColor)
+        .multilineTextAlignment(.center)
+        .padding(.leading, 10)
+        .padding(.trailing, 10)
+    }
+
+    private var emptyListDescription: some View {
+        return Text(String.CreditCard.Settings.EmptyListDescription)
+            .preferredBodyFont(size: 16)
+            .foregroundColor(subTextColor)
+            .multilineTextAlignment(.center)
+            .padding(.leading, 10)
+            .padding(.trailing, 10)
+            .padding([.top], -5)
     }
 
     func applyTheme(theme: Theme) {

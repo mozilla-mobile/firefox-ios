@@ -37,9 +37,6 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Vizituar Së Fundi";
 
-/* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "Shkurtore";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Caktoni Rreshta";
 
@@ -305,7 +302,7 @@
 "ErrorPages.Advanced.Button" = "Të thelluara";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Kujdes: s’e konfirmojmë dot se lidhja juaj me këtë sajt është e sigurt.";
+"ErrorPages.AdvancedWarning1.Text" = "Kujdes: s’e konfirmojmë dot se lidhja juaj me këtë sajt është e siguruar.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Mund të jetë një keqformësim ose futje hundësh nga dikush që po sulmon. Vazhdoni, nëse e pranoni rrezikun potencial.";
@@ -929,10 +926,10 @@
 "Privacy Policy" = "Rregulla Privatësie";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "Lidhja s’është e sigurt";
+"ProtectionStatus.NotSecure" = "Lidhja s’është e siguruar";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Lidhja është e sigurt";
+"ProtectionStatus.Secure" = "Lidhja është e siguruar";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Motorë Kërkimesh të Shpejta";
@@ -1407,9 +1404,6 @@
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Kur hapet %@";
-
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Kur Hapet Firefox-i";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ofro Hapje Lidhjesh të Kopjuara";

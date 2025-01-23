@@ -11,17 +11,19 @@ import Shared
 extension BrowserDBSQLite {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         let id = row["historyID"] as? Int
-        let url = row["url"] as! String
-        let title = row["title"] as! String
-        let guid = row["guid"] as? String
+        guard let url = row["url"] as? String, let title = row["title"] as? String else {
+            assertionFailure("None of these properties should be nil")
+            return Site.createBasicSite(url: "", title: "")
+        }
+
+        // FXIOS-10996 improved our `Site` type to have strict unique IDs. But this `historyID` field was previously
+        // optional, so we need to migrate users over in v136. Otherwise users will lose all their pinned top sites.
+        var site = Site.createBasicSite(id: id, url: url, title: title)
 
         // Extract a boolean from the row if it's present.
-        let iB = row["is_bookmarked"] as? Int
-        let isBookmarked: Bool? = (iB == nil) ? nil : (iB! != 0)
-
-        let site = Site(url: url, title: title, bookmarked: isBookmarked)
-        site.guid = guid
-        site.id = id
+        if let isBookmarked = row["is_bookmarked"] as? Int {
+            site.isBookmarked = isBookmarked != 0
+        }
 
         // Find the most recent visit, regardless of which column it might be in.
         let local = row.getTimestamp("localVisitDate") ?? 0
@@ -32,6 +34,7 @@ extension BrowserDBSQLite {
         if latest > 0 {
             site.latestVisit = Visit(date: latest, type: .link)
         }
+
         return site
     }
 
@@ -49,7 +52,7 @@ extension BrowserDBSQLite {
     }
 
     class func historyMetadataColumnFactory(_ row: SDRow) -> Site {
-        let site = basicHistoryColumnFactory(row)
+        var site = basicHistoryColumnFactory(row)
         site.metadata = pageMetadataColumnFactory(row)
         return site
     }

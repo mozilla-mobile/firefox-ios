@@ -31,7 +31,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: nil) // No faviconURL yet
+                                   siteResource: nil) // No faviconURL yet
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 1, "getFaviconURLCalled should be called once")
@@ -46,21 +46,20 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: faviconURL)
+                                   siteResource: .remoteURL(url: faviconURL))
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 0, "getFaviconURLCalled should not be called")
     }
 
     func testGetImage_favicon_noURL_stillCallsImageHandler_fetchFavicon() async {
-        let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         let siteURL = URL(string: "https://www.mozilla.com")!
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: nil)
+                                   siteResource: nil)
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 1, "getFaviconURLCalled should be called")
@@ -76,7 +75,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: faviconURL)
+                                   siteResource: .remoteURL(url: faviconURL))
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called once")

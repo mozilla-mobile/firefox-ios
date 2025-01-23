@@ -39,7 +39,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
     private var syncedDeviceIconCenterConstraint: NSLayoutConstraint?
     private var showAllSyncedTabsAction: (() -> Void)?
-    private var tabStackTopConstraint: NSLayoutConstraint!
+    private var tabStackTopConstraint: NSLayoutConstraint?
     private var openSyncedTabAction: (() -> Void)?
 
     // MARK: - UI Elements
@@ -207,6 +207,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         tabStackTopConstraint = tabStack.topAnchor.constraint(
             equalTo: syncedTabsButton.bottomAnchor,
             constant: UX.tabStackTopAnchorConstant)
+        tabStackTopConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             cardTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -218,7 +219,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
                                                        constant: -16),
 
-            tabStackTopConstraint,
             tabStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tabStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tabStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
@@ -294,7 +294,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             tabStackTopAnchorConstant = UX.tabStackTopAnchorCompactPhoneConstant
         }
-        tabStackTopConstraint.constant = tabStackTopAnchorConstant
+        tabStackTopConstraint?.constant = tabStackTopAnchorConstant
     }
 
     private func setupShadow(theme: Theme) {

@@ -208,7 +208,10 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
 
         subject?.findInPageDelegate = findInPageDelegate
-        let script = contentScriptManager.scripts[FindInPageContentScript.name()] as! FindInPageContentScript
+        guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else {
+            XCTFail("Failed to cast script to FindInPageContentScript in testFindInPageDelegateIsSetProperly")
+            return
+        }
         script.userContentController(didReceiveMessage: ["currentResult": 10])
 
         XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
@@ -248,7 +251,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.restore(state: restoredState)
 
-        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.interactionState as? Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         prepareForTearDown(subject!)
     }
@@ -260,7 +263,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.restore(state: restoredState)
 
-        XCTAssertEqual(webViewProvider.webView.interactionState as! Data, restoredState)
+        XCTAssertEqual(webViewProvider.webView.interactionState as? Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")
         prepareForTearDown(subject!)
     }

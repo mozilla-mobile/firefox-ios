@@ -12,36 +12,67 @@ class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs,
          delegate: SettingsDelegate?,
          theme: Theme,
-         settingsDelegate: SupportSettingsDelegate?) {
+         settingsDelegate: SupportSettingsDelegate?,
+         title: String,
+         message: String,
+         linkedText: String) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
-                string: .SettingsStudiesToggleMessage,
+                string: message,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
             )
         )
-        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: "\n"))
         statusText.append(
             NSAttributedString(
-                string: .SettingsStudiesToggleLink,
+                string: linkedText,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
             )
         )
 
         self.settingsDelegate = settingsDelegate
+
         super.init(
             prefs: prefs,
             prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
-            attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
+            attributedTitleText: NSAttributedString(string: title),
             attributedStatusText: statusText,
             settingDidChange: {
                 Experiments.setStudiesSetting($0)
             }
         )
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+
+        setupSettingDidChange()
+
+        let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+
+        // Special Case (EXP-4780) disable studies if usage data is disabled
+        updateSetting(for: sendUsageDataPref)
+    }
+
+    private func setupSettingDidChange() {
+        self.settingDidChange = {
+            Experiments.setStudiesSetting($0)
+        }
+    }
+
+    func updateSetting(for isUsageEnabled: Bool) {
+        guard !isUsageEnabled else {
+            // Note: switch should be enabled only when telemetry usage is enabled
+            control.setSwitchTappable(to: true)
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setStudiesSetting(prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+            return
+        }
+
+        // Special Case (EXP-4780) disable Studies if usage data is disabled
+        control.setSwitchTappable(to: false)
+        control.toggleSwitch(to: false)
+        writeBool(control.switchView)
+        Experiments.setStudiesSetting(false)
     }
 
     override var accessibilityIdentifier: String? {

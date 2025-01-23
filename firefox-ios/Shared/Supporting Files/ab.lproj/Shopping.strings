@@ -1,0 +1,240 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Аахәара ҟашәҵаанӡа, еилышәкаа аалыҵ азы ахҳәаақәа рыгәра шәгозар.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Ахҳәаа агәаҭага ԥышәшәа";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
+"ContextualHints.Shopping.OptedInAction.v120" = "Иаарттәуп ахҳәаа агәаҭара";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Агәра угартә иҟоума арҭ ахҳәаақәа? Уажәы игәашәҭ ирҽеиу арейтинг шәбарц азы.";
+
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "Аӡыргара %@ аҟынтә";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "Уаҳа хшыҩзышьҭра зҭатәузеи";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Зыгәра уго ахҳәаа шьаҭас иҟаҵаны";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ 5 еҵәа рҟынтә";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "Ирҽеиу ареитинг";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "Еилкаауп";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Анализ актуалра амоуп";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "Аконкуренциа";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "Еиҵаны аарԥшра";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "Еиҳаны аарԥшра";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Аҭра";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Ахә";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Ахаҭабзиара";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Азнагара";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Аҵыхәтәантәи ахҳәаақәа рҟынтәи ахшыҩзышьҭра дуқәа";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Рыцҳарас иҟалаз, ҳара иҳалшом аалыҵ хкқәа рзы ахҳәаа ахаҭабзиара агәаҭара. Иаҳҳәап, аҳамҭатә картақәеи авидеоқәеи, амузыкеи ахәмаррақәеи.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Ҳара иҳалшом арҭ ахҳәаақәа рыгәра агара";
+
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Ҳара ари ахархәага иазкны аҭак ҳауроуп 24 сааҭ рыҩныҵҟа. Ҳаҳәоит, нас шәеиҭахәаԥш.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Аинформациа лассы иҟалоит";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Уажәы игәашәҭ";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Аинформациа ҿыц агәаҭара";
+
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Ҳара ари азҵаара аӡбаразы аус ҳуеит. Ҳаҳәоит, лассы шәеиҭахәаԥш.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Уажәазы ​​аинформациа ыҟаӡам";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Ари ахархәага еиҳаны ахҳәаа анаиулак, уи ахаҭабзиара агәаҭара ҳалшоит.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Ахҳәаақәа макьана иазхом";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Ари ахәҭа шьҭахьҟа иҟоу жәбазар, иҳашәҳәа, ҳара ахҳәаа гәаҳҭоит.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Ашьҭаҵарҭаҿы аалыҵ шыҟоу азы адырраҭара";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "Аалыҵ ыҟаӡам";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Уи 60 секунд раҟара аамҭа аҭаххар ауеит.";
+
+/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+"Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Ахҳәаа ахаҭабзиара агәаҭара (%@)";
+
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Ҳара ари ахархәага иазкны аҭак ҳауроуп 24 сааҭ рыҩныҵҟа. Ҳаҳәоит, нас шәеиҭахәаԥш.";
+
+/* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "Иҭабуп адырраҭаразы!";
+
+/* Text for the analyzer button displayed when an analysis can be updated for a product. */
+"Shopping.NoAnalysisCard.AnalyzerButton.Title.v120" = "Ахҳәаақәа рхаҭабзиара гәашәҭ";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "Ари ахархәага иазку ахҳәаақәа рыгәра угартә иҟоу-иҟаму аилкааразы, ахҳәаақәа рхаҭабзиара гәашәҭ. Уи 60 секунд раҟара аамҭа аҭаххоит.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Арҭ ахҳәаақәа ирызкны макьаназы адыррақәа ыҟам";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "“Иаҳҳәап, иԥышәшәа” ҳәа иалхны, шәақәшаҳаҭуп:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Аахәара ҟашәҵаанӡа %1$@ аҟны аалыҵ ахҳәаа агәрагара гәашәҭ. Ахҳәаа агәаҭара, %2$@ аҟынтәи аексперименталтә ҟазшьа, ииашаҵәҟьаны абраузер аҿы иаԥҵоуп.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Аахәара ҟашәҵаанӡа, шәахәаԥш шаҟа игәрагоу аалыҵ ахҳәаа %1$@ аҟны. Ахҳәаа агәаҭара, %2$@ аҟынтәи аексперименталтә ҟазшьа, ииашаҵәҟьаны абраузер аҿы иаԥҵоуп. Уи %3$@-еи %4$@-еи рҿгьы аус ауеит.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Еилышәкаа игәрагоу аалыҵ ахҳәаа азы ҳгаид";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Еиҳаны аилкаара";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "Ааи, иԥышәа";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Амаӡаратә рдырраҭара %@";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "Уажәазы ​​акәым";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "%1$@ амч ахархәарала %2$@ аҟынтә, ҳара шәыцхраауеит еилых ҟамҵакәа, гәрагара змам ахҳәаақәа шәҽырцәышәыхьчарц. Ҳара ҳартифициалтә интеллект амодель еснагь аиӷьтәра иаҿуп, аахәаҩцәа раан шәыхьчарц азы.";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Ахархәара аԥҟарақәа %@";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Ахәшьара %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Шаҟа рыгәра угартә иҟоузеи арҭ ахҳәаақәа?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "Зыгәра уго ахҳәаақәа";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Зыгәра угартә иҟоуи зыгәра угашами ахҳәаақәа реилаԥса";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Имцу ахҳәаақәа";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*Ирҽеиу арейтинг* шьаҭас иамоуп зыгәра угартә иҟоу ҳәа иҳаԥхьаӡо ахҳәаа мацара.";
+
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Аиҵаҵара акарточка «Ахҳәаа ахаҭабзиара шҳаӡбо»";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Ирҭбаа акарточка «Ахҳәаа ахаҭабзиара шҳаӡбо»";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Ҳара ҳхы иаҳархәоит %1$@ by %2$@ AI атехнологиа аалыҵ ахҳәаа аиашара агәаҭаразы. Уи шәара ишәыцхраауеит ахҳәаа ахаҭабзиара мацара ахәшьара аҭараҿы, аалыҵ ахаҭабзиара акәымкәа.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Ихадоу адыррақәа* аҵыхәтәантәи 80 мшы рзы %@ аҟны ахҳәаақәа рҟынтәи иаагоуп, урҭ рыгәра угартә иҟоуп ҳәа ҳгәы иаанагоит.";
+
+/* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Label.Title.v120" = "Ахҳәаақәа рхаҭабзиара шҳаӡбо";
+
+/* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Еиҳаны еилышәкаа %@ ахҳәаақәа рхаҭабзиара шаӡбо";
+
+/* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Ҳара ҳагәра ганы ҳаҟоуп, араҟа ииашоуи игәрагоуи ахҳәаа еилаԥсоуп ҳәа.";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Узықәгәыӷыртә иҟоу ахҳәаақәа. Ҳара ҳагәра ганы ҳаҟоуп, ари ахҳәаа еиҳарак ииашоу, еилых ҟамҵа ахҳәаа ҟазҵаз ииашоу аалыҵҳәаҩцәа шракәу.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Аалыҵ зегьы рыхҳәаа A инаркны F рҟынӡа *ҩырала* ахәшьара раҳҭоит.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Амцтә хҳәаақәа. Ҳара ҳагәра ганы ҳаҟоуп, арҭ ахҳәаақәа мцыркуп ҳәа, мамзаргьы еилых ҟазҵо ахҳәааҩцәа рыла иҩуп ҳәа.";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Акарта архиарақәа реизгара";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Ирҭбаатәуп архиарақәа ркарточка";
+
+/* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Аиқәыршәара аԥсахразы ҩынтә ақәыӷәӷәара.";
+
+/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, агәыҵха аиҭакра, %2$@.";
+
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Ахҳәаа агәаҭага амыруга иаԥиҵаз %1$@ ала %2$@";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "Архиарақәа";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Иаарԥштәуп аалыҵқәа ирыднагало %@";
+
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Ирцәоу";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Аҿк.";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Ахәаԥшра агәаҭара аҿыхтәуп";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "АБЕТА";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Иарктәуп ахҳәаа агәаҭара";
+
+/* Label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Title.v120" = "Ахҳәаа агәаҭара";
+
+/* Text for body of error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Уҳа аимадара гәаҭаны, адаҟьа ҿыц аҭагалара уҽазышәа.";
+
+/* Title for error card displayed to the user when the device is disconnected from the network. */
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Аҳа аимадара ыҟам";
+

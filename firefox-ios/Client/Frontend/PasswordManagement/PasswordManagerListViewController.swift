@@ -146,7 +146,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
         selectionButton.setTitleColor(theme.colors.textInverted, for: [])
         selectionButton.backgroundColor = theme.colors.actionPrimary
-        deleteButton.tintColor = theme.colors.textWarning
+        deleteButton.tintColor = theme.colors.textCritical
 
         // Search bar text and placeholder color
         let searchTextField = searchController.searchBar.searchTextField
@@ -166,6 +166,12 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     @objc
     func dismissLogins() {
         dismiss(animated: true)
+    }
+
+    func showToast() {
+        SimpleToast().showAlertWithText(.LoginListDeleteToast,
+                                        bottomContainer: view,
+                                        theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit,
@@ -328,6 +334,7 @@ private extension PasswordManagerListViewController {
                         self.cancelSelection()
                         self.loadLogins()
                         self.sendLoginsDeletedTelemetry()
+                        self.showToast()
                     }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)

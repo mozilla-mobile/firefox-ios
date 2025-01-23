@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zatvori privatne kartice";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodaj Firefoxove prečace na početni zaslon";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodaj Firefoxove prečace na tvoj početni ekran.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Idi na kopiranu poveznicu";

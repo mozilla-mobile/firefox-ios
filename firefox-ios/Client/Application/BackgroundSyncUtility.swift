@@ -10,6 +10,7 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
     let profile: Profile
     let application: UIApplication
     let logger: Logger
+    private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
 
     init(profile: Profile,
          application: UIApplication,
@@ -22,18 +23,17 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
     }
 
     func scheduleTaskOnAppBackground() {
-        if profile.syncManager.isSyncing {
+        if let syncManager = profile.syncManager, syncManager.isSyncing {
             // If syncing, create a background task because _shutdown() is blocking and
             // might take a few seconds to complete
-            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
             taskId = application.beginBackgroundTask(expirationHandler: {
                 self.shutdownProfileWhenNotActive()
-                self.application.endBackgroundTask(taskId)
+                self.application.endBackgroundTask(self.taskId)
             })
 
             DispatchQueue.main.async {
                 self.shutdownProfileWhenNotActive()
-                self.application.endBackgroundTask(taskId)
+                self.application.endBackgroundTask(self.taskId)
             }
         } else {
             // Blocking call, however without sync running it should be instantaneous
@@ -61,7 +61,7 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
                 return
             }
             let collection = ["bookmarks", "history"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+            self.profile.syncManager?.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 task.setTaskCompleted(success: true)
                 let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
                 request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
@@ -81,7 +81,7 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2",
                                         using: DispatchQueue.global()) { task in
             let collection = ["tabs", "logins", "clients"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+            self.profile.syncManager?.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive()
                 task.setTaskCompleted(success: true)
             }

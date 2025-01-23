@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox убраузер еиԥш алхра иаарту, насгьы зегьы ирзымариоу Интернет азы абжьыҭира ауп.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Еиӷьу аинтернет ахь аиасра";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Еилышәкаа ишыҟало";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Firefox аҟны асаитқәа, аимеилқәа, Ацҳарақәа рҟынтәи автоматла иаартуа азхьарԥшқәа шьақәыргылатәуп.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Иалышәх Firefox шәбраузер еиԥш аццакыра, ашәарҭадара, амаӡара рзы.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Есыҽнытәи уԥшаара еиӷьтәтәуп";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox есымза ахархәаҩ ибжьаратәла 3,000 тракерк аанкылоит. Умаӡара иазкны угәы ҭынчхарц азы убраузер ҳзыҟаҵа.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox амаӡара еиқәнаршәоит";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Иԥсахтәуп ишыҟоу еиԥш иҟоу абраузер";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Аиқәыршәарақәа рахь ацара";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Аиқәыршәарақәа рахь ацара";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Иалшәх \"Абраузер апликациа стандарт\"";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Иалшәх Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Абраузер апликациа ишыҟоу еиԥш";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Абраузер ишыҟоу еиԥш ишьақәыргылатәуп";
+

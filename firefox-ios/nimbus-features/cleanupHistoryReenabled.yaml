@@ -1,0 +1,19 @@
+# The configuration file for the cleanupHistoryIfNeeded re-enabling functionnality
+features:
+  cleanup-history-reenabled:
+    description: >
+      This feature flag will help us slowly re-enable the cleanupHistoryIfNeeded functionnality at startup of the app
+    variables:
+      enabled:
+        description: >
+          When true the cleanupHistoryIfNeeded will be run
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
+

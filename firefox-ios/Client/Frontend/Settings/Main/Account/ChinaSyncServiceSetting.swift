@@ -13,26 +13,25 @@ class ChinaSyncServiceSetting: Setting {
     private var prefs: Prefs { return profile.prefs }
     private let prefKey = PrefsKeys.KeyEnableChinaSyncService
     private let profile: Profile
-    private let settings: UIViewController
 
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     override var hidden: Bool { return !AppInfo.isChinaEdition }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: "本地同步服务",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override var status: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: "禁用后使用全球服务同步数据",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary])
     }
 
-    init(settings: SettingsTableViewController,
-         settingsDelegate: SharedSettingsDelegate?) {
-        self.profile = settings.profile
-        self.settings = settings
+    init(profile: Profile, settingsDelegate: SharedSettingsDelegate?) {
+        self.profile = profile
         self.settingsDelegate = settingsDelegate
     }
 

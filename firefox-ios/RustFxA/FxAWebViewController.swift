@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import WebKit
+@preconcurrency import WebKit
 import Account
 import Common
 import Shared
@@ -171,7 +171,7 @@ extension FxAWebViewController: WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavascriptInDefaultContentWorld(hideLongpress)
 

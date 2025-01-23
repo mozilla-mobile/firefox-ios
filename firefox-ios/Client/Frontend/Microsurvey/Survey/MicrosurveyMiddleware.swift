@@ -17,7 +17,7 @@ final class MicrosurveyMiddleware {
         case MicrosurveyActionType.closeSurvey:
             self.dismissSurvey(windowUUID: windowUUID, surveyId: surveyId)
         case MicrosurveyActionType.tapPrivacyNotice:
-            self.navigateToPrivacyNotice(windowUUID: windowUUID, surveyId: surveyId)
+            self.sendTelemtryForNavigatingToPrivacyNotice(surveyId: surveyId)
         case MicrosurveyActionType.submitSurvey:
             self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action, surveyId: surveyId)
         case MicrosurveyActionType.surveyDidAppear:
@@ -30,21 +30,11 @@ final class MicrosurveyMiddleware {
     }
 
     private func dismissSurvey(windowUUID: WindowUUID, surveyId: String) {
-        let newAction = MicrosurveyMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyMiddlewareActionType.dismissSurvey
-        )
-        store.dispatch(newAction)
         microsurveyTelemetry.dismissButtonTapped(surveyId: surveyId)
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
-    private func navigateToPrivacyNotice(windowUUID: WindowUUID, surveyId: String) {
-        let newAction = MicrosurveyMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyMiddlewareActionType.navigateToPrivacyNotice
-        )
-        store.dispatch(newAction)
+    private func sendTelemtryForNavigatingToPrivacyNotice(surveyId: String) {
         microsurveyTelemetry.privacyNoticeTapped(surveyId: surveyId)
     }
 

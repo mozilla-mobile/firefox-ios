@@ -262,7 +262,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "test search text"))
+        XCTAssertEqual(route, .searchQuery(query: "test search text", isPrivate: false))
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -344,7 +344,46 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "google"))
+        XCTAssertEqual(route, .searchQuery(query: "google", isPrivate: false))
+    }
+
+    func testShareSheetRouteUrlOnly() {
+        let testURL = URL(string: "https://www.google.com")!
+        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)")!
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: shareURL)
+
+        XCTAssertEqual(route, .sharesheet(shareType: .site(url: testURL), shareMessage: nil))
+    }
+
+    func testShareSheetRouteUrlTitle() {
+        let testURL = URL(string: "https://www.google.com")!
+        let testTitle = "TEST TITLE"
+        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)")!
+
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: shareURL)
+
+        let expectedShareType = ShareType.site(url: testURL)
+        let expectedShareMessage = ShareMessage(message: testTitle, subtitle: nil)
+        XCTAssertEqual(route, .sharesheet(shareType: expectedShareType, shareMessage: expectedShareMessage))
+    }
+
+    func testShareSheetRouteUrlTitleAndSubtitle() {
+        let testURL = URL(string: "https://www.google.com")!
+        let testTitle = "TEST TITLE"
+        let testSubtitle = "TEST SUBTITLE"
+        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)&subtitle=\(testSubtitle)")!
+
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: shareURL)
+
+        let expectedShareType = ShareType.site(url: testURL)
+        let expectedShareMessage = ShareMessage(message: testTitle, subtitle: testSubtitle)
+        XCTAssertEqual(route, .sharesheet(shareType: expectedShareType, shareMessage: expectedShareMessage))
     }
 
     // MARK: - AppAction

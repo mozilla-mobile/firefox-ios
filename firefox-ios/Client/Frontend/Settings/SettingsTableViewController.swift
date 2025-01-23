@@ -32,7 +32,7 @@ class Setting: NSObject {
     private var _footerTitle: NSAttributedString?
     private var _cellHeight: CGFloat?
     private var _image: UIImage?
-    var theme: Theme!
+    var theme: Theme?
 
     weak var delegate: SettingsDelegate?
 
@@ -103,6 +103,7 @@ class Setting: NSObject {
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
+        cell.isUserInteractionEnabled = enabled
 
         backgroundView.backgroundColor = theme.colors.layer5Hover
         backgroundView.bounds = cell.bounds
@@ -195,6 +196,14 @@ class PaddedSwitch: UIView {
         switchView.isEnabled = isEnabled
     }
 
+    func setSwitchTappable(to value: Bool) {
+        switchView.isEnabled = value
+    }
+
+    func toggleSwitch(to value: Bool, animated: Bool = true) {
+        switchView.setOn(value, animated: animated)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -205,10 +214,10 @@ class PaddedSwitch: UIView {
 class BoolSetting: Setting, FeatureFlaggable {
     // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
     let prefKey: String?
-
     let prefs: Prefs?
+
+    var settingDidChange: ((Bool) -> Void)?
     private let defaultValue: Bool?
-    private let settingDidChange: ((Bool) -> Void)?
     private let statusText: NSAttributedString?
     private let featureFlagName: NimbusFeatureFlagID?
 
@@ -331,7 +340,6 @@ class BoolSetting: Setting, FeatureFlaggable {
     func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
-
         if let featureFlagName = featureFlagName {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
@@ -624,7 +632,7 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     @objc
     func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
+        let color = isValid(textField.text) ? theme?.colors.textPrimary : theme?.colors.textCritical
         textField.textColor = color
     }
 
@@ -656,12 +664,11 @@ class CheckmarkSetting: Setting {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
         static let cellIndentationLevel = 1
-        static let checkmarkHeight: CGFloat = 20
-        static let checkmarkWidth: CGFloat = 24
         static let checkmarkTopHeight: CGFloat = 10
+        static let checkmarkHeight: CGFloat = 20.0
+        static let checkmarkWidth: CGFloat = 24.0
         static let checkmarkLeading: CGFloat = 20
         static let checkmarkSymbol = "\u{2713}"
-        static let checkmarkFontSize: CGFloat = 20
         static let cellAlpha: CGFloat = 0.5
     }
 
@@ -672,7 +679,6 @@ class CheckmarkSetting: Setting {
 
     private lazy var check: UILabel = .build { label in
         label.text = UX.checkmarkSymbol
-        label.font = UIFont.systemFont(ofSize: UX.checkmarkFontSize)
     }
 
     override var status: NSAttributedString? {
@@ -703,30 +709,12 @@ class CheckmarkSetting: Setting {
         } else {
             let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? UX.defaultInset
-            cell.indentationWidth = UX.cellIndentationWidth + safeAreaInsets
+            let dynamicIndentationWidth = UIFontMetrics.default.scaledValue(for: UX.cellIndentationWidth)
+            cell.indentationWidth = dynamicIndentationWidth + safeAreaInsets
             cell.indentationLevel = UX.cellIndentationLevel
-
             cell.accessoryType = .detailButton
 
-            let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
-
-            cell.contentView.addSubview(check)
-            NSLayoutConstraint.activate(
-                [
-                    check.heightAnchor.constraint(equalToConstant: UX.checkmarkHeight),
-                    check.widthAnchor.constraint(equalToConstant: UX.checkmarkWidth),
-                    check.topAnchor.constraint(
-                        equalTo: cell.contentView.topAnchor,
-                        constant: UX.checkmarkTopHeight
-                    ),
-                    check.leadingAnchor.constraint(
-                        equalTo: cell.contentView.leadingAnchor,
-                        constant: UX.checkmarkLeading
-                    )
-                ]
-            )
-
-            check.textColor = checkColor
+            setupLeftCheckLabel(cell, theme: theme)
 
             let result = NSMutableAttributedString()
             if let str = title?.string {
@@ -745,6 +733,28 @@ class CheckmarkSetting: Setting {
         }
     }
 
+    private func setupLeftCheckLabel(_ cell: UITableViewCell, theme: Theme) {
+        check.font = FXFontStyles.Regular.title3.scaledFont()
+        let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
+        check.textColor = checkColor
+
+        cell.contentView.addSubview(check)
+        let checkmarkHeight = UIFontMetrics.default.scaledValue(for: UX.checkmarkHeight)
+        let checkmarkWidth = UIFontMetrics.default.scaledValue(for: UX.checkmarkWidth)
+        NSLayoutConstraint.activate([
+            check.topAnchor.constraint(
+                equalTo: cell.contentView.topAnchor,
+                constant: UX.checkmarkTopHeight
+            ),
+            check.leadingAnchor.constraint(
+                equalTo: cell.contentView.leadingAnchor,
+                constant: UX.checkmarkLeading
+            ),
+            check.heightAnchor.constraint(equalToConstant: checkmarkHeight),
+            check.widthAnchor.constraint(equalToConstant: checkmarkWidth)
+        ])
+    }
+
     override func onClick(_ navigationController: UINavigationController?) {
         // Force editing to end for any focused text fields so they can finish up validation first.
         navigationController?.view.endEditing(true)
@@ -754,77 +764,12 @@ class CheckmarkSetting: Setting {
     }
 }
 
-/// A helper class for a setting backed by a UITextField.
-/// This takes an optional isEnabled and mandatory onClick callback
-/// isEnabled is called on each tableview.reloadData. If it returns
-/// false then the 'button' appears disabled.
-class ButtonSetting: Setting {
-    private struct UX {
-        static let padding: CGFloat = 8
-        static let textLabelHeight: CGFloat = 44
-    }
-
-    let onButtonClick: (UINavigationController?) -> Void
-    let destructive: Bool
-    let isEnabled: (() -> Bool)?
-
-    init(title: NSAttributedString?,
-         destructive: Bool = false,
-         accessibilityIdentifier: String,
-         isEnabled: (() -> Bool)? = nil,
-         onClick: @escaping (UINavigationController?) -> Void) {
-        self.onButtonClick = onClick
-        self.destructive = destructive
-        self.isEnabled = isEnabled
-        super.init(title: title)
-        self.accessibilityIdentifier = accessibilityIdentifier
-    }
-
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
-
-        if isEnabled?() ?? true {
-            cell.textLabel?.textColor = destructive ? theme.colors.textWarning : theme.colors.actionPrimary
-        } else {
-            cell.textLabel?.textColor = theme.colors.textDisabled
-        }
-        if let textLabel = cell.textLabel {
-            NSLayoutConstraint.activate(
-                [
-                    textLabel.heightAnchor.constraint(equalToConstant: UX.textLabelHeight),
-                    textLabel.trailingAnchor.constraint(
-                        equalTo: cell.contentView.trailingAnchor,
-                        constant: -UX.padding
-                    ),
-                    textLabel.leadingAnchor.constraint(
-                        equalTo: cell.contentView.leadingAnchor,
-                        constant: UX.padding
-                    )
-                ]
-            )
-            textLabel.translatesAutoresizingMaskIntoConstraints = false
-        }
-
-        cell.textLabel?.textAlignment = .center
-        cell.accessibilityTraits = UIAccessibilityTraits.button
-        cell.selectionStyle = .none
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        // Force editing to end for any focused text fields so they can finish up validation first.
-        navigationController?.view.endEditing(true)
-        if isEnabled?() ?? true {
-            onButtonClick(navigationController)
-        }
-    }
-}
-
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
 class AccountSetting: Setting {
     unowned var settings: SettingsTableViewController
 
-    var profile: Profile {
+    var profile: Profile? {
         return settings.profile
     }
 
@@ -837,7 +782,7 @@ class AccountSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        if settings.profile.rustFxA.userProfile != nil {
+        if settings.profile?.rustFxA.userProfile != nil {
             cell.selectionStyle = .none
         }
     }
@@ -846,11 +791,17 @@ class AccountSetting: Setting {
 }
 
 class WithAccountSetting: AccountSetting {
-    override var hidden: Bool { return !profile.hasAccount() }
+    override var hidden: Bool {
+        guard let profile else { return true }
+        return !profile.hasAccount()
+    }
 }
 
 class WithoutAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.hasAccount() }
+    override var hidden: Bool {
+        guard let profile else { return false }
+        return profile.hasAccount()
+    }
 }
 
 @objc
@@ -871,8 +822,8 @@ class SettingsTableViewController: ThemedTableViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    var profile: Profile!
-    var tabManager: TabManager!
+    var profile: Profile?
+    var tabManager: TabManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()

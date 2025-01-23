@@ -4,20 +4,8 @@
 
 import SwiftUI
 import Common
-import Storage
 
-import struct MozillaAppServices.EncryptedLogin
-
-// MARK: - LoginCellView
-
-extension VerticalAlignment {
-    enum MidAccountAndName: AlignmentID {
-        static func defaultValue (in context: ViewDimensions) -> CGFloat {
-            context[.top]
-        }
-    }
-    static let midAccountAndName = VerticalAlignment(MidAccountAndName.self)
-}
+import struct MozillaAppServices.Login
 
 /// A view representing a cell displaying login information.
 struct LoginCellView: View {
@@ -31,14 +19,14 @@ struct LoginCellView: View {
     @Environment(\.themeManager)
     var themeManager
 
-    private(set) var login: EncryptedLogin
+    private(set) var login: Login
     private(set) var onTap: () -> Void
 
     // MARK: - Body
 
     var body: some View {
         Button(action: onTap) {
-            HStack(alignment: .midAccountAndName, spacing: 24) {
+            HStack(alignment: .midIconAndLabel, spacing: 24) {
                 Image(StandardImageIdentifiers.Large.login)
                     .renderingMode(.template)
                     .resizable()
@@ -46,14 +34,14 @@ struct LoginCellView: View {
                     .frame(width: 22)
                     .padding(.leading, 16)
                     .foregroundColor(iconPrimary)
-                    .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
+                    .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     .accessibilityHidden(true)
                 VStack(alignment: .leading) {
-                    Text(login.decryptedUsername.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
-                         : login.decryptedUsername)
+                    Text(login.username.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
+                         : login.username)
                         .font(.body)
                         .foregroundColor(textColor)
-                        .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
+                        .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     Text(verbatim: "**********")
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
@@ -107,7 +95,7 @@ struct LoginButtonStyle: ButtonStyle {
 struct LoginCellView_Previews: PreviewProvider {
     static var previews: some View {
         // Create a sample login item
-        let loginRecord = EncryptedLogin(
+        let loginRecord = Login(
             credentials: URLCredential(
                 user: "test",
                 password: "doubletest",

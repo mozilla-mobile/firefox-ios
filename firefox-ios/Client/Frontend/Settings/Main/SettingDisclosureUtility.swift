@@ -14,6 +14,7 @@ struct SettingDisclosureUtility {
         )?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         disclosureIndicator.tintColor = theme.colors.iconSecondary
         disclosureIndicator.sizeToFit()
+        disclosureIndicator.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return disclosureIndicator
     }
 }

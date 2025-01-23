@@ -39,7 +39,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    override var tintColor: UIColor! {
+    override var tintColor: UIColor? {
         didSet {
             self.imageView?.tintColor = self.tintColor
         }
@@ -70,7 +70,7 @@ class ReaderModeButton: UIButton {
 
 extension ReaderModeButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        selectedTintColor = theme.colors.iconAction
+        selectedTintColor = theme.colors.iconAccent
         unselectedTintColor = theme.colors.iconSecondary
         tintColor = isSelected ? selectedTintColor : unselectedTintColor
     }

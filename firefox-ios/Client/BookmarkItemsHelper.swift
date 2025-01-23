@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 import Shared
 
 import class MozillaAppServices.BookmarkItemData
@@ -22,5 +21,10 @@ struct Bookmark: BookmarkItem {
     init(bookmark: BookmarkItemData) {
         self.title = bookmark.title
         self.url = bookmark.url
+    }
+
+    init(title: String, url: String) {
+        self.title = title
+        self.url = url
     }
 }

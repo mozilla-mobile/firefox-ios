@@ -6,6 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
 	<true/>
+	<key>com.apple.developer.networking.multipath</key>
+	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.org.mozilla.ios.Fennec.enterprise</string>

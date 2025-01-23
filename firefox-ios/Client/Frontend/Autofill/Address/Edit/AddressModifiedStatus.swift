@@ -37,7 +37,7 @@ enum AddressModifiedStatus {
     var message: String {
         switch self {
         case .saved: return .Addresses.Settings.Edit.AddressSavedConfirmation
-        case .updated: return .Addresses.Settings.Edit.AddressUpdatedConfirmation
+        case .updated: return .Addresses.Settings.Edit.AddressUpdatedConfirmationV2
         case .removed: return .Addresses.Settings.Edit.AddressRemovedConfirmation
         case .error(let type): return type.message
         }

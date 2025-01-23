@@ -41,13 +41,16 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Remover cookies e datos de sito pro %@ pote disconnecter te de sitos web e vacuar carrettos de compras.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Clarar le cookies e le datos de sito";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Rader le cookies e le datos de sito";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Clarar le cookies e le datos de sito";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Rader le cookies e le datos de sito";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Cookies e datos de sitos removite";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Clauder menu de confidentialitate e securitate";
 
 /* Text to let users know that the current website is secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Connexion secur";
@@ -57,6 +60,9 @@
 
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Nulle traciatores trovate";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "Contento traciante: %@";
 
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Cookies de traciamento inter sitos: %@";
@@ -72,6 +78,9 @@
 
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Verificate per %@";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Vider le certificato";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ es foras de servicio. Nos consilia reactivar le protectiones.";
@@ -96,9 +105,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protection antitraciamento reinfortiate";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Le protectiones es disactivate. Nos consilia reactivar lo.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Le protectiones es disactivate. Nos consilia reactivar los.";

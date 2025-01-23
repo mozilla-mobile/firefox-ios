@@ -5,7 +5,6 @@
 import Foundation
 
 protocol AppSessionProvider {
-    var tabUpdateState: TabUpdateState { get set }
     var launchSessionProvider: LaunchSessionProviderProtocol { get set }
     var downloadQueue: DownloadQueue { get }
 }
@@ -17,7 +16,6 @@ protocol AppSessionProvider {
 /// session manager into a smörgåsbord of countless properties. Consider all options before adding
 /// it here, but if it makes sense, go for it.
 struct AppSessionManager: AppSessionProvider {
-    var tabUpdateState: TabUpdateState = .coldStart
     var launchSessionProvider: LaunchSessionProviderProtocol
     var downloadQueue: DownloadQueue
 

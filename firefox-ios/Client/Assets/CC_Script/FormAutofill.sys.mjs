@@ -37,12 +37,15 @@ const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF =
   "extensions.formautofill.heuristics.captureOnFormRemoval";
 const ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF =
   "extensions.formautofill.heuristics.captureOnPageNavigation";
+const ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP =
+  "extensions.formautofill.heuristics.autofillSameOriginWithTop";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF,
+  ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   AUTOFILL_CREDITCARDS_REAUTH_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
@@ -188,6 +191,10 @@ export const FormAutofill = {
       prefix: logPrefix,
     });
   },
+
+  get isMLExperimentEnabled() {
+    return FormAutofill._isMLEnabled && FormAutofill._isMLExperimentEnabled;
+  },
 };
 
 // TODO: Bug 1747284. Use Region.home instead of reading "browser.serach.region"
@@ -284,11 +291,30 @@ XPCOMUtils.defineLazyPreferenceGetter(
   null,
   val => val?.split(",").filter(v => !!v)
 );
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "autofillSameOriginWithTop",
+  ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP
+);
 
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "_isAutofillAddressesAvailableInExperiment",
   "extensions.formautofill.addresses.experiments.enabled"
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "_isMLEnabled",
+  "browser.ml.enable",
+  false
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "_isMLExperimentEnabled",
+  "extensions.formautofill.ml.experiment.enabled",
+  false
 );
 
 ChromeUtils.defineLazyGetter(FormAutofill, "countries", () =>

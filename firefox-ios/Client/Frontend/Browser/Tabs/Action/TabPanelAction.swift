@@ -20,14 +20,16 @@ class TabPanelViewAction: Action {
     let moveTabData: MoveTabData?
     let toastType: ToastType?
     let shareSheetURL: URL?
+    let isInactiveTab: Bool?
 
-    init(panelType: TabTrayPanelType,
+    init(panelType: TabTrayPanelType?,
          isPrivateModeActive: Bool? = nil,
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
+         isInactiveTab: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.panelType = panelType
@@ -37,6 +39,7 @@ class TabPanelViewAction: Action {
         self.moveTabData = moveTabData
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
+        self.isInactiveTab = isInactiveTab
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -44,6 +47,7 @@ class TabPanelViewAction: Action {
 
 enum TabPanelViewActionType: ActionType {
     case tabPanelDidLoad
+    case tabPanelWillAppear
     case tabPanelDidAppear
     case addNewTab
     case closeTab
@@ -53,29 +57,31 @@ enum TabPanelViewActionType: ActionType {
     case undoCloseAllTabs
     case moveTab
     case toggleInactiveTabs
-    case closeInactiveTabs
+    case closeInactiveTab
     case undoCloseInactiveTab
     case closeAllInactiveTabs
     case undoCloseAllInactiveTabs
     case learnMorePrivateMode
     case selectTab
     case hideUndoToast
-    case showShareSheet
 }
 
 class TabPanelMiddlewareAction: Action {
     let tabDisplayModel: TabDisplayModel?
     let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
+    let scrollBehavior: TabScrollBehavior?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
          inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
+         scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel
         self.inactiveTabModels = inactiveTabModels
         self.toastType = toastType
+        self.scrollBehavior = scrollBehavior
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -83,8 +89,10 @@ class TabPanelMiddlewareAction: Action {
 
 enum TabPanelMiddlewareActionType: ActionType {
     case didLoadTabPanel
+    case willAppearTabPanel
     case didChangeTabPanel
     case refreshTabs
     case refreshInactiveTabs
     case showToast
+    case scrollToTab
 }
