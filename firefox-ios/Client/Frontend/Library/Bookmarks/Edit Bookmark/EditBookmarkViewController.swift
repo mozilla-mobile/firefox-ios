@@ -12,7 +12,7 @@ class EditBookmarkViewController: UIViewController,
     private struct UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
         static let folderHeaderIdentifier = "folderHeaderIdentifier"
-        static let folderHeaderHorizzontalPadding: CGFloat = 16.0
+        static let folderHeaderHorizontalPadding: CGFloat = 16.0
         static let folderHeaderBottomPadding: CGFloat = 8.0
     }
 
@@ -273,9 +273,9 @@ class EditBookmarkViewController: UIViewController,
         configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
         configuration.textProperties.color = theme.colors.textSecondary
         let layoutMargins = NSDirectionalEdgeInsets(top: 0,
-                                                    leading: UX.folderHeaderHorizzontalPadding,
+                                                    leading: UX.folderHeaderHorizontalPadding,
                                                     bottom: UX.folderHeaderBottomPadding,
-                                                    trailing: UX.folderHeaderHorizzontalPadding)
+                                                    trailing: UX.folderHeaderHorizontalPadding)
         configuration.directionalLayoutMargins = layoutMargins
         header.contentConfiguration = configuration
         header.directionalLayoutMargins = .zero

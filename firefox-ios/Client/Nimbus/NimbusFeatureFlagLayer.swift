@@ -118,9 +118,6 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
-        case .universalLinks:
-            return checkUniversalLinkFeature(from: nimbus)
-
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
 
@@ -237,11 +234,6 @@ final class NimbusFeatureFlagLayer {
     private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
-    }
-
-    private func checkUniversalLinkFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.universalLinks.value()
-        return config.enabled
     }
 
     private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {

@@ -228,6 +228,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         if shouldShowReportSiteIssue {
             description += ", \(Preview.ReportBrokenSiteSubtitle)"
         }
+
+        description += ", \(Preview.PrintSubtitle)"
         description += ", \(Preview.ShareSubtitle)"
 
         return description
@@ -309,7 +311,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
         return [
             firstSection,
-            MenuSection(options: [configureShareItem(with: uuid, tabInfo: tabInfo)]),
+            MenuSection(options: [
+                configurePrintItem(with: uuid, tabInfo: tabInfo),
+                configureShareItem(with: uuid, tabInfo: tabInfo),
+            ])
         ]
     }
 
@@ -333,6 +338,34 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         navigationDestination: MenuNavigationDestination(
                             .goToURL,
                             url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configurePrintItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.Print,
+            iconName: Icons.print,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Print,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.print,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .printSheet,
+                            url: tabInfo.canonicalURL
                         ),
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )

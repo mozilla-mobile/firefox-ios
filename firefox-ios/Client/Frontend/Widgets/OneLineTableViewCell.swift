@@ -90,8 +90,12 @@ class OneLineTableViewCell: UITableViewCell,
         super.layoutSubviews()
         updateReorderControl()
 
+        // Position the accessory at the trailing edge of the cell, accounting for safe area and padding
         if let accessoryView {
-            accessoryView.frame.origin.x = frame.width - accessoryView.frame.width - UX.accessoryViewTrailingPadding
+            accessoryView.frame.origin.x = frame.width
+            - accessoryView.frame.width
+            - UX.accessoryViewTrailingPadding
+            - safeAreaInsets.right
         }
     }
 
@@ -258,7 +262,7 @@ class OneLineTableViewCell: UITableViewCell,
 
         switch customization {
         case .regular:
-            accessoryView?.tintColor = accessoryView is UIButton ? theme.colors.iconPrimary : theme.colors.iconSecondary
+            accessoryView?.tintColor = isAccessoryViewInteractive ? theme.colors.iconPrimary : theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:

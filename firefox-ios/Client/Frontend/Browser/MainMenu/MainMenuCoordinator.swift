@@ -16,6 +16,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showFindInPage()
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
+    func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
     func showShareSheetForCurrentlySelectedTab()
@@ -110,6 +111,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     referringPage: .appMenu
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+
+            case .printSheet:
+                self.navigationHandler?.showPrintSheet()
 
             case .shareSheet:
                 self.navigationHandler?.showShareSheetForCurrentlySelectedTab()

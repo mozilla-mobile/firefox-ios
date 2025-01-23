@@ -21,7 +21,7 @@ class BrowserViewController: UIViewController,
                              FindInPageHelperDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
-    private var engineSession: EngineSession!
+    private var engineSession: EngineSession
     private var engineView: EngineView
     private let urlFormatter: URLFormatter
 
@@ -203,7 +203,7 @@ class BrowserViewController: UIViewController,
         guard let url = linkURL else { return nil }
 
         let previewProvider: UIContextMenuContentPreviewProvider = {
-            let previewEngineProvider = EngineProvider()
+            guard let previewEngineProvider = EngineProvider() else { return nil }
             let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
             previewVC.engineSession.load(url: url.absoluteString)
             return previewVC

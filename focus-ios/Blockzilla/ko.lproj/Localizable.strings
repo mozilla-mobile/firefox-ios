@@ -274,11 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "콘텐츠 추적기 차단";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message" = "이 정보는 Mozilla가 활성 사용자를 예측하는 데 도움이 됩니다.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "일일 사용량 핑";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "어두운";
 
 /* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports" = "충돌 보고서를 통해 브라우저 문제를 진단하고 해결할 수 있습니다.";
+"Settings.detailTextCrashReports.V2" = "이렇게 하면 브라우저의 문제를 진단하고 해결하는데 도움이 됩니다.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@가 주소창에 입력한 내용을 검색엔진에 전송합니다.";
