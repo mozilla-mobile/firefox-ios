@@ -201,4 +201,14 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: state.hasSyncableAccount)
         }
     }
+    
+    static func defaultState(from state: TabTrayState) -> TabTrayState {
+            return TabTrayState(windowUUID: state.windowUUID,
+                                isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount)
+        }
 }
+
+

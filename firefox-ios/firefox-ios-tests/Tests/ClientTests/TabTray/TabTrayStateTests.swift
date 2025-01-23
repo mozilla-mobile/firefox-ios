@@ -247,9 +247,20 @@ final class TabTrayStateTests: XCTestCase {
     }
     
     func testDefaultState() {
-        let initialState = createSubject()
+        var initialState = createSubject()
         
-        XCTAssertEqual(createDefaultState, initialState)
+        initialState.shouldDismiss = true
+        initialState.showCloseConfirmation = true
+        let defaultState = TabTrayState.defaultState(from: initialState)
+        
+        XCTAssertEqual(defaultState.windowUUID, initialState.windowUUID)
+        XCTAssertEqual(defaultState.isPrivateMode, initialState.isPrivateMode)
+        XCTAssertEqual(defaultState.selectedPanel, initialState.selectedPanel)
+        XCTAssertEqual(defaultState.hasSyncableAccount, initialState.hasSyncableAccount)
+        XCTAssertEqual(defaultState.shareURL, initialState.shareURL)
+        XCTAssertEqual(defaultState.normalTabsCount, initialState.normalTabsCount)
+        XCTAssertNotEqual(defaultState.shouldDismiss, initialState.shouldDismiss)
+        XCTAssertNotEqual(defaultState.showCloseConfirmation, initialState.showCloseConfirmation)
     }
     
     // MARK: - Private
@@ -271,19 +282,6 @@ final class TabTrayStateTests: XCTestCase {
     
     private func getTabPanelViewAction(for actionType: TabPanelViewActionType) -> TabPanelViewAction {
         return  TabPanelViewAction(panelType: .tabs, windowUUID: .XCTestDefaultUUID, actionType: actionType)
-    }
-    
-    private var createDefaultState:TabTrayState {
-        return TabTrayState(
-            windowUUID: .XCTestDefaultUUID,
-            isPrivateMode: false,
-            selectedPanel: .tabs,
-            normalTabsCount: "0",
-            hasSyncableAccount: false,
-            shouldDismiss: false,
-            shareURL: nil,
-            showCloseConfirmation: false
-        )
     }
 }
 
