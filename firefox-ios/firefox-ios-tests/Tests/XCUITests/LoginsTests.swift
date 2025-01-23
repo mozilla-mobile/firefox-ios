@@ -124,10 +124,10 @@ class LoginTest: BaseTestCase {
             // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
             // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
             if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
             // Workaround for Github Actions specific issue. "runner" user is used in Github Actions.
             } else if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("runner")) {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
             } else {
                 XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
             }
