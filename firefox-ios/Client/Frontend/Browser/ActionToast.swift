@@ -28,9 +28,6 @@ final class ActionToast: ThemeApplicable {
             trailing: 16
         )
         static let buttonHeight: CGFloat = 36
-        static let toastCornerRadius: CGFloat = 8
-        static let toastBottomSpacing: CGFloat = 4
-        static let toastSidePadding: CGFloat = 16
     }
 
     private lazy var stackView: UIStackView = {
@@ -40,7 +37,7 @@ final class ActionToast: ThemeApplicable {
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
         stack.layoutMargins = UX.stackViewLayoutMargins
-        stack.layer.cornerRadius = UX.toastCornerRadius
+        stack.layer.cornerRadius = Toast.UX.toastCornerRadius
         return stack
     }()
 
@@ -102,12 +99,12 @@ final class ActionToast: ThemeApplicable {
             [
                 heightConstraint,
                 stackView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor,
-                                                   constant: UX.toastSidePadding),
+                                                   constant: Toast.UX.toastSidePadding),
                 stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
-                                                    constant: -UX.toastSidePadding),
+                                                    constant: -Toast.UX.toastSidePadding),
                 stackView.bottomAnchor.constraint(
                     equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
-                    constant: -UX.toastBottomSpacing
+                    constant: -Toast.UX.toastBottomSpacing
                 ),
                 actionButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
             ]
