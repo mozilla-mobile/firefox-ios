@@ -202,5 +202,3 @@ struct TabTrayState: ScreenState, Equatable {
         }
     }
 }
-
-
