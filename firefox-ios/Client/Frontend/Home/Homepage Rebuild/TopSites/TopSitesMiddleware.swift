@@ -74,15 +74,15 @@ final class TopSitesMiddleware {
                     self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredTiles: self.sponsoredSites
                     )
                 }
                 group.addTask {
-                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
                     self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles
+                        sponsoredTiles: self.sponsoredSites
                     )
                 }
 
@@ -90,7 +90,7 @@ final class TopSitesMiddleware {
                 updateTopSites(
                     for: action.windowUUID,
                     otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredTiles
+                    sponsoredTiles: self.sponsoredSites
                 )
             }
         }
@@ -99,7 +99,7 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [SponsoredTile]
+        sponsoredTiles: [Site]
     ) {
         let topSites = self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
