@@ -7,12 +7,12 @@ import ComponentLibrary
 import Shared
 import UIKit
 
-/// The Legacy Home Tab Banner is the card that appears at the top of the Firefox Homepage.
+/// The card that appears at the top of the Firefox Homepage and is powered by the mobile messaging system.
 ///
-/// The Legacy HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
+/// This UI surface is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
+class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
@@ -25,10 +25,14 @@ class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let standardSpacing: CGFloat = 16
         static let topCardSafeSpace: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 32
+
+        // Shadow
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1 // shadow opacity set to 0.16 through shadowDefault themed color
     }
 
     // MARK: - Properties
-    private var viewModel: HomepageMessageCardViewModel?
     private var kvoToken: NSKeyValueObservation?
 
     // MARK: - UI
@@ -93,13 +97,8 @@ class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         kvoToken?.invalidate()
     }
 
-    func configure(viewModel: HomepageMessageCardViewModel, theme: Theme) {
-        self.viewModel = viewModel
-
-        if let message = viewModel.getMessage(for: .newTabCard) {
-            applyGleanMessage(message)
-        }
-
+    func configure(state: MessageCardState, theme: Theme) {
+        applyGleanMessage(with: state.title, description: state.description, buttonLabel: state.buttonLabel)
         applyTheme(theme: theme)
         ctaButton.applyTheme(theme: theme)
     }
@@ -167,9 +166,9 @@ class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     private func setupShadow(theme: Theme) {
         cardView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        cardView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        cardView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
-        cardView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        cardView.layer.shadowOffset = UX.shadowOffset
+        cardView.layer.shadowOpacity = UX.shadowOpacity
+        cardView.layer.shadowRadius = UX.shadowRadius
         updateShadowPath()
     }
 
@@ -181,8 +180,8 @@ class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     // MARK: - Message setup
 
     /// Apply message data, including handling of cases where certain parts of the message are missing.
-    private func applyGleanMessage(_ message: GleanPlumbMessage) {
-        if let buttonLabel = message.buttonLabel {
+    private func applyGleanMessage(with title: String?, description: String?, buttonLabel: String?) {
+        if let buttonLabel {
             let buttonViewModel = PrimaryRoundedButtonViewModel(
                 title: buttonLabel,
                 a11yIdentifier: a11y.ctaButton
@@ -196,30 +195,30 @@ class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
             cardView.isUserInteractionEnabled = true
         }
 
-        if let title = message.title {
+        if let title {
             bannerTitle.text = title
         } else {
             textStackView.removeArrangedView(titleContainerView)
         }
 
-        descriptionText.text = message.text
+        descriptionText.text = description
     }
 
     // MARK: Actions
     @objc
     private func dismissCard() {
-        viewModel?.handleMessageDismiss()
+        // TODO: FXIOS-11134 - Handle message actions
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc
     func handleCTA() {
-        viewModel?.handleMessagePressed()
+        // TODO: FXIOS-11134 - Handle message actions
     }
 }
 
 // MARK: - Notifiable
-extension LegacyHomepageMessageCardCell: Blurrable {
+extension HomepageMessageCardCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
@@ -232,7 +231,7 @@ extension LegacyHomepageMessageCardCell: Blurrable {
 }
 
 // MARK: - ThemeApplicable
-extension LegacyHomepageMessageCardCell: ThemeApplicable {
+extension HomepageMessageCardCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         bannerTitle.textColor = theme.colors.textPrimary
         descriptionText.textColor = theme.colors.textPrimary
