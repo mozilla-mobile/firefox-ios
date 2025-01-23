@@ -684,6 +684,7 @@ class BrowserViewController: UIViewController,
         handleMicrosurvey(state: state)
     }
 
+    // laurie
     private func showToastType(toast: ToastType) {
         func showToast() {
             SimpleToast().showAlertWithText(
@@ -4061,9 +4062,12 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor,
+                                              constant: -Toast.UX.toastBottomSpacing)
             ]
         }
     }
