@@ -126,10 +126,11 @@ class ContentContainer: UIView {
             options: transitionData.0,
             animations: {
                 self.bringSubviewToFront(content.view)
-            }, completion: { _ in
+            },
+            completion: { _ in
                 self.removePreviousContent()
                 self.saveContentType(content: content)
-        })
+            })
     }
 
     // MARK: - Private
