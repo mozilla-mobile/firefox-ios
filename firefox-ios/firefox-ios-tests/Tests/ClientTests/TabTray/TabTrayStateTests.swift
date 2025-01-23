@@ -284,5 +284,3 @@ final class TabTrayStateTests: XCTestCase {
         return  TabPanelViewAction(panelType: .tabs, windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }
-
-
