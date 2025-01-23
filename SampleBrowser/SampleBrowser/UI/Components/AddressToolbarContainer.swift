@@ -11,8 +11,16 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 }
 
 class AddressToolbarContainer: UIView, ThemeApplicable {
+    private enum UX {
+        static let toolbarHorizontalPadding: CGFloat = 16
+    }
+
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
+
+    private var isCompact: Bool {
+        traitCollection.horizontalSizeClass == .compact
+    }
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -25,8 +33,20 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
 
     func configure(_ model: AddressToolbarContainerModel,
                    toolbarDelegate: AddressToolbarDelegate) {
-        compactToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate, isUnifiedSearchEnabled: false)
-        regularToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate, isUnifiedSearchEnabled: false)
+        compactToolbar.configure(
+            state: model.state,
+            toolbarDelegate: toolbarDelegate,
+            leadingSpace: calculateToolbarSpace(),
+            trailingSpace: calculateToolbarSpace(),
+            isUnifiedSearchEnabled: false
+        )
+        regularToolbar.configure(
+            state: model.state,
+            toolbarDelegate: toolbarDelegate,
+            leadingSpace: calculateToolbarSpace(),
+            trailingSpace: calculateToolbarSpace(),
+            isUnifiedSearchEnabled: false
+        )
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -57,7 +77,6 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
         compactToolbar.removeFromSuperview()
         regularToolbar.removeFromSuperview()
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
         let toolbarToAdd = isCompact ? compactToolbar : regularToolbar
 
         addSubview(toolbarToAdd)
@@ -68,6 +87,11 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
             toolbarToAdd.bottomAnchor.constraint(equalTo: bottomAnchor),
             toolbarToAdd.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+    }
+
+    private func calculateToolbarSpace() -> CGFloat {
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        return isCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
     }
 
     // MARK: - ThemeApplicable
