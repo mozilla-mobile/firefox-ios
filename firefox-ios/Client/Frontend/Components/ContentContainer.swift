@@ -125,10 +125,10 @@ class ContentContainer: UIView {
             duration: transitionData.1,
             options: transitionData.0,
             animations: {
-            self.bringSubviewToFront(content.view)
-        }, completion: { _ in
-            self.removePreviousContent()
-            self.saveContentType(content: content)
+                self.bringSubviewToFront(content.view)
+            }, completion: { _ in
+                self.removePreviousContent()
+                self.saveContentType(content: content)
         })
     }
 
