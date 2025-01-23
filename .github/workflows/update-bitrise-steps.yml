@@ -1,11 +1,8 @@
 name: Update Outdated Bitrise Steps Versions
 
 on:
-  # schedule:
-  #  - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
-  push:
-    branches:
-      - mb/MTE-4167_update_bitrise_steps
+  schedule:
+   - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -33,7 +30,7 @@ jobs:
       - name: Run update script
         id: update_script
         run: |
-          python ./test-fixtures/update_bitrise_step.py
+          python ./test-fixtures/update_bitrise_steps.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -70,7 +67,6 @@ jobs:
           title: "Bump [v${{ env.next_version }}] Update outdated Bitrise steps ${{ env.current_date }}"
           body: |
             This PR updates the outdated Bitrise steps to their latest versions.
-          # team-reviewers: firefox ios
           reviewers: mdotb-moz,clarmso,isabelrios
 
         # Step 8: Send a message to slack if there is a failure
