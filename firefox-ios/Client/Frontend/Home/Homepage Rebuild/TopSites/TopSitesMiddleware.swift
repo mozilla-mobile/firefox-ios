@@ -68,30 +68,39 @@ final class TopSitesMiddleware {
 
     private func getTopSitesDataAndUpdateState(for action: Action) {
         Task {
-            self.otherSites = await self.topSitesManager.getOtherSites()
-            await updateTopSites(
-                for: action.windowUUID,
-                otherSites: self.otherSites,
-                sponsoredTiles: self.sponsoredTiles
-            )
-        }
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    self.otherSites = await self.topSitesManager.getOtherSites()
+                    self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: self.otherSites,
+                        sponsoredTiles: self.sponsoredTiles
+                    )
+                }
+                group.addTask {
+                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    self.updateTopSites(
+                        for: action.windowUUID,
+                        otherSites: self.otherSites,
+                        sponsoredTiles: self.sponsoredTiles
+                    )
+                }
 
-        Task {
-            self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
-            await updateTopSites(
-                for: action.windowUUID,
-                otherSites: self.otherSites,
-                sponsoredTiles: self.sponsoredTiles
-            )
+                await group.waitForAll()
+                updateTopSites(
+                    for: action.windowUUID,
+                    otherSites: self.otherSites,
+                    sponsoredTiles: self.sponsoredTiles
+                )
+            }
         }
     }
 
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [Site],
-        numberOfTilesPerRow: Int? = nil
-    ) async {
+        sponsoredTiles: [SponsoredTile]
+    ) {
         let topSites = self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
             sponsoredSites: sponsoredSites
