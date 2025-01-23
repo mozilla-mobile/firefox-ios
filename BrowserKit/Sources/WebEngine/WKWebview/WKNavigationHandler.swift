@@ -10,7 +10,6 @@ protocol WKNavigationHandler: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView,
                  didCommit navigation: WKNavigation?)
-    
 
     func webView(_ webView: WKWebView,
                  didFinish navigation: WKNavigation?)
