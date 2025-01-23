@@ -23,9 +23,9 @@ enum ContentType {
     var duration: TimeInterval {
         return switch self {
         case .privateHomepage:
-            0.5
+                1.0
         default:
-            0.15
+                1.0
         }
     }
 
@@ -119,8 +119,17 @@ class ContentContainer: UIView {
     ///
     /// - Parameter content: The content to update
     func update(content: ContentContainable) {
-        removePreviousContent()
-        saveContentType(content: content)
+        let transitionData = (content.contentType.transition, 0.1)
+        UIView.transition(
+            with: self,
+            duration: transitionData.1,
+            options: transitionData.0,
+            animations: {
+            self.bringSubviewToFront(content.view)
+        }, completion: { _ in
+            self.removePreviousContent()
+            self.saveContentType(content: content)
+        })
     }
 
     // MARK: - Private
