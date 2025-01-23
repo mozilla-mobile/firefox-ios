@@ -13,6 +13,7 @@ final class HomepageSectionLayoutProvider {
         static let interGroupSpacing: CGFloat = 8
         static let iPadInset: CGFloat = 50
         static let spacingBetweenSections: CGFloat = 62
+        static let standardSingleItemHeight: CGFloat = 100
 
         static func leadingInset(
             traitCollection: UITraitCollection,
@@ -26,6 +27,10 @@ final class HomepageSectionLayoutProvider {
 
         struct HeaderConstants {
             static let bottomSpacing: CGFloat = 30
+        }
+
+        struct MessageCardConstants {
+            static let height: CGFloat = 180
         }
 
         struct PocketConstants {
@@ -71,9 +76,17 @@ final class HomepageSectionLayoutProvider {
     ) -> NSCollectionLayoutSection {
         switch section {
         case .header:
-            return createHeaderSectionLayout(for: traitCollection)
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                topInsets: UX.standardInset,
+                bottomInsets: UX.HeaderConstants.bottomSpacing
+            )
         case .messageCard:
-            return createMessageCardSectionLayout(for: traitCollection)
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                itemHeight: UX.MessageCardConstants.height,
+                bottomInsets: UX.spacingBetweenSections
+            )
         case .topSites(let numberOfTilesPerRow):
             return createTopSitesSectionLayout(
                 for: traitCollection,
@@ -82,18 +95,27 @@ final class HomepageSectionLayoutProvider {
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
-            return createCustomizeSectionLayout(for: traitCollection)
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                topInsets: UX.spacingBetweenSections,
+                bottomInsets: UX.spacingBetweenSections
+            )
         }
     }
 
-    private func createHeaderSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    private func createSingleItemSectionLayout(
+        for traitCollection: UITraitCollection,
+        itemHeight: CGFloat = UX.standardSingleItemHeight,
+        topInsets: CGFloat = 0,
+        bottomInsets: CGFloat = 0
+    ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(100))
+                                              heightDimension: .estimated(itemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(100))
+                                               heightDimension: .estimated(itemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
@@ -101,31 +123,10 @@ final class HomepageSectionLayoutProvider {
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
 
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.standardInset,
+            top: topInsets,
             leading: leadingInset,
-            bottom: UX.HeaderConstants.bottomSpacing,
+            bottom: bottomInsets,
             trailing: leadingInset)
-
-        return section
-    }
-
-    private func createMessageCardSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(180))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(180))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: horizontalInset,
-            bottom: UX.spacingBetweenSections,
-            trailing: horizontalInset)
 
         return section
     }
@@ -204,25 +205,6 @@ final class HomepageSectionLayoutProvider {
         )
         section.interGroupSpacing = UX.standardSpacing
 
-        return section
-    }
-
-    private func createCustomizeSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(100))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(100))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-
-        let horizontalInsets = UX.leadingInset(traitCollection: traitCollection)
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.spacingBetweenSections,
-            leading: horizontalInsets,
-            bottom: UX.spacingBetweenSections,
-            trailing: horizontalInsets)
         return section
     }
 }
