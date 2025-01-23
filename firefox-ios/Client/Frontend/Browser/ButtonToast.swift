@@ -19,7 +19,7 @@ class ButtonToast: Toast {
         static let delay = DispatchTimeInterval.milliseconds(900)
         static let padding: CGFloat = 15
         static let buttonPadding: CGFloat = 10
-        static let buttonBorderRadius: CGFloat = 5
+        static let buttonBorderRadius: CGFloat = 8
         static let buttonBorderWidth: CGFloat = 1
         static let widthOffset: CGFloat = 20
     }
@@ -78,10 +78,9 @@ class ButtonToast: Toast {
             heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeight)
         ])
 
-        // Laurie
-//        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
-//                                                             constant: Toast.UX.toastHeight)
-//        animationConstraint?.isActive = true
+        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+                                                             constant: Toast.UX.toastHeight)
+        animationConstraint?.isActive = true
         if let theme = theme {
             applyTheme(theme: theme)
         }

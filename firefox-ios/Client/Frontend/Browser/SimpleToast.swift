@@ -7,6 +7,12 @@ import Foundation
 import Shared
 
 struct SimpleToast: ThemeApplicable {
+    struct UX {
+        static let toastCornerRadius: CGFloat = 8
+        static let toastBottomSpacing: CGFloat = 4
+        static let toastSidePadding: CGFloat = 16
+    }
+
     private let toastLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
@@ -35,6 +41,7 @@ struct SimpleToast: ThemeApplicable {
         ])
         applyTheme(theme: theme)
         animate(toastLabel)
+
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .announcement, argument: text)
         }
