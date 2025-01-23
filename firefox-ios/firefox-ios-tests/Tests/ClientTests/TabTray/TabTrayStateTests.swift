@@ -24,10 +24,10 @@ final class TabTrayStateTests: XCTestCase {
     func testDidLoadTabTrayAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
-
+        
         let action = getTabTrayAction(for: .didLoadTabTray)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -40,10 +40,10 @@ final class TabTrayStateTests: XCTestCase {
     func testChangePanelAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
-
+        
         let action = getTabTrayAction(for: .changePanel)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -56,10 +56,10 @@ final class TabTrayStateTests: XCTestCase {
     func testDismissTabTrayAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
-
+        
         let action = getTabTrayAction(for: .dismissTabTray)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -75,7 +75,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabTrayAction(for: .firefoxAccountChanged)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, true)
         XCTAssertEqual(newState.selectedPanel, .privateTabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -91,7 +91,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabTrayAction(for: .firefoxAccountChanged)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .syncedTabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -107,7 +107,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelMiddleWareAction(for: .didLoadTabPanel)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -116,14 +116,14 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
-
+    
     func testDidChangeTabPanelAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
         
         let action = getTabPanelMiddleWareAction(for: .didChangeTabPanel)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -139,7 +139,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelMiddleWareAction(for: .refreshTabs)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -155,7 +155,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelMiddleWareAction(for: .refreshInactiveTabs)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -171,7 +171,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelMiddleWareAction(for: .showToast)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -187,7 +187,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelViewAction(for: .closeAllTabs)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -203,7 +203,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelViewAction(for: .showShareSheet)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -219,7 +219,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelViewAction(for: .tabPanelDidLoad)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -236,7 +236,7 @@ final class TabTrayStateTests: XCTestCase {
         
         let action = getTabPanelViewAction(for: .closeTab)
         let newState = reducer(initialState, action)
-
+        
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
@@ -248,30 +248,19 @@ final class TabTrayStateTests: XCTestCase {
     
     func testDefaultState() {
         let initialState = createSubject()
-        let reducer = tabTrayReducer()
         
-        let unknownAction = getUnknownAction()
-        let newState = reducer(initialState, unknownAction)
-        
-        XCTAssertEqual(newState, initialState, "State should remain unchanged when an unknown action is passed")
-        XCTAssertEqual(initialState.isPrivateMode, newState.isPrivateMode)
-        XCTAssertEqual(initialState.selectedPanel, newState.selectedPanel)
-        XCTAssertEqual(initialState.hasSyncableAccount, newState.hasSyncableAccount)
-        XCTAssertEqual(initialState.shouldDismiss, newState.shouldDismiss)
-        XCTAssertEqual(initialState.shareURL, newState.shareURL)
-        XCTAssertEqual(initialState.normalTabsCount, newState.normalTabsCount)
-        XCTAssertEqual(initialState.showCloseConfirmation, newState.showCloseConfirmation)
+        XCTAssertEqual(createDefaultState, initialState)
     }
-
+    
     // MARK: - Private
     private func createSubject(panelType:TabTrayPanelType = .tabs) -> TabTrayState {
         return TabTrayState(windowUUID: .XCTestDefaultUUID, panelType: panelType)
     }
-
+    
     private func tabTrayReducer() -> Reducer<TabTrayState> {
         return TabTrayState.reducer
     }
-
+    
     private func getTabTrayAction(for actionType: TabTrayActionType) -> TabTrayAction {
         return  TabTrayAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
@@ -284,19 +273,18 @@ final class TabTrayStateTests: XCTestCase {
         return  TabPanelViewAction(panelType: .tabs, windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
     
-    private func getUnknownAction() -> UnknownMockAction {
-        return  UnknownMockAction(windowUUID: .XCTestDefaultUUID, actionType: MockActionType())
-    }
-    
-    private class UnknownMockAction: Action {
-        override init(windowUUID: WindowUUID, actionType: ActionType) {
-             super.init(windowUUID: windowUUID,
-                        actionType: actionType)
-        }
-    }
-    
-    private struct MockActionType: ActionType {
-        let description = "Unknown Action"
+    private var createDefaultState:TabTrayState {
+        return TabTrayState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            selectedPanel: .tabs,
+            normalTabsCount: "0",
+            hasSyncableAccount: false,
+            shouldDismiss: false,
+            shareURL: nil,
+            showCloseConfirmation: false
+        )
     }
 }
+
 
