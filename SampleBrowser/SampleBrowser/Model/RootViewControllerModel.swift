@@ -109,11 +109,14 @@ class RootViewControllerModel {
             urlTextFieldA11yId: "urlTextField",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Large.lock,
-            url: url,
+            lockIconNeedsTheming: false,
+            safeListedURLImageName: nil,
+            url: nil,
             droppableUrl: nil,
-            searchTerm: nil,
+            searchTerm: url?.absoluteString,
             isEditing: false,
-            isScrollingDuringEdit: false,
+            didStartTyping: false,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: false)
 
         // FXIOS-8947: Use scroll position
