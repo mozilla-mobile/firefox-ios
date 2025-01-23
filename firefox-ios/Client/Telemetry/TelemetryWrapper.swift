@@ -104,6 +104,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
            let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
+        
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+        GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
 
         // Set or generate profile id used for usage reporting
         if sendUsageData {
