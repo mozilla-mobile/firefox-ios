@@ -57,7 +57,7 @@ extension Notification.Name {
 
     public static let TrackingProtectionViewControllerDidDismiss =
     Notification.Name("TrackingProtectionViewControllerDidDismiss")
-    
+
     public static let TrackingProtectionViewControllerDidAppear =
     Notification.Name("TrackingProtectionViewControllerDidAppear")
 
