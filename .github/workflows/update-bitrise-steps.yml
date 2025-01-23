@@ -1,8 +1,11 @@
 name: Update Outdated Bitrise Steps Versions
 
 on:
-  schedule:
-    - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
+  # schedule:
+  #  - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
+  push:
+    branches:
+      - mb/MTE-4167_update_bitrise_steps  
   workflow_dispatch: # Allow manual triggering
 
 jobs:
