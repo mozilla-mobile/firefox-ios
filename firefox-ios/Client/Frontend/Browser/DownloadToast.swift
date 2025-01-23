@@ -141,9 +141,8 @@ class DownloadToast: Toast {
             heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight)
         ])
 
-        // TODO: laurie
-//        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: Toast.UX.toastHeight)
-//        animationConstraint?.isActive = true
+        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: Toast.UX.toastHeight)
+        animationConstraint?.isActive = true
         applyTheme(theme: theme)
     }
 
