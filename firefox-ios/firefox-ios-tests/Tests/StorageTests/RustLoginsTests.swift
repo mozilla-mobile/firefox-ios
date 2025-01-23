@@ -75,16 +75,13 @@ class RustLoginsTests: XCTestCase {
         XCTAssertEqual(login!.id, addResult.successValue!)
 
         let updatedLogin = LoginEntry(
-            fromLoginEntryFlattened: LoginEntryFlattened(
-                id: "",
-                hostname: login!.hostname,
-                password: "password2",
-                username: "",
+                origin: login!.hostname,
                 httpRealm: login!.httpRealm,
-                formSubmitUrl: login!.formSubmitUrl,
+                formActionOrigin: login!.formSubmitUrl,
                 usernameField: login!.usernameField,
-                passwordField: login!.passwordField
-            )
+                passwordField: login!.passwordField,
+                password: "password2",
+                username: ""
         )
 
         let updateResult = logins.updateLogin(id: login!.id, login: updatedLogin).value
@@ -92,7 +89,7 @@ class RustLoginsTests: XCTestCase {
         let getResult2 = logins.getLogin(id: login!.id).value
         XCTAssertTrue(getResult2.isSuccess)
         XCTAssertNotNil(getResult2.successValue!)
-        let password = getResult2.successValue!!.decryptedPassword
+        let password = getResult2.successValue!!.password
         XCTAssertEqual(password, "password2")
     }
 
