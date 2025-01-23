@@ -7,16 +7,12 @@ import Foundation
 import Shared
 
 struct SimpleToast: ThemeApplicable {
-    struct UX {
-        static let toastCornerRadius: CGFloat = 8
-        static let toastBottomSpacing: CGFloat = 4
-        static let toastSidePadding: CGFloat = 16
-    }
-
     private let toastLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.layer.cornerRadius = Toast.UX.toastCornerRadius
+        label.clipsToBounds = true
     }
 
     private let heightConstraint: NSLayoutConstraint
@@ -29,13 +25,15 @@ struct SimpleToast: ThemeApplicable {
     func showAlertWithText(_ text: String,
                            bottomContainer: UIView,
                            theme: Theme,
-                           bottomConstraintPadding: CGFloat = 0) {
+                           bottomConstraintPadding: CGFloat = -Toast.UX.toastBottomSpacing) {
         toastLabel.text = text
         bottomContainer.addSubview(toastLabel)
         NSLayoutConstraint.activate([
             heightConstraint,
-            toastLabel.widthAnchor.constraint(equalTo: bottomContainer.widthAnchor),
-            toastLabel.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
+            toastLabel.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor,
+                                                constant: Toast.UX.toastSidePadding),
+            toastLabel.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
+                                                 constant: -Toast.UX.toastSidePadding),
             toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
                                                constant: bottomConstraintPadding)
         ])

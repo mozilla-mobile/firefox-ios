@@ -684,7 +684,6 @@ class BrowserViewController: UIViewController,
         handleMicrosurvey(state: state)
     }
 
-    // laurie
     private func showToastType(toast: ToastType) {
         func showToast() {
             SimpleToast().showAlertWithText(
