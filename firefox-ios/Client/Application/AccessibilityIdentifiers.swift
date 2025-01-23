@@ -99,6 +99,7 @@ struct AccessibilityIdentifiers {
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
         static let saveAsPDF = "MainMenu.SaveAsPDF"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
@@ -714,7 +715,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct SendData {
-            static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"

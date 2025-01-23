@@ -114,17 +114,15 @@ class AddCredentialViewController: UIViewController, Themeable {
         }
 
         dismiss(animated: true) {
-            let entry = LoginEntryFlattened(
-                id: "",
-                hostname: hostname,
-                password: password,
-                username: username,
+            self.didSaveAction(LoginEntry(
+                origin: hostname,
                 httpRealm: nil,
-                formSubmitUrl: hostname,
+                formActionOrigin: hostname,
                 usernameField: "",
-                passwordField: ""
+                passwordField: "",
+                password: password,
+                username: username)
             )
-            self.didSaveAction(LoginEntry(fromLoginEntryFlattened: entry))
         }
     }
 
