@@ -12,7 +12,7 @@ features:
     defaults:
       - channel: beta
         value:
-          status: true
+          status: false
       - channel: developer
         value:
           status: true

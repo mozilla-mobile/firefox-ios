@@ -25,6 +25,7 @@
         "L10nSuite1SnapshotTests\/testSettingsETP()",
         "L10nSuite1SnapshotTests\/testTakeMarketingScreenshots()",
         "L10nSuite1SnapshotTests\/testToS()",
+        "L10nSuite1SnapshotTests\/testToSSettings()",
         "L10nSuite1SnapshotTests\/testTopSitesMenu()",
         "L10nSuite1SnapshotTests\/testWebViewAuthenticationDialog()",
         "L10nSuite1SnapshotTests\/testWebViewContextMenu()",
