@@ -54,7 +54,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git diff --quiet || git commit -am "Update outdated Bitrise steps"
+          git diff
+          git diff --quiet || (git add bitrise.yml && git commit -m "Update outdated Bitrise steps")
           git push -u origin update/bitrise-steps || echo "No changes to push."
 
       # Step 7: Create a Pull Request
