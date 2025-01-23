@@ -6,13 +6,19 @@ import Common
 import Foundation
 @preconcurrency import WebKit
 
+protocol SessionHandler {
+    func commitURLChange()
+    func fetchMetadata(withURL url: URL)
+}
+
 class WKEngineSession: NSObject,
                        EngineSession,
                        WKUIDelegate,
                        WKNavigationDelegate,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
-                       AdsTelemetryScriptDelegate {
+                       AdsTelemetryScriptDelegate,
+                       SessionHandler {
     weak var delegate: EngineSessionDelegate?
     weak var findInPageDelegate: FindInPageHelperDelegate? {
         didSet {
@@ -298,12 +304,18 @@ class WKEngineSession: NSObject,
         commitURLChange()
     }
 
-    private func commitURLChange() {
+    // MARK: - SessionHandler
+
+    func commitURLChange() {
         guard let url = webView.url else { return }
 
         sessionData.url = url
         delegate?.onLocationChange(url: url.absoluteString)
 
+        metadataFetcher.fetch(fromSession: self, url: url)
+    }
+
+    func fetchMetadata(withURL url: URL) {
         metadataFetcher.fetch(fromSession: self, url: url)
     }
 
@@ -377,75 +389,6 @@ class WKEngineSession: NSObject,
         // TODO: FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
     }
 
-    // MARK: - WKNavigationDelegate
-
-    func webView(_ webView: WKWebView,
-                 didCommit navigation: WKNavigation?) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
-
-        // TODO: Revisit possible duplicate delegate callbacks when navigating to URL in same origin [PR #19083] [FXIOS-8351]
-        commitURLChange()
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFinish navigation: WKNavigation?) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-
-        if let url = webView.url {
-            metadataFetcher.fetch(fromSession: self, url: url)
-        }
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadFinished)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFail navigation: WKNavigation?,
-                 withError error: Error) {
-        telemetryProxy?.handleTelemetry(session: self, event: .didFailNavigation)
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFailProvisionalNavigation navigation: WKNavigation?,
-                 withError error: Error) {
-        telemetryProxy?.handleTelemetry(session: self, event: .didFailProvisionalNavigation)
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 didStartProvisionalNavigation navigation: WKNavigation?) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationResponse: WKNavigationResponse,
-                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        decisionHandler(.allow)
-    }
-
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 preferences: WKWebpagePreferences,
-                 decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        decisionHandler(.allow, preferences)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?) {
-        // TODO: FXIOS-8275 - Handle didReceiveServerRedirectForProvisionalNavigation (epic part 3)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didReceive challenge: URLAuthenticationChallenge,
-                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
-        completionHandler(.performDefaultHandling, nil)
-    }
-
     // MARK: - WKEngineWebViewDelegate
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {
@@ -469,11 +412,11 @@ class WKEngineSession: NSObject,
     // MARK: - AdsTelemetryScriptDelegate
 
     func trackAdsClickedOnPage(providerName: String) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsClickedOnPage(providerName: providerName))
+        telemetryProxy?.handleTelemetry(event: .trackAdsClickedOnPage(providerName: providerName))
     }
 
     func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
+        telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
     }
 
     func searchProviderModels() -> [EngineSearchProviderModel] {
