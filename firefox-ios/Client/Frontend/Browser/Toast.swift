@@ -14,9 +14,11 @@ class Toast: UIView, ThemeApplicable {
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
         static let toastAnimationDuration = 0.5
+        static let toastCornerRadius: CGFloat = 8
+        static let toastBottomSpacing: CGFloat = 12
+        static let toastSidePadding: CGFloat = 16
     }
 
-    var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
 
     weak var viewController: UIViewController?
@@ -29,7 +31,16 @@ class Toast: UIView, ThemeApplicable {
         return gestureRecognizer
     }()
 
-    lazy var toastView: UIView = .build { view in }
+    lazy var toastView: UIView = .build { view in
+        view.layer.cornerRadius = UX.toastCornerRadius
+        view.layer.masksToBounds = true
+
+        // Add shadow to create the "hovering" effect
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.2
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowRadius = 8
+    }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -49,12 +60,13 @@ class Toast: UIView, ThemeApplicable {
             guard viewController != nil else { return }
 
             NSLayoutConstraint.activate(updateConstraintsOn(self))
+            self.alpha = 0 // Start invisible
             self.layoutIfNeeded()
 
             UIView.animate(
                 withDuration: UX.toastAnimationDuration,
                 animations: {
-                    self.animationConstraint?.constant = 0
+                    self.alpha = 1 // Fade in
                     self.layoutIfNeeded()
                 }
             ) { finished in
@@ -76,7 +88,7 @@ class Toast: UIView, ThemeApplicable {
         UIView.animate(
             withDuration: UX.toastAnimationDuration,
             animations: {
-                self.animationConstraint?.constant = UX.toastHeight
+                self.alpha = 0 // Fade out
                 self.layoutIfNeeded()
             }
         ) { finished in

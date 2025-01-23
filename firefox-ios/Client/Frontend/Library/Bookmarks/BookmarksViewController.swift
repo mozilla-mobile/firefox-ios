@@ -271,9 +271,12 @@ class BookmarksViewController: SiteTableViewController,
             })
             toast.showToast(viewController: self, delay: UX.toastDelayBefore, duration: UX.toastDismissDelay) { toast in
                 [
-                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                                  constant: -Toast.UX.toastBottomSpacing)
                 ]
             }
         }

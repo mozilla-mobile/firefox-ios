@@ -78,9 +78,10 @@ class ButtonToast: Toast {
             heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeight)
         ])
 
-        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
-                                                             constant: Toast.UX.toastHeight)
-        animationConstraint?.isActive = true
+        // Laurie
+//        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+//                                                             constant: Toast.UX.toastHeight)
+//        animationConstraint?.isActive = true
         if let theme = theme {
             applyTheme(theme: theme)
         }
