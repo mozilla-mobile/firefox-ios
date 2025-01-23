@@ -6,15 +6,13 @@ import Common
 import Foundation
 @preconcurrency import WebKit
 
-protocol SessionHandler {
+protocol SessionHandler: AnyObject {
     func commitURLChange()
     func fetchMetadata(withURL url: URL)
 }
 
 class WKEngineSession: NSObject,
                        EngineSession,
-                       WKUIDelegate,
-                       WKNavigationDelegate,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
                        AdsTelemetryScriptDelegate,
@@ -37,6 +35,8 @@ class WKEngineSession: NSObject,
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
+    private let navigationHandler: WKNavigationHandler
+    private let uiHandler: WKUIHandler
 
     init?(userScriptManager: WKUserScriptManager,
           telemetryProxy: EngineTelemetryProxy? = nil,
@@ -46,7 +46,9 @@ class WKEngineSession: NSObject,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
           securityManager: SecurityManager = DefaultSecurityManager(),
-          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper()) {
+          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
+          navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
+          uiHandler: WKUIHandler = DefaultUIHandler()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -60,13 +62,17 @@ class WKEngineSession: NSObject,
         self.contentScriptManager = contentScriptManager
         self.securityManager = securityManager
         self.metadataFetcher = metadataFetcher
+        self.navigationHandler = navigationHandler
+        self.uiHandler = uiHandler
         super.init()
 
         self.setupObservers()
 
         self.metadataFetcher.delegate = self
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
+        navigationHandler.session = self
+        uiHandler.delegate = delegate
+        webView.uiDelegate = uiHandler
+        webView.navigationDelegate = navigationHandler
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
         addContentScripts()
@@ -328,65 +334,6 @@ class WKEngineSession: NSObject,
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
-    }
-
-    // MARK: - WKUIDelegate
-
-    func webView(_ webView: WKWebView,
-                 createWebViewWith configuration: WKWebViewConfiguration,
-                 for navigationAction: WKNavigationAction,
-                 windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
-        return nil
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (Bool) -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptTextInputPanelWithPrompt prompt: String,
-        defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (String?) -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webViewDidClose(_ webView: WKWebView) {
-        // TODO: FXIOS-8245 - Handle webViewDidClose in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
-    ) {
-        completionHandler(delegate?.onProvideContextualMenu(linkURL: elementInfo.linkURL))
-    }
-
-    @available(iOS 15, *)
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // TODO: FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
     }
 
     // MARK: - WKEngineWebViewDelegate

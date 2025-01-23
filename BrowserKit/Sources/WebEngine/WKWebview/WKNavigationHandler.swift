@@ -4,9 +4,13 @@
 
 import WebKit
 
-protocol WKNavigationHandler {
+protocol WKNavigationHandler: WKNavigationDelegate {
+    var session: SessionHandler? { get set }
+    var telemetryProxy: EngineTelemetryProxy? { get set }
+
     func webView(_ webView: WKWebView,
                  didCommit navigation: WKNavigation?)
+    
 
     func webView(_ webView: WKWebView,
                  didFinish navigation: WKNavigation?)
@@ -22,32 +26,32 @@ protocol WKNavigationHandler {
     func webView(_ webView: WKWebView,
                  didStartProvisionalNavigation navigation: WKNavigation?)
 
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationResponse: WKNavigationResponse,
-                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void)
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
+    )
 
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 preferences: WKWebpagePreferences,
-                 decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void)
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        preferences: WKWebpagePreferences,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy, WKWebpagePreferences) -> Void
+    )
 
     func webView(_ webView: WKWebView,
                  didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?)
 
-    func webView(_ webView: WKWebView,
-                 didReceive challenge: URLAuthenticationChallenge,
-                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void)
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    )
 }
 
-class DefaultNavigationHandler: WKNavigationHandler {
-    private let session: SessionHandler
-    var telemetryProxy: EngineTelemetryProxy?
-
-    init(session: SessionHandler,
-         telemetryProxy: EngineTelemetryProxy? = nil) {
-        self.session = session
-        self.telemetryProxy = telemetryProxy
-    }
+class DefaultNavigationHandler: NSObject, WKNavigationHandler {
+    weak var session: SessionHandler?
+    weak var telemetryProxy: EngineTelemetryProxy?
 
     func webView(_ webView: WKWebView,
                  didCommit navigation: WKNavigation?) {
@@ -55,7 +59,7 @@ class DefaultNavigationHandler: WKNavigationHandler {
         telemetryProxy?.handleTelemetry(event: .pageLoadStarted)
 
         // TODO: Revisit possible duplicate delegate callbacks when navigating to URL in same origin [PR #19083] [FXIOS-8351]
-        session.commitURLChange()
+        session?.commitURLChange()
     }
 
     func webView(_ webView: WKWebView,
@@ -63,7 +67,7 @@ class DefaultNavigationHandler: WKNavigationHandler {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
 
         if let url = webView.url {
-            session.fetchMetadata(withURL: url)
+            session?.fetchMetadata(withURL: url)
         }
         telemetryProxy?.handleTelemetry(event: .pageLoadFinished)
     }
@@ -89,17 +93,21 @@ class DefaultNavigationHandler: WKNavigationHandler {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationResponse: WKNavigationResponse,
-                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
+    ) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
         decisionHandler(.allow)
     }
 
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 preferences: WKWebpagePreferences,
-                 decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        preferences: WKWebpagePreferences,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy, WKWebpagePreferences) -> Void
+    ) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
         decisionHandler(.allow, preferences)
     }
@@ -109,9 +117,11 @@ class DefaultNavigationHandler: WKNavigationHandler {
         // TODO: FXIOS-8275 - Handle didReceiveServerRedirectForProvisionalNavigation (epic part 3)
     }
 
-    func webView(_ webView: WKWebView,
-                 didReceive challenge: URLAuthenticationChallenge,
-                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
         // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
         completionHandler(.performDefaultHandling, nil)
     }
