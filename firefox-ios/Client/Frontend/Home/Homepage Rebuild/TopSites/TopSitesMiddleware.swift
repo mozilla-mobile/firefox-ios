@@ -14,7 +14,7 @@ final class TopSitesMiddleware {
     // Raw data to build top sites with, we may want to revisit and fetch only the number of top sites we want
     // but keeping logic consistent for now
     private var otherSites: [TopSiteState] = []
-    private var sponsoredTiles: [SponsoredTile] = []
+    private var sponsoredSites: [Site] = []
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
@@ -74,16 +74,16 @@ final class TopSitesMiddleware {
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles,
+                        sponsoredTiles: self.sponsoredSites,
                         numberOfTilesPerRow: numberOfTilesPerRow
                     )
                 }
                 group.addTask {
-                    self.sponsoredTiles = await self.topSitesManager.fetchSponsoredSites()
+                    self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
                     await self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredTiles,
+                        sponsoredTiles: self.sponsoredSites,
                         numberOfTilesPerRow: numberOfTilesPerRow
                     )
                 }
@@ -92,7 +92,7 @@ final class TopSitesMiddleware {
                 await updateTopSites(
                     for: action.windowUUID,
                     otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredTiles,
+                    sponsoredTiles: self.sponsoredSites,
                     numberOfTilesPerRow: numberOfTilesPerRow
                 )
             }
@@ -102,12 +102,12 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [SponsoredTile],
+        sponsoredTiles: [Site],
         numberOfTilesPerRow: Int? = nil
     ) async {
         let topSites = await self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
-            sponsoredSites: sponsoredTiles
+            sponsoredSites: sponsoredSites
         )
         store.dispatch(
             TopSitesAction(

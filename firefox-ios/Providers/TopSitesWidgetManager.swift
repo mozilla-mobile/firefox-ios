@@ -31,6 +31,7 @@ class TopSitesWidgetManager: TopSitesWidget {
 
             // save top sites for widgetkit use
             self.save(topSites: sites)
+
             // Update widget timeline
             WidgetCenter.shared.reloadAllTimelines()
         }
@@ -39,7 +40,8 @@ class TopSitesWidgetManager: TopSitesWidget {
     private func save(topSites: [Site]) {
         userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTopTab)
 
-        guard let encodedData = try? Site.encode(with: JSONEncoder(), data: topSites) else { return }
+        guard let encodedData = try? JSONEncoder().encode(topSites) else { return }
+
         userDefaults.set(encodedData, forKey: PrefsKeys.WidgetKitSimpleTopTab)
     }
 }

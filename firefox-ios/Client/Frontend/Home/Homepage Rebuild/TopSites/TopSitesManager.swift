@@ -13,18 +13,22 @@ protocol TopSitesManagerInterface {
     func getOtherSites() async -> [TopSiteState]
 
     /// Returns a list of sponsored tiles using the contile provider
-    func fetchSponsoredSites() async -> [SponsoredTile]
+    func fetchSponsoredSites() async -> [Site]
 
     /// Returns a list of top sites used to show the user
-    ///
+    /// 
     /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
     /// In terms of space, pinned tiles has precedence over the Google tile,
     /// which has precedence over sponsored and frecency tiles.
-    ///
+    /// 
     /// From a user perspective, Google top site is always first (from left to right),
     /// then comes the sponsored tiles, pinned sites and then frecency top sites.
-    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceeds the available number shown of tiles.
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState]
+    /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceed the available number shown of tiles.
+    /// 
+    /// - Parameters:
+    ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
+    ///   - sponsoredSites: Contains the sponsored sites.
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState]
 
     /// Removes the site out of the top sites.
     /// If site is pinned it removes it from pinned and top sites list.
@@ -74,7 +78,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.maxTopSites = maxTopSites
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
@@ -90,7 +94,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // MARK: Google tile
     private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteState] {
         guard googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0),
-              let googleSite = googleTopSiteManager.suggestedSiteData
+              let googleSite = googleTopSiteManager.pinnedSiteData
         else {
             return []
         }
@@ -98,7 +102,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     // MARK: Sponsored tiles (Contiles)
-    func fetchSponsoredSites() async -> [SponsoredTile] {
+    func fetchSponsoredSites() async -> [Site] {
         guard shouldLoadSponsoredTiles else { return [] }
         let contiles = await withCheckedContinuation { continuation in
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
@@ -131,7 +135,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
             }
         }
 
-        return contiles.compactMap { SponsoredTile(contile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
     private var shouldLoadSponsoredTiles: Bool {
@@ -139,7 +143,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     private func filterSponsoredSites(
-        contiles: [SponsoredTile],
+        contiles: [Site],
         with availableSpaceCount: Int,
         and otherSites: [TopSiteState]
     ) async -> [TopSiteState] {
@@ -159,8 +163,8 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     /// and it's not the default search engine
     private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
-        let sponsoredSiteIsAlreadyPresent = otherSites.contains {
-            ($0.site.url.asURL?.shortDomain == siteDomain) && (($0.site as? PinnedSite) != nil)
+        let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteState) in
+            (topSite.site.url.asURL?.shortDomain == siteDomain) && (topSite.isPinned)
         }
 
         let shouldAddDefaultEngine = SponsoredTileDataUtility().shouldAdd(
@@ -188,7 +192,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     /// - Parameter otherSites: Comes from fetching the other top sites that are not sponsored or google tile
     /// - Returns: The available space count for the rest of the calculation
     private func getAvailableSpaceCount(with otherSites: [TopSiteState]) -> Int {
-        let pinnedSiteCount = otherSites.filter { $0.site is PinnedSite }.count
+        let pinnedSiteCount = otherSites.filter { $0.isPinned }.count
         return maxTopSites - pinnedSiteCount
     }
 
@@ -202,20 +206,20 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // Ex: A default site is present but user has recent history site of the same site.
     // That recent history tile won't be added.
     private func removeDuplicates(for sites: [TopSiteState]) -> [TopSiteState] {
-        var duplicates = Set<TopSiteState>()
+        var previousStates = Set<TopSiteState>()
         return sites.compactMap { (state) -> TopSiteState? in
             // Do not remove sponsored tiles or pinned tiles duplicates
-            guard (state.site as? SponsoredTile) == nil && (state.site as? PinnedSite) == nil else {
-                duplicates.insert(state)
+            guard !state.isSponsored, !state.isPinned else {
+                previousStates.insert(state)
                 return state
             }
 
             let siteDomain = state.site.url.asURL?.shortDomain
-            let shouldAddSite = !duplicates.contains(where: { $0.site.url.asURL?.shortDomain == siteDomain })
+            let shouldAddSite = !previousStates.contains(where: { $0.site.url.asURL?.shortDomain == siteDomain })
 
             // If shouldAddSite or site domain was not found, then insert the site
             guard shouldAddSite || siteDomain == nil else { return nil }
-            duplicates.insert(state)
+            previousStates.insert(state)
 
             return state
         }

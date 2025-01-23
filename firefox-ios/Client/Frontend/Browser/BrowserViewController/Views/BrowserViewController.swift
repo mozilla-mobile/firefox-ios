@@ -1704,7 +1704,6 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-        site?.setBookmarked(true)
         showBookmarkToast(action: .add)
     }
 
@@ -1712,7 +1711,6 @@ class BrowserViewController: UIViewController,
         profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
-            site?.setBookmarked(false)
         }
     }
 

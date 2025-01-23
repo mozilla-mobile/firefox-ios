@@ -171,9 +171,9 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
         let closedTab = recentlyClosedTabs[indexPath.row]
         let site: Site
         if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
+            site = Site.createBasicSite(url: String(describing: closedTab.url), title: title)
         } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
+            site = Site.createBasicSite(url: String(describing: closedTab.url), title: "")
         }
         return site
     }

@@ -461,10 +461,10 @@ class SearchTelemetry {
         }
 
         for clientTab in visibleData {
-            if let isBookmarked = clientTab.bookmarked {
-                resultTypes.append(isBookmarked ?
-                                   SearchTelemetryValues.Results.bookmark.rawValue :
-                                    SearchTelemetryValues.Results.history.rawValue)
+            if let isBookmarked = clientTab.isBookmarked {
+                resultTypes.append(isBookmarked
+                                   ? SearchTelemetryValues.Results.bookmark.rawValue
+                                   : SearchTelemetryValues.Results.history.rawValue)
             }
         }
 

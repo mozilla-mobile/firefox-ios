@@ -48,7 +48,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                 return
             }
 
-            let sites = bookmarkItems.map({ Site(url: $0.url, title: $0.title, bookmarked: true, guid: $0.guid) })
+            let sites = bookmarkItems.map({ Site.createBasicSite(url: $0.url, title: $0.title, isBookmarked: true) })
             completionHandler(sites)
         }
     }
@@ -74,7 +74,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                 // Sort descending by frecency score
                 $0.frecency > $1.frecency
             }.map({
-                return Site(url: $0.url, title: $0.title )
+                return Site.createBasicSite(url: $0.url, title: $0.title )
             }).uniqued()
             completionHandler(sites)
         }

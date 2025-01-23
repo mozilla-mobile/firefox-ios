@@ -4,29 +4,30 @@
 
 import Foundation
 import Glean
+import Storage
 
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events
 protocol SponsoredTileTelemetry {
-    func sendImpressionTelemetry(tile: SponsoredTile,
+    func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool)
-    func sendClickTelemetry(tile: SponsoredTile,
+    func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool)
 }
 
 extension SponsoredTileTelemetry {
-    func sendImpressionTelemetry(tile: SponsoredTile,
+    func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool = false) {
-        sendImpressionTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
+        sendImpressionTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
     }
 
-    func sendClickTelemetry(tile: SponsoredTile,
+    func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool = false) {
-        sendClickTelemetry(tile: tile, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
+        sendClickTelemetry(tileSite: tileSite, position: position, isUnifiedAdsEnabled: isUnifiedAdsEnabled)
     }
 }
 
@@ -41,12 +42,17 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
 
     /// Send Sponsored tile impression telemetry with Glean Pings
     /// - Parameters:
-    ///   - tile: The sponsored tile
+    ///   - tile: The sponsored tile Site.
     ///   - position: The position of the sponsored tile in the top sites collection view
     ///   - isUnifiedAdsEnabled: Whether the unified ads is enabled, if enabled some information isn't set on the ping
-    func sendImpressionTelemetry(tile: SponsoredTile,
+    func sendImpressionTelemetry(tileSite: Site,
                                  position: Int,
                                  isUnifiedAdsEnabled: Bool = false) {
+        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
+
         let extra = GleanMetrics.TopSites.ContileImpressionExtra(
             position: Int32(position),
             source: DefaultSponsoredTileTelemetry.source
@@ -56,24 +62,29 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         // Some information isn't set on the ping when unified ads is enabled
         if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
-                                        value: Int64(tile.tileId))
+                                        value: Int64(siteInfo.tileId))
             gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: tile.impressionURL)
+                                   value: siteInfo.impressionURL)
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,
-                                  value: tile.title)
+                                  value: tileSite.title)
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.topsitesImpression)
     }
 
     /// Send Sponsored tile click telemetry with Glean Pings
     /// - Parameters:
-    ///   - tile: The sponsored tile
+    ///   - tileSite: The sponsored tile Site.
     ///   - position: The position of the sponsored tile in the top sites collection view
     ///   - isUnifiedAdsEnabled: Whether the unified ads is enabled, if enabled some information isn't set on the ping
-    func sendClickTelemetry(tile: SponsoredTile,
+    func sendClickTelemetry(tileSite: Site,
                             position: Int,
                             isUnifiedAdsEnabled: Bool = false) {
+        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+            assertionFailure("Only .sponsoredSite telemetry is supported right now")
+            return
+        }
+
         let extra = GleanMetrics.TopSites.ContileClickExtra(
             position: Int32(position),
             source: DefaultSponsoredTileTelemetry.source
@@ -83,13 +94,13 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         // Some information isn't set on the ping when unified ads is enabled
         if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
-                                        value: Int64(tile.tileId))
+                                        value: Int64(siteInfo.tileId))
             gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: tile.clickURL)
+                                   value: siteInfo.clickURL)
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,
-                                  value: tile.title)
+                                  value: tileSite.title)
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.topsitesImpression)
     }
 }

@@ -85,7 +85,7 @@ class HistoryHighlightsTestEntryProvider {
         let urlString = "https://www.\(name).com/\(sufix)"
         let urlTitle = "\(name) test"
 
-        return Site(url: urlString, title: urlTitle)
+        return Site.createBasicSite(url: urlString, title: urlTitle)
     }
 
     func createTabs(named name: String) -> Tab {
