@@ -7,15 +7,15 @@ import WebEngine
 
 struct EngineProvider {
     // We only have one session in the SampleBrowser
-    private(set) var session: EngineSession?
+    private(set) var session: EngineSession
     let view: EngineView
 
-    init(engine: Engine = WKEngine.factory(),
-         sessionDependencies: EngineSessionDependencies? = nil) {
+    init?(engine: Engine = WKEngine.factory(),
+          sessionDependencies: EngineSessionDependencies? = nil) {
         do {
             session = try engine.createSession(dependencies: sessionDependencies)
         } catch {
-            session = nil
+            return nil
         }
 
         view = engine.createView()

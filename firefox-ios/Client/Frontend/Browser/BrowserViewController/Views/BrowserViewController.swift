@@ -18,7 +18,7 @@ import ToolbarKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
 import enum MozillaAppServices.VisitType
 
@@ -143,12 +143,11 @@ class BrowserViewController: UIViewController,
     }
 
     var isNativeErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
     }
 
-    /// Temporary flag for showing no internet connection native error page only.
     var isNICErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
     var isJSAlertRefactorEnabled: Bool {
@@ -3583,11 +3582,11 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
-    private func filterLoginsForCurrentTab(logins: [EncryptedLogin],
+    private func filterLoginsForCurrentTab(logins: [Login],
                                            tabURL: URL,
-                                           field: FocusFieldType) -> [EncryptedLogin] {
+                                           field: FocusFieldType) -> [Login] {
         return logins.filter { login in
-            if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
+            if field == FocusFieldType.username && login.username.isEmpty { return false }
             guard let recordHostnameURL = URL(string: login.hostname) else { return false }
             return recordHostnameURL.baseDomain == tabURL.baseDomain
         }

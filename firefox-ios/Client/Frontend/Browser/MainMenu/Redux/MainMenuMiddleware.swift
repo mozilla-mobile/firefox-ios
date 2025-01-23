@@ -23,6 +23,7 @@ final class MainMenuMiddleware {
         static let newInFirefox = "new_in_firefox"
         static let tools = "tools"
         static let save = "save"
+        static let print = "print"
         static let share = "share"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
@@ -269,6 +270,9 @@ final class MainMenuMiddleware {
             } else if urlToVisit == SupportUtils.URLForWhatsNew {
                 telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newInFirefox)
             }
+
+        case .printSheet:
+            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
 
         case .shareSheet:
             telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.share)

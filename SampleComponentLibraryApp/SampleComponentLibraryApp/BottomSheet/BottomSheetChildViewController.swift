@@ -25,8 +25,6 @@ class BottomSheetChildViewController: UIViewController, BottomSheetChild, Themea
         label.numberOfLines = 0
     }
 
-    private var heightConstraint: NSLayoutConstraint!
-
     init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)

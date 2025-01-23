@@ -88,6 +88,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         listenForThemeChange(view)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: view)
+    }
+
     // MARK: - View setup
     private func setupLayout() {
         view.addSubview(titleLabel)
@@ -184,6 +189,8 @@ final class PrivacyPreferencesViewController: UIViewController,
     }
 
     private func setupAccessibility() {
+        contentView.accessibilityElements = [technicalDataSwitch, crashReportsSwitch]
+        view.accessibilityElements = [titleLabel, doneButton, contentScrollView]
         let identifiers = AccessibilityIdentifiers.TermsOfService.PrivacyNotice.self
         titleLabel.accessibilityIdentifier = identifiers.title
         doneButton.accessibilityIdentifier = identifiers.doneButton
