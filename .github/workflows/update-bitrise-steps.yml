@@ -33,7 +33,7 @@ jobs:
       - name: Run update script
         id: update_script
         run: |
-          python ./test-fixtures/update_bitrise_steps.py
+          python ./test-fixtures/update_bitrise_step.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
