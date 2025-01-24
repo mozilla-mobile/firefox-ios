@@ -7,11 +7,11 @@ import Glean
 
 public struct PasswordGeneratorTelemetry {
     private let gleanWrapper: GleanWrapper
-    
+
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-    
+
     func passwordGeneratorDialogShown() {
         gleanWrapper.incrementCounter(for: GleanMetrics.PasswordGenerator.shown)
     }
