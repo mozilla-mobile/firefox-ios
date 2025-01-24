@@ -287,10 +287,13 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             }
         }
         let config = searchFeature.value().awesomeBar
+        /* Ecosia: hardcode config
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
         let searchInContent = config.usePageContent
         && searchTerms.contains(where: { $0.count >= config.minSearchTerm })
+         */
+        let searchInContent = searchTerms.contains(where: { $0.count >= 3 })
 
         filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url,

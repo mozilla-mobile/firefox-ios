@@ -151,7 +151,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        // TODO Ecosia upgrade: Check headerView effect
         headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
         /* Ecosia: Add legacy theme references
         backgroundHolder.backgroundColor = theme.colors.layer1

@@ -71,7 +71,7 @@ struct OpenTabsView: View {
             */
             Image(decorative: "openEcosia")
                 .foregroundColor(.init("PrimaryText"))
-            Text("Open Firefox") // TODO Ecosia Upgrade: Don't we need to update this text? (was already Firefox, prbably should use `String.OpenFirefoxLabel`)
+            Text("Open Firefox") // TODO Ecosia Upgrade: Don't we need to update this text? (was already Firefox, prbably should use `String.OpenFirefoxLabel`) [MOB-3170]
                 /* Ecosia: update color
                 .foregroundColor(Color.white).lineLimit(1)
                 */

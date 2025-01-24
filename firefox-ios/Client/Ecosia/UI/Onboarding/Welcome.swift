@@ -47,7 +47,7 @@ final class Welcome: UIViewController {
         addBackground()
         addStack()
 
-        /* TODO Ecosia Upgrade: Is this still needed?
+        /* TODO Ecosia Upgrade: Is this still needed? [MOB-3152]
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         (themeManager as? EcosiaThemeManager)?.updateLegacyThemeIfSystemThemeON()
          */

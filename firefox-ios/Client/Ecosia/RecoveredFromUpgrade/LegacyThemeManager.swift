@@ -100,7 +100,7 @@ class LegacyThemeManager {
             let userInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
              */
-            // TODO Ecosia Upgrade: Re-add if LegacyThemeManager is kept
+            // TODO Ecosia Upgrade: Re-add if LegacyThemeManager is kept [MOB-3152]
             // LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
         }
     }

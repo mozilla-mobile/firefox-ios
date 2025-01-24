@@ -2945,8 +2945,6 @@
 		2CB289302B07C8F000A8FCB3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Plurals.stringsdict; sourceTree = "<group>"; };
 		2CB289312B07C8F000A8FCB3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Ecosia.strings; sourceTree = "<group>"; };
 		2CB289322B07C8F000A8FCB3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Plurals.stringsdict; sourceTree = "<group>"; };
-		2CB289342B07C8F000A8FCB3 /* Clean.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clean.swift; sourceTree = "<group>"; };
-		2CB289352B07C8F000A8FCB3 /* Validate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validate.swift; sourceTree = "<group>"; };
 		2CB289362B07C8F000A8FCB3 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		2CB289372B07C8F000A8FCB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Ecosia.strings; sourceTree = "<group>"; };
 		2CB289382B07C8F000A8FCB3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Plurals.stringsdict; sourceTree = "<group>"; };
@@ -10889,19 +10887,9 @@
 			children = (
 				2CB289292B07C8F000A8FCB3 /* Ecosia.strings */,
 				2CB2892B2B07C8F000A8FCB3 /* Plurals.stringsdict */,
-				2CB289332B07C8F000A8FCB3 /* Scripts */,
 				2CB289362B07C8F000A8FCB3 /* String.swift */,
 			);
 			path = L10N;
-			sourceTree = "<group>";
-		};
-		2CB289332B07C8F000A8FCB3 /* Scripts */ = {
-			isa = PBXGroup;
-			children = (
-				2CB289342B07C8F000A8FCB3 /* Clean.swift */,
-				2CB289352B07C8F000A8FCB3 /* Validate.swift */,
-			);
-			path = Scripts;
 			sourceTree = "<group>";
 		};
 		2CB2893B2B07C8F000A8FCB3 /* FeatureManagement */ = {

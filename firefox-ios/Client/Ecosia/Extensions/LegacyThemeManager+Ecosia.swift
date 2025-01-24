@@ -29,7 +29,7 @@ extension LegacyThemeManager {
     }
 }
 
-/* TODO Ecosia Upgrade: Re-add if LegacyThemeManager is kept
+/* TODO Ecosia Upgrade: Re-add if LegacyThemeManager is kept [MOB-3152]
 extension LegacyThemeManager {
 
     /// Updates the current theme based on the system theme type provided by the `EcosiaThemeManager`.

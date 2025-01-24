@@ -2,7 +2,7 @@ name: Merge Unit Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, mob-3113-firefox-upgrade-133 ]
 
 jobs:
   execute_merge_tests:

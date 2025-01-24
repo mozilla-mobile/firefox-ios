@@ -97,7 +97,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
             let tabData = TabData(
                 id: savedTabUUID,
                 title: savedTab.title,
-                /* TODO Ecosia Upgrade: Do we still want the logic to restore tabs?
+                /* TODO Ecosia Upgrade: Do we still want the logic to restore tabs? [MOB-3166]
                 savedTab.url?.absoluteString ?? savedTab.sessionData?.urls.last?.absoluteString ?? ""
                  */
                 siteUrl: savedTab.url?.absoluteString ?? "",

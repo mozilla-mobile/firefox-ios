@@ -99,6 +99,6 @@ public protocol ThemeColourPalette {
     var shadowDefault: UIColor { get }
 
     // MARK: - Ecosia Legacy Colors
-    // TODO Ecosia Upgrade: Can we get rid of them?
+    // TODO Ecosia Upgrade: Can we get rid of them? [MOB-3152]
     var layer6: UIColor { get }
 }

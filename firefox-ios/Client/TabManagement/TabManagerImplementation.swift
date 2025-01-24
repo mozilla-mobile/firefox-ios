@@ -114,7 +114,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             var windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
 
-            // TODO Ecosia Upgrade: Do we want to keep this?
+            // TODO Ecosia Upgrade: Do we want to keep this? [MOB-3166]
             /* Ecosia: Upgrading from v9.x to v10.0.0 caused an issue where migrated URLs were blank.
             await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
              */

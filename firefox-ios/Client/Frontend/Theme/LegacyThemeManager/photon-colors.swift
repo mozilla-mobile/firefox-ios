@@ -8,7 +8,7 @@ import UIKit
 
 extension UIColor {
     struct Photon {
-        // TODO Ecosia Upgrade: Are LightGrey20 and DarkGrey30 used? (they were removed in Firefox)
+        // TODO Ecosia Upgrade: Are LightGrey20 and DarkGrey30 used? (they were removed in Firefox) [MOB-3152]
         static let LightGrey20 = UIColor(rgb: 0xf0f0f4)
 
         // Ecosia: Add legacy color references from 9.1.0 App Version

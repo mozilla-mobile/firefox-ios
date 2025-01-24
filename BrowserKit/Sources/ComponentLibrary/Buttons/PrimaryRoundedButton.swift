@@ -104,7 +104,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         backgroundColorNormal = theme.colors.actionPrimary
         backgroundColorHighlighted = theme.colors.actionPrimaryHover
         backgroundColorDisabled = theme.colors.actionPrimaryDisabled
-        // TODO Ecosia Upgrade: Review if button color needs updating
+        // TODO Ecosia Upgrade: Review if button color needs updating [MOB-3152]
         foregroundColor = theme.colors.textInverted
         foregroundColorDisabled = theme.colors.textInvertedDisabled
         setNeedsUpdateConfiguration()

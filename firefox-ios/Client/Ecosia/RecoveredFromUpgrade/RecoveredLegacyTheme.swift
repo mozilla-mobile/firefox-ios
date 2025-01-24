@@ -6,7 +6,7 @@ import Common
 import UIKit
 import Shared
 
-// TODO Ecosia Upgrade: Can we also get rid of this now that Firefox has?
+// TODO Ecosia Upgrade: Can we also get rid of this now that Firefox has? [MOB-3152]
 extension UIColor {
     static var legacyTheme: LegacyTheme {
         return LegacyThemeManager.instance.current
@@ -42,7 +42,7 @@ class TabTrayColor {
 }
 
 class SnackBarColor {
-    // TODO Ecosia Upgrade: UIColor.LegacyDefaults no longer exists, is it needed?
+    // TODO Ecosia Upgrade: UIColor.LegacyDefaults no longer exists, is it needed? [MOB-3152]
 //    var highlight: UIColor { return UIColor.LegacyDefaults.iOSTextHighlightBlue.withAlphaComponent(0.9) }
     var highlightText: UIColor { return UIColor.Photon.Blue40 }
     var border: UIColor { return UIColor.Photon.Grey30 }

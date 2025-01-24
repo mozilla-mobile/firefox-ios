@@ -1131,7 +1131,6 @@ extension URLBarView {
     func updateSearchEngineImage() {
         if inOverlayMode {
             if isPrivate {
-                // TODO Ecosia Upgrade: Is this image correct? Used to be `ImageIdentifiers.newPrivateTab`
                 searchIconImageView.image = .templateImageNamed(StandardImageIdentifiers.Large.privateMode)?.tinted(withColor: locationActiveBorderColor)
             } else {
                 searchIconImageView.image = .init(themed: "searchLogo")

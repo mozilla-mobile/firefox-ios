@@ -37,7 +37,6 @@ enum TabTrayPanelType: Int, CaseIterable {
         case .tabs:
             return UIImage(named: StandardImageIdentifiers.Large.tab)
         case .privateTabs:
-            // TODO Ecosia Upgrade: Is this image correct? Used to be `ImageIdentifiers.newPrivateTab`
             return UIImage(named: StandardImageIdentifiers.Large.privateMode)
         case .syncedTabs:
             return UIImage(named: StandardImageIdentifiers.Large.syncTabs)

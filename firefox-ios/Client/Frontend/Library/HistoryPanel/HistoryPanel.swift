@@ -674,7 +674,7 @@ class HistoryPanel: UIViewController,
         updateEmptyPanelState()
 
         let theme = currentTheme()
-        // TODO Ecosia Upgrade: Check new background color layer1
+        // TODO Ecosia Upgrade: Check new background color layer1 [MOB-3152]
         tableView.backgroundColor = theme.colors.layer1
         emptyStateOverlayView.backgroundColor = theme.colors.layer1
 

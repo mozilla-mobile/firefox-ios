@@ -102,7 +102,10 @@ public struct StandardImageIdentifiers {
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
         public static let print = "printLarge"
+        /* Ecosia: Update privateMode image everywhere on the app
         public static let privateMode = "privateModeLarge"
+         */
+        public static let privateMode = "privateSearch"
         public static let privateModeCircleFill = "privateModeCircleFillLarge"
         public static let qrCode = "qrCodeLarge"
         public static let quality = "qualityLarge"

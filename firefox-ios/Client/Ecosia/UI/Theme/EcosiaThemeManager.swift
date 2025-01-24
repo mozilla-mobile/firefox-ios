@@ -194,13 +194,13 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         case .dark:
             return EcosiaDarkTheme()
         case .nightMode:
-            return EcosiaDarkTheme() // TODO Ecosia Upgrade: Is this what we want?
+            return EcosiaDarkTheme() // TODO Ecosia Upgrade: Is this what we want? [MOB-3152]
         case .privateMode:
             return EcosiaLightTheme()
         }
     }
 
-    // TODO Ecosia Upgrade: Is migration still needed?
+    // TODO Ecosia Upgrade: Is migration still needed? [MOB-3152]
     private func migrateDefaultsToUseStandard() {
         guard let oldDefaultsStore = UserDefaults(suiteName: sharedContainerIdentifier) else { return }
 
@@ -231,7 +231,7 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     }
 }
 
-/* TODO Ecosia Upgrade: Is this still needed?
+/* TODO Ecosia Upgrade: Is this still needed? [MOB-3152]
 extension EcosiaThemeManager {
 
     func updateLegacyThemeIfSystemThemeON() {

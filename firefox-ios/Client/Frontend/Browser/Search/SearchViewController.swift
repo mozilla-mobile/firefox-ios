@@ -75,7 +75,10 @@ class SearchViewController: SiteTableViewController,
     }()
 
     private lazy var searchButton: UIButton = .build { button in
+        /* Ecosia: Update image reference for search button
         let image = UIImage(named: StandardImageIdentifiers.Large.search)?.withRenderingMode(.alwaysTemplate)
+         */
+        let image = UIImage(named: "searches")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didClickSearchButton), for: .touchUpInside)
@@ -275,9 +278,6 @@ class SearchViewController: SiteTableViewController,
         searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.leadingAnchor
 
-        // TODO Ecosia Upgrade: Where should we set search button image? Code used to be here
-        // searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-
         if let imageView = searchButton.imageView {
             NSLayoutConstraint.activate([
                 imageView.widthAnchor.constraint(equalToConstant: 20),
@@ -440,8 +440,6 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
-    // TODO Ecosia Upgrade: Where should we hardcode config? Code used to be here
-    // let searchInContent = searchTerms.find { $0.count >= 3 } != nil
     // MARK: - Table view delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -38,7 +38,7 @@ private class EcosiaDarkColourPalette: EcosiaLightColourPalette {
 
 private class EcosiaLightColourPalette: ThemeColourPalette {
 
-    // TODO Ecosia Upgrade: Review new colors and older ones that are no longer on the protocol
+    // TODO Ecosia Upgrade: Review new colors and older ones that are no longer on the protocol [MOB-3152]
     var layerInformation: UIColor { fallbackTheme.colors.layerInformation }
     var layerSuccess: UIColor { fallbackTheme.colors.layerSuccess }
     var layerCritical: UIColor { fallbackTheme.colors.layerCritical }
@@ -54,7 +54,7 @@ private class EcosiaLightColourPalette: ThemeColourPalette {
     var iconCritical: UIColor { fallbackTheme.colors.iconCritical }
     var iconRatingNeutral: UIColor { fallbackTheme.colors.iconRatingNeutral }
 
-    /* TODO Ecosia Upgrade: Review if ok to switch to directly linking fallback theme.
+    /* TODO Ecosia Upgrade: Review if ok to switch to directly linking fallback theme. [MOB-3152]
     // The alternative is receiving window here since `getCurrentTheme` now requires it.
      let fallbackDefaultThemeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
      */

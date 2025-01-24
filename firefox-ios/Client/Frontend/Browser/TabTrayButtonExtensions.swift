@@ -11,7 +11,6 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = .TabTrayToggleAccessibilityLabel
-        // TODO Ecosia Upgrade: Is this image correct? Used to be `ImageIdentifiers.newPrivateTab`
         let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?
             .withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])

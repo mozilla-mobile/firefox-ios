@@ -64,14 +64,8 @@ open class TabToolbarHelper: NSObject {
     let ImageSearch = UIImage.templateImageNamed("searchUrl")
     let ImageNewTab = UIImage.templateImageNamed("nav-add")
     let ImageHome = UIImage.templateImageNamed("menu-Home")
-
-    // TODO Ecosia Upgrade: Do we need to update these two too?
     let ImageBookmark = UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkTrayFill)
     let ImageFire = UIImage.templateImageNamed(StandardImageIdentifiers.Large.dataClearance)
-
-    // TODO Ecosia Upgrade: Reload and Stop and no longer present
-    // let ImageReload = UIImage.templateImageNamed("nav-refresh")
-    // let ImageStop = UIImage.templateImageNamed("nav-stop")
 
     func setMiddleButtonState(_ state: MiddleButtonState) {
         let device = UIDevice.current.userInterfaceIdiom
