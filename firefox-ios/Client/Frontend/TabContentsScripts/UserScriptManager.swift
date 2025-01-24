@@ -17,13 +17,10 @@ class UserScriptManager: FeatureFlaggable {
         source: "window.__firefox__.NoImageMode.setEnabled(true)",
         injectionTime: .atDocumentStart,
         forMainFrameOnly: true)
-    
-    private lazy var isDarkReaderEnabled: Bool = {
-        self.featureFlags.isFeatureEnabled(.darkReader, checking: .buildOnly)
-    }()
 
     private lazy var nightModeUserScript: WKUserScript = {
-        WKUserScript.createInDefaultContentWorld(
+        let isDarkReaderEnabled = self.featureFlags.isFeatureEnabled(.darkReader, checking: .buildOnly)
+        return WKUserScript.createInDefaultContentWorld(
             source: NightModeHelper.jsCallbackBuilder(true, isDarkReaderEnabled),
             injectionTime: .atDocumentEnd,
             forMainFrameOnly: true
