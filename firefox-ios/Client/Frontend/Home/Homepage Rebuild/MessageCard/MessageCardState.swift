@@ -35,6 +35,8 @@ struct MessageCardState: StateType, Equatable, Hashable {
         switch action.actionType {
         case MessageCardMiddlewareActionType.initialize:
             return handleInitializeAction(for: state, with: action)
+        case MessageCardActionType.tappedOnActionButton, MessageCardActionType.tappedOnCloseButton:
+            return handleTappingAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
@@ -49,6 +51,14 @@ struct MessageCardState: StateType, Equatable, Hashable {
         return MessageCardState(
             windowUUID: state.windowUUID,
             messageCardConfiguration: messageCardConfiguration
+        )
+    }
+
+    /// Tapping an action on the card should dismiss the message card and we do this by setting the configuration to nil
+    private static func handleTappingAction(for state: MessageCardState, with action: Action) -> MessageCardState {
+        return MessageCardState(
+            windowUUID: state.windowUUID,
+            messageCardConfiguration: nil
         )
     }
 

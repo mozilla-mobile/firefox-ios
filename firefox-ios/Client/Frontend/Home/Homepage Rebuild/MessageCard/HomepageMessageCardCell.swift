@@ -34,6 +34,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
     private var kvoToken: NSKeyValueObservation?
+    private var windowUUID: WindowUUID?
 
     // MARK: - UI
 
@@ -97,7 +98,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         kvoToken?.invalidate()
     }
 
-    func configure(with config: MessageCardConfiguration, theme: Theme) {
+    func configure(with config: MessageCardConfiguration, windowUUID: WindowUUID, theme: Theme) {
+        self.windowUUID = windowUUID
         applyGleanMessage(with: config.title, description: config.description, buttonLabel: config.buttonLabel)
         applyTheme(theme: theme)
         ctaButton.applyTheme(theme: theme)
@@ -207,13 +209,31 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     // MARK: Actions
     @objc
     private func dismissCard() {
-        // TODO: FXIOS-11134 - Handle message actions
+        guard let windowUUID else {
+//            logger.log(level: .warning, "windowUUID is nil when dismissing homepage message card")
+            return
+        }
+        store.dispatch(
+            MessageCardAction(
+                windowUUID: windowUUID,
+                actionType: MessageCardActionType.tappedOnCloseButton
+            )
+        )
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
     @objc
     func handleCTA() {
-        // TODO: FXIOS-11134 - Handle message actions
+        guard let windowUUID else {
+//            logger.log(level: .warning, "windowUUID is nil when tapping on action button on homepage message card")
+            return
+        }
+        store.dispatch(
+            MessageCardAction(
+                windowUUID: windowUUID,
+                actionType: MessageCardActionType.tappedOnActionButton
+            )
+        )
     }
 }
 
