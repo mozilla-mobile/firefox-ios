@@ -17,7 +17,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
-                let key = String(parts[1])
+        let key = String(parts[1])
         if noSkipIntroTest.contains(key) {
             args = [LaunchArguments.ClearProfile,
                     LaunchArguments.SkipWhatsNew,
@@ -86,14 +86,14 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
         mozWaitForElementToExist(app.buttons["TermsOfService.ManageDataCollectionAgreement"])
-
+        
         // Manage
         app.buttons["TermsOfService.ManageDataCollectionAgreement"].tap()
         mozWaitForElementToExist(app.otherElements["PopoverDismissRegion"])
         mozWaitForElementToExist(app.buttons["TermsOfService.PrivacyNotice.DoneButton"])
         snapshot("TermsOfService-1")
         app.buttons["TermsOfService.PrivacyNotice.DoneButton"].tap()
-
+        
         // Set as default browser
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
@@ -101,6 +101,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         mozWaitForElementToExist(app.buttons[".DefaultBrowserSettings.PrimaryButton"])
         snapshot("TermsOfService-2")
+    }
 
     func testWebViewContextMenu () throws {
         throw XCTSkip("Failing a lot and now new strings here")
