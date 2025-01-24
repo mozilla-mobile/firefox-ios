@@ -17,8 +17,7 @@ class EditFolderCell: UITableViewCell,
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
-        let layoutDirection = UIView.userInterfaceLayoutDirection(for: self.semanticContentAttribute)
-        view.textAlignment = layoutDirection == .rightToLeft ? .right : .left
+        view.textAlignment = .natural
     }
     var onTitleFieldUpdate: ((String) -> Void)?
 

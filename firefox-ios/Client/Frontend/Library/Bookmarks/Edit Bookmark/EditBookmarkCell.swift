@@ -32,8 +32,7 @@ class EditBookmarkCell: UITableViewCell,
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
-        let layoutDirection = UIView.userInterfaceLayoutDirection(for: self.semanticContentAttribute)
-        view.textAlignment = layoutDirection == .rightToLeft ? .right : .left
+        view.textAlignment = .natural
     }
     private lazy var urlTextfield: TextField = .build { view in
         view.keyboardType = .URL
@@ -41,8 +40,7 @@ class EditBookmarkCell: UITableViewCell,
             self?.urlTextFieldDidChange()
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
-        let layoutDirection = UIView.userInterfaceLayoutDirection(for: self.semanticContentAttribute)
-        view.textAlignment = layoutDirection == .rightToLeft ? .right : .left
+        view.textAlignment = .natural
     }
     var onTitleFieldUpdate: ((String) -> Void)?
     var onURLFieldUpdate: ((String) -> Void)?
