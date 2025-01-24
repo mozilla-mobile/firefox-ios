@@ -80,13 +80,13 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v2.0.0
         with:
+          payload-file-path: "./test-fixtures/ci/update_bitrise.json"
           payload-templated: true
           webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
           webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "🚨 *GitHub Action Failed* 🚨\nThe workflow to update Bitrise steps has failed.\n*Repository*: <https://github.com/${{ github.repository }}|${{ github.repository }}>\n*Workflow*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow Logs>\n*Branch*: ${{ github.ref_name }}\n*Commit*: <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>",
-              "channel": "mobile-alerts-sandbox",
-              "username": "GitHub Actions Bot",
-              "icon_emoji": ":octocat:"
-            }
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUNID: ${{ github.run_id }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+            
