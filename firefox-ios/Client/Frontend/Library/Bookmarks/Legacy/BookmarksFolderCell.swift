@@ -116,6 +116,8 @@ extension FxBookmarkNode {
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
     }
 }
