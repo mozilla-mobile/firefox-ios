@@ -370,8 +370,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-
-            webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
+            let isDarkReaderEnabled = featureFlags.isFeatureEnabled(.darkReader, checking: .buildOnly)
+            webView?.evaluateJavascriptInDefaultContentWorld(NightModeHelper.jsCallbackBuilder(nightMode, isDarkReaderEnabled))
 
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
