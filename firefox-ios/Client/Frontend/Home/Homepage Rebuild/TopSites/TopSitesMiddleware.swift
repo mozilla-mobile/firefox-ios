@@ -35,9 +35,9 @@ final class TopSitesMiddleware {
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize:
-            self.getTopSitesDataAndUpdateState(for: action, and: (action as? HomepageAction)?.numberOfTilesPerRow)
+            self.getTopSitesDataAndUpdateState(for: action)
         case TopSitesActionType.fetchTopSites:
-            self.getTopSitesDataAndUpdateState(for: action, and: (action as? TopSitesAction)?.numberOfTilesPerRow)
+            self.getTopSitesDataAndUpdateState(for: action)
         case TopSitesActionType.toggleShowSponsoredSettings:
             self.getTopSitesDataAndUpdateState(for: action)
         case ContextMenuActionType.tappedOnPinTopSite:
@@ -66,34 +66,31 @@ final class TopSitesMiddleware {
         return site
     }
 
-    private func getTopSitesDataAndUpdateState(for action: Action, and numberOfTilesPerRow: Int? = nil) {
+    private func getTopSitesDataAndUpdateState(for action: Action) {
         Task {
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
                     self.otherSites = await self.topSitesManager.getOtherSites()
-                    await self.updateTopSites(
+                    self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites,
-                        numberOfTilesPerRow: numberOfTilesPerRow
+                        sponsoredTiles: self.sponsoredSites
                     )
                 }
                 group.addTask {
                     self.sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
-                    await self.updateTopSites(
+                    self.updateTopSites(
                         for: action.windowUUID,
                         otherSites: self.otherSites,
-                        sponsoredTiles: self.sponsoredSites,
-                        numberOfTilesPerRow: numberOfTilesPerRow
+                        sponsoredTiles: self.sponsoredSites
                     )
                 }
 
                 await group.waitForAll()
-                await updateTopSites(
+                updateTopSites(
                     for: action.windowUUID,
                     otherSites: self.otherSites,
-                    sponsoredTiles: self.sponsoredSites,
-                    numberOfTilesPerRow: numberOfTilesPerRow
+                    sponsoredTiles: self.sponsoredSites
                 )
             }
         }
@@ -102,17 +99,15 @@ final class TopSitesMiddleware {
     private func updateTopSites(
         for windowUUID: WindowUUID,
         otherSites: [TopSiteState],
-        sponsoredTiles: [Site],
-        numberOfTilesPerRow: Int? = nil
-    ) async {
-        let topSites = await self.topSitesManager.recalculateTopSites(
+        sponsoredTiles: [Site]
+    ) {
+        let topSites = self.topSitesManager.recalculateTopSites(
             otherSites: otherSites,
             sponsoredSites: sponsoredSites
         )
         store.dispatch(
             TopSitesAction(
                 topSites: topSites,
-                numberOfTilesPerRow: numberOfTilesPerRow,
                 windowUUID: windowUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )

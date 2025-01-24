@@ -35,7 +35,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 3)
@@ -73,7 +73,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: updatedState)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 21)
@@ -100,16 +100,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        let finalState = HomepageState.reducer(
-            updatedState,
-            TopSitesAction(
-                numberOfTilesPerRow: 4,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-            )
-        )
-
-        dataSource.updateSnapshot(state: finalState)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
@@ -128,7 +119,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state)
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
