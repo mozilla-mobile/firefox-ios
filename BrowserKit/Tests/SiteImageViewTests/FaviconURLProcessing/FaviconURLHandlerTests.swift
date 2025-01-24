@@ -103,6 +103,31 @@ class FaviconURLHandlerTests: XCTestCase {
         XCTAssertEqual(url, "myUrl")
     }
 
+    func testExtractServerError_whenServerErrorOccurs() async {
+        // Simulate a server-side error (5xx HTTP status code)
+        guard let error = HTTPURLResponse(url: siteURL,
+                                          statusCode: 500,
+                                          httpVersion: nil,
+                                          headerFields: nil) as? Error else { return }
+
+        // Call extractServerError with the simulated server error response
+        let isServerError = ServerErrorHelper.extractServerError(error)
+
+        // Verify that the error is identified as a server error
+        XCTAssertTrue(isServerError, "The error should be identified as a server error for a 5xx status code")
+    }
+
+    func testExtractServerError_whenNonServerErrorOccurs() async {
+        // Simulate a non-server error (e.g., a client-side error like a network timeout)
+        let error = URLError(.timedOut)
+
+        // Call extractServerError with the simulated non-server error
+        let isServerError = ServerErrorHelper.extractServerError(error)
+
+        // Verify that the error is identified as not a server error
+        XCTAssertFalse(isServerError, "The error should not be identified as a server error for a client-side issue")
+    }
+
     func testClearCache() async {
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
                                                urlCache: mockCache)

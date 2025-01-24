@@ -120,7 +120,7 @@ class DefaultImageHandler: ImageHandler {
             let isServerError = ServerErrorHelper.extractServerError(error)
 
             if isServerError {
-                return await fallbackToLetterFavicon(imageModel: imageModel, isServerError: true)
+                return await fallbackToLetterFavicon(imageModel: imageModel, isServerError: isServerError)
             } else {
                 return await fallbackToLetterFavicon(imageModel: imageModel, isServerError: false)
             }
