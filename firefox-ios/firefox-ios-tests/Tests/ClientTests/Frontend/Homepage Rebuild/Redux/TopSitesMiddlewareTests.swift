@@ -33,7 +33,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "All relevant top sites middleware actions are dispatched")
-        expectation.expectedFulfillmentCount = 2
+        expectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             expectation.fulfill()
@@ -63,7 +63,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "All top sites middleware actions are dispatched")
-        expectation.expectedFulfillmentCount = 2
+        expectation.expectedFulfillmentCount = 3
 
         mockStore.dispatchCalled = {
             expectation.fulfill()
