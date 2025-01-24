@@ -21,8 +21,9 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         return ["NightMode"]
     }
 
-    static func jsCallbackBuilder(_ enabled: Bool, _ isDarkReaderEnabled: Bool) -> String {
-        return "window.__firefox__.NightMode.setEnabled(\(enabled), \(isDarkReaderEnabled))"
+    static func jsCallbackBuilder(_ enabled: Bool) -> String {
+        let isDarkReader = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.darkReader, checking: .buildOnly)
+        return "window.__firefox__.NightMode.setEnabled(\(enabled), \(isDarkReader))"
     }
 
     func userContentController(
@@ -30,9 +31,7 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let webView = message.frameInfo.webView else { return }
-        let isDarkReaderEnabled = featureFlags.isFeatureEnabled(.darkReader, checking: .buildOnly)
-        webView.evaluateJavascriptInDefaultContentWorld(
-            NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated(), isDarkReaderEnabled))
+        webView.evaluateJavascriptInDefaultContentWorld(NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated()))
     }
 
     static func toggle(
