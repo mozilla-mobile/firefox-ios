@@ -19,8 +19,17 @@
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Quality.Title.v120" = "ഗുണനിലവാരം";
 
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "വിവരം ഉടൻ വരുന്നു";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "ഇപ്പോള്‍ പരിശോധിക്കുക";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "നോക്കാൻ പുതിയ വിവരങ്ങൾ";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "ഇപ്പോൾ വിവരങ്ങളൊന്നും ലഭ്യമല്ല";
 
 /* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.Title.v121" = "ഉൽപ്പണം ലഭ്യമല്ല";
