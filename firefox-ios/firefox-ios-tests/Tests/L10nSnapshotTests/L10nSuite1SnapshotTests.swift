@@ -86,14 +86,14 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
         mozWaitForElementToExist(app.buttons["TermsOfService.ManageDataCollectionAgreement"])
-        
+
         // Manage
         app.buttons["TermsOfService.ManageDataCollectionAgreement"].tap()
         mozWaitForElementToExist(app.otherElements["PopoverDismissRegion"])
         mozWaitForElementToExist(app.buttons["TermsOfService.PrivacyNotice.DoneButton"])
         snapshot("TermsOfService-1")
         app.buttons["TermsOfService.PrivacyNotice.DoneButton"].tap()
-        
+
         // Set as default browser
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
