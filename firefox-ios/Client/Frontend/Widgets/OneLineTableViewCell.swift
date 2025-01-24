@@ -204,13 +204,7 @@ class OneLineTableViewCell: UITableViewCell,
                 let button = accessoryView as? UIButton
                 var buttonConfig = button?.configuration
                 let image = buttonConfig?.image?.createScaled(
-                    CGSize(
-                        width: iconSize,
-                        height: iconSize
-                    )
-                ).withRenderingMode(
-                    .alwaysTemplate
-                ).imageFlippedForRightToLeftLayoutDirection()
+                    CGSize(width: iconSize, height: iconSize)).withRenderingMode(.alwaysTemplate)
                 buttonConfig?.image = image
                 button?.configuration = buttonConfig
             }
