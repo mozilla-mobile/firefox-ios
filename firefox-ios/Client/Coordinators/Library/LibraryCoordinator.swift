@@ -108,7 +108,7 @@ class LibraryCoordinator: BaseCoordinator,
         }
 
         let coordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
+            alertContainer: libraryViewController?.view ?? UIView(),
             router: router,
             profile: profile,
             parentCoordinator: self,
