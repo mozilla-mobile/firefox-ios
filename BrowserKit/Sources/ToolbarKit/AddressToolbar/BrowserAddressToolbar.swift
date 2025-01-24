@@ -94,19 +94,24 @@ public class BrowserAddressToolbar: UIView,
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewState = state.locationViewState
-        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
+        if state.locationViewState.isEditing {
+            leadingNavigationActionStackConstraint?.constant = 8
+        }
+        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
 
     public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
-        updateActions(state: state)
+
         updateBorder(borderPosition: state.borderPosition)
 
+        updateActions(state: state) 
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         droppableUrl = state.locationViewState.droppableUrl
 
-        setNeedsLayout()
-        layoutIfNeeded()
+
+//        setNeedsLayout()
+//        layoutIfNeeded()
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -236,7 +241,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(state: AddressToolbarState) {
+    internal func updateActions(state: AddressToolbarState, completion: (() -> Void)? = nil) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
 
@@ -247,6 +252,12 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+
+        UIView.animate(withDuration: animationTime, delay: 0) {
+            self.layoutIfNeeded()
+        } completion: { _ in
+            completion?()
+        }
     }
 
     private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
@@ -277,12 +288,17 @@ public class BrowserAddressToolbar: UIView,
         return button
     }
 
+    let animationTime = 0.2
+    lazy var delay = animationTime - 0.1
+
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         stackView.removeAllArrangedViews()
 
         toolbarElements.forEach { toolbarElement in
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
+            button.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+            button.alpha = 0
             stackView.addArrangedSubview(button)
 
             NSLayoutConstraint.activate([
@@ -297,6 +313,12 @@ public class BrowserAddressToolbar: UIView,
 
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
+            }
+        }
+        UIView.animate(withDuration: animationTime, delay: delay) {
+            stackView.arrangedSubviews.forEach {
+                $0.transform = .identity
+                $0.alpha = 1
             }
         }
     }

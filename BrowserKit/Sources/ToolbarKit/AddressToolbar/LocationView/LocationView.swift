@@ -127,6 +127,8 @@ final class LocationView: UIView,
         searchEngineContentView = isUnifiedSearchEnabled
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
+
+        
         searchEngineContentView.configure(state, delegate: delegate)
 
         configureLockIconButton(state)
@@ -229,17 +231,38 @@ final class LocationView: UIView,
         iconContainerStackView.removeAllArrangedViews()
     }
 
+    let animationTime = 0.2
+    lazy var delay = animationTime - 0.1
+
     private func updateIconContainer() {
         guard !isEditing else {
+            lockIconButton.alpha = 0
+            lockIconButton.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             updateUIForSearchEngineDisplay()
             urlTextFieldTrailingConstraint?.constant = 0
+            UIView.animate(withDuration: animationTime, delay: delay) {
+                self.searchEngineContentView.alpha = 1
+                self.searchEngineContentView.transform = .identity
+            }
             return
         }
 
         if isURLTextFieldEmpty {
+            lockIconButton.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             updateUIForSearchEngineDisplay()
+            UIView.animate(withDuration: animationTime, delay: delay) {
+                self.lockIconButton.alpha = 0
+                self.searchEngineContentView.alpha = 1
+                self.searchEngineContentView.transform = .identity
+            }
         } else {
+            searchEngineContentView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             updateUIForLockIconDisplay()
+            UIView.animate(withDuration: animationTime, delay: delay) {
+                self.searchEngineContentView.alpha = 0
+                self.lockIconButton.alpha = 1
+                self.lockIconButton.transform = .identity
+            }
         }
         urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
     }
@@ -284,6 +307,16 @@ final class LocationView: UIView,
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
             urlTextField.removeInteraction(dropInteraction)
+        }
+
+        if state.isEditing {
+            UIView.animate(withDuration: animationTime, delay: delay) {
+                self.urlTextField.clearButton?.alpha = 1
+                self.urlTextField.clearButton?.transform = .identity
+            }
+        } else {
+            urlTextField.clearButton?.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+            urlTextField.clearButton?.alpha = 0
         }
 
         // Once the user started typing we should not update the text anymore as that interferes with
