@@ -11,7 +11,7 @@ import {
 } from "darkreader";
 
 // Needed in order for dark reader to handle CORS properly
-// This tells dark reader to use use the global window.fetch.
+// This tells dark reader to use the global window.fetch.
 setFetchMethod(window.fetch);
 
 export const setEnabled = (enabled) => {
