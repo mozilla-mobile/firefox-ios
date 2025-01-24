@@ -101,20 +101,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         mozWaitForElementToExist(app.buttons[".DefaultBrowserSettings.PrimaryButton"])
         snapshot("TermsOfService-2")
-    }
-
-    @MainActor
-    func testToSSettings() {
-        navigator.goto(SettingsScreen)
-        app.swipeUp()
-        app.swipeUp()
-        app.swipeUp()
-        // Show Tour is an item closely before the "Technical and Interaction Data" setting.
-        while !app.cells["ShowTour"].isHittable {
-            app.swipeDown(velocity: 30)
-        }
-        snapshot("TermsOfService-Settings-1")
-    }
 
     func testWebViewContextMenu () throws {
         throw XCTSkip("Failing a lot and now new strings here")
