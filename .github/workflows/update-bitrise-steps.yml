@@ -71,7 +71,6 @@ jobs:
           reviewers: mdotb-moz,clarmso,isabelrios
 
         # Step 8: Send a message to slack if there is a failure
-
   notify-on-failure:
     runs-on: ubuntu-latest
     needs: update-steps
