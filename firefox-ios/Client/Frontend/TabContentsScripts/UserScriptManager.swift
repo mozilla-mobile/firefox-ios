@@ -17,10 +17,19 @@ class UserScriptManager: FeatureFlaggable {
         source: "window.__firefox__.NoImageMode.setEnabled(true)",
         injectionTime: .atDocumentStart,
         forMainFrameOnly: true)
-    private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(
-        source: "window.__firefox__.NightMode.setEnabled(true)",
-        injectionTime: .atDocumentEnd,
-        forMainFrameOnly: true)
+    
+    private lazy var isDarkReaderEnabled: Bool = {
+        self.featureFlags.isFeatureEnabled(.darkReader, checking: .buildOnly)
+    }()
+
+    private lazy var nightModeUserScript: WKUserScript = {
+        WKUserScript.createInDefaultContentWorld(
+            source: NightModeHelper.jsCallbackBuilder(true, isDarkReaderEnabled),
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: true
+        )
+    }()
+
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",
         injectionTime: .atDocumentEnd,
