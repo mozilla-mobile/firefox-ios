@@ -53,7 +53,7 @@
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "രഹസ്യവാക്കുകൾ";
 
 /* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
-"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "ആമുഖതാൾ സ്വന്തമാക്കുക";
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "ആമുഖത്താൾ ഇഷ്ടാനുസൃതമാക്കുക";
 
 /* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
 "MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "സഹായം നേടുക";
@@ -65,7 +65,7 @@
 "MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "%@ -ൽ പുതിയതു്";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
-"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "ആമുഖതാൾ സ്വന്തമാക്കുക";
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "ആമുഖത്താൾ ഇഷ്ടാനുസൃതമാക്കുക";
 
 /* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
 "MainMenu.SettingsSection.GetHelp.Title.v131" = "സഹായം നേടുക";

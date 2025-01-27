@@ -28,6 +28,9 @@
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Modificar marcapagina";
 
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "MARCAPAGINAS DE SCRIPTORIO";
+
 /* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
 "Bookmarks.Menu.EditBookmarkSave.v135" = "Salvar";
 
@@ -42,6 +45,9 @@
 
 /* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
 "Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Altere optiones";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Salvate in “Marcapaginas”";
 
 /* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Salvate in “%@”";
