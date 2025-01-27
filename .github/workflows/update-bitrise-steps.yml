@@ -16,7 +16,10 @@ jobs:
     steps:
       # Step 1: Check out the repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+           persist-credentials: false
+           token: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 2: Set up Python
       - name: Set up Python
