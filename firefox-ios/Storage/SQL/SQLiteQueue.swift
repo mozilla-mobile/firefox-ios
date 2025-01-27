@@ -18,9 +18,8 @@ open class SQLiteQueue: TabQueue {
     }
 
     fileprivate func factory(_ row: SDRow) -> ShareItem {
-        guard let url = row["url"] as? String, let title = row["title"] as? String else {
-            return ShareItem(url: "", title: "")
-        }
+        let title = row["title"] as? String ?? ""
+        let url = row["url"] as? String ?? ""
         return ShareItem(url: url, title: title)
     }
 
