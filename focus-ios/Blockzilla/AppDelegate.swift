@@ -358,6 +358,8 @@ extension AppDelegate {
             }
         }
         
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+        
         if Settings.getToggle(.sendAnonymousUsageData) {
             UsageProfileManager.checkAndSetUsageProfileId()
         } else {
