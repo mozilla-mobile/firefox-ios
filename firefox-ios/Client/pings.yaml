@@ -135,6 +135,5 @@ usage-deletion-request:
     include_info_sections: false
   reasons:
     set_upload_enabled: |
-      The ping was submitted between Glean init and Glean shutdown.
-      After init but before shutdown the upload of usage reporting data changed
-      from enabled to disabled.
+      The ping was submitted due to the usage-reporting data preference changing from
+      enabled to disabled.
