@@ -62,7 +62,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update/bitrise-steps
+          branch: update-bitrise-steps
           commit-message: "Update [v${{ env.next_version }}] outdated Bitrise steps ${{ env.current_date }}"
           title: "Bump [v${{ env.next_version }}] Update outdated Bitrise steps ${{ env.current_date }}"
           body: |
