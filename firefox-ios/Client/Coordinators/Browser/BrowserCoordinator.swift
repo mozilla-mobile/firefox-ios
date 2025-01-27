@@ -387,9 +387,9 @@ class BrowserCoordinator: BaseCoordinator,
         case .topSites:
             browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab:
-            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
+            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: true)
         case .newTab:
-            browserViewController.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: true)
         }
     }
 
