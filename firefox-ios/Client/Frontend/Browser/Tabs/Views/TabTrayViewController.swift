@@ -531,30 +531,32 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeAllTabs)
-        store.dispatch(action)
+        showCloseAllConfirmation()
     }
 
     private func showCloseAllConfirmation() {
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
-                                           style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-        controller.popoverPresentationController?.barButtonItem = deleteButton
-        present(controller, animated: true, completion: nil)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let closeAction = UIAlertAction(title: "Close All Tabs", style: .destructive) { _ in
+            self.closeAllTabs()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(closeAction)
+        alertController.addAction(cancelAction)
+        
+        // Per iPad, specifica la sorgente del popover
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        
+        present(alertController, animated: true, completion: nil)
     }
 
-    private func confirmCloseAll() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.confirmCloseAllTabs)
+    private func closeAllTabs() {
+        let action = TabPanelViewAction(panelType: self.tabTrayState.selectedPanel,
+                                        windowUUID: self.windowUUID,
+                                        actionType: TabPanelViewActionType.closeAllTabs)
         store.dispatch(action)
     }
 
