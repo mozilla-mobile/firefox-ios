@@ -26,9 +26,6 @@ class DependencyHelper {
         let appSessionProvider: AppSessionProvider = appDelegate.appSessionManager
         AppContainer.shared.register(service: appSessionProvider)
 
-        let ratingPromptManager: RatingPromptManager = appDelegate.ratingPromptManager
-        AppContainer.shared.register(service: ratingPromptManager)
-
         let downloadQueue: DownloadQueue = appDelegate.appSessionManager.downloadQueue
         AppContainer.shared.register(service: downloadQueue)
 
