@@ -531,21 +531,14 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        showCloseAllConfirmation()
+        closeAllTabs()
     }
 
-    private func showCloseAllConfirmation() {
-        let alertController = UIAlertController(title: "Close all tabs?", message: nil, preferredStyle: .alert)
-        let closeAction = UIAlertAction(title: "Close All", style: .destructive) { _ in
-            let action = TabPanelViewAction(panelType: self.tabTrayState.selectedPanel,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.closeAllTabs)
-            store.dispatch(action)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(closeAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
+    private func closeAllTabs() {
+        let action = TabPanelViewAction(panelType: self.tabTrayState.selectedPanel,
+                                        windowUUID: self.windowUUID,
+                                        actionType: TabPanelViewActionType.closeAllTabs)
+        store.dispatch(action)
     }
 
     @objc
