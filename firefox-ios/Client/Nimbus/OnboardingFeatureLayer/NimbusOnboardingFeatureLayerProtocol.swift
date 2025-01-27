@@ -7,6 +7,7 @@ import Foundation
 protocol NimbusOnboardingFeatureLayerProtocol {
     func getOnboardingModel(
         for onboardingType: OnboardingType,
-        from nimbus: FxNimbus
+        from nimbus: FxNimbus,
+        and termsOfServiceManager: TermsOfServiceManager?
     ) -> OnboardingViewModel
 }
