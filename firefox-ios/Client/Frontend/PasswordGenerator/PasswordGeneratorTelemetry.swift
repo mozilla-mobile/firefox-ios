@@ -6,11 +6,17 @@ import Foundation
 import Glean
 
 public struct PasswordGeneratorTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func passwordGeneratorDialogShown() {
-        GleanMetrics.PasswordGenerator.shown.add()
+        gleanWrapper.incrementCounter(for: GleanMetrics.PasswordGenerator.shown)
     }
 
     func usePasswordButtonPressed() {
-        GleanMetrics.PasswordGenerator.filled.add()
+        gleanWrapper.incrementCounter(for: GleanMetrics.PasswordGenerator.filled)
     }
 }
