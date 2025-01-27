@@ -5,7 +5,6 @@
 import XCTest
 @testable import Client
 
-
 final class MockGleanUsageReportingMetricsService: GleanUsageReportingMetricsService {}
 
 final class MockGleanUsageReportingApi: GleanUsageReportingApi {
