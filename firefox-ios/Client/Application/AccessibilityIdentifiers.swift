@@ -101,6 +101,7 @@ struct AccessibilityIdentifiers {
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
         static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
+        static let saveAsPDF = "MainMenu.SaveAsPDF"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
