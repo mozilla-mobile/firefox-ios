@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Glean
 
 // MARK: - Settings Flow Delegate Protocol
 

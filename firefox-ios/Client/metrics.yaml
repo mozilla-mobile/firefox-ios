@@ -752,6 +752,7 @@ usage:
     expires: never
     send_in_pings:
       - usage-reporting
+      - usage-deletion-request
 
   duration:
     type: timing_distribution
