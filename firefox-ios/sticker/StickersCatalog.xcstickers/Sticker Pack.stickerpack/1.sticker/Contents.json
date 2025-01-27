@@ -4,6 +4,7 @@
     "version" : 1
   },
   "properties" : {
+    "accessibility-label" : "Firefox logo",
     "filename" : "1.png"
   }
 }

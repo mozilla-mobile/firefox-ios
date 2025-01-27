@@ -4,6 +4,7 @@
     "version" : 1
   },
   "properties" : {
+    "accessibility-label" : "Melting face",
     "filename" : "6.png"
   }
 }

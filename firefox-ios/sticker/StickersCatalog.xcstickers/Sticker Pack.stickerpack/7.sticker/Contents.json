@@ -4,6 +4,7 @@
     "version" : 1
   },
   "properties" : {
+    "accessibility-label" : "Cactus with sunglasses",
     "filename" : "7.png"
   }
 }

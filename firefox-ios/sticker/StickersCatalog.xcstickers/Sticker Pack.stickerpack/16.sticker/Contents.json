@@ -4,6 +4,7 @@
     "version" : 1
   },
   "properties" : {
+    "accessibility-label" : "Computer face with crossed-out eyes",
     "filename" : "16.png"
   }
 }
