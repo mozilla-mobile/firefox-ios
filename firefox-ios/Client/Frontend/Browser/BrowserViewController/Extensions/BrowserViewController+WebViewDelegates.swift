@@ -625,11 +625,10 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
+            // Try to open the custom scheme URL, if it doesn't work we show an error alert
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 // Do not show error message for JS navigated links or
                 // redirect as it's not the result of a user action.
-                // TODO: Laurie - Check syntheticClickType
-
                 if !openedURL, navigationAction.navigationType == .linkActivated {
                     let alert = UIAlertController(
                         title: nil,
