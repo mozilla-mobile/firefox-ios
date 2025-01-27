@@ -8,9 +8,14 @@ import UIKit
 class LaunchScreenView: UIView {
     private static let viewName = "LaunchScreen"
 
-    class func fromNib() -> UIView {
-        return Bundle.main.loadNibNamed(LaunchScreenView.viewName,
-                                        owner: nil,
-                                        options: nil)![0] as! UIView
+    class func fromNib() -> UIView? {
+        guard let view = Bundle.main.loadNibNamed(
+            LaunchScreenView.viewName,
+            owner: nil,
+            options: nil
+        )?[0] as? UIView else {
+            return nil
+        }
+        return view
     }
 }

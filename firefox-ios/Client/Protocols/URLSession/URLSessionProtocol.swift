@@ -7,6 +7,10 @@ import Foundation
 protocol URLSessionProtocol {
     typealias DataTaskResult = (Data?, URLResponse?, Error?) -> Void
 
+    func data(from url: URL) async throws -> (Data, URLResponse)
+
+    func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse)
+
     func dataTaskWith(_ url: URL,
                       completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol
@@ -18,6 +22,14 @@ protocol URLSessionProtocol {
 }
 
 extension URLSession: URLSessionProtocol {
+    public func data(from url: URL) async throws -> (Data, URLResponse) {
+        try await data(from: url, delegate: nil)
+    }
+
+    public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+        try await data(for: urlRequest, delegate: nil)
+    }
+
     func dataTaskWith(
         request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void

@@ -14,7 +14,7 @@ class XCRun(object):
         self.logger.info('Running: {}'.format(' '.join(args)))
         subprocess.check_call(args)
 
-    def boot(self, device='iPhone 15'):
+    def boot(self, device='iPhone 16'):
         ios_device = os.environ.get("SIMULATOR_UDID", device)
         self._run('boot', ios_device)
 

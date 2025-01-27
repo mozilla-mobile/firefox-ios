@@ -6,7 +6,7 @@ import Common
 import ToolbarKit
 import Shared
 
-class AddressToolbarContainerModel: Equatable {
+final class AddressToolbarContainerModel: Equatable {
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
@@ -22,7 +22,7 @@ class AddressToolbarContainerModel: Equatable {
     let searchTerm: String?
     let isEditing: Bool
     let didStartTyping: Bool
-    let isScrollingDuringEdit: Bool
+    let shouldShowKeyboard: Bool
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -57,7 +57,7 @@ class AddressToolbarContainerModel: Equatable {
             searchTerm: term,
             isEditing: isEditing,
             didStartTyping: didStartTyping,
-            isScrollingDuringEdit: isScrollingDuringEdit,
+            shouldShowKeyboard: shouldShowKeyboard,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
             onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
@@ -109,7 +109,7 @@ class AddressToolbarContainerModel: Equatable {
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
         self.didStartTyping = state.addressToolbar.didStartTyping
-        self.isScrollingDuringEdit = state.addressToolbar.isScrollingDuringEdit
+        self.shouldShowKeyboard = state.addressToolbar.shouldShowKeyboard
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
@@ -182,6 +182,7 @@ class AddressToolbarContainerModel: Equatable {
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
 

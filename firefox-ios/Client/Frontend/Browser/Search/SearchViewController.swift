@@ -21,6 +21,8 @@ private struct SearchViewControllerUX {
     static let FaviconSize: CGFloat = 29
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
+
+    static let AppendButtonSize: CGFloat = 44
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
@@ -53,6 +55,7 @@ class SearchViewController: SiteTableViewController,
     var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager
+    private let logger: Logger
 
     var searchTelemetry: SearchTelemetry?
 
@@ -85,10 +88,12 @@ class SearchViewController: SiteTableViewController,
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
+        self.logger = logger
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
         viewModel.delegate = self
 
@@ -538,14 +543,24 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let twoLineImageOverlayCell = tableView.dequeueReusableCell(
+        guard let twoLineImageOverlayCell = tableView.dequeueReusableCell(
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
-        ) as! TwoLineImageOverlayCell
-        let oneLineTableViewCell = tableView.dequeueReusableCell(
+        ) as? TwoLineImageOverlayCell else {
+            logger.log("Failed to dequeue TwoLineImageOverlayCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
+        guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! OneLineTableViewCell
+        ) as? OneLineTableViewCell else {
+            logger.log("Failed to dequeue OneLineTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,
                                  for: SearchListSection(rawValue: indexPath.section)!,
@@ -708,8 +723,10 @@ class SearchViewController: SiteTableViewController,
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = currentTheme().colors.iconPrimary
-                appendButton.sizeToFit()
+                appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
+                                            height: SearchViewControllerUX.AppendButtonSize)
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.isAccessoryViewInteractive = true
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -761,7 +778,7 @@ class SearchViewController: SiteTableViewController,
                     twoLineCell,
                     site.title,
                     site.url,
-                    site.bookmarked ?? false
+                    site.isBookmarked ?? false
                 )
                 cell = twoLineCell
             }

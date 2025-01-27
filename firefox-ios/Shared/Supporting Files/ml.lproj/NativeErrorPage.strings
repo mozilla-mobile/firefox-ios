@@ -1,0 +1,12 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "വീണ്ടും ലഭ്യമാക്കുക";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "ശ്രദ്ധിക്കൂ. ഇതിൽ എന്തോ കുഴപ്പമുണ്ടെന്നു് തോന്നുന്നു.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "മറ്റൊരു ഉപകരണത്തോറു ബന്ധപ്പെടാൻ ശ്രമിക്കുക. താങ്ങളുടെ മോഡം പരിശോധിക്കുക. വൈഫൈ-ലേക്കു് വിച്ഛേതിച്ചും വീണ്ടും ബന്ധപ്പെടിയിട്ടു് ശ്രമിക്കുക.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "താങ്ങളുടെ അന്തരവല സമ്പർക്കത്തിൽ കുഴപ്പം ഉണ്ടു്.";
+

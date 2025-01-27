@@ -19,7 +19,7 @@ class TrackingProtectionModel {
     var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
-    let connectionSecure: Bool
+    var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
 
@@ -44,9 +44,9 @@ class TrackingProtectionModel {
     let domainHeaderLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.domainHeaderLabel
     let statusTitleLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.statusTitleLabel
     let statusBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.statusBodyLabel
-    let trackersBlockedLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackersBlockedLabel
-    let securityStatusLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusLabel
-    let toggleViewTitleLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewTitleLabel
+    let trackersBlockedButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackersBlockedButton
+    let securityStatusButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton
+    let toggleViewContainerA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewLabelsContainer
     let toggleViewBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewBodyLabel
     let closeButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton
     let closeButtonA11yLabel = String.Menu.EnhancedTrackingProtection.closeButtonAccessibilityLabel
@@ -126,7 +126,7 @@ class TrackingProtectionModel {
         if !connectionSecure {
             return theme.colors.layerRatingFSubdued
         }
-        return theme.colors.layer3
+        return theme.colors.layerAccentPrivateNonOpaque
     }
 
     func getDetailsModel() -> TrackingProtectionDetailsModel {
@@ -150,12 +150,9 @@ class TrackingProtectionModel {
     }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        if connectionSecure {
-            return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
-                .withRenderingMode(.alwaysTemplate)
-        } else {
-            return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
-        }
+        let imageName = connectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
+        return UIImage(imageLiteralResourceName: imageName)
+            .withRenderingMode(.alwaysTemplate)
     }
 
     func toggleSiteSafelistStatus() {
@@ -169,7 +166,7 @@ class TrackingProtectionModel {
     }
 
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
-        let alertMessage = String(format: clearCookiesAlertText, url.absoluteDisplayString)
+        let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
         let alert = UIAlertController(
             title: clearCookiesAlertTitle,
             message: alertMessage,
@@ -181,15 +178,31 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.clearCookiesAndSiteData()
             self?.selectedTab?.webView?.reload()
+
+            guard let windowUUID = self?.selectedTab?.windowUUID else { return }
+            store.dispatch(
+                TrackingProtectionMiddlewareAction(
+                    windowUUID: windowUUID,
+                    actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
+                )
+            )
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .clearCookies,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
-        _ = cookiesClearable.clear()
-        _ = siteDataClearable.clear()
+    func clearCookiesAndSiteData() {
+        _ = CookiesClearable().clear()
+        _ = SiteDataClearable().clear()
     }
 }

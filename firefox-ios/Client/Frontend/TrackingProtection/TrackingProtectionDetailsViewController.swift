@@ -35,8 +35,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
-        static let viewCertButtonTopDistance: CGFloat = 8.0
     }
+    private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
@@ -176,11 +176,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
+        viewCertificatesButton.applyUnderline(underlinedText: model.viewCertificatesButtonTitle)
         baseView.addArrangedSubview(viewCertificatesButton)
-        baseView.setCustomSpacing(
-            UX.viewCertButtonTopDistance,
-            after: verifiedByView
-        )
     }
 
     // MARK: Header Actions
@@ -196,6 +193,13 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
+            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+        )
     }
 
     // MARK: View Transitions
@@ -242,6 +246,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         let certificatesController = CertificatesViewController(with: model.getCertificatesModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(certificatesController, animated: true)
+        telemetryWrapper.trackShowCertificates()
     }
 
     private func currentTheme() -> Theme {
@@ -253,7 +258,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 extension TrackingProtectionDetailsViewController {
     func applyTheme() {
         let theme = currentTheme()
-        view.backgroundColor =  theme.colors.layer1
+        view.backgroundColor =  theme.colors.layer3
         connectionView.connectionImage.image = model.getLockIcon(theme.type)
         verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)

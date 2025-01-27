@@ -16,9 +16,9 @@ final class NativeErrorPageViewController: UIViewController,
     private let windowUUID: WindowUUID
 
     // MARK: Themable Variables
-    var themeManager: Common.ThemeManager
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: Common.NotificationProtocol
+    var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? {
         windowUUID
     }
@@ -50,7 +50,7 @@ final class NativeErrorPageViewController: UIViewController,
             top: 100,
             leading: 166,
             bottom: -16,
-            trailing: -144
+            trailing: -166
         )
     }
 
@@ -71,25 +71,32 @@ final class NativeErrorPageViewController: UIViewController,
         stackView.distribution = .fill
     }
 
-    private lazy var logoImage: UIImageView = .build { imageView in
+    private lazy var foxImage: UIImageView = .build { imageView in
         imageView.image = UIImage(
             named: ImageIdentifiers.NativeErrorPage.noInternetConnection
         )
         imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.foxImage
     }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .left
+        label.textAlignment = .natural
+        label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
+        label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
+        label.accessibilityTraits = .header
     }
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .left
+        label.textAlignment = .natural
+        label.text = .NativeErrorPage.NoInternetConnection.Description
+        label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
@@ -128,8 +135,23 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-        titleLabel.text = state.title
-        errorDescriptionLabel.text = state.description
+
+        if !state.title.isEmpty {
+            titleLabel.text = state.title
+            foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
+
+            if let validURL = state.url {
+                let errorDescription = getDescriptionWithHostName(
+                    errorURL: validURL,
+                    description: state.description
+                )
+                errorDescriptionLabel.attributedText = errorDescription
+            } else {
+                errorDescriptionLabel.text = state.description
+            }
+        } else {
+            return
+        }
     }
 
     func subscribeToRedux() {
@@ -188,11 +210,10 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
-    // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
-            a11yIdentifier: ""
+            a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.reloadButton
         )
         reloadButton.configure(
             viewModel: viewModel
@@ -204,7 +225,7 @@ final class NativeErrorPageViewController: UIViewController,
         textStack.addArrangedSubview(errorDescriptionLabel)
         commonContainer.addArrangedSubview(textStack)
         commonContainer.addArrangedSubview(reloadButton)
-        scrollContainer.addArrangedSubview(logoImage)
+        scrollContainer.addArrangedSubview(foxImage)
         scrollContainer.addArrangedSubview(commonContainer)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
@@ -244,7 +265,7 @@ final class NativeErrorPageViewController: UIViewController,
                 equalTo: scrollView.bottomAnchor,
                 constant: self.isLandscape ? UX.landscapePadding.bottom : UX.portraitPadding.bottom
             ),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+            foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
 
         iPadContraintsList = [
@@ -264,7 +285,7 @@ final class NativeErrorPageViewController: UIViewController,
                 equalTo: scrollView.bottomAnchor,
                 constant: UX.iPadPadding.bottom
             ),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
+            foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
             reloadButton.widthAnchor.constraint(
                 equalTo: commonContainer.widthAnchor,
                 multiplier: UX.reloadButtonIpadMultiplier
@@ -311,5 +332,17 @@ final class NativeErrorPageViewController: UIViewController,
                 actionType: GeneralBrowserActionType.reloadWebsite
             )
         )
+    }
+
+    func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
+        guard let validHostName = errorURL.host else { return nil }
+
+        let errDescription = String(format: description, validHostName)
+        let attributedString = errDescription.attributedText(
+            style: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
+            highlightedText: validHostName,
+            highlightedTextStyle: [.font: FXFontStyles.Bold.body.scaledFont()]
+        )
+        return attributedString
     }
 }

@@ -22,6 +22,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: versionString,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }

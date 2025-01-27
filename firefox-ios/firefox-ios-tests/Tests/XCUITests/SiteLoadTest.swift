@@ -26,10 +26,10 @@ class SiteLoadTest: BaseTestCase {
 
             // clear the cache
             navigator.goto(ClearPrivateDataSettings)
-            app.tables.staticTexts["Clear Private Data"].tap()
+            app.tables.staticTexts["Clear Private Data"].waitAndTap()
             app.alerts.buttons["OK"].waitAndTap()
             navigator.goto(BrowserTab)
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             counter += 1
         }
     }

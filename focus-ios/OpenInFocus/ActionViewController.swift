@@ -101,8 +101,14 @@ class ActionViewController: SLComposeServiceViewController {
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
         while responder != nil {
-            if responder!.responds(to: selectorOpenURL) {
-                responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
+            if #available(iOS 18.0, *) {
+                if let application = responder as? UIApplication {
+                    application.open(url as URL, options: [:], completionHandler: nil)
+                }
+            } else {
+                if responder!.responds(to: selectorOpenURL) {
+                    responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
+                }
             }
 
             responder = responder!.next

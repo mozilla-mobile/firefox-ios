@@ -62,13 +62,37 @@
 "FxA.FirefoxAccount.v119" = "Reikningur";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
-"Settings.AddressAutofill.Title.v124" = "Sjálfvirk útfylling á vistföngum";
-
-/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Heimilisföng";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Greiðslumátar";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Kanna nánar.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Kanna nánar";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Hrunskýrslur gera okkur kleift að greina og laga vandamál í vafranum.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Þetta hjálpar okkur að greina og laga vandamál í vafranum.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Senda hrunskýrslur inn sjálfkrafa";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Kanna nánar.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Kanna nánar";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Þetta hjálpar %@ að áætla virka notendur.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping um daglega notkun";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Reikningur";
@@ -106,9 +130,6 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Aðrar leitarvélar";
 
-/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
-"Settings.Search.DefaultSearchEngine.Footer.v122" = "Niðurstöður úr leitum, vafurferli, bókamerkjum og fleiru";
-
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Sjálfgefin leitarvél";
 
@@ -121,17 +142,8 @@
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Birta tillögur frá leitarvélum í huliðslotum";
 
-/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v122" = "Birta tillögur í huliðsvafri";
-
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "Sýna í huliðsvöfrun";
-
-/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v122" = "Huliðsvafur";
-
-/* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "Hraðleitarvélar";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Sýna leitartillögur";
@@ -154,14 +166,8 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Leita í samstilltum flipum";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Fáðu tillögur af vefnum sem tengjast leitinni þinni";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Fáðu tillögur frá %@ sem tengjast leitinni þinni";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Tillögur frá %@";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Tillögur af vefnum";
@@ -171,4 +177,31 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Tillögur frá styrktaraðilum";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Kanna nánar";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Prófaðu eiginleika og hugmyndir áður en þær eru settar í dreifingu.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Settu upp og keyrðu rannsóknir";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Kanna nánar.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Kanna nánar";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ safnar eingöngu þeim gögnum sem við þurfum til að veita og betrum bæta %2$@ fyrir alla.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Gögn um tækið þitt, vélbúnaðarstillingar og hvernig þú notar %@ hjálpa til við að bæta eiginleika, afköst og stöðugleika fyrir alla notendur.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Tækni- og samskiptagögn";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Senda tækni- og samskiptagögn";
 

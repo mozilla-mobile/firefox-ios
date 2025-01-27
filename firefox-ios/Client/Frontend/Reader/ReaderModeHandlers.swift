@@ -27,6 +27,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
+        // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.
+        let readerModeStyle = ReaderModeStyle.defaultStyle()
+
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
@@ -55,6 +58,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
                         guard let response = generateHtmlFor(readabilityResult: readabilityResult,
+                                                             style: readerModeStyle,
                                                              profile: profile) else { return nil }
                         return response
                     } catch {
@@ -90,9 +94,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     }
 
     private static func generateHtmlFor(readabilityResult: ReadabilityResult,
+                                        style: ReaderModeStyle,
                                         profile: Profile) -> GCDWebServerDataResponse? {
-        var readerModeStyle = ReaderModeStyle.defaultStyle()
-
+        var readerModeStyle = style
         // We have this page in our cache, so we can display it. Just grab the correct style from the
         // profile and then generate HTML from the Readability results.
         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),

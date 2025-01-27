@@ -10,9 +10,9 @@ import Foundation
 public class BrowserKitInformation {
     public static var shared = BrowserKitInformation()
 
-    public var buildChannel: AppBuildChannel!
-    public var nightlyAppVersion: String!
-    public var sharedContainerIdentifier: String!
+    public var buildChannel: AppBuildChannel?
+    public var nightlyAppVersion: String?
+    public var sharedContainerIdentifier: String?
 
     public func configure(buildChannel: AppBuildChannel,
                           nightlyAppVersion: String,

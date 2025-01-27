@@ -47,14 +47,22 @@ final class ContentContainerTests: XCTestCase {
 
     func testCanAddNewHomepage() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
 
         XCTAssertTrue(subject.canAdd(content: homepage))
     }
 
     func testCanAddNewHomepageOnceOnly() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
 
         subject.add(content: homepage)
         XCTAssertFalse(subject.canAdd(content: homepage))
@@ -127,7 +135,11 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasNewHomepage_returnsTrueWhenAdded() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
         subject.add(content: homepage)
 
         XCTAssertTrue(subject.hasHomepage)
@@ -188,7 +200,11 @@ final class ContentContainerTests: XCTestCase {
 
     func testContentView_hasContentNewHomepage_viewIsNotNil() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
         subject.add(content: homepage)
         XCTAssertNotNil(subject.contentView)
     }
@@ -217,7 +233,11 @@ final class ContentContainerTests: XCTestCase {
 
     func test_update_hasNewHomepage_returnsTrue() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
         subject.update(content: homepage)
         XCTAssertTrue(subject.hasHomepage)
         XCTAssertFalse(subject.hasLegacyHomepage)

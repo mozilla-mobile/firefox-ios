@@ -34,9 +34,6 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "ନଗଦ ଦେଖିଥିଲେ";
 
-/* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "ସର୍ଟକଟ୍‌ଗୁଡିକ";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "ଧାଡ଼ି ସେଟ୍ କରନ୍ତୁ";
 

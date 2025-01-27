@@ -4,6 +4,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "New: streamlined menu";
 
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Dimmed";
+
 /* The accessibility label for the back button in the Main menu header navigation view. */
 "MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Back";
 
@@ -109,6 +112,9 @@
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Reading List";
 
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Save to Reading List";
+
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Home";
 
@@ -148,6 +154,48 @@
 /* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
 "MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Save to Reading List";
 
+/* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Turn off Night Mode";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Turn on Night Mode";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Night Mode";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Print";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Print";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Turn off Reader View";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Turn on Reader View";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Reader View";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool and is indicating that under the Tools submenu, a Report (Report Broken Site) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "Report";
+
+/* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "Report Broken Site";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Share tool and is indicating that under the Tools submenu, a Share (to someone else) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "Share";
+
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "Share";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zoom";
+
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Zoom (%@)";
+
 /* On the main menu, the title for the action that will turn Night Mode off in the application. */
 "MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Turn off Night Mode";
 
@@ -176,7 +224,7 @@
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Report";
 
 /* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131" = "Report Broken Site";
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Report Broken Site…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Share";
@@ -190,11 +238,41 @@
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
 "MainMenu.Submenus.Tools.Zoom.Title.v131" = "Zoom (%@)";
 
+/* The accessibility label for the Main Menu. */
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "Main Menu";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "New Private Tab";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "New Tab";
+
 /* On the main menu, the title for the action that will create a new private tab. */
 "MainMenu.TabsSection.NewPrivateTab.Title.v131" = "New Private Tab";
 
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "New Tab";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Find in page";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Save";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Save submenu";
+
+/* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Switch to desktop site";
+
+/* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "Switch to mobile site";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Tools";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Tools submenu";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Find in Page…";

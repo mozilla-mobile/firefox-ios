@@ -78,6 +78,7 @@
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
 		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
+		8C8906AC2D0B3E9F003734FE /* UsageProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -229,6 +230,7 @@
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
+		ED5ACDB02CE6AABF00A55506 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */; };
 		F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */; };
 		F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
@@ -241,7 +243,6 @@
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
 		F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86D00602790978700E83177 /* InternalSettingsView.swift */; };
 		F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */; };
-		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
 		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
@@ -678,9 +679,16 @@
 		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
 		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
+		8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProfileManager.swift; sourceTree = "<group>"; };
 		A847EEFA289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A858FC272D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Intents.strings; sourceTree = "<group>"; };
+		A858FC282D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A858FC292D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Intro.strings; sourceTree = "<group>"; };
+		A858FC2A2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A858FC2B2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A858FC2C2D271326008B994A /* scn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = scn; path = scn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A892C8D428BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A892C8D628BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intro.strings; sourceTree = "<group>"; };
 		A892C8D728BBA27600A64567 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -689,6 +697,12 @@
 		A89766D51F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A89766D61F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D71F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74A2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Intents.strings"; sourceTree = "<group>"; };
+		A8BDA74B2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74C2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Intro.strings"; sourceTree = "<group>"; };
+		A8BDA74D2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		A8BDA74E2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		A8BDA74F2D27124B00E02B59 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A8EA0CE4289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A8EA0CE6289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Intro.strings; sourceTree = "<group>"; };
 		A8EA0CE7289A4F4100B99C37 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1275,8 +1289,8 @@
 				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */,
 				8A0E7F2E2BA0F0EE006BC6B6 /* Fuzi in Frameworks */,
-				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
 				C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */,
+				ED5ACDB02CE6AABF00A55506 /* Sentry-Dynamic in Frameworks */,
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
 				451B81BF2BA4DB9F00CF3C50 /* RustMozillaAppServices.framework in Frameworks */,
@@ -1873,6 +1887,7 @@
 			isa = PBXGroup;
 			children = (
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
+				8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
 				C8D0305A27E89CC0000664DA /* InternalSettings */,
@@ -2123,7 +2138,6 @@
 			name = Blockzilla;
 			packageProductDependencies = (
 				F85F7A282655AD5800395515 /* SnapKit */,
-				F8B92FBD279EC73700183998 /* Sentry */,
 				CDFA746E27ABD43D0055FE55 /* Glean */,
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
 				C8FB1E6527F5A79300C60DC6 /* DesignSystem */,
@@ -2131,6 +2145,7 @@
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
 				C809130D2A08F245000889B0 /* Licenses */,
 				8A0E7F2D2BA0F0EE006BC6B6 /* Fuzi */,
+				ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -2314,6 +2329,8 @@
 				be,
 				am,
 				gl,
+				"en-CA",
+				scn,
 			);
 			mainGroup = E4BF2DCA1BACE8CA00DA9D68;
 			packageReferences = (
@@ -2486,7 +2503,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n    swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 		D5D067F9252F939600C35227 /* Glean */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2748,6 +2765,7 @@
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				C871586227FC276D006224BB /* OnboardingFactory.swift in Sources */,
 				B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */,
+				8C8906AC2D0B3E9F003734FE /* UsageProfileManager.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,
 				D3561B2B1DB5925100A5EEAF /* GradientBackgroundView.swift in Sources */,
 				F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */,
@@ -2911,6 +2929,8 @@
 				4369C6E22C0493E800CA4991 /* hy-AM */,
 				43D5D1B72CB3EAD7001137A4 /* ar */,
 				4343874F2CB3EC32009962A9 /* ne-NP */,
+				A8BDA74F2D27124B00E02B59 /* en-CA */,
+				A858FC2C2D271326008B994A /* scn */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3003,6 +3023,8 @@
 				43D535F52959011100A7C85C /* be */,
 				43D302E229B54A120040A4CC /* am */,
 				434B6DC32A2408A400EE7F9A /* gl */,
+				A8BDA74C2D27124B00E02B59 /* en-CA */,
+				A858FC292D271326008B994A /* scn */,
 			);
 			name = Intro.strings;
 			sourceTree = "<group>";
@@ -3095,6 +3117,8 @@
 				43D535F62959011100A7C85C /* be */,
 				43D302E329B54A120040A4CC /* am */,
 				434B6DC42A2408A400EE7F9A /* gl */,
+				A8BDA74D2D27124B00E02B59 /* en-CA */,
+				A858FC2A2D271326008B994A /* scn */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3187,6 +3211,8 @@
 				43D535F32959011000A7C85C /* be */,
 				43D302E129B54A120040A4CC /* am */,
 				434B6DC22A2408A400EE7F9A /* gl */,
+				A8BDA74B2D27124B00E02B59 /* en-CA */,
+				A858FC282D271326008B994A /* scn */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3420,6 +3446,8 @@
 				437778062A24092200BD08C5 /* pa-IN */,
 				4379F1D62A24094200FB3E77 /* si */,
 				438F047A2A24096D00960A50 /* tt */,
+				A8BDA74E2D27124B00E02B59 /* en-CA */,
+				A858FC2B2D271326008B994A /* scn */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3513,6 +3541,8 @@
 				E521DDFA29782D3C00655202 /* cy */,
 				43D302E029B54A120040A4CC /* am */,
 				434B6DC12A2408A400EE7F9A /* gl */,
+				A8BDA74A2D27124B00E02B59 /* en-CA */,
+				A858FC272D271326008B994A /* scn */,
 			);
 			name = Intents.intentdefinition;
 			sourceTree = "<group>";
@@ -7168,7 +7198,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 134.0.20241113050253;
+				version = 136.0.20250122050310;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7184,7 +7214,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 61.2.0;
+				minimumVersion = 63.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -7200,7 +7230,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.21.0;
+				version = 8.36.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -7246,15 +7276,15 @@
 			package = CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
 		};
+		ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-Dynamic";
+		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		F8B92FBD279EC73700183998 /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

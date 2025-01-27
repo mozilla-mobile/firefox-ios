@@ -70,7 +70,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
+        logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in self?.dispatch(action) }

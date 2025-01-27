@@ -21,6 +21,7 @@ class UpdateViewModelTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         profile = nil
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
     // MARK: Enable cards
@@ -104,7 +105,7 @@ class UpdateViewModelTests: XCTestCase {
     func testShouldNotShowCoverSheetForSameVersion() {
         let subject = createSubject()
         let currentTestAppVersion = "22.0"
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
 
         // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)

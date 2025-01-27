@@ -62,13 +62,37 @@
 "FxA.FirefoxAccount.v119" = "Conta";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
-"Settings.AddressAutofill.Title.v124" = "Preencher automaticamente as moradas";
-
-/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Endereços";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Métodos de pagamento";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Saber mais.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Saber mais";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Os relatórios de falha permitem-nos diagnosticar e corrigir problemas com o navegador.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Isto ajuda-nos a diagnosticar e a corrigir problemas com o navegador.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Enviar relatórios de falha automaticamente";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Saber mais.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Saber mais";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Isto ajuda o %@ a estimar os utilizadores ativos.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping de utilização diária";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Conta";
@@ -106,9 +130,6 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Motores de pesquisa alternativos";
 
-/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
-"Settings.Search.DefaultSearchEngine.Footer.v122" = "Resultados de pesquisas, histórico, marcadores e muito mais";
-
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Motor de pesquisa predefinido";
 
@@ -121,17 +142,8 @@
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Mostrar sugestões dos motores de pesquisa em sessões privadas";
 
-/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v122" = "Mostrar sugestões na navegação privada";
-
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "Mostrar em sessões privadas";
-
-/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v122" = "Navegação privada";
-
-/* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "Motores de pesquisa rápida";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Mostrar sugestões de pesquisa";
@@ -154,14 +166,8 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Pesquisar separadores sincronizados";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Obtenha sugestões da Internet relacionadas com a sua pesquisa";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Obtenha sugestões de %@ relacionadas com a sua pesquisa";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Sugestões de %@";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Sugestões da Web";
@@ -171,4 +177,31 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Sugestões de patrocinadores";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Saber mais";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Experimente funcionalidades e ideias antes de serem disponibilizadas para todos.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Instalar e executar estudos";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Saber mais.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Saber mais";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "O %1$@ esforça-se para apenas recolher o que precisamos para melhorar o %2$@ para todos.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Os dados sobre o seu dispositivo, configuração de hardware e utilização ajudam-nos a melhorar as funcionalidades, desempenho e estabilidade do %@.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Dados técnicos e de interação";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Enviar dados técnicos e de interação";
 

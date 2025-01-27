@@ -4,6 +4,7 @@
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  FormAutofill: "resource://autofill/FormAutofill.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
 });
 
@@ -92,7 +93,12 @@ export class FieldDetail {
     element,
     form,
     fieldName = null,
-    { autocompleteInfo = {}, confidence = null, isVisible = true } = {}
+    {
+      autocompleteInfo = null,
+      fathomLabel = null,
+      fathomConfidence = null,
+      isVisible = true,
+    } = {}
   ) {
     const fieldDetail = new FieldDetail(element);
 
@@ -121,9 +127,9 @@ export class FieldDetail {
       fieldDetail.credentialType = autocompleteInfo.credentialType;
       fieldDetail.sectionName =
         autocompleteInfo.section || autocompleteInfo.addressType;
-    } else if (confidence) {
+    } else if (fathomConfidence) {
       fieldDetail.reason = "fathom";
-      fieldDetail.confidence = confidence;
+      fieldDetail.confidence = fathomConfidence;
 
       // TODO: This should be removed once we support reference field info across iframe.
       // Temporarily add an addtional "the field is the only visible input" constraint
@@ -158,6 +164,15 @@ export class FieldDetail {
 
     // Info required by heuristics
     fieldDetail.maxLength = element.maxLength;
+
+    if (
+      lazy.FormAutofill.isMLExperimentEnabled &&
+      ["input", "select"].includes(element.localName)
+    ) {
+      fieldDetail.htmlMarkup = element.outerHTML.substring(0, 1024);
+      fieldDetail.fathomLabel = fathomLabel;
+      fieldDetail.fathomConfidence = fathomConfidence;
+    }
 
     return fieldDetail;
   }

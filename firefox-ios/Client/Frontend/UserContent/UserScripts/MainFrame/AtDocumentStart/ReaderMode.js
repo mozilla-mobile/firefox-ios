@@ -4,6 +4,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 "use strict";
+import { isProbablyReaderable, Readability } from "@mozilla/readability";
 
 const DEBUG = false;
 
@@ -33,6 +34,11 @@ function checkReadability() {
       return;
     }
 
+    if(!isProbablyReaderable(document)) {
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+      return;
+    }
+
     if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
       // Short circuit in case we already ran Readability. This mostly happens when going
       // back/forward: the page will be cached and the result will still be there.
@@ -42,8 +48,6 @@ function checkReadability() {
         webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
         return;
       }
-
-      var {Readability} = require("@mozilla/readability");
 
       var uri = {
         spec: document.location.href,

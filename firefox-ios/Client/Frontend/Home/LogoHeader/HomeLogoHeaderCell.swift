@@ -112,6 +112,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 // MARK: - ThemeApplicable
 extension HomeLogoHeaderCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
+        // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
         let wallpaperManager = WallpaperManager()
         if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)

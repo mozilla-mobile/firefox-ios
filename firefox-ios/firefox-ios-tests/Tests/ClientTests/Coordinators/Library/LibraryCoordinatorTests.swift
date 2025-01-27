@@ -96,7 +96,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testShowShareSheet_addsShareSheetCoordinator() {
         let subject = createSubject()
 
         subject.shareLibraryItem(
@@ -107,7 +107,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }

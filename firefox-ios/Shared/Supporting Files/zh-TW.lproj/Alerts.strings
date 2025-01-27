@@ -1,8 +1,23 @@
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com' */
+"Alerts.AddToCalendar.Body.v134" = "%@ 請求下載行事曆事件檔案，並將該事件加入您的行事曆。";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain. */
+"Alerts.AddToCalendar.BodyDefault.v134" = "此網站請求下載行事曆事件檔案，並將該事件加入您的行事曆。";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar. */
+"Alerts.AddToCalendar.Button.Add.v134" = "新增";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
+"Alerts.AddToCalendar.Title.v134" = "要新增至行事曆嗎？";
+
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
 "Alerts.FeltDeletion.Body.v122" = "關閉所有隱私分頁，並清除瀏覽紀錄、Cookie 及其他網站資料。";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "取消";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar. */
+"Alerts.FeltDeletion.Button.Cancel.v134" = "取消";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
 "Alerts.FeltDeletion.Button.Confirm.v122" = "清除瀏覽階段資料";

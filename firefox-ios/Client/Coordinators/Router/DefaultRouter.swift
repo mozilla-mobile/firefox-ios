@@ -11,6 +11,10 @@ class DefaultRouter: NSObject, Router {
         return navigationController.viewControllers.first
     }
 
+    var isPresenting: Bool {
+        return navigationController.presentedViewController != nil
+    }
+
     var navigationController: NavigationController
 
     init(navigationController: NavigationController) {

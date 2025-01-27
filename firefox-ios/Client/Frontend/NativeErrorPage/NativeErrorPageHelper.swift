@@ -2,12 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
-import WebKit
-import GCDWebServers
-import Shared
-import Storage
 
 class NativeErrorPageHelper {
     enum NetworkErrorType {
@@ -25,18 +20,31 @@ class NativeErrorPageHelper {
     }
 
     func parseErrorDetails() -> ErrorPageModel {
-        var title = ""
-        var description = ""
-
-        switch error.code {
-        case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
-            title = .NativeErrorPage.NoInternetConnection.TitleLabel
-            description = .NativeErrorPage.NoInternetConnection.Description
-        default:
-            break
+        let model: ErrorPageModel = if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+            switch error.code {
+            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
+                ErrorPageModel(
+                    errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
+                    errorDescription: .NativeErrorPage.NoInternetConnection.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
+                    url: nil
+                )
+            default:
+                ErrorPageModel(
+                    errorTitle: .NativeErrorPage.GenericError.TitleLabel,
+                    errorDescription: .NativeErrorPage.GenericError.Description,
+                    foxImageName: ImageIdentifiers.NativeErrorPage.securityError,
+                    url: url
+                )
+            }
+        } else {
+            ErrorPageModel(
+                errorTitle: .NativeErrorPage.NoInternetConnection.TitleLabel,
+                errorDescription: .NativeErrorPage.NoInternetConnection.Description,
+                foxImageName: ImageIdentifiers.NativeErrorPage.noInternetConnection,
+                url: nil
+            )
         }
-
-        let model = ErrorPageModel(errorTitle: title, errorDescription: description)
         return model
     }
 }

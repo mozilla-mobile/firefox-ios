@@ -48,6 +48,7 @@ class FasterInactiveTabs: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
         let fasterInactiveTabOption = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
 

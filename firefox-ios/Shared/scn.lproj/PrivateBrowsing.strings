@@ -1,0 +1,33 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Chiuji i schedi privati";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Grapi nta na scheda privata";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox nun s'arricorda nenti dâ to crunuluggìa o dî viscotta, ma sarba i nzingalibbra novi.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Cchiù nfurmazzioni";
+
+/* Toggled OFF accessibility value */
+"Off" = "Sdisattiva";
+
+/* Toggled ON accessibility value */
+"On" = "Attiva";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Navicazzioni privata";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mudalità privata";
+
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Navicazzioni privata";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Attiva o sdisattiva a mudalità privata";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Quannu nesci dâ mudalità privata";
+

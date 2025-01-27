@@ -66,7 +66,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
-class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -341,6 +341,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
 
+    /// Used to retain a reference to an AR 3D model preview until display ends
+    var quickLookPreviewHelper: OpenQLPreviewHelper?
+
     /// Returns true if this tab's URL is known, and it's longer than we want to store.
     var urlIsTooLong: Bool {
         guard let url = self.url else {
@@ -418,6 +421,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
+    private var newAlertQueue = [NewJSAlertInfo]()
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
@@ -583,7 +587,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(URLRequest(url: url))
+            if let internalURL = InternalURL(url),
+               internalURL.isAboutHomeURL {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            } else {
+                webView.load(URLRequest(url: url))
+            }
         }
 
         if let interactionState = interactionState {
@@ -685,7 +694,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     func reload(bypassCache: Bool = false) {
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
-            webView?.replaceLocation(with: page)
+            let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+            webView?.load(request)
             return
         }
 
@@ -702,7 +712,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             }
         }
 
-        if let webView, webView.url != nil {
+        // Do not reload from origin for homepage internal URLs
+        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
             webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
@@ -868,6 +879,27 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
+    }
+
+    func cancelQueuedAlerts() {
+        newAlertQueue.forEach { alert in
+            alert.cancel()
+        }
+    }
+
+    /// Queues a JS Alert for later display
+    /// Do not call completionHandler until the alert is displayed and dismissed
+    func newQueueJavascriptAlertPrompt(_ alert: NewJSAlertInfo) {
+        newAlertQueue.append(alert)
+    }
+
+    func newDequeueJavascriptAlertPrompt() -> NewJSAlertInfo? {
+        guard !newAlertQueue.isEmpty else { return nil }
+        return newAlertQueue.removeFirst()
+    }
+
+    func hasJavascriptAlertPrompt() -> Bool {
+        return !newAlertQueue.isEmpty
     }
 
     override func observeValue(

@@ -382,6 +382,9 @@
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Suciale";
 
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Mandà autumaticamente i raporti d’accidente";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Impiegà Face ID per spalancà l’appiecazione";
 

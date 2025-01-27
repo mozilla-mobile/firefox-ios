@@ -30,6 +30,9 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
 
         configuration = UIButton.Configuration.filled()
         titleLabel?.adjustsFontForContentSizeCategory = true
+
+        // Fix for https://openradar.appspot.com/FB12472792
+        titleLabel?.textAlignment = .center
     }
 
     required init?(coder aDecoder: NSCoder) {

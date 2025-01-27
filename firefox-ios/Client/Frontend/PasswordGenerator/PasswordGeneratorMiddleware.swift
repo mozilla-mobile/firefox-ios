@@ -95,14 +95,27 @@ final class PasswordGeneratorMiddleware {
 
     private func userTappedUsePassword(frame: WKFrameInfo, password: String) {
         passwordGeneratorTelemetry.usePasswordButtonPressed()
-        let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\"\(password)\")"
-        frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
-            if error != nil {
-                self.logger.log("Error filling in password info",
-                                level: .warning,
-                                category: .webview)
+        if let escapedPassword = escapeString(string: password) {
+            let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
+            frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
+                if error != nil {
+                    self.logger.log("Error filling in password info",
+                                    level: .warning,
+                                    category: .passwordGenerator)
+                }
             }
         }
+    }
+
+    private func escapeString(string: String) -> String? {
+        guard let jsonData = try? JSONEncoder().encode(string),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            self.logger.log("Error encoding generated password to JSON",
+                            level: .warning,
+                            category: .passwordGenerator)
+            return nil
+        }
+        return jsonString
     }
 
     private func userTappedRefreshPassword(frame: WKFrameInfo, windowUUID: WindowUUID) {

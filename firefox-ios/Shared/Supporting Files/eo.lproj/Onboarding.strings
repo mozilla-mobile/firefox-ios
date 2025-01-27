@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Ŝalti sciigojn";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Komencinte seancon kaj spegulinte, vi estas pli sekura. %@ ĉifras viajn pasvortojn, legosignojn kaj pli.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "Dum spegulado %@ ĉifras viajn pasvortojn, legosignojn kaj pli.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

@@ -28,7 +28,6 @@ protocol TabManager: AnyObject {
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
-    var tabDisplayType: TabDisplayType { get set }
     subscript(index: Int) -> Tab? { get }
     subscript(webView: WKWebView) -> Tab? { get }
 
@@ -63,7 +62,7 @@ protocol TabManager: AnyObject {
     func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
-    func addTab(_ request: URLRequest!,
+    func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
@@ -131,7 +130,7 @@ extension TabManager {
     }
 
     @discardableResult
-    func addTab(_ request: URLRequest! = nil,
+    func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false

@@ -8,18 +8,29 @@ import Redux
 
 /// Actions that are related to navigation from the user perspective
 class NavigationBrowserAction: Action {
-    let url: URL?
-    init(url: URL? = nil,
+    let navigationDestination: NavigationDestination
+
+    init(navigationDestination: NavigationDestination,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.url = url
+        self.navigationDestination = navigationDestination
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
 }
 
 enum NavigationBrowserActionType: ActionType {
+    // Native views
+    case tapOnTrackingProtection
+    case tapOnShareSheet
     case tapOnCustomizeHomepage
-    case tapOnCell
+    case tapOnSettingsSection
+
+    // link related
     case tapOnLink
+    case tapOnOpenInNewTab
+
+    // cell related
+    case tapOnCell
+    case longPressOnCell
 }

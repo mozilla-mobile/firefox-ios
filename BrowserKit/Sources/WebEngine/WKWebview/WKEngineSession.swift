@@ -4,15 +4,19 @@
 
 import Common
 import Foundation
-import WebKit
+@preconcurrency import WebKit
+
+protocol SessionHandler: AnyObject {
+    func commitURLChange()
+    func fetchMetadata(withURL url: URL)
+}
 
 class WKEngineSession: NSObject,
                        EngineSession,
-                       WKUIDelegate,
-                       WKNavigationDelegate,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
-                       AdsTelemetryScriptDelegate {
+                       AdsTelemetryScriptDelegate,
+                       SessionHandler {
     weak var delegate: EngineSessionDelegate?
     weak var findInPageDelegate: FindInPageHelperDelegate? {
         didSet {
@@ -31,6 +35,8 @@ class WKEngineSession: NSObject,
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
+    private let navigationHandler: WKNavigationHandler
+    private let uiHandler: WKUIHandler
 
     init?(userScriptManager: WKUserScriptManager,
           telemetryProxy: EngineTelemetryProxy? = nil,
@@ -40,7 +46,9 @@ class WKEngineSession: NSObject,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
           securityManager: SecurityManager = DefaultSecurityManager(),
-          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper()) {
+          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
+          navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
+          uiHandler: WKUIHandler = DefaultUIHandler()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -54,13 +62,17 @@ class WKEngineSession: NSObject,
         self.contentScriptManager = contentScriptManager
         self.securityManager = securityManager
         self.metadataFetcher = metadataFetcher
+        self.navigationHandler = navigationHandler
+        self.uiHandler = uiHandler
         super.init()
 
         self.setupObservers()
 
         self.metadataFetcher.delegate = self
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
+        navigationHandler.session = self
+        uiHandler.delegate = delegate
+        webView.uiDelegate = uiHandler
+        webView.navigationDelegate = navigationHandler
         webView.delegate = self
         userScriptManager.injectUserScriptsIntoWebView(webView)
         addContentScripts()
@@ -132,7 +144,7 @@ class WKEngineSession: NSObject,
     }
 
     func scrollToTop() {
-        webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+        webView.engineScrollView?.setContentOffset(CGPoint.zero, animated: true)
     }
 
     func findInPage(text: String, function: FindInPageFunction) {
@@ -298,12 +310,18 @@ class WKEngineSession: NSObject,
         commitURLChange()
     }
 
-    private func commitURLChange() {
+    // MARK: - SessionHandler
+
+    func commitURLChange() {
         guard let url = webView.url else { return }
 
         sessionData.url = url
         delegate?.onLocationChange(url: url.absoluteString)
 
+        metadataFetcher.fetch(fromSession: self, url: url)
+    }
+
+    func fetchMetadata(withURL url: URL) {
         metadataFetcher.fetch(fromSession: self, url: url)
     }
 
@@ -316,134 +334,6 @@ class WKEngineSession: NSObject,
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
-    }
-
-    // MARK: - WKUIDelegate
-
-    func webView(_ webView: WKWebView,
-                 createWebViewWith configuration: WKWebViewConfiguration,
-                 for navigationAction: WKNavigationAction,
-                 windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: FXIOS-8243 - Handle popup windows with createWebViewWith in WebEngine (epic part 2)
-        return nil
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (Bool) -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptTextInputPanelWithPrompt prompt: String,
-        defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping (String?) -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
-    }
-
-    func webViewDidClose(_ webView: WKWebView) {
-        // TODO: FXIOS-8245 - Handle webViewDidClose in WebEngine (epic part 3)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
-    ) {
-        completionHandler(delegate?.onProvideContextualMenu(linkURL: elementInfo.linkURL))
-    }
-
-    @available(iOS 15, *)
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // TODO: FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
-    }
-
-    // MARK: - WKNavigationDelegate
-
-    func webView(_ webView: WKWebView,
-                 didCommit navigation: WKNavigation!) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
-
-        // TODO: Revisit possible duplicate delegate callbacks when navigating to URL in same origin [PR #19083] [FXIOS-8351]
-        commitURLChange()
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFinish navigation: WKNavigation!) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-
-        if let url = webView.url {
-            metadataFetcher.fetch(fromSession: self, url: url)
-        }
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadFinished)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFail navigation: WKNavigation!,
-                 withError error: Error) {
-        telemetryProxy?.handleTelemetry(session: self, event: .didFailNavigation)
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 didFailProvisionalNavigation navigation: WKNavigation!,
-                 withError error: Error) {
-        telemetryProxy?.handleTelemetry(session: self, event: .didFailProvisionalNavigation)
-        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 didStartProvisionalNavigation navigation: WKNavigation!) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-    }
-
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationResponse: WKNavigationResponse,
-                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        decisionHandler(.allow)
-    }
-
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 preferences: WKWebpagePreferences,
-                 decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-        // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
-        decisionHandler(.allow, preferences)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        // TODO: FXIOS-8275 - Handle didReceiveServerRedirectForProvisionalNavigation (epic part 3)
-    }
-
-    func webView(_ webView: WKWebView,
-                 didReceive challenge: URLAuthenticationChallenge,
-                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // TODO: FXIOS-8276 - Handle didReceive challenge: URLAuthenticationChallenge (epic part 3)
-        completionHandler(.performDefaultHandling, nil)
     }
 
     // MARK: - WKEngineWebViewDelegate
@@ -469,11 +359,11 @@ class WKEngineSession: NSObject,
     // MARK: - AdsTelemetryScriptDelegate
 
     func trackAdsClickedOnPage(providerName: String) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsClickedOnPage(providerName: providerName))
+        telemetryProxy?.handleTelemetry(event: .trackAdsClickedOnPage(providerName: providerName))
     }
 
     func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
+        telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
     }
 
     func searchProviderModels() -> [EngineSearchProviderModel] {

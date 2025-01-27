@@ -39,11 +39,17 @@ public enum LoggerCategory: String {
     /// Related to the application lifecycle.
     case lifecycle
 
+    /// Related to the main menu.
+    case mainMenu
+
     /// Related to redux library or integration
     case redux
 
     /// Related to the setup of services on app launch.
     case setup
+
+    /// Related to showing the share sheet from multiple places in the app.
+    case shareSheet
 
     /// Related to storage (keychain, SQL database, store of different types, etc).
     case storage
@@ -62,4 +68,10 @@ public enum LoggerCategory: String {
 
     /// Remote settings
     case remoteSettings
+
+    /// Password Generator
+    case passwordGenerator
+
+    /// Related to wallpaper functionality, like fetching metadata, images, etc
+    case wallpaper
 }

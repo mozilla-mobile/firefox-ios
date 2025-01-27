@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱸᱡᱟ ᱨᱚᱯᱷᱟ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱫᱚ ᱵᱚᱱᱫᱚ ᱜᱮᱭᱟ ᱾  ᱟᱞᱮ ᱫᱚ ᱱᱚᱣᱟ ᱫᱚᱦᱲᱟ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱞᱮ ᱮᱢᱟᱭᱟ ᱾";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ᱨᱩᱠᱷᱤᱭᱟᱹ ᱫᱚ ᱵᱚᱱᱫᱚ ᱜᱮᱭᱟ ᱾  ᱟᱞᱮ ᱩᱱᱠᱩ ᱫᱚᱦᱲᱟ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱞᱮ ᱮᱢᱟᱫ ᱠᱚᱣᱟ ᱾";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

@@ -29,7 +29,7 @@
 "Menu.OpenHistoryAction.AccessibilityLabel.v2" = "ඉතිහාසය";
 
 /* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
-"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "කියවීමේ ලේඛනය";
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "කියවීමේ ලැයිස්තුව";
 
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "සැකසුම්";

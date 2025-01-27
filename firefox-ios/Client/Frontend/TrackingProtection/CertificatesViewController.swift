@@ -34,7 +34,8 @@ class CertificatesViewController: UIViewController,
     // MARK: - UI
     struct UX {
         static let titleLabelMargin = 8.0
-        static let titleLabelTopMargin = 20.0
+        static let titleLabelTopMargin = 2.0
+        static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
     }
@@ -42,19 +43,21 @@ class CertificatesViewController: UIViewController,
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
     }
 
     private let headerView: NavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.CertificatesScreen.headerView
     }
 
-    // TODO: FXIOS-9980 Tracking Protection Certificates Screen tableView header text is a little bit cutted off
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
         tableView.register(CertificatesHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
         tableView.sectionHeaderTopPadding = 0
+        tableView.separatorInset = .zero
     }
 
     // MARK: - Variables
@@ -65,17 +68,20 @@ class CertificatesViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    private let logger: Logger
 
     // MARK: - View Lifecycle
 
     init(with viewModel: CertificatesModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.model = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -136,9 +142,18 @@ class CertificatesViewController: UIViewController,
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.titleLabelMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.titleLabelMargin),
-            titleLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.titleLabelTopMargin)
+            titleLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: UX.titleLabelMargin
+            ),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -UX.titleLabelMargin
+            ),
+            titleLabel.topAnchor.constraint(
+                equalTo: headerView.bottomAnchor,
+                constant: UX.titleLabelTopMargin
+            )
         ])
     }
 
@@ -149,8 +164,7 @@ class CertificatesViewController: UIViewController,
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
             certificatesTableView.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: UX.titleLabelTopMargin
+                equalTo: titleLabel.bottomAnchor
             ),
             certificatesTableView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -171,8 +185,13 @@ class CertificatesViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: CertificatesHeaderView.cellIdentifier) as! CertificatesHeaderView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
+            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+                       level: .fatal,
+                       category: .certificate)
+            return UIView()
+        }
         var items: [CertificatesHeaderItem] = []
         for (index, certificate) in model.certificates.enumerated() {
             let certificateValues = certificate.subject.description.getDictionary()
@@ -189,6 +208,7 @@ class CertificatesViewController: UIViewController,
             }
         }
         headerView.configure(withItems: items, theme: currentTheme())
+        headerView.setupAccessibilityIdentifiers()
         return headerView
     }
 
@@ -203,6 +223,7 @@ class CertificatesViewController: UIViewController,
         }
 
         let certificate = model.certificates[model.selectedCertificateIndex]
+        cell.setupAccessibilityIdentifiers()
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
@@ -221,7 +242,8 @@ class CertificatesViewController: UIViewController,
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
                                        (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)],
+                               isIssuerName: true)
             }
 
         case .validity:
@@ -229,9 +251,9 @@ class CertificatesViewController: UIViewController,
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateValidity,
                            items: [
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotBefore,
-                                certificate.notValidBefore.toRFC822String()),
+                             certificate.notValidBefore.toRFC822String()),
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotAfter,
-                                certificate.notValidAfter.toRFC822String())
+                             certificate.notValidAfter.toRFC822String())
                            ])
 
         case .subjectAltName:
@@ -245,7 +267,16 @@ class CertificatesViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        // TODO: FXIOS-9829 Enhanced Tracking Protection certificates details screen accessibility identifiers
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: A11y.closeButton,
+            titleA11yId: A11y.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: A11y.backButton
+        )
+        titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
+        certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
     // MARK: View Transitions
@@ -282,7 +313,7 @@ class CertificatesViewController: UIViewController,
 extension CertificatesViewController {
     func applyTheme() {
         let theme = currentTheme()
-        view.backgroundColor = theme.colors.layer5
+        view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
         headerView.applyTheme(theme: theme)

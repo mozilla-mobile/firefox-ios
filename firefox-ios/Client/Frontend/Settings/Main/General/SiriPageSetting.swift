@@ -6,9 +6,9 @@ import Foundation
 
 class SiriPageSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
-    private let profile: Profile
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -18,7 +18,6 @@ class SiriPageSetting: Setting {
 
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?) {
-        self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(

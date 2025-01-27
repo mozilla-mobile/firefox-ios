@@ -23,6 +23,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
@@ -103,14 +104,9 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate(viewConstraints)
     }
 
-    func setupDetails(image: UIImage, text: String) {
-        connectionStatusImage.image = image
-        connectionStatusLabel.text = text
-    }
-
-    func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusLabelA11yId: String) {
+    func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusButtonA11yId: String) {
         connectionDetailArrow.accessibilityIdentifier = arrowImageA11yId
-        connectionStatusLabel.accessibilityIdentifier = securityStatusLabelA11yId
+        connectionButton.accessibilityIdentifier = securityStatusButtonA11yId
     }
 
     func adjustLayout() {
@@ -130,17 +126,19 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        self.backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
+        connectionStatusImage.tintColor = theme.colors.iconSecondary
     }
 
-    func setConnectionStatus(image: UIImage, isConnectionSecure: Bool, theme: Theme) {
+    func setConnectionStatus(image: UIImage,
+                             text: String,
+                             isConnectionSecure: Bool,
+                             theme: Theme) {
         connectionStatusImage.image = image
-        if isConnectionSecure {
-            connectionDetailArrow.isHidden = false
-            connectionStatusImage.tintColor = theme.colors.iconPrimary
-        } else {
-            connectionDetailArrow.isHidden = true
-        }
+        connectionStatusLabel.text = text
+        connectionButton.accessibilityLabel = text
+        connectionStatusImage.tintColor = theme.colors.iconSecondary
+        connectionDetailArrow.isHidden = !isConnectionSecure
     }
 }

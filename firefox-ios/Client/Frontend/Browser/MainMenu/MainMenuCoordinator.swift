@@ -16,17 +16,25 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showFindInPage()
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
-    func showShareSheet(with url: URL?)
+    func presentSavePDFController()
+    func showPrintSheet()
+
+    /// Open the share sheet to share the currently selected `Tab`.
+    func showShareSheetForCurrentlySelectedTab()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     private let profile: Profile
 
-    init(router: Router, windowUUID: WindowUUID, profile: Profile) {
+    init(
+        router: Router,
+        windowUUID: WindowUUID,
+        profile: Profile
+    ) {
         self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
@@ -50,9 +58,13 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         router.popViewController(animated: true)
     }
 
+    func removeCoordinatorFromParent() {
+        parentCoordinator?.didFinish(from: self)
+    }
+
     func dismissMenuModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
-        parentCoordinator?.didFinish(from: self)
+        removeCoordinatorFromParent()
     }
 
     func navigateTo(_ destination: MenuNavigationDestination, animated: Bool) {
@@ -62,26 +74,37 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             switch destination.destination {
             case .bookmarks:
                 self.navigationHandler?.showLibraryPanel(.bookmarks)
+
             case .customizeHomepage:
                 self.navigationHandler?.showSettings(at: .homePage)
+
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
+
             case .editBookmark:
                 self.navigationHandler?.editLatestBookmark()
+
             case .findInPage:
                 self.navigationHandler?.showFindInPage()
+
             case .goToURL:
                 self.navigationHandler?.openURLInNewTab(destination.url)
+
             case .history:
                 self.navigationHandler?.showLibraryPanel(.history)
+
             case .newTab:
                 self.navigationHandler?.openNewTab(inPrivateMode: false)
+
             case .newPrivateTab:
                 self.navigationHandler?.openNewTab(inPrivateMode: true)
+
             case .passwords:
                 self.navigationHandler?.showSettings(at: .password)
+
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
+
             case .syncSignIn:
                 let fxaParameters = FxASignInViewParameters(
                     launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
@@ -89,17 +112,26 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     referringPage: .appMenu
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+
+            case .printSheet:
+                self.navigationHandler?.showPrintSheet()
+
             case .shareSheet:
-                self.navigationHandler?.showShareSheet(with: destination.url)
+                self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
+
+            case .saveAsPDF:
+                self.navigationHandler?.presentSavePDFController()
+
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }
 
-            self.parentCoordinator?.didFinish(from: self)
+            removeCoordinatorFromParent()
         })
     }
 
     // MARK: - Private helpers
+
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)
         mainMenuViewController.coordinator = self

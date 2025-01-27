@@ -81,6 +81,7 @@ class BlockedTrackersTableViewController: UIViewController,
         constraints.removeAll()
         setupNavigationView()
         setupTableView()
+        setupAccessibilityIdentifiers()
         setupHeaderViewActions()
         NSLayoutConstraint.activate(constraints)
     }
@@ -108,8 +109,7 @@ class BlockedTrackersTableViewController: UIViewController,
         view.addSubview(trackersTable)
         let tableConstraints = [
             trackersTable.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             ),
             trackersTable.topAnchor.constraint(
                 equalTo: navigationView.bottomAnchor,
@@ -120,8 +120,7 @@ class BlockedTrackersTableViewController: UIViewController,
                 constant: 0
             ),
             trackersTable.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             )
         ]
         constraints.append(contentsOf: tableConstraints)
@@ -196,6 +195,17 @@ class BlockedTrackersTableViewController: UIViewController,
         }
     }
 
+    // MARK: Accessibility
+    private func setupAccessibilityIdentifiers() {
+        navigationView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
+            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+        )
+    }
+
     // MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
@@ -237,6 +247,6 @@ class BlockedTrackersTableViewController: UIViewController,
         let theme = currentTheme()
         navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
     }
 }

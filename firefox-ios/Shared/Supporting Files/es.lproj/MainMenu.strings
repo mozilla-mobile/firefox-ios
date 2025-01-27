@@ -4,6 +4,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Nuevo: menú simplificado";
 
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Atenuado";
+
 /* The accessibility label for the back button in the Main menu header navigation view. */
 "MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Atrás";
 
@@ -221,7 +224,7 @@
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Informar";
 
 /* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131" = "Informar de problemas con un sitio";
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Informar de problemas con un sitio…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Compartir";

@@ -24,7 +24,7 @@ protocol WKEngineWebView: UIView {
     var interactionState: Any? { get set }
     var url: URL? { get }
     var title: String? { get }
-    var engineScrollView: WKScrollView! { get }
+    var engineScrollView: WKScrollView? { get }
     var engineConfiguration: WKEngineConfiguration { get }
     var hasOnlySecureContent: Bool { get }
 
@@ -132,7 +132,7 @@ extension WKEngineWebView {
 // TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
 class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface {
-    var engineScrollView: WKScrollView!
+    var engineScrollView: WKScrollView?
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 

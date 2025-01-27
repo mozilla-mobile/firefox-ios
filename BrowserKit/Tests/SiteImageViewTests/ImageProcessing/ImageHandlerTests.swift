@@ -72,7 +72,7 @@ final class ImageHandlerTests: XCTestCase {
         let image = await subject.fetchFavicon(imageModel: model)
 
         let siteImageBundle = Bundle.allBundles.first {
-            return $0.bundleIdentifier?.contains("SiteImageView-resources") ?? false
+            return $0.bundleIdentifier?.contains("browserkit.SiteImageView.resources") ?? false
         }!
         let expectedImage = UIImage(named: "google", in: siteImageBundle, with: nil)
         XCTAssertEqual(expectedImage, image)
@@ -90,7 +90,7 @@ final class ImageHandlerTests: XCTestCase {
         let image = await subject.fetchFavicon(imageModel: model)
 
         let siteImageBundle = Bundle.allBundles.first {
-            return $0.bundleIdentifier?.contains("SiteImageView-resources") ?? false
+            return $0.bundleIdentifier?.contains("browserkit.SiteImageView.resources") ?? false
         }!
         let expectedImage = UIImage(named: "google", in: siteImageBundle, with: nil)
         XCTAssertEqual(expectedImage, image)
@@ -108,7 +108,7 @@ final class ImageHandlerTests: XCTestCase {
         let image = await subject.fetchFavicon(imageModel: model)
 
         let siteImageBundle = Bundle.allBundles.first {
-            return $0.bundleIdentifier?.contains("SiteImageView-resources") ?? false
+            return $0.bundleIdentifier?.contains("browserkit.SiteImageView.resources") ?? false
         }!
         let expectedImage = UIImage(named: "facebook", in: siteImageBundle, with: nil)
         XCTAssertEqual(expectedImage, image)

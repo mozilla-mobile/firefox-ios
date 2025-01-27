@@ -39,7 +39,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    override var tintColor: UIColor! {
+    override var tintColor: UIColor? {
         didSet {
             self.imageView?.tintColor = self.tintColor
         }

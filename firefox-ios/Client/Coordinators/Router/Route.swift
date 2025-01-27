@@ -66,6 +66,13 @@ enum Route: Equatable {
     ///                      settings to be displayed.
     case defaultBrowser(section: DefaultBrowserSection)
 
+    /// A route for opening a share sheet with share content and an optional accompanying message.
+    ///
+    /// - Parameters:
+    ///   - shareType: The content to be shared.
+    ///   - shareMessage: An optional plain text share message to be shared.
+    case sharesheet(shareType: ShareType, shareMessage: ShareMessage?)
+
     /// An enumeration representing different sections of the home panel.
     enum HomepanelSection: String, CaseIterable, Equatable {
         case bookmarks

@@ -3,14 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 import Common
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
-protocol BookmarksFolderCell {
+protocol BookmarksFolderCell: BookmarksRefactorFeatureFlagProvider {
     func getViewModel() -> OneLineTableViewCellViewModel
 
     func didSelect(profile: Profile,
@@ -29,10 +28,19 @@ extension BookmarkFolderData: BookmarksFolderCell {
             title = self.title
         }
 
-        return OneLineTableViewCellViewModel(title: title,
-                                             leftImageView: leftImageView,
-                                             accessoryView: nil,
-                                             accessoryType: .disclosureIndicator)
+        if isBookmarkRefactorEnabled {
+            return OneLineTableViewCellViewModel(title: title,
+                                                 leftImageView: leftImageView,
+                                                 accessoryView: UIImageView(image: chevronImage),
+                                                 accessoryType: .none,
+                                                 editingAccessoryView: UIImageView(image: chevronImage))
+        } else {
+            return OneLineTableViewCellViewModel(title: title,
+                                                 leftImageView: leftImageView,
+                                                 accessoryView: nil,
+                                                 accessoryType: .disclosureIndicator,
+                                                 editingAccessoryView: nil)
+        }
     }
 
     func didSelect(profile: Profile,
@@ -63,10 +71,19 @@ extension BookmarkItemData: BookmarksFolderCell {
             title = self.title
         }
 
-        return OneLineTableViewCellViewModel(title: title,
-                                             leftImageView: nil,
-                                             accessoryView: nil,
-                                             accessoryType: .disclosureIndicator)
+        if isBookmarkRefactorEnabled {
+            return OneLineTableViewCellViewModel(title: title,
+                                                 leftImageView: nil,
+                                                 accessoryView: UIImageView(image: chevronImage),
+                                                 accessoryType: .none,
+                                                 editingAccessoryView: UIImageView(image: chevronImage))
+        } else {
+            return OneLineTableViewCellViewModel(title: title,
+                                                 leftImageView: nil,
+                                                 accessoryView: nil,
+                                                 accessoryType: .disclosureIndicator,
+                                                 editingAccessoryView: nil)
+        }
     }
 
     func didSelect(profile: Profile,
@@ -87,7 +104,8 @@ extension BookmarkItemData: BookmarksFolderCell {
             return
         }
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
+        let bookmarksTelemetry = BookmarksTelemetry()
+        bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.bookmarksPanel)
     }
 }
 
@@ -98,6 +116,8 @@ extension FxBookmarkNode {
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
     }
 }

@@ -2,11 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 import Shared
 
 class LocalRequestHelper: TabContentScript {
+    private let logger: Logger
+
+    required init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     func scriptMessageHandlerNames() -> [String]? {
         return ["localRequestHelper"]
     }
@@ -19,7 +26,12 @@ class LocalRequestHelper: TabContentScript {
               let internalUrl = InternalURL(requestUrl)
         else { return }
 
-        let params = message.body as! [String: String]
+        guard let params = message.body as? [String: String] else {
+            logger.log("Invalid data message body in LocalRequestHelper: \(message.body)",
+                       level: .fatal,
+                       category: .library)
+            return
+        }
 
         guard let token = params["appIdToken"],
               token == UserScriptManager.appIdToken

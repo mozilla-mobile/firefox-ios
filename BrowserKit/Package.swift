@@ -9,6 +9,8 @@ let package = Package(
         .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
@@ -49,7 +51,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.12.0"),
+            exact: "8.1.3"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -58,7 +60,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.21.0"),
+            exact: "8.36.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
@@ -67,6 +69,10 @@ let package = Package(
             exact: "0.17.0"),
     ],
     targets: [
+        .target(name: "Shared",
+                dependencies: ["Common",
+                               "WebEngine"],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
@@ -92,7 +98,7 @@ let package = Package(
             name: "Common",
             dependencies: ["Dip",
                            "SwiftyBeaver",
-                           .product(name: "Sentry", package: "sentry-cocoa")],
+                           .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",

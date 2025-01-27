@@ -46,11 +46,11 @@ final class TabDisplayPanelTests: XCTestCase {
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,
                                file: StaticString = #file,
-                               line: UInt = #line) -> TabDisplayPanel {
+                               line: UInt = #line) -> TabDisplayPanelViewController {
         let subjectState = createSubjectState(isPrivateMode: isPrivateMode,
                                               emptyTabs: emptyTabs,
                                               emptyInactiveTabs: emptyInactiveTabs)
-        let subject = TabDisplayPanel(isPrivateMode: isPrivateMode, windowUUID: .XCTestDefaultUUID)
+        let subject = TabDisplayPanelViewController(isPrivateMode: isPrivateMode, windowUUID: .XCTestDefaultUUID)
         subject.newState(state: subjectState)
 
         trackForMemoryLeaks(subject, file: file, line: line)

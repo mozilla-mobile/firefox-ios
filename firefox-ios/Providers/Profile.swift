@@ -116,9 +116,6 @@ protocol Profile: AnyObject {
     // <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>
     func localName() -> String
 
-    // Async call to wait for result
-    func hasSyncAccount(completion: @escaping (Bool) -> Void)
-
     // Do we have an account at all?
     func hasAccount() -> Bool
 
@@ -147,7 +144,7 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
 
-    var syncManager: SyncManager! { get }
+    var syncManager: SyncManager? { get }
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
@@ -238,7 +235,7 @@ open class BrowserProfile: Profile {
 
     let database: BrowserDB
     let readingListDB: BrowserDB
-    var syncManager: SyncManager!
+    var syncManager: SyncManager?
 
     var fxaCommandsDelegate: FxACommandsDelegate?
 
@@ -407,7 +404,7 @@ open class BrowserProfile: Profile {
     }
 
     deinit {
-        self.syncManager.endTimedSyncs()
+        self.syncManager?.endTimedSyncs()
     }
 
     func localName() -> String {
@@ -424,7 +421,7 @@ open class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var legacyPlaces: PinnedSites  = {
+    private lazy var legacyPlaces: PinnedSites = {
         return BrowserDBSQLite(database: self.database, prefs: self.prefs)
     }()
 
@@ -451,7 +448,7 @@ open class BrowserProfile: Profile {
             callback(HistoryMigrationResult(numTotal: 0, numSucceeded: 0, numFailed: 0, totalDuration: 0))
             return
         }
-        let lastSyncTimestamp = Int64(syncManager.lastSyncFinishTime ?? 0)
+        let lastSyncTimestamp = Int64(syncManager?.lastSyncFinishTime ?? 0)
         places.migrateHistory(
             dbPath: browserDbPath,
             lastSyncTimestamp: lastSyncTimestamp,
@@ -519,11 +516,14 @@ open class BrowserProfile: Profile {
     }
 
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return self.syncManager.syncTabs() >>> { self.retrieveTabData() }
+        guard let syncManager else {
+            return deferMaybe([])
+        }
+        return syncManager.syncTabs() >>> { self.retrieveTabData() }
     }
 
     public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
-        let deferredResponse = self.syncManager.syncTabs() >>> { self.retrieveTabData() }
+        let deferredResponse = self.getClientsAndTabs()
         deferredResponse.upon { result in
             completion(result.successValue)
         }
@@ -553,7 +553,7 @@ open class BrowserProfile: Profile {
             // We shouldn't be called at all if the user isn't signed in.
             return
         }
-        if syncManager.isSyncing {
+        if let syncManager, syncManager.isSyncing {
             // If Sync is already running, `BrowserSyncManager#endSyncing` will
             // send a ping with the queued events when it's done, so don't send
             // an events-only ping now.
@@ -696,12 +696,6 @@ open class BrowserProfile: Profile {
         }
     }()
 
-    func hasSyncAccount(completion: @escaping (Bool) -> Void) {
-        rustFxA.hasAccount { hasAccount in
-            completion(hasAccount)
-        }
-    }
-
     func hasAccount() -> Bool {
         return rustFxA.hasAccount()
     }
@@ -753,7 +747,7 @@ open class BrowserProfile: Profile {
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
-        self.syncManager.onRemovedAccount()
+        self.syncManager?.onRemovedAccount()
     }
 
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {

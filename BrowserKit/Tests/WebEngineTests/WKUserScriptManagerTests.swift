@@ -17,7 +17,10 @@ final class WKUserScriptManagerTests: XCTestCase {
         let subject = createSubject()
 
         subject.injectUserScriptsIntoWebView(webview)
-        let config = webview.engineConfiguration as! MockWKEngineConfiguration
+        guard let config = webview.engineConfiguration as? MockWKEngineConfiguration else {
+            XCTFail("Failed to cast webview engine configuration to MockWKEngineConfiguration")
+            return
+        }
         XCTAssertEqual(config.addUserScriptCalled, 8)
     }
 

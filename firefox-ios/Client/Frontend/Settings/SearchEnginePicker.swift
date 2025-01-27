@@ -6,7 +6,7 @@ import UIKit
 
 class SearchEnginePicker: ThemedTableViewController {
     weak var delegate: SearchEnginePickerDelegate?
-    var engines: [OpenSearchEngine]!
+    var engines: [OpenSearchEngine] = []
     var selectedSearchEngineName: String?
 
     override func viewDidLoad() {

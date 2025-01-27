@@ -1,3 +1,9 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Назад";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Закрыть";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Общее наименование";
 
@@ -38,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Очистить";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Удаление кук и данных сайтов для %@ может привести к разрегистрации вас на веб-сайтах и очищению корзины покупок.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Удаление кук и данных сайтов для %@ может привести к выходу из аккаунта на веб-сайтах и очищению корзины покупок.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Удалить куки и данные сайтов";
@@ -105,9 +111,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Улучшенная защита от отслеживания";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Защита ОТКЛЮЧЕНА. Мы предлагаем снова включить её.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Защита ОТКЛЮЧЕНА. Мы предлагаем включить её снова.";

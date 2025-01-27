@@ -55,6 +55,9 @@
 /* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
 "Onboarding.Customization.Toolbar.Continue.Action.v123" = "שמירה והתחלת הגלישה";
 
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "לשמור חיפושים בהישג יד.";
+
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "דילוג";
 
@@ -89,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "הפעלת התרעות";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "כאשר החשבון שלך מחובר ומסונכרן, אתה מוגן יותר. %@ מצפין את הססמאות והסימניות שלך ועוד.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "‏%@ מצפין את הססמאות, הסימניות ועוד כאשר החשבון מסונכרן.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
@@ -102,6 +102,57 @@
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Sync.Title.v120" = "להישאר מוצפן במעבר בין מכשירים";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v135" = "הסכמה והמשך";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.TermsOfService.ManageLink.v135" = "ניהול";
+
+/* Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "כדי לסייע בשיפור הדפדפן, %1$@ שולח נתוני אבחון ואינטראקציה ל־%2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "‏%1$@ דואג לפרטיות שלך. מידע נוסף ב%2$@ שלנו.";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "הצהרת הפרטיות";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "למידע נוסף.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "מידע נוסף";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "דיווחי קריסה מאפשרים לנו לאבחן ולתקן בעיות בדפדפן. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "שליחת דיווחי קריסה באופן אוטומטי";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "נתונים על המכשיר שלך, תצורת החומרה והאופן שבו %1$@ משמש אותך עוזרים לשפר את היכולות, הביצועים והיציבות עבור כולם. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "שליחת נתונים טכניים ונתוני אינטראקציה ל־%@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
+"Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "עזרו לנו לשפר את %@";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. */
+"Onboarding.TermsOfService.Subtitle.v136" = "גלישה מהירה ומאובטחת באינטרנט";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "בחירה בהמשך מהווה הסכמה ל%@";
+
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "תנאי השירות של %@.";
+
+/* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
+"Onboarding.TermsOfService.Title.v135" = "ברוכים הבאים אל %@";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "תנאי השימוש של %@.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "תמונת רקע קלאסית";

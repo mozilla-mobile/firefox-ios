@@ -21,21 +21,106 @@ final class TabPanelStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testTabsState_DidLoadTabPanel() {
+    // MARK: - TabPanelMiddlewareActionType
+    func testTabsState_didLoadTabPanel() {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
         let tabs = createTabs()
-        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+        let inactiveTabs = createInactiveTabs()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
-                                              inactiveTabs: [InactiveTabsModel](),
+                                              inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
         let newState = reducer(initialState, action)
-        XCTAssertFalse(newState.tabs.isEmpty)
+        XCTAssertEqual(newState.tabs, tabs)
+        XCTAssertTrue(newState.isPrivateMode)
+        XCTAssertEqual(newState.inactiveTabs, inactiveTabs)
+        XCTAssertFalse(newState.isInactiveTabsExpanded)
+    }
+
+    func testTabsState_didChangeTabPanel() {
+        let initialState = createInitialState()
+        XCTAssertTrue(initialState.tabs.isEmpty)
+        let reducer = tabsPanelReducer()
+        let tabs = createTabs()
+        let inactiveTabs = createInactiveTabs()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
+                                              inactiveTabs: inactiveTabs,
+                                              isInactiveTabsExpanded: false)
+        let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
+                                              windowUUID: .XCTestDefaultUUID,
+                                              actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
+        let newState = reducer(initialState, action)
+        XCTAssertEqual(newState.tabs, tabs)
+        XCTAssertTrue(newState.isPrivateMode)
+        XCTAssertEqual(newState.inactiveTabs, inactiveTabs)
+        XCTAssertFalse(newState.isInactiveTabsExpanded)
+    }
+
+    func testTabsState_willAppearTabPanel() throws {
+        let tabs = createOneSelectedTab()
+        let expectedIndex = tabs.firstIndex(where: \.isSelected)
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
+                                          isPrivateMode: false,
+                                          tabs: tabs,
+                                          inactiveTabs: createInactiveTabs(),
+                                          isInactiveTabsExpanded: false)
+        let reducer = tabsPanelReducer()
+        let action = TabPanelMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelMiddlewareActionType.willAppearTabPanel
+        )
+        let newState = reducer(initialState, action)
+
+        let scrollState = try XCTUnwrap(newState.scrollState)
+        XCTAssertEqual(expectedIndex, scrollState.toIndex)
+    }
+
+    func testTabsState_refreshTabs() throws {
+        let initialState = createInitialState()
+        let reducer = tabsPanelReducer()
+        let tabs = createOneSelectedTab()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
+                                              inactiveTabs: [InactiveTabsModel](),
+                                              isInactiveTabsExpanded: false)
+        let action = TabPanelMiddlewareAction(
+            tabDisplayModel: tabDisplayModel,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelMiddlewareActionType.refreshTabs
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.tabs, tabs)
+    }
+
+    func testTabsState_refreshInactiveTabs() throws {
+        let initialState = createInitialState()
+        XCTAssertTrue(initialState.inactiveTabs.isEmpty)
+        let reducer = tabsPanelReducer()
+        let tabs = createTabs()
+        let inactiveTabs = createInactiveTabs()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
+                                              inactiveTabs: [InactiveTabsModel](),
+                                              isInactiveTabsExpanded: false)
+        let action = TabPanelMiddlewareAction(
+            tabDisplayModel: tabDisplayModel,
+            inactiveTabModels: inactiveTabs,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelMiddlewareActionType.refreshInactiveTabs
+        )
+        let newState = reducer(initialState, action)
+        XCTAssertEqual(newState.inactiveTabs, inactiveTabs, "Expected inactive tabs were: \(inactiveTabs)")
     }
 
     func testTabsState_IsInactiveTabsExpanded() {
@@ -264,21 +349,25 @@ final class TabPanelStateTests: XCTestCase {
         return TabsPanelState(windowUUID: .XCTestDefaultUUID)
     }
 
+    private func createOneSelectedTab() -> [TabModel] {
+        return [
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 0"),
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 1", isSelected: true),
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 2")
+        ]
+    }
+
     private func createTabs(count: Int = 3, isPrivate: Bool = false) -> [TabModel] {
-        var tabs = [TabModel]()
-        for index in 0..<count {
-            let tab = TabModel.emptyState(tabUUID: createTabUUID(), title: "Tab\(index)", isPrivate: isPrivate)
-            tabs.append(tab)
+        return (0 ..< count).map { index in
+            .emptyState(tabUUID: createTabUUID(), title: "Tab\(index)", isPrivate: isPrivate)
         }
-        return tabs
     }
 
     private func createInactiveTabs(count: Int = 3) -> [InactiveTabsModel] {
-        var inactiveTabs = [InactiveTabsModel]()
-        for index in 0..<count {
-            let inactiveTab = InactiveTabsModel.emptyState(tabUUID: createTabUUID(), title: "InactiveTab\(index)")
-            inactiveTabs.append(inactiveTab)
+        return (0 ..< count).map { index in
+            InactiveTabsModel(tabUUID: createTabUUID(),
+                              title: "InactiveTab\(index)",
+                              url: URL(string: "https://www.test\(index).com"))
         }
-        return inactiveTabs
     }
 }

@@ -253,8 +253,14 @@ extension ContentBlocker {
                 let suffixLength = jsonSuffix.count
                 // Trim off .json suffix if needed, we only want the raw file name
                 let fileTrimmed = file.hasSuffix(jsonSuffix) ? String(file.dropLast(suffixLength)) : file
-                if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
-                    source = try String(contentsOfFile: path, encoding: .utf8)
+
+                if fileTrimmed.hasPrefix(BlocklistFileName.customBlocklistJSONFilePrefix) {
+                    if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
+                        source = try String(contentsOfFile: path, encoding: .utf8)
+                    }
+                } else {
+                    let json = try RemoteDataType.contentBlockingLists.loadLocalSettingsFileAsJSON(fileName: fileTrimmed)
+                    source = String(data: json, encoding: .utf8) ?? ""
                 }
             } catch let error {
                 logger.log("Error loading content-blocking JSON: \(error)", level: .warning, category: .adblock)
@@ -288,11 +294,7 @@ extension ContentBlocker {
         }
     }
 
-    private func calculateHash(forFileAtPath path: String) -> String? {
-        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
-            return nil
-        }
-
+    private func calculateHash(for fileData: Data) -> String? {
         let hash = SHA256.hash(data: fileData)
         return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
@@ -302,9 +304,10 @@ extension ContentBlocker {
         let defaults = UserDefaults.standard
         var hasChanged = false
 
+        let lists = RemoteDataType.contentBlockingLists
         for list in blocklists {
-            guard let path = Bundle.main.path(forResource: list, ofType: "json"),
-                  let newHash = calculateHash(forFileAtPath: path) else { continue }
+            guard let data = try? lists.loadLocalSettingsFileAsJSON(fileName: list) else { continue }
+            guard let newHash = calculateHash(for: data) else { continue }
 
             let oldHash = defaults.string(forKey: list)
             if oldHash != newHash {

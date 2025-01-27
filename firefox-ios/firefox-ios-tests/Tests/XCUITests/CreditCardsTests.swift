@@ -35,7 +35,7 @@ class CreditCardsTests: BaseTestCase {
                 app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards]
             ]
         )
-        addCardButton.tap()
+        addCardButton.waitAndTap()
         // Add Credit Card page is displayed
         waitForElementsToExist(
             [
@@ -63,8 +63,8 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         let cardDetails = ["Test", "Expires", "5/40"]
-        for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
+        for index in cardDetails {
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[index])
         }
     }
 
@@ -73,9 +73,8 @@ class CreditCardsTests: BaseTestCase {
     func testDeleteButtonFromEditCard() {
         addCardAndReachViewCardPage()
         // Tap on the "Remove card" button
-        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
-        mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.EditCreditCard.editCreditCard])
-        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].tap()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].waitAndTap()
+        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].waitAndTap()
         // Validate the pop up displayed
         let removeThisCardAlert = app.alerts[creditCardsStaticTexts.EditCreditCard.removeThisCard]
         let cancelButton = removeThisCardAlert.scrollViews.otherElements.buttons[
@@ -92,16 +91,15 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         // Tap on "CANCEL"
-        cancelButton.tap()
+        cancelButton.waitAndTap()
         // The prompt is dismissed, the "Edit card" page is displayed
         mozWaitForElementToNotExist(removeThisCardAlert)
         mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.EditCreditCard.editCreditCard])
         // Tap again on the "Remove card" button
-        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].tap()
+        app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].waitAndTap()
         // The prompt is displayed again
-        mozWaitForElementToExist(removeThisCardAlert)
         // Tap "Remove" on the prompt
-        removeButton.tap()
+        removeButton.waitAndTap()
         // The credit card is deleted. The user is redirected to the "Saved cards" page
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         mozWaitForElementToNotExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
@@ -114,7 +112,7 @@ class CreditCardsTests: BaseTestCase {
         addCardAndReachViewCardPage()
 
         // Go back to saved cards section
-        app.navigationBars.buttons[creditCardsStaticTexts.ViewCreditCard.close].tap()
+        app.navigationBars.buttons[creditCardsStaticTexts.ViewCreditCard.close].waitAndTap()
         waitForElementsToExist(
             [
                 app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards],
@@ -131,15 +129,14 @@ class CreditCardsTests: BaseTestCase {
         }
         addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
-        app.buttons[manageCards].tap()
+        app.buttons[manageCards].waitAndTap()
         unlockLoginsView()
         // The user is redirected to the "Credit cards" section in Settings
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         // Tap the back button on the Credit cards page
-        app.buttons["Settings"].tap()
+        app.buttons["Settings"].waitAndTap()
         navigator.nowAt(SettingsScreen)
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // The user is returned to the webpage
         mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Explore Checkout"])
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
@@ -156,43 +153,50 @@ class CreditCardsTests: BaseTestCase {
         let saveAndFillPaymentMethodsSwitch =
             app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards].switches.firstMatch
         if saveAndFillPaymentMethodsSwitch.value! as? String == "1" {
-            saveAndFillPaymentMethodsSwitch.tap()
+            saveAndFillPaymentMethodsSwitch.waitAndTap()
         }
         XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "0")
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         let dateFiveYearsFromNow = Calendar.current.date(byAdding: .year, value: 5, to: Date())
         let formatter = DateFormatter()
         formatter.dateFormat = "MMyy"
         let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
-        if #available(iOS 16, *) {
-            navigator.goto(NewTabScreen) // Not working on iOS 15
-            navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
-            waitUntilPageLoad()
-            // The autofill option (Use saved card prompt) is not displayed
-            let cardNumber = app.webViews["Web content"].textFields["Card Number:"]
-            cardNumber.waitAndTap()
-            mozWaitForElementToNotExist(app.buttons[useSavedCard])
-            // If Keyboard is open, hit return button
-            let keyboardReturn = app.keyboards.buttons["return"]
-            if keyboardReturn.waitForExistence(timeout: 5) { keyboardReturn.tap() }
-            navigator.goto(CreditCardsSettings)
-            unlockLoginsView()
-            mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-            // Enable the "Save and Fill Payment Methods" toggle
-            app.switches.element(boundBy: 1).tap()
-            XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "1")
-            app.buttons["Settings"].tap()
-            navigator.nowAt(SettingsScreen)
-            waitForExistence(app.buttons["Done"])
-            app.buttons["Done"].tap()
-            cardNumber.waitAndTap()
-            // The autofill option (Use saved card prompt) is displayed
-            if !app.buttons[useSavedCard].waitForExistence(timeout: 3) {
-                app.webViews["Web content"].staticTexts["Card Number:"].tap()
-            }
-            mozWaitForElementToExist(app.buttons[useSavedCard])
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
+        waitUntilPageLoad()
+        // The autofill option (Use saved card prompt) is not displayed
+        var cardNumber = app.webViews["Web content"].textFields["Card Number:"]
+        if #unavailable(iOS 17) {
+            cardNumber = app.webViews["Web content"].staticTexts["Card Number:"]
         }
+        cardNumber.waitAndTap()
+        mozWaitForElementToNotExist(app.buttons[useSavedCard])
+        // If Keyboard is open, hit return button
+        let keyboard = app.keyboards.firstMatch
+        let timeout: TimeInterval = 5.0 // Set the timeout duration
+
+        if keyboard.waitForExistence(timeout: timeout) {
+            app.buttons["KeyboardAccessory.doneButton"].waitAndTap()
+        } else {
+            XCTFail("Keyboard did not appear within \(timeout) seconds")
+        }
+
+        navigator.goto(CreditCardsSettings)
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        // Enable the "Save and Fill Payment Methods" toggle
+        app.switches.element(boundBy: 1).waitAndTap()
+        XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "1")
+        app.buttons["Settings"].waitAndTap()
+        navigator.nowAt(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+        cardNumber.waitAndTap()
+        // The autofill option (Use saved card prompt) is displayed
+        if !app.buttons[useSavedCard].waitForExistence(timeout: 3) {
+            app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
+        }
+        mozWaitForElementToExist(app.buttons[useSavedCard])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306971
@@ -215,31 +219,34 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306976
-    func testVerifyThatTheEditedCreditCardIsSaved() {
+    func testVerifyThatTheEditedCreditCardIsSaved() throws {
+        if #unavailable(iOS 17) {
+            throw XCTSkip("testVerifyThatTheEditedCreditCardIsSaved() does not work on iOS 15 and iOS 16")
+        }
         // Go to a saved credit card and change the name on card
         let updatedName = "Firefox"
         addCardAndReachViewCardPage()
-        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].waitAndTap()
         tapCardName()
-        app.keyboards.keys["delete"].press(forDuration: 1.5)
+        nameOnCard.clearText()
         typeCardName(name: updatedName)
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap()
         // The name of the card is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[updatedName])
         // Go to an saved credit card and change the credit card number
-        app.tables.cells.element(boundBy: 1).tap()
-        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        app.tables.cells.element(boundBy: 1).waitAndTap()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].waitAndTap()
         tapCardNr()
-        pressDelete()
+        cardNr.clearText()
         typeCardNr(cardNo: cards[1])
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap()
         // The credit card number is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
         // reachAutofillWebsite() does not work on iOS 15
         if #available(iOS 16, *) {
             reachAutofillWebsite()
-            app.scrollViews.otherElements.tables.cells.firstMatch.tap()
+            app.scrollViews.otherElements.tables.cells.firstMatch.waitAndTap()
             // The credit card's number and name are imported correctly on the designated fields
             validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "05 / 40", name: updatedName)
         }
@@ -254,59 +261,64 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test2", cardNumber: cards[1], expirationDate: "0640")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test3", cardNumber: cards[2], expirationDate: "0740")
         // The cards are saved and displayed in Saved cards
         XCTAssertEqual(app.tables.cells.count - 1, expectedCards)
         let cardsInfo = [["1252", "Test", "5/40"],
                          ["1111", "Test2", "6/40"],
                          ["9631", "Test3", "7/40"]]
-        for i in 1...3 {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: i).buttons.firstMatch)
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons.elementContainingText(cardsInfo[i-1][0]).exists,
-                          "\(cardsInfo[i-1][0]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons[cardsInfo[i-1][1]].exists,
-                          "\(cardsInfo[i-1][1]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons[cardsInfo[i-1][2]].exists,
-                          "\(cardsInfo[i-1][2]) info is not displayed")
+        for index in 1...3 {
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: index).buttons.firstMatch)
+            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons
+                .elementContainingText(cardsInfo[index-1][0]).exists,
+                          "\(cardsInfo[index-1][0]) info is not displayed")
+            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons[cardsInfo[index-1][1]].exists,
+                          "\(cardsInfo[index-1][1]) info is not displayed")
+            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons[cardsInfo[index-1][2]].exists,
+                          "\(cardsInfo[index-1][2]) info is not displayed")
         }
         // reachAutofillWebsite() not working on iOS 15
         if #available(iOS 16, *) {
             // Reach used saved cards autofill website
             reachAutofillWebsite()
             // Any saved card can be selected/used from the autofill menu
-            app.scrollViews.otherElements.tables.cells.firstMatch.tap()
+            app.scrollViews.otherElements.tables.cells.firstMatch.waitAndTap()
             validateAutofillCardInfo(cardNr: "2720 9943 2658 1252", expirationNr: "05 / 40", name: "Test")
             dismissSavedCardsPrompt()
             swipeUp(nrOfSwipes: 2)
             swipeDown(nrOfSwipes: 1)
             app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+            swipeUp(nrOfSwipes: 2)
+            swipeDown(nrOfSwipes: 1)
             if !app.buttons[useSavedCard].exists {
-                app.webViews["Web content"].textFields["Card number"].tapOnApp()
+                app.webViews["Web content"].textFields["CVC"].tapOnApp()
             }
-            app.buttons[useSavedCard].tap()
+            app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            app.scrollViews.otherElements.tables.cells["creditCardCell_1"].tap()
+            app.scrollViews.otherElements.tables.cells["creditCardCell_1"].waitAndTap()
             validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
-            app.webViews["Web content"].textFields["Email"].tapOnApp()
-            app.webViews["Web content"].textFields["Card number"].tapOnApp()
-            if !app.buttons[useSavedCard].exists {
-                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+            if #available(iOS 17, *) {
+                app.webViews["Web content"].textFields["Email"].tapOnApp()
+                app.webViews["Web content"].textFields["Card number"].tapOnApp()
+                if !app.buttons[useSavedCard].exists {
+                    app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+                }
+                app.buttons[useSavedCard].waitAndTap()
+                unlockLoginsView()
+                mozWaitForElementToExist(app.staticTexts["Use saved card"])
+                app.scrollViews.element.swipeUp()
+                mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
+                app.scrollViews.otherElements.tables.cells["creditCardCell_2"].waitAndTap()
+                validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
             }
-            app.buttons[useSavedCard].tap()
-            unlockLoginsView()
-            mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            app.scrollViews.element.swipeUp()
-            mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
-            app.scrollViews.otherElements.tables.cells["creditCardCell_2"].tap()
-            validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
         }
     }
 
@@ -314,11 +326,12 @@ class CreditCardsTests: BaseTestCase {
     func testErrorStatesCreditCards() {
         // Go to a saved credit card and delete the name
         addCardAndReachViewCardPage()
-        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].waitAndTap()
         let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
         tapCardName()
-        app.keyboards.keys["delete"].press(forDuration: 1.5)
+        nameOnCard.clearText()
         tapCardNr()
+
         // Error message is displayed
         waitForElementsToExist(
             [
@@ -334,7 +347,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements.staticTexts["Add a name"])
         mozWaitForElementToExist(saveButton)
         XCTAssertTrue(saveButton.isEnabled)
-        pressDelete()
+        cardNr.clearText()
         tapCardName()
         // Error message is displayed
         waitForElementsToExist([app.otherElements.staticTexts["Enter a valid card number"], saveButton])
@@ -346,7 +359,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid card number"])
         mozWaitForElementToExist(saveButton)
         XCTAssertTrue(saveButton.isEnabled)
-        pressDelete()
+        expiration.clearText()
         tapCardNr()
         // Error message is displayed
         waitForElementsToExist(
@@ -363,7 +376,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid expiration date"])
         mozWaitForElementToExist(saveButton)
         XCTAssertTrue(saveButton.isEnabled)
-        saveButton.tap()
+        saveButton.waitAndTap()
         // The credit card is saved
         let cardsInfo = ["Test", "5/40"]
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
@@ -398,7 +411,7 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         // Tapping 'x' will dismiss the prompt
-        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].tap()
+        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Securely save this card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 2)
@@ -423,7 +436,7 @@ class CreditCardsTests: BaseTestCase {
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0540", nameOnCard: "Test")
         payButton.tapOnApp()
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap()
         // The prompt is dismissed. And a toast message is displayed: "New card saved"
         mozWaitForElementToExist(app.staticTexts["New Card Saved"])
         mozWaitForElementToNotExist(app.staticTexts["Securely save this card?"])
@@ -475,6 +488,7 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         // Tapping 'x' will dismiss the prompt
+        app.buttons["Done"].tapIfExists()
         app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
@@ -516,7 +530,7 @@ class CreditCardsTests: BaseTestCase {
         // The prompt contains two buttons: "Save" and "x".
         mozWaitForElementToExist(app.staticTexts["Update card?"])
         // Tapping 'x' will dismiss the prompt
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 2)
@@ -526,8 +540,8 @@ class CreditCardsTests: BaseTestCase {
         // Credit cards details changed
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         cardDetails = ["TestTest2", "Expires", "5/40"]
-        for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
+        for index in cardDetails {
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[index])
         }
     }
 
@@ -574,22 +588,26 @@ class CreditCardsTests: BaseTestCase {
         var nrOfRetries = 3
         if iPad() {
             while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+                app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
+                email.tapOnApp()
             }
         }
-        email.typeText("foo@mozilla.org")
+        email.typeText("foo1@mozilla.org")
+
         mozWaitForElementToExist(cardNumber)
-        dismissSavedCardsPrompt()
         if skipFillInfo == false {
-            cardNumber.tapOnApp()
+            cardNumber.waitAndTap()
+            dismissSavedCardsPrompt()
+            cardNumber.waitAndTap()
             cardNumber.typeText(cardNr)
             mozWaitForElementToExist(expiration)
             dismissSavedCardsPrompt()
-            expiration.tapOnApp()
+            expiration.waitAndTap()
             expiration.typeText(expirationDate)
         }
-
+        sleep(1)
         if app.keyboards.firstMatch.exists {
-            app.buttons["KeyboardAccessory.doneButton"].tap()
+            app.buttons["KeyboardAccessory.doneButton"].waitAndTap()
         }
         cvc.tapOnApp()
         cvc.typeText("123")
@@ -603,6 +621,11 @@ class CreditCardsTests: BaseTestCase {
             nrOfRetries -= 1
         }
         zip.typeText("12345")
+        app.buttons["KeyboardAccessory.doneButton"].waitAndTap()
+
+        if app.webViews["Web content"].switches.element(boundBy: 0).value as? String == "1" {
+            app.webViews["Web content"].switches.element(boundBy: 0).tapOnApp()
+        }
         name.tapOnApp()
         name.typeText(nameOnCard)
         swipeDown(nrOfSwipes: 2)
@@ -624,33 +647,35 @@ class CreditCardsTests: BaseTestCase {
     private func dismissSavedCardsPrompt() {
         if app.buttons.elementContainingText("Decline").isVisible() &&
             app.buttons.elementContainingText("Decline").isHittable {
-            app.staticTexts["TEST CARDS"].tap()
+            app.staticTexts["TEST CARDS"].waitAndTap()
         }
     }
 
     private func pressDelete() {
         if iPad() {
+            mozWaitForElementToExist(app.keyboards.keys["delete"])
             app.keyboards.keys["delete"].press(forDuration: 2.2)
         } else {
+            mozWaitForElementToExist(app.keyboards.keys["Delete"])
             app.keyboards.keys["Delete"].press(forDuration: 2.2)
         }
     }
 
     func tapCardName() {
         initCardFields()
-        nameOnCard.tap()
+        nameOnCard.waitAndTap()
         mozWaitForElementToExist(nameOnCard)
     }
 
     func tapCardNr() {
         initCardFields()
-        cardNr.tap()
+        cardNr.waitAndTap()
         mozWaitForElementToExist(cardNr)
     }
 
     func tapExpiration() {
         initCardFields()
-        expiration.tap()
+        expiration.waitAndTap()
         mozWaitForElementToExist(expiration)
     }
 
@@ -661,7 +686,7 @@ class CreditCardsTests: BaseTestCase {
 
     func typeCardNr(cardNo: String) {
         initCardFields()
-        cardNr.typeText(cardNo)
+        cardNr.typeTextWithDelay(cardNo, delay: 0.1)
     }
 
     func typeExpirationDate(exprDate: String) {
@@ -689,6 +714,7 @@ class CreditCardsTests: BaseTestCase {
         swipeUp(nrOfSwipes: 2)
         swipeDown(nrOfSwipes: 1)
         cardNumber.tapOnApp()
+        dismissSavedCardsPrompt()
         if !app.buttons[useSavedCard].exists {
             cardNumber.tapOnApp()
         }
@@ -706,9 +732,9 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         let saveAndFillPaymentMethodsSwitch = app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards]
         if saveAndFillPaymentMethodsSwitch.value! as? String == "0" {
-            saveAndFillPaymentMethodsSwitch.tap()
+            saveAndFillPaymentMethodsSwitch.waitAndTap()
         }
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         navigator.goto(NewTabScreen)
         navigator.openURL("https://checkout.stripe.dev/preview")
@@ -719,12 +745,10 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         if !app.buttons[useSavedCard].isHittable {
-            cardNumber.tapOnApp()
+            cardNumber.waitAndTap()
         }
         // Use saved card prompt is displayed
-        mozWaitForElementToExist(app.buttons[useSavedCard])
-        // Expand the prompt
-        app.buttons[useSavedCard].tap()
+        app.buttons[useSavedCard].waitAndTap(timeout: TIMEOUT)
         unlockLoginsView()
         waitForElementsToExist(
             [
@@ -740,11 +764,11 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         // Tap on a saved card
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        app.tables.cells.element(boundBy: 1).tap()
+        app.tables.cells.element(boundBy: 1).waitAndTap()
         // The "View card" page is displayed with all the details of the card
         waitForElementsToExist(
             [
@@ -757,11 +781,12 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         let cardDetails = ["Test", "05 / 40"]
-        for i in cardDetails {
+        for index in cardDetails {
             if #available(iOS 16, *) {
-                XCTAssertTrue(app.buttons[i].exists, "\(i) does not exists")
+                mozWaitForElementToExist(app.buttons[index])
+                XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
             } else {
-                mozWaitForElementToExist(app.staticTexts[i])
+                mozWaitForElementToExist(app.staticTexts[index])
             }
         }
     }
@@ -782,7 +807,6 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
         }
         let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
-        mozWaitForElementToExist(saveButton)
         if !saveButton.isEnabled {
             retryOnCardNumber(cardNumber: cardNumber)
             mozWaitForElementToExist(expiration)
@@ -790,19 +814,28 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        XCTAssertTrue(saveButton.isEnabled, "Save button is disabled")
-        saveButton.tap()
+        saveButton.waitAndTap()
     }
 
     private func retryOnCardNumber(cardNumber: String) {
         tapCardNr()
-        app.keyboards.keys["Delete"].press(forDuration: 2.2)
+        pressDelete()
         typeCardNr(cardNo: cardNumber)
         tapExpiration()
     }
 
     private func retryExpirationNumber(expirationDate: String) {
-        app.keyboards.keys["Delete"].press(forDuration: 1.5)
+        pressDelete()
         typeExpirationDate(exprDate: expirationDate)
+    }
+}
+
+extension XCUIElement {
+    func clearText() {
+        tap()
+        if let stringValue = value as? String, !stringValue.isEmpty {
+            let deleteString = stringValue.map { _ in "\u{8}" }.joined()
+            typeText(deleteString)
+        }
     }
 }

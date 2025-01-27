@@ -74,7 +74,8 @@ let middlewares = [
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
     PocketMiddleware().pocketSectionProvider,
-    NativeErrorPageMiddleware().nativeErrorPageProvider
+    NativeErrorPageMiddleware().nativeErrorPageProvider,
+    WallpaperMiddleware().wallpaperProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

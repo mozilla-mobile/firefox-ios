@@ -1,0 +1,12 @@
+/* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Corre la voz acerca de %1$@ cada vez que compartas un enlace en %2$@.";
+
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Incluir el enlace de descarga de %1$@ al compartir en %2$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ Enviado desde %2$@ 🦊 Prueba el navegador móvil: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ Enviado desde %2$@ 🦊 %3$@";
+

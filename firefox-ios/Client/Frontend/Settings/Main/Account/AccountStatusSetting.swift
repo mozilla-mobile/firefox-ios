@@ -37,11 +37,12 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
     override var title: NSAttributedString? {
-        guard let profile = RustFirefoxAccounts.shared.userProfile else { return nil }
+        guard let profile = RustFirefoxAccounts.shared.userProfile, let theme else { return nil }
 
         let string = profile.displayName ?? profile.email
 
@@ -54,20 +55,18 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        if RustFirefoxAccounts.shared.isActionNeeded {
-            let string: String = .FxAAccountVerifyPassword
-            let color = theme.colors.textCritical
-            let range = NSRange(location: 0, length: string.count)
-            let attrs = [NSAttributedString.Key.foregroundColor: color]
-            let res = NSMutableAttributedString(string: string)
-            res.setAttributes(attrs, range: range)
-            return res
-        }
-        return nil
+        guard RustFirefoxAccounts.shared.isActionNeeded, let theme else { return nil }
+        let string: String = .FxAAccountVerifyPassword
+        let color = theme.colors.textCritical
+        let range = NSRange(location: 0, length: string.count)
+        let attrs = [NSAttributedString.Key.foregroundColor: color]
+        let res = NSMutableAttributedString(string: string)
+        res.setAttributes(attrs, range: range)
+        return res
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        guard !profile.rustFxA.accountNeedsReauth() else {
+        guard let profile, !profile.rustFxA.accountNeedsReauth() else {
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             settingsDelegate?.pressedToShowFirefoxAccount()
             return

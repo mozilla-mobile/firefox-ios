@@ -7,6 +7,7 @@ import ComponentLibrary
 import MozillaAppServices
 import WebKit
 import XCTest
+import GCDWebServers
 
 @testable import Client
 
@@ -140,7 +141,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -149,11 +155,21 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage()
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
@@ -238,21 +254,75 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(
-            url: URL(
-                string: "https://www.google.com"
-            )!,
+        subject.startShareSheetCoordinator(
+            shareType: .site(url: URL(string: "https://www.google.com")!),
+            shareMessage: ShareMessage(message: "Test Message", subtitle: "Test Subtitle"),
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
+        let predicate = NSPredicate { _, _ in
+            return self.mockRouter.presentCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 5.0)
+
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
+        XCTAssertEqual(self.mockRouter.presentCalled, 1)
+        XCTAssertTrue(self.mockRouter.presentedViewController is UIActivityViewController)
+    }
+
+    func testStartShareSheetCoordinator_isSharingTabWithTemporaryDocument_upgradesTabShareToFileShare() throws {
+        let testWebURL = URL(string: "https://mozilla.org")!
+        let testFileURL = URL(string: "file://some/file/url")!
+        let testWebpageDisplayTitle = "Mozilla"
+        let testShareMessage = ShareMessage(message: "Test Message", subtitle: "Test Subtitle")
+        let mockTemporaryDocument = MockTemporaryDocument(withFileURL: testFileURL)
+        let testTab = MockShareTab(
+            title: testWebpageDisplayTitle,
+            url: testWebURL,
+            canonicalURL: testWebURL,
+            withTemporaryDocument: mockTemporaryDocument
+        )
+
+        let mockServerURL = try startMockServer()
+
+        let subject = createSubject()
+
+        subject.startShareSheetCoordinator(
+            shareType: .tab(url: mockServerURL, tab: testTab),
+            shareMessage: testShareMessage,
+            sourceView: UIView(),
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
+        )
+
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
+        let predicate = NSPredicate { _, _ in
+            return self.mockRouter.presentCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 5.0)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+        // Right now we have no interface to check the ShareType passed in to ShareSheetCoordinator's start() call, but this
+        // can tell us that there was an attempt to download a TemporaryDocument for a tab type share, which is sufficient.
+        XCTAssertEqual(mockTemporaryDocument.getDownloadedURLCalled, 1)
     }
 
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
@@ -366,11 +436,22 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
+    func testShowContextMenu_addsContextMenuCoordinator() {
+        let subject = createSubject()
+        let config = ContextMenuConfiguration(homepageSection: .customizeHomepage, toastContainer: UIView())
+        subject.showContextMenu(for: config)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ContextMenuCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is PhotonActionSheet)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
-        let childCoordinator = ShareExtensionCoordinator(
+        let childCoordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
@@ -919,16 +1000,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mbvc.isPrivate)
     }
 
-    func testOpenRecentlyClosedTabInSameTab_callsReletedMethodInBrowserViewController() {
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        subject.browserViewController = mbvc
-
-        subject.openRecentlyClosedSiteInSameTab(URL(string: "https://www.google.com")!)
-
-        XCTAssertEqual(mbvc.didOpenRecentlyClosedSiteInSameTab, 1)
-    }
-
     func testOpenRecentlyClosedSiteInNewTab_addsOneTabToTabManager() {
         let subject = createSubject()
 
@@ -1132,6 +1203,55 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MicrosurveyViewController)
     }
 
+    // MARK: - Edit Bookmark Controller
+    func testShowEditBookmarks_addBookmarksCoordinator() {
+        let subject = createSubject()
+
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is BookmarksCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is EditBookmarkViewController)
+    }
+
+    func testShowEditBookmarks_didDidDismiss_removesChild() {
+        let subject = createSubject()
+
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+        guard let bookmarksCoordinator = subject.childCoordinators[0] as? BookmarksCoordinator else {
+            XCTFail("Bookmarks coordinator was expected to be resolved")
+            return
+        }
+
+        subject.didFinish(from: bookmarksCoordinator)
+
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {
@@ -1150,5 +1270,23 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    // MARK: - Mock Server
+
+    func startMockServer() throws -> URL {
+        let webServer = GCDWebServer()
+
+        webServer.addHandler(forMethod: "GET",
+                             path: "/",
+                             request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+            return GCDWebServerDataResponse()
+        }
+
+        if !webServer.start(withPort: 0, bonjourName: nil) {
+            XCTFail("Can't start the GCDWebServer")
+        }
+
+        return URL(string: "http://localhost:\(webServer.port)")!
     }
 }

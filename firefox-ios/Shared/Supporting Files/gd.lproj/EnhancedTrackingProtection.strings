@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Dìon adhartach o thracadh";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Tha an dìon dheth. Mholamaid dhut a chur air a-rithist.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Tha an dìon dheth. Mholamaid dhut an cur air a-rithist.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

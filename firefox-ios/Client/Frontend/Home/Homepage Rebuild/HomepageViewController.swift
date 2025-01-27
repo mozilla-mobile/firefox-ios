@@ -5,16 +5,17 @@
 import Foundation
 import Common
 import Redux
+import Shared
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
+                                    FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
                                     Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
-    private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
@@ -27,26 +28,53 @@ final class HomepageViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // MARK: - Layout variables
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
+
     // MARK: - Private variables
+    private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
-    private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
-    private var logger: Logger
+    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
+    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+
     private var homepageState: HomepageState
+    private var lastContentOffsetY: CGFloat = 0
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    private var availableWidth: CGFloat {
+        return view.frame.size.width
+    }
+
+    // MARK: - Private constants
+    private let overlayManager: OverlayModeManager
+    private let logger: Logger
+    private let toastContainer: UIView
+
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         overlayManager: OverlayModeManager,
+         statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
+         toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.overlayManager = overlayManager
+        self.statusBarScrollDelegate = statusBarScrollDelegate
+        self.toastContainer = toastContainer
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -72,12 +100,14 @@ final class HomepageViewController: UIViewController,
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
+        configureWallpaperView()
         configureCollectionView()
+        setupLayout()
         configureDataSource()
 
         store.dispatch(
             HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -85,6 +115,75 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
+        addTapGestureRecognizerToDismissKeyboard()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        wallpaperView.updateImageForOrientationChange()
+    }
+
+    // called when the homepage is displayed to make sure it's scrolled to top
+    func scrollToTop(animated: Bool = false) {
+        collectionView?.setContentOffset(.zero, animated: animated)
+        if let collectionView = collectionView {
+            handleScroll(collectionView, isUserInteraction: false)
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        handleScroll(scrollView, isUserInteraction: true)
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+        handleToolbarStateOnScroll()
+    }
+
+    private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(
+                scrollView,
+                statusBarFrame: statusBarFrame,
+                theme: theme
+            )
+        }
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
+            lastContentOffsetY = scrollView.contentOffset.y
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
+        }
+    }
+
+    private func handleToolbarStateOnScroll() {
+        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
+        // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
+        store.dispatch(action)
+    }
+
+    /// Calculates the number of tiles that can fit in a single row based on the available width.
+    /// Used for top sites section layout and data filtering.
+    /// Must be calculated on main thread only due to use of traitCollection.
+    ///
+    /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
+    /// - Returns: The number of tiles that can fit in a single row within the available width.
+    private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
+        let tiles = TopSitesDimensionCalculator.numberOfTilesPerRow(
+            availableWidth: availableWidth,
+            leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
+                traitCollection: traitCollection
+            )
+        )
+        return tiles
     }
 
     // MARK: - Redux
@@ -108,8 +207,9 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
-        homepageState = state
-        dataSource?.applyInitialSnapshot(state: state)
+        self.homepageState = state
+        wallpaperView.wallpaperState = state.wallpaperState
+        dataSource?.updateSnapshot(state: state, numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth))
     }
 
     func unsubscribeFromRedux() {
@@ -128,6 +228,23 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Layout
+
+    func configureWallpaperView() {
+        view.addSubview(wallpaperView)
+
+        // Constraint so wallpaper appears under the status bar
+        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+
+        NSLayoutConstraint.activate([
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
+            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
+        view.sendSubviewToBack(wallpaperView)
+    }
+
     private func setupLayout() {
         guard let collectionView else {
             logger.log(
@@ -148,7 +265,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -164,6 +281,7 @@ final class HomepageViewController: UIViewController,
         )
 
         collectionView.keyboardDismissMode = .onDrag
+        collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
@@ -173,6 +291,27 @@ final class HomepageViewController: UIViewController,
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: self.windowUUID)
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
+                self?.logger.log(
+                    "Section should not have been nil, something went wrong for \(sectionIndex)",
+                    level: .fatal,
+                    category: .homepage
+                )
+                return nil
+            }
+
+            return sectionProvider.createLayoutSection(
+                for: section,
+                with: environment.traitCollection
+            )
+        }
+        return layout
     }
 
     private func configureDataSource() {
@@ -201,7 +340,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header:
+        case .header(let state):
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
                 for: indexPath
@@ -209,10 +348,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(
-                headerState: homepageState.headerState,
-                showiPadSetup: shouldUseiPadSetup()
-            ) { [weak self] in
+            headerCell.configure(headerState: state) { [weak self] in
                 self?.toggleHomepageMode()
             }
 
@@ -220,16 +356,26 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
-        case .topSite(let site):
+        case .messageCard(let state):
+            guard let messageCardCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageMessageCardCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            messageCardCell.configure(state: state, theme: currentTheme)
+            return messageCardCell
+        case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+
             topSiteCell.configure(
                 site,
                 position: indexPath.row,
                 theme: currentTheme,
-                textColor: .systemPink
+                textColor: textColor
             )
             return topSiteCell
 
@@ -237,6 +383,7 @@ final class HomepageViewController: UIViewController,
             guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
+
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
@@ -247,10 +394,11 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
+
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover:
+        case .pocketDiscover(let item):
             guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
                 cellType: PocketDiscoverCell.self,
                 for: indexPath
@@ -258,7 +406,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            pocketDiscoverCell.configure(text: homepageState.pocketState.pocketDiscoverItem.title, theme: currentTheme)
+            pocketDiscoverCell.configure(text: item.title, theme: currentTheme)
 
             return pocketDiscoverCell
 
@@ -320,15 +468,65 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .pocket:
+        case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
+                textColor: textColor,
                 theme: currentTheme
             )
             return sectionLabelCell
         default:
             return nil
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        store.dispatch(
+            HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.traitCollectionDidChange
+            )
+        )
+    }
+
+    // MARK: Tap Geasutre Recognizer
+    private func addTapGestureRecognizerToDismissKeyboard() {
+        // We want any interaction with the homepage to dismiss the keyboard, including taps
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc
+    private func dismissKeyboard() {
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
+    }
+
+    // MARK: Long Press (Photon Action Sheet)
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+    }()
+
+    @objc
+    private func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let point = longPressGestureRecognizer.location(in: collectionView)
+        guard let indexPath = collectionView?.indexPathForItem(at: point),
+              let item = dataSource?.itemIdentifier(for: indexPath),
+              let section = dataSource?.sectionIdentifier(for: indexPath.section),
+              let sourceView = collectionView?.cellForItem(at: indexPath)
+        else {
+            self.logger.log(
+                "Item selected at \(point) but does not navigate to context menu",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
     }
 
     // MARK: Dispatch Actions
@@ -344,6 +542,7 @@ final class HomepageViewController: UIViewController,
     private func navigateToHomepageSettings() {
         store.dispatch(
             NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.homePage)),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
             )
@@ -353,9 +552,25 @@ final class HomepageViewController: UIViewController,
     private func navigateToPocketLearnMore() {
         store.dispatch(
             NavigationBrowserAction(
-                url: homepageState.pocketState.footerURL,
+                navigationDestination: NavigationDestination(.link, url: homepageState.pocketState.footerURL),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
+            )
+        )
+    }
+
+    private func navigateToContextMenu(for section: HomepageSection, and item: HomepageItem, sourceView: UIView? = nil) {
+        let configuration = ContextMenuConfiguration(
+            homepageSection: section,
+            item: item,
+            sourceView: sourceView,
+            toastContainer: toastContainer
+        )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.longPressOnCell
             )
         )
     }
@@ -371,18 +586,33 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
-        case .pocket(let story):
+        case .topSite(let state, _):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: story.url,
+                    navigationDestination: NavigationDestination(
+                        .link,
+                        url: state.site.url.asURL,
+                        isGoogleTopSite: state.isGoogleURL
+                    ),
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
             )
-        case .pocketDiscover:
+        case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
-                    url: homepageState.pocketState.pocketDiscoverItem.url,
+                    navigationDestination: NavigationDestination(.link, url: story.url),
+                    windowUUID: self.windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnCell
+                )
+            )
+        case .pocketDiscover(let item):
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: NavigationDestination(
+                        .link,
+                        url: item.url
+                    ),
                     windowUUID: self.windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )

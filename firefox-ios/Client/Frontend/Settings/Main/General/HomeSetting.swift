@@ -6,9 +6,10 @@ import Foundation
 
 class HomeSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
-    private let profile: Profile
+    private let profile: Profile?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -16,8 +17,9 @@ class HomeSetting: Setting {
         return AccessibilityIdentifiers.Settings.Homepage.homeSettings
     }
 
-    override var status: NSAttributedString {
-        return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).settingTitle)
+    override var status: NSAttributedString? {
+        guard let profile else { return nil }
+        return NSAttributedString(string: NewTabAccessors.getHomePage(profile.prefs).settingTitle)
     }
 
     override var style: UITableViewCell.CellStyle { return .value1 }

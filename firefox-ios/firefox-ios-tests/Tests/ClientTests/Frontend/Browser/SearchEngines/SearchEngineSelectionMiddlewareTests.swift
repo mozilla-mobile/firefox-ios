@@ -27,12 +27,12 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         mockSearchEnginesManager = MockSearchEnginesManager(searchEngines: mockSearchEngines)
 
         // We must reset the global mock store prior to each test
-        setupTestingStore()
+        setupStore()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
-        resetTestingStore()
+        resetStore()
         super.tearDown()
     }
 
@@ -42,12 +42,11 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.searchEngineSelectionProvider(AppState(), action)
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? SearchEngineSelectionAction,
-              case SearchEngineSelectionActionType.didLoadSearchEngines = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched")
-            return
-        }
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SearchEngineSelectionAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SearchEngineSelectionActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, SearchEngineSelectionActionType.didLoadSearchEngines)
         XCTAssertEqual(actionCalled.searchEngines, mockSearchEngineModels)
     }
 
@@ -57,12 +56,11 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.searchEngineSelectionProvider(AppState(), action)
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? ToolbarAction,
-              case ToolbarActionType.didStartEditingUrl = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched")
-            return
-        }
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.didStartEditingUrl)
     }
 
     // MARK: - Helpers
@@ -92,14 +90,14 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupTestingStore() {
+    func setupStore() {
         mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupTestingStore(with: mockStore)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
-    func resetTestingStore() {
-        StoreTestUtilityHelper.resetTestingStore()
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }

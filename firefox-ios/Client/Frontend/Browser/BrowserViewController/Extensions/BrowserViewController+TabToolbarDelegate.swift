@@ -173,8 +173,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func dismissUrlBar() {
         if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-        } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
-            urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        } else if !isToolbarRefactorEnabled, let legacyUrlBar, legacyUrlBar.inOverlayMode {
+            legacyUrlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
 
@@ -358,7 +358,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
                                     theme: currentTheme()) { isButtonTapped in
                 isButtonTapped ? self.openBookmarkEditPanel() : nil
             }
-            self.show(toast: toast)
+            if isBookmarkRefactorEnabled {
+                self.show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
+            } else {
+                self.show(toast: toast)
+            }
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
@@ -429,5 +433,9 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         documentPicker.delegate = self
         documentPicker.modalPresentationStyle = .formSheet
         showViewController(viewController: documentPicker)
+    }
+
+    func showEditBookmark() {
+        openBookmarkEditPanel()
     }
 }

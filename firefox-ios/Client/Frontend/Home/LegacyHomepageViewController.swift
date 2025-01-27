@@ -39,12 +39,15 @@ class LegacyHomepageViewController:
     private var tabManager: TabManager
     private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
-    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
+    private var wallpaperViewTopConstraint: NSLayoutConstraint?
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
-    private var collectionView: UICollectionView! = nil
+    private var collectionView: UICollectionView?
     private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
+    private let viewWillAppearEventThrottler = Throttler(seconds: 0.5)
+
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -150,7 +153,12 @@ class LegacyHomepageViewController:
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.recordViewAppeared()
+
+        // TODO: FXIOS-9428 - Need to fix issue where viewWillAppear is called twice so we can remove the throttle workaround
+        // This can then be moved back inside the `viewModel.recordViewAppeared()`
+        viewWillAppearEventThrottler.throttle {
+            Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        }
 
         notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
         notificationCenter.post(name: .HistoryUpdated)
@@ -161,6 +169,8 @@ class LegacyHomepageViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // FXIOS-9428 - Record telemetry in viewDidAppear since viewWillAppear is sometimes triggered twice
+        viewModel.recordViewAppeared()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
@@ -191,6 +201,11 @@ class LegacyHomepageViewController:
         viewModel.newSize = size
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation(newSize: size)
+        }
+
+        coordinator.animate { sin_ in
+            let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? self.statusBarFrame?.height ?? 0
+            self.wallpaperViewTopConstraint?.constant = -wallpaperTopConstant
         }
     }
 
@@ -238,8 +253,8 @@ class LegacyHomepageViewController:
     // MARK: - Layout
 
     func configureCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds,
-                                          collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: view.bounds,
+                                              collectionViewLayout: createLayout())
 
         HomepageSectionType.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -260,6 +275,8 @@ class LegacyHomepageViewController:
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.addInteraction(UIContextMenuInteraction(delegate: self))
         contentStackView.addArrangedSubview(collectionView)
+
+        self.collectionView = collectionView
     }
 
     func configureContentStackView() {
@@ -277,9 +294,11 @@ class LegacyHomepageViewController:
 
         // Constraint so wallpaper appears under the status bar
         let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+        wallpaperViewTopConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor,
+                                                                        constant: -wallpaperTopConstant)
 
+        wallpaperViewTopConstraint?.isActive = true
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -338,7 +357,8 @@ class LegacyHomepageViewController:
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: point),
+        guard let collectionView,
+              let indexPath = collectionView.indexPathForItem(at: point),
               let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
         else { return }
 
@@ -368,14 +388,14 @@ class LegacyHomepageViewController:
 
         // Force the entire collection view to re-layout
         viewModel.refreshData(for: traitCollection, size: newSize)
-        collectionView.reloadData()
-        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView?.reloadData()
+        collectionView?.collectionViewLayout.invalidateLayout()
 
         // This pushes a reload to the end of the main queue after all the work associated with
         // rotating has been completed. This is important because some of the cells layout are
         // based on the screen state
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.collectionView?.reloadData()
         }
     }
 
@@ -398,7 +418,9 @@ class LegacyHomepageViewController:
 
     // called when the homepage is displayed to make sure it's scrolled to top
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
+        guard let collectionView else { return }
+
+        collectionView.setContentOffset(.zero, animated: animated)
         handleScroll(collectionView, isUserInteraction: false)
     }
 
@@ -423,27 +445,23 @@ class LegacyHomepageViewController:
     }
 
     private func handleToolbarStateOnScroll() {
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-
-        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
-        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
-           let toolbarState,
-           toolbarState.addressToolbar.isEditing {
-            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
+        // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        if let selectedTab = tabManager.selectedTab,
+           selectedTab.isFxHomeTab,
+           selectedTab.url?.displayURL == nil {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
             // On a website we just dismiss the keyboard
-            if toolbarState.addressToolbar.url == nil && tabManager.selectedTab?.isFxHomeTab == true {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(action)
-            } else {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
-                store.dispatch(action)
-            }
+        } else {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
+            store.dispatch(action)
         }
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+        if WallpaperManager().currentWallpaper.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
@@ -476,9 +494,7 @@ class LegacyHomepageViewController:
               canModalBePresented
         else { return }
 
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
-            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
-        })
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
@@ -506,7 +522,8 @@ class LegacyHomepageViewController:
     private func prepareJumpBackInContextualHint(onView headerView: LegacyLabelButtonHeaderView) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
               !viewModel.shouldDisplayHomeTabBanner,
-              !headerView.frame.isEmpty
+              !headerView.frame.isEmpty,
+              let collectionView
         else { return }
 
         // Calculate label header view frame to add as source rect for CFR
@@ -806,7 +823,7 @@ private extension LegacyHomepageViewController {
 
     private func buildSite(from highlight: HighlightItem) -> Site {
         let itemURL = highlight.urlString ?? ""
-        return Site(url: itemURL, title: highlight.displayTitle)
+        return Site.createBasicSite(url: itemURL, title: highlight.displayTitle)
     }
 
     func openTabTray(_ sender: UIButton) {
@@ -920,7 +937,8 @@ extension LegacyHomepageViewController: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
         let locationInCollectionView = interaction.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
+        guard let collectionView,
+              let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
               let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
         else { return nil }
 
@@ -943,11 +961,11 @@ extension LegacyHomepageViewController: UIAdaptivePresentationControllerDelegate
 extension LegacyHomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
-            self.collectionView.reloadData()
-            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView?.reloadData()
+            self.collectionView?.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
                             category: .legacyHomepage)

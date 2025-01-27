@@ -23,8 +23,11 @@ public final class NavigationHeaderView: UIView {
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.numberOfLines = 2
+        label.lineBreakMode = .byTruncatingTail
         label.accessibilityTraits.insert(.header)
         label.isAccessibilityElement = false
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -37,6 +40,8 @@ public final class NavigationHeaderView: UIView {
                         for: .normal)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
 
     private let horizontalLine: UIView = .build()
@@ -62,26 +67,20 @@ public final class NavigationHeaderView: UIView {
         closeButton.removeConstraints(closeButton.constraints)
         viewConstraints.removeAll()
         viewConstraints.append(contentsOf: [
-            backButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: UX.imageMargins
-            ),
+            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.imageMargins),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            backButton.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.leadingAnchor,
+                                                 constant: -UX.horizontalMargin),
 
-            titleLabel.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: UX.baseDistance
-            ),
-            titleLabel.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
-                constant: -UX.baseDistance
-            ),
+            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: backButton.trailingAnchor,
+                                                constant: UX.horizontalMargin),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                 constant: -UX.horizontalMargin),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.baseDistance),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.baseDistance),
 
-            closeButton.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -UX.horizontalMargin
-            ),
+            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -150,5 +149,6 @@ public final class NavigationHeaderView: UIView {
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         titleLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer3
     }
 }

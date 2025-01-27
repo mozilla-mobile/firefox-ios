@@ -10,12 +10,6 @@ import SwiftUI
 
 import struct MozillaAppServices.VisitTransitionSet
 
-private class FetchInProgressError: MaybeErrorType {
-    internal var description: String {
-        return "Fetch is already in-progress"
-    }
-}
-
 class HistoryPanelViewModel: FeatureFlaggable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -162,7 +156,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
                 return
             }
             if let result = result.successValue {
-                self.searchResultSites = result.map { Site(url: $0.url, title: $0.title) }
+                self.searchResultSites = result.map { Site.createBasicSite(url: $0.url, title: $0.title) }
                 completion(!result.isEmpty)
             }
         }

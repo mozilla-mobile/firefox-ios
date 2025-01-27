@@ -34,7 +34,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var imageViewYConstraint: NSLayoutConstraint!
+    var imageViewYConstraint: NSLayoutConstraint?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -136,13 +136,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     private func constrainViews() {
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        imageViewYConstraint?.isActive = true
 
         NSLayoutConstraint.activate(
             [
                 imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
                 imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
                 imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                imageViewYConstraint,
 
                 titleLabel.topAnchor.constraint(
                     equalTo: imageView.bottomAnchor,
@@ -211,12 +211,12 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     /// Changes the constraint of the imageView. This needs to be done separately
     /// if we want to do it in an animation.
     private func changeImageViewConstraint() {
-        NSLayoutConstraint.deactivate([imageViewYConstraint])
+        imageViewYConstraint?.isActive = false
         imageViewYConstraint = imageView.centerYAnchor.constraint(
             equalTo: view.centerYAnchor,
             constant: -(view.frame.height * UX.imageViewCenterYOffset)
         )
-        NSLayoutConstraint.activate([imageViewYConstraint])
+        imageViewYConstraint?.isActive = true
     }
 
     // MARK: - Button Actions

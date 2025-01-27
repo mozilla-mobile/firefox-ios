@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 
 final class MicrosurveyTests: BaseTestCase {
     override func setUp() {
@@ -27,7 +28,7 @@ final class MicrosurveyTests: BaseTestCase {
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
         XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
-        app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
         XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
     }
 
@@ -51,7 +52,7 @@ final class MicrosurveyTests: BaseTestCase {
     func testShowMicrosurvey() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
-        continueButton.tap()
+        continueButton.waitAndTap()
 
         waitForElementsToExist(
             [
@@ -61,7 +62,7 @@ final class MicrosurveyTests: BaseTestCase {
         )
         let tablesQuery = app.scrollViews.otherElements.tables
         let firstOption = tablesQuery.cells.firstMatch
-        firstOption.tap()
+        firstOption.waitAndTap()
         mozWaitForElementToExist(firstOption)
         XCTAssertEqual(firstOption.label, "Very satisfied")
         mozWaitForValueContains(firstOption, value: "1 out of 6")

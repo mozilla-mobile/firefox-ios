@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "ਸੁਰੱਖਿਆਵਾਂ ਬੰਦ ਹਨ। ਅਸੀਂ ਉਹਨਾਂ ਨੂੰ ਚਾਲੂ ਕਰਨ ਦਾ ਸੁਝਾਅ ਦਿੰਦੇ ਹਾਂ।";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ਸੁਰੱਖਿਆਵਾਂ ਬੰਦ ਹਨ। ਅਸੀਂ ਉਹਨਾਂ ਨੂੰ ਚਾਲੂ ਕਰਨ ਦਾ ਸੁਝਾਅ ਦਿੰਦੇ ਹਾਂ।";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

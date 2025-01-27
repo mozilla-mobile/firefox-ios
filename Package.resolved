@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nerdishbynature/octokit.swift",
       "state" : {
-        "revision" : "f762f1566f7cd0e683b9329f169c28ab6ef993cc",
-        "version" : "0.12.0"
+        "revision" : "44192458beb89180c3a3a1245d904aacac8be0ae",
+        "version" : "0.13.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nerdishbynature/RequestKit.git",
       "state" : {
-        "revision" : "8b0258ea2a4345cbcac90509b764faacea12efb0",
-        "version" : "3.2.1"
+        "revision" : "e4d905fed938807e36d87f28375f88b7c1c26840",
+        "version" : "3.3.0"
       }
     },
     {
@@ -41,8 +41,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/danger/swift.git",
       "state" : {
-        "revision" : "21b074b1292286c9e90688fffa33d64d492f0520",
-        "version" : "3.16.0"
+        "revision" : "e43a19617fc905ef303b1af2f0449b99fc6ea0f2",
+        "version" : "3.20.2"
+      }
+    },
+    {
+      "identity" : "swiftformat",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/SwiftFormat",
+      "state" : {
+        "revision" : "c4d0bc2ec8aa41d4fe622771935247d74ff2e718",
+        "version" : "0.55.1"
       }
     },
     {

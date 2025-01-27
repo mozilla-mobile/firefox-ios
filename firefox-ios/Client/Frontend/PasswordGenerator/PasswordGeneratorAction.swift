@@ -34,6 +34,8 @@ enum PasswordGeneratorActionType: ActionType {
     case userTappedRefreshPassword
     case userTappedUsePassword
     case clearGeneratedPasswordForSite
+    case hidePassword
+    case showPassword
 
     // Middleware Actions
     case updateGeneratedPassword

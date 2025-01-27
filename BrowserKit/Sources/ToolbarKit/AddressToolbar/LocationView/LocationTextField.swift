@@ -50,6 +50,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         autocapitalizationType = .none
         returnKeyType = .go
         tintAdjustmentMode = .normal
+
+        // Setting the content type to a field that is not related to AutoFill functionality
+        // like email and password, should disable the Operating system to load those content,
+        // hence having a faster keyboard start up the first time
+        textContentType = .URL
         delegate = self
 
         // Disable dragging urls on iPhones because it conflicts with editing the text
@@ -169,7 +174,6 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         guard !isSettingMarkedText else { return }
 
         hideCursor = markedTextRange != nil
-        removeCompletion()
 
         let isKeyboardReplacingText = lastReplacement != nil
         if isKeyboardReplacingText, markedTextRange == nil {

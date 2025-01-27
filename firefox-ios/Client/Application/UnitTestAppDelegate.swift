@@ -15,6 +15,7 @@ final class UnitTestAppDelegate: UIResponder, UIApplicationDelegate {
         for sceneSession in application.openSessions {
             application.perform(Selector(("_removeSessionFromSessionSet:")), with: sceneSession)
         }
+        UserDefaults.standard.setValue(true, forKey: "_FennecLaunchedUnitTestDelegate")
         return true
     }
 

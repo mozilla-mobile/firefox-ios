@@ -23,30 +23,40 @@ class SettingsCoordinator: BaseCoordinator,
                            AboutSettingsDelegate,
                            ParentCoordinatorDelegate,
                            QRCodeNavigationHandler {
-    var settingsViewController: AppSettingsScreen
+    var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let gleanLifecycleObserver: GleanLifecycleObserver
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
-    init(router: Router,
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        router: Router,
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+        profile: Profile = AppContainer.shared.resolve(),
+        tabManager: TabManager,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+    ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
-        self.settingsViewController = AppSettingsTableViewController(with: profile,
-                                                                     and: tabManager)
+        self.gleanLifecycleObserver = gleanLifecycleObserver
         super.init(router: router)
 
+        // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
+        let settingsViewController = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            settingsDelegate: self,
+            parentCoordinator: self,
+            gleanLifecycleObserver: gleanLifecycleObserver
+        )
+        self.settingsViewController = settingsViewController
         router.setRootViewController(settingsViewController)
-        settingsViewController.settingsDelegate = self
-        settingsViewController.parentCoordinator = self
     }
 
     func start(with settingsSection: Route.SettingsSection) {
@@ -55,7 +65,8 @@ class SettingsCoordinator: BaseCoordinator,
         if let viewController = getSettingsViewController(settingsSection: settingsSection) {
             router.push(viewController)
         } else {
-            settingsViewController.handle(route: settingsSection)
+            assert(settingsViewController != nil)
+            settingsViewController?.handle(route: settingsSection)
         }
     }
 
@@ -209,7 +220,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func showDebugFeatureFlags() {
-        let featureFlagsViewController = FeatureFlagsDebugViewController(windowUUID: windowUUID)
+        let featureFlagsViewController = FeatureFlagsDebugViewController(profile: profile, windowUUID: windowUUID)
         router.push(featureFlagsViewController)
     }
 
@@ -406,7 +417,8 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: - AboutSettingsDelegate
 
     func pressedRateApp() {
-        settingsViewController.handle(route: .rateApp)
+        assert(settingsViewController != nil)
+        settingsViewController?.handle(route: .rateApp)
     }
 
     func pressedLicense(url: URL, title: NSAttributedString) {

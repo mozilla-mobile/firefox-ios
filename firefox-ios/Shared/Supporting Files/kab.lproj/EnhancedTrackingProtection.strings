@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Ammesten mgal aḍfaṛ yettwaseǧhed";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Ammesten yensa. Ad nsumer armad-is.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Ammesten yensa. Ad nsumer ad t-tremdeḍ.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

@@ -8,13 +8,23 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        super.tearDown()
+    }
+
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
 
         XCTAssertFalse(initialState.headerState.isPrivate)
-        XCTAssertTrue(initialState.headerState.showPrivateModeToggle)
+        XCTAssertFalse(initialState.headerState.showiPadSetup)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -24,15 +34,15 @@ final class HomepageStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             HomepageAction(
+                showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.initialize
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertTrue(newState.headerState.showPrivateModeToggle)
+        XCTAssertTrue(newState.headerState.showiPadSetup)
     }
 
     // MARK: - Private

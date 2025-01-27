@@ -12,18 +12,24 @@ import Redux
 /// store implementation (e.g. storing a completion handler for asynchronous middleware actions so you can await expectations
 ///  in your tests).
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
+    private let lock = NSLock()
+
     var state: State
 
-    /// Records the number of times dispatch is called, and the actions with which it is called. Check this property to
-    /// ensure that your middleware correctly dispatches the right action(s) in response to a given action.
-    var dispatchCalled: (numberOfTimes: Int, withActions: [Redux.Action]) = (0, [])
+    /// Records all actions dispatched to the mock store. Check this property to ensure that your middleware correctly
+    /// dispatches the right action(s), and the right count of actions, in response to a given action.
+    var dispatchedActions: [Redux.Action] = []
+
+    /// Called every time an action is dispatched to the mock store. Used to confirm that a dispatched action completed. This
+    /// is useful when the middleware is making an asynchronous call and we want to wait for an expectation to be fulfilled.
+    var dispatchCalled: (() -> Void)?
 
     init(state: State) {
         self.state = state
     }
 
     func subscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
-        // TODO if you need it
+        // TODO: if you need it
     }
 
     func subscribe<SubState, S>(
@@ -34,21 +40,23 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
             ) -> Redux.Subscription<SubState>
         )?
     ) where SubState == S.SubscriberStateType, S: Redux.StoreSubscriber {
-        // TODO if you need it
+        // TODO: if you need it
     }
 
     func unsubscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
-        // TODO if you need it
+        // TODO: if you need it
     }
 
     func unsubscribe(_ subscriber: any Redux.StoreSubscriber) {
-        // TODO if you need it
+        // TODO: if you need it
     }
 
+    /// We implemented the lock to ensure that this is thread safe
+    /// since actions can be dispatch in concurrent tasks
     func dispatch(_ action: Redux.Action) {
-        var dispatchActions = dispatchCalled.withActions
-        dispatchActions.append(action)
-
-        dispatchCalled = (dispatchCalled.numberOfTimes + 1, dispatchActions)
+        lock.lock()
+        defer { lock.unlock() }
+        dispatchedActions.append(action)
+        dispatchCalled?()
     }
 }

@@ -176,7 +176,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     isActive: false,
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
-                    a11yHint: "",
+                    a11yHint: getToolsSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
                         store.dispatch(
@@ -197,7 +197,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     isActive: false,
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
-                    a11yHint: "",
+                    a11yHint: getSaveSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
                         store.dispatch(
@@ -228,6 +228,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         if shouldShowReportSiteIssue {
             description += ", \(Preview.ReportBrokenSiteSubtitle)"
         }
+
+        description += ", \(Preview.PrintSubtitle)"
         description += ", \(Preview.ShareSubtitle)"
 
         return description
@@ -243,6 +245,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         if tabInfo.readerModeIsAvailable {
             description += ", \(Preview.SaveToReadingListSubtitle)"
         }
+
+        description += ", \(Preview.SaveAsPDFSubtitle)"
 
         return description
     }
@@ -309,7 +313,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
         return [
             firstSection,
-            MenuSection(options: [configureShareItem(with: uuid, tabInfo: tabInfo)]),
+            MenuSection(options: [
+                configurePrintItem(with: uuid, tabInfo: tabInfo),
+                configureShareItem(with: uuid, tabInfo: tabInfo),
+            ])
         ]
     }
 
@@ -333,6 +340,34 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         navigationDestination: MenuNavigationDestination(
                             .goToURL,
                             url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configurePrintItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.Print,
+            iconName: Icons.print,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Print,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.print,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .printSheet,
+                            url: tabInfo.canonicalURL
                         ),
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
@@ -482,6 +517,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 configureBookmarkItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 configureReadingListItem(with: uuid, and: tabInfo),
+                configureSaveAsPDFItem(with: uuid, and: tabInfo),
             ]
         )]
     }
@@ -579,6 +615,34 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         windowUUID: uuid,
                         actionType: actionType,
                         tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureSaveAsPDFItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Save.SaveAsPDF,
+            iconName: Icons.saveAsPDF,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .saveAsPDF,
+                            url: tabInfo.canonicalURL
+                        ),
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )

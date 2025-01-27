@@ -62,13 +62,28 @@
 "FxA.FirefoxAccount.v119" = "Conto";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
-"Settings.AddressAutofill.Title.v124" = "Endatar automaticamain las adressas";
-
-/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adressas";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Metodas da pajament";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Ulteriuras infurmaziuns.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Rapports da collaps ans permettan da diagnostitgar e curreger problems cun il navigatur.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Trametter automaticamain rapports da collaps";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Ulteriuras infurmaziuns.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Quai gida %@ a stimar il dumber dad utilisaders activs.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping d’utilisaziun quotidian";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Conto";
@@ -106,9 +121,6 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Maschinas da tschertgar alternativas";
 
-/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
-"Settings.Search.DefaultSearchEngine.Footer.v122" = "Resultats da tschertgas, cronologia, segnapaginas e dapli";
-
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Maschina da tschertgar da standard";
 
@@ -121,17 +133,8 @@
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Mussar las propostas da maschinas da tschertgar en sesidas privatas";
 
-/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v122" = "Mussar propostas en il modus privat";
-
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "Mussar en sesidas privatas";
-
-/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v122" = "Modus privat";
-
-/* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "Maschinas da tschertgar rapidas";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Mussar propostas da tschertga";
@@ -154,14 +157,8 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Tschertgar en ils tabs sincronisads";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Retschaiva propostas dal web en connex cun tia tschertga";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Retschaiva propostas da %@ en connex cun tia tschertga";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Propostas da %@";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Propostas dal web";
@@ -171,4 +168,13 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Propostas da sponsurs";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Ulteriuras infurmaziuns.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ vul mo rimnar las datas necessarias per metter a disposiziun e meglierar %2$@ per ina e scadin.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Datas tecnicas e d’interacziun";
 

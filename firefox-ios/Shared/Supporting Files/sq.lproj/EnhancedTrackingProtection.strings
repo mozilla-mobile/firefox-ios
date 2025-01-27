@@ -1,3 +1,9 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Mbrapsht";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Mbylle";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Emër i Rëndomtë";
 
@@ -53,10 +59,10 @@
 "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Mbylleni menunë për privatësinë dhe sigurinë";
 
 /* Text to let users know that the current website is secure. */
-"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Lidhje e sigurt";
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Lidhje e siguruar";
 
 /* Text to let users know that the current website is not secure. */
-"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Lidhje jo e sigurt";
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Lidhje jo e siguruar";
 
 /* Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "S’u gjetën gjurmues";
@@ -105,9 +111,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Mbrojtje e Thelluar Nga Gjurmimi";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Mbrojtjet janë OFF. Sugjerojmë t’i aktivizoni.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Mbrojtjet janë OFF. Sugjerojmë t’i aktivizoni.";

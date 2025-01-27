@@ -1,3 +1,9 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Tillbaka";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Stäng";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Vanligt namn";
 
@@ -105,9 +111,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Förbättrat spårningsskydd";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Skydd är AV. Vi föreslår att du slår på det igen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Skydd är AV. Vi föreslår att du slår på det igen.";

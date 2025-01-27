@@ -7,6 +7,9 @@
 /* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
 "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "Configuración de privacidade e seguridade";
 
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
+"AddressToolbar.SearchEngine.A11y.Hint.v133" = "Abre a selección do buscador";
+
 /* Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google). */
 "AddressToolbar.SearchEngine.A11y.Label.v128" = "Buscador: %@";
 

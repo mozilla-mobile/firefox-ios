@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Gwarez araokaet a-enep d’an heulierien";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Diweredekaet eo ar gwarezioù. Aliañ a reomp deoc’h gweredekaat anezho en-dro. ";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Diweredekaet eo ar gwarezioù. Aliañ a reomp deoc’h gweredekaat anezho en-dro. ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

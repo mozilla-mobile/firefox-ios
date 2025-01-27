@@ -11,6 +11,7 @@ import ComponentLibrary
 class TrackingProtectionStatusView: UIView {
     private struct UX {
         static let imageMargins: CGFloat = 10
+        static let labelsVerticalMargins: CGFloat = 11
         static let connectionStatusLabelConstraintConstant = 16.0
     }
 
@@ -22,7 +23,7 @@ class TrackingProtectionStatusView: UIView {
     }
 
     let connectionStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
@@ -66,12 +67,12 @@ class TrackingProtectionStatusView: UIView {
             connectionStatusLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                             constant: -TPMenuUX.UX.horizontalMargin),
             connectionStatusLabel.topAnchor.constraint(equalTo: topAnchor,
-                                                       constant: TPMenuUX.UX.horizontalMargin),
+                                                       constant: UX.labelsVerticalMargins),
 
             dividerView.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.topAnchor.constraint(equalTo: connectionStatusLabel.bottomAnchor,
-                                             constant: TPMenuUX.UX.horizontalMargin),
+                                             constant: UX.labelsVerticalMargins),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
         ])
@@ -87,6 +88,6 @@ class TrackingProtectionStatusView: UIView {
         backgroundColor = theme.colors.layer2
         connectionStatusLabel.textColor = theme.colors.textPrimary
         dividerView.backgroundColor = theme.colors.borderPrimary
-        connectionImage.tintColor = theme.colors.iconPrimary
+        connectionImage.tintColor = theme.colors.iconSecondary
     }
 }

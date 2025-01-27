@@ -327,7 +327,7 @@ private let SentryDSNKey = "SentryDSN"
 extension AppDelegate {
     func setupCrashReporting() {
         // Do not enable crash reporting if collection of anonymous usage data is disabled.
-        if !Settings.getToggle(.sendAnonymousUsageData) {
+        if !Settings.getToggle(.crashToggle) {
             return
         }
 
@@ -357,13 +357,19 @@ extension AppDelegate {
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
+        
+        if Settings.getToggle(.sendAnonymousUsageData) {
+            UsageProfileManager.checkAndSetUsageProfileId()
+        } else {
+            UsageProfileManager.unsetUsageProfileId()
+        }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
         let configuration = Configuration(
             channel: channel,
-            pingSchedule: ["baseline": ["dau-reporting"]]
+            pingSchedule: ["baseline": ["usage-reporting"]]
         )
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
 

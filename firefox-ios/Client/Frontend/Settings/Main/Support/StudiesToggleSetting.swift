@@ -12,18 +12,21 @@ class StudiesToggleSetting: BoolSetting {
     init(prefs: Prefs,
          delegate: SettingsDelegate?,
          theme: Theme,
-         settingsDelegate: SupportSettingsDelegate?) {
+         settingsDelegate: SupportSettingsDelegate?,
+         title: String,
+         message: String,
+         linkedText: String) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
-                string: .SettingsStudiesToggleMessage,
+                string: message,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
             )
         )
-        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: "\n"))
         statusText.append(
             NSAttributedString(
-                string: .SettingsStudiesToggleLink,
+                string: linkedText,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
             )
         )
@@ -34,7 +37,7 @@ class StudiesToggleSetting: BoolSetting {
             prefs: prefs,
             prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
-            attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
+            attributedTitleText: NSAttributedString(string: title),
             attributedStatusText: statusText,
             settingDidChange: {
                 Experiments.setStudiesSetting($0)

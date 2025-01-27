@@ -71,7 +71,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: PasswordManagerTableViewCell.cellIdentifier,
                                                            for: indexPath) as? PasswordManagerTableViewCell {
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
-            let username = login.decryptedUsername
+            let username = login.username
             cell.hostnameLabel.text = login.hostname
             cell.usernameLabel.text = username.isEmpty ? "(no username)" : username
             if let breaches = viewModel.userBreaches, breaches.contains(login) {

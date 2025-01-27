@@ -171,13 +171,12 @@ class TPStatsBlocklists {
             ] {
             let list: [[String: AnyObject]]
             do {
-                guard let path = Bundle.main.path(forResource: blockListFile.filename, ofType: "json") else {
-                    logger.log("Blocklists: bad file path.", level: .warning, category: .webview)
-                    assertionFailure("Blocklists: bad file path.")
-                    return
+                let settingsLists = RemoteDataType.contentBlockingLists
+                guard let json = try? settingsLists.loadLocalSettingsFileAsJSON(fileName: blockListFile.filename) else {
+                    logger.log("Blocklists: could not load blocklist JSON file.", level: .warning, category: .webview)
+                    assertionFailure("Blocklists: could not load file.")
+                    continue
                 }
-
-                let json = try Data(contentsOf: URL(fileURLWithPath: path))
                 guard let data = try JSONSerialization.jsonObject(
                     with: json,
                     options: []

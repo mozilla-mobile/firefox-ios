@@ -1,3 +1,9 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Retro";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Clauder";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Nomine commun";
 
@@ -105,9 +111,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protection antitraciamento reinfortiate";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Le protectiones es disactivate. Nos consilia reactivar lo.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Le protectiones es disactivate. Nos consilia reactivar los.";

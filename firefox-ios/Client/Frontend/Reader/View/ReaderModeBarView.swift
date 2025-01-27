@@ -55,15 +55,15 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
 
     var contextStrokeColor: UIColor?
 
-    var readStatusButton: UIButton!
-    var settingsButton: UIButton!
-    var listStatusButton: UIButton!
+    var readStatusButton: UIButton?
+    var settingsButton: UIButton?
+    var listStatusButton: UIButton?
 
     @objc dynamic var buttonTintColor = UIColor.clear {
         didSet {
-            readStatusButton.tintColor = self.buttonTintColor
-            settingsButton.tintColor = self.buttonTintColor
-            listStatusButton.tintColor = self.buttonTintColor
+            readStatusButton?.tintColor = self.buttonTintColor
+            settingsButton?.tintColor = self.buttonTintColor
+            listStatusButton?.tintColor = self.buttonTintColor
         }
     }
 
@@ -71,31 +71,25 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         super.init(frame: frame)
 
         readStatusButton = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
-        readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
-        NSLayoutConstraint.activate([
-            readStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            readStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
-            readStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            readStatusButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
-        ])
+        readStatusButton?.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
+        readStatusButton?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        readStatusButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        readStatusButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        readStatusButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
 
         settingsButton = createButton(.settings, action: #selector(tappedSettingsButton))
-        settingsButton.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
-        NSLayoutConstraint.activate([
-            settingsButton.heightAnchor.constraint(equalTo: heightAnchor),
-            settingsButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            settingsButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            settingsButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
-        ])
+        settingsButton?.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
+        settingsButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        settingsButton?.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        settingsButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        settingsButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
 
         listStatusButton = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
-        listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
-        NSLayoutConstraint.activate([
-            listStatusButton.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-            listStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
-            listStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            listStatusButton.widthAnchor.constraint(equalToConstant: UX.buttonWidth)
-        ])
+        listStatusButton?.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
+        listStatusButton?.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
+        listStatusButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        listStatusButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        listStatusButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,17 +125,17 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     }
 
     @objc
-    func tappedReadStatusButton(_ sender: UIButton!) {
+    func tappedReadStatusButton(_ sender: UIButton?) {
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
     @objc
-    func tappedSettingsButton(_ sender: UIButton!) {
+    func tappedSettingsButton(_ sender: UIButton?) {
         delegate?.readerModeBar(self, didSelectButton: .settings)
     }
 
     @objc
-    func tappedListStatusButton(_ sender: UIButton!) {
+    func tappedListStatusButton(_ sender: UIButton?) {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: added ? .delete : .add,
@@ -154,16 +148,16 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     var unread = true {
         didSet {
             let buttonType: ReaderModeBarButtonType = unread && added ? .markAsRead : .markAsUnread
-            readStatusButton.setImage(buttonType.image, for: .normal)
-            readStatusButton.isEnabled = added
-            readStatusButton.alpha = added ? 1.0 : 0.6
+            readStatusButton?.setImage(buttonType.image, for: .normal)
+            readStatusButton?.isEnabled = added
+            readStatusButton?.alpha = added ? 1.0 : 0.6
         }
     }
 
     var added = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList
-            listStatusButton.setImage(buttonType.image, for: .normal)
+            listStatusButton?.setImage(buttonType.image, for: .normal)
         }
     }
 }

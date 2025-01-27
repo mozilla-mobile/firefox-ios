@@ -35,8 +35,7 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].waitAndTap()
+        navigator.goto(FindInPage)
 
         // Enter some text to start finding
         if #available(iOS 16, *) {
@@ -70,27 +69,27 @@ class FindInPageTests: BaseTestCase {
         }
 
         let nextInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton]
-        nextInPageResultButton.tap()
+        nextInPageResultButton.waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.staticTexts["2 of 6"])
             XCTAssertTrue(app.staticTexts["2 of 6"].exists)
         }
 
-        nextInPageResultButton.tap()
+        nextInPageResultButton.waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.staticTexts["3 of 6"])
             XCTAssertTrue(app.staticTexts["3 of 6"].exists)
         }
 
         let previousInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton]
-        previousInPageResultButton.tap()
+        previousInPageResultButton.waitAndTap()
 
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.staticTexts["2 of 6"])
             XCTAssertTrue(app.staticTexts["2 of 6"].exists)
         }
 
-        previousInPageResultButton.tap()
+        previousInPageResultButton.waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.staticTexts["1 of 6"])
             XCTAssertTrue(app.staticTexts["1 of 6"].exists)
@@ -123,9 +122,8 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previous way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        // Enter some text to start finding
-        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
+        navigator.goto(FindInPage)
+
         if #available(iOS 16, *) {
             app.searchFields["find.searchField"].typeText("The Book of")
             mozWaitForElementToExist(app.searchFields["The Book of"])
@@ -174,7 +172,7 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Before reloading, it is necessary to hide the keyboard
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.typeText("\n")
 
         // Once the page is reloaded the search bar should not appear
@@ -193,7 +191,7 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Dismiss keyboard
-        app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton].tap()
+        app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton].waitAndTap()
         navigator.nowAt(BrowserTab)
 
         // Going to tab tray and back to the website hides the search field.
@@ -221,9 +219,9 @@ class FindInPageTests: BaseTestCase {
         // the buttons to find next and previous
         while !app.menuItems["Find in Page"].exists {
             if #available(iOS 16, *) {
-                app.buttons["Forward"].firstMatch.tap()
+                app.buttons["Forward"].firstMatch.waitAndTap()
             } else {
-                app.menuItems["show.next.items.menu.button"].tap()
+                app.menuItems["show.next.items.menu.button"].waitAndTap()
             }
             mozWaitForElementToExist(app.menuItems.firstMatch)
             if #available(iOS 16, *) {
@@ -232,8 +230,7 @@ class FindInPageTests: BaseTestCase {
                 mozWaitForElementToExist(app.menuItems["show.next.items.menu.button"])
             }
         }
-        mozWaitForElementToExist(app.menuItems["Find in Page"])
-        app.menuItems["Find in Page"].tap()
+        app.menuItems["Find in Page"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.searchFields[textToFind])
         } else {

@@ -104,11 +104,15 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
         // Tap on Twitter from "Jump Back In"
-        app.cells["JumpBackInCell"].staticTexts["Wikipedia"].firstMatch.tap()
+        app.cells["JumpBackInCell"].staticTexts["Wikipedia"].firstMatch.waitAndTap()
 
         // The view is switched to the twitter tab
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(url, "www.wikipedia.org/")
+        if let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
+            XCTAssertEqual(url, "wikipedia.org", "The URL retrieved from the address toolbar does not match the expected value")
+        } else {
+            XCTFail("Failed to retrieve the URL string from the address toolbar")
+            return
+        }
 
         // Open a new tab in normal browsing
         navigator.goto(TabTray)
@@ -130,7 +134,7 @@ class JumpBackInTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
-        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].tap()
+        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)

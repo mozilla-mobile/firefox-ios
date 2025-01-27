@@ -81,8 +81,9 @@ enum ToolbarActionType: ActionType {
     case showMenuWarningBadge
     case didPasteSearchTerm
     case didStartEditingUrl
+    case cancelEditOnHomepage
     case cancelEdit
-    case didScrollDuringEdit
+    case hideKeyboard
     case readerModeStateChanged
     case backForwardButtonStateChanged
     case traitCollectionDidChange
@@ -93,6 +94,7 @@ enum ToolbarActionType: ActionType {
     case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
+    case didSetSearchTerm
     case didStartTyping
 }
 

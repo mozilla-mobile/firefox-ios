@@ -8,6 +8,7 @@ class FirefoxSuggestTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
         navigator.openURL("www.example.com")
+        waitUntilPageLoad()
         navigator.createNewTab()
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")

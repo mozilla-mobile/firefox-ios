@@ -4,11 +4,13 @@
 
 import Common
 import Foundation
+import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
 final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
+        self.profile = profile
         self.title = "Feature Flags"
     }
 
@@ -29,7 +31,11 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     titleText: format(string: "Enable Bookmarks Redesign"),
                     statusText: format(string: "Toggle to use the new bookmarks design")
                 ) { [weak self] _ in
-                    self?.reloadView()
+                    guard let self else { return }
+                    self.reloadView()
+                    let isBookmarksRefactorEnabled = self.featureFlags.isFeatureEnabled(.bookmarksRefactor,
+                                                                                        checking: .buildOnly)
+                    self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
                     with: .closeRemoteTabs,
@@ -75,9 +81,23 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .noInternetConnectionErrorPage,
+                    titleText: format(string: "Enable NIC Native Error Page"),
+                    statusText: format(string: "Toggle to display natively created no internet connection error page")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .toolbarRefactor,
                     titleText: format(string: "Toolbar Redesign"),
                     statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedAds,
+                    titleText: format(string: "Enable Unified Ads"),
+                    statusText: format(string: "Toggle to use unified ads API")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
@@ -95,6 +115,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .sentFromFirefox,
+                    titleText: format(string: "Enable Sent from Firefox"),
+                    statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                }
             ]
         )
     }

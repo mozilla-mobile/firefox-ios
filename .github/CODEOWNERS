@@ -8,6 +8,7 @@
 # those specific persons will be asked for review and not the global owners.
 /firefox-ios/Client/Experiments/initial_experiments.json @afurlan-firefox
 /firefox-ios/Client/Assets/CC_Script @nbhasin2 @issammani
+/firefox-ios/Client/Assets/RemoteSettingsData/ @nbhasin2 @issammani @mattreaganmozilla
 
 # When someone opens a pull request that only modifies those folders / files, 
 # only @mozilla-mobile/fxios-automation and not the global

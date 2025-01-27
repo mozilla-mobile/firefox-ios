@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Rmed ilɣa";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Mi ara teqqneḍ rnu ad tremdeḍ amtawi, taɣellist tettwaseǧhed. %@ yettwgelhin awalen-ik uffiren, ticraḍ n yisebtar, akked wayen niḍen.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ ittewgelhin awalen uffiren, ticraḍ n yisebtar, d wugar mi ara tremdeḍ amtawi.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

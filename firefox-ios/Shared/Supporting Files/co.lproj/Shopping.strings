@@ -97,9 +97,6 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "St’operazione pò piglià 60 seconde";
 
-/* Title for info card when the product is in analysis mode */
-"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Cuntrollà a qualità di l’avisi";
-
 /* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Cuntrollu di a qualità di l’avisi (%@)";
 
@@ -117,9 +114,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Ùn ci hè ancu infurmazione nant’à st’avisi";
-
-/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
-"Shopping.OptInCard.Disclaimer.Text.v120" = "A selezzione di « Sì, pruvallu » vole dì chì vo accettate quell’elementi di %@ :";
 
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v123" = "A selezzione di « Sì, pruvallu » vole dì chì vo accettate st’elementi :";
@@ -139,9 +133,6 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "Sì, pruvallu";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Pulitica di cunfidenzialità";
-
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "A dichjarazione di cunfidenzialità di %@";
 
@@ -150,9 +141,6 @@
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
 "Shopping.OptInCard.SecondParagraph.Description.v120" = "Impieghendu a tecnolugia di %1$@ da %2$@, vi aiutemu à rispinghje l’avisi partigiani è falsi. U nostru mudellu d’intelligenza artificiale hè amendatu cuntinuatamente per prutegevi quandu vo cumprate.";
-
-/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Cundizioni d’utilizazione";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "E cundizioni d’utilizazione di %@";
@@ -183,9 +171,6 @@
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Impieghemu a tecnolugia d’intelligenza artificial di %1$@ da %2$@ per verificà s’è l’avisi nant’à i prudutti sò degni di cunfidenza. Què vi aiuterà solu à misurà a qualità di l’avisu, micca quella di u pruduttu";
-
-/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "L’elementi *messi in lume* sò l’avisi lasciati nant’à %1@ durante l’ultimi 80 ghjorni chì no cridemu degni di cunfidenza.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "L’elementi *messi in lume* sò l’avisi lasciati nant’à %@ durante l’ultimi 80 ghjorni chì no cridemu degni di cunfidenza.";

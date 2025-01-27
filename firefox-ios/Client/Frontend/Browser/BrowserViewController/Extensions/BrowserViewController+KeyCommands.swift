@@ -149,8 +149,8 @@ extension BrowserViewController {
 
         if isToolbarRefactorEnabled {
             store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
-        } else {
-            urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        } else if let legacyUrlBar {
+            legacyUrlBar.tabLocationViewDidTapLocation(legacyUrlBar.locationView)
         }
     }
 
@@ -421,7 +421,7 @@ extension BrowserViewController {
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
-        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
+        if !isToolbarRefactorEnabled, let legacyUrlBar, legacyUrlBar.inOverlayMode {
             return commands + searchLocationCommands
         } else if !isEditingText {
             return commands + overridesTextEditing

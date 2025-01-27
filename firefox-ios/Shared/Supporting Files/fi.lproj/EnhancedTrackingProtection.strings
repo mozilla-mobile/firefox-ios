@@ -1,3 +1,9 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "Takaisin";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "Sulje";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Yleinen nimi";
 
@@ -48,6 +54,9 @@
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Evästeet ja sivustotiedot poistettu";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Sulje tietosuoja- ja turvallisuusvalikko";
 
 /* Text to let users know that the current website is secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Suojattu yhteys";
@@ -102,9 +111,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Tehostettu seurannan suojaus";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Suojaukset ovat POIS PÄÄLTÄ. Suosittelemme kytkemään ne takaisin päälle.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Suojaukset ovat POIS PÄÄLTÄ. Suosittelemme kytkemään ne takaisin päälle.";

@@ -24,6 +24,7 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private let trackersDetailArrow: UIImageView = .build { image in
@@ -117,7 +118,9 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     }
 
     func setupDetails(for trackersBlocked: Int?) {
-        trackersLabel.text = getTrackerString(for: trackersBlocked)
+        let trackersString = getTrackerString(for: trackersBlocked)
+        trackersButton.accessibilityLabel = trackersString
+        trackersLabel.text = trackersString
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
         if let trackersBlocked {
@@ -126,10 +129,10 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     }
 
     func setupAccessibilityIdentifiers(arrowImageA11yId: String,
-                                       trackersBlockedLabelA11yId: String,
+                                       trackersBlockedButtonA11yId: String,
                                        shieldImageA11yId: String) {
         trackersDetailArrow.accessibilityIdentifier = arrowImageA11yId
-        trackersLabel.accessibilityIdentifier = trackersBlockedLabelA11yId
+        trackersButton.accessibilityIdentifier = trackersBlockedButtonA11yId
         shieldImage.accessibilityIdentifier = shieldImageA11yId
     }
 
@@ -172,7 +175,7 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         self.backgroundColor = theme.colors.layer2
         trackersDetailArrow.tintColor = theme.colors.iconSecondary
-        shieldImage.tintColor = theme.colors.iconPrimary
+        shieldImage.tintColor = theme.colors.iconSecondary
         trackersHorizontalLine.backgroundColor = theme.colors.borderPrimary
     }
 }

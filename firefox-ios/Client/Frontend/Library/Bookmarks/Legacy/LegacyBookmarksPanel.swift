@@ -43,6 +43,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
     private var logger: Logger
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
@@ -61,6 +62,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            bottomRightButton.isEnabled = true
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
@@ -149,8 +151,9 @@ class LegacyBookmarksPanel: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData { [weak self] in
-            self?.tableView.reloadData()
-
+            ensureMainThread {
+                self?.tableView.reloadData()
+            }
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
@@ -418,10 +421,11 @@ class LegacyBookmarksPanel: SiteTableViewController,
             // Site is needed on BookmarkItemData to setup cell image
             var site: Site?
             if let node = node as? BookmarkItemData {
-                site = Site(url: node.url,
-                            title: node.title,
-                            bookmarked: true,
-                            guid: node.guid)
+                site = Site.createBasicSite(
+                    url: node.url,
+                    title: node.title,
+                    isBookmarked: true
+                )
             }
             cell.tag = indexPath.item
 
@@ -480,11 +484,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "swipe"])
+            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -523,7 +523,7 @@ extension LegacyBookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        return Site.createBasicSite(url: bookmarkItem.url, title: bookmarkItem.title, isBookmarked: true)
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
@@ -550,13 +550,9 @@ extension LegacyBookmarksPanel: LibraryPanelContextMenu {
 
         let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
-                                                 tapHandler: { _ in
-            self.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "long-press"])
+                                                 tapHandler: { [weak self] _ in
+            self?.deleteBookmarkNodeAtIndexPath(indexPath)
+            self?.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
         }).items
         actions.append(removeAction)
 

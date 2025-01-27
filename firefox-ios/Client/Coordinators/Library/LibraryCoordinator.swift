@@ -10,7 +10,7 @@ import Storage
 import enum MozillaAppServices.VisitType
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
-    func didFinishLibrary(from coordinator: LibraryCoordinator)
+    func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
@@ -26,7 +26,7 @@ class LibraryCoordinator: BaseCoordinator,
                           BookmarksRefactorFeatureFlagProvider {
     private let profile: Profile
     private let tabManager: TabManager
-    private var libraryViewController: LibraryViewController!
+    private var libraryViewController: LibraryViewController?
     weak var parentCoordinator: LibraryCoordinatorDelegate?
     override var isDismissable: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
@@ -43,15 +43,17 @@ class LibraryCoordinator: BaseCoordinator,
     }
 
     private func initializeLibraryViewController() {
-        libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
+        let libraryViewController = LibraryViewController(profile: profile, tabManager: tabManager)
         router.setRootViewController(libraryViewController)
         libraryViewController.childPanelControllers = makeChildPanels()
         libraryViewController.delegate = self
         libraryViewController.navigationHandler = self
+
+        self.libraryViewController = libraryViewController
     }
 
     func start(with homepanelSection: Route.HomepanelSection) {
-        libraryViewController.setupOpenPanel(panelType: homepanelSection.libraryPanel)
+        libraryViewController?.setupOpenPanel(panelType: homepanelSection.libraryPanel)
     }
 
     private func makeChildPanels() -> [UINavigationController] {
@@ -92,9 +94,30 @@ class LibraryCoordinator: BaseCoordinator,
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
-        let coordinator = makeShareExtensionCoordinator()
-        coordinator.start(url: url, sourceView: sourceView)
+        if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
+            // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
+            logger.log(
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                level: .info,
+                category: .shareSheet,
+                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
+                        "LibraryCoordinator windowUUID": "\(windowUUID)"]
+            )
+
+            coordinator.dismiss()
+        }
+
+        let coordinator = ShareSheetCoordinator(
+            alertContainer: UIView(),
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
+        add(child: coordinator)
+
+        // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
+        coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
@@ -104,8 +127,9 @@ class LibraryCoordinator: BaseCoordinator,
             router: router,
             profile: profile,
             windowUUID: windowUUID,
-            parentCoordinator: parentCoordinator,
-            navigationHandler: self
+            libraryCoordinator: parentCoordinator,
+            libraryNavigationHandler: self,
+            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         add(child: bookmarksCoordinator)
         if isBookmarkRefactorEnabled {
@@ -157,25 +181,13 @@ class LibraryCoordinator: BaseCoordinator,
     }
 
     func setNavigationBarHidden(_ value: Bool) {
-        libraryViewController.setNavigationBarHidden(value)
+        libraryViewController?.setNavigationBarHidden(value)
     }
 
     // MARK: - ParentCoordinatorDelegate
 
     func didFinish(from childCoordinator: any Coordinator) {
         remove(child: childCoordinator)
-    }
-
-    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
-        let coordinator = ShareExtensionCoordinator(
-            alertContainer: UIView(),
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: coordinator)
-        return coordinator
     }
 
     // MARK: - LibraryPanelDelegate

@@ -8,10 +8,10 @@ import UIKit
 
 public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let contentMargin: CGFloat = 11
+        static let contentMargin: CGFloat = 12
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
-        static let contentSpacing: CGFloat = 5
+        static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
     }
 
@@ -63,6 +63,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.accessibilityIdentifier = model.a11yId
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint
+        self.accessibilityTraits = .button
         self.separatorInset = UIEdgeInsets(top: 0, left: separatorInsetSize, bottom: 0, right: 0)
         setupView()
     }

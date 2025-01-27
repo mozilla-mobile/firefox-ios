@@ -18,7 +18,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
-        static let doneButtonFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -136,8 +135,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
                 self?.tappedUseStrongPasswordButton()
             })
         accessoryView.accessibilityTraits = .button
-        accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
-        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Autofill.footerPrimaryAction
+        accessoryView.accessibilityLabel = .PasswordGenerator.KeyboardAccessoryButtonLabel
+        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.keyboardButton
         accessoryView.isAccessibilityElement = true
         return accessoryView
     }()

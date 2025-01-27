@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar meaning"
@@ -21,9 +22,9 @@ class SearchTests: BaseTestCase {
 
     private func suggestionsOnOff() {
         navigator.goto(SearchSettings)
-        app.tables.switches["Show Search Suggestions"].tap()
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.tables.switches["Show Search Suggestions"].waitAndTap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
     }
 
     private func validateSearchSuggestionText(typeText: String) {
@@ -49,10 +50,10 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"].cells.firstMatch)
 
         // Disable Search suggestion
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
         waitForTabsButton()
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
         navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
@@ -64,16 +65,16 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells.firstMatch)
 
         // Verify that previous choice is remembered
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
 
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells[SuggestedSite])
 
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         waitForTabsButton()
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
         navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
@@ -125,16 +126,21 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        urlBarAddress.press(forDuration: 5)
-        app.menuItems["Select All"].tap()
+        if iPad() {
+            urlBarAddress.waitAndTap()
+            urlBarAddress.waitAndTap()
+        } else {
+            urlBarAddress.press(forDuration: 5)
+        }
+        app.menuItems["Select All"].waitAndTap()
         app.menuItems["Copy"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
         navigator.nowAt(HomePanelsScreen)
         mozWaitForElementToExist(
-            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.waitAndTap()
 
         app.menuItems["Paste"].waitAndTap()
@@ -145,12 +151,12 @@ class SearchTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Check that the website is loaded
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "www.mozilla.org")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "mozilla.org")
         waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         typeOnSearchBar(text: "moz")
@@ -164,13 +170,13 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
-        app.tables.cells.element(boundBy: 0).tap()
+        app.tables.cells.element(boundBy: 0).waitAndTap()
         let tablesQuery2 = app.tables
-        tablesQuery2.staticTexts[searchEngine].tap()
+        tablesQuery2.staticTexts[searchEngine].waitAndTap()
 
         navigator.openURL("foo bar")
         mozWaitForElementToExist(app.webViews.firstMatch)
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: searchEngine.lowercased())
     }
 
@@ -182,8 +188,8 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
         changeSearchEngine(searchEngine: "Google")
-        changeSearchEngine(searchEngine: "eBay")
         changeSearchEngine(searchEngine: "Wikipedia")
+        changeSearchEngine(searchEngine: "eBay")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353246
@@ -204,7 +210,7 @@ class SearchTests: BaseTestCase {
         // Click on the > button to get to that option only on iPhone
         if #available(iOS 16, *) {
             while !app.collectionViews.menuItems["Search with Firefox"].exists {
-                app.buttons["Forward"].firstMatch.tap()
+                app.buttons["Forward"].firstMatch.waitAndTap()
                 waitForElementsToExist(
                     [
                         app.collectionViews.menuItems.firstMatch,
@@ -214,7 +220,7 @@ class SearchTests: BaseTestCase {
             }
         } else {
             while !app.menuItems["Search with Firefox"].exists {
-                app.menuItems["Show more items"].firstMatch.tap()
+                app.menuItems["Show more items"].firstMatch.waitAndTap()
                 waitForElementsToExist(
                     [
                         app.menuItems.firstMatch,
@@ -226,10 +232,10 @@ class SearchTests: BaseTestCase {
 
         app.menuItems["Search with Firefox"].waitAndTap()
         waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "google")
         // Now there should be two tabs open
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numTab)
     }
 
@@ -237,10 +243,10 @@ class SearchTests: BaseTestCase {
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         mozWaitForValueContains(url, value: "google")
     }
@@ -267,16 +273,12 @@ class SearchTests: BaseTestCase {
             waitUntilPageLoad()
 
             // Reload icon is displayed.
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
-
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].label, "New Tab")
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+            navigator.performAction(Action.CloseURLBarOpen)
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
-            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].waitAndTap()
 
             mozWaitForElementToExist(addressBar)
             XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
@@ -324,13 +326,13 @@ class SearchTests: BaseTestCase {
             let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             scrollToElement(customizeHomepage)
             mozWaitForElementToExist(customizeHomepage)
-            let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+            let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))
             XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
 
             // In a new tab, tap on the URL bar
             navigator.goto(NewTabScreen)
-            urlBar.tap()
+            urlBar.waitAndTap()
 
             // The URL bar is focused and the keyboard is displayed
             validateUrlHasFocusAndKeyboardIsDisplayed()
@@ -344,45 +346,81 @@ class SearchTests: BaseTestCase {
             waitUntilPageLoad()
 
             // Tap on the URL bar
-            urlBar.tap()
+            urlBar.waitAndTap()
 
             // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
             validateUrlHasFocusAndKeyboardIsDisplayed()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+            mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
             // Tap the back icon <
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
             // The focused is dismissed from the URL bar
-            let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+            let addressBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
             XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
-    func testSearchSuggestions() {
+    func testSearchSuggestions() throws {
+        guard #available(iOS 17.0, *) else { return }
+
         // Tap on URL Bar and type "g"
         navigator.nowAt(NewTabScreen)
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons["appendUpLeftLarge"].firstMatch.tap()
+        app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.waitAndTap()
 
         // The search suggestion fills the URL bar but does not conduct the search
         waitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
+        // Check accessibility
+        // swiftlint:disable empty_count
+        if !iPad() {
+            try app.performAccessibilityAudit { issue in
+                guard let element = issue.element else { return false }
+
+                var shouldIgnore = false
+                // number of tabs in navigation toolbar
+                let isDynamicTypeTabButton = element.label == "1" &&
+                issue.auditType == .dynamicType
+
+                // clipped text on homepage
+                let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].firstMatch
+                let isDescendantOfHomepage = homepage.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
+
+                // clipped text in search suggestions
+                let suggestions = self.app.tables["SiteTable"].firstMatch
+                let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
+
+                // text in the address toolbar text field
+                let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
+
+                if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
+                    shouldIgnore = true
+                }
+
+                return shouldIgnore
+            }
+            // swiftlint:enable empty_count
+        }
+
         // Delete the text and type "g"
+        app.textFields.firstMatch.waitAndTap()
         app.buttons["Clear text"].waitAndTap()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the text letter "g"
-        app.tables.cells.firstMatch.tap()
+        app.tables.cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
 
         // The search is conducted through the default search engine
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        waitForValueContains(urlBar, value: "www.google.com/search?q=")
+        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        waitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
@@ -392,7 +430,7 @@ class SearchTests: BaseTestCase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: false)
 
         // Enable "Show search suggestions" from Settings and type text in a new tab
-        app.tables.cells.firstMatch.tap()
+        app.tables.cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
 
@@ -406,9 +444,9 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(showSearchSuggestions)
         let switchValue = showSearchSuggestions.value
         if switchValue as? String == "0", true && turnOnSwitch == true {
-            showSearchSuggestions.tap()
+            showSearchSuggestions.waitAndTap()
         } else if switchValue as? String == "1", true && turnOnSwitch == false {
-            showSearchSuggestions.tap()
+            showSearchSuggestions.waitAndTap()
         }
     }
 
@@ -429,8 +467,9 @@ class SearchTests: BaseTestCase {
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
             XCTAssertTrue(app.tables.cells.count >= 4)
         } else {
-            mozWaitForElementToNotExist(app.tables.buttons["appendUpLeftLarge"])
+            mozWaitForElementToNotExist(app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft])
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables.cells.firstMatch)
             XCTAssertTrue(app.tables.cells.count <= 3)
         }
     }

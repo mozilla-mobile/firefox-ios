@@ -1,8 +1,8 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Smiren";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Teḍra-d tuccḍa SSL, tuqqna taɣellsant akked uqeddac tegguma ad teqεed.";
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "Bab n %@ ur t-yesbadu ara akken iwata, tuqqna taɣellsan tegguma ad tettwag.";
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Ḥader. Yella wayen ur nteddu ara akken ilaq.";

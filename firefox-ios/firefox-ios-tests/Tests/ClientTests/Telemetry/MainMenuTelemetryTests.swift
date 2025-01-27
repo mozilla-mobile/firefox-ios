@@ -14,6 +14,10 @@ final class MainMenuTelemetryTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        // Due to changes allow certain custom pings to implement their own opt-out
+        // independent of Glean, custom pings may need to be registered manually in
+        // tests in order to puth them in a state in which they can collect data.
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         subject = MainMenuTelemetry()
     }

@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "സ്വകാര്യ മോഡ്";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "സ്വകാര്യ തിരച്ചിൽ";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "സ്വകാര്യ മോഡ് ഓണ്‍ അല്ലെങ്കില്‍ ഓഫ്";
 

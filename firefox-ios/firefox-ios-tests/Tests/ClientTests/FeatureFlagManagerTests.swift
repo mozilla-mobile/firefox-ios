@@ -15,11 +15,6 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
         mockProfile.prefs.clearAll()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
-    }
-
-    override func tearDown() {
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
     // MARK: - Tests

@@ -12,7 +12,7 @@ import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
-    func addBookmark(url: String, title: String?)
+    func addBookmark(url: String, title: String?, site: Site?)
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
@@ -27,6 +27,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
     func showFilePicker(fileURL: URL)
+    func showEditBookmark()
 }
 
 extension ToolBarActionMenuDelegate {
@@ -56,7 +57,8 @@ enum MenuButtonToastAction {
 class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
-                            AppVersionUpdateCheckerProtocol {
+                            AppVersionUpdateCheckerProtocol,
+                            BookmarksRefactorFeatureFlagProvider {
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
@@ -571,6 +573,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: Share
 
+    /// This action is called when the user taps Menu > Share for a file URL opened in the current active tab (e.g. by
+    /// viewing a file from the Downloads Panel)
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.AppMenuSharePageTitleString,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
@@ -582,38 +586,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
+    /// This action is called when the user taps Menu > Share for a website URL in the current active tab.
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Share,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
-            guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
+            // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+            guard let tab = self.selectedTab,
+                  let url = tab.canonicalURL?.displayURL
+            else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-
-            guard let temporaryDocument = tab.temporaryDocument else {
-                self.navigationHandler?.showShareExtension(
-                    url: url,
-                    sourceView: self.buttonView,
-                    toastContainer: self.toastContainer,
-                    popoverArrowDirection: .any)
-                return
-            }
-
-            temporaryDocument.getURL { tempDocURL in
-                DispatchQueue.main.async {
-                    // If we successfully got a temp file URL, share it like a downloaded file,
-                    // otherwise present the ordinary share menu for the web URL.
-                    if let tempDocURL = tempDocURL,
-                       tempDocURL.isFileURL {
-                        self.share(fileURL: tempDocURL, buttonView: self.buttonView)
-                    } else {
-                        self.navigationHandler?.showShareExtension(
-                            url: url,
-                            sourceView: self.buttonView,
-                            toastContainer: self.toastContainer,
-                            popoverArrowDirection: .any)
-                    }
-                }
-            }
+            self.navigationHandler?.showShareSheet(
+                shareType: .tab(url: url, tab: tab),
+                shareMessage: nil,
+                sourceView: self.buttonView,
+                sourceRect: nil,
+                toastContainer: self.toastContainer,
+                popoverArrowDirection: .any
+            )
         }.items
     }
 
@@ -630,12 +620,16 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    // Main menu option Share page with when opening a file
+    /// Share the URL of a downloaded file (e.g. either a user-downloaded file being viewed in the webView, or a link with a
+    /// non-HTML MIME type currently opened in the webView, such as a PDF).
+    /// NOTE: Called from getShareFileAction (files in the browser) and getShareAction (websites)
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-        navigationHandler?.showShareExtension(
-            url: fileURL,
+        navigationHandler?.showShareSheet(
+            shareType: .file(url: fileURL),
+            shareMessage: nil,
             sourceView: buttonView,
+            sourceRect: nil,
             toastContainer: toastContainer,
             popoverArrowDirection: .any)
     }
@@ -728,7 +722,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getBookmarkAction() -> SingleActionViewModel {
-        return isBookmarked ? getRemoveBookmarkAction() : getAddBookmarkAction()
+        guard isBookmarked else { return getAddBookmarkAction() }
+        return isBookmarkRefactorEnabled ? getEditBookmarkAction() : getRemoveBookmarkAction()
     }
 
     private func getAddBookmarkAction() -> SingleActionViewModel {
@@ -739,7 +734,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             else { return }
 
             // The method in BVC also handles the toast for this use case
-            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title)
+            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, site: nil)
             TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .add,
@@ -772,6 +767,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
     }
 
+    private func getEditBookmarkAction() -> SingleActionViewModel {
+        return SingleActionViewModel(title: .LegacyAppMenu.EditBookmarkLabel,
+                                     iconString: StandardImageIdentifiers.Large.bookmarkFill) { _ in
+            self.delegate?.showEditBookmark()
+        }
+    }
+
     // MARK: Shortcut
 
     private func getShortcutAction() -> PhotonRowActions {
@@ -783,7 +785,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: StandardImageIdentifiers.Large.pin) { _ in
             guard let url = self.selectedTab?.url?.displayURL,
                   let title = self.selectedTab?.displayTitle else { return }
-            let site = Site(url: url.absoluteString, title: title)
+
+            let site = Site.createBasicSite(url: url.absoluteString, title: title)
+
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .LegacyAppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage)
@@ -798,7 +802,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: StandardImageIdentifiers.Large.pinSlash) { _ in
             guard let url = self.selectedTab?.url?.displayURL,
                   let title = self.selectedTab?.displayTitle else { return }
-            let site = Site(url: url.absoluteString, title: title)
+
+            let site = Site.createBasicSite(url: url.absoluteString, title: title)
+
             self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     self.delegate?.showToast(

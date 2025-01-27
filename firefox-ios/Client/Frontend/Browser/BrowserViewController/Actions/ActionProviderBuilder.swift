@@ -6,10 +6,12 @@ import Common
 import WebKit
 import Photos
 import Shared
+import Storage
 
 class ActionProviderBuilder {
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     func build() -> [UIAction] {
         return actions
@@ -37,34 +39,28 @@ class ActionProviderBuilder {
             })
     }
 
-    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
+    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuBookmarkLink,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
-            ) { _ in
-                addBookmark(url.absoluteString, title)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .add,
-                                             object: .bookmark,
-                                             value: .contextMenu)
+            ) { [weak self] _ in
+                addBookmark(url.absoluteString, title, nil)
+                self?.bookmarksTelemetry.addBookmark(eventLabel: .contextMenu)
             }
         )
     }
 
-    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
+    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
-            ) { _ in
-                removeBookmark(url, title)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .delete,
-                                             object: .bookmark,
-                                             value: .contextMenu)
+            ) { [weak self] _ in
+                removeBookmark(url, title, nil)
+                self?.bookmarksTelemetry.deleteBookmark(eventLabel: .contextMenu)
             }
         )
     }
@@ -114,10 +110,13 @@ class ActionProviderBuilder {
                   let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
             else { return }
 
-            // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
+            // The `point` is only used on ipad for positioning the popover. On iPhone it is an bottom sheet.
             let point = webView.convert(helper.touchPoint, to: view)
-            navigationHandler?.showShareExtension(
-                url: url,
+
+            // Shares from long-pressing a link in the webview and tapping Share in the context menu
+            navigationHandler?.showShareSheet(
+                shareType: .site(url: url), // NOT `.tab` share; the link might be to a different domain from the current tab
+                shareMessage: nil,
                 sourceView: view,
                 sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),
                 toastContainer: contentContainer,

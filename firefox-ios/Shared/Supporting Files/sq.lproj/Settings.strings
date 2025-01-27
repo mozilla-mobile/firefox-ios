@@ -26,7 +26,7 @@
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Shtoni Kartë";
 
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
-"CreditCard.Settings.EmptyListDescription.v112" = "Ruani në mënyrë të siguruar hollësi të kartës tuaj, që të përfundoni më shpjet blerjet herës tjetër.";
+"CreditCard.Settings.EmptyListDescription.v112" = "Ruani në mënyrë të siguruar hollësi të kartës tuaj, që të përfundoni më shpejt blerjet herës tjetër.";
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "Ruaji Kartat në %@";
@@ -38,7 +38,7 @@
 "CreditCard.Settings.NotNow.v122" = "Jo Tani";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v122" = "Të ruhet në mënyrë të sigurt kjo kartë?";
+"CreditCard.Settings.RememberThisCard.v122" = "Të ruhet në mënyrë të siguruar kjo kartë?";
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
 "CreditCard.Settings.UpdateThisCard.v122" = "Të përditësohet karta?";
@@ -62,13 +62,37 @@
 "FxA.FirefoxAccount.v119" = "Llogari";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
-"Settings.AddressAutofill.Title.v124" = "Vetëplotëso Adresa";
-
-/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adresa";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Metoda Pagese";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "Mësoni Më Tepër.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Mësoni Më Tepër";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Njoftimet e vithisjeve na lejojnë të diagnostikojmë dhe ndreqim probleme me shfletuesin.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Kjo na ndihmon të diagnostikojmë dhe ndreqim probleme me shfletuesin.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Dërgo Vetvetiu Njoftime Vithisjesh";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "Mësoni Më Tepër.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Mësoni Më Tepër";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Kjo e ndihmon %@ të hamendësojë numrin e përdoruesve aktivë.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping Përdorimi Ditor";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Llogari";
@@ -106,9 +130,6 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Motorë Alternativë Kërkimesh";
 
-/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
-"Settings.Search.DefaultSearchEngine.Footer.v122" = "Përfundime prej kërkimesh, historiku, faqerojtësish, etj";
-
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Motor Parazgjedhje Kërkimesh";
 
@@ -121,17 +142,8 @@
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Shfaq në sesione private sugjerime nga motorë kërkimesh";
 
-/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v122" = "Shfaq Sugjerime në Shfletim Privat";
-
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "Shfaqi në Sesione Private";
-
-/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v122" = "Shfletim Privat";
-
-/* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "Motorë Kërkimesh të Shpejta";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Shfaq Sugjerime Kërkimi";
@@ -154,14 +166,8 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Kërko në Skeda të Njëkohësuara";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Merrni nga interneti sugjerime të lidhura me kërkimin tuaj";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Merrni nga %@-i sugjerime të lidhura me kërkimin tuaj";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Sugjerime nga %@";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Sugjerime nga Interneti";
@@ -171,4 +177,31 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Sugjerime nga Sponsorë";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Mësoni Më Tepër";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Provoni veçori dhe ide para se të hidhen në qarkullim për këdo.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Instaloni dhe Kryeni Studime";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Mësoni Më Tepër.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Mësoni Më Tepër";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar %2$@-in për këdo.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Të dhënat rreth pajisjes tuaj, formësimit “hardware” dhe përdorimit na ndihmojnë të përmirësohen veçori, funksionimi dhe qëndrueshmëria e %@-it.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "Të dhëna Teknike dhe Ndërveprimesh";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Dërgo Të dhëna Teknike dhe Ndërveprimesh";
 

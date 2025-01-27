@@ -17,7 +17,6 @@ private struct RecentlyClosedPanelUX {
 
 protocol RecentlyClosedPanelDelegate: AnyObject {
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
-    func openRecentlyClosedSiteInSameTab(_ url: URL)
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
@@ -172,9 +171,9 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
         let closedTab = recentlyClosedTabs[indexPath.row]
         let site: Site
         if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
+            site = Site.createBasicSite(url: String(describing: closedTab.url), title: title)
         } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
+            site = Site.createBasicSite(url: String(describing: closedTab.url), title: "")
         }
         return site
     }

@@ -1,6 +1,9 @@
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "Саклау";
 
+/* This value is used as the title for the remember credit card page */
+"CreditCard.RememberCard.MainTitle.v122" = "Бу карта хәвефсез рәвештә саклансынмы?";
+
 /* This value is used as the title for the Not Now button in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Хәзер түгел";
 

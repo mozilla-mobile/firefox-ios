@@ -14,6 +14,7 @@ open class LinkButton: UIButton, ThemeApplicable {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
+        titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     open func configure(viewModel: LinkButtonViewModel) {
@@ -56,6 +57,16 @@ open class LinkButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+
+    public func applyUnderline(underlinedText: String) {
+        let attributedString = NSAttributedString(
+            string: underlinedText,
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+        )
+        setAttributedTitle(attributedString, for: .normal)
     }
 
     // MARK: ThemeApplicable

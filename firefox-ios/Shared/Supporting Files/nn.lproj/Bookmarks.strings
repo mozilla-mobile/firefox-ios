@@ -1,3 +1,12 @@
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Mappa er tom";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "Lagre nettstadar medan du surfar. Vi hentar også bokmerke frå andre synkroniserte einingar.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "Ingen bokmerke enno";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Alle";
 
@@ -12,6 +21,9 @@
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Rediger bokmerke";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "Lagre";
 
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Lagre i";

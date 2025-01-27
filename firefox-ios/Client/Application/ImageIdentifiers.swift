@@ -8,7 +8,7 @@ import Foundation
 /// Please see `StandardImageIdentifiers` for th standard ones.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct ImageIdentifiers {
+struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
     public static let firefoxFavicon = "faviconFox"
     public static let foxConfirmation = "foxConfirmation"
@@ -26,6 +26,8 @@ public struct ImageIdentifiers {
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
     public static let menuWarningMask = "warning-mask"
+    public static let noBookmarksInFolder = "noBookmarksInFolder"
+    public static let noBookmarksInRoot = "noBookmarksInRoot"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
@@ -65,6 +67,7 @@ public struct ImageIdentifiers {
 
     public struct NativeErrorPage {
         public static let noInternetConnection = "noInternetConnection"
+        public static let securityError = "securityError"
     }
 
     public struct TrackingProtection {

@@ -33,7 +33,6 @@ class MockTabManager: TabManager {
     var normalActiveTabs = [Tab]()
     var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
-    var tabDisplayType: TabDisplayType = .TabGrid
 
     var addTabsForURLsCalled = 0
     var addTabsURLs: [URL] = []
@@ -147,7 +146,7 @@ class MockTabManager: TabManager {
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Client.Tab], previousTabUUID: String, isPrivate: Bool) {}
 
     @discardableResult
-    func addTab(_ request: URLRequest!,
+    func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool

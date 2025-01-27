@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Арҿыцра";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "SSL агха ҟалеит, насгьы асервер ахь ашәарҭадаратә еиқәыршәара ашьақәыргылара залымшеит.";
-
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Згәы зҽану. Акы ииашаны иҟам.";
 

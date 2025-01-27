@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
+    case cleanupHistoryReenabled
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -25,40 +26,50 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
+    case jsAlertRefactor
     case jumpBackIn
     case loginAutofill
     case menuRefactor
     case menuRefactorHint
     case microsurvey
     case nativeErrorPage
+    case noInternetConnectionErrorPage
     case nightMode
     case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
+    case pullToRefreshRefactor
     case reduxSearchSettings
     case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
+    case sentFromFirefox
+    case sentFromFirefoxTreatmentA
     case splashScreen
+    case unifiedAds
     case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
     case toolbarNavigationHint
+    case tosFeature
     case trackingProtectionRefactor
     case zoomFeature
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
                 .closeRemoteTabs,
-                .microsurvey,
                 .homepageRebuild,
                 .menuRefactor,
-                .trackingProtectionRefactor,
+                .microsurvey,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
+                .sentFromFirefox,
                 .toolbarRefactor,
-                .unifiedSearch,
-                .passwordGenerator:
+                .trackingProtectionRefactor,
+                .passwordGenerator,
+                .unifiedAds,
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -91,11 +102,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
+        case .sentFromFirefox:
+            return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .accountSettingsRedux,
                 .addressAutofillEdit,
+                .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .closeRemoteTabs,
                 .fakespotBackInStock,
@@ -103,24 +117,30 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
+                .jsAlertRefactor,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
                 .menuRefactorHint,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
                 .nightMode,
                 .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,
+                .pullToRefreshRefactor,
                 .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
                 .searchHighlights,
+                .sentFromFirefoxTreatmentA,
                 .splashScreen,
+                .unifiedAds,
                 .unifiedSearch,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
                 .toolbarNavigationHint,
+                .tosFeature,
                 .trackingProtectionRefactor,
                 .zoomFeature:
             return nil
@@ -135,11 +155,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
     // MARK: - Public methods
     public func isNimbusEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        // Provide a way to override nimbus feature enabled for tests
-        if AppConstants.isRunningUnitTest, UserDefaults.standard.bool(forKey: PrefsKeys.NimbusFeatureTestsOverride) {
-            return true
-        }
-
         return nimbusLayer.checkNimbusConfigFor(featureID)
     }
 
@@ -150,7 +165,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     public func isUserEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
         guard let optionsKey = featureKey,
               let option = profile.prefs.boolForKey(optionsKey)
-        else { return isNimbusEnabled(using: nimbusLayer) }
+        else {
+            // In unit tests only, we provide a way to return an override value to simulate a user's preference for a feature
+            if AppConstants.isRunningUnitTest,
+               UserDefaults.standard.valueExists(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride) {
+                return UserDefaults.standard.bool(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+            }
+
+            return isNimbusEnabled(using: nimbusLayer)
+        }
 
         return option
     }

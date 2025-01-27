@@ -56,7 +56,13 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
     // MARK: Private
     private func setUp() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
-            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+            guard let backgroundRefreshTask = task as? BGAppRefreshTask else {
+                self.logger.log("Failed to cast task to BGAppRefreshTask",
+                                level: .fatal,
+                                category: .lifecycle)
+                return
+            }
+            self.handleAppRefresh(task: backgroundRefreshTask)
 
             // Schedule a new refresh task.
             self.scheduleTaskOnAppBackground()

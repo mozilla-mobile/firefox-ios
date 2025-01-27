@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Aukin rakningarvörn";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Slökkt er á vörnum. Við mælum með að kveikja aftur á þeim.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Slökkt er á vörnum. Við mælum með að kveikja aftur á þeim.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

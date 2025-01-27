@@ -5,13 +5,16 @@
 import XCTest
 
 class LibraryTestsIpad: IpadOnlyTestCase {
-    func testLibraryShortcut() {
+    func testLibraryShortcut() throws {
+        guard !iPad() else {
+            throw XCTSkip("Library shortcut not available on the new toolbar for iPad")
+        }
         if skipPlatform {return}
         // Open Library from shortcut
         // The Bookmark panel is displayed
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton])
         let libraryShorcutButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
-        libraryShorcutButton.tap()
+        libraryShorcutButton.waitAndTap()
         navigator.nowAt(HomePanel_Library)
         mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView])
         // Go to a different panel

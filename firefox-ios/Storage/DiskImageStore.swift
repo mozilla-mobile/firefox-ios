@@ -55,7 +55,13 @@ public actor DefaultDiskImageStore: DiskImageStore {
         var keys = [String]()
         if let fileEnumerator = FileManager.default.enumerator(atPath: filesDir) {
             for file in fileEnumerator {
-                keys.append(file as! String)
+                if let fileName = file as? String {
+                    keys.append(fileName)
+                } else {
+                    logger.log("Non-string item encountered while enumerating files",
+                               level: .fatal,
+                               category: .storage)
+                }
             }
         }
         self.keys = Set(keys)

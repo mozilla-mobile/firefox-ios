@@ -47,7 +47,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
-                              handler: { _ in
+                              handler: { [weak self] _ in
+            guard let self else { return }
             element.onSelected?(self)
             UIAccessibility.post(notification: .announcement, argument: element.a11yLabel)
         })
@@ -58,6 +59,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
+        // Remove all existing actions for .touchUpInside before adding the new one
+        // This ensures that we do not accumulate multiple actions for the same event,
+        // which can cause the action to be called multiple times when the button is tapped.
+        // By removing all existing actions first, we guarantee that only the new action
+        // will be associated with the .touchUpInside event.
+        removeTarget(nil, action: nil, for: .touchUpInside)
         addAction(action, for: .touchUpInside)
 
         showsLargeContentViewer = true
@@ -100,17 +107,6 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
-    }
-
-    public func isButtonFor(toolbarElement: ToolbarElement) -> Bool {
-        guard let config = configuration else { return false }
-
-        return isSelected == toolbarElement.isSelected &&
-            config.image == imageConfiguredForRTL(for: toolbarElement) &&
-            isEnabled == toolbarElement.isEnabled &&
-            accessibilityIdentifier == toolbarElement.a11yId &&
-            accessibilityLabel == toolbarElement.a11yLabel &&
-            accessibilityHint == toolbarElement.a11yHint
     }
 
     private func addBadgeIcon(imageName: String) {

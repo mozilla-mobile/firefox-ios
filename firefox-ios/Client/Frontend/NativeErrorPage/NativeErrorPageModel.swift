@@ -7,4 +7,6 @@ import Foundation
 struct ErrorPageModel: Equatable {
     let errorTitle: String
     let errorDescription: String
+    let foxImageName: String
+    let url: URL?
 }

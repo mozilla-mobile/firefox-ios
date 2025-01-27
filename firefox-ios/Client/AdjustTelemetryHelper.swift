@@ -54,7 +54,7 @@
 //            telemetry.record(network: network)
 //        }
 //
-//        gleanWrapper.submitPing()
+//        gleanWrapper.submit(GleanMetrics.Pings.shared.firstSession)
 //    }
 //}
 // swiftlint:enable comment_spacing file_header

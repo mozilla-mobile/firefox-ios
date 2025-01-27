@@ -113,8 +113,8 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let regularTabsPanel = TabDisplayPanel(isPrivateMode: false, windowUUID: .XCTestDefaultUUID)
-        let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: .XCTestDefaultUUID)
+        let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: .XCTestDefaultUUID)
+        let privateTabsPanel = TabDisplayPanelViewController(isPrivateMode: true, windowUUID: .XCTestDefaultUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         return [
             ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),

@@ -37,7 +37,8 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(url2)
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "localhost")
         navigator.goto(LibraryPanel_History)
         waitForElementsToExist(
             [
@@ -75,8 +76,8 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         waitUntilPageLoad()
         navigator.openURL(url3)
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "test-example")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "localhost")
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -109,11 +110,12 @@ class PrivateBrowsingTest: BaseTestCase {
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
+        waitUntilPageLoad()
         waitForTabsButton()
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        app.cells.staticTexts["Homepage"].tap()
+        app.cells.staticTexts["Homepage"].waitAndTap()
         navigator.nowAt(NewTabScreen)
 
         // Go back to private browsing and check that the tab has been closed
@@ -227,7 +229,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
         var numTab = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
 
         // Validate Close All Tabs and Cancel options
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
@@ -236,7 +238,7 @@ class PrivateBrowsingTest: BaseTestCase {
         }
 
         // Tap on "Close All Tabs"
-        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].waitAndTap()
         if #unavailable(iOS 16) {
             // Wait for the screen to refresh first.
             mozWaitForElementToExist(
@@ -269,15 +271,16 @@ class PrivateBrowsingTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         // Validate menu option New Private Tab
-        let newPrivateTab = app.tables.otherElements["New Private Tab"]
+        let newPrivateTab = app.staticTexts["New Private Tab"]
         mozWaitForElementToExist(newPrivateTab)
         scrollToElement(newPrivateTab)
         // Tap on "New private tab" option
-        newPrivateTab.tap()
+        newPrivateTab.waitAndTap()
         // Tap on "New private tab" option
         navigator.nowAt(NewTabScreen)
         if #available(iOS 16, *) {
             navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
             navigator.goto(TabTray)
             let numTab = app.otherElements["Tabs Tray"].cells.count
             XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
@@ -303,7 +306,7 @@ fileprivate extension BaseTestCase {
             settingsTableView.swipeUp()
         }
         let closePrivateTabsSwitch = settingsTableView.switches["ClosePrivateTabs"]
-        closePrivateTabsSwitch.tap()
+        closePrivateTabsSwitch.waitAndTap()
     }
 }
 
@@ -326,15 +329,16 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "iana")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "iana")
         waitForElementsToExist(
             [
                 app.links["RFC 2606"],
-                app.buttons["Show Tabs"]
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             ]
         )
-        let numPrivTab = app.buttons["Show Tabs"].value as? String
+        let numPrivTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numPrivTab)
     }
 }

@@ -2,10 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
+import Shared
 
 class EditFolderViewModel {
+    private let profile: Profile
+    private let logger: Logger
     private let parentFolder: FxBookmarkNode
     private var folder: FxBookmarkNode?
     private let bookmarkSaver: BookmarksSaver
@@ -13,22 +17,29 @@ class EditFolderViewModel {
     private(set) var selectedFolder: Folder?
     private(set) var folderStructures = [Folder]()
     private(set) var isFolderCollapsed = true
+    private var isNewFolderView: Bool {
+        return folder == nil
+    }
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
+    weak var parentFolderSelector: ParentFolderSelector?
 
     var controllerTitle: String {
-        return folder == nil ? .BookmarksNewFolder : .BookmarksEditFolder
+        return isNewFolderView ? .BookmarksNewFolder : .BookmarksEditFolder
     }
     var editedFolderTitle: String? {
         return folder?.title
     }
 
     init(profile: Profile,
+         logger: Logger = DefaultLogger.shared,
          parentFolder: FxBookmarkNode,
          folder: FxBookmarkNode?,
          bookmarkSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil) {
+        self.profile = profile
+        self.logger = logger
         self.parentFolder = parentFolder
         self.folder = folder
         self.bookmarkSaver = bookmarkSaver ?? DefaultBookmarksSaver(profile: profile)
@@ -85,11 +96,27 @@ class EditFolderViewModel {
         }
     }
 
-    func save() {
-        guard let folder else { return }
+    @discardableResult
+    func save() -> Task<Void, Never>? {
+        guard let folder, !folder.title.isEmpty else { return nil }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
-        Task { @MainActor in
-            _ = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
+        return Task { @MainActor in
+            // Creates or updates the folder
+            let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
+            switch result {
+            case .success(let guid):
+                // A nil guid indicates a bookmark update, not creation
+                guard let guid else { break }
+                profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
+
+                // When the folder edit view is a child of the edit bookmark view, the newly created folder
+                // should be selected
+                let folderCreated = Folder(title: folder.title, guid: guid, indentation: 0)
+                parentFolderSelector?.selectFolderCreatedFromChild(folder: folderCreated)
+            case .failure(let error):
+                self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
+            }
+
             onBookmarkSaved?()
         }
     }

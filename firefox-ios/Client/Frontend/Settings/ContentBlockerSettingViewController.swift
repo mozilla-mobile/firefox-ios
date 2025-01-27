@@ -90,27 +90,32 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
             return setting
         }
 
-        let enabledSetting = BoolSetting(
-            prefs: profile.prefs,
-            prefKey: ContentBlockingConfig.Prefs.EnabledKey,
-            defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
-            attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
-                TabContentBlocker.prefsChanged()
-                strengthSetting.forEach { item in
-                    item.enabled = enabled
-                }
-                self?.tableView.reloadData()
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .trackingProtectionMenu,
-                                             extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
-        }
+        var sections: [SettingSection] = []
 
-        let firstSection = SettingSection(
-            title: nil,
-            footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter),
-            children: [enabledSetting]
-        )
+        if let profile {
+            let enabledSetting = BoolSetting(
+                prefs: profile.prefs,
+                prefKey: ContentBlockingConfig.Prefs.EnabledKey,
+                defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing,
+                attributedTitleText: NSAttributedString(string: .TrackingProtectionEnableTitle)) { [weak self] enabled in
+                    TabContentBlocker.prefsChanged()
+                    strengthSetting.forEach { item in
+                        item.enabled = enabled
+                    }
+                    self?.tableView.reloadData()
+                    TelemetryWrapper.recordEvent(category: .action,
+                                                 method: .tap,
+                                                 object: .trackingProtectionMenu,
+                                                 extras: [TelemetryWrapper.EventExtraKey.etpEnabled.rawValue: enabled] )
+            }
+
+            let firstSection = SettingSection(
+                title: nil,
+                footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter),
+                children: [enabledSetting]
+            )
+            sections.append(firstSection)
+        }
 
         let optionalFooterTitle = NSAttributedString(string: .TrackingProtectionLevelFooter)
 
@@ -122,7 +127,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
             footerTitle: optionalFooterTitle,
             children: strengthSetting
         )
-        return [firstSection, secondSection]
+        sections.append(secondSection)
+
+        return sections
     }
 
     private func recordEventOnChecked(option: BlockingStrength) {

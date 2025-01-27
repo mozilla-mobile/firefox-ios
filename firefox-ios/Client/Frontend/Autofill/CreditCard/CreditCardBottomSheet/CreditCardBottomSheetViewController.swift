@@ -92,8 +92,8 @@ class CreditCardBottomSheetViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapYes), for: .touchUpInside)
     }
 
-    private var contentViewHeightConstraint: NSLayoutConstraint!
-    private var contentWidthConstraint: NSLayoutConstraint!
+    private var contentViewHeightConstraint: NSLayoutConstraint?
+    private var contentWidthConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
     init(viewModel: CreditCardBottomSheetViewModel,
@@ -107,8 +107,9 @@ class CreditCardBottomSheetViewController: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel.didUpdateCreditCard = { [weak self] in
-            self?.cardTableView.reloadData()
-            self?.cardTableView.isScrollEnabled = self?.cardTableView.contentSize.height ?? 0 > self?.view.frame.height ?? 0
+            guard let self else { return }
+            self.cardTableView.reloadData()
+            self.cardTableView.isScrollEnabled = self.cardTableView.contentSize.height > self.view.frame.height
         }
 
         // Only allow selection when we are in selectSavedCard state
@@ -173,12 +174,14 @@ class CreditCardBottomSheetViewController: UIViewController,
         contentViewHeightConstraint = contentView.heightAnchor.constraint(
             greaterThanOrEqualToConstant: estimatedContentHeight
         )
-        contentViewHeightConstraint.priority = UILayoutPriority(999)
+        contentViewHeightConstraint?.priority = UILayoutPriority(999)
+        contentViewHeightConstraint?.isActive = true
 
         let contentWidthCheck = UX.contentViewWidth > view.frame.width
         let contentViewWidth = contentWidthCheck ? view.frame.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
-        contentWidthConstraint.priority = UILayoutPriority(999)
+        contentWidthConstraint?.priority = UILayoutPriority(999)
+        contentWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate(
             [
@@ -211,22 +214,22 @@ class CreditCardBottomSheetViewController: UIViewController,
                 ),
 
                 yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
-                contentWidthConstraint,
-                contentViewHeightConstraint
             ]
         )
     }
 
     func updateConstraints() {
-        let buttonsHeight = buttonsContainerStackView.frame.height
-        let estimatedContentHeight = cardTableView.contentSize.height +
-        buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
-        let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
-        contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
+        if let contentViewHeightConstraint {
+            let buttonsHeight = buttonsContainerStackView.frame.height
+            let estimatedContentHeight = cardTableView.contentSize.height +
+                buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
+            let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
+            contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
+        }
 
         let contentWidthCheck = UX.contentViewWidth > view.frame.size.width
         let contentViewWidth = contentWidthCheck ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
-        contentWidthConstraint.constant = contentViewWidth
+        contentWidthConstraint?.constant = contentViewWidth
     }
 
     // MARK: View Transitions
@@ -239,9 +242,9 @@ class CreditCardBottomSheetViewController: UIViewController,
         super.viewWillTransition(to: size, with: coordinator)
         let contentWidthCheck = UX.contentViewWidth > size.width
         let contentViewWidth = contentWidthCheck ? size.width - UX.containerPadding : UX.contentViewWidth
-        contentWidthConstraint.constant = contentViewWidth
+        contentWidthConstraint?.constant = contentViewWidth
         if let header = cardTableView.headerView(forSection: 0) as? CreditCardBottomSheetHeaderView {
-            header.titleLabelTrailingConstraint.constant = contentWidthCheck ? -UX.closeButtonMarginAndWidth : 0
+            header.titleLabelTrailingConstraint?.constant = contentWidthCheck ? -UX.closeButtonMarginAndWidth : 0
         }
     }
 

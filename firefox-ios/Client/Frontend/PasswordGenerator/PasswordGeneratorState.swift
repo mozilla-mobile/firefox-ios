@@ -10,6 +10,7 @@ import Common
 struct PasswordGeneratorState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var password: String
+    var passwordHidden: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let passwordGeneratorState = store.state.screenState(
@@ -23,16 +24,19 @@ struct PasswordGeneratorState: ScreenState, Equatable {
 
         self.init(
             windowUUID: passwordGeneratorState.windowUUID,
-            password: passwordGeneratorState.password
+            password: passwordGeneratorState.password,
+            passwordHidden: passwordGeneratorState.passwordHidden
         )
     }
 
     init(
         windowUUID: WindowUUID,
-        password: String = ""
+        password: String = "",
+        passwordHidden: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.password = password
+        self.passwordHidden = passwordHidden
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -47,7 +51,20 @@ struct PasswordGeneratorState: ScreenState, Equatable {
             }
             return PasswordGeneratorState(
                 windowUUID: action.windowUUID,
-                password: password)
+                password: password,
+                passwordHidden: state.passwordHidden)
+
+        case PasswordGeneratorActionType.hidePassword:
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: true)
+
+        case PasswordGeneratorActionType.showPassword:
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: false)
 
         default:
             return defaultState(from: state)
@@ -57,7 +74,8 @@ struct PasswordGeneratorState: ScreenState, Equatable {
     static func defaultState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
         return PasswordGeneratorState(
             windowUUID: state.windowUUID,
-            password: state.password
+            password: state.password,
+            passwordHidden: state.passwordHidden
         )
     }
 }

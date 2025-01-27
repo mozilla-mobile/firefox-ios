@@ -382,6 +382,9 @@
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Сацыяльныя сеткі";
 
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Аўтаматычна адпраўляць справаздачы аб збоях";
+
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Выкарыстоўваць Face ID для разблакіравання праграмы";
 

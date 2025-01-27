@@ -16,14 +16,6 @@ import struct MozillaAppServices.Profile
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
-// Used to ignore unknown classes when de-archiving
-final class Unknown: NSObject, NSCoding {
-    func encode(with coder: NSCoder) {}
-    init(coder aDecoder: NSCoder) {
-        super.init()
-    }
-}
-
 // A convenience to allow other callers to pass in Nimbus/Flaggable features
 // to RustFirefoxAccounts
 public struct RustFxAFeatures: OptionSet {
@@ -181,7 +173,9 @@ open class RustFirefoxAccounts {
             deviceType: type,
             capabilities: capabilities
         )
-        let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
+        guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
+            fatalError("Missing or invalid 'MozDevelopmentTeam' key in Info.plist")
+        }
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
         return FxAccountManager(
@@ -255,12 +249,6 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
-    }
-
-    public func hasAccount(completion: @escaping (Bool) -> Void) {
-        if let manager = RustFirefoxAccounts.shared.accountManager {
-            completion(manager.hasAccount())
-        }
     }
 
     public func hasAccount() -> Bool {

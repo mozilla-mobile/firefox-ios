@@ -23,11 +23,12 @@ class TabDisplayView: UIView,
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
+    private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
 
     private var dataSource: TabDisplayDiffableDataSource?
 
-    private var shouldHideInactiveTabs: Bool {
+    var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
@@ -72,6 +73,7 @@ class TabDisplayView: UIView,
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
     }()
 
@@ -125,19 +127,14 @@ class TabDisplayView: UIView,
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
         let section: Int = scrollState.isInactiveTabSection ? 0 : 1
         let indexPath = IndexPath(row: scrollState.toIndex, section: section)
-
-        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
-        collectionView.layoutIfNeeded()
-
-        // Only scroll to the view if it is not visible.
-        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
-
-        // Scrolling to an invalid cell will crash the app, so check indexPath first
-        guard collectionView.isValid(indexPath: indexPath) else { return }
-
-        collectionView.scrollToItem(at: indexPath,
-                                    at: .centeredVertically,
-                                    animated: scrollState.withAnimation)
+        // Piping this into main thread let the collection view finish its layout process
+        DispatchQueue.main.async {
+            guard !self.collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
+            guard self.collectionView.isValid(indexPath: indexPath) else { return }
+            self.collectionView.scrollToItem(at: indexPath,
+                                             at: .centeredVertically,
+                                             animated: scrollState.withAnimation)
+        }
     }
 
     private func configureDataSource() {
@@ -169,7 +166,8 @@ class TabDisplayView: UIView,
                     ) as? TabCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tab, theme: theme, delegate: self)
+                let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
                 return cell
             }
         }
@@ -279,7 +277,7 @@ class TabDisplayView: UIView,
         let action = TabPanelViewAction(panelType: panelType,
                                         tabUUID: inactiveTabs.tabUUID,
                                         windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeInactiveTabs)
+                                        actionType: TabPanelViewActionType.closeInactiveTab)
         store.dispatch(action)
     }
 
@@ -287,9 +285,11 @@ class TabDisplayView: UIView,
         if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
             switch selectedItem {
             case .inactiveTab(let inactiveTabsModel):
+                inactiveTabsTelemetry.tabOpened()
                 let tabUUID = inactiveTabsModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
+                                                isInactiveTab: true,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)

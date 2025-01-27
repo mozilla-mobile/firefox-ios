@@ -468,11 +468,13 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   };
 
   function fillGeneratedPassword(password) {
+    LoginManagerContent.fromFill = true
     this.yieldFocusBackToField();
     const passwordField = LoginManagerContent.activeField;
     passwordField?.setUserInput(password);
     const confirmationField = Logic.findConfirmationField(passwordField, LoginFormFactory);
     confirmationField?.setUserInput(password);
+    LoginManagerContent.fromFill = false
   }
 
   function yieldFocusBackToField() {
@@ -499,7 +501,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     const isPasswordField = field === password;
     const isYieldingFocus = LoginManagerContent.activeField === field;
     LoginManagerContent.activeField = field;
-    if (formHasNewPassword && isPasswordField && !isYieldingFocus) {
+    if (formHasNewPassword && isPasswordField && !LoginManagerContent.fromFill) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "generatePassword",
       });

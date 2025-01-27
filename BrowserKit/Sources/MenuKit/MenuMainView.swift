@@ -43,8 +43,8 @@ public final class MenuMainView: UIView,
 
             tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -UX.horizontalTableViewMargin),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: UX.horizontalTableViewMargin)
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
 
@@ -64,8 +64,7 @@ public final class MenuMainView: UIView,
                                              closeButtonA11yId: closeButtonA11yId,
                                              mainButtonA11yLabel: mainButtonA11yLabel,
                                              mainButtonA11yId: mainButtonA11yId)
-        tableView.accessibilityIdentifier = menuA11yId
-        tableView.accessibilityLabel = menuA11yLabel
+        tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
     }
 
     public func adjustLayout() {

@@ -17,12 +17,14 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         stack.alignment = .leading
         stack.axis = .vertical
         stack.spacing = TPMenuUX.UX.headerLabelDistance
+        stack.isAccessibilityElement = true
     }
 
     private let toggleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
@@ -33,6 +35,7 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private var viewConstraints: [NSLayoutConstraint] = []
@@ -109,15 +112,18 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
     }
 
     func setupDetails(isOn: Bool) {
-        toggleSwitch.isOn = isOn
-        toggleLabel.text = .Menu.EnhancedTrackingProtection.switchTitle
-        toggleStatusLabel.text = isOn ?
+        let title: String = .Menu.EnhancedTrackingProtection.switchTitle
+        let subtitle: String = isOn ?
             .Menu.EnhancedTrackingProtection.switchOnText : .Menu.EnhancedTrackingProtection.switchOffText
+        toggleSwitch.isOn = isOn
+        toggleLabel.text = title
+        toggleStatusLabel.text = subtitle
+        toggleLabelsContainer.accessibilityLabel = title
+        toggleLabelsContainer.accessibilityHint = subtitle
     }
 
-    func setupAccessibilityIdentifiers(toggleViewTitleLabelA11yId: String, toggleViewBodyLabelA11yId: String) {
-        toggleLabel.accessibilityIdentifier = toggleViewTitleLabelA11yId
-        toggleStatusLabel.accessibilityIdentifier = toggleViewBodyLabelA11yId
+    func setupAccessibilityIdentifiers(toggleViewLabelsContainerA11yId: String) {
+        toggleLabelsContainer.accessibilityIdentifier = toggleViewLabelsContainerA11yId
     }
 
     func setupActions() {

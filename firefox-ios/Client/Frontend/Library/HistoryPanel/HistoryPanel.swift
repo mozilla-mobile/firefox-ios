@@ -9,12 +9,6 @@ import WebKit
 import Common
 import SiteImageView
 
-private class FetchInProgressError: MaybeErrorType {
-    internal var description: String {
-        return "Fetch is already in-progress"
-    }
-}
-
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
@@ -103,6 +97,7 @@ class HistoryPanel: UIViewController,
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
+        searchbar.showsCancelButton = true
     }
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
@@ -182,7 +177,6 @@ class HistoryPanel: UIViewController,
         setupLayout()
         configureDataSource()
         applyTheme()
-
         // Update theme of already existing view
         bottomStackView.applyTheme(theme: currentTheme())
     }
@@ -416,7 +410,8 @@ class HistoryPanel: UIViewController,
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
                                                       leftImageView: historyActionable.itemImage,
                                                       accessoryView: nil,
-                                                      accessoryType: .none)
+                                                      accessoryType: .none,
+                                                      editingAccessoryView: nil)
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
@@ -860,7 +855,7 @@ extension HistoryPanel {
     }
 
     private func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(.main) { syncResult in
+        profile.syncManager?.syncHistory().uponQueue(.main) { syncResult in
             self.endRefreshing()
 
             if syncResult.isSuccess {

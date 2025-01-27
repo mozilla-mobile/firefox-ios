@@ -19,6 +19,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 
+    private var isViewSetupComplete = false
+
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel? = nil,
@@ -52,7 +54,13 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupLaunchScreen()
+
+        if !isViewSetupComplete {
+            setupLaunchScreen()
+            isViewSetupComplete = true
+        }
+
+        viewModel.loadNextLaunchType()
     }
 
     // MARK: - Loading
@@ -63,6 +71,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - Setup
 
     private func setupLayout() {
+        guard let launchScreen = launchScreen else {
+            fatalError("LaunchScreen view is nil during layout setup")
+        }
+
         launchScreen.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(launchScreen)
 
@@ -88,6 +100,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         }
     }
 
+    func finishedLoadingLaunchOrder() {
+        viewModel.loadNextLaunchType()
+    }
+
     // MARK: - Splash Screen
 
     private func delayStart() async throws {
@@ -101,7 +117,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         setupLayout()
         guard shouldTriggerSplashScreenExperiment else { return }
         if !UIAccessibility.isReduceMotionEnabled {
-            splashScreenAnimation.configureAnimation(with: launchScreen)
+            splashScreenAnimation.configureAnimation(with: launchScreen!)
         }
     }
 }

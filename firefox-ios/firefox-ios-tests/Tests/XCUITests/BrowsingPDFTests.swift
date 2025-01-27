@@ -7,14 +7,14 @@ import Common
 
 let PDF_website = [
     "url": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "pdfValue": "storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "urlValue": "yukon.ca/en/education-and-schools",
+    "urlValue": "education.gov.yk.ca",
+    "pdfValue": "storage.googleapis.com",
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 
 class BrowsingPDFTests: BaseTestCase {
-    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
@@ -42,14 +42,14 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
         if checkboxValidation.exists {
-            checkboxValidation.tap()
+            checkboxValidation.waitAndTap()
         }
         mozWaitForValueContains(url, value: PDF_website["urlValue"]!)
         // Let's comment the next line until that fails intermittently due to the page re-direction
         // mozWaitForElementToExist(app.staticTexts["Education and schools"])
 
         // Go back to pdf view
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
     }
 
@@ -58,7 +58,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        longPressOnPdfLink()
 
         waitForElementsToExist(
             [
@@ -80,10 +80,10 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        longPressOnPdfLink()
 
         mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
-        app.buttons["Add to Reading List"].tap()
+        app.buttons["Add to Reading List"].waitAndTap()
         navigator.nowAt(BrowserTab)
 
         // Go to reading list and check that the item is there
@@ -101,7 +101,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForElementsToExist(
             [
-                app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+                app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
                 app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )
@@ -109,12 +109,12 @@ class BrowsingPDFTests: BaseTestCase {
         // Open pdf from pinned site
         let pdfTopSite = app
             .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .cells[PDF_website["bookmarkLabel"]!]
+            .links[PDF_website["bookmarkLabel"]!]
             .children(matching: .other)
             .element
             .children(matching: .other)
             .element(boundBy: 0)
-        pdfTopSite.tap()
+        pdfTopSite.waitAndTap()
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
 
@@ -122,11 +122,10 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
-        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
+        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         waitForElementsToExist(
             [
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
             app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )
@@ -146,5 +145,12 @@ class BrowsingPDFTests: BaseTestCase {
                 app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )
+    }
+
+    private func longPressOnPdfLink() {
+        let link = app.webViews.links.element(boundBy: 0)
+        let startCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let endCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        startCoordinate.press(forDuration: 3, thenDragTo: endCoordinate)
     }
 }

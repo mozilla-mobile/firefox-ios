@@ -55,11 +55,23 @@
 /* Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill. */
 "Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Prefektuuri";
 
+/* Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes. */
+"Addresses.EditAddress.AutofillAddressProvince.v129" = "Maakunta";
+
+/* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
+"Addresses.EditAddress.AutofillAddressState.v129" = "Osavaltio";
+
 /* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
 "Addresses.EditAddress.AutofillAddressSuburb.v129" = "Lähiö";
 
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "Puhelin";
+
+/* Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component. */
+"Addresses.EditAddress.AutofillAddressTownland.v129" = "Alue";
+
+/* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
+"Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Kylä tai kaupunki";
 
 /* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
 "Addresses.EditAddress.AutofillAddressZip.v129" = "Postinumero";

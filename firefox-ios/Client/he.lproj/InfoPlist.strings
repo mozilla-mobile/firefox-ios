@@ -11,7 +11,7 @@
 "NSFaceIDUsageDescription" = "Firefox‏ דורש שימוש ב־Face ID כדי לגשת לססמאות ולאמצעי התשלום השמורים שלך.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "אתרים אליהם נכנסים עשויים לבקש את המיקום של המשתמש.";
+"NSLocationWhenInUseUsageDescription" = "אתרים בשימושך עשויים לבקש ממך את המיקום שלך.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "‏Firefox משתמש במיקרופון שלך כדי להקליט ולהעלות אודיו.";

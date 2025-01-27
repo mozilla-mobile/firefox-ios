@@ -11,6 +11,9 @@ enum LaunchCoordinatorType {
 }
 
 enum LaunchType {
+    /// Showing the terms of service
+    case termsOfService(manager: TermsOfServiceManager)
+
     /// Showing the intro onboarding
     case intro(manager: IntroScreenManager)
 
@@ -43,6 +46,8 @@ enum LaunchType {
     /// - Returns: if the launch type needs to be full screen or not
     func isFullScreenAvailable(isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) -> Bool {
         switch self {
+        case .termsOfService:
+            return true
         case .intro, .update:
             return isIphone
         case .survey:

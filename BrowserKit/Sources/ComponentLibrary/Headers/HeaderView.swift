@@ -181,7 +181,6 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public func setupDetails(subtitle: String, title: String, icon: FaviconImageViewModel) {
-        titleLabel.font = FXFontStyles.Regular.headline.scaledFont()
         favicon.setFavicon(icon)
         subtitleLabel.text = subtitle
         titleLabel.text = title

@@ -61,6 +61,7 @@ import:
               OPEN_NEW_TAB:                       ://deep-link?url=homepanel/new-tab
               MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
               MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
+              OPEN_SHARE_SHEET:                   ://share-sheet
             styles:
               FALLBACK:
                 priority: 40

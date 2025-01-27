@@ -32,7 +32,13 @@ import struct MozillaAppServices.VisitTransitionSet
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
+    func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool,
+        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+    )
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void)
     func updateBookmarkNode(
         guid: GUID,
         parentGUID: GUID?,
@@ -172,6 +178,42 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
+    /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
+    public func withReader<T>(
+        _ callback: @escaping (
+            PlacesReadConnection
+        ) throws -> T,
+        completion: @escaping (Result<T, any Error>) -> Void
+    ) {
+        readerQueue.async {
+            guard self.isOpen else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+                return
+            }
+
+            if self.reader == nil {
+                do {
+                    self.reader = try self.api?.openReader()
+                } catch let error {
+                    completion(.failure(error))
+                    return
+                }
+            }
+
+            if let reader = self.reader {
+                do {
+                    let result = try callback(reader)
+                    completion(.success(result))
+                } catch let error {
+                    completion(.failure(error))
+                    return
+                }
+            } else {
+                completion(.failure(PlacesConnectionError.connUseAfterApiClosed))
+            }
+        }
+    }
+
     public func getBookmarksTree(
         rootGUID: GUID,
         recursive: Bool
@@ -179,6 +221,19 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return withReader { connection in
             return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
         }
+    }
+
+    public func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool,
+        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+    ) {
+        withReader({ connection in
+            return try connection.getBookmarksTree(
+                rootGUID: rootGUID,
+                recursive: recursive
+            )
+        }, completion: completion)
     }
 
     public func getBookmark(guid: GUID) -> Deferred<Maybe<BookmarkNodeData?>> {
@@ -197,6 +252,20 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
 
         deferredResponse.upon { result in
             completion(result.successValue ?? [])
+        }
+    }
+
+    public func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        let deferredResponse = withReader { connection in
+            return try connection.countBookmarksInTrees(folderGuids: folderGuids)
+        }
+
+        deferredResponse.upon { result in
+            if let count = result.successValue {
+                completion(.success(count))
+            } else if let error = result.failureValue {
+                completion(.failure(error))
+            }
         }
     }
 
@@ -624,7 +693,7 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                return Site(url: info.url, title: title)
+                return Site.createBasicSite(url: info.url, title: title)
             }))
         }
         return returnValue
@@ -651,7 +720,9 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                let site = Site(url: info.url, title: title)
+                // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
+                let hashValue = "\(info.url)_\(info.timestamp)".hashValue
+                var site = Site.createBasicSite(id: hashValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()

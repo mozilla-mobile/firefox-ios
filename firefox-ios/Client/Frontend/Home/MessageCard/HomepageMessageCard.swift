@@ -4,16 +4,15 @@
 
 import Common
 import ComponentLibrary
-import Storage
 import Shared
 import UIKit
 
-/// The Home Tab Banner is the card that appears at the top of the Firefox Homepage.
-/// 
-/// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
+/// The Legacy Home Tab Banner is the card that appears at the top of the Firefox Homepage.
+///
+/// The Legacy HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
+class LegacyHomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
@@ -220,7 +219,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - Notifiable
-extension HomepageMessageCardCell: Blurrable {
+extension LegacyHomepageMessageCardCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
@@ -233,7 +232,7 @@ extension HomepageMessageCardCell: Blurrable {
 }
 
 // MARK: - ThemeApplicable
-extension HomepageMessageCardCell: ThemeApplicable {
+extension LegacyHomepageMessageCardCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         bannerTitle.textColor = theme.colors.textPrimary
         descriptionText.textColor = theme.colors.textPrimary

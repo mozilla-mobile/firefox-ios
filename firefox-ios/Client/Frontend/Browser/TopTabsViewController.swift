@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Storage
 import WebKit
 import Common
 
@@ -37,7 +36,15 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
-    private var topTabDisplayManager: LegacyTabDisplayManager!
+
+    private lazy var topTabDisplayManager = TopTabDisplayManager(
+        collectionView: collectionView,
+        tabManager: tabManager,
+        tabDisplayer: self,
+        reuseID: TopTabCell.cellIdentifier,
+        profile: profile
+    )
+
     var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
@@ -50,7 +57,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(cellType: TopTabCell.self)
-        collectionView.register(cellType: LegacyInactiveTabCell.self)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
@@ -124,14 +130,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        topTabDisplayManager = LegacyTabDisplayManager(collectionView: self.collectionView,
-                                                       tabManager: self.tabManager,
-                                                       tabDisplayer: self,
-                                                       reuseID: TopTabCell.cellIdentifier,
-                                                       tabDisplayType: .TopTabTray,
-                                                       profile: profile,
-                                                       theme: themeManager.getCurrentTheme(for: windowUUID))
-        self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -149,7 +147,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         super.viewWillAppear(animated)
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        topTabDisplayManager.tabDisplayType = .TopTabTray
         refreshTabs()
     }
 

@@ -7,7 +7,7 @@ import Foundation
 @testable import Client
 
 class WallpaperURLSessionDataTaskMock: URLSessionDataTaskProtocol {
-    private (set) var resumeWasCalled = false
+    private(set) var resumeWasCalled = false
 
     func resume() {
         resumeWasCalled = true
@@ -28,6 +28,18 @@ class WallpaperURLSessionMock: URLSessionProtocol {
         self.data = data
         self.response = response
         self.error = error
+    }
+
+    func data(from url: URL) async throws -> (Data, URLResponse) {
+        if let error = error {
+            throw error
+        }
+
+        return (data ?? Data(), response ?? URLResponse())
+    }
+
+    func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+        try await data(from: urlRequest.url!)
     }
 
     func dataTaskWith(_ url: URL,

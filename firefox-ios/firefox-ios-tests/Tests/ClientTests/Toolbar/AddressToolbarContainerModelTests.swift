@@ -93,7 +93,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                lockIconNeedsTheming: true,
                                safeListedURLImageName: nil,
                                isEditing: false,
-                               isScrollingDuringEdit: false,
+                               shouldShowKeyboard: true,
                                shouldSelectSearchTerm: true,
                                isLoading: false,
                                readerModeState: nil,

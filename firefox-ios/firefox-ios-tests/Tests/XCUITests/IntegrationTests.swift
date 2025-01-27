@@ -4,6 +4,7 @@
 
 import Common
 import XCTest
+import Shared
 
 private let testingURL = "https://example.com"
 private let userName = "iosmztest"
@@ -44,7 +45,7 @@ class IntegrationTests: BaseTestCase {
 
     func allowNotifications () {
         addUIInterruptionMonitor(withDescription: "notifications") { (alert) -> Bool in
-            alert.buttons["Allow"].tap()
+            alert.buttons["Allow"].waitAndTap()
             return true
         }
         app.swipeDown()
@@ -78,8 +79,11 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
         sleep(5)
+        if app.tables.staticTexts["Sync is offline"].exists {
+            app.tables.staticTexts["Sync is offline"].waitAndTap()
+        }
         if app.tables.staticTexts["Sync Now"].exists {
-            app.tables.staticTexts["Sync Now"].tap()
+            app.tables.staticTexts["Sync Now"].waitAndTap()
         }
         mozWaitForElementToNotExist(app.tables.staticTexts["Syncing…"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
@@ -112,9 +116,9 @@ class IntegrationTests: BaseTestCase {
         // Bookmark is added by the DB
         // Sign into Mozilla Account
         navigator.openURL(testingURL)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         navigator.goto(BrowserTabMenu)
-        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
+        navigator.performAction(Action.Bookmark)
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
@@ -150,9 +154,9 @@ class IntegrationTests: BaseTestCase {
         )
 
         // Sync again just to make sure to sync after new name is shown
-        app.buttons["Settings"].tap()
+        app.buttons["Settings"].waitAndTap()
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
-        app.tables.cells.element(boundBy: 2).tap()
+        app.tables.cells.element(boundBy: 2).waitAndTap()
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
 
@@ -162,10 +166,10 @@ class IntegrationTests: BaseTestCase {
 
         // Log in in order to save it
         app.webViews.textFields["Email or phone"].tapAndTypeText(userName)
-        app.webViews.buttons["Next"].tap()
+        app.webViews.buttons["Next"].waitAndTap()
         app.webViews.secureTextFields["Password"].tapAndTypeText(userPassword)
 
-        app.webViews.buttons["Sign in"].tap()
+        app.webViews.buttons["Sign in"].waitAndTap()
 
         // Save the login
         app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
@@ -199,7 +203,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         mozWaitForElementToExist(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
+        app.scrollViews.buttons["Continue"].waitAndTap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
@@ -218,7 +222,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
@@ -254,7 +258,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         mozWaitForElementToExist(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
+        app.scrollViews.buttons["Continue"].waitAndTap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
@@ -266,18 +270,18 @@ class IntegrationTests: BaseTestCase {
 
         // Disconnect account
         navigator.goto(SettingsScreen)
-        app.tables.cells.element(boundBy: 1).tap()
+        app.tables.cells.element(boundBy: 1).waitAndTap()
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
 
-        app.cells["SignOut"].tap()
+        app.cells["SignOut"].waitAndTap()
 
         app.buttons["Disconnect"].waitAndTap()
         sleep(3)
 
         // Connect same account again
         navigator.nowAt(SettingsScreen)
-        app.tables.cells["SignInToSync"].tap()
-        app.buttons["EmailSignIn.button"].tap()
+        app.tables.cells["SignInToSync"].waitAndTap()
+        app.buttons["EmailSignIn.button"].waitAndTap()
 
         navigator.nowAt(FxASigninScreen)
         mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
