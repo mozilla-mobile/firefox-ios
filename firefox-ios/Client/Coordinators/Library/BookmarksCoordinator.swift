@@ -7,7 +7,7 @@ import Common
 import MozillaAppServices
 
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
-    func start(from folder: FxBookmarkNode)
+    func start(fromGUID folderGUID: String, animated: Bool)
 
     /// Shows the bookmark detail to modify a bookmark folder
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)?)
@@ -75,10 +75,10 @@ class BookmarksCoordinator: BaseCoordinator,
 
     // MARK: - BookmarksCoordinatorDelegate
 
-    func start(from folder: FxBookmarkNode) {
+    func start(fromGUID folderGUID: String, animated: Bool = true) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: profile.places,
-                                                bookmarkFolderGUID: folder.guid)
+                                                bookmarkFolderGUID: folderGUID)
         if isBookmarkRefactorEnabled {
             let controller = BookmarksViewController(viewModel: viewModel, windowUUID: windowUUID)
             controller.bookmarkCoordinatorDelegate = self

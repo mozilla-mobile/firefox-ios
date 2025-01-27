@@ -37,7 +37,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
 
-        subject.start(from: folder)
+        subject.start(fromGUID: folder.guid, animated: true)
 
         XCTAssertTrue(router.pushedViewController is LegacyBookmarksPanel)
         XCTAssertEqual(router.pushCalled, 1)
@@ -77,7 +77,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         let subject = createSubject(isBookmarkRefactorEnabled: true)
         let folder = LocalDesktopFolder()
 
-        subject.start(from: folder)
+        subject.start(fromGUID: folder.guid, animated: true)
 
         XCTAssertTrue(router.pushedViewController is BookmarksViewController)
         XCTAssertEqual(router.pushCalled, 1)
