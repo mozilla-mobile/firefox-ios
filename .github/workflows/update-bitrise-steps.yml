@@ -55,7 +55,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff
-          git diff --quiet || (git add bitrise.yml && git commit -m "Update outdated Bitrise steps")
+          git diff --quiet || (git add bitrise.yml)
 
       # Step 7: Create a Pull Request
       - name: Create a Pull Request
