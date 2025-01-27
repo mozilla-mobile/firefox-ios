@@ -47,7 +47,7 @@
 "Onboarding.Customization.Theme.System.Action.v123" = "თვითშერჩევა";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Theme.Title.v123" = "გაფორმების შერჩევა";
+"Onboarding.Customization.Theme.Title.v123" = "აირჩიეთ გაფორმება";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "ქვემოთ";
@@ -56,13 +56,13 @@
 "Onboarding.Customization.Toolbar.Continue.Action.v123" = "შეინახეთ და დაიწყეთ გვერდების თვალიერება";
 
 /* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Description.v123" = "ხელთ იქონიეთ საძიებო.";
+"Onboarding.Customization.Toolbar.Description.v123" = "ახლოს იქონიეთ საძიებო.";
 
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "აცილება";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Toolbar.Title.v123" = "ხელსაწყოთა ზოლის განთავსება";
+"Onboarding.Customization.Toolbar.Title.v123" = "განათავსეთ ხელსაწყოთა ზოლი";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "ზემოთ";
@@ -106,6 +106,9 @@
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v135" = "თანხმობა და გაგრძელება";
 
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v136" = "თანხმობა და გაგრძელება";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "მართვა";
 
@@ -131,7 +134,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "თქვენი მოწყობილობის მონაცემები, აპარატურული გაწყობა და ის, თუ როგორაა გამოყენებული %1$@ , მეტად გვეხმარება შესაძლებლობების, წარმადობისა და მდგრადობის გაუმჯობესებაში სხვა მომხმარებლებისთვისაც. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "მონაცემები თქვენი მოწყობილობის, აპარატურული გაწყობისა და იმის შესახებ, თუ როგორ გამოიყენება %1$@, გვეხმარება შესაძლებლობების, წარმადობისა და მდგრადობის გაუმჯობესებაში ყველა მომხმარებლისთვის. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "ტექნიკური და გამოყენების მონაცემები გაეგზავნოს %@-ს";
@@ -150,6 +153,9 @@
 
 /* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
 "Onboarding.TermsOfService.Title.v135" = "მოგესალმებათ %@";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ – გამოყენების პირობები.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "ჩვეული ფონი";

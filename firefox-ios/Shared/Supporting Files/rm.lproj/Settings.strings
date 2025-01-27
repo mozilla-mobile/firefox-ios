@@ -70,14 +70,23 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "Ulteriuras infurmaziuns.";
 
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Ulteriuras infurmaziuns";
+
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Rapports da collaps ans permettan da diagnostitgar e curreger problems cun il navigatur.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Quai ans gida da diagnostitgar e curreger problems cun il navigatur.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Trametter automaticamain rapports da collaps";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Ulteriuras infurmaziuns.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Ulteriuras infurmaziuns";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
 "Settings.DailyUsagePing.Message.v135" = "Quai gida %@ a stimar il dumber dad utilisaders activs.";
@@ -169,12 +178,30 @@
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Propostas da sponsurs";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Ulteriuras infurmaziuns";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Emprova novas funcziuns ed ideas avant ch’ellas stettian a disposiziun a mintgin.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Installar ed exequir studis";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Ulteriuras infurmaziuns.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Ulteriuras infurmaziuns";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
 "Settings.TechnicalData.Message.v135" = "%1$@ vul mo rimnar las datas necessarias per metter a disposiziun e meglierar %2$@ per ina e scadin.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Datas davart tes apparat, la configuraziun da la hardware e l’utilisaziun, ans gidan a meglierar funcziuns, la prestaziun e la stabilitad da %@.";
+
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Datas tecnicas e d’interacziun";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Trametter datas tecnicas e d’interacziun";
 
