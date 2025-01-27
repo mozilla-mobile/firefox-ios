@@ -92,7 +92,7 @@
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Esteu protegit. Si detectem alguna cosa, us ho farem saber.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "La connexió no és segura,";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "La connexió no és segura.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Aneu amb compte en aquest lloc";

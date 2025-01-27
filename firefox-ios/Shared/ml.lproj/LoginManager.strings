@@ -68,7 +68,7 @@
 "Reveal" = "വെളിപ്പെടുത്തുക";
 
 /* Title for the search field at the top of the Logins list screen */
-"Search" = "തെരയുക";
+"Search" = "തിരയുക";
 
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "തെരയുന്ന വാക്കിടാനുള്ള ഇടം";

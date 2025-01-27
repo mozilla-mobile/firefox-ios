@@ -1,3 +1,15 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Afegiu adreces d’interès mentre navegueu per a trobar fàcilment els vostres llocs preferits més tard.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Aquesta carpeta és buida";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "Deseu llocs mentre navegueu. També es recuperaran les adreces d’interès d’altres dispositius sincronitzats.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "Encara no hi ha cap adreça d’interès";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Tot";
 
@@ -12,6 +24,9 @@
 
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Edita l'adreça d'interès";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "Desa";
 
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Desa a";

@@ -199,3 +199,6 @@
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "נתונים טכניים ונתוני אינטראקציה";
 
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "שליחת נתונים טכניים ונתוני אינטראקציה";
+
