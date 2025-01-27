@@ -2,8 +2,13 @@ name: Update Outdated Bitrise Steps Versions
 
 on:
   schedule:
-   - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
+    - cron: "0 3 * * 0" # Runs every Sunday at 03:00 UTC
   workflow_dispatch: # Allow manual triggering
+    inputs:
+      branchName:
+        description: "Branch used as target for automation"
+        required: true
+        default: "main"
 
 jobs:
   update-steps:
@@ -52,8 +57,6 @@ jobs:
       # Step 6: Check for changes
       - name: Commit changes if any
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff
           git diff --quiet || (git add bitrise.yml)
 
@@ -61,10 +64,13 @@ jobs:
       - name: Create a Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: GitHub <noreply@github.com>
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update/bitrise-steps
+          branch: update-bitrise-steps
           commit-message: "Update [v${{ env.next_version }}] outdated Bitrise steps ${{ env.current_date }}"
           title: "Bump [v${{ env.next_version }}] Update outdated Bitrise steps ${{ env.current_date }}"
+          delete-branch: true
           body: |
             This PR updates the outdated Bitrise steps to their latest versions.
           reviewers: mdotb-moz,clarmso,isabelrios
@@ -88,4 +94,3 @@ jobs:
           GITHUB_RUNID: ${{ github.run_id }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}
-            
