@@ -54,10 +54,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     private var profile: Profile?
     private var logger: Logger
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve()) {
         crashedLastLaunch = logger.crashedLastLaunch
         self.logger = logger
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -107,6 +110,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
         GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
+        if profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing)
+            ?? profile.prefs.boolForKey(AppConstants.prefSendUsageData)
+            ?? true {
+            gleanUsageReportingMetricsService.start()
+        }
 
         // Set or generate profile id used for usage reporting
         if sendUsageData {

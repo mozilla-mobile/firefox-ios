@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
-    private var metricKitWrapper = MetricKitWrapper()
+    private lazy var metricKitWrapper = MetricKitWrapper()
     private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(
