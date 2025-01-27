@@ -41,6 +41,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Script to check if branch exists to not commit again
+        run: |-
+           branch=$(curl -X GET -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mozilla-mobile/firefox-ios/branches?per_page=100 | jq -r '.[].name | select(contains("update-bitrise-steps-${{ env.next_version }}"))')
+           echo $branch
+           if [ -z "$branch" ]; then echo "BRANCH_CREATED=false" >> $GITHUB_ENV; else echo "BRANCH_CREATED=true"  >> $GITHUB_ENV;fi
+        
       # Step 5: Determine PR Version Number
       - name: Determine PR Version Number
         id: versioning
@@ -58,6 +64,7 @@ jobs:
 
       # Step 6: Check for changes
       - name: Commit changes if any
+        if: env.BRANCH_CREATED == 'false'
         run: |
           git diff
           git diff --quiet || (git add bitrise.yml)
@@ -65,6 +72,7 @@ jobs:
       # Step 7: Create a Pull Request
       - name: Create a Pull Request
         uses: peter-evans/create-pull-request@v6
+        if: env.BRANCH_CREATED == 'false'
         with:
           commit-message: "Update [v${{ env.next_version }}] outdated Bitrise steps ${{ env.current_date }}"
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
