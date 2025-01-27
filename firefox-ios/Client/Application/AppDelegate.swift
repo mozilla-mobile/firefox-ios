@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
-    lazy var gleanLifecycleObserver = GleanLifecycleObserver()
+    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?

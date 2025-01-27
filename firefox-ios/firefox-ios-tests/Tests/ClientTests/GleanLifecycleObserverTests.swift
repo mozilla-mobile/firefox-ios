@@ -5,7 +5,23 @@
 import XCTest
 @testable import Client
 
+
+final class MockGleanUsageReportingMetricsService: GleanUsageReportingMetricsService {}
+
 final class MockGleanUsageReportingApi: GleanUsageReportingApi {
+    var setEnabledCalled = false
+    var requestDataDeletionCalled = false
+    var setEnabledValue: Bool?
+
+    func setEnabled(_ enabled: Bool) {
+        setEnabledCalled = true
+        setEnabledValue = enabled
+    }
+
+    func requestDataDeletion() {
+        requestDataDeletionCalled = true
+    }
+
     var setUsageReasonCalled = false
     var submitPingCalled = false
     var startTrackingDurationCalled = false
@@ -73,6 +89,30 @@ final class GleanLifecycleObserverTests: XCTestCase {
         mockGleanUsageReportingApi = nil
         gleanLifecycleObserver = nil
         super.tearDown()
+    }
+
+    func testSetEnabled() {
+        let enabledValue = true
+        mockGleanUsageReportingApi.setEnabled(enabledValue)
+
+        XCTAssertTrue(
+            mockGleanUsageReportingApi.setEnabledCalled,
+            "setEnabled should be called."
+        )
+        XCTAssertEqual(
+            mockGleanUsageReportingApi.setEnabledValue,
+            enabledValue,
+            "setEnabled should be called with the correct value."
+        )
+    }
+
+    func testRequestDataDeletion() {
+        mockGleanUsageReportingApi.requestDataDeletion()
+
+        XCTAssertTrue(
+            mockGleanUsageReportingApi.requestDataDeletionCalled,
+            "requestDataDeletion should be called."
+        )
     }
 
     func testStartObserving() {
@@ -157,6 +197,28 @@ final class GleanLifecycleObserverTests: XCTestCase {
         XCTAssertTrue(
             mockGleanUsageReportingApi.stopTrackingDurationCalled,
             "Background notification should trigger stopTrackingDuration."
+        )
+    }
+
+    func testMultiplePingSubmissions() {
+        gleanLifecycleObserver.handleForegroundEvent()
+        gleanLifecycleObserver.handleForegroundEvent()
+
+        XCTAssertEqual(
+            mockGleanUsageReportingApi.pingSubmitCount,
+            2,
+            "Ping submission count should increment with each foreground event."
+        )
+    }
+
+    func testSetUsageReasonUpdatesLastUsageReason() {
+        let reason = UsageReason.active
+        mockGleanUsageReportingApi.setUsageReason(reason)
+
+        XCTAssertEqual(
+            mockGleanUsageReportingApi.lastUsageReason,
+            reason.rawValue,
+            "setUsageReason should update the last usage reason."
         )
     }
 }
