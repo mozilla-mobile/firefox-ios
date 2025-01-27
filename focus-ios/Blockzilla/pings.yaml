@@ -60,9 +60,9 @@ usage-deletion-request:
   include_client_id: false
   send_if_empty: true
   bugs:
-    - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10904
   data_reviews:
-    - https://github.com/mozilla-mobile/firefox-ios/pull/24263
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24339
   notification_emails:
     - glean-team@mozilla.com
     - jrediger@mozilla.com
