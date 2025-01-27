@@ -18,7 +18,7 @@ class UserScriptManager: FeatureFlaggable {
         injectionTime: .atDocumentStart,
         forMainFrameOnly: true)
     private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(
-        source: "window.__firefox__.NightMode.setEnabled(true)",
+        source: NightModeHelper.jsCallbackBuilder(true),
         injectionTime: .atDocumentEnd,
         forMainFrameOnly: true)
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(

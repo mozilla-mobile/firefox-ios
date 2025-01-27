@@ -1,0 +1,18 @@
+# The configuration for the addressAutofillFeature feature
+features:
+  dark-reader-feature:
+    description: >
+      This property defines if we legacy dark theme code or
+      darkreader should be used to toggle dark mode on/off
+    variables:
+      status:
+        description: If true, we will allow use dark reader on webpages to toggle dark mode
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          status: false
+      - channel: developer
+        value:
+          status: true
