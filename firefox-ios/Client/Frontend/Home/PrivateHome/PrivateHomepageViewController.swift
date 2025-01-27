@@ -40,7 +40,7 @@ final class PrivateHomepageViewController:
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    var parentCoordinator: PrivateHomepageDelegate?
+    weak var parentCoordinator: PrivateHomepageDelegate?
 
     private let overlayManager: OverlayModeManager
     private let logger: Logger
@@ -72,7 +72,7 @@ final class PrivateHomepageViewController:
             })
     }
 
-    private lazy var scrollContainer: UIStackView = .build { stackView in
+    private let scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContainerStackSpacing
     }
@@ -85,7 +85,9 @@ final class PrivateHomepageViewController:
             link: .FirefoxHomepage.FeltPrivacyUI.Link
         )
         messageCard.configure(with: messageCardModel, and: themeManager.getCurrentTheme(for: windowUUID))
-        messageCard.privateBrowsingLinkTapped = learnMore
+        messageCard.privateBrowsingLinkTapped = { [weak self] in
+            self?.learnMore()
+        }
         return messageCard
     }()
 
@@ -132,6 +134,10 @@ final class PrivateHomepageViewController:
             homepageHeaderCell.configure(with: headerViewModel)
         }
         applyTheme()
+    }
+
+    deinit {
+        scrollView.removeFromSuperview()
     }
 
     private func setupLayout() {
