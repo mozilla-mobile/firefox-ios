@@ -507,8 +507,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
             if url.scheme == "sms" { // All the other types show a native prompt
-                // TODO: Laurie - Add string
-                showExternalAlert(withText: "Open sms in an external application?") { _ in
+                showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                     UIApplication.shared.open(url, options: [:])
                 }
             } else {
@@ -560,8 +559,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            // TODO: Laurie - Add string
-            showExternalAlert(withText: "Open email in the default mail application?") { _ in
+            showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
                 if let mailToMetadata = url.mailToMetadata(),
                    let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
                    mailScheme != "mailto" {
@@ -633,10 +631,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 // TODO: Laurie - Check syntheticClickType
 
                 if !openedURL, navigationAction.navigationType == .linkActivated {
-                    // TODO: Laurie - Add string
                     let alert = UIAlertController(
                         title: nil,
-                        message: "The application required to open that link can't be found.",
+                        message: .ExternalInvalidLinkMessage,
                         preferredStyle: .alert
                     )
                     alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
@@ -1063,9 +1060,8 @@ private extension BrowserViewController {
                                       message: text,
                                       preferredStyle: .alert)
 
-        // TODO: Laurie - Add string
         let okOption = UIAlertAction(
-            title: "Open",
+            title: .ExternalOpenMessage,
             style: .default,
             handler: completion
         )
