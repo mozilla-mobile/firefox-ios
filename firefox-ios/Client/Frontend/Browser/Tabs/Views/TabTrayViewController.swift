@@ -531,31 +531,20 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeAllTabs)
-        store.dispatch(action)
+        showCloseAllConfirmation()
     }
 
     private func showCloseAllConfirmation() {
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
-                                           style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
-                                           style: .cancel,
-                                           handler: nil),
-                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
-        controller.popoverPresentationController?.barButtonItem = deleteButton
-        present(controller, animated: true, completion: nil)
-    }
-
-    private func confirmCloseAll() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.confirmCloseAllTabs)
-        store.dispatch(action)
+        let alertController = UIAlertController(title: "Close all tabs?", message: nil, preferredStyle: .alert)
+        let closeAction = UIAlertAction(title: "Close All", style: .destructive) { _ in
+            let action = TabPanelViewAction(panelType: self.tabTrayState.selectedPanel,
+                                            actionType: TabPanelViewActionType.closeAllTabs)
+            store.dispatch(action)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(closeAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 
     @objc
