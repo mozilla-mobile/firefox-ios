@@ -538,6 +538,7 @@ class TabTrayViewController: UIViewController,
         let alertController = UIAlertController(title: "Close all tabs?", message: nil, preferredStyle: .alert)
         let closeAction = UIAlertAction(title: "Close All", style: .destructive) { _ in
             let action = TabPanelViewAction(panelType: self.tabTrayState.selectedPanel,
+                                            windowUUID: self.windowUUID,
                                             actionType: TabPanelViewActionType.closeAllTabs)
             store.dispatch(action)
         }
