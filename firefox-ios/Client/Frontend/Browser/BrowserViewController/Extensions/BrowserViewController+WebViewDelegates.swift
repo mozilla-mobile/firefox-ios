@@ -507,8 +507,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
             if url.scheme == "sms" { // All the other types show a native prompt
-                showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                    guard isOk else { return }
+                // TODO: Laurie - Add string
+                showExternalAlert(withText: "Open sms in an external application?") { _ in
                     UIApplication.shared.open(url, options: [:])
                 }
             } else {
@@ -540,17 +540,18 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
 
             // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-            DispatchQueue.main.asyncAfter(deadline: .now() + tabManager.delaySelectingNewPopupTab + 0.1) {
-                // Show only if no other snack bar
-                guard let tab = self.tabManager.selectedTab, tab.bars.isEmpty else { return }
-                TimerSnackBar.showAppStoreConfirmationBar(
-                    forTab: tab,
-                    appStoreURL: url,
-                    theme: self.currentTheme()
-                ) { _ in
-                    // If a new window was opened for this URL (it will have no history), close it.
-                    if tab.historyList.isEmpty {
-                        self.tabManager.removeTab(tab)
+            // Otherwise the AppStoreAlert is shown on the wrong tab
+            let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+            DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
+                self?.showAppStoreAlert { isOpened in
+                    if isOpened {
+                        UIApplication.shared.open(url, options: [:])
+                    }
+                    // If a new window was opened for this URL, close it
+                    if let currentTab = self?.tabManager.selectedTab,
+                       currentTab.historyList.count == 1,
+                       self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                        self?.tabManager.removeTab(tab)
                     }
                 }
             }
@@ -559,9 +560,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                guard isOk else { return }
-
+            // TODO: Laurie - Add string
+            showExternalAlert(withText: "Open email in the default mail application?") { _ in
                 if let mailToMetadata = url.mailToMetadata(),
                    let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
                    mailScheme != "mailto" {
@@ -627,20 +627,20 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                guard isOk else { return }
-                UIApplication.shared.open(url, options: [:]) { openedURL in
-                    // Do not show error message for JS navigated links or 
-                    // redirect as it's not the result of a user action.
-                    if !openedURL, navigationAction.navigationType == .linkActivated {
-                        let alert = UIAlertController(
-                            title: .UnableToOpenURLErrorTitle,
-                            message: .UnableToOpenURLError,
-                            preferredStyle: .alert
-                        )
-                        alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    }
+            UIApplication.shared.open(url, options: [:]) { openedURL in
+                // Do not show error message for JS navigated links or
+                // redirect as it's not the result of a user action.
+                // TODO: Laurie - Check syntheticClickType
+
+                if !openedURL, navigationAction.navigationType == .linkActivated {
+                    // TODO: Laurie - Add string
+                    let alert = UIAlertController(
+                        title: nil,
+                        message: "The application required to open that link can't be found.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
         }
@@ -1057,28 +1057,52 @@ private extension BrowserViewController {
       return isHttpScheme && isAppStoreHost
     }
 
-    // Use for sms and mailto links, which do not show a confirmation before opening.
-    func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
-        let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
-        let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
-            tab.removeSnackbar(bar)
-            completion(true)
-        }
-        let cancel = SnackButton(
-            title: .CancelString,
-            accessibilityIdentifier: "AppOpenExternal.button.cancel"
-        ) { bar in
-            tab.removeSnackbar(bar)
-            completion(false)
-        }
-        let theme = currentTheme()
-        ok.applyTheme(theme: theme)
-        cancel.applyTheme(theme: theme)
-        snackBar.applyTheme(theme: theme)
+    // Use for sms and mailto, which do not show a confirmation before opening.
+    func showExternalAlert(withText text: String, completion: @escaping (UIAlertAction) -> Void) {
+        let alert = UIAlertController(title: nil,
+                                      message: text,
+                                      preferredStyle: .alert)
 
-        snackBar.addButton(ok)
-        snackBar.addButton(cancel)
-        tab.addSnackbar(snackBar)
+        // TODO: Laurie - Add string
+        let okOption = UIAlertAction(
+            title: "Open",
+            style: .default,
+            handler: completion
+        )
+
+        let cancelOption = UIAlertAction(
+            title: .CancelString,
+            style: .cancel,
+            handler: nil
+        )
+
+        alert.addAction(okOption)
+        alert.addAction(cancelOption)
+
+        present(alert, animated: true, completion: nil)
+    }
+
+    func showAppStoreAlert(completion: @escaping (Bool) -> Void) {
+        let alert = UIAlertController(title: nil,
+                                      message: .ExternalLinkAppStoreConfirmationTitle,
+                                      preferredStyle: .alert)
+
+        let okOption = UIAlertAction(
+            title: .AppStoreString,
+            style: .default,
+            handler: { _ in completion(true) }
+        )
+
+        let cancelOption = UIAlertAction(
+            title: .NotNowString,
+            style: .cancel,
+            handler: { _ in completion(false) }
+        )
+
+        alert.addAction(okOption)
+        alert.addAction(cancelOption)
+
+        present(alert, animated: true, completion: nil)
     }
 
     func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
