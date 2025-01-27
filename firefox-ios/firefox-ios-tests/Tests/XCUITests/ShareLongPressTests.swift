@@ -169,7 +169,8 @@ class ShareLongPressTests: BaseTestCase {
         }
         app.buttons["Share Link"].waitAndTap()
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -190,7 +191,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -208,7 +210,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -229,7 +232,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -243,7 +247,8 @@ class ShareLongPressTests: BaseTestCase {
             .staticTexts.firstMatch.press(forDuration: 1.5)
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }

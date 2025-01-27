@@ -155,7 +155,7 @@ class ShareToolbarTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["autofill"])
             mozWaitForElementToExist(app.buttons["Done"])
         } else {
-            mozWaitForElementToExist(app.buttons["Colour picker"])
+            mozWaitForElementToExist(app.buttons["Color picker"])
         }
     }
 
@@ -167,7 +167,8 @@ class ShareToolbarTests: BaseTestCase {
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -178,7 +179,8 @@ class ShareToolbarTests: BaseTestCase {
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
