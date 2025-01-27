@@ -137,6 +137,7 @@ final class PrivateHomepageViewController:
     }
 
     deinit {
+        // TODO: FXIOS-11187 - Investigate further on privateMessageCardCell memory leaking during viewing private tab.
         scrollView.removeFromSuperview()
     }
 
