@@ -357,8 +357,8 @@ extension AppDelegate {
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
-        
-        if Settings.getToggle(.sendAnonymousUsageData) {
+
+        if TelemetryManager.shared.isGleanEnabled {
             UsageProfileManager.checkAndSetUsageProfileId()
         } else {
             UsageProfileManager.unsetUsageProfileId()
@@ -371,7 +371,11 @@ extension AppDelegate {
             channel: channel,
             pingSchedule: ["baseline": ["usage-reporting"]]
         )
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
+        Glean.shared.initialize(
+            uploadEnabled: TelemetryManager.shared.isGleanEnabled,
+            configuration: configuration,
+            buildInfo: GleanMetrics.GleanBuild.info
+        )
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry
