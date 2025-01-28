@@ -43,7 +43,7 @@ class EditBookmarkViewController: UIViewController,
             target: self,
             action: #selector(saveButtonAction)
         )
-        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.EditBookmarkView.saveButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
         return button
     }()
 

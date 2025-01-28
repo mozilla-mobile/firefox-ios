@@ -467,22 +467,12 @@ struct AccessibilityIdentifiers {
             static let tableView = "Bookmarks List"
             static let bookmarksCell = "BookmarksPanel.BookmarksCell"
             static let bookmarksCellDisclosureButton = ".DisclosureButton"
+            static let emptyStateSignInButton = "BookmarksPanel.EmptyState.signInButton"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
             static let bookmarkParentFolderCell = "BookmarksDetail.ParentFolderSelector.FolderCell"
             static let newFolderCell = "BookmarksDetail.ParentFolderSelector.NewFolderCell"
-
-            struct EmptyState {
-                static let signInButton = "BookmarksPanel.RootEmptyState.signInButton"
-            }
-
-            struct EditBookmarkView {
-                static let saveButton = "BookmarksPanel.EditBookmarkView.SaveButton"
-            }
-
-            struct EditFolderView {
-                static let saveButton = "BookmarksPanel.EditFolderView.SaveButton"
-            }
+            static let saveButton = "BookmarksDetail.SaveButton"
         }
 
         struct HistoryPanel {
