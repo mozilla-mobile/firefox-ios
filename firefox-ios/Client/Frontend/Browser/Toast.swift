@@ -14,6 +14,9 @@ class Toast: UIView, ThemeApplicable {
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
         static let toastAnimationDuration = 0.5
+        static let toastCornerRadius: CGFloat = 8
+        static let toastBottomSpacing: CGFloat = 4
+        static let toastSidePadding: CGFloat = 16
     }
 
     var animationConstraint: NSLayoutConstraint?
@@ -29,7 +32,10 @@ class Toast: UIView, ThemeApplicable {
         return gestureRecognizer
     }()
 
-    lazy var toastView: UIView = .build { view in }
+    lazy var toastView: UIView = .build { view in
+        view.layer.cornerRadius = UX.toastCornerRadius
+        view.layer.masksToBounds = true
+    }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()

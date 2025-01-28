@@ -10,7 +10,6 @@ final class ActionToast: ThemeApplicable {
     private let theme: Theme
     private let buttonTitle: String
     private let buttonAction: () -> Void
-    private var bottomConstraintPadding: CGFloat
     private var bottomContainer: UIView
 
     struct UX {
@@ -38,6 +37,7 @@ final class ActionToast: ThemeApplicable {
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
         stack.layoutMargins = UX.stackViewLayoutMargins
+        stack.layer.cornerRadius = Toast.UX.toastCornerRadius
         return stack
     }()
 
@@ -76,14 +76,12 @@ final class ActionToast: ThemeApplicable {
         text: String,
         bottomContainer: UIView,
         theme: Theme,
-        bottomConstraintPadding: CGFloat = 0,
         buttonTitle: String,
         buttonAction: @escaping () -> Void
     ) {
         self.text = text
         self.bottomContainer = bottomContainer
         self.theme = theme
-        self.bottomConstraintPadding = bottomConstraintPadding
         self.buttonTitle = buttonTitle
         self.buttonAction = buttonAction
     }
@@ -100,11 +98,13 @@ final class ActionToast: ThemeApplicable {
         NSLayoutConstraint.activate(
             [
                 heightConstraint,
-                stackView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
-                stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor),
+                stackView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
                 stackView.bottomAnchor.constraint(
                     equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
-                    constant: bottomConstraintPadding
+                    constant: -Toast.UX.toastBottomSpacing
                 ),
                 actionButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
             ]
