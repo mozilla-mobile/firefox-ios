@@ -179,7 +179,7 @@ class PasteControlToast: ButtonToast {
 
     private lazy var pasteControl: UIPasteControl = {
         let pasteControlConfig = UIPasteControl.Configuration()
-        pasteControlConfig.displayMode = .iconAndLabel
+        pasteControlConfig.displayMode = .labelOnly
         pasteControlConfig.baseForegroundColor = theme?.colors.textInverted
         pasteControlConfig.baseBackgroundColor = theme?.colors.actionPrimary
 
