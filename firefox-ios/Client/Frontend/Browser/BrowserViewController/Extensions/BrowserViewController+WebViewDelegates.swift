@@ -389,7 +389,6 @@ extension BrowserViewController: WKUIDelegate {
         pendingDownloadWebView = webView
     }
 
-    @available(iOS 15, *)
     func webView(_ webView: WKWebView,
                  requestMediaCapturePermissionFor origin: WKSecurityOrigin,
                  initiatedByFrame frame: WKFrameInfo,
