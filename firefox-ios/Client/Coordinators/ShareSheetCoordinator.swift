@@ -103,6 +103,7 @@ class ShareSheetCoordinator: BaseCoordinator,
             }
         case .copyToPasteboard:
             showToast(text: .LegacyAppMenu.AppMenuCopyURLConfirmMessage)
+            dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
         }
