@@ -187,7 +187,7 @@ class EditFolderViewController: UIViewController,
                 configureDesktopBookmarksHeaderCell(cell)
             } else {
                 configureParentFolderCell(cell, folder: folder)
-                cell.accessibilityIdentifier = 
+                cell.accessibilityIdentifier =
                 "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.row)"
             }
             return cell

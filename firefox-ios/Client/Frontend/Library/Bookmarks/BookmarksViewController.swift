@@ -490,7 +490,7 @@ class BookmarksViewController: SiteTableViewController,
             var viewModel = bookmarkCell.getViewModel()
 
             cell.accessibilityTraits = .button
-            cell.accessibilityIdentifier = 
+            cell.accessibilityIdentifier =
             "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
 
             // BookmarkItemData requires:
