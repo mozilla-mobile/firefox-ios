@@ -186,6 +186,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertEqual(section, .lastHour)
     }
 
+    // Laurie
     func testGroupBelongToSection_ForToday() {
         let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
         let timestamp = date.toMicrosecondsSince1970()
@@ -235,6 +236,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertEqual(section, .lastMonth)
     }
 
+    // Laurie
     func testShouldAddGroupToSections_ForToday() {
         let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
         let timestamp = date.toMicrosecondsSince1970()
@@ -268,23 +270,31 @@ class HistoryPanelViewModelTests: XCTestCase {
         addSiteVisit(profile, url: "https://apple.com/", title: "Apple")
     }
 
-    private func addSiteVisit(_ profile: MockProfile, url: String, title: String) {
+    private func addSiteVisit(_ profile: MockProfile,
+                              url: String,
+                              title: String,
+                              file: StaticString = #file,
+                              line: UInt = #line) {
         let visitObservation = VisitObservation(url: url, title: title, visitType: .link)
         let result = profile.places.applyObservation(visitObservation: visitObservation)
 
-        XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).")
+        XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).", file: file, line: line)
     }
 
-    private func clear(profile: MockProfile) {
+    private func clear(profile: MockProfile,
+                       file: StaticString = #file,
+                       line: UInt = #line) {
         let result = profile.places.deleteEverythingHistory()
-        XCTAssertTrue(result.value.isSuccess, "History cleared.")
+        XCTAssertTrue(result.value.isSuccess, "History cleared.", file: file, line: line)
     }
 
-    private func fetchHistory(completion: @escaping (Bool) -> Void) {
+    private func fetchHistory(file: StaticString = #file,
+                              line: UInt = #line,
+                              completion: @escaping (Bool) -> Void) {
         let expectation = self.expectation(description: "Wait for history")
 
         subject.reloadData { success in
-            XCTAssertNotNil(success)
+            XCTAssertNotNil(success, file: file, line: line)
             completion(success)
             expectation.fulfill()
         }
@@ -293,11 +303,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     private func fetchSearchHistory(searchTerm: String,
+                                    file: StaticString = #file,
+                                    line: UInt = #line,
                                     completion: @escaping (Bool) -> Void) {
         let expectation = self.expectation(description: "Wait for history search")
 
         subject.performSearch(term: searchTerm) { hasResults in
-            XCTAssertNotNil(hasResults)
+            XCTAssertNotNil(hasResults, file: file, line: line)
             completion(hasResults)
             expectation.fulfill()
         }
@@ -305,7 +317,9 @@ class HistoryPanelViewModelTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
-    private func createSearchTermGroup(timestamp: MicrosecondTimestamp) -> ASGroup<Site> {
+    private func createSearchTermGroup(timestamp: MicrosecondTimestamp,
+                                       file: StaticString = #file,
+                                       line: UInt = #line) -> ASGroup<Site> {
         var groupSites = [Site]()
         for index in 0...3 {
             var site = Site.createBasicSite(url: "http://site\(index).com", title: "Site \(index)")
@@ -318,7 +332,9 @@ class HistoryPanelViewModelTests: XCTestCase {
             )
             XCTAssertTrue(
                 profile.places.applyObservation(visitObservation: visit).value.isSuccess,
-                "Site added: \(site.url)."
+                "Site added: \(site.url).",
+                file: file,
+                line: line
             )
             groupSites.append(site)
         }

@@ -1147,6 +1147,10 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(frame: frame, configuration: configuration)
+
+        if #available(iOS 16.0, *) {
+            isFindInteractionEnabled = true
+        }
     }
 
     required init?(coder: NSCoder) {
