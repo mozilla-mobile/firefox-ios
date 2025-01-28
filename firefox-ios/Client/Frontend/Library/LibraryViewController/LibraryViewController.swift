@@ -380,7 +380,11 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         let controlbarHeight = segmentControlToolbar.frame.height
         segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
-        view.layoutIfNeeded()
+
+        // Reload the current panel
+        guard let index = viewModel.selectedPanel?.rawValue,
+              let currentPanel = childPanelControllers[safe: index] else { return }
+        currentPanel.view.layoutIfNeeded()
     }
 }
 
