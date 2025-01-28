@@ -358,6 +358,8 @@ extension AppDelegate {
             }
         }
 
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+
         if TelemetryManager.shared.isGleanEnabled {
             UsageProfileManager.checkAndSetUsageProfileId()
         } else {
@@ -371,6 +373,7 @@ extension AppDelegate {
             channel: channel,
             pingSchedule: ["baseline": ["usage-reporting"]]
         )
+
         Glean.shared.initialize(
             uploadEnabled: TelemetryManager.shared.isGleanEnabled,
             configuration: configuration,
