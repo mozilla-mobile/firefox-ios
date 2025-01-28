@@ -68,6 +68,7 @@ class BrowserViewController: UIViewController {
     private var themeManager: ThemeManager
     private let shortcutsPresenter = ShortcutsPresenter()
     private let onboardingTelemetry = OnboardingTelemetryHelper()
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
 
     private enum URLBarScrollState {
         case collapsed
@@ -108,12 +109,14 @@ class BrowserViewController: UIViewController {
         shortcutManager: ShortcutsManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandling,
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         themeManager: ThemeManager
     ) {
         self.tipManager = tipManager
         self.shortcutManager = shortcutManager
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -2066,6 +2069,7 @@ extension BrowserViewController: MenuActionable {
             searchEngineManager: searchEngineManager,
             authenticationManager: authenticationManager,
             onboardingEventsHandler: onboardingEventsHandler,
+            gleanUsageReportingMetricsService: gleanUsageReportingMetricsService,
             themeManager: themeManager,
             dismissScreenCompletion: activateUrlBarOnHomeView,
             shouldScrollToSiri: shouldScrollToSiri
