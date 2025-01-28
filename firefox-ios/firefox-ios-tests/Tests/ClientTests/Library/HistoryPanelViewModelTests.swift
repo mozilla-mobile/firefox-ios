@@ -186,9 +186,8 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertEqual(section, .lastHour)
     }
 
-    // Laurie
     func testGroupBelongToSection_ForToday() {
-        let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
+        let date = Calendar.current.date(byAdding: .hour, value: -3, to: Date()) ?? Date()
         let timestamp = date.toMicrosecondsSince1970()
         let searchTermGroup = createSearchTermGroup(timestamp: timestamp)
 
@@ -236,9 +235,8 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertEqual(section, .lastMonth)
     }
 
-    // Laurie
     func testShouldAddGroupToSections_ForToday() {
-        let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
+        let date = Calendar.current.date(byAdding: .hour, value: -3, to: Date()) ?? Date()
         let timestamp = date.toMicrosecondsSince1970()
         let searchTermGroup = createSearchTermGroup(timestamp: timestamp)
         subject.visibleSections.append(.today)
