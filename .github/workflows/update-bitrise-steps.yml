@@ -41,13 +41,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Script to check if branch exists to not commit again
-        run: |-
-           branch=$(curl -X GET -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mozilla-mobile/firefox-ios/branches?per_page=100 | jq -r '.[].name | select(contains("update-bitrise-steps-${{ env.next_version }}"))')
-           echo $branch
-           if [ -z "$branch" ]; then echo "BRANCH_CREATED=false" >> $GITHUB_ENV; else echo "BRANCH_CREATED=true"  >> $GITHUB_ENV;fi
-
-
       # Step 5: Determine PR Version Number
       - name: Determine PR Version Number
         id: versioning
@@ -62,6 +55,12 @@ jobs:
           echo "Next version is: v${next_version}"
           echo "next_version=${next_version}" >> $GITHUB_ENV
           echo "current_date=$current_date" >> $GITHUB_ENV
+
+      - name: Script to check if branch exists to not commit again
+        run: |-
+             branch=$(curl -X GET -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mozilla-mobile/firefox-ios/branches?per_page=100 | jq -r '.[].name | select(contains("update-bitrise-steps-${{ env.next_version }}"))')
+             echo $branch
+             if [ -z "$branch" ]; then echo "BRANCH_CREATED=false" >> $GITHUB_ENV; else echo "BRANCH_CREATED=true"  >> $GITHUB_ENV;fi
 
       # Step 6: Check for changes
       - name: Commit changes if any
