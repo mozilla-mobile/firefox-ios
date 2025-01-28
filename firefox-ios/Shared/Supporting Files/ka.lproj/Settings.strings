@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "უეცარი გათიშვის შეტყობინებები გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
 
@@ -125,7 +128,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "ვრცლად Firefox-შემოთავაზების შესახებ";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "საძიებო სისტემების შემნაცვლებლები";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "სათადარიგო საძიებოები";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "ნაგულისხმევი საძიებო";
@@ -155,13 +158,13 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "Firefox-შემოთავაზების ჩვენება პირად ფანჯრებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ძიება დათვალიერების ისტორიაში";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ძიება ნანახ გვერდებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
-"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "სანიშნების ძიება";
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "ძიება სანიშნებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
-"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "დასინქ. ჩანართების მოძიება";
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "ძიება დასინქ. ჩანართებში";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "შემოთავაზებებს გაჩვენებთ %@ თქვენ მიერ მოძიებულის შესაბამისად";

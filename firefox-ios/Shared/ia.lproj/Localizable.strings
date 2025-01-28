@@ -1556,7 +1556,7 @@
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protection antitraciamento reinfortiate";
 
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "Diagnostico";
+"Settings.TroubleShootSync.Title" = "Solver problemas";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Monstrar plus";

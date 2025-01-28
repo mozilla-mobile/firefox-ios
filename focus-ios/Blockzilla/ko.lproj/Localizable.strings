@@ -274,7 +274,7 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "콘텐츠 추적기 차단";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "이 정보는 Mozilla가 활성 사용자를 예측하는 데 도움이 됩니다.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */

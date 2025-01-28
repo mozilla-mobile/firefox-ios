@@ -44,7 +44,7 @@
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Sarba";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Sarba e jinchi i mètudi di pagamentu";
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Sarba e jinchi i furmi di pagamentu";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Vidi carta";

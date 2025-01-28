@@ -274,7 +274,7 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "封鎖內容追蹤器";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "此資訊可幫助 Mozilla 估算活躍使用者數。";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */

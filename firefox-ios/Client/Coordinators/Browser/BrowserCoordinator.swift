@@ -40,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
@@ -160,13 +159,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
-        let privateHomepageController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
+        let privateHomepageController = PrivateHomepageViewController(
+            windowUUID: windowUUID,
+            overlayManager: overlayManager
+        )
         privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
         }
-        self.privateViewController = privateHomepageController
     }
 
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
@@ -387,9 +388,9 @@ class BrowserCoordinator: BaseCoordinator,
         case .topSites:
             browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab:
-            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
+            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: true)
         case .newTab:
-            browserViewController.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: true)
         }
     }
 

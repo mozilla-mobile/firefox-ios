@@ -49,6 +49,9 @@
 /* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "ບັນທຶກໄວ້ໃນ “ບຸກມາກ”";
 
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+"Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "ບັນທຶກໃນ “%@”";
+
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "ແກ້ໄຂ";
 

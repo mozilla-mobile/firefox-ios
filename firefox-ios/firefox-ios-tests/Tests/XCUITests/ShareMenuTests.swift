@@ -96,7 +96,7 @@ class ShareMenuTests: BaseTestCase {
         validateMarkupTool()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2864293
+    // https://mozilla.testrail.io/index.php?/cases/view/2864065
     func testSharePdfFilePrint() {
         reachShareMenuLayoutAndSelectOption(option: "Print", url: pdfUrl)
         validatePrintLayout()
@@ -155,7 +155,7 @@ class ShareMenuTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["autofill"])
             mozWaitForElementToExist(app.buttons["Done"])
         } else {
-            mozWaitForElementToExist(app.buttons["Colour picker"])
+            mozWaitForElementToExist(app.buttons["Color picker"])
         }
     }
 
@@ -169,7 +169,8 @@ class ShareMenuTests: BaseTestCase {
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -183,7 +184,8 @@ class ShareMenuTests: BaseTestCase {
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }

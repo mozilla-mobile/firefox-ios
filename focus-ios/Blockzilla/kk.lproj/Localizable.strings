@@ -274,7 +274,7 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Мазмұндық трекерлерді блоктау";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "Бұл Mozilla-ға белсенді пайдаланушылар санын бағалауға көмектеседі.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */

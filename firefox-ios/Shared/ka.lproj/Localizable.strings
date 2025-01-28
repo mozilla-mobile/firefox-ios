@@ -698,7 +698,7 @@
 "LoginsList.SelectPassword.Title" = "შეარჩიეთ პაროლი შესავსებად";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "შენახული ანგარიშები";
+"LoginsList.Title" = "ᲨᲔᲜᲐᲮᲣᲚᲘ ᲐᲜᲒᲐᲠᲘᲨᲔᲑᲘ";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "როგორც ჩანს, Firefox წინა ჯერზე უეცრად გაითიშა. გსურთ, ჩანართების აღდგენა?";
@@ -935,7 +935,7 @@
 "Quick-Search Engines" = "სწრაფი ძიების სისტემები";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
-"Ratings.Settings.RateOnAppStore" = "შეაფასეთ App Store-ში";
+"Ratings.Settings.RateOnAppStore" = "შეგვაფასეთ – App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "წაკითხული";
@@ -1400,10 +1400,10 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "სურათების შეზღუდვა";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox-ის გახსნისას";
+"Settings.OfferClipboardBar.Status" = "როცა გაიხსნება Firefox";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
-"Settings.OfferClipboardBar.Status.v128" = "როცა იხსნება %@";
+"Settings.OfferClipboardBar.Status.v128" = "როცა გაიხსნება %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "აღებულ ბმულებზე გადასვლის შემოთავაზება";
@@ -1439,7 +1439,7 @@
 "Settings.SendUsage.Link" = "ვრცლად.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც საჭიროა Firefox-ის გასაუმჯობესებლად.";
+"Settings.SendUsage.Message" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლითაც ვახერხებთ გავაუმჯობესოთ Firefox.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "მონაცემთა აღრიცხვა";

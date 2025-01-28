@@ -63,6 +63,7 @@ extension AppState {
 let middlewares = [
     FeltPrivacyMiddleware().privacyManagerProvider,
     MainMenuMiddleware().mainMenuProvider,
+    MessageCardMiddleware().messageCardProvider,
     MicrosurveyMiddleware().microsurveyProvider,
     MicrosurveyPromptMiddleware().microsurveyProvider,
     RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
