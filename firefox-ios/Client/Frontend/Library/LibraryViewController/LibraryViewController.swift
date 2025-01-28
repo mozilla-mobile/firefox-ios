@@ -5,6 +5,7 @@
 import Common
 import Shared
 import UIKit
+import MozillaAppServices
 
 extension LibraryViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
@@ -220,12 +221,64 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
                 accessibilityIdentifier: panelDescriptor.accessibilityIdentifier
             )
             showPanel(panelNavigationController)
+            if viewModel.selectedPanel ?? .bookmarks == .bookmarks,
+               let recentFolderGUID = viewModel.profile.prefs.stringForKey(PrefsKeys.LastViewedBookmarkFolder) {
+                findPathToFolder(currentFolderGUID: recentFolderGUID) { tempPath in
+                    guard var path = tempPath else {return}
+                    path.removeFirst()
+                    CATransaction.begin()
+                    CATransaction.setDisableActions(true)
+                    self.navigationHandler?.start(
+                        panelType: self.viewModel.selectedPanel ?? .bookmarks,
+                        navigationController: panelNavigationController,
+                        folderPath: path
+                    )
+                    CATransaction.commit()
+                }
+                return
+            }
             navigationHandler?.start(
                 panelType: viewModel.selectedPanel ?? .bookmarks,
-                navigationController: panelNavigationController
+                navigationController: panelNavigationController,
+                folderPath: nil
             )
         }
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+    }
+
+    private func findPathToFolder(currentFolderGUID: String,
+                                  completion: @escaping (_: [String]?) -> Void) {
+        viewModel.profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID,
+                                                  recursive: true).uponQueue(.main) { result in
+            guard let maybeBookmarkTreeRoot = result.successValue,
+                  let bookmarkTreeRoot = maybeBookmarkTreeRoot else {
+                completion(nil)
+                return
+            }
+            guard let path = self.findPathToFolderGivenTree(targetGUID: currentFolderGUID,
+                                                            treeRootNode: bookmarkTreeRoot),
+                  !path.isEmpty else {
+                completion(nil)
+                return
+            }
+            completion(path.map({ $0.guid }))
+        }
+    }
+
+    private func findPathToFolderGivenTree(targetGUID: String, treeRootNode: BookmarkNodeData) -> [BookmarkNodeData]? {
+        guard let treeRootFolder = treeRootNode as? BookmarkFolderData else { return nil}
+        guard targetGUID != treeRootFolder.guid else {return [treeRootNode]}
+        var path: [BookmarkNodeData]?
+
+        guard let children = treeRootFolder.children else {return nil}
+        for childNode in children {
+            if let pathToFolder = findPathToFolderGivenTree(targetGUID: targetGUID, treeRootNode: childNode) {
+                path = pathToFolder
+            }
+        }
+        guard path != nil else {return nil}
+        path?.insert(treeRootNode, at: 0)
+        return path
     }
 
     private func hideCurrentPanel() {

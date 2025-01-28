@@ -7,14 +7,14 @@ import Foundation
 import Shared
 import Storage
 
-import enum MozillaAppServices.VisitType
+import MozillaAppServices
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
     func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
-    func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController, folderPath: [String]?)
     func shareLibraryItem(url: URL, sourceView: UIView)
     func setNavigationBarHidden(_ value: Bool)
 }
@@ -80,10 +80,10 @@ class LibraryCoordinator: BaseCoordinator,
 
     // MARK: - LibraryNavigationHandler
 
-    func start(panelType: LibraryPanelType, navigationController: UINavigationController) {
+    func start(panelType: LibraryPanelType, navigationController: UINavigationController, folderPath: [String]?) {
         switch panelType {
         case .bookmarks:
-            makeBookmarksCoordinator(navigationController: navigationController)
+            makeBookmarksCoordinator(navigationController: navigationController, folderPath: folderPath)
         case .history:
             makeHistoryCoordinator(navigationController: navigationController)
         case .downloads:
@@ -120,7 +120,7 @@ class LibraryCoordinator: BaseCoordinator,
         coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
     }
 
-    private func makeBookmarksCoordinator(navigationController: UINavigationController) {
+    private func makeBookmarksCoordinator(navigationController: UINavigationController, folderPath: [String]?) {
         guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let bookmarksCoordinator = BookmarksCoordinator(
@@ -135,6 +135,9 @@ class LibraryCoordinator: BaseCoordinator,
         if isBookmarkRefactorEnabled {
             (navigationController.topViewController as? BookmarksViewController)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator
+            folderPath?.forEach { folderGUID in
+                bookmarksCoordinator.start(fromGUID: folderGUID)
+            }
         } else {
             (navigationController.topViewController as? LegacyBookmarksPanel)?
                 .bookmarkCoordinatorDelegate = bookmarksCoordinator

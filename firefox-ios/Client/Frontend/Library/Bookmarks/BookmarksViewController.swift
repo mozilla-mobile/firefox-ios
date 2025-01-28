@@ -138,6 +138,11 @@ class BookmarksViewController: SiteTableViewController,
         setupEmptyStateView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        profile.prefs.setString(viewModel.bookmarkFolderGUID, forKey: PrefsKeys.LastViewedBookmarkFolder)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
@@ -466,7 +471,7 @@ class BookmarksViewController: SiteTableViewController,
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
-            bookmarkCoordinatorDelegate?.start(from: folder)
+            bookmarkCoordinatorDelegate?.start(fromGUID: folder.guid, animated: true)
         }
     }
 
