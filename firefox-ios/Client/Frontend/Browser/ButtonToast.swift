@@ -39,12 +39,12 @@ class ButtonToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.footnote.scaledFont()
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
     }
 
@@ -71,15 +71,15 @@ class ButtonToast: Toast {
         self.addSubview(createdToastView)
 
         NSLayoutConstraint.activate([
-            toastView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            toastView.heightAnchor.constraint(equalTo: heightAnchor),
+            toastView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Toast.UX.shadowVerticalSpacing),
+            toastView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Toast.UX.shadowVerticalSpacing),
+            toastView.heightAnchor.constraint(equalTo: heightAnchor, constant: -Toast.UX.shadowHorizontalSpacing),
 
-            heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeight)
+            heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeightWithShadow)
         ])
 
         animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
-                                                             constant: Toast.UX.toastHeight)
+                                                             constant: Toast.UX.toastHeightWithShadow)
         animationConstraint?.isActive = true
         if let theme = theme {
             applyTheme(theme: theme)
@@ -121,8 +121,7 @@ class ButtonToast: Toast {
             horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.padding),
             horizontalStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor),
             horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
-            horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
-            horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
+            horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor)
         ])
         return toastView
     }
@@ -173,6 +172,7 @@ class ButtonToast: Toast {
     }
 }
 
+// Laurie - TODO: test
 @available(iOS 16.0, *)
 class PasteControlToast: ButtonToast {
     private var theme: Theme?

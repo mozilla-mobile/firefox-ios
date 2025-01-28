@@ -43,7 +43,7 @@ final class ActionToast: ThemeApplicable {
 
     private lazy var toastLabel: UILabel = {
         let label = UILabel()
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.text = text
         label.textAlignment  = .center
         label.numberOfLines = 1
@@ -69,7 +69,7 @@ final class ActionToast: ThemeApplicable {
     }()
 
     private lazy var heightConstraint: NSLayoutConstraint = {
-        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight)
+        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithShadow)
     }()
 
     init(
@@ -134,9 +134,10 @@ final class ActionToast: ThemeApplicable {
         UIView.animate(
             withDuration: Toast.UX.toastAnimationDuration,
             animations: {
+                // Laurie - TODO: test
                 var frame = toast.frame
-                frame.origin.y = frame.origin.y - Toast.UX.toastHeight
-                frame.size.height = Toast.UX.toastHeight
+                frame.origin.y = frame.origin.y - Toast.UX.toastHeightWithShadow
+                frame.size.height = Toast.UX.toastHeightWithoutShadow
                 toast.frame = frame
             },
             completion: { finished in
