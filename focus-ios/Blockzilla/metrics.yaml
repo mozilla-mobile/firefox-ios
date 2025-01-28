@@ -837,7 +837,7 @@ usage:
       - https://bugzilla.mozilla.org/1497894
       - https://bugzilla.mozilla.org/1519120
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
@@ -860,7 +860,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1557048
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1609218#c4
     data_sensitivity:
       - technical
@@ -883,7 +883,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1497894
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
@@ -904,7 +904,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1497894
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
@@ -926,7 +926,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1508305
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1508305#c9
     data_sensitivity:
       - technical
@@ -946,7 +946,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1520741
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1520741#c18
     data_sensitivity:
       - technical
@@ -968,7 +968,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1525045
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1525045#c18
     data_sensitivity:
       - technical
@@ -990,7 +990,7 @@ usage:
       - https://mozilla-hub.atlassian.net/browse/DENG-7254
       - https://bugzilla.mozilla.org/1508305
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24389
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
     data_sensitivity:
       - technical
