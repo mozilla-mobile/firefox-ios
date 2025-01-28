@@ -72,6 +72,46 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(messagingManager.onMessageDisplayedCalled, 0)
     }
 
+    func test_tappedOnActionButton_performsActionAndDismissesMessageCard() throws {
+        let messagingManager = MockGleanPlumbMessageManagerProtocol()
+        let message = createMessage(with: MockMessageData(surface: .newTabCard))
+        messagingManager.message = message
+        let subject = createSubject(messagingManager: messagingManager)
+
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        subject.messageCardProvider(AppState(), action)
+
+        let secondaryAction = MessageCardAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MessageCardActionType.tappedOnActionButton
+        )
+
+        subject.messageCardProvider(AppState(), secondaryAction)
+
+        XCTAssertEqual(messagingManager.onMessagePressedCalled, 1)
+    }
+
+    func test_tappedOnCloseButton_dismissesMessageCard() throws {
+        let messagingManager = MockGleanPlumbMessageManagerProtocol()
+        let message = createMessage(with: MockMessageData(surface: .newTabCard))
+        messagingManager.message = message
+        let subject = createSubject(messagingManager: messagingManager)
+
+        let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
+
+        subject.messageCardProvider(AppState(), action)
+
+        let secondaryAction = MessageCardAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MessageCardActionType.tappedOnCloseButton
+        )
+
+        subject.messageCardProvider(AppState(), secondaryAction)
+
+        XCTAssertEqual(messagingManager.onMessageDismissedCalled, 1)
+    }
+
     // MARK: - Helpers
     private func createSubject(messagingManager: GleanPlumbMessageManagerProtocol) -> MessageCardMiddleware {
         return MessageCardMiddleware(messagingManager: messagingManager)

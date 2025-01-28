@@ -30,16 +30,12 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         GleanMetrics.Pings.shared.usageReporting.setEnabled(enabled: enabled)
     }
 
-    private var id: TimerId?
-
     func startTrackingDuration() {
-        id = GleanMetrics.Usage.duration.start()
+        GleanMetrics.Usage.duration.start()
     }
 
     func stopTrackingDuration() {
-        if let timerId = id {
-            GleanMetrics.Usage.duration.stopAndAccumulate(timerId)
-        }
+        GleanMetrics.Usage.duration.stop()
     }
 
     func setUsageReason(_ usageReason: UsageReason) {
