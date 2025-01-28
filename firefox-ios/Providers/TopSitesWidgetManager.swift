@@ -10,7 +10,6 @@ import Storage
 
 protocol TopSitesWidget {
     /// Write top sites to widgetkit
-    @available(iOS 14.0, *)
     func writeWidgetKitTopSites()
 }
 
@@ -24,7 +23,6 @@ class TopSitesWidgetManager: TopSitesWidget {
         self.userDefaults = userDefaults
     }
 
-    @available(iOS 14.0, *)
     func writeWidgetKitTopSites() {
         topSitesProvider.getTopSites { sites in
             guard let sites = sites else { return }
