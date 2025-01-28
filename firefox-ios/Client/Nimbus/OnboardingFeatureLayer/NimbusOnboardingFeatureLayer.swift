@@ -21,14 +21,16 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     func getOnboardingModel(
         for onboardingType: OnboardingType,
-        from nimbus: FxNimbus = FxNimbus.shared
+        from nimbus: FxNimbus = FxNimbus.shared,
+        and termsOfServiceManager: TermsOfServiceManager? = nil
     ) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         let cards = getOrderedOnboardingCards(
             for: onboardingType,
             from: framework.cards,
-            withConditions: framework.conditions)
+            withConditions: framework.conditions,
+            termsOfServiceManager: termsOfServiceManager)
 
         return OnboardingViewModel(
             cards: cards,
@@ -38,14 +40,16 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String]
+        withConditions conditionTable: [String: String],
+        termsOfServiceManager: TermsOfServiceManager?
     ) -> [OnboardingCardInfoModel] {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
             from: cardData.filter { $0.value.onboardingType == onboardingType },
-            withConditions: conditionTable
+            withConditions: conditionTable,
+            termsOfServiceManager: termsOfServiceManager
         )
         .sorted(by: { $0.order < $1.order })
         // We have to update the a11yIdRoot using the correct order of the cards
@@ -69,7 +73,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String]
+        withConditions conditionTable: [String: String],
+        termsOfServiceManager: TermsOfServiceManager?
     ) -> [OnboardingCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
@@ -81,6 +86,13 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
+                let onboardingLink: OnboardingLinkInfoModel? = if cardName == "welcome",
+                                                                  let termsOfServiceManager,
+                                                                  termsOfServiceManager.isAccepted {
+                    nil
+                } else {
+                    getOnboardingLink(from: cardData.link)
+                }
                 return OnboardingCardInfoModel(
                     cardType: cardData.cardType,
                     name: cardName,
@@ -92,7 +104,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                         format: cardData.body,
                         AppName.shortName.rawValue,
                         AppName.shortName.rawValue),
-                    link: getOnboardingLink(from: cardData.link),
+                    link: onboardingLink,
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
                     multipleChoiceButtons: getOnboardingMultipleChoiceButtons(from: cardData.multipleChoiceButtons),
                     onboardingType: cardData.onboardingType,

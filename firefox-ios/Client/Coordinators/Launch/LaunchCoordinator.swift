@@ -78,7 +78,10 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(
+            for: .freshInstall,
+            and: TermsOfServiceManager(prefs: profile.prefs)
+        )
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
