@@ -5,21 +5,17 @@
 import Foundation
 
 struct ServerErrorHelper {
-    /// Extracts whether the given error is a server-side error (5xx status code).
+    /// Extracts whether the given error is related to user connectivity (not a server-side error).
     /// - Parameter error: The error to be checked.
-    /// - Returns: A boolean indicating if the error is a server error (5xx).
-    static func extractServerError(_ error: Error) -> Bool {
+    /// - Returns: A boolean indicating if the error is a connectivity error (e.g., no internet connection).
+    static func isClientError(_ error: Error) -> Bool {
         if let urlError = error as? URLError {
             switch urlError.code {
             case .notConnectedToInternet, .timedOut, .networkConnectionLost:
-                return false
+                return true
             default:
                 break
             }
-        }
-
-        if let httpError = error as? HTTPURLResponse {
-            return httpError.statusCode >= 500 && httpError.statusCode < 600
         }
 
         return false

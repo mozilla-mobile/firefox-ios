@@ -129,7 +129,7 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         XCTAssertEqual(letterImageGenerator.image, result)
 
@@ -139,7 +139,7 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
 
-        if isServerError {
+        if !isClientError {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         } else {
@@ -164,7 +164,7 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         XCTAssertEqual(letterImageGenerator.image, result)
 
@@ -174,7 +174,7 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if isServerError {
+        if !isClientError {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         } else {
@@ -216,7 +216,7 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         XCTAssertEqual(letterImageGenerator.image, result)
 
@@ -226,7 +226,7 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if isServerError {
+        if !isClientError {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         } else {
@@ -254,7 +254,7 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         XCTAssertEqual(letterImageGenerator.image, result)
 
@@ -265,7 +265,7 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if isServerError {
+        if !isClientError {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         } else {
@@ -410,17 +410,15 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        // Call extractServerError with the simulated server error response
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         // Act
         _ = await imageHandler.fetchFavicon(imageModel: siteImageModel)
 
-        // Assert
-        if isServerError {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when isServerError is true.")
+        if !isClientError {
+            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when server-side error occurs.")
         } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when isServerError is false.")
+            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when client-side error occurs.")
         }
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1, "Fallback letter image should be generated.")
     }
@@ -445,17 +443,15 @@ final class ImageHandlerTests: XCTestCase {
                                           httpVersion: nil,
                                           headerFields: nil) as? Error else { return }
 
-        // Call extractServerError with the simulated server error response
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        let isClientError = ServerErrorHelper.isClientError(error)
 
         // Act
         _ = await imageHandler.fetchFavicon(imageModel: siteImageModel)
 
-        // Assert
-        if isServerError {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when isServerError is true.")
+        if !isClientError {
+            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when server-side error occurs.")
         } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when isServerError is false.")
+            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when client-side error occurs.")
         }
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1, "Fallback letter image should be generated.")
     }

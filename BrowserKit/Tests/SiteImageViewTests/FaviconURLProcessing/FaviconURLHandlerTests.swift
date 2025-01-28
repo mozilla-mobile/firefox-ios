@@ -103,29 +103,26 @@ class FaviconURLHandlerTests: XCTestCase {
         XCTAssertEqual(url, "myUrl")
     }
 
-    func testExtractServerError_whenServerErrorOccurs() async {
-        // Simulate a server-side error (5xx HTTP status code)
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
+    func testIsClientError_whenConnectivityErrorOccurs() async {
+        // Simulate a connectivity error (e.g., no internet connection)
+        let connectivityError = URLError(.notConnectedToInternet)
 
-        // Call extractServerError with the simulated server error response
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        // Call isClientError with the simulated connectivity error
+        let isClientError = ServerErrorHelper.isClientError(connectivityError)
 
-        // Verify that the error is identified as a server error
-        XCTAssertTrue(isServerError, "The error should be identified as a server error for a 5xx status code")
+        // Verify that the error is identified as a client error
+        XCTAssertTrue(isClientError, "The error should be identified as a client error.")
     }
 
-    func testExtractServerError_whenNonServerErrorOccurs() async {
-        // Simulate a non-server error (e.g., a client-side error like a network timeout)
-        let error = URLError(.timedOut)
+    func testIsClientError_whenServerErrorOccurs() async {
+        // Simulate a server-side error (e.g., 500 status code, server error)
+        let serverError = URLError(.badServerResponse)
 
-        // Call extractServerError with the simulated non-server error
-        let isServerError = ServerErrorHelper.extractServerError(error)
+        // Call isClientError with the simulated server error
+        let isClientError = ServerErrorHelper.isClientError(serverError)
 
-        // Verify that the error is identified as not a server error
-        XCTAssertFalse(isServerError, "The error should not be identified as a server error for a client-side issue")
+        // Verify that the error is NOT identified as a client error (it should be identified as a server error)
+        XCTAssertFalse(isClientError, "The error should be identified as a server error.")
     }
 
     func testClearCache() async {
