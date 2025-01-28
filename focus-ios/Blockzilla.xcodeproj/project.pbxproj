@@ -78,7 +78,8 @@
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
 		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
-		8C1E49862D49067300EEA5B4 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C1E49852D49067300EEA5B4 /* Shared */; };
+		8C28008F2D49354400ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C28008E2D49354400ED6D07 /* Shared */; };
+		8C2800912D49357C00ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C2800902D49357C00ED6D07 /* Shared */; };
 		8C75DF662D3E636A00924EAB /* TelemetryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C75DF652D3E636A00924EAB /* TelemetryManager.swift */; };
 		8C8906AC2D0B3E9F003734FE /* UsageProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */; };
 		8C90C3BE2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */; };
@@ -1237,6 +1238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2800912D49357C00ED6D07 /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1299,7 +1301,7 @@
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
 				451B81BF2BA4DB9F00CF3C50 /* RustMozillaAppServices.framework in Frameworks */,
-				8C1E49862D49067300EEA5B4 /* Shared in Frameworks */,
+				8C28008F2D49354400ED6D07 /* Shared in Frameworks */,
 				C809130E2A08F245000889B0 /* Licenses in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2154,7 +2156,7 @@
 				C809130D2A08F245000889B0 /* Licenses */,
 				8A0E7F2D2BA0F0EE006BC6B6 /* Fuzi */,
 				ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */,
-				8C1E49852D49067300EEA5B4 /* Shared */,
+				8C28008E2D49354400ED6D07 /* Shared */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -7262,7 +7264,11 @@
 			package = 8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
 		};
-		8C1E49852D49067300EEA5B4 /* Shared */ = {
+		8C28008E2D49354400ED6D07 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		8C2800902D49357C00ED6D07 /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};
