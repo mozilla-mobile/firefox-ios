@@ -358,7 +358,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @discardableResult
-    func addTab(_ request: URLRequest! = nil,
+    func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
@@ -375,7 +375,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return
         }
 
-        var tab: Tab!
+        var tab: Tab?
         for url in urls {
             tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie, isPrivate: isPrivate)
         }
@@ -1017,7 +1017,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 // MARK: - WKNavigationDelegate
 extension LegacyTabManager: WKNavigationDelegate {
     // Note the main frame JSContext (i.e. document, window) is not available yet.
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         if let tab = self[webView], let blocker = tab.contentBlocker {
             blocker.clearPageStats()
         }
@@ -1025,7 +1025,7 @@ extension LegacyTabManager: WKNavigationDelegate {
 
     // The main frame JSContext is available, and DOM parsing has begun.
     // Do not execute JS at this point that requires running prior to DOM parsing.
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
         guard let tab = self[webView] else { return }
 
         if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
@@ -1033,7 +1033,7 @@ extension LegacyTabManager: WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
         if let url = webView.url {
             if InternalURL(url) != nil {

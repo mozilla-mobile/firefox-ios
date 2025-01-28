@@ -205,10 +205,12 @@ private extension BaseTestCase {
     func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
         var nrOfAttempts = 0
         mozWaitForElementToExist(dropOnElement)
-        dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
+        let startCoordinate = dragElement.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let endCoordinate = dropOnElement.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        startCoordinate.press(forDuration: 2.0, thenDragTo: endCoordinate)
         mozWaitForElementToExist(dragElement)
         // Repeat the action in case the first drag and drop attempt was not successful
-        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 4 {
+        while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 5 {
             dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
             nrOfAttempts = nrOfAttempts + 1
             mozWaitForElementToExist(dragElement)
@@ -311,7 +313,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
 
         // Leave Tab Tray and check order in Top Tabs
-        app.cells.staticTexts[secondWebsiteUnselected.tabName].firstMatch.tap()
+        app.cells.staticTexts[secondWebsiteUnselected.tabName].firstMatch.waitAndTap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -331,7 +333,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         app.textFields[searchTextField].press(forDuration: 1, thenDragTo: searchField)
 
         // Verify that the text in the search field is the same as the text in the url text field
-        searchField.tap()
+        searchField.waitAndTap()
         guard let textValue = app.textFields[searchTextField].value as? String, textValue == websiteWithSearchField
         else {
             XCTFail("The url text field value is not equal to \(websiteWithSearchField)")

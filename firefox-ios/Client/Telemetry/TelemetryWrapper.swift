@@ -105,6 +105,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+        GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
+
         // Set or generate profile id used for usage reporting
         if sendUsageData {
             if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId),
@@ -823,12 +826,6 @@ extension TelemetryWrapper {
             GleanMetrics.Bookmarks.viewList[from.rawValue].add()
         case (.action, .add, .bookmark, let from?, _):
             GleanMetrics.Bookmarks.add[from.rawValue].add()
-        case (.action, .delete, .bookmark, let from?, _):
-            GleanMetrics.Bookmarks.delete[from.rawValue].add()
-        case (.action, .open, .bookmark, let from?, _):
-            GleanMetrics.Bookmarks.open[from.rawValue].add()
-        case (.action, .change, .bookmark, let from?, _):
-            GleanMetrics.Bookmarks.edit[from.rawValue].add()
         case(.information, .view, .mobileBookmarks, .doesHaveMobileBookmarks, _):
             GleanMetrics.Bookmarks.hasMobileBookmarks.set(true)
         case(.information, .view, .mobileBookmarks, .doesNotHaveMobileBookmarks, _):
@@ -837,8 +834,6 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.mobileBookmarksQuantity.rawValue] as? Int64 {
                 GleanMetrics.Bookmarks.mobileBookmarksCount.set(quantity)
             }
-        case(.action, .tap, .bookmark, .bookmarkAddFolder, _):
-            GleanMetrics.Bookmarks.folderAdd.record()
         // MARK: Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()

@@ -5,10 +5,12 @@
 @testable import Client
 
 import Shared
+import MozillaAppServices
 
 class MockBookmarksSaver: BookmarksSaver {
     var saveCalled = 0
     var createBookmarkCalled = 0
+    var restoreBookmarkNodeCalled = 0
     var mockCreateGuid: GUID?
 
     var savedBookmarkURL: String?
@@ -26,5 +28,11 @@ class MockBookmarksSaver: BookmarksSaver {
         savedBookmarkTitle = title
         savedBookmarkPosition = position
         createBookmarkCalled += 1
+    }
+
+    func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
+                             parentFolderGUID: String,
+                             completion: @escaping (Shared.GUID?) -> Void) {
+        restoreBookmarkNodeCalled += 1
     }
 }

@@ -7,7 +7,7 @@ import Storage
 import Shared
 
 /// Top site UI class, used in the homepage top site section
-final class TopSiteState: Hashable, Equatable {
+struct TopSiteState: Hashable, Equatable {
     var site: Site
     var title: String
 
@@ -16,30 +16,36 @@ final class TopSiteState: Hashable, Equatable {
     }
 
     var accessibilityLabel: String? {
-        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(title), \(sponsoredText)" : title
     }
 
     var isPinned: Bool {
-        return (site as? PinnedSite) != nil
+        return site.isPinnedSite
     }
 
     var isSuggested: Bool {
-        return (site as? SuggestedSite) != nil
+        return site.isSuggestedSite
     }
 
-    var isSponsoredTile: Bool {
-        return (site as? SponsoredTile) != nil
+    var isSponsored: Bool {
+        return site.isSponsoredSite
     }
 
-    var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+    var type: SiteType {
+        return site.type
+    }
+
+    var isGooglePinnedTile: Bool {
+        guard case SiteType.pinnedSite(let siteInfo) = site.type else {
+            return false
+        }
+
+        return siteInfo.isGooglePinnedTile
     }
 
     var isGoogleURL: Bool {
         return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
-
-    var identifier = UUID().uuidString
 
     init(site: Site) {
         self.site = site
@@ -54,32 +60,22 @@ final class TopSiteState: Hashable, Equatable {
 
     func impressionTracking(position: Int) {
         // Only sending sponsored tile impressions for now
-        guard let tile = site as? SponsoredTile else { return }
+        guard site.isSponsoredSite else { return }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
     func getTelemetrySiteType() -> String {
-        if isPinned && isGoogleGUID {
+        if isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"
         } else if isSuggested {
             return "suggested"
-        } else if isSponsoredTile {
+        } else if isSponsored {
             return "sponsored"
         }
 
         return "history-based"
-    }
-
-    // MARK: - Equatable
-    static func == (lhs: TopSiteState, rhs: TopSiteState) -> Bool {
-        lhs.site == rhs.site
-    }
-
-    // MARK: - Hashable
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.site)
     }
 }

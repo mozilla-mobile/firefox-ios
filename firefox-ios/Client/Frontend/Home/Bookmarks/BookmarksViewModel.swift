@@ -130,7 +130,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
         guard let bookmarksCell = cell as? BookmarksCell else { return UICollectionViewCell() }
 
         if let item = bookmarkItems[safe: indexPath.row] {
-            let site = Site(url: item.url, title: item.title, bookmarked: true)
+            let site = Site.createBasicSite(url: item.url, title: item.title, isBookmarked: true)
             let viewModel = BookmarksCellViewModel(site: site)
             bookmarksCell.configure(viewModel: viewModel, theme: theme)
         }
@@ -156,8 +156,8 @@ extension BookmarksViewModel: HomepageSectionHandler {
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let onLongPressTileAction = onLongPressTileAction else { return }
 
-        let site = Site(url: bookmarkItems[indexPath.row].url,
-                        title: bookmarkItems[indexPath.row].title)
+        let site = Site.createBasicSite(url: bookmarkItems[indexPath.row].url,
+                                        title: bookmarkItems[indexPath.row].title)
         let sourceView = collectionView.cellForItem(at: indexPath)
         onLongPressTileAction(site, sourceView)
     }

@@ -18,8 +18,7 @@ class RouteBuilderTests: XCTestCase {
         universalLinkUserActivity.webpageURL = testURL
         randomActivity.webpageURL = testURL
     }
-    func test_makeRoute_whenUniversalLinkIsDisabled_HandlesAnyACtivityType() {
-        setupNimbusUniversalLinksTesting(isEnabled: false)
+    func test_makeRoute_HandlesAnyActivityType() {
         let routeBuilder = createSubject()
 
         let route = routeBuilder.makeRoute(
@@ -39,38 +38,9 @@ class RouteBuilderTests: XCTestCase {
         XCTAssertEqual(randomRoute, .search(url: testURL, isPrivate: false))
     }
 
-    func test_makeRoute_whenUniversalLinkIsEnabled_handlesWebpageURLForActivityTypeBrowsingActivityAndBrowsingWeb() {
-        setupNimbusUniversalLinksTesting(isEnabled: true)
-        let routeBuilder = createSubject()
-
-        let route = routeBuilder.makeRoute(
-            userActivity: handoffUserActivity
-        )
-
-        let universalLinkRoute = routeBuilder.makeRoute(
-            userActivity: universalLinkUserActivity
-        )
-
-        let randomRoute = routeBuilder.makeRoute(
-            userActivity: randomActivity
-        )
-
-        XCTAssertEqual(route, .search(url: testURL, isPrivate: false))
-        XCTAssertEqual(universalLinkRoute, .search(url: testURL, isPrivate: false))
-        XCTAssertNil(randomRoute)
-    }
-
     private func createSubject() -> RouteBuilder {
         let subject = RouteBuilder()
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    private func setupNimbusUniversalLinksTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.universalLinks.with { _, _ in
-            return UniversalLinks(
-                enabled: isEnabled
-            )
-        }
     }
 }

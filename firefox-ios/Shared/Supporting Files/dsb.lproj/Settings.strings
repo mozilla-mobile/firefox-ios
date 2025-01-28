@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Rozpšawy wowalenjow nam zmóžnjaju, problemy z wobglědowakom diagnosticěrowaś a rozwězaś.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "To nam zmóžnja, problemy z wobglědowakom diagnosticěrowaś a rozwězaś.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Rozpšawy wowalenjow awtomatiski pósłaś";
 

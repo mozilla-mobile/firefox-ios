@@ -9,7 +9,7 @@ import Kingfisher
 
 import class MozillaAppServices.HardcodedNimbusFeatures
 
-class UITestAppDelegate: AppDelegate, FeatureFlaggable {
+class UITestAppDelegate: AppDelegate {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
     private var internalProfile: Profile?

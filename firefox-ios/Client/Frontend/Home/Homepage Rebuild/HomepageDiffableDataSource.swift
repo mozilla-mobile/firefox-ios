@@ -12,35 +12,28 @@ typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
-
+    typealias NumberOfTilesPerRow = Int
     enum HomeSection: Hashable {
         case header
-        case topSites
+        case messageCard
+        case topSites(NumberOfTilesPerRow)
         case pocket(TextColor?)
         case customizeHomepage
-
-        init?(rawValue: Int) {
-            switch rawValue {
-            case 0: self = .header
-            case 1: self = .topSites
-            case 2: self = .pocket(nil)
-            case 3: self = .customizeHomepage
-            default: return nil
-            }
-        }
     }
 
     enum HomeItem: Hashable {
-        case header(TextColor?)
+        case header(HeaderState)
+        case messageCard(MessageCardState)
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
-        case pocketDiscover
+        case pocketDiscover(PocketDiscoverState)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
             return [
                 HomepageHeaderCell.self,
+                HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 PocketStandardCell.self,
@@ -50,23 +43,41 @@ final class HomepageDiffableDataSource:
         }
     }
 
-    func updateSnapshot(state: HomepageState) {
+    func updateSnapshot(state: HomepageState, numberOfCellsPerRow: Int) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
-        snapshot.appendSections([.header, .topSites, .pocket(textColor), .customizeHomepage])
-        snapshot.appendItems([.header(textColor)], toSection: .header)
 
-        let topSites = getTopSites(with: state.topSitesState, and: textColor)
-        snapshot.appendItems(topSites, toSection: .topSites)
+        snapshot.appendSections([.header])
+        snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
-        let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
-        snapshot.appendItems(stories, toSection: .pocket(textColor))
-        snapshot.appendItems([.pocketDiscover], toSection: .pocket(textColor))
+        // TODO: FXIOS-11133 - Handle whether to show / hide message card from message card manager
+        snapshot.appendSections([.messageCard])
+        snapshot.appendItems([.messageCard(state.messageState)], toSection: .messageCard)
 
+        if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
+            snapshot.appendSections([.topSites(numberOfCellsPerRow)])
+            snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
+        }
+
+        if let stories = getPocketStories(with: state.pocketState) {
+            snapshot.appendSections([.pocket(textColor)])
+            snapshot.appendItems(stories, toSection: .pocket(textColor))
+        }
+
+        snapshot.appendSections([.customizeHomepage])
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 
         apply(snapshot, animatingDifferences: true)
+    }
+
+    private func getPocketStories(
+        with pocketState: PocketState
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        var stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
+        guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
+        stories.append(.pocketDiscover(pocketState.pocketDiscoverItem))
+        return stories
     }
 
     /// Gets the proper amount of top sites based on layout configuration
@@ -76,11 +87,16 @@ final class HomepageDiffableDataSource:
     ///   - textColor: text color from wallpaper configuration
     private func getTopSites(
         with topSitesState: TopSitesSectionState,
-        and textColor: TextColor?
-    ) -> [HomepageDiffableDataSource.HomeItem] {
-        guard topSitesState.numberOfTilesPerRow != 0 else { return [] }
-        let topSites: [HomeItem] = topSitesState.topSitesData.compactMap { .topSite($0, textColor) }
-        let filterTopSites = topSites.prefix(Int(topSitesState.numberOfRows) * topSitesState.numberOfTilesPerRow)
-        return Array(filterTopSites)
+        and textColor: TextColor?,
+        numberOfCellsPerRow: Int
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        guard topSitesState.shouldShowSection else { return nil }
+        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
+            topSitesState.numberOfRows * numberOfCellsPerRow
+        ).compactMap {
+            .topSite($0, textColor)
+        }
+        guard !topSites.isEmpty else { return nil }
+        return topSites
     }
 }

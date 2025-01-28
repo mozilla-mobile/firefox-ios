@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Os relatórios de falha permitem-nos diagnosticar e corrigir problemas com o navegador.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Isto ajuda-nos a diagnosticar e a corrigir problemas com o navegador.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Enviar relatórios de falha automaticamente";
 
@@ -86,7 +89,7 @@
 "Settings.DailyUsagePing.Link.v136" = "Saber mais";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
-"Settings.DailyUsagePing.Message.v135" = "Isto ajuda o %@ a calcular os utilizadores ativos.";
+"Settings.DailyUsagePing.Message.v135" = "Isto ajuda o %@ a estimar os utilizadores ativos.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
 "Settings.DailyUsagePing.Title.v135" = "Ping de utilização diária";

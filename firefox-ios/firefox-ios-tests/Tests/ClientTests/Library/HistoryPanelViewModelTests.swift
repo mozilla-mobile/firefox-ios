@@ -308,7 +308,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     private func createSearchTermGroup(timestamp: MicrosecondTimestamp) -> ASGroup<Site> {
         var groupSites = [Site]()
         for index in 0...3 {
-            let site = Site(url: "http://site\(index).com", title: "Site \(index)")
+            var site = Site.createBasicSite(url: "http://site\(index).com", title: "Site \(index)")
             site.latestVisit = Visit(date: timestamp)
             let visit = VisitObservation(
                 url: site.url,

@@ -151,6 +151,9 @@
 /* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
 "Onboarding.TermsOfService.Title.v135" = "歡迎使用 %@！";
 
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ 使用條款。";
+
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "經典背景圖";
 

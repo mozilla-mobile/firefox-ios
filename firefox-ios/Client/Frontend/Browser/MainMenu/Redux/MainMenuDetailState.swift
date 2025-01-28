@@ -82,40 +82,9 @@ struct MainMenuDetailsState: ScreenState, Equatable {
 
         switch action.actionType {
         case ScreenActionType.showScreen:
-            guard let screenAction = action as? ScreenAction,
-                  screenAction.screen == .mainMenuDetails,
-                  let menuState = store.state.screenState(
-                    MainMenuState.self,
-                    for: .mainMenu,
-                    window: action.windowUUID),
-                  let currentTabInfo = menuState.currentTabInfo,
-                  let currentSubmenu = menuState.currentSubmenuView
-                  // let toolbarState = store.state.screenState(
-                  //   ToolbarState.self,
-                  //   for: .toolbar,
-                  //   window: action.windowUUID),
-                  // let readerModeState = toolbarState.addressToolbar.readerModeState
-            else { return defaultState(from: state) }
-
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuConfigurator.generateMenuElements(
-                    with: currentTabInfo,
-                    for: currentSubmenu,
-                    and: action.windowUUID,
-                    readerState: nil
-                ),
-                submenuType: currentSubmenu,
-                isHomepage: state.isHomepage
-            )
+            return handleShowScreenAction(action: action, state: state)
         case MainMenuDetailsActionType.tapBackToMainMenu:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                shouldGoBackToMenu: true
-            )
+            return handleTapBackToMainMenuAction(state: state)
         case MainMenuDetailsActionType.tapDismissView,
             MainMenuDetailsActionType.tapAddToBookmarks,
             MainMenuDetailsActionType.tapAddToShortcuts,
@@ -124,32 +93,83 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             MainMenuDetailsActionType.tapRemoveFromReadingList,
             MainMenuDetailsActionType.tapToggleNightMode,
             GeneralBrowserActionType.showReaderMode:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                shouldDismiss: true
-            )
+            return handleDismissableAction(state: state)
         case MainMenuDetailsActionType.tapEditBookmark:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                navigationDestination: MenuNavigationDestination(.editBookmark)
-            )
+            return handleTapEditBookmarkAction(state: state)
         case MainMenuDetailsActionType.tapZoom:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage,
-                navigationDestination: MenuNavigationDestination(.zoom)
-            )
+            return handleTapZoomAction(state: state)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleShowScreenAction(action: Action, state: Self) -> MainMenuDetailsState {
+        guard let screenAction = action as? ScreenAction,
+              screenAction.screen == .mainMenuDetails,
+              let menuState = store.state.screenState(
+                MainMenuState.self,
+                for: .mainMenu,
+                window: action.windowUUID),
+              let currentTabInfo = menuState.currentTabInfo,
+              let currentSubmenu = menuState.currentSubmenuView
+              // let toolbarState = store.state.screenState(
+              //   ToolbarState.self,
+              //   for: .toolbar,
+              //   window: action.windowUUID),
+              // let readerModeState = toolbarState.addressToolbar.readerModeState
+        else { return defaultState(from: state) }
+
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                for: currentSubmenu,
+                and: action.windowUUID,
+                readerState: nil
+            ),
+            submenuType: currentSubmenu,
+            isHomepage: state.isHomepage
+        )
+    }
+
+    private static func handleTapBackToMainMenuAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            shouldGoBackToMenu: true
+        )
+    }
+
+    private static func handleDismissableAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            shouldDismiss: true
+        )
+    }
+
+    private static func handleTapEditBookmarkAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            navigationDestination: MenuNavigationDestination(.editBookmark)
+        )
+    }
+
+    private static func handleTapZoomAction(state: Self) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage,
+            navigationDestination: MenuNavigationDestination(.zoom)
+        )
     }
 
     static func defaultState(from state: MainMenuDetailsState) -> MainMenuDetailsState {

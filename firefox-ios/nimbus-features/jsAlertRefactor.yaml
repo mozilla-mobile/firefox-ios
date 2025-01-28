@@ -1,18 +1,18 @@
-# The configuration for the universalLinks feature
+# The configuration for the jsAlertRefactor feature
 features:
-  universal-links:
+  js-alert-refactor:
     description: >
-      This feature is for managing the roll out of universal link support in the iOS App
+      This feature is for the JavaScript Webview refactor
     variables:
       enabled:
         description: >
-          If true, enables the feature
+          When true this enables the new JS alerts system to be used
         type: Boolean
         default: false
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
           enabled: true

@@ -352,6 +352,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
+    @MainActor
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
         // In non-private mode, if:
@@ -955,7 +956,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
 
@@ -976,7 +978,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             store.dispatch(

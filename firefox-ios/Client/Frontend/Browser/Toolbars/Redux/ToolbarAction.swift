@@ -81,6 +81,7 @@ enum ToolbarActionType: ActionType {
     case showMenuWarningBadge
     case didPasteSearchTerm
     case didStartEditingUrl
+    case cancelEditOnHomepage
     case cancelEdit
     case hideKeyboard
     case readerModeStateChanged

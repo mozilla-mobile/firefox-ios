@@ -2,7 +2,7 @@
 "CreditCard.SnackBar.CancelRemoveCardButton.v112" = "Sfai";
 
 /* Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices */
-"CreditCard.SnackBar.RemoveCardSublabel.v112" = "Chistu cancella a carta di tutti i to dispusitivi sincrunizzati.";
+"CreditCard.SnackBar.RemoveCardSublabel.v112" = "Chistu scancella a carta di tutti i to dispusitivi sincrunizzati.";
 
 /* Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card */
 "CreditCard.SnackBar.RemoveCardTitle.v122" = "Livari a carta?";

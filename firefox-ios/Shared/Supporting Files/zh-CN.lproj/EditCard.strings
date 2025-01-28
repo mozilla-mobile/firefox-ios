@@ -1,5 +1,5 @@
 /* Title label for the view where user can add their credit card info */
-"CreditCard.EditCard.AddCreditCardTitle.v122" = "添加信用卡";
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "添加卡片";
 
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "取消";
@@ -47,5 +47,5 @@
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "保存和填充付款方式";
 
 /* Title label for the view where user can view their credit card info */
-"CreditCard.EditCard.ViewCreditCardTitle.v116" = "查看信用卡";
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "查看卡片";
 

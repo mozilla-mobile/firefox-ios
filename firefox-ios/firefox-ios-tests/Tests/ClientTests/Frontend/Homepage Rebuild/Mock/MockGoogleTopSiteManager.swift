@@ -8,19 +8,28 @@ import Storage
 @testable import Client
 
 class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
-    private let mockSiteData: PinnedSite?
+    private let mockSiteData: Site?
+    var removeGoogleTopSiteCalledCount = 0
 
-    init(mockSiteData: PinnedSite? = PinnedSite(
-        site: Site(url: GoogleTopSiteManager.Constants.usUrl, title: "Google Test"),
-        faviconResource: nil
-    )) {
+    init(
+        mockSiteData: Site? = Site.createPinnedSite(
+            url: GoogleTopSiteManager.Constants.usUrl,
+            title: "Google Test",
+            isGooglePinnedTile: true
+        )
+    ) {
         self.mockSiteData = mockSiteData
     }
-    var suggestedSiteData: PinnedSite? {
+
+    var pinnedSiteData: Site? {
         return mockSiteData
     }
 
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
         return hasSpace
+    }
+
+    func removeGoogleTopSite(site: Site) {
+        removeGoogleTopSiteCalledCount += 1
     }
 }

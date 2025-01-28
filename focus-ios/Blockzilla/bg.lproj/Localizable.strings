@@ -185,7 +185,7 @@
 "NewOnboarding.Subtitle.V2" = "Бързо. Поверително. Без разсейване.";
 
 /* Text for a label that indicates the title of button from onboarding screen */
-"Onboarding.Button.Title" = "Започнете да сърфирате";
+"Onboarding.Button.Title" = "Започнете да разглеждате";
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Пропускане";

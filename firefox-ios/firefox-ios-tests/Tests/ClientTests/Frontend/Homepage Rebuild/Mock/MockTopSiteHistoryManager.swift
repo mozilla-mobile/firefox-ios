@@ -9,34 +9,33 @@ import Storage
 
 class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
     private let sites: [Site]?
+    var removeDefaultTopSitesTileCalledCount = 0
+    var removeTopSiteCalledCount = 0
+
     static var defaultSuccessData: [Site] {
         return [
-            PinnedSite(
-                site: Site(url: "www.mozilla.com", title: "Pinned Site Test"),
-                faviconResource: nil
-            ),
-            PinnedSite(
-                site: Site(url: "www.firefox.com", title: "Pinned Site 2 Test"),
-                faviconResource: nil
-            ),
-            Site(url: "www.example.com", title: "History-Based Tile Test")
+            Site.createPinnedSite(fromSite: Site.createBasicSite(url: "www.mozilla.com", title: "Pinned Site Test")),
+            Site.createPinnedSite(fromSite: Site.createBasicSite(url: "www.firefox.com", title: "Pinned Site 2 Test")),
+            Site.createBasicSite(url: "www.example.com", title: "History-Based Tile Test")
         ]
     }
 
     // Demonstrates a tile that exists under sponsored tile list
     static var duplicateTile: [Site] {
         return [
-            PinnedSite(
-                site: Site(url: "https://firefox.com", title: "Firefox Sponsored Tile"),
-                faviconResource: nil
-            )
+            Site.createPinnedSite(
+                fromSite: Site.createBasicSite(
+                    url: "https://firefox.com",
+                    title: "Firefox Sponsored Tile"
+                )
+            ),
         ]
     }
 
     static var noPinnedData: [Site] {
         return [
-            Site(url: "https://firefox.com", title: "History-Based Tile Test"),
-            Site(url: "www.example.com", title: "History-Based Tile 2 Test")
+            Site.createBasicSite(url: "https://firefox.com", title: "History-Based Tile Test"),
+            Site.createBasicSite(url: "www.example.com", title: "History-Based Tile 2 Test")
         ]
     }
 
@@ -46,5 +45,13 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
 
     func getTopSites(completion: @escaping ([Site]?) -> Void) {
         completion(sites)
+    }
+
+    func removeDefaultTopSitesTile(site: Site) {
+        removeDefaultTopSitesTileCalledCount += 1
+    }
+
+    func removeTopSite(site: Site) {
+        removeTopSiteCalledCount += 1
     }
 }

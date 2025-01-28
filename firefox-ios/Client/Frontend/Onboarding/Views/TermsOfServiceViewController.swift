@@ -66,7 +66,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
     private lazy var confirmationButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
-            title: .Onboarding.TermsOfService.AgreementButtonTitle,
+            title: .Onboarding.TermsOfService.AgreementButtonTitleV2,
             a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.acceptTermsOfService), for: .touchUpInside)
@@ -111,9 +111,17 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     }
 
     // MARK: - View setup
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     private func configure() {
         agreementContent.removeAllArrangedViews()
-        let termsOfServiceLink = String(format: .Onboarding.TermsOfService.TermsOfServiceLink, AppName.shortName.rawValue)
+        let termsOfServiceLink = String(format: .Onboarding.TermsOfService.TermsOfUseLink, AppName.shortName.rawValue)
         let termsOfServiceAgreement = String(format: .Onboarding.TermsOfService.TermsOfServiceAgreement, termsOfServiceLink)
         setupAgreementTextView(with: termsOfServiceAgreement,
                                linkTitle: termsOfServiceLink,
@@ -252,16 +260,19 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     // MARK: - Button actions
     @objc
     private func presentTermsOfService(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServiceLinkTapped()
         presentLink(with: URL(string: Links.termsOfService))
     }
 
     @objc
     private func presentPrivacyNotice(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServicePrivacyNoticeLinkTapped()
         presentLink(with: URL(string: Links.privacyNotice))
     }
 
     @objc
     private func presentManagePreferences(_ gesture: UIGestureRecognizer) {
+        TermsOfServiceTelemetry().termsOfServiceManageLinkTapped()
         let managePreferencesVC = PrivacyPreferencesViewController(profile: profile, windowUUID: windowUUID)
         if UIDevice.current.userInterfaceIdiom != .phone {
             managePreferencesVC.modalPresentationStyle = .formSheet

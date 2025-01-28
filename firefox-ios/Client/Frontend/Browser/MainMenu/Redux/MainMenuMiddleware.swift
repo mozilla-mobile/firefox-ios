@@ -23,7 +23,9 @@ final class MainMenuMiddleware {
         static let newInFirefox = "new_in_firefox"
         static let tools = "tools"
         static let save = "save"
+        static let print = "print"
         static let share = "share"
+        static let saveAsPDF = "save_as_PDF"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
         static let readerViewTurnOn = "reader_view_turn_on"
@@ -270,8 +272,14 @@ final class MainMenuMiddleware {
                 telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newInFirefox)
             }
 
+        case .printSheet:
+            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
+
         case .shareSheet:
             telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
+
+        case .saveAsPDF:
+            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)
 
         case .syncSignIn:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.signInAccount)

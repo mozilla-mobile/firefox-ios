@@ -8,6 +8,8 @@ import Storage
 
 protocol TopSiteHistoryManagerProvider {
     func getTopSites(completion: @escaping ([Site]?) -> Void)
+    func removeDefaultTopSitesTile(site: Site)
+    func removeTopSite(site: Site)
 }
 
 // Manages the top site

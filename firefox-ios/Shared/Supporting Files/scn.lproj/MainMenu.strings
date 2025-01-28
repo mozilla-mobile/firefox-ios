@@ -1,5 +1,5 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
-"ContextualHints.MainMenu.NewMenu.Body.v132" = "Attrova chiḍḍu chi ti serbi cchiù lestu, dâ navigazzioni privata nzinu a l'azzioni di sarbataggiu.";
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Attrova chiḍḍu chi ti serbi cchiù lestu, dâ navicazzioni privata nzinu a l'azzioni di sarbataggiu.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Novu: minù cchiù fàcili";

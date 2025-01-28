@@ -181,6 +181,9 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
 
+        case ToolbarActionType.cancelEditOnHomepage:
+            return handleCancelEditOnHomepageAction(state: state, action: action)
+
         case ToolbarActionType.cancelEdit:
             return handleCancelEditAction(state: state, action: action)
 
@@ -521,6 +524,14 @@ struct AddressBarState: StateType, Equatable {
             showQRPageAction: showQRPageAction,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
+    }
+
+    private static func handleCancelEditOnHomepageAction(state: Self, action: Action) -> Self {
+        if state.url == nil {
+            return handleCancelEditAction(state: state, action: action)
+        } else {
+            return handleHideKeyboardAction(state: state)
+        }
     }
 
     private static func handleCancelEditAction(state: Self, action: Action) -> Self {

@@ -35,14 +35,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(nil), .customizeHomepage])
+        XCTAssertEqual(snapshot.numberOfSections, 3)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .messageCard, .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(nil)).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 
@@ -58,6 +57,15 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
+            PocketAction(
+                pocketStories: createStories(),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+            )
+        )
+
+        let updatedState = HomepageState.reducer(
+            state,
             WallpaperAction(
                 wallpaperConfiguration: wallpaperConfig,
                 windowUUID: .XCTestDefaultUUID,
@@ -65,10 +73,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 21)
     }
 
     func test_updateSnapshot_withValidState_returnTopSites() throws {
@@ -86,34 +94,60 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let updatedState = HomepageState.reducer(
             state,
             TopSitesAction(
-                numberOfRows: 4,
+                numberOfRows: 2,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: TopSitesActionType.updatedNumberOfRows
             )
         )
 
-        let finalState = HomepageState.reducer(
-            updatedState,
-            TopSitesAction(
-                numberOfTilesPerRow: 4,
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .messageCard, .topSites(4), .customizeHomepage])
+    }
+
+    func test_updateSnapshot_withValidState_returnPocketStories() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            PocketAction(
+                pocketStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
+                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
             )
         )
 
-        dataSource.updateSnapshot(state: finalState)
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites), 16)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .messageCard, .pocket(nil), .customizeHomepage])
     }
 
     private func createSites(count: Int = 30) -> [TopSiteState] {
         var sites = [TopSiteState]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0)")
+            let site = Site.createBasicSite(
+                url: "www.url\($0).com",
+                title: "Title \($0)"
+            )
             sites.append(TopSiteState(site: site))
         }
         return sites
+    }
+
+    private func createStories(count: Int = 20) -> [PocketStoryState] {
+        var feedStories = [PocketFeedStory]()
+        (0..<count).forEach {
+            let story: PocketFeedStory = .make(title: "feed \($0)")
+            feedStories.append(story)
+        }
+
+        let stories = feedStories.compactMap {
+            PocketStoryState(story: PocketStory(pocketFeedStory: $0))
+        }
+        return stories
     }
 }

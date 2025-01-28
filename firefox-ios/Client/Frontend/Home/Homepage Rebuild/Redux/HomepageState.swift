@@ -10,6 +10,7 @@ struct HomepageState: ScreenState, Equatable {
 
     // Homepage sections state in the order they appear on the collection view
    let headerState: HeaderState
+   let messageState: MessageCardState
    let topSitesState: TopSitesSectionState
    let pocketState: PocketState
    let wallpaperState: WallpaperState
@@ -27,6 +28,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
+            messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
             pocketState: homepageState.pocketState,
             wallpaperState: homepageState.wallpaperState
@@ -37,6 +39,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
+            messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID)
@@ -46,12 +49,14 @@ struct HomepageState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
+        messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
         pocketState: PocketState,
         wallpaperState: WallpaperState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
+        self.messageState = messageState
         self.topSitesState = topSitesState
         self.pocketState = pocketState
         self.wallpaperState = wallpaperState
@@ -68,6 +73,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                messageState: MessageCardState.reducer(state.messageState, action),
                 topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
                 wallpaperState: WallpaperState.reducer(state.wallpaperState, action)
@@ -79,12 +85,14 @@ struct HomepageState: ScreenState, Equatable {
 
     private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
         var headerState = state.headerState
+        var messageState = state.messageState
         var pocketState = state.pocketState
         var topSitesState = state.topSitesState
         var wallpaperState = state.wallpaperState
 
         if let action {
             headerState = HeaderState.reducer(state.headerState, action)
+            messageState = MessageCardState.reducer(state.messageState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
             topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
             wallpaperState = WallpaperState.reducer(state.wallpaperState, action)
@@ -93,6 +101,7 @@ struct HomepageState: ScreenState, Equatable {
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: headerState,
+            messageState: messageState,
             topSitesState: topSitesState,
             pocketState: pocketState,
             wallpaperState: wallpaperState

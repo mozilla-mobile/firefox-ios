@@ -115,6 +115,79 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertEqual(addedFolder.parentGUID, rootFolderGUID)
     }
 
+    @MainActor
+    func testRestoreBookmarkNode_restoreSeparator() async throws {
+        let subject = createSubject()
+        // guid is not assigned since places will assign a custom one when creating a new bookmark
+        let separator = BookmarkSeparatorData(guid: "",
+                                              dateAdded: 0,
+                                              lastModified: 0,
+                                              parentGUID: rootFolderGUID,
+                                              position: 0)
+        let resultingGUID = await withCheckedContinuation { continuation in
+            subject.restoreBookmarkNode(bookmarkNode: separator, parentFolderGUID: rootFolderGUID) { guid in
+                    continuation.resume(returning: guid)
+            }
+        }
+        XCTAssertNil(resultingGUID ?? nil)
+    }
+
+    @MainActor
+    func testRestoreBookmarkNode_restoreFolder() async throws {
+        let subject = createSubject()
+        // guid is not assigned since places will assign a custom one when creating a new bookmark
+        let folder = BookmarkFolderData(guid: "",
+                                        dateAdded: 0,
+                                        lastModified: 0,
+                                        parentGUID: nil,
+                                        position: 1,
+                                        title: "testTitle",
+                                        childGUIDs: [],
+                                        children: nil)
+        let tempGUID = await withCheckedContinuation { continuation in
+            subject.restoreBookmarkNode(bookmarkNode: folder, parentFolderGUID: rootFolderGUID) { guid in
+                    continuation.resume(returning: guid)
+            }
+        }
+        let resultingGUID = try XCTUnwrap(tempGUID)
+
+        let tempFolder = await readNode(guid: resultingGUID) as? BookmarkFolderData
+        let addedFolder = try XCTUnwrap(tempFolder)
+
+        XCTAssertNotNil(addedFolder)
+        XCTAssertEqual(addedFolder.title, folder.title)
+        XCTAssertEqual(addedFolder.parentGUID, rootFolderGUID)
+        XCTAssertEqual(addedFolder.position, folder.position)
+    }
+
+    @MainActor
+    func testRestoreBookmarkNode_restoreBookmark() async throws {
+        let subject = createSubject()
+        // guid is not assigned since places will assign a custom one when creating a new bookmark
+        let bookmark = BookmarkItemData(guid: "",
+                                        dateAdded: 0,
+                                        lastModified: 0,
+                                        parentGUID: nil,
+                                        position: 1,
+                                        url: "https://www.mozilla.com/",
+                                        title: "testTitle")
+        let tempGUID = await withCheckedContinuation { continuation in
+            subject.restoreBookmarkNode(bookmarkNode: bookmark, parentFolderGUID: rootFolderGUID) { guid in
+                    continuation.resume(returning: guid)
+            }
+        }
+        let resultingGUID = try XCTUnwrap(tempGUID)
+
+        let tempBookmark = await readNode(guid: resultingGUID) as? BookmarkItemData
+        let addedBookmark = try XCTUnwrap(tempBookmark)
+
+        XCTAssertNotNil(addedBookmark)
+        XCTAssertEqual(addedBookmark.title, bookmark.title)
+        XCTAssertEqual(addedBookmark.url, bookmark.url)
+        XCTAssertEqual(addedBookmark.parentGUID, rootFolderGUID)
+        XCTAssertEqual(addedBookmark.position, bookmark.position)
+    }
+
     func testSave_updatesAlreadyPresentFolder() async throws {
         let subject = createSubject()
 

@@ -175,7 +175,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             }
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailUsername,
-                description: viewModel.login.decryptedUsername,
+                description: viewModel.login.username,
                 keyboardType: .emailAddress,
                 returnKeyType: .next,
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
@@ -191,7 +191,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             }
             let cellModel = LoginDetailTableViewCellModel(
                 title: .LoginDetailPassword,
-                description: viewModel.login.decryptedPassword,
+                description: viewModel.login.password,
                 displayDescriptionAsPassword: true,
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: isEditingFieldData)
@@ -399,22 +399,19 @@ extension PasswordDetailViewController {
             return
         }
 
-        guard username != viewModel.login.decryptedUsername || password != viewModel.login.decryptedPassword else {
+        guard username != viewModel.login.username || password != viewModel.login.password else {
             self.tableView.reloadData()
             return
         }
 
         let updatedLogin = LoginEntry(
-            fromLoginEntryFlattened: LoginEntryFlattened(
-                id: viewModel.login.id,
-                hostname: viewModel.login.hostname,
-                password: password,
-                username: username,
+                origin: viewModel.login.hostname,
                 httpRealm: viewModel.login.httpRealm,
-                formSubmitUrl: viewModel.login.formSubmitUrl,
+                formActionOrigin: viewModel.login.formSubmitUrl,
                 usernameField: viewModel.login.usernameField,
-                passwordField: viewModel.login.passwordField
-            )
+                passwordField: viewModel.login.passwordField,
+                password: password,
+                username: username
         )
 
         if updatedLogin.isValid.isSuccess {

@@ -87,31 +87,10 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .bookmarksRefactor, to: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
-        let expectation = expectation(description: "Subject reloaded")
-
-        profile.places.createBookmark(
-            parentGUID: BookmarkRoots.MenuFolderGUID,
-            url: "https://www.firefox.com",
-            title: "Firefox",
-            position: 0
-        ).uponQueue(.main) { _ in
-            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
-                switch result {
-                case .success(let bookmarkCount):
-                        XCTAssertEqual(bookmarkCount, 1, "Menu folder contains one bookmark")
-
-                        subject.reloadData {
-                            XCTAssertNotNil(subject.bookmarkFolder)
-                            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
-                            expectation.fulfill()
-                        }
-                case .failure(let error):
-                        XCTFail("Failed to count bookmarks: \(error)")
-                        expectation.fulfill()
-                }
-            }
+        createDesktopBookmark(subject: subject) {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
         }
-        waitForExpectations(timeout: 5)
     }
 
     func testShouldReload_whenLocalDesktopFolder() {
@@ -152,7 +131,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testMoveRowAtGetNewIndex_NotMobileGuid_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
-        let expectedIndex = -1
+        let expectedIndex = 0
         let index = subject.getNewIndex(from: expectedIndex)
         XCTAssertEqual(index, expectedIndex)
     }
@@ -181,6 +160,60 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let index = subject.getNewIndex(from: 5)
         XCTAssertEqual(index, 4)
     }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        createDesktopBookmark(subject: subject) {
+            let index = subject.getNewIndex(from: 0)
+            XCTAssertEqual(index, 0)
+        }
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        createDesktopBookmark(subject: subject) {
+            let index = subject.getNewIndex(from: -1)
+            XCTAssertEqual(index, 0)
+        }
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_atFive_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        createDesktopBookmark(subject: subject) {
+            let index = subject.getNewIndex(from: 5)
+            XCTAssertEqual(index, 4)
+        }
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        let index = subject.getNewIndex(from: 0)
+        XCTAssertEqual(index, 0)
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_minusIndex_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        let index = subject.getNewIndex(from: -1)
+        XCTAssertEqual(index, 0)
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_atFive_bookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+
+        let index = subject.getNewIndex(from: 5)
+        XCTAssertEqual(index, 4)
+    }
 }
 
 extension BookmarksPanelViewModelTests {
@@ -199,6 +232,32 @@ extension BookmarksPanelViewModelTests {
             nodes.append(node)
         }
         return nodes
+    }
+
+    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @escaping () -> Void) {
+        let expectation = expectation(description: "Subject reloaded")
+
+        profile.places.createBookmark(
+            parentGUID: BookmarkRoots.MenuFolderGUID,
+            url: "https://www.firefox.com",
+            title: "Firefox",
+            position: 0
+        ).uponQueue(.main) { _ in
+            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
+                switch result {
+                case .success:
+                    subject.reloadData {
+                        completion()
+                        expectation.fulfill()
+                    }
+                case .failure(let error):
+                    XCTFail("Failed to count bookmarks: \(error)")
+                    expectation.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 5)
     }
 }
 

@@ -8,24 +8,29 @@ import Redux
 
 /// Actions that are related to navigation from the user perspective
 class NavigationBrowserAction: Action {
-    let url: URL?
-    let isGoogleTopSite: Bool?
+    let navigationDestination: NavigationDestination
 
-    init(url: URL? = nil,
-         isGoogleTopSite: Bool? = nil,
+    init(navigationDestination: NavigationDestination,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.url = url
-        self.isGoogleTopSite = isGoogleTopSite
+        self.navigationDestination = navigationDestination
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
 }
 
 enum NavigationBrowserActionType: ActionType {
-    case tapOnCustomizeHomepage
-    case tapOnCell
-    case tapOnLink
+    // Native views
     case tapOnTrackingProtection
+    case tapOnShareSheet
+    case tapOnCustomizeHomepage
+    case tapOnSettingsSection
+
+    // link related
+    case tapOnLink
+    case tapOnOpenInNewTab
+
+    // cell related
+    case tapOnCell
     case longPressOnCell
 }

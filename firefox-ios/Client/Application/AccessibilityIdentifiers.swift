@@ -99,7 +99,9 @@ struct AccessibilityIdentifiers {
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
+        static let saveAsPDF = "MainMenu.SaveAsPDF"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
@@ -125,9 +127,9 @@ struct AccessibilityIdentifiers {
             static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
             static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
             static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
-            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
-            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
-            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let trackersBlockedButton = "TrackingProtection.TrackersBlockedButton"
+            static let securityStatusButton = "TrackingProtection.ConnectionSecurityStatusButton"
+            static let toggleViewLabelsContainer = "TrackingProtection.ToggleViewLabelsContainer"
             static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
             static let closeButton = "TrackingProtection.CloseButton"
             static let faviconImage = "TrackingProtection.FaviconImage"
@@ -139,6 +141,15 @@ struct AccessibilityIdentifiers {
             static let containerView = "TrackingProtectionDetails.BaseView"
             static let connectionView = "TrackingProtectionDetails.ConnectionView"
             static let certificatesButton = "TrackingProtectionDetails.CertificatesButton"
+            static let closeButton = "TrackingProtectionDetails.CloseButton"
+            static let backButton = "TrackingProtectionDetails.BackButton"
+            static let titleLabel = "TrackingProtectionDetails.TitleLabel"
+            static let certificatesTitleLabel = "TrackingProtectionDetails.CertificatesTitleLabel"
+            static let tableView = "TrackingProtectionDetails.TableView"
+            static let tableViewHeader = "TrackingProtectionDetails.TableViewHeader"
+            static let sectionLabel = "TrackingProtectionDetails.SectionLabel"
+            static let allSectionItems = "TrackingProtectionDetails.AllSectionItems"
+            static let itemLabel = "TrackingProtectionDetails.ItemLabel"
         }
 
         struct BlockedTrackers {
@@ -704,7 +715,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct SendData {
-            static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"

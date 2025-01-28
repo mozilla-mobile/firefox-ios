@@ -65,11 +65,11 @@ class PocketViewModel {
 
     private func getSitesDetail(for index: Int) -> Site {
         if isStoryCell(index: index) {
-            return Site(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
-                        title: pocketStoriesViewModels[index].title)
+            return Site.createBasicSite(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
+                                        title: pocketStoriesViewModels[index].title)
         } else {
-            return Site(url: PocketProvider.MoreStoriesURL.absoluteString,
-                        title: .FirefoxHomepage.Pocket.DiscoverMore)
+            return Site.createBasicSite(url: PocketProvider.MoreStoriesURL.absoluteString,
+                                        title: .FirefoxHomepage.Pocket.DiscoverMore)
         }
     }
 

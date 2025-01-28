@@ -76,17 +76,10 @@ extension BrowserDBSQLite: PinnedSites {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
 
-        // We insert a dummy guid for backward compatibility.
-        // in the past, the guid was required, but we removed that requirement.
-        // if we do not insert a guid, users who downgrade their version of firefox will
-        // crash when loading their pinned tabs.
-        //
-        // We have since allowed the guid to be optional, and should remove this guid
-        // once we stop supporting downgrading to any versions less than 110.
-        let args: Args = [site.url, now, site.title, site.id, "dummy-guid", host]
+        let args: Args = [site.url, now, site.title, site.id, host]
         let arglist = BrowserDB.varlist(args.count)
 
-        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
+        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, domain) VALUES \(arglist)", args)])
         >>== {
             self.notificationCenter.post(name: .TopSitesUpdated, object: self)
             return succeed()

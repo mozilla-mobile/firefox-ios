@@ -7,7 +7,7 @@ import UIKit
 import Shared
 
 class ReaderModeThemeButton: UIButton {
-    var readerModeTheme: ReaderModeTheme!
+    var readerModeTheme: ReaderModeTheme?
 
     var fontType: ReaderModeFontType = .sansSerif {
         didSet {

@@ -26,10 +26,10 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenSectionShown_ThenGleanIsCalled() throws {
         subject?.sectionShown()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabShown)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -37,10 +37,10 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenClosedAllTabs_ThenGleanIsCalled() throws {
         subject?.closedAllTabs()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -48,10 +48,10 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenTabOpened_ThenGleanIsCalled() throws {
         subject?.tabOpened()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.openInactiveTab)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -59,10 +59,10 @@ final class InactiveTabsTelemetryTests: XCTestCase {
     func testRecordInactiveTab_WhenTabSwipedClosed_ThenGleanIsCalled() throws {
         subject?.tabSwipedToClose()
 
-        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvent as? CounterMetricType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? CounterMetricType)
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
@@ -71,24 +71,12 @@ final class InactiveTabsTelemetryTests: XCTestCase {
         subject?.sectionToggled(hasExpanded: true)
 
         let savedMetric = try XCTUnwrap(
-            gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra>
         )
         let expectedMetricType = type(of: GleanMetrics.InactiveTabsTray.toggleInactiveTabTray)
         let resultMetricType = type(of: savedMetric)
-        let debugMessage = DebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-    }
-
-    // MARK: Helpers
-
-    private struct DebugMessage {
-        let firstText = "Expected savedMetric to be of type "
-        let lastText = ", but got "
-        let text: String
-
-        init<Metatype>(expectedMetric: Metatype, resultMetric: Metatype) {
-            text = "\(firstText)\(expectedMetric)\(lastText)\(resultMetric)"
-        }
     }
 }

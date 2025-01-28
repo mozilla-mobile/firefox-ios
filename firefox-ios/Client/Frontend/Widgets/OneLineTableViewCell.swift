@@ -9,13 +9,15 @@ import SiteImageView
 enum OneLineTableViewCustomization {
     case regular
     case newFolder
+    case desktopBookmarksLabel
 }
 
 struct OneLineTableViewCellViewModel {
     let title: String?
     var leftImageView: UIImage?
-    let accessoryView: UIImageView?
+    var accessoryView: UIView?
     let accessoryType: UITableViewCell.AccessoryType
+    let editingAccessoryView: UIImageView?
 }
 
 class OneLineTableViewCell: UITableViewCell,
@@ -34,6 +36,18 @@ class OneLineTableViewCell: UITableViewCell,
         static let shortLeadingMargin: CGFloat = 5
         static let longLeadingMargin: CGFloat = 13
         static let cornerRadius: CGFloat = 5
+        static let accessoryViewIconSize: CGFloat = 24
+        static let accessoryViewSize: CGFloat = 44
+        static let accessoryViewTrailingPadding: CGFloat = 6
+    }
+
+    var reorderControlImageView: UIImageView? {
+        let reorderControl = self.subviews.first { view in
+            view.classForCoder.description() == "UITableViewCellReorderControl"
+        }
+        return reorderControl?.subviews.first { view in
+            view is UIImageView
+        } as? UIImageView
     }
 
     var shouldLeftAlignTitle = false
@@ -54,9 +68,10 @@ class OneLineTableViewCell: UITableViewCell,
         separatorLine.isHidden = true
     }
 
+    var isAccessoryViewInteractive = false
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         setupLayout()
     }
 
@@ -69,6 +84,28 @@ class OneLineTableViewCell: UITableViewCell,
                             left: UX.imageSize + 2 * UX.borderViewMargin,
                             bottom: 0,
                             right: 0)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateReorderControl()
+
+        // Position the accessory at the trailing edge of the cell, accounting for safe area and padding
+        if let accessoryView {
+            if UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft {
+                accessoryView.frame.origin.x = UX.accessoryViewTrailingPadding + safeAreaInsets.left
+            } else {
+                accessoryView.frame.origin.x = frame.width
+                    - accessoryView.frame.width
+                    - UX.accessoryViewTrailingPadding
+                    - safeAreaInsets.right
+            }
+        }
+    }
+
+    private func updateReorderControl() {
+        guard isBookmarkRefactorEnabled else { return }
+        reorderControlImageView?.image = reorderControlImageView?.image?.withRenderingMode(.alwaysTemplate)
     }
 
     /// Holds a reference to the left image view's leading constraint so we can update
@@ -153,20 +190,59 @@ class OneLineTableViewCell: UITableViewCell,
         selectedBackgroundView = selectedView
     }
 
+    private func createAccessoryView(accessoryView: UIView?) -> UIView? {
+        guard let accessoryView else { return nil }
+        let isButton = accessoryView is UIButton
+        let iconSize = min(UIFontMetrics.default.scaledValue(for: UX.accessoryViewIconSize), UX.accessoryViewIconSize * 2)
+        let accessoryViewSize = isButton ? UX.accessoryViewSize : iconSize
+
+        let customAccessoryView: UIView = {
+            let view = UIView()
+            view.addSubview(accessoryView)
+
+            if isButton {
+                let button = accessoryView as? UIButton
+                var buttonConfig = button?.configuration
+                let image = buttonConfig?.image?.createScaled(
+                    CGSize(width: iconSize, height: iconSize)).withRenderingMode(.alwaysTemplate)
+                buttonConfig?.image = image
+                button?.configuration = buttonConfig
+            }
+
+            accessoryView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                accessoryView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                accessoryView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                accessoryView.widthAnchor.constraint(equalToConstant: accessoryViewSize),
+                accessoryView.heightAnchor.constraint(equalToConstant: accessoryViewSize)
+            ])
+
+            return view
+        }()
+
+        customAccessoryView.frame = CGRect(x: 0, y: 0, width: UX.accessoryViewSize, height: UX.accessoryViewSize)
+        return customAccessoryView
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
 
         selectionStyle = .default
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
+        titleLabel.font = FXFontStyles.Regular.body.scaledFont()
+        leftImageView.isHidden = false
     }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
     // Use it for new code, replace when possible in old code
     func configure(viewModel: OneLineTableViewCellViewModel) {
+        isAccessoryViewInteractive = viewModel.accessoryView is UIButton
+
         titleLabel.text = viewModel.title
-        accessoryView = viewModel.accessoryView
+        accessoryView = createAccessoryView(accessoryView: viewModel.accessoryView)
         accessoryType = viewModel.accessoryType
+        editingAccessoryView =  createAccessoryView(accessoryView: viewModel.editingAccessoryView)
 
         if let image = viewModel.leftImageView {
             leftImageView.manuallySetImage(image)
@@ -182,16 +258,25 @@ class OneLineTableViewCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
+        if isBookmarkRefactorEnabled {
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            editingAccessoryView?.tintColor = theme.colors.iconSecondary
+            tintColor = theme.colors.iconSecondary
+        }
 
         switch customization {
         case .regular:
-            accessoryView?.tintColor = theme.colors.iconSecondary
+            accessoryView?.tintColor = isAccessoryViewInteractive ? theme.colors.iconPrimary : theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:
             accessoryView?.tintColor = theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textAccent
             titleLabel.textColor = theme.colors.textAccent
+        case .desktopBookmarksLabel:
+            titleLabel.font = FXFontStyles.Regular.caption1.scaledFont()
+            titleLabel.textColor = theme.colors.textSecondary
+            leftImageView.isHidden = true
         }
     }
 }

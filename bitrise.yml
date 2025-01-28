@@ -504,6 +504,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
+        - lint_config_file: ""  # Don't pass a config file to make use of nested configurations
     - deploy-to-bitrise-io@2.9.2: {}
     - script@1:
         inputs:
@@ -822,8 +823,9 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.219.0
+            gem install fastlane -v 2.226.0
             fastlane -version
+            xcodebuild -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
@@ -845,7 +847,7 @@ workflows:
       the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-15.4.x
+        stack: osx-xcode-16.2.x-edge
         machine_type_id: g2-m1.8core
   L10nScreenshotsTests:
     steps:
@@ -868,7 +870,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.219.0
+            gem install fastlane -v 2.226.0
             fastlane -version
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
@@ -890,7 +892,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-15.4.x
+        stack: osx-xcode-16.2.x-edge
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
@@ -2114,17 +2116,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '135.0'
+    BITRISE_RELEASE_VERSION: '136.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '135.0'
+    BITRISE_BETA_VERSION: '136.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v135
+- push_branch: release/v136
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test

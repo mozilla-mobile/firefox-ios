@@ -13,7 +13,7 @@ class MockSearchEnginesManager: SearchEnginesManagerProvider {
         return searchEngines.first
     }
 
-    var orderedEngines: [OpenSearchEngine]! {
+    var orderedEngines: [OpenSearchEngine] {
         return searchEngines
     }
 

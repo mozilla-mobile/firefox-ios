@@ -103,7 +103,8 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
+        let bookmarksTelemetry = BookmarksTelemetry()
+        bookmarksTelemetry.editBookmark(eventLabel: .bookmarksPanel)
         if isBookmarkRefactorEnabled {
             router.push(makeDetailController(for: node, folder: folder))
         } else {

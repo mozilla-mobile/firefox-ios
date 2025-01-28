@@ -218,7 +218,7 @@
 "Could not load page." = "Nun potti carricari a pàggina.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "A prutizzioni avanzata dû trazzamentu ntigrata t'ajuta a bluccari i pubblicità chi ti sicùtanu mentri chi nàvighi. Attivà a mudalità Stritta pi bluccari ancora cchiù assai trazzatura, pubblicità e finestri assummanti. ";
+"CoverSheet.v24.ETP.Description" = "A prutizzioni avanzata dû trazzamentu ntigrata t'ajuta a bluccari i pubblicità chi ti sicùtanu mentri chi nàvichi. Attivà a mudalità Stritta pi bluccari ancora cchiù assai trazzatura, pubblicità e finestri assummanti. ";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Vai nnê mpustazzioni";
@@ -287,7 +287,7 @@
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
-"DownloadsPanel.Delete.Title" = "Cancella";
+"DownloadsPanel.Delete.Title" = "Scancella";
 
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Cca cci sunnu i prichi scarricati.";
@@ -323,7 +323,7 @@
 "ExternalLink.AppStore.ConfirmationTitle" = "Gràpiri sta lijami nni l'App Store?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "Grapi sta lijami nta n'applicazzioni di fora?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Grapi sta lijami nta l'applicazzioni di fora?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -428,7 +428,7 @@
 "History" = "Crunuluggìa";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "Cancella crunuluggìa ricenti…";
+"HistoryPanel.ClearHistoryButtonTitle" = "Scancella crunuluggìa ricenti…";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "Tuttu";
@@ -467,7 +467,7 @@
 "HomePanel.ContextMenu.Bookmark" = "Junci ê nzingalibbra";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Cancella dâ crunuluggìa";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Scancella dâ crunuluggìa";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Grapi nta na scheda privata";
@@ -479,7 +479,7 @@
 "HomePanel.ContextMenu.Remove" = "Leva";
 
 /* The title for the Remove Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.RemoveBookmark" = "Cancella nzingalibbru";
+"HomePanel.ContextMenu.RemoveBookmark" = "Scancella nzingalibbru";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "Sparti";
@@ -503,10 +503,10 @@
 "Hotkeys.NewTab.DiscoveryTitle" = "Nova scheda";
 
 /* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Mudalità di navigazzioni nurmali";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Mudalità di navicazzioni nurmali";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Mudalità di navigazzioni privata";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Mudalità di navicazzioni privata";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Attualizza a pàggina";
@@ -536,7 +536,7 @@
 "Keyboard.Shortcuts.AddBookmark" = "Junci nzingalibbru";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ClearRecentHistory" = "Cancella crunuluggìa ricenti";
+"Keyboard.Shortcuts.ClearRecentHistory" = "Scancella crunuluggìa ricenti";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Trova u pròssimu";
@@ -596,16 +596,16 @@
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Sfai";
 
 /* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
-"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Cancella";
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Scancella";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
 "LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Cancillari tutti i siti di %@?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
-"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Cancella a crunuluggìa (macari chiḍḍa sincrunizzata di autri dispusitivi), i viscotta e autri dati di navigazzioni.";
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Scancella a crunuluggìa (macari chiḍḍa sincrunizzata di autri dispusitivi), i viscotta e autri dati di navicazzioni.";
 
 /* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
-"LibraryPanel.History.DeleteGroupedItem.v104" = "Cancella";
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Scancella";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Nun cc'è nuḍḍa crunuluggìa dispunìbbili";
@@ -785,7 +785,7 @@
 "Menu.ReloadWithTrackingProtection.Title" = "Attualizza câ prutizzioni dû trazzamentu";
 
 /* Toast displayed to the user after a bookmark has been removed. */
-"Menu.RemoveBookmark.Confirm" = "Nzingalibbru cancillatu";
+"Menu.RemoveBookmark.Confirm" = "Nzingalibbru scancillatu";
 
 /* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
 "Menu.RemoveBookmark.Label.v99" = "Leva";
@@ -845,7 +845,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "I pirrijatura di crittumunita ùsanu a putenza dû to sistema 'n sicritu pi criari munita diggitali. Sti prugrammi cunzùmanu a battirìa, fannu addivintari cchiù lentu u to computer e ti ponnu custari assai nnâ bulletta elèttrica.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "I mpustazzioni dû to navigaturi nnô to computer sunnu ùnichi. I giniratura di griffi nfurmàtichi ricògghinu na varità di sti mpustazzioni ùnichi pi criari un prufilu di tia, chi ponnu usari pi trazzàriti mentri chi nàvighi.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "I mpustazzioni dû to navicaturi nnô to computer sunnu ùnichi. I giniratura di griffi nfurmàtichi ricògghinu na varità di sti mpustazzioni ùnichi pi criari un prufilu di tia, chi ponnu usari pi trazzàriti mentri chi nàvichi.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "I riti suciali mèttinu trazzatura macari nni autri siti pi custrujiri un prufilu di tia megghiu e cu cchiù assai minutagghi. Si i blocchi, arriduci a quantità di nfurmazzioni chi i cumpagnìi dî riti suciali vìdini di chiḍḍu chi fai 'n riti.";
@@ -869,7 +869,7 @@
 "more than a week ago" = "cchiù assai di na simana nn'arrè";
 
 /* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
-"Navigation Toolbar" = "Sbarra di navigazzioni";
+"Navigation Toolbar" = "Sbarra di navicazzioni";
 
 /* Accessibility label for the New Tab button in the tab toolbar. */
 "New Tab" = "Nova scheda";
@@ -887,7 +887,7 @@
 "Okay" = "Bonu";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
-"Onboarding.WhatsNew.Button.Title" = "Accumincia a navigari";
+"Onboarding.WhatsNew.Button.Title" = "Accumincia a navicari";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ops. Firefox scasciau";
@@ -1148,16 +1148,16 @@
 "Settings.BlockOpeningExternalApps.Title" = "Blocca a graputa di app di fora";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Cancella tutti i dati dî siti";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Scancella tutti i dati dî siti";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "Cancella i dati privati";
+"Settings.ClearPrivateData.Clear.Button" = "Scancella i dati privati";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "Cancella i dati privati";
+"Settings.ClearPrivateData.SectionName" = "Scancella i dati privati";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
-"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Cancella elimenti: %1$@";
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Scancella elimenti: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Cupiatu nnô pitazzu";
@@ -1172,7 +1172,7 @@
 "Settings.DataManagement.Title" = "Maniju dî dati";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox nun sincrunizza cchiù cû to cuntu, ma nun cancella nuḍḍu dî to dati di navigazzioni nna stu dispusitivu.";
+"Settings.Disconnect.Body" = "Firefox nun sincrunizza cchiù cû to cuntu, ma nun scancella nuḍḍu dî to dati di navicazzioni nna stu dispusitivu.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sculleja Sync";
@@ -1523,7 +1523,7 @@
 "Settings.TrackingProtection.LearnMore" = "Cchiù nfurmazzioni";
 
 /* Additional information about your Enhanced Tracking Protection */
-"Settings.TrackingProtection.ProtectionCellFooter" = "Arriduci i pubblicità pirsunalizzati e t'ajuta a firmari i cumpagnìi di trazzàriti mentri chi nàvighi.";
+"Settings.TrackingProtection.ProtectionCellFooter" = "Arriduci i pubblicità pirsunalizzati e t'ajuta a firmari i cumpagnìi di trazzàriti mentri chi nàvichi.";
 
 /* Footer information for tracker protection level. */
 "Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un situ nun funziona bonu, tocca u catinazzu nnâ barra dû nnirizzu e sdisattiva a prutizzioni avanzata dû trazzamentu pi ḍḍa pàggina.";
@@ -1562,10 +1562,10 @@
 "Settings.WebsiteData.ButtonShowMore" = "Mustra cchiù assai";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
-"Settings.WebsiteData.ConfirmPrompt" = "St'azzioni cancella tutti i to dati dî siti. Nun si po sfari.";
+"Settings.WebsiteData.ConfirmPrompt" = "St'azzioni scancella tutti i to dati dî siti. Nun si po sfari.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "St'azzioni cancella tutti l'elimenti scartati. Nun si po sfari.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "St'azzioni scancella tutti l'elimenti scartati. Nun si po sfari.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Dati dî siti";

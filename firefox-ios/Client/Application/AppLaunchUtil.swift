@@ -15,14 +15,19 @@ class AppLaunchUtil {
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
+    private let gleanLifecycleObserver: GleanLifecycleObserver
 
-    init(logger: Logger = DefaultLogger.shared,
-         profile: Profile) {
+    init(
+        logger: Logger = DefaultLogger.shared,
+        profile: Profile,
+        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+    ) {
         self.logger = logger
         self.profile = profile
 //        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
+        self.gleanLifecycleObserver = gleanLifecycleObserver
     }
 
     func setUpPreLaunchDependencies() {
@@ -52,6 +57,8 @@ class AppLaunchUtil {
                 TelemetryWrapper.shared.setup(profile: profile)
                 TelemetryWrapper.shared.recordStartUpTelemetry()
             }
+
+            gleanLifecycleObserver.startObserving()
         } else {
             logger.setup(sendCrashReports: sendCrashReports)
             TelemetryWrapper.shared.setup(profile: profile)
@@ -104,7 +111,7 @@ class AppLaunchUtil {
             AppEventQueue.signal(event: .accountManagerInitialized)
         }
 
-        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        // Add swizzle on UIViewControllers to automatically log when there's a new view appearing or disappearing
         UIViewController.loggerSwizzle()
 
         // Add swizzle on top of UIControl to automatically log when there's an action sent
