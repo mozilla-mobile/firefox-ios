@@ -25,14 +25,19 @@ class FormSection {
 
     fieldDetails.forEach(field => this.addField(field));
 
-    const fieldName = fieldDetails[0].fieldName;
-    if (lazy.FormAutofillUtils.isAddressField(fieldName)) {
-      this.type = FormSection.ADDRESS;
-    } else if (lazy.FormAutofillUtils.isCreditCardField(fieldName)) {
-      this.type = FormSection.CREDIT_CARD;
-    } else {
-      throw new Error("Unknown field type to create a section.");
+    for (const fieldDetail of fieldDetails) {
+      if (lazy.FormAutofillUtils.isAddressField(fieldDetail.fieldName)) {
+        this.type = FormSection.ADDRESS;
+        break;
+      } else if (
+        lazy.FormAutofillUtils.isCreditCardField(fieldDetail.fieldName)
+      ) {
+        this.type = FormSection.CREDIT_CARD;
+        break;
+      }
     }
+
+    this.type ||= FormSection.ADDRESS;
   }
 
   get fieldDetails() {
@@ -140,21 +145,40 @@ export class FormAutofillSection {
    * The result is an array contains the sections with its belonging field details.
    *
    * @param   {Array<FieldDetails>} fieldDetails field detail array to be classified
-   * @param   {boolean} ignoreInvalid
-   *          True to keep invalid section in the return array. Only used by tests now.
+   * @param   {object} options
+   * @param   {boolean} [options.ignoreInvalidSection = false]
+   *          True to keep invalid section in the return array. Only used by tests now
+   * @param   {boolean} [options.ignoreUnknownField = true]
+   *          False to keep unknown field in a section. Only used by developer tools now
    * @returns {Array<FormSection>} The array with the sections.
    */
-  static classifySections(fieldDetails, ignoreInvalid = false) {
-    const addressSections = FormAutofillSection.groupFields(
-      fieldDetails.filter(f =>
-        lazy.FormAutofillUtils.isAddressField(f.fieldName)
-      )
-    );
-    const creditCardSections = FormAutofillSection.groupFields(
-      fieldDetails.filter(f =>
-        lazy.FormAutofillUtils.isCreditCardField(f.fieldName)
-      )
-    );
+  static classifySections(
+    fieldDetails,
+    { ignoreInvalidSection = false, ignoreUnknownField = true } = {}
+  ) {
+    const addressFields = [];
+    const creditCardFields = [];
+
+    // 'current' refers to the last list where an field was added to.
+    // It helps determine the appropriate list for unknown fields, defaulting to the address
+    // field list for simplicity
+    let current = addressFields;
+    for (const fieldDetail of fieldDetails) {
+      if (lazy.FormAutofillUtils.isAddressField(fieldDetail.fieldName)) {
+        current = addressFields;
+      } else if (
+        lazy.FormAutofillUtils.isCreditCardField(fieldDetail.fieldName)
+      ) {
+        current = creditCardFields;
+      } else if (ignoreUnknownField) {
+        continue;
+      }
+      current.push(fieldDetail);
+    }
+
+    const addressSections = FormAutofillSection.groupFields(addressFields);
+    const creditCardSections =
+      FormAutofillSection.groupFields(creditCardFields);
 
     const sections = [...addressSections, ...creditCardSections].sort(
       (a, b) =>
@@ -173,7 +197,7 @@ export class FormAutofillSection {
           ? new FormAutofillAddressSection(section.fieldDetails)
           : new FormAutofillCreditCardSection(section.fieldDetails);
 
-      if (ignoreInvalid && !autofillableSection.isValidSection()) {
+      if (ignoreInvalidSection && !autofillableSection.isValidSection()) {
         continue;
       }
 
@@ -420,10 +444,7 @@ export class FormAutofillAddressSection extends FormAutofillSection {
     const country = lazy.FormAutofillUtils.identifyCountryCode(
       record.country || record["country-name"]
     );
-    if (
-      country &&
-      !lazy.FormAutofill.isAutofillAddressesAvailableInCountry(country)
-    ) {
+    if (!lazy.FormAutofill.isAutofillAddressesAvailableInCountry(country)) {
       // We don't want to save data in the wrong fields due to not having proper
       // heuristic regexes in countries we don't yet support.
       this.log.warn(
@@ -585,16 +606,27 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
         "autofill-use-payment-method-os-prompt-windows",
         "autofill-use-payment-method-os-prompt-other"
       );
-      const decrypted = await this.getDecryptedString(
-        profile["cc-number-encrypted"],
-        promptMessage
-      );
-
+      let decrypted;
+      let result;
+      try {
+        decrypted = await this.getDecryptedString(
+          profile["cc-number-encrypted"],
+          promptMessage
+        );
+        result = decrypted ? "success" : "fail_user_canceled";
+      } catch (ex) {
+        result = "fail_error";
+        throw ex;
+      } finally {
+        Glean.formautofill.promptShownOsReauth.record({
+          trigger: "autofill",
+          result,
+        });
+      }
       if (!decrypted) {
         // Early return if the decrypted is empty or undefined
         return false;
       }
-
       profile["cc-number"] = decrypted;
     }
     return true;

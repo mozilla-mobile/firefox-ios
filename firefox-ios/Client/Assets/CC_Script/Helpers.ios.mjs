@@ -125,9 +125,6 @@ export const XPCOMUtils = withNotImplementedError({
     }
     obj[prop] = transform(value);
   },
-  defineLazyModuleGetters(obj, modules) {
-    internalModuleResolvers.resolveModules(obj, modules);
-  },
   defineLazyServiceGetter() {
     // Don't do anything
     // We need this for OS Auth fixes for formautofill.
