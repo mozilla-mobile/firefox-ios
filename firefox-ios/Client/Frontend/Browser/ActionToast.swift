@@ -5,6 +5,7 @@
 import UIKit
 import Common
 
+// Only used in two places in the application, please avoid using this class and use ButtonToast instead
 final class ActionToast: ThemeApplicable {
     private let text: String
     private let theme: Theme
@@ -69,7 +70,7 @@ final class ActionToast: ThemeApplicable {
     }()
 
     private lazy var heightConstraint: NSLayoutConstraint = {
-        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithShadow)
+        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithoutShadow)
     }()
 
     init(
@@ -134,9 +135,8 @@ final class ActionToast: ThemeApplicable {
         UIView.animate(
             withDuration: Toast.UX.toastAnimationDuration,
             animations: {
-                // Laurie - TODO: test
                 var frame = toast.frame
-                frame.origin.y = frame.origin.y - Toast.UX.toastHeightWithShadow
+                frame.origin.y = frame.origin.y - Toast.UX.toastHeightWithoutShadow
                 frame.size.height = Toast.UX.toastHeightWithoutShadow
                 toast.frame = frame
             },
