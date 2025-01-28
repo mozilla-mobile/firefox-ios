@@ -549,7 +549,6 @@ class TabTrayViewController: UIViewController,
             popoverController.permittedArrowDirections = []
         }
         
-        
         closeAction.accessibilityIdentifier = "closeAllTabsButton"
         cancelAction.accessibilityIdentifier = "cancelButton"
         
