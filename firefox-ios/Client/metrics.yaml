@@ -755,7 +755,7 @@ usage:
       - usage-deletion-request
 
   duration:
-    type: timing_distribution
+    type: timespan
     time_unit: millisecond
     description: |
       The duration of the last foreground session.

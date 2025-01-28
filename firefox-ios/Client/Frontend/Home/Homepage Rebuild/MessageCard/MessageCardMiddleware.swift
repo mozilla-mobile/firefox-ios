@@ -26,6 +26,12 @@ final class MessageCardMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize:
             self.handleInitializeMessageCardAction(windowUUID: windowUUID)
+        case MessageCardActionType.tappedOnActionButton:
+            guard let message = self.message else { return }
+            self.messagingManager.onMessagePressed(message, window: windowUUID, shouldExpire: true)
+        case MessageCardActionType.tappedOnCloseButton:
+            guard let message = self.message else { return }
+            self.messagingManager.onMessageDismissed(message)
         default:
            break
         }
@@ -40,7 +46,9 @@ final class MessageCardMiddleware {
             )
             dispatchMessageCardAction(windowUUID: windowUUID, config: config)
             messagingManager.onMessageDisplayed(message)
+            self.message = message
         } else {
+            self.message = nil
             return
         }
     }

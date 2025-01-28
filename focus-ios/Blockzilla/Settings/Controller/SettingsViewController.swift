@@ -656,7 +656,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         } else if toggle.setting == .dailyUsagePing {
-            // TODO: FXIOS-10904 Focus iOS: Send data deletion request when DAU ping is toggled off
+            if !sender.isOn {
+                GleanMetrics.Pings.shared.usageDeletionRequest.submit()
+            }
         }
 
         switch toggle.setting {

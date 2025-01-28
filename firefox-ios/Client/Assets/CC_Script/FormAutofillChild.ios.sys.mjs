@@ -71,7 +71,7 @@ export class FormAutofillChild {
 
     if (!handler.hasIdentifiedFields() || handler.updateFormIfNeeded(element)) {
       // If we found newly identified fields, run section classification heuristic
-      const detectedFields = FormAutofillHandler.collectFormFields(
+      const detectedFields = FormAutofillHandler.collectFormFieldDetails(
         handler.form
       );
 
