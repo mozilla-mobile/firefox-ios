@@ -364,7 +364,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            messageCardCell.configure(with: config, theme: currentTheme)
+            messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
             return messageCardCell
         case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
