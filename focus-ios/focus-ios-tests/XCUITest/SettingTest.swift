@@ -4,6 +4,12 @@
 
 import XCTest
 
+#if FOCUS
+@testable import Firefox_Focus
+#else
+@testable import Firefox_Klar
+#endif
+
 class SettingTest: BaseTestCase {
     let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 
@@ -62,11 +68,12 @@ class SettingTest: BaseTestCase {
         }
 
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockFonts"].value as! String, "0")
-        if app.label == "Firefox Focus" {
-            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "1")
-        } else {
-            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "0")
-        }
+//        Temporary disable telemetry
+//        if app.label == "Firefox Focus" {
+//            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "1")
+//        } else {
+//            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "0")
+//        }
 
         // Check Tracking Protection Settings page
         app.tables.firstMatch.swipeDown()
