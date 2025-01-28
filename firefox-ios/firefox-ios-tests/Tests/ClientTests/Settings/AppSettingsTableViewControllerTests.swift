@@ -14,7 +14,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var mockSettingsDelegate: MockSettingsDelegate!
     private var mockParentCoordinator: MockSettingsFlowDelegate!
-    private var mockGleanLifecycleObserver: MockGleanLifecycleObserver!
+    private var mockGleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService!
 
     override func setUp() {
         super.setUp()
@@ -28,7 +28,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.applicationHelper = MockApplicationHelper()
         self.mockSettingsDelegate = MockSettingsDelegate()
         self.mockParentCoordinator = MockSettingsFlowDelegate()
-        self.mockGleanLifecycleObserver = MockGleanLifecycleObserver()
+        self.mockGleanUsageReportingMetricsService = MockGleanUsageReportingMetricsService(profile: MockProfile())
     }
 
     override func tearDown() {
@@ -134,13 +134,15 @@ class AppSettingsTableViewControllerTests: XCTestCase {
 
     // MARK: - Helper
     private func createSubject() -> AppSettingsTableViewController {
-        let subject = AppSettingsTableViewController(with: profile,
-                                                     and: tabManager,
-                                                     settingsDelegate: mockSettingsDelegate,
-                                                     parentCoordinator: mockParentCoordinator,
-                                                     gleanLifecycleObserver: mockGleanLifecycleObserver,
-                                                     appAuthenticator: appAuthenticator,
-                                                     applicationHelper: applicationHelper)
+        let subject = AppSettingsTableViewController(
+            with: profile,
+            and: tabManager,
+            settingsDelegate: mockSettingsDelegate,
+            parentCoordinator: mockParentCoordinator,
+            gleanUsageReportingMetricsService: mockGleanUsageReportingMetricsService,
+            appAuthenticator: appAuthenticator,
+            applicationHelper: applicationHelper
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

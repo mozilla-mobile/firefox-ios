@@ -28,7 +28,7 @@ class SettingsCoordinator: BaseCoordinator,
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
-    private let gleanLifecycleObserver: GleanLifecycleObserver
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
@@ -38,13 +38,13 @@ class SettingsCoordinator: BaseCoordinator,
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve()
     ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
-        self.gleanLifecycleObserver = gleanLifecycleObserver
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -53,7 +53,7 @@ class SettingsCoordinator: BaseCoordinator,
             and: tabManager,
             settingsDelegate: self,
             parentCoordinator: self,
-            gleanLifecycleObserver: gleanLifecycleObserver
+            gleanUsageReportingMetricsService: gleanUsageReportingMetricsService
         )
         self.settingsViewController = settingsViewController
         router.setRootViewController(settingsViewController)

@@ -13,13 +13,23 @@ enum UsageReason: String, Equatable {
 }
 
 protocol GleanUsageReportingApi {
+    func setEnabled(_ enabled: Bool)
     func setUsageReason(_ usageReason: UsageReason)
     func submitPing()
     func startTrackingDuration()
     func stopTrackingDuration()
+    func requestDataDeletion()
 }
 
-class GleanUsageReporting: GleanUsageReportingApi {
+final class GleanUsageReporting: GleanUsageReportingApi {
+    func requestDataDeletion() {
+        GleanMetrics.Pings.shared.usageDeletionRequest.submit()
+    }
+
+    func setEnabled(_ enabled: Bool) {
+        GleanMetrics.Pings.shared.usageReporting.setEnabled(enabled: enabled)
+    }
+
     private var id: TimerId?
 
     func startTrackingDuration() {
@@ -54,7 +64,7 @@ class GleanUsageReporting: GleanUsageReportingApi {
 }
 
 class GleanLifecycleObserver {
-    private let gleanUsageReportingApi: GleanUsageReportingApi
+    let gleanUsageReportingApi: GleanUsageReportingApi
     private var isObserving = false
     private let notificationCenter: NotificationCenter
 
@@ -122,5 +132,51 @@ class GleanLifecycleObserver {
         gleanUsageReportingApi.stopTrackingDuration()
         gleanUsageReportingApi.setUsageReason(.inactive)
         gleanUsageReportingApi.submitPing()
+    }
+}
+
+class GleanUsageReportingMetricsService {
+    private var lifecycleObserver: GleanLifecycleObserver
+    let profile: Profile
+
+    init(
+        profile: Profile,
+        lifecycleObserver: GleanLifecycleObserver = GleanLifecycleObserver()
+    ) {
+        self.profile = profile
+        self.lifecycleObserver = lifecycleObserver
+    }
+
+    func start() {
+        lifecycleObserver.gleanUsageReportingApi.setEnabled(true)
+        checkAndSetUsageProfileId()
+        lifecycleObserver.startObserving()
+    }
+
+    func stop() {
+        lifecycleObserver.gleanUsageReportingApi.setEnabled(false)
+        unsetUsageProfileId()
+        lifecycleObserver.stopObserving()
+        lifecycleObserver.gleanUsageReportingApi.requestDataDeletion()
+    }
+
+    struct Constants {
+        static let profileId = "profileId"
+        static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
+    }
+
+    func unsetUsageProfileId() {
+        profile.prefs.removeObjectForKey(PrefsKeys.Usage.profileId)
+        GleanMetrics.Usage.profileId.set(Constants.canaryUUID)
+    }
+
+    func checkAndSetUsageProfileId() {
+        if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId),
+           let uuid = UUID(uuidString: uuidString) {
+            GleanMetrics.Usage.profileId.set(uuid)
+        } else {
+            let uuid = GleanMetrics.Usage.profileId.generateAndSet()
+            profile.prefs.setString(uuid.uuidString, forKey: Constants.profileId)
+        }
     }
 }

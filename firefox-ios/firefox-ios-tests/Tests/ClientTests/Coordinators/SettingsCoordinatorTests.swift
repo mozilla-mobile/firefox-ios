@@ -537,7 +537,9 @@ final class SettingsCoordinatorTests: XCTestCase {
             router: mockRouter,
             wallpaperManager: wallpaperManager,
             tabManager: MockTabManager(),
-            gleanLifecycleObserver: MockGleanLifecycleObserver()
+            gleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService(
+                profile: MockProfile()
+            )
         )
         trackForMemoryLeaks(subject)
         return subject
