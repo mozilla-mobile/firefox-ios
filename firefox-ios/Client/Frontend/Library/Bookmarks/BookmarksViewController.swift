@@ -275,8 +275,7 @@ class BookmarksViewController: SiteTableViewController,
                                                    constant: Toast.UX.toastSidePadding),
                     toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                                  constant: -Toast.UX.toastBottomSpacing)
+                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
                 ]
             }
         }

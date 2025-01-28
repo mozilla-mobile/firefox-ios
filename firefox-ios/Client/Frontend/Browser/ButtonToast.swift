@@ -172,7 +172,6 @@ class ButtonToast: Toast {
     }
 }
 
-// Laurie - TODO: test
 @available(iOS 16.0, *)
 class PasteControlToast: ButtonToast {
     private var theme: Theme?

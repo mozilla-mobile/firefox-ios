@@ -104,8 +104,7 @@ final class ActionToast: ThemeApplicable {
                 stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
                 stackView.bottomAnchor.constraint(
-                    equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
-                    constant: -Toast.UX.toastBottomSpacing
+                    equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor
                 ),
                 actionButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
             ]

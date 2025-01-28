@@ -462,7 +462,7 @@ class TabTrayViewController: UIViewController,
                     toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
                     toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                                  constant: -self.toolbarHeight - Toast.UX.toastBottomSpacing)
+                                                  constant: -self.toolbarHeight)
                 ]
             }
             shownToast = toast

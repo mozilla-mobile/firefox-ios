@@ -4065,8 +4065,7 @@ extension BrowserViewController: TabManagerDelegate {
                                                constant: Toast.UX.toastSidePadding),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
-                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor,
-                                              constant: -Toast.UX.toastBottomSpacing)
+                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]
         }
     }

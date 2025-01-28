@@ -16,7 +16,6 @@ class Toast: UIView, ThemeApplicable {
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
         static let toastAnimationDuration = 0.5
         static let toastCornerRadius: CGFloat = 8
-        static let toastBottomSpacing: CGFloat = 4
         static let toastSidePadding: CGFloat = 16
 
         // Shadow
