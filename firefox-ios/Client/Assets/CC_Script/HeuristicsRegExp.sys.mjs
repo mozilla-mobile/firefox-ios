@@ -8,9 +8,9 @@ export const HeuristicsRegExp = {
   RULES: {
     email: undefined,
     tel: undefined,
+    "address-housenumber": undefined,
     "street-address": undefined,
     "address-line1": undefined,
-    "address-housenumber": undefined,
     "address-line2": undefined,
     "address-line3": undefined,
     "address-level2": undefined,
@@ -52,6 +52,8 @@ export const HeuristicsRegExp = {
         "addrline2|address_2|addl2" +
         "|landmark", // common in IN
       "address-line3": "addrline3|address_3|addl3",
+      "address-housenumber":
+        "house\\s*number|hausnummer|haus|house[a-z\-]*n(r|o)",
       "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
@@ -467,9 +469,6 @@ export const HeuristicsRegExp = {
         "|राज्य" + // hi
         "|((\\b|_|\\*)(eyalet|[şs]ehir|[İii̇]l(imiz)?|kent)(\\b|_|\\*))" + // tr
         "|^시[·・]?도", // ko-KR
-
-      "address-housenumber":
-        "housenumber|hausnummer|haus|house[a-z\-]*n(r|o)",
 
       "postal-code":
         "zip|postal|post.*code|pcode" +
