@@ -147,6 +147,45 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNotNil(newState.actions[4].maskImageName)
     }
 
+    func test_borderPositionChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = navigationBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .top,
+                displayNavBorder: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.borderPositionChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.displayBorder, true)
+    }
+
+    func test_toolbarPositionChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = navigationBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                toolbarPosition: .top,
+                addressBorderPosition: .bottom,
+                displayNavBorder: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.toolbarPositionChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.displayBorder, true)
+    }
+
     // MARK: - Private
     private func createSubject() -> NavigationBarState {
         return NavigationBarState(windowUUID: windowUUID)
