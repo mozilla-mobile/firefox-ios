@@ -1781,6 +1781,7 @@
 		E1E5BE252A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */; };
 		E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */; };
 		E1EAA5EF2D49182700D3039C /* NavigationBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */; };
+		E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */; };
 		E1FC23F12A8629380089E14D /* FakespotReliabilityCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */; };
 		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FE133129C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */; };
@@ -9501,6 +9502,7 @@
 		E1E5BE242A28F7BE00248F77 /* PasswordDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordDetailViewControllerModel.swift; sourceTree = "<group>"; };
 		E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbContextProviderTests.swift; sourceTree = "<group>"; };
 		E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarStateTests.swift; sourceTree = "<group>"; };
+		E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarStateTests.swift; sourceTree = "<group>"; };
 		E1FC23F02A8629380089E14D /* FakespotReliabilityCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotReliabilityCardView.swift; sourceTree = "<group>"; };
 		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFetchAndProcessingUtility.swift; sourceTree = "<group>"; };
@@ -13800,6 +13802,7 @@
 				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
 				E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */,
 				E1EAA5EE2D49181600D3039C /* NavigationBarStateTests.swift */,
+				E1EAA5F02D49470000D3039C /* ToolbarStateTests.swift */,
 			);
 			path = Toolbar;
 			sourceTree = "<group>";
@@ -17582,6 +17585,7 @@
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,
 				8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */,
 				AB9CBC082C53B7CD00102610 /* TrackingProtectionStateTests.swift in Sources */,
+				E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */,
 				5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */,
 				C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */,
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
