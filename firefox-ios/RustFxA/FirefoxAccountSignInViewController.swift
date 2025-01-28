@@ -319,7 +319,7 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
         }
     }
 
-    func didScanQRCodeWithText(_ text: String) {
+    func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText: String) {
         logger.log("FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called",
                    level: .info,
                    category: .sync)

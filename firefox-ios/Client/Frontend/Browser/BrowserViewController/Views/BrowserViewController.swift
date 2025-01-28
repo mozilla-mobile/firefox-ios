@@ -3277,13 +3277,12 @@ class BrowserViewController: UIViewController,
         TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
-    func didScanQRCodeWithText(_ text: String) {
+    func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText text: String) {
         TelemetryWrapper.recordEvent(category: .action, method: .scan, object: .qrCodeText)
         let defaultAction: () -> Void = { [weak self] in
             guard let tab = self?.tabManager.selectedTab else { return }
             self?.submitSearchText(text, forTab: tab)
         }
-        let content = TextContentDetector.detectTextContent(text)
         switch content {
         case .some(.link(let url)):
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
