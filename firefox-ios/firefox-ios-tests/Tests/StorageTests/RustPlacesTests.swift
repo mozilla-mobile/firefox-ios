@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Storage
 
-class RustPlacesTests: XCTestCase {
+final class RustPlacesTests: XCTestCase {
     var files: FileAccessor!
     var places: RustPlaces!
 
