@@ -173,7 +173,7 @@ class BrowserViewController: UIViewController,
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
-    // ex: Find In Page, SnackBars
+    // ex: Find In Page, SnackBar from LoginsHelper
     var bottomContentStackView: BaseAlphaStackView = .build { stackview in
         stackview.isClearBackground = true
     }

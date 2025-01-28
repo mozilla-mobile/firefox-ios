@@ -4946,11 +4946,30 @@ extension String {
         tableName: nil,
         value: "Open this link in the App Store?",
         comment: "Question shown to user when tapping a link that opens the App Store app")
-    public static let ExternalLinkGenericConfirmation = MZLocalizedString(
-        key: "ExternalLink.AppStore.GenericConfirmationTitle",
-        tableName: nil,
-        value: "Open this link in external app?",
-        comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+    public static let ExternalSmsLinkConfirmation = MZLocalizedString(
+        key: "ExternalLink.ExternalSmsLinkConfirmation",
+        tableName: "ExternalLink",
+        value: "Open sms in an external application?",
+        comment: "Question shown to user when tapping an SMS link that opens the external app for those."
+    )
+    public static let ExternalMailLinkConfirmation = MZLocalizedString(
+        key: "ExternalLink.ExternalMailLinkConfirmation",
+        tableName: "ExternalLink",
+        value: "Open email in the default mail application?",
+        comment: "Question shown to user when tapping a mail link that opens the external app for those."
+    )
+    public static let ExternalInvalidLinkMessage = MZLocalizedString(
+        key: "ExternalLink.ExternalInvalidLinkMessage",
+        tableName: "ExternalLink",
+        value: "The application required to open that link can't be found.",
+        comment: "A statement shown to user when tapping an external link and the link doesn't work."
+    )
+    public static let ExternalOpenMessage = MZLocalizedString(
+        key: "ExternalLink.ExternalOpenMessage",
+        tableName: "ExternalLink",
+        value: "Open",
+        comment: "The call to action button for a user to open an external link."
+    )
 }
 
 // MARK: Enhanced Tracking Protection/Unified Trust Panel
@@ -7695,6 +7714,13 @@ extension String {
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send crash reports.")
+        }
+        struct v136 {
+            public static let ExternalLinkGenericConfirmation = MZLocalizedString(
+                key: "ExternalLink.AppStore.GenericConfirmationTitle",
+                tableName: nil,
+                value: "Open this link in external app?",
+                comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
         }
     }
 }
