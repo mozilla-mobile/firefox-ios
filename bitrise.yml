@@ -214,7 +214,7 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_${SHARD}_XCRESULT_PATH'
   determine_apps_affected:
     steps:
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - script@1.2.1:
         title: Determine which application to base configuration
         inputs:
@@ -422,7 +422,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -664,7 +664,7 @@ workflows:
         title: Check main branch for recent activity before continuing
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - cache-pull@2.7.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
@@ -758,7 +758,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - cache-pull@2.7.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
@@ -853,7 +853,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - restore-cache@2.5.0:
         inputs:
@@ -898,7 +898,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
@@ -1022,7 +1022,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
@@ -1113,7 +1113,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
@@ -1753,7 +1753,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8.2.3: {}
+    - git-clone@6.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
