@@ -693,7 +693,7 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                return Site(url: info.url, title: title)
+                return Site.createBasicSite(url: info.url, title: title)
             }))
         }
         return returnValue
@@ -722,7 +722,7 @@ extension RustPlaces {
                 }
                 // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
                 let hashValue = "\(info.url)_\(info.timestamp)".hashValue
-                let site = Site(id: hashValue, url: info.url, title: title)
+                var site = Site.createBasicSite(id: hashValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()

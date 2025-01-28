@@ -73,6 +73,12 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Μάθετε περισσότερα";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Οι αναφορές κατάρρευσης μάς επιτρέπουν να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
 
@@ -81,6 +87,12 @@
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Μάθετε περισσότερα";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "Αυτό βοηθά το %@ να εκτιμήσει τους ενεργούς χρήστες.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ενημέρωση ημερήσιας χρήσης";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Λογαριασμός";
@@ -169,11 +181,23 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Μάθετε περισσότερα";
 
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Δοκιμάστε λειτουργίες και ιδέες πριν δημοσιευτούν σε όλους.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Εγκατάσταση και εκτέλεση μελετών";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Μάθετε περισσότερα.";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Μάθετε περισσότερα";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "Η %1$@ αγωνίζεται για να συλλέγει μόνο ό,τι χρειάζεται για να παρέχει και να βελτιώνει το %2$@ για όλους.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "Τα δεδομένα της συσκευής, των ρυθμίσεων υλικού και της χρήσης σας, μάς βοηθούν να βελτιώσουμε τις λειτουργίες, τις επιδόσεις και τη σταθερότητα του %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "Τεχνικά δεδομένα και δεδομένα αλληλεπίδρασης";

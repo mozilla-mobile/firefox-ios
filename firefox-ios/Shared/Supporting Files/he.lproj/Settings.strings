@@ -73,6 +73,12 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "מידע נוסף";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "דיווחי קריסה מאפשרים לנו לאבחן ולתקן בעיות בדפדפן.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "זה מסייע לנו לאבחן ולתקן בעיות בדפדפן.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "שליחת דיווחי קריסה באופן אוטומטי";
 
@@ -190,6 +196,12 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
 "Settings.TechnicalData.Message.v135" = "הגישה של %1$@ היא לאסוף רק מה שנדרש לצורך שיפור %2$@ לטובת הכלל.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "נתונים על המכשיר שלך, תצורת החומרה ואופן השימוש בדפדפן מסייעים לנו לשפר את היכולות, הביצועים והיציבות של %@.";
+
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v135" = "נתונים טכניים ונתוני אינטראקציה";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "שליחת נתונים טכניים ונתוני אינטראקציה";
 

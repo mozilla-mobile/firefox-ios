@@ -5,6 +5,7 @@
 import Foundation
 import Glean
 import XCTest
+import Storage
 
 @testable import Client
 
@@ -31,21 +32,31 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         networking.error = UnifiedAdsProvider.Error.noDataAvailable
         let subject = createSubject()
 
-        subject.sendImpressionTelemetry(tile: tile, position: 1)
-        XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.impressionURL)")
+        guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
+            XCTFail()
+            return
+        }
+
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(siteInfo.impressionURL)")
     }
 
     func testClickTelemetry_givenErrorResponse_thenFailsWithLogMessage() {
         networking.error = UnifiedAdsProvider.Error.noDataAvailable
         let subject = createSubject()
 
-        subject.sendClickTelemetry(tile: tile, position: 2)
-        XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.clickURL)")
+        guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
+            XCTFail()
+            return
+        }
+
+        subject.sendClickTelemetry(tileSite: tileSite, position: 2)
+        XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(siteInfo.clickURL)")
     }
 
     func testLegacyImpressionTelemetry() throws {
         let subject = createSubject()
-        subject.sendImpressionTelemetry(tile: tile, position: 1)
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
@@ -79,7 +90,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     func testLegacyClickTelemetry() throws {
         let subject = createSubject()
-        subject.sendClickTelemetry(tile: tile, position: 1)
+        subject.sendClickTelemetry(tileSite: tileSite, position: 1)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 0)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
@@ -126,16 +137,18 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     // MARK: - Mock object
 
-    var tile: SponsoredTile {
-        return SponsoredTile(
-            contile: Contile(id: 0,
-                             name: "Test",
-                             url: "www.test.com",
-                             clickUrl: "https://www.something1.com",
-                             imageUrl: "https://www.something2.com",
-                             imageSize: 0,
-                             impressionUrl: "https://www.something3.com",
-                             position: 0)
+    var tileSite: Site {
+        let contile = Contile(
+            id: 0,
+            name: "Test",
+            url: "www.test.com",
+            clickUrl: "https://www.something1.com",
+            imageUrl: "https://www.something2.com",
+            imageSize: 0,
+            impressionUrl: "https://www.something3.com",
+            position: 0
         )
+
+        return Site.createSponsoredSite(fromContile: contile)
     }
 }

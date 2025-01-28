@@ -8,6 +8,8 @@ import Common
 import Shared
 
 final class TrackingProtectionMiddleware {
+    private let telemetryWrapper = TrackingProtectionTelemetry()
+
     lazy var trackingProtectionProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
@@ -44,6 +46,7 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.clearCookies
         )
         store.dispatch(newAction)
+        telemetryWrapper.clearCookiesAndSiteData()
     }
 
     private func tappedShowClearCookiesAndSiteDataAlert(windowUUID: WindowUUID) {
@@ -52,6 +55,7 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.showAlert
         )
         store.dispatch(newAction)
+        telemetryWrapper.showClearCookiesAlert()
     }
 
     private func dismissScreen(windowUUID: WindowUUID) {
@@ -60,6 +64,7 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
         )
         store.dispatch(newAction)
+        telemetryWrapper.dismissTrackingProtection()
     }
 
     private func showTrackingProtectionDetails(windowUUID: WindowUUID) {
@@ -68,6 +73,7 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails
         )
         store.dispatch(newAction)
+        telemetryWrapper.showTrackingProtectionDetails()
     }
 
     private func showBlockedTrackersDetails(windowUUID: WindowUUID) {
@@ -76,6 +82,7 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails
         )
         store.dispatch(newAction)
+        telemetryWrapper.showBlockedTrackersDetails()
     }
 
     private func showTrackingProtectionSettings(windowUUID: WindowUUID) {
@@ -84,5 +91,6 @@ final class TrackingProtectionMiddleware {
             actionType: TrackingProtectionMiddlewareActionType.navigateToSettings
         )
         store.dispatch(newAction)
+        telemetryWrapper.tappedShowSettings()
     }
 }

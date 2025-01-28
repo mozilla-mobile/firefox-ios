@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "충돌 보고서를 통해 브라우저 문제를 진단하고 해결할 수 있습니다.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "이렇게 하면 브라우저의 문제를 진단하고 해결하는데 도움이 됩니다.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "자동으로 충돌 보고서 보내기";
 

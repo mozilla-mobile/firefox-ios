@@ -6,7 +6,7 @@ import XCTest
 
 @testable import Client
 
-class TopSitesDimensionImplementationTests: XCTestCase {
+class TopSitesDimensionCalculatorTests: XCTestCase {
     struct UX {
         struct DeviceSize {
             static let iPhone14 = CGSize(width: 390, height: 844)
@@ -16,11 +16,10 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withPortraitIphone_showsExpectedRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.width,
             leadingInset: leadingInset
         )
@@ -29,11 +28,10 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withLandscapeIphone_showsExpectedRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.height,
             leadingInset: leadingInset
         )
@@ -42,11 +40,10 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withPortraitIpadRegular_showsExpectedRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.width,
             leadingInset: leadingInset
         )
@@ -55,11 +52,10 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withLandscapeIpadRegular_showsDefaultRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.height,
             leadingInset: leadingInset
         )
@@ -68,11 +64,10 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withPortraitIpadCompact_showsDefaultRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.width,
             leadingInset: leadingInset
         )
@@ -81,20 +76,14 @@ class TopSitesDimensionImplementationTests: XCTestCase {
     }
 
     func test_getNumberOfTilesPerRow_withLandscapeIpadCompact_showsDefaultRowNumber() {
-        let subject = createSubject()
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = subject.getNumberOfTilesPerRow(
+        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.height,
             leadingInset: leadingInset
         )
 
         XCTAssertEqual(numberOfTilesPerRow, 4)
-    }
-
-    func createSubject() -> TopSitesDimensionImplementation {
-        let subject = TopSitesDimensionImplementation()
-        return subject
     }
 }

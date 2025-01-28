@@ -37,16 +37,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             var sections: [Section] = [
                 .defaultBrowser,
                 .general,
-                .privacy,
-                .usageData,
-                .studies,
+                .privacy
+                ]
+            
+            if TelemetryManager.shared.isTelemetryFeatureEnabled {
+                sections.append(contentsOf: [.studies, .usageData])
+            }
+
+            sections.append(contentsOf: [
                 .dailyUsagePing,
                 .crashReports,
                 .search,
                 .siri,
                 integration,
                 .mozilla
-            ]
+            ])
 
             if Settings.getToggle(.displaySecretMenu) {
                 sections.append(.secret)
@@ -215,7 +220,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 toggle.onTintColor = .accent
                 toggle.tintColor = .darkGray
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-                toggle.isOn = Settings.getToggle(blockerToggle.setting)
+                if blockerToggle.setting == .dailyUsagePing {
+                    toggle.isOn = TelemetryManager.shared.isNewTosEnabled
+                } else {
+                    toggle.isOn = Settings.getToggle(blockerToggle.setting)
+                }
                 if blockerToggle.setting == .studies {
                     toggle.isEnabled = Settings.getToggle(.sendAnonymousUsageData)
                 }
@@ -436,13 +445,22 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if let text = toggles[section]?.first?.value.subtitle {
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.text = text
-            let learnMoreActions: [Int?: Selector] = [
-                getSectionIndex(.usageData): #selector(tappedLearnMoreFooter),
-                getSectionIndex(.search): #selector(tappedLearnMoreSearchSuggestionsFooter),
-                getSectionIndex(.studies): #selector(tappedLearnMoreStudies),
-                getSectionIndex(.crashReports): #selector(tappedLearnMoreCrashReports),
-                getSectionIndex(.dailyUsagePing): #selector(tappedLearnMoreDailyUsagePing)
+            var learnMoreActions = [Int: Selector]()
+
+            let actions: [(Int?, Selector)] = [
+                (getSectionIndex(.usageData), #selector(tappedLearnMoreFooter)),
+                (getSectionIndex(.search), #selector(tappedLearnMoreSearchSuggestionsFooter)),
+                (getSectionIndex(.studies), #selector(tappedLearnMoreStudies)),
+                (getSectionIndex(.crashReports), #selector(tappedLearnMoreCrashReports)),
+                (getSectionIndex(.dailyUsagePing), #selector(tappedLearnMoreDailyUsagePing))
             ]
+
+            for (index, action) in actions {
+                if let index {
+                    learnMoreActions[index] = action
+                }
+            }
+
             if let selector = learnMoreActions[section] {
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
@@ -457,7 +475,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         return nil
     }
-
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sections[section] == .privacy ? 50 : 30
@@ -554,11 +571,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .studies)
     }
-    @objc func tappedLearnMoreCrashReports() {
+
+    @objc
+    func tappedLearnMoreCrashReports() {
         tappedFooter(forSupportTopic: .mobileCrashReports)
     }
     
-    @objc func tappedLearnMoreDailyUsagePing() {
+    @objc
+    func tappedLearnMoreDailyUsagePing() {
         tappedFooter(forSupportTopic: .usagePingSettingsMobile)
     }
 
@@ -635,6 +655,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
+        } else if toggle.setting == .dailyUsagePing {
+            if !sender.isOn {
+                GleanMetrics.Pings.shared.usageDeletionRequest.submit()
+            }
         }
 
         switch toggle.setting {

@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "追跡コンテンツをブロック";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "これは Mozilla がアクティブユーザー数を推定するのに役立ちます。";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "毎日の使用頻度を送信";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Dark";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "これはブラウザーの問題を診断して修正するのに役立ちます。";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";

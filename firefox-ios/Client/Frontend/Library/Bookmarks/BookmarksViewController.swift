@@ -493,10 +493,11 @@ class BookmarksViewController: SiteTableViewController,
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
             if let node = node as? BookmarkItemData {
-                let site = Site(url: node.url,
-                                title: node.title,
-                                bookmarked: true,
-                                guid: node.guid)
+                let site = Site.createBasicSite(
+                    url: node.url,
+                    title: node.title,
+                    isBookmarked: true
+                )
                 if viewModel.leftImageView == nil {
                     cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 }
@@ -679,7 +680,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             return nil
         }
 
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        return Site.createBasicSite(url: bookmarkItem.url, title: bookmarkItem.title, isBookmarked: true)
     }
 
     private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {

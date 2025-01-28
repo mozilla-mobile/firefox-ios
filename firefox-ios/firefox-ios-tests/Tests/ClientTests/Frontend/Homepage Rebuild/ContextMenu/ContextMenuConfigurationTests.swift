@@ -57,7 +57,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
     func tests_initialState_forTopSitesItem_returnsExpectedState() {
         let topSiteItem: HomepageItem = .topSite(
             TopSiteState(
-                site: Site(url: "www.example.com/1234", title: "Site 0")
+                site: Site.createBasicSite(url: "www.example.com/1234", title: "Site 0")
             ), nil
         )
         let subject = ContextMenuConfiguration(

@@ -104,7 +104,7 @@
 "Bookmarks.Folder.Label" = "Thư mục";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Dấu trang desktop";
+"Bookmarks.Menu.DesktopBookmarks" = "Dấu trang trên máy tính";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Đánh dấu mới";

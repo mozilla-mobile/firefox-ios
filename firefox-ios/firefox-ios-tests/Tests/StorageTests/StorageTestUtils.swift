@@ -35,8 +35,7 @@ enum VisitOrigin {
 
 func populateHistoryForFrecencyCalculations(_ places: RustPlaces, siteCount count: Int, visitPerSite: Int = 4) {
     for i in 0...count {
-        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
-        site.guid = "abc\(i)def"
+        let site = Site.createBasicSite(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
 
         for j in 0..<visitPerSite {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))

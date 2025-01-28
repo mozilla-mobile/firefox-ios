@@ -151,14 +151,14 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
 class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
-    // html page with gray background similar to homepage or privatehomepage.
+    // html page with gray background similar to homepage or private homepage.
     // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
     var isNativeErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
     }
 
     var isNICErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {

@@ -10,7 +10,7 @@ protocol SuggestionViewControllerDelegate: AnyObject {
 
 class SuggestionViewController: UIViewController, UITableViewDelegate {
     private var tableView: UITableView
-    private var dataSource: SuggestionDataSource!
+    private var dataSource: SuggestionDataSource?
     private weak var delegate: SuggestionViewControllerDelegate?
 
     private var gradientLayer: CAGradientLayer?
@@ -87,14 +87,14 @@ class SuggestionViewController: UIViewController, UITableViewDelegate {
 
     func updateUI(for suggestions: [String]) {
         tableView.isHidden = suggestions.isEmpty
-        dataSource.suggestions = suggestions
+        dataSource?.suggestions = suggestions
         tableView.reloadData()
     }
 
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let term = dataSource.suggestions[indexPath.row]
+        guard let term = dataSource?.suggestions[indexPath.row] else { return }
         delegate?.tapOnSuggestion(term: term)
     }
 }

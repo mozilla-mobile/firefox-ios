@@ -19,7 +19,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     private let logger: Logger
 
     var closeButtonTitle: String?
-    var site: Site?
+    let site: Site?
     var bookmarkFolderTitle: String?
     var title: String?
 
@@ -72,6 +72,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
         self.isMainMenu = isMainMenu
         self.isMainMenuInverted = isMainMenuInverted
         self.logger = logger
+        self.site = nil
         setMainMenuStyle()
     }
 
