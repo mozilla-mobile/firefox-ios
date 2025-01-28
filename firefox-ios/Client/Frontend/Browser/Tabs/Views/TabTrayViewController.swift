@@ -536,19 +536,24 @@ class TabTrayViewController: UIViewController,
 
     private func showCloseAllConfirmation() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let closeAction = UIAlertAction(title: "Close All Tabs", style: .destructive) { _ in
+        let closeAction = UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString, style: .destructive) { _ in
             self.closeAllTabs()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel, style: .cancel, handler: nil)
         alertController.addAction(closeAction)
         alertController.addAction(cancelAction)
         
-        // Per iPad, specifica la sorgente del popover
+        
         if let popoverController = alertController.popoverPresentationController {
             popoverController.sourceView = self.view
             popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
             popoverController.permittedArrowDirections = []
         }
+        
+        
+        alertController.accessibilityIdentifier = "closeAllTabsActionSheet"
+        closeAction.accessibilityIdentifier = "closeAllTabsButton"
+        cancelAction.accessibilityIdentifier = "cancelButton"
         
         present(alertController, animated: true, completion: nil)
     }
