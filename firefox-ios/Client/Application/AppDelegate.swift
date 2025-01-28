@@ -37,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
     lazy var gleanLifecycleObserver = GleanLifecycleObserver()
+    lazy var shareTelemetry = ShareTelemetry()
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -53,6 +54,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        // record startup time
+        shareTelemetry.recordOpenURLTime()
+        AppEventQueue.wait(for: .startupFlowOpenURLComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenURLTimeRecord()
+        }
+        AppEventQueue.wait(for: .startupFlowOpenURLCanceled) { [weak self] in
+            self?.shareTelemetry.cancelOpenURLTimeRecord()
+        }
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,

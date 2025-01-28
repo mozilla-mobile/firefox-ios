@@ -7,6 +7,7 @@ import CoreSpotlight
 import Shared
 import UserNotifications
 import Common
+import Glean
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -18,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
 
+    private let gleanWrapper = DefaultGleanWrapper()
     private let logger: Logger = DefaultLogger.shared
     private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
 
@@ -39,6 +41,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
         if let url = connectionOptions.urlContexts.first?.url {
             Experiments.shared.initializeTooling(url: url)
+        } else {
+            // there is no url so cancel startup recording
+            AppEventQueue.signal(event: .startupFlowOpenURLCanceled)
         }
 
         routeBuilder.configure(
@@ -233,5 +238,47 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                              category: .coordinator)
             sceneCoordinator.findAndHandle(route: route)
         }
+    }
+}
+
+
+struct StartupTimeUtility {
+    static var startupTimeInSeconds = 0.0
+
+    static func startRecording() {
+        NSLog("FF: started recording")
+        startupTimeInSeconds = CACurrentMediaTime()
+    }
+
+    static func stopRecording() {
+        startupTimeInSeconds = CACurrentMediaTime() - startupTimeInSeconds
+        NSLog("FF: startup time: \(startupTimeInSeconds) seconds")
+        storeStartupTime()
+    }
+
+    static func storeStartupTime() {
+        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        let logFile = documentDirectory.appendingPathComponent("startupTime.txt")
+        if FileManager.default.fileExists(atPath: logFile.path),
+           var content = try? String(contentsOf: logFile, encoding: .utf8) {
+            content.append("\n \(Date.now) \(startupTimeInSeconds) seconds")
+            try? content.write(to: logFile, atomically: true, encoding: .utf8)
+        } else {
+            let text = "\(Date.now) \(startupTimeInSeconds) seconds"
+            try? text.write(to: logFile, atomically: true, encoding: .utf8)
+        }
+    }
+
+    static func startupTimeFileURL() -> URL? {
+        guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        let fileURL = documentDirectory.appendingPathComponent("startupTime.txt")
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            return fileURL
+        }
+        return nil
     }
 }

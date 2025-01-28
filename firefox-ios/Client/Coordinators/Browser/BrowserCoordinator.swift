@@ -398,6 +398,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+        AppEventQueue.signal(event: .startupFlowOpenURLComplete)
         browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
     }
 

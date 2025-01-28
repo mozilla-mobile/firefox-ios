@@ -5,6 +5,7 @@
 import XCTest
 import Shared
 import UniformTypeIdentifiers
+import Glean
 
 @testable import Client
 
@@ -28,12 +29,12 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let testActivityType = UIActivity.ActivityType.mail
         let testShareType: ShareType = .site(url: testWebURL)
         let testShareMessage: ShareMessage? = nil
-        let mockShareTelemetry = MockShareTelemetry()
+        let mockGleanWrapper = MockGleanWrapper()
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareType: testShareType,
             shareMessage: testShareMessage,
-            telemetry: mockShareTelemetry
+            gleanWrapper: mockGleanWrapper
         )
         let itemForActivity = shareTelemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
@@ -41,7 +42,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         )
 
         XCTAssertTrue(itemForActivity is NSNull, "Should never share content")
-        XCTAssertEqual(mockShareTelemetry.sharedToCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertNotNil(mockGleanWrapper.savedEvents?.first as? EventMetricType<GleanMetrics.ShareSheet.SharedToExtra>)
     }
 
     func testWithShareType_hasShareMessage_callTelemetryOnly() throws {
