@@ -6,13 +6,13 @@ import Common
 import Shared
 import UIKit
 
-// Laurie - TODO: test
 class DownloadToast: Toast {
     struct UX {
         static let buttonSize: CGFloat = 40
     }
 
     lazy var progressView: UIView = .build { view in
+        view.layer.cornerRadius = Toast.UX.toastCornerRadius
     }
 
     private var horizontalStackView: UIStackView = .build { stackView in
