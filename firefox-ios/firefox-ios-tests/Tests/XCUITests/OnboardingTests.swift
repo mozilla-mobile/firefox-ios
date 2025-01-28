@@ -34,6 +34,19 @@ class OnboardingTests: BaseTestCase {
 
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
+
+        // Terms of Service
+        waitForElementsToExist(
+            [
+                app.staticTexts["TermsOfService.Title"],
+                app.buttons["TermsOfService.AgreeAndContinueButton"]
+            ]
+        )
+        // "Hit area is too small"
+        // try app.performAccessibilityAudit()
+
+        // Swipe to next screen
+        app.buttons["TermsOfService.AgreeAndContinueButton"].waitAndTap()
         waitForElementsToExist(
             [
                 app.images["\(rootA11yId)ImageView"],
@@ -170,7 +183,18 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testOnboardingSignIn() {
+        // Terms of Service
+        waitForElementsToExist(
+            [
+                app.staticTexts["TermsOfService.Title"],
+                app.buttons["TermsOfService.AgreeAndContinueButton"]
+            ]
+        )
+
+        // Swipe to next screen
+        app.buttons["TermsOfService.AgreeAndContinueButton"].waitAndTap()
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
         currentScreen += 1
@@ -194,6 +218,18 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
+        // Terms of Service
+        waitForElementsToExist(
+            [
+                app.staticTexts["TermsOfService.Title"],
+                app.buttons["TermsOfService.AgreeAndContinueButton"]
+            ]
+        )
+
+        // Swipe to next screen
+        app.buttons["TermsOfService.AgreeAndContinueButton"].waitAndTap()
+
+        // Note: Close button is not on Terms of Service screen
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
