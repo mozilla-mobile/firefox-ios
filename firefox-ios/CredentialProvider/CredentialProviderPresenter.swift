@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
@@ -11,13 +12,16 @@ final class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
     private let appAuthenticator: AppAuthenticator
+    private let logger: Logger
 
     init(view: CredentialProviderViewProtocol,
          profile: Profile = BrowserProfile(localName: "profile"),
-         appAuthenticator: AppAuthenticator = AppAuthenticator()) {
+         appAuthenticator: AppAuthenticator = AppAuthenticator(),
+         logger: Logger = DefaultLogger.shared) {
         self.view = view
         self.profile = profile
         self.appAuthenticator = appAuthenticator
+        self.logger = logger
     }
 
     func extensionConfigurationRequested() {
@@ -32,31 +36,44 @@ final class CredentialProviderPresenter {
         let maxRetries = 3
         var currentRetry = 0
 
+        guard profile.logins.reopenIfClosed() == nil else {
+            cancel(with: .failed)
+            return
+        }
+
+        guard let id = credentialIdentity.recordIdentifier else { return }
+
         func attemptProvision() {
-            if self.profile.logins.reopenIfClosed() != nil {
-                self.cancel(with: .failed)
-            } else if let id = credentialIdentity.recordIdentifier {
-                profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
-                    switch result {
-                    case .failure:
-                        self?.cancel(with: .failed)
-                    case .success(let record):
-                        if let passwordCredential = record?.passwordCredential {
-                            self?.view?.extensionContext.completeRequest(
-                                withSelectedCredential: passwordCredential)
-                        } else {
-                            if currentRetry < maxRetries {
-                                currentRetry += 1
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    attemptProvision()
-                                }
-                            } else {
-                                self?.cancel(with: .userInteractionRequired)
+            profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
+                switch result {
+                case .failure:
+                    self?.cancel(with: .failed)
+                case .success(let record):
+                    if let passwordCredential = record?.passwordCredential {
+                        self?.view?.extensionContext.completeRequest(
+                            withSelectedCredential: passwordCredential)
+                    } else {
+                        if currentRetry < maxRetries {
+                            currentRetry += 1
+                            self?.logger.log(
+                                "Failed to retrieve credentials. Will retry. Retry #\(currentRetry)",
+                                level: .warning,
+                                category: .autofill
+                            )
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                attemptProvision()
                             }
+                        } else {
+                            self?.logger.log(
+                                "Failed to retrieve credentials after all \(maxRetries) attempts. No further retries. Will cancel the request with `userInteractionRequired` error.",
+                                level: .warning,
+                                category: .autofill
+                            )
+                            self?.cancel(with: .userInteractionRequired)
                         }
                     }
-                })
-            }
+                }
+            })
         }
 
         attemptProvision()
