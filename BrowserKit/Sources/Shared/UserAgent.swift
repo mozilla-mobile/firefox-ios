@@ -14,9 +14,6 @@ open class UserAgent {
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
 
-    // For iPad, we need to append this to the default UA for google.com to show correct page
-    public static let uaBitGoogleIpad = "Version/13.0.3"
-
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
