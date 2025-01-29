@@ -507,7 +507,7 @@ class BookmarksViewController: SiteTableViewController,
                 }
 
                 let contextButton = createContextButton()
-                contextButton.accessibilityIdentifier = cell.accessibilityIdentifier ?? "" +
+                contextButton.accessibilityIdentifier = (cell.accessibilityIdentifier ?? "") +
                 AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
                     guard let indexPath = tableView.indexPath(for: cell) else { return }
