@@ -32,8 +32,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testIntro() {
         mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
-        snapshot("Onboarding-0")
 
+        // Agree to the Terms of services
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
@@ -86,6 +86,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.staticTexts["TermsOfService.Title"])
         mozWaitForElementToExist(app.buttons["TermsOfService.AgreeAndContinueButton"])
         mozWaitForElementToExist(app.buttons["TermsOfService.ManageDataCollectionAgreement"])
+        snapshot("TermsOfService-0")
 
         // Manage
         app.buttons["TermsOfService.ManageDataCollectionAgreement"].tap()
