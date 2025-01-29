@@ -117,16 +117,13 @@ export const XPCOMUtils = withNotImplementedError({
     transform = val => val
   ) => {
     const value = IOSAppConstants.prefs[pref] ?? defaultValue;
-    // Explicitly check for null since false, "" and 0 are valid values
-    if (value === null) {
+    // Explicitly check for undefined since null, false, "" and 0 are valid values
+    if (value === undefined) {
       throw Error(
         `Pref ${pref} is not defined and no valid default value was provided.`
       );
     }
     obj[prop] = transform(value);
-  },
-  defineLazyModuleGetters(obj, modules) {
-    internalModuleResolvers.resolveModules(obj, modules);
   },
   defineLazyServiceGetter() {
     // Don't do anything

@@ -51,3 +51,26 @@ usage-reporting:
     include_info_sections: false
     ping_schedule:
       - baseline
+
+usage-deletion-request:
+  description: |
+    This ping is submitted when a user opts out of sending usage
+    frequency of Firefox to Mozilla.
+    Sent in response to user action.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10904
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24339
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false
+  reasons:
+    set_upload_enabled: |
+      The ping was submitted due to the usage-reporting data preference changing from
+      enabled to disabled.

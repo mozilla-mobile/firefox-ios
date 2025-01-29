@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 
 let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on load times in the wild.
 

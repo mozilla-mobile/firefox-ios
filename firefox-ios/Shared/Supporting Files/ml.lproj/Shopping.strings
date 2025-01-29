@@ -4,6 +4,9 @@
 /* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
 "Shopping.AdCard.Title.v121" = "പരിഗണിക്കാൻ കൂടുതൽ";
 
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "5 താരചിഹ്നങ്ങളിൽ %@";
+
 /* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
 "Shopping.ConfirmationCard.Button.Text.v120" = "പിടി കിട്ടി";
 
