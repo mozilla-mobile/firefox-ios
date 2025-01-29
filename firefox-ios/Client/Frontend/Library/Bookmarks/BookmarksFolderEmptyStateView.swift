@@ -66,7 +66,8 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
 
     func configure(isRoot: Bool, isSignedIn: Bool) {
         titleLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Title : .Bookmarks.EmptyState.Nested.Title
-        bodyLabel.text = isRoot ? isSignedIn ? .Bookmarks.EmptyState.Root.BodySignedIn : .Bookmarks.EmptyState.Root.BodySignedOut
+        bodyLabel.text = isRoot ? isSignedIn ? .Bookmarks.EmptyState.Root.BodySignedIn
+                                             : .Bookmarks.EmptyState.Root.BodySignedOut
                                 : .Bookmarks.EmptyState.Nested.Body
         logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
         signInButton.isHidden = !isRoot || isSignedIn
