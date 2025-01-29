@@ -5518,13 +5518,12 @@ share_sheet:
 share:
   deeplink_open_url_load_time:
     type: timing_distribution
-    lifetime: application
     description: |
       Tracks the startup time of the application when the app was launched to open a url.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/24325
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/24325
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24422
     data_sensitivity:
       - technical
     notification_emails:

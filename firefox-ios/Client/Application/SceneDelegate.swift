@@ -7,7 +7,6 @@ import CoreSpotlight
 import Shared
 import UserNotifications
 import Common
-import Glean
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -19,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
 
-    private let gleanWrapper = DefaultGleanWrapper()
     private let logger: Logger = DefaultLogger.shared
     private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
 
