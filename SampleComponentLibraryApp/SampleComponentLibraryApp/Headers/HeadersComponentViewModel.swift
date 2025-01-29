@@ -4,9 +4,9 @@
 
 import UIKit
 
-struct NavigationHeaderComponentViewModel: ComponentViewModel {
-    var title = "NavigationHeaderView"
-    var viewController: UIViewController = NavigationHeaderViewViewController()
+struct HeadersComponentViewModel: ComponentViewModel {
+    var title = "Headers"
+    var viewController: UIViewController = HeadersViewViewController()
 
     func present(with presenter: Presenter?) {
         presenter?.push(viewController: viewController)

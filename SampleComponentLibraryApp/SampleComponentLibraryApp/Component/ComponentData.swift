@@ -13,7 +13,6 @@ struct ComponentData {
                 CardViewComponentViewModel(),
                 ShadowCardViewComponentViewModel(),
                 CollapsibleCardViewComponentViewModel(),
-                NavigationHeaderComponentViewModel(),
-                HeaderComponentViewModel()]
+                HeadersComponentViewModel()]
     }
 }
