@@ -3285,7 +3285,11 @@ class BrowserViewController: UIViewController,
         }
         switch content {
         case .some(.link(let url)):
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if url.isWebPage() {
+                didScanQRCodeWithURL(url)
+            } else {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
         case .some(.phoneNumber(let phoneNumber)):
             if let url = URL(string: "tel:\(phoneNumber)", invalidCharacters: false) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
