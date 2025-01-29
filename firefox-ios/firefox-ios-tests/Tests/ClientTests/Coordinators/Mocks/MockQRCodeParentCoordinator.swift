@@ -13,7 +13,7 @@ class MockQRCodeViewControllerDelegate: QRCodeViewControllerDelegate {
         didScanQRCodeWithUrlCalled += 1
     }
 
-    func didScanQRCodeWithText(_ text: String) {
+    func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText: String) {
         didScanQRCodeWithTextCalled += 1
     }
 
