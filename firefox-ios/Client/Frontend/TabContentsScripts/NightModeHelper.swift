@@ -31,7 +31,10 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let webView = message.frameInfo.webView else { return }
-        webView.evaluateJavascriptInDefaultContentWorld(NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated()))
+        webView.evaluateJavascriptInCustomContentWorld(
+            NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated()),
+            in: .world(name: NightModeHelper.name())
+        )
     }
 
     static func toggle(

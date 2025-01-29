@@ -370,7 +370,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-            webView?.evaluateJavascriptInDefaultContentWorld(NightModeHelper.jsCallbackBuilder(nightMode))
+            webView?.evaluateJavascriptInCustomContentWorld(
+                NightModeHelper.jsCallbackBuilder(nightMode),
+                in: .world(name: NightModeHelper.name())
+            )
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
@@ -789,6 +792,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
     }
 
+    func addContentScriptToCustomWorld(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToCustomWorld(helper, name: name, forTab: self)
+    }
+
     func getContentScript(name: String) -> TabContentScript? {
         return contentScriptManager.getContentScript(name)
     }
@@ -1079,6 +1086,22 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // receives all messages and then dispatches them to the right TabHelper.
         helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
             tab.webView?.configuration.userContentController.addInPageContentWorld(
+                scriptMessageHandler: self,
+                name: scriptMessageHandlerName
+            )
+        }
+    }
+
+    func addContentScriptToCustomWorld(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        // If a helper script already exists on the page, skip adding this duplicate.
+        guard helpers[name] == nil else { return }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handlers names and register them. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
+            tab.webView?.configuration.userContentController.addInCustomContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
             )

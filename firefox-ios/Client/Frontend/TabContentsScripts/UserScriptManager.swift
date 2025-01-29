@@ -17,10 +17,11 @@ class UserScriptManager: FeatureFlaggable {
         source: "window.__firefox__.NoImageMode.setEnabled(true)",
         injectionTime: .atDocumentStart,
         forMainFrameOnly: true)
-    private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(
+    private let nightModeUserScript = WKUserScript(
         source: NightModeHelper.jsCallbackBuilder(true),
         injectionTime: .atDocumentEnd,
-        forMainFrameOnly: true)
+        forMainFrameOnly: true,
+        in: .world(name: NightModeHelper.name()))
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",
         injectionTime: .atDocumentEnd,
@@ -39,8 +40,7 @@ class UserScriptManager: FeatureFlaggable {
             let mainframeString = mainFrameOnly ? "MainFrame" : "AllFrames"
             let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
             let name = mainframeString + "AtDocument" + injectionString
-            if let path = Bundle.main.path(forResource: name, ofType: "js"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = UserScriptManager.getScriptSource(name) {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
                 let userScript = WKUserScript.createInDefaultContentWorld(
                     source: wrappedSource,
@@ -52,11 +52,7 @@ class UserScriptManager: FeatureFlaggable {
 
             // Autofill scripts
             let autofillName = "Autofill\(name)"
-            if let autofillScriptCompatPath = Bundle.main.path(
-                forResource: autofillName, ofType: "js"),
-                let source = try? NSString(
-                    contentsOfFile: autofillScriptCompatPath,
-                    encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = UserScriptManager.getScriptSource(autofillName) {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
                 let userScript = WKUserScript.createInDefaultContentWorld(
                     source: wrappedSource,
@@ -65,15 +61,20 @@ class UserScriptManager: FeatureFlaggable {
                 compiledUserScripts[autofillName] = userScript
             }
 
+            // NightMode scripts
+            let nightModeName = "NightMode\(name)"
+            if let source = UserScriptManager.getScriptSource(nightModeName) {
+                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+                let userScript = WKUserScript(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly,
+                    in: .world(name: NightModeHelper.name()))
+                compiledUserScripts[nightModeName] = userScript
+            }
+
             let webcompatName = "Webcompat\(name)"
-            if let webCompatPath = Bundle.main.path(
-                forResource: webcompatName,
-                ofType: "js"
-            ),
-               let source = try? NSString(
-                contentsOfFile: webCompatPath,
-                encoding: String.Encoding.utf8.rawValue
-               ) as String {
+            if let source = UserScriptManager.getScriptSource(webcompatName) {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
                 let userScript = WKUserScript.createInPageContentWorld(
                     source: wrappedSource,
@@ -85,6 +86,13 @@ class UserScriptManager: FeatureFlaggable {
         }
 
         self.compiledUserScripts = compiledUserScripts
+    }
+
+    private static func getScriptSource(_ scriptName: String) -> String? {
+        guard let path = Bundle.main.path(forResource: scriptName, ofType: "js") else {
+            return nil
+        }
+        return try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
     }
 
     public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
@@ -108,6 +116,11 @@ class UserScriptManager: FeatureFlaggable {
             let autofillName = "Autofill\(name)"
             if let autofillScript = compiledUserScripts[autofillName] {
                 webView?.configuration.userContentController.addUserScript(autofillScript)
+            }
+
+            let nightModeName = "NightMode\(name)"
+            if let nightModeScript = compiledUserScripts[nightModeName] {
+                webView?.configuration.userContentController.addUserScript(nightModeScript)
             }
 
             let webcompatName = "Webcompat\(name)"
