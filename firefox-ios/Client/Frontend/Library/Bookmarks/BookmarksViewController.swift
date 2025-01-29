@@ -489,9 +489,9 @@ class BookmarksViewController: SiteTableViewController,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
 
+            let cellA11yId = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
+            cell.accessibilityIdentifier = cellA11yId
             cell.accessibilityTraits = .button
-            cell.accessibilityIdentifier =
-            "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
 
             // BookmarkItemData requires:
             // - Site to setup cell image
@@ -507,7 +507,7 @@ class BookmarksViewController: SiteTableViewController,
                 }
 
                 let contextButton = createContextButton()
-                contextButton.accessibilityIdentifier = (cell.accessibilityIdentifier ?? "") +
+                contextButton.accessibilityIdentifier = cellA11yId +
                 AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
                     guard let indexPath = tableView.indexPath(for: cell) else { return }
