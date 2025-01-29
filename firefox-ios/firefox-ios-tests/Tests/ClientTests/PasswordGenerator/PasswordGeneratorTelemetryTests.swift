@@ -22,14 +22,18 @@ final class PasswordGeneratorTelemetryTests: XCTestCase {
     }
 
     func testShowPasswordGeneratorDialog() {
-        let subject = PasswordGeneratorTelemetry(gleanWrapper: gleanWrapper)
+        let subject = self.createSubject()
         subject.passwordGeneratorDialogShown()
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
 
     func testUsePasswordButtonPressed() {
-        let subject = PasswordGeneratorTelemetry(gleanWrapper: gleanWrapper)
+        let subject = self.createSubject()
         subject.usePasswordButtonPressed()
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
+    }
+    
+    private func createSubject() -> PasswordGeneratorTelemetry {
+        PasswordGeneratorTelemetry(gleanWrapper: gleanWrapper)
     }
 }
