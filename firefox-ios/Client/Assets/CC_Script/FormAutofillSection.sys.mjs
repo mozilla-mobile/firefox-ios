@@ -642,13 +642,22 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
       reauth = false;
     }
     let string;
+    let errorMessage;
     try {
       string = await lazy.OSKeyStore.decrypt(cipherText, reauth);
+      errorMessage = "NO_ERROR";
     } catch (e) {
       if (e.result != Cr.NS_ERROR_ABORT) {
         throw e;
       }
       this.log.warn("User canceled encryption login");
+      errorMessage = e.result;
+    } finally {
+      Glean.creditcard.osKeystoreDecrypt.record({
+        isDecryptSuccess: errorMessage === "NO_ERROR",
+        errorMessage,
+        trigger: "autofill",
+      });
     }
     return string;
   }
