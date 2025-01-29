@@ -104,7 +104,18 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
     }
 
+    func testRecordOpenURLTime_returnTimeNotZero() async throws {
+        let subject = createSubject()
+        
+        subject.recordOpenURLTime()
+        // simulate startup time
+        try await Task.sleep(nanoseconds: 1_000)
+        subject.sendOpenURLTimeRecord()
+
+        XCTAssertGreaterThan(GleanMetrics.Share.deeplinkOpenUrlLoadTime.testGetValue()?.sum ?? 0, 0)
+    }
+
     func createSubject() -> ShareTelemetry {
-        return DefaultShareTelemetry()
+        return ShareTelemetry()
     }
 }

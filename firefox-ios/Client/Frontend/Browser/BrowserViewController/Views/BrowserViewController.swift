@@ -2478,20 +2478,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if let startupFileURL = StartupTimeUtility.startupTimeFileURL() {
-            addressToolbarContainer.enterOverlayMode("\(StartupTimeUtility.startupTimeInSeconds) seconds", pasted: false, search: false)
-            navigationHandler?.showShareSheet(
-                shareType: .file(url: startupFileURL),
-                shareMessage: .init(message: "",
-                                    subtitle: nil),
-                sourceView: sourceView,
-                sourceRect: nil,
-                toastContainer: contentContainer,
-                popoverArrowDirection: .any
-            )
-            return
-        }
-
         /// Note: If the user is viewing a _downloaded_ (not online) PDF in the browser, then the current tab's URL will
         /// have a `file://` scheme.
         navigationHandler?.showShareSheet(
