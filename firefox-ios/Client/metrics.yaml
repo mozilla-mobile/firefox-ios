@@ -5516,10 +5516,10 @@ share_sheet:
 # Share related metrics
 
 share:
-  deeplink_open_url_load_time:
+  deeplink_open_url_startup_time:
     type: timing_distribution
     description: |
-      Tracks the startup time of the application when the app was launched to open a url.
+      Track the startup time of the application when the app was launched to open a url.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/24325
     data_reviews:

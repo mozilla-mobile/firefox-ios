@@ -33,17 +33,17 @@ class ShareTelemetry {
     // MARK: - Deeplinks
 
     func recordOpenURLTime() {
-        openURLTimerId = gleanWrapper.startTiming(for: GleanMetrics.Share.deeplinkOpenUrlLoadTime)
+        openURLTimerId = gleanWrapper.startTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime)
     }
 
     func sendOpenURLTimeRecord() {
         guard let openURLTimerId else { return }
-        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Share.deeplinkOpenUrlLoadTime,
+        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime,
                                              timerId: openURLTimerId)
     }
 
     func cancelOpenURLTimeRecord() {
         guard let openURLTimerId else { return }
-        gleanWrapper.cancelTiming(for: GleanMetrics.Share.deeplinkOpenUrlLoadTime, timerId: openURLTimerId)
+        gleanWrapper.cancelTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime, timerId: openURLTimerId)
     }
 }

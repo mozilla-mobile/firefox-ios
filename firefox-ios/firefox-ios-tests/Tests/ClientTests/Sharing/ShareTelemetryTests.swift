@@ -112,7 +112,7 @@ final class ShareTelemetryTests: XCTestCase {
         try await Task.sleep(nanoseconds: 1_000)
         subject.sendOpenURLTimeRecord()
 
-        let metric = GleanMetrics.Share.deeplinkOpenUrlLoadTime
+        let metric = GleanMetrics.Share.deeplinkOpenUrlStartupTime
         let recordedTime = try XCTUnwrap(metric.testGetValue()?.sum)
 
         XCTAssertGreaterThan(recordedTime, 0)
@@ -126,7 +126,7 @@ final class ShareTelemetryTests: XCTestCase {
         try await Task.sleep(nanoseconds: 1_000)
         subject.cancelOpenURLTimeRecord()
 
-        let metric = GleanMetrics.Share.deeplinkOpenUrlLoadTime
+        let metric = GleanMetrics.Share.deeplinkOpenUrlStartupTime
 
         XCTAssertNil(metric.testGetValue())
     }
