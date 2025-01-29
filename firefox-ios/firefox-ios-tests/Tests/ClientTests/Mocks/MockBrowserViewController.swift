@@ -61,7 +61,12 @@ class MockBrowserViewController: BrowserViewController {
         switchToPrivacyModeCount += 1
     }
 
-    override func switchToTabForURLOrOpen(_ url: URL, uuid: String?, isPrivate: Bool, completionHandler: (() -> Void)? = nil) {
+    override func switchToTabForURLOrOpen(
+        _ url: URL,
+        uuid: String?,
+        isPrivate: Bool,
+        completionHandler: (() -> Void)? = nil
+    ) {
         switchToTabForURLOrOpenCalled = true
         switchToTabForURLOrOpenURL = url
         switchToTabForURLOrOpenUUID = uuid

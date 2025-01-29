@@ -5529,7 +5529,7 @@ share:
       - technical
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-07-01"
 
 # Device specific metrics
 
