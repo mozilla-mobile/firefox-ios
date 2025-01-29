@@ -187,6 +187,29 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return configuration
     }
 
+    // MARK: - Add/Remove Delegate
+    func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
+        DispatchQueue.main.async { [unowned self] in
+            for index in 0 ..< self.delegates.count {
+                let del = self.delegates[index]
+                if delegate === del.get() || del.get() == nil {
+                    self.delegates.remove(at: index)
+                    return
+                }
+            }
+            completion?()
+        }
+    }
+
+    func addDelegate(_ delegate: TabManagerDelegate) {
+        self.delegates.append(WeakTabManagerDelegate(value: delegate))
+    }
+
+    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
+        self.navDelegate.insert(delegate)
+    }
+
+    // MARK: - Remove Tab
     @MainActor
     func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
@@ -224,48 +247,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         )
     }
 
-    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        return addTab(request,
-                      afterTab: afterTab,
-                      flushToDisk: true,
-                      zombie: false,
-                      isPrivate: isPrivate)
-    }
-
-    @discardableResult
-    func addTab(_ request: URLRequest? = nil,
-                afterTab: Tab? = nil,
-                zombie: Bool = false,
-                isPrivate: Bool = false
-    ) -> Tab {
-        return addTab(request,
-                      afterTab: afterTab,
-                      flushToDisk: true,
-                      zombie: zombie,
-                      isPrivate: isPrivate)
-    }
-
-    func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
-        DispatchQueue.main.async { [unowned self] in
-            for index in 0 ..< self.delegates.count {
-                let del = self.delegates[index]
-                if delegate === del.get() || del.get() == nil {
-                    self.delegates.remove(at: index)
-                    return
-                }
-            }
-            completion?()
-        }
-    }
-
-    func addDelegate(_ delegate: TabManagerDelegate) {
-        self.delegates.append(WeakTabManagerDelegate(value: delegate))
-    }
-
-    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
-        self.navDelegate.insert(delegate)
-    }
-
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
@@ -273,243 +254,18 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         storeChanges()
     }
 
-    func undoCloseTab() {
-        guard let backupCloseTab = self.backupCloseTab else { return }
-
-        let previouslySelectedTab = selectedTab
-        if let index = backupCloseTab.restorePosition {
-            tabs.insert(backupCloseTab.tab, at: index)
-        } else {
-            tabs.append(backupCloseTab.tab)
+    @MainActor
+    func removeTabs(by urls: [URL]) async {
+        let urls = Set(urls)
+        let tabsToRemove = normalTabs.filter { tab in
+            guard let url = tab.url else { return false }
+            return urls.contains(url)
         }
-
-        if backupCloseTab.isSelected {
-            self.selectTab(backupCloseTab.tab)
-        } else if let tabToSelect = previouslySelectedTab {
-            self.selectTab(tabToSelect)
-        }
-
-        delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-        storeChanges()
-    }
-
-    func getMostRecentHomepageTab() -> Tab? {
-        let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
-        let homePageTabs = tabsToFilter.filter { $0.isFxHomeTab }
-
-        return mostRecentTab(inTabs: homePageTabs)
-    }
-
-    func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-        let currentTabs = privateMode ? privateTabs : normalActiveTabs
-
-        guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
-
-        let fromIndex = tabs.firstIndex(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
-        let toIndex = tabs.firstIndex(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
-
-        let previouslySelectedTab = selectedTab
-
-        tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
-
-        if let previouslySelectedTab = previouslySelectedTab,
-           let previousSelectedIndex = tabs.firstIndex(of: previouslySelectedTab) {
-            selectedIndex = previousSelectedIndex
-        }
-
-        storeChanges()
-    }
-
-    func startAtHomeCheck() -> Bool {
-        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
-
-        guard !startAtHomeManager.shouldSkipStartHome else {
-            logger.log("Skipping start at home", level: .debug, category: .tabs)
-            return false
-        }
-
-        if startAtHomeManager.shouldStartAtHome() {
-            let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
-            let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
-            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
-                                                                            with: profile.prefs)
-            let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
-                                                   inPrivateMode: wasLastSessionPrivate,
-                                                   and: profile.prefs)
-
-            logger.log("Start at home triggered with last session private \(wasLastSessionPrivate)",
-                       level: .debug,
-                       category: .tabs)
-            selectTab(tabToSelect)
-            return true
-        }
-        return false
-    }
-
-    func getTabForUUID(uuid: TabUUID) -> Tab? {
-        let filterdTabs = tabs.filter { tab -> Bool in
-            tab.tabUUID == uuid
-        }
-        return filterdTabs.first
-    }
-
-    func getTabForURL(_ url: URL) -> Tab? {
-        return tabs.first(where: { $0.webView?.url == url })
-    }
-
-    func expireSnackbars() {
-        for tab in tabs {
-            tab.expireSnackbars()
-        }
-    }
-
-    func switchPrivacyMode() -> SwitchPrivacyModeResult {
-        var result = SwitchPrivacyModeResult.usedExistingTab
-        guard let selectedTab = selectedTab else { return result }
-        let nextSelectedTab: Tab?
-
-        if selectedTab.isPrivate {
-            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
-        } else if privateTabs.isEmpty {
-            nextSelectedTab = addTab(isPrivate: true)
-            result = .createdNewTab
-        } else {
-            nextSelectedTab = mostRecentTab(inTabs: privateTabs)
-        }
-
-        selectTab(nextSelectedTab)
-
-        let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
-                                        object: notificationObject,
-                                        userInfo: windowUUID.userInfo)
-        return result
-    }
-
-    func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        let popup = Tab(profile: profile,
-                        isPrivate: parentTab.isPrivate,
-                        windowUUID: windowUUID)
-        // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
-        // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
-        // use this configuration WebKit will throw an exception.
-        configureTab(popup,
-                     request: nil,
-                     afterTab: parentTab,
-                     flushToDisk: true,
-                     zombie: false,
-                     isPopup: true,
-                     requiredConfiguration: configuration)
-
-        // Wait momentarily before selecting the new tab, otherwise the parent tab
-        // may be unable to set `window.location` on the popup immediately after
-        // calling `window.open("")`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) {
-            self.selectTab(popup)
-        }
-
-        return popup
-    }
-
-    /// Note: Inserts AND configures the given tab.
-    func configureTab(_ tab: Tab,
-                      request: URLRequest?,
-                      afterTab parent: Tab? = nil,
-                      flushToDisk: Bool,
-                      zombie: Bool,
-                      isPopup: Bool = false,
-                      requiredConfiguration: WKWebViewConfiguration? = nil
-    ) {
-        // If network is not available webView(_:didCommit:) is not going to be called
-        // We should set request url in order to show url in url bar even no network
-        tab.url = request?.url
-        var placeNextToParentTab = false
-        if parent == nil || parent?.isPrivate != tab.isPrivate {
-            tabs.append(tab)
-        } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
-            placeNextToParentTab = true
-            insertIndex += 1
-
-            tab.parent = parent
-            tabs.insert(tab, at: insertIndex)
-        }
-
-        delegates.forEach {
-            $0.get()?.tabManager(self,
-                                 didAddTab: tab,
-                                 placeNextToParentTab: placeNextToParentTab,
-                                 isRestoring: !tabRestoreHasFinished)
-        }
-
-        if !zombie {
-            let configuration: WKWebViewConfiguration
-            if let required = requiredConfiguration {
-                configuration = required
-            } else {
-                configuration = tab.isPrivate ? privateConfiguration : self.configuration
-            }
-            tab.createWebview(configuration: configuration)
-        }
-        tab.navigationDelegate = self.navDelegate
-
-        if let request = request {
-            tab.loadRequest(request)
-        } else if !isPopup {
-            let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
-            tab.newTabPageType = newTabChoice
-            switch newTabChoice {
-            case .homePage:
-                // We definitely have a homepage if we've got here
-                // (so we can safely dereference it).
-                let url = NewTabHomePageAccessors.getHomePage(profile.prefs)!
-                tab.loadRequest(URLRequest(url: url))
-            case .blankPage:
-                break
-            default:
-                // The common case, where the NewTabPage enum defines
-                // one of the about:home pages.
-                if let url = newTabChoice.url {
-                    tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
-                    tab.url = url
-                }
+        for tab in tabsToRemove {
+            await withCheckedContinuation { continuation in
+                removeTab(tab) { continuation.resume() }
             }
         }
-
-        tab.nightMode = NightModeHelper.isActivated()
-        tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
-
-        if flushToDisk {
-            storeChanges()
-        }
-    }
-
-    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
-        // We know the fomer index of the removed tab in the full `tabs` array. However, if we want to get the closest
-        // neighbouring tab of the same type, we need to map this index into a subarray containing only tabs of that type.
-        //
-        // Example:
-        //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
-        //          deleted index is 7, indicating normal active tab A3 was previously removed.
-        //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
-        //                                       ^ deletedIndex is 7
-        //
-        //          We can map this deletedIndex to an index into a filtered subarray containing only normal active tabs.
-        //          To do this, we count the number of normal active tabs in the `tabs` array in the range 0..<deletedIndex.
-        //          In this case, there are two: A1 and A2.
-        //
-        //          [A1, A2, _, A4]
-        //                   ^ deletedIndex mapped to subarray of normal active tabs is 2
-        //
-        let arraySlice = tabs[0..<deletedIndex]
-
-        // Get the count of similar tabs on left side of the array
-        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
-        let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
-
-        // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or
-        // right neighbours of the same type. This code checks the right tab first, then the left tab.
-        // Note: Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
-        return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
     }
 
     func removeAllTabs(isPrivateMode: Bool) {
@@ -535,6 +291,144 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         storeChanges()
     }
 
+    /// Remove a tab, will notify delegate of the tab removal
+    /// - Parameters:
+    ///   - tab: the tab to remove
+    ///   - flushToDisk: Will store changes if true, and update selected index
+    private func removeTab(_ tab: Tab, flushToDisk: Bool) {
+        guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
+            logger.log("Could not find index of tab to remove",
+                       level: .warning,
+                       category: .tabs,
+                       description: "Tab count: \(count)")
+            return
+        }
+
+        // Save the tab's session state before closing it and losing the webView
+        if flushToDisk {
+            saveSessionData(forTab: tab)
+        }
+
+        backupCloseTab = BackupCloseTab(tab: tab,
+                                        restorePosition: removalIndex,
+                                        isSelected: selectedTab?.tabUUID == tab.tabUUID)
+        let prevCount = count
+        tabs.remove(at: removalIndex)
+        assert(count == prevCount - 1, "Make sure the tab count was actually removed")
+        if count != prevCount - 1 {
+            logger.log("Make sure the tab count was actually removed",
+                       level: .warning,
+                       category: .tabs)
+        }
+
+        tab.close()
+
+        // Notify of tab removal
+        ensureMainThread { [unowned self] in
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
+            TabEvent.post(.didClose, for: tab)
+        }
+
+        if flushToDisk {
+            storeChanges()
+        }
+    }
+
+    // MARK: - Add Tab
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
+        return addTab(request,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: false,
+                      isPrivate: isPrivate)
+    }
+
+    @discardableResult
+    func addTab(_ request: URLRequest? = nil,
+                afterTab: Tab? = nil,
+                zombie: Bool = false,
+                isPrivate: Bool = false
+    ) -> Tab {
+        return addTab(request,
+                      afterTab: afterTab,
+                      flushToDisk: true,
+                      zombie: zombie,
+                      isPrivate: isPrivate)
+    }
+
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
+        if urls.isEmpty {
+            return
+        }
+
+        var tab: Tab?
+        for url in urls {
+            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie, isPrivate: isPrivate)
+        }
+
+        if shouldSelectTab {
+            // Select the most recent.
+            selectTab(tab)
+        }
+
+        // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
+
+        // Flush.
+        storeChanges()
+    }
+
+    private func addTab(_ request: URLRequest? = nil,
+                        afterTab: Tab? = nil,
+                        flushToDisk: Bool,
+                        zombie: Bool,
+                        isPrivate: Bool = false
+    ) -> Tab {
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
+        return tab
+    }
+
+    // MARK: - Get Tab
+    func getTabForUUID(uuid: TabUUID) -> Tab? {
+        let filterdTabs = tabs.filter { tab -> Bool in
+            tab.tabUUID == uuid
+        }
+        return filterdTabs.first
+    }
+
+    func getTabForURL(_ url: URL) -> Tab? {
+        return tabs.first(where: { $0.webView?.url == url })
+    }
+
+    func getMostRecentHomepageTab() -> Tab? {
+        let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
+        let homePageTabs = tabsToFilter.filter { $0.isFxHomeTab }
+
+        return mostRecentTab(inTabs: homePageTabs)
+    }
+
+    // MARK: - Undo Close Tab
+    func undoCloseTab() {
+        guard let backupCloseTab = self.backupCloseTab else { return }
+
+        let previouslySelectedTab = selectedTab
+        if let index = backupCloseTab.restorePosition {
+            tabs.insert(backupCloseTab.tab, at: index)
+        } else {
+            tabs.append(backupCloseTab.tab)
+        }
+
+        if backupCloseTab.isSelected {
+            self.selectTab(backupCloseTab.tab)
+        } else if let tabToSelect = previouslySelectedTab {
+            self.selectTab(tabToSelect)
+        }
+
+        delegates.forEach { $0.get()?.tabManagerUpdateCount() }
+        storeChanges()
+    }
+
     func undoCloseAllTabs() {
         guard !backupCloseTabs.isEmpty else { return }
         tabs = backupCloseTabs
@@ -543,20 +437,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         if backupCloseTab != nil {
             selectTab(backupCloseTab?.tab)
             backupCloseTab = nil
-        }
-    }
-
-    @MainActor
-    func removeTabs(by urls: [URL]) async {
-        let urls = Set(urls)
-        let tabsToRemove = normalTabs.filter { tab in
-            guard let url = tab.url else { return false }
-            return urls.contains(url)
-        }
-        for tab in tabsToRemove {
-            await withCheckedContinuation { continuation in
-                removeTab(tab) { continuation.resume() }
-            }
         }
     }
 
@@ -632,39 +512,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return selectedTab ?? addTab()
     }
 
-    private func addTab(_ request: URLRequest? = nil,
-                        afterTab: Tab? = nil,
-                        flushToDisk: Bool,
-                        zombie: Bool,
-                        isPrivate: Bool = false
-    ) -> Tab {
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
-        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
-        return tab
-    }
-
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
-        if urls.isEmpty {
-            return
-        }
-
-        var tab: Tab?
-        for url in urls {
-            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie, isPrivate: isPrivate)
-        }
-
-        if shouldSelectTab {
-            // Select the most recent.
-            selectTab(tab)
-        }
-
-        // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
-        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
-
-        // Flush.
-        storeChanges()
-    }
-
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
         // If the currently selected tab has been deleted, try to select the next most reasonable tab.
         if deletedIndex == selectedIndex {
@@ -707,49 +554,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                 assertionFailure("This should not happen, we should always be able to get the selected tab again.")
                 selectTab(addTab())
             }
-        }
-    }
-
-    /// Remove a tab, will notify delegate of the tab removal
-    /// - Parameters:
-    ///   - tab: the tab to remove
-    ///   - flushToDisk: Will store changes if true, and update selected index
-    private func removeTab(_ tab: Tab, flushToDisk: Bool) {
-        guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
-            logger.log("Could not find index of tab to remove",
-                       level: .warning,
-                       category: .tabs,
-                       description: "Tab count: \(count)")
-            return
-        }
-
-        // Save the tab's session state before closing it and losing the webView
-        if flushToDisk {
-            saveSessionData(forTab: tab)
-        }
-
-        backupCloseTab = BackupCloseTab(tab: tab,
-                                        restorePosition: removalIndex,
-                                        isSelected: selectedTab?.tabUUID == tab.tabUUID)
-        let prevCount = count
-        tabs.remove(at: removalIndex)
-        assert(count == prevCount - 1, "Make sure the tab count was actually removed")
-        if count != prevCount - 1 {
-            logger.log("Make sure the tab count was actually removed",
-                       level: .warning,
-                       category: .tabs)
-        }
-
-        tab.close()
-
-        // Notify of tab removal
-        ensureMainThread { [unowned self] in
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
-            TabEvent.post(.didClose, for: tab)
-        }
-
-        if flushToDisk {
-            storeChanges()
         }
     }
 
@@ -1215,6 +1019,207 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         if let tabToClose = tabs.first(where: { $0.url == url }) {
             self.removeTab(tabToClose)
         }
+    }
+
+    func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
+        let currentTabs = privateMode ? privateTabs : normalActiveTabs
+
+        guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
+
+        let fromIndex = tabs.firstIndex(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
+        let toIndex = tabs.firstIndex(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
+
+        let previouslySelectedTab = selectedTab
+
+        tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
+
+        if let previouslySelectedTab = previouslySelectedTab,
+           let previousSelectedIndex = tabs.firstIndex(of: previouslySelectedTab) {
+            selectedIndex = previousSelectedIndex
+        }
+
+        storeChanges()
+    }
+
+    func startAtHomeCheck() -> Bool {
+        let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
+
+        guard !startAtHomeManager.shouldSkipStartHome else {
+            logger.log("Skipping start at home", level: .debug, category: .tabs)
+            return false
+        }
+
+        if startAtHomeManager.shouldStartAtHome() {
+            let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
+            let scannableTabs = wasLastSessionPrivate ? privateTabs : normalTabs
+            let existingHomeTab = startAtHomeManager.scanForExistingHomeTab(in: scannableTabs,
+                                                                            with: profile.prefs)
+            let tabToSelect = createStartAtHomeTab(withExistingTab: existingHomeTab,
+                                                   inPrivateMode: wasLastSessionPrivate,
+                                                   and: profile.prefs)
+
+            logger.log("Start at home triggered with last session private \(wasLastSessionPrivate)",
+                       level: .debug,
+                       category: .tabs)
+            selectTab(tabToSelect)
+            return true
+        }
+        return false
+    }
+
+    func expireSnackbars() {
+        for tab in tabs {
+            tab.expireSnackbars()
+        }
+    }
+
+    func switchPrivacyMode() -> SwitchPrivacyModeResult {
+        var result = SwitchPrivacyModeResult.usedExistingTab
+        guard let selectedTab = selectedTab else { return result }
+        let nextSelectedTab: Tab?
+
+        if selectedTab.isPrivate {
+            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
+        } else if privateTabs.isEmpty {
+            nextSelectedTab = addTab(isPrivate: true)
+            result = .createdNewTab
+        } else {
+            nextSelectedTab = mostRecentTab(inTabs: privateTabs)
+        }
+
+        selectTab(nextSelectedTab)
+
+        let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: windowUUID.userInfo)
+        return result
+    }
+
+    func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
+        let popup = Tab(profile: profile,
+                        isPrivate: parentTab.isPrivate,
+                        windowUUID: windowUUID)
+        // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
+        // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
+        // use this configuration WebKit will throw an exception.
+        configureTab(popup,
+                     request: nil,
+                     afterTab: parentTab,
+                     flushToDisk: true,
+                     zombie: false,
+                     isPopup: true,
+                     requiredConfiguration: configuration)
+
+        // Wait momentarily before selecting the new tab, otherwise the parent tab
+        // may be unable to set `window.location` on the popup immediately after
+        // calling `window.open("")`.
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) {
+            self.selectTab(popup)
+        }
+
+        return popup
+    }
+
+    /// Note: Inserts AND configures the given tab.
+    func configureTab(_ tab: Tab,
+                      request: URLRequest?,
+                      afterTab parent: Tab? = nil,
+                      flushToDisk: Bool,
+                      zombie: Bool,
+                      isPopup: Bool = false,
+                      requiredConfiguration: WKWebViewConfiguration? = nil
+    ) {
+        // If network is not available webView(_:didCommit:) is not going to be called
+        // We should set request url in order to show url in url bar even no network
+        tab.url = request?.url
+        var placeNextToParentTab = false
+        if parent == nil || parent?.isPrivate != tab.isPrivate {
+            tabs.append(tab)
+        } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
+            placeNextToParentTab = true
+            insertIndex += 1
+
+            tab.parent = parent
+            tabs.insert(tab, at: insertIndex)
+        }
+
+        delegates.forEach {
+            $0.get()?.tabManager(self,
+                                 didAddTab: tab,
+                                 placeNextToParentTab: placeNextToParentTab,
+                                 isRestoring: !tabRestoreHasFinished)
+        }
+
+        if !zombie {
+            let configuration: WKWebViewConfiguration
+            if let required = requiredConfiguration {
+                configuration = required
+            } else {
+                configuration = tab.isPrivate ? privateConfiguration : self.configuration
+            }
+            tab.createWebview(configuration: configuration)
+        }
+        tab.navigationDelegate = self.navDelegate
+
+        if let request = request {
+            tab.loadRequest(request)
+        } else if !isPopup {
+            let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+            tab.newTabPageType = newTabChoice
+            switch newTabChoice {
+            case .homePage:
+                // We definitely have a homepage if we've got here
+                // (so we can safely dereference it).
+                let url = NewTabHomePageAccessors.getHomePage(profile.prefs)!
+                tab.loadRequest(URLRequest(url: url))
+            case .blankPage:
+                break
+            default:
+                // The common case, where the NewTabPage enum defines
+                // one of the about:home pages.
+                if let url = newTabChoice.url {
+                    tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+                    tab.url = url
+                }
+            }
+        }
+
+        tab.nightMode = NightModeHelper.isActivated()
+        tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
+
+        if flushToDisk {
+            storeChanges()
+        }
+    }
+
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
+        // We know the fomer index of the removed tab in the full `tabs` array. However, if we want to get the closest
+        // neighbouring tab of the same type, we need to map this index into a subarray containing only tabs of that type.
+        //
+        // Example:
+        //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
+        //          deleted index is 7, indicating normal active tab A3 was previously removed.
+        //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
+        //                                       ^ deletedIndex is 7
+        //
+        //          We can map this deletedIndex to an index into a filtered subarray containing only normal active tabs.
+        //          To do this, we count the number of normal active tabs in the `tabs` array in the range 0..<deletedIndex.
+        //          In this case, there are two: A1 and A2.
+        //
+        //          [A1, A2, _, A4]
+        //                   ^ deletedIndex mapped to subarray of normal active tabs is 2
+        //
+        let arraySlice = tabs[0..<deletedIndex]
+
+        // Get the count of similar tabs on left side of the array
+        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
+        let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
+
+        // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or
+        // right neighbours of the same type. This code checks the right tab first, then the left tab.
+        // Note: Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
+        return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
     }
 
     // MARK: - Update Menu Items
