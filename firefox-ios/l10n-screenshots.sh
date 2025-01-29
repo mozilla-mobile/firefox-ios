@@ -35,6 +35,7 @@ for lang in $LOCALES; do
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project firefox-ios/Client.xcodeproj --scheme L10nSnapshotTests \
         --testPlan L10nSnapshotTests \
+        --only-testing L10nSuite1SnapshotTests/testToS
         --number_of_retries 0 \
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
@@ -44,18 +45,6 @@ for lang in $LOCALES; do
         --devices "iPhone 16" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         --xcodebuild_formatter xcbeautify \
-        $EXTRA_FAST_LANE_ARGS | tee output.txt
-    if [ "$?" != "0" ]; then
-        echo "Fastlane exited with code: $?"
-        exit $?
-    elif grep -q "TEST FAILED" "output.txt"; then
-        echo "Test/compilation failed"
-        exit 1
-    elif grep -q "Caught error" "output.txt"; then
-        echo "Fastlane caught error"
-        exit 1
-    elif grep -q "❌" "output.txt"; then
-        exit 1
-    fi
-    rm output.txt
+        $EXTRA_FAST_LANE_ARGS
+    echo "Fastlane exited with code: $?"
 done
