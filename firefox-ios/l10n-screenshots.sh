@@ -30,14 +30,8 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-xcodebuild build-for-testing -project firefox-ios/Client.xcodeproj -scheme L10nSnapshotTests \
-    -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
-    -testPlan L10nSnapshotTests \
-    -derivedDataPath l10n-screenshots-dd
-
 langs=${LOCALES// /,}
 fastlane snapshot --project firefox-ios/Client.xcodeproj --scheme L10nSnapshotTests \
-    --test-without-building \
     --testPlan L10nSnapshotTests \
     --only-testing "L10nSnapshotTests/L10nSuite1SnapshotTests/testToS" \
     --number_of_retries 0 \
