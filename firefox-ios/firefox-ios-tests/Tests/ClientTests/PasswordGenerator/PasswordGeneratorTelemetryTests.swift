@@ -32,7 +32,7 @@ final class PasswordGeneratorTelemetryTests: XCTestCase {
         subject.usePasswordButtonPressed()
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
-    
+
     private func createSubject() -> PasswordGeneratorTelemetry {
         PasswordGeneratorTelemetry(gleanWrapper: gleanWrapper)
     }
