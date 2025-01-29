@@ -362,10 +362,10 @@ extension AppDelegate {
 
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
 
-        if TelemetryManager.shared.isGleanEnabled {
+        if TelemetryManager.shared.isNewTosEnabled {
             gleanUsageReportingMetricsService.start()
         } else {
-            UsageProfileManager.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
