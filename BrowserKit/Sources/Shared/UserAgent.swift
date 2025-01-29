@@ -172,7 +172,7 @@ public struct UserAgentBuilder {
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
+            systemInfo: "(Macintosh; Intel Mac OS X 10_15_7)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
             extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
