@@ -2593,6 +2593,8 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
+    // MARK: - Handle Deeplink open URL / query
+
     func handle(query: String, isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if isToolbarRefactorEnabled {
@@ -2600,24 +2602,31 @@ class BrowserViewController: UIViewController,
         } else if let legacyUrlBar {
             urlBar(legacyUrlBar, didSubmitText: query)
         }
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         if let url = url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
                 isPrivate: isPrivate
             )
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
         if let url = url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
@@ -2638,11 +2647,21 @@ class BrowserViewController: UIViewController,
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
-    func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
+    func switchToTabForURLOrOpen(
+        _ url: URL,
+        uuid: String? = nil,
+        isPrivate: Bool = false,
+        completionHandler: (() -> Void)? = nil
+    ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                self?.switchToTabForURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
+                self?.switchToTabForURLOrOpen(
+                    url,
+                    uuid: uuid,
+                    isPrivate: isPrivate,
+                    completionHandler: completionHandler
+                )
             }
             return
         }
@@ -2650,6 +2669,7 @@ class BrowserViewController: UIViewController,
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            completionHandler?()
             return
         }
 
@@ -2660,6 +2680,7 @@ class BrowserViewController: UIViewController,
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
+        completionHandler?()
     }
 
     @discardableResult
@@ -3900,6 +3921,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
+
         // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")

@@ -50,12 +50,12 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let testActivityType = UIActivity.ActivityType.mail
         let testShareType: ShareType = .site(url: testWebURL)
         let testShareMessage = ShareMessage(message: testMessage, subtitle: testSubtitle)
-        let mockShareTelemetry = MockShareTelemetry()
+        let mockGleanWrapper = MockGleanWrapper()
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareType: testShareType,
             shareMessage: testShareMessage,
-            telemetry: mockShareTelemetry
+            gleanWrapper: mockGleanWrapper
         )
         let itemForActivity = shareTelemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
@@ -63,7 +63,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         )
 
         XCTAssertTrue(itemForActivity is NSNull, "Should never share content")
-        XCTAssertEqual(mockShareTelemetry.sharedToCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertNotNil(mockGleanWrapper.savedEvents?.first as? EventMetricType<GleanMetrics.ShareSheet.SharedToExtra>)
     }
 
     // MARK: - Sent from Firefox experiment
@@ -72,7 +73,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let testActivityType = UIActivity.ActivityType.mail
         let testShareType: ShareType = .site(url: testWebURL)
         let testShareMessage = ShareMessage(message: testMessage, subtitle: testSubtitle)
-        let mockShareTelemetry = MockShareTelemetry()
+        let mockGleanWrapper = MockGleanWrapper()
         let testNimbusEnrollment = true
         let testUserOptIn = false
 
@@ -85,7 +86,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareType: testShareType,
             shareMessage: testShareMessage,
-            telemetry: mockShareTelemetry
+            gleanWrapper: mockGleanWrapper
         )
         let itemForActivity = shareTelemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
@@ -93,7 +94,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         )
 
         XCTAssertTrue(itemForActivity is NSNull, "Should never share content")
-        XCTAssertEqual(mockShareTelemetry.sharedToCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        guard let event = mockGleanWrapper.savedEvents?.first as? EventMetricType<GleanMetrics.ShareSheet.SharedToExtra> else { return }
         XCTAssertEqual(mockShareTelemetry.isEnrolledInSentFromFirefox, testNimbusEnrollment)
         XCTAssertEqual(mockShareTelemetry.isOptedInSentFromFirefox, testUserOptIn)
     }

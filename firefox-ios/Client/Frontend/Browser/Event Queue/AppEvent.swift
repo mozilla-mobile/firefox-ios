@@ -14,8 +14,6 @@ public enum AppEvent: AppEventType {
 
     // Events: Startup flow
     case startupFlowComplete
-    case startupFlowOpenURLComplete
-    case startupFlowOpenURLCanceled
 
     // Sub-Events for Startup Flow
     case profileInitialized
@@ -23,6 +21,10 @@ public enum AppEvent: AppEventType {
     case postLaunchDependenciesComplete
     case accountManagerInitialized
     case browserIsReady
+
+    // Events: Open URL startup time record
+    case recordStartupTimeOpenURLComplete
+    case recordStartupTimeOpenURLCanceled
 
     // Activities: Profile Syncing
     case profileSyncing

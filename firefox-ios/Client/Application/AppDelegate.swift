@@ -54,14 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // record startup time
-        shareTelemetry.recordOpenURLTime()
-        AppEventQueue.wait(for: .startupFlowOpenURLComplete) { [weak self] in
-            self?.shareTelemetry.sendOpenURLTimeRecord()
-        }
-        AppEventQueue.wait(for: .startupFlowOpenURLCanceled) { [weak self] in
-            self?.shareTelemetry.cancelOpenURLTimeRecord()
-        }
+        startRecordingStartupOpenURLTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -105,6 +98,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                    category: .lifecycle)
 
         return true
+    }
+
+    private func startRecordingStartupOpenURLTime() {
+        shareTelemetry.recordOpenURLTime()
+        var recordCompleteToken: ActionToken?
+        var recordCanceledToken: ActionToken?
+        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenURLTimeRecord()
+            guard let recordCanceledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCanceledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
+        recordCanceledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCanceled) { [weak self] in
+            self?.shareTelemetry.cancelOpenURLTimeRecord()
+            guard let recordCanceledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCanceledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
     }
 
     func application(
