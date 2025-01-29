@@ -212,7 +212,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNil(rightOrLeftTab, "Cannot return a tab when the array is empty")
     }
 
-    func testFindRightOrLeftTab_forSingleTabInArray_ofSameType(){
+    func testFindRightOrLeftTab_forSingleTabInArray_ofSameType() {
         // Set up a tab array as follows:
         // [A1]
         // Will pretend to delete a normal active tab at index 0.
