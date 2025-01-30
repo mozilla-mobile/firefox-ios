@@ -10,11 +10,13 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
     var scripts = [String: WKContentScript]()
     var addContentScriptCalled = 0
     var addContentScriptToPageCalled = 0
+    var addContentScriptToCustomWorldCalled = 0
     var uninstallCalled = 0
     var userContentControllerCalled = 0
 
     var savedContentScriptNames = [String]()
     var savedContentScriptPageNames = [String]()
+    var savedContentScriptCustomWorldNames = [String]()
 
     func addContentScript(_ script: WKContentScript,
                           name: String,
@@ -30,6 +32,14 @@ class MockWKContentScriptManager: NSObject, WKContentScriptManager {
         scripts[name] = script
         savedContentScriptPageNames.append(name)
         addContentScriptToPageCalled += 1
+    }
+
+    func addContentScriptToCustomWorld(_ script: WKContentScript,
+                                       name: String,
+                                       forSession session: WKEngineSession) {
+        scripts[name] = script
+        savedContentScriptCustomWorldNames.append(name)
+        addContentScriptToCustomWorldCalled += 1
     }
 
     func uninstall(session: WKEngineSession) {
