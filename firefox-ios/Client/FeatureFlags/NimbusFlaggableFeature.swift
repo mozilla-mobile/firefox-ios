@@ -15,6 +15,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
+<<<<<<< HEAD
+=======
+    case cleanupHistoryReenabled
+    case darkReader
+>>>>>>> 3fbead0c5 (Add FXIOS-11179 [Dark Mode] Use darkreader for webviews (#24327))
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -111,6 +116,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,
                 .closeRemoteTabs,
+                .darkReader,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
