@@ -88,14 +88,14 @@ class BrowsingTest: BaseTestCase {
         loadWebPage("facebook.com")
 
         waitForWebPageLoad()
-        waitForExistence(app.buttons["HomeView.settingsButton"])
+        mozWaitForElementToExist(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
 
         if iPad() {
-            waitForExistence(app.collectionViews.buttons["Request Mobile Site"])
+            mozWaitForElementToExist(app.collectionViews.buttons["Request Mobile Site"])
             app.collectionViews.buttons["Request Mobile Site"].tap()
         } else {
-            waitForExistence(app.collectionViews.buttons["Request Desktop Site"])
+            mozWaitForElementToExist(app.collectionViews.buttons["Request Desktop Site"])
             app.collectionViews.buttons["Request Desktop Site"].tap()
         }
 
