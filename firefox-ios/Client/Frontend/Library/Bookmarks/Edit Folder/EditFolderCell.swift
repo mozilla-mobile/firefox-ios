@@ -17,6 +17,7 @@ class EditFolderCell: UITableViewCell,
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
+        view.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
     }
     var onTitleFieldUpdate: ((String) -> Void)?
 

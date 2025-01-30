@@ -19,6 +19,7 @@ include:
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/contextualHintFeature.yaml
+  - nimbus-features/darkReaderFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
@@ -46,5 +47,4 @@ include:
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/unifiedAds.yaml
-  - nimbus-features/universalLinks.yaml
   - nimbus-features/zoomFeature.yaml

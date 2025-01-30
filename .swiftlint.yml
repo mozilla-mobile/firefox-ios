@@ -86,6 +86,7 @@ only_rules: # Only enforce these rules, ignore all others
   - accessibility_trait_for_button
   - force_cast
   - closure_body_length
+  - implicitly_unwrapped_optional
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
@@ -142,8 +143,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
   - Package.swift
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
-  # Temporarly ignore focus-ios folder
-  - focus-ios/
+  # Focus specific
+  - focus-ios/Blockzilla/Generated
+  - focus-ios-tests/tools/Localizations
 
 included:
   - /Users/vagrant/git

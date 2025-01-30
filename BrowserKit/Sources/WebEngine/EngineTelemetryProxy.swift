@@ -35,5 +35,5 @@ public enum EngineTelemetryEvent {
 /// Protocol for handling WebEngine telemetry events. These can be custom-handled
 /// by clients to be recorded through Glean or any other preferred API.
 public protocol EngineTelemetryProxy: AnyObject {
-    func handleTelemetry(session: EngineSession, event: EngineTelemetryEvent)
+    func handleTelemetry(event: EngineTelemetryEvent)
 }

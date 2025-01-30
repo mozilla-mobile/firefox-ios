@@ -2,23 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
-import SiteImageView
 import Common
-import Shared
+import SiteImageView
 
-struct JumpBackInCellViewModel {
-    let titleText: String
-    let descriptionText: String
-    let siteURL: String
-    var accessibilityLabel: String {
-        return "\(titleText), \(descriptionText)"
-    }
-}
-
-// MARK: - JumpBackInCell
 /// A cell used in Home page Jump Back In section
-class JumpBackInCell: UICollectionViewCell, ReusableCell {
+final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable {
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
@@ -39,7 +27,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     // contains imageContainer and textContainer
     private let contentStack: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
-        stackView.spacing = 16
+        stackView.spacing = UX.cellSpacing
         stackView.axis = .horizontal
         stackView.alignment = .leading
     }
@@ -105,23 +93,25 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: contentView.bounds,
+            cornerRadius: HomepageViewModel.UX.generalCornerRadius
+        ).cgPath
     }
 
     // MARK: - Helpers
 
-    func configure(viewModel: JumpBackInCellViewModel, theme: Theme) {
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.siteURL,
+    func configure(state: JumpBackInTabState, theme: Theme) {
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: state.siteURL,
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
 
-        let faviconViewModel = FaviconImageViewModel(siteURLString: viewModel.siteURL)
+        let faviconViewModel = FaviconImageViewModel(siteURLString: state.siteURL)
         websiteImage.setFavicon(faviconViewModel)
 
-        itemTitle.text = viewModel.titleText
-        websiteLabel.text = viewModel.descriptionText
-        accessibilityLabel = viewModel.accessibilityLabel
+        itemTitle.text = state.titleText
+        websiteLabel.text = state.descriptionText
+        accessibilityLabel = state.accessibilityLabel
         adjustLayout()
 
         applyTheme(theme: theme)
@@ -207,25 +197,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
-}
 
-// MARK: - ThemeApplicable
-extension JumpBackInCell: ThemeApplicable {
-    func applyTheme(theme: Theme) {
-        itemTitle.textColor = theme.colors.textPrimary
-        websiteLabel.textColor = theme.colors.textSecondary
-        adjustBlur(theme: theme)
-        let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
-                                                 faviconBackgroundColor: theme.colors.layer1,
-                                                 faviconBorderColor: theme.colors.layer1)
-        heroImage.updateHeroImageTheme(with: heroImageColors)
-    }
-}
-
-// MARK: - Blurrable
-extension JumpBackInCell: Blurrable {
+    // MARK: - Blurrable
     func adjustBlur(theme: Theme) {
-        // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
             contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
@@ -235,10 +209,19 @@ extension JumpBackInCell: Blurrable {
             setupShadow(theme: theme)
         }
     }
-}
 
-// MARK: - Notifiable
-extension JumpBackInCell: Notifiable {
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        itemTitle.textColor = theme.colors.textPrimary
+        websiteLabel.textColor = theme.colors.textSecondary
+        adjustBlur(theme: theme)
+        let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
+                                                 faviconBackgroundColor: theme.colors.layer1,
+                                                 faviconBorderColor: theme.colors.layer1)
+        heroImage.updateHeroImageTheme(with: heroImageColors)
+    }
+
+    // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {

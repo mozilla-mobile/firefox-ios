@@ -41,7 +41,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     private lazy var signInButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .Bookmarks.EmptyState.Root.ButtonTitle,
-            a11yIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.EmptyState.signInButton
+            a11yIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
         )
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.didTapSignIn), for: .touchUpInside)

@@ -29,6 +29,7 @@ class BookmarksViewController: SiteTableViewController,
     let viewModel: BookmarksPanelViewModel
     var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
@@ -488,26 +489,33 @@ class BookmarksViewController: SiteTableViewController,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
 
+            let cellA11yId = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
+            cell.accessibilityIdentifier = cellA11yId
+            cell.accessibilityTraits = .button
+
             // BookmarkItemData requires:
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
             if let node = node as? BookmarkItemData {
-                let site = Site(url: node.url,
-                                title: node.title,
-                                bookmarked: true,
-                                guid: node.guid)
+                let site = Site.createBasicSite(
+                    url: node.url,
+                    title: node.title,
+                    isBookmarked: true
+                )
                 if viewModel.leftImageView == nil {
                     cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 }
 
                 let contextButton = createContextButton()
+                contextButton.accessibilityIdentifier = cellA11yId +
+                AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
+                    guard let indexPath = tableView.indexPath(for: cell) else { return }
                     self?.presentContextMenu(for: indexPath)
                 }, for: .touchUpInside)
                 viewModel.accessoryView = contextButton
             }
 
-            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell
@@ -556,11 +564,7 @@ class BookmarksViewController: SiteTableViewController,
             guard let strongSelf = self else { completion(false); return }
 
             strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "swipe"])
+            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -681,7 +685,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             return nil
         }
 
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        return Site.createBasicSite(url: bookmarkItem.url, title: bookmarkItem.title, isBookmarked: true)
     }
 
     private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {
@@ -737,11 +741,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  tapHandler: { _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .delete,
-                                         object: .bookmark,
-                                         value: .bookmarksPanel,
-                                         extras: ["gesture": "long-press"])
+            self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
         }).items
         actions.append(removeAction)
 

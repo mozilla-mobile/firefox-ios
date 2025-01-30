@@ -25,17 +25,7 @@ class ShareToolbarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864279
     func testShareNormalWebsitePrint() {
         tapToolbarShareButtonAndSelectOption(option: "Print")
-        // The Print dialog appears
-        waitForElementsToExist(
-            [
-                app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
-                app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
-            ]
-        )
+        validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864277
@@ -53,16 +43,7 @@ class ShareToolbarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864278
     func testShareNormalWebsiteMarkup() {
         tapToolbarShareButtonAndSelectOption(option: "Markup")
-        // The Markup tool opens
-        waitForElementsToExist(
-            [
-                app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
-            ]
-        )
+        validateMarkupTool()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864276
@@ -88,17 +69,7 @@ class ShareToolbarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864310
     func testShareWebsiteReaderModePrint() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
-        // The Print dialog appears
-        waitForElementsToExist(
-            [
-                app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
-                app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
-            ]
-        )
+        validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864307
@@ -122,16 +93,70 @@ class ShareToolbarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864309
     func testShareWebsiteReaderModeMarkup() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
+        validateMarkupTool()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864293
+    func testSharePdfFilePrint() {
+        tapToolbarShareButtonAndSelectOption(option: "Print", url: pdfUrl)
+        validatePrintLayout()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864292
+    func testSharePdfFileMarkup() {
+        tapToolbarShareButtonAndSelectOption(option: "Markup", url: pdfUrl)
+        validateMarkupTool()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864294
+    func testSharePdfFileSaveToFile() {
+        if #available(iOS 17, *) {
+            tapToolbarShareButtonAndSelectOption(option: "Save to Files", url: pdfUrl)
+            if !iPad() {
+                mozWaitForElementToExist(app.staticTexts["On My iPhone"])
+            } else {
+                mozWaitForElementToExist(app.staticTexts["On My iPad"])
+            }
+            app.buttons["Save"].waitAndTap()
+            waitForTabsButton()
+        }
+    }
+
+    private func validatePrintLayout() {
+        // The Print dialog appears
+        waitForElementsToExist(
+            [
+                app.staticTexts["Printer"],
+                app.staticTexts["Paper Size"]
+            ]
+        )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["Layout"])
+        }
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.staticTexts["Options"])
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Print Options"])
+        }
+    }
+
+    private func validateMarkupTool() {
         // The Markup tool opens
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
+                app.buttons["Redo"]
             ]
         )
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.buttons["PKPalette-Multicolor-Swatch"])
+        }
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.buttons["autofill"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Color picker"])
+        }
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
@@ -141,13 +166,23 @@ class ShareToolbarTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 
-    private func tapToolbarShareButtonAndSelectOption(option: String) {
-        navigator.openURL(url_3)
+    private func tapToolbarShareButtonAndSelectOption(option: String, url: String = url_3) {
+        navigator.openURL(url)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 }

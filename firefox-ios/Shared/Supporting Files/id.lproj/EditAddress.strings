@@ -1,3 +1,30 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "Batal";
+
+/* Message explaining the consequences of removing an address from all synced devices. */
+"Addresses.EditAddress.Alert.Message.v129" = "Alamat akan dihapus dari semua perangkat Anda yang disinkronkan.";
+
+/* Title for the remove button in the remove address alert. */
+"Addresses.EditAddress.Alert.RemoveButton.v129" = "Hapus";
+
+/* Title for the alert indicating the action to remove an address. */
+"Addresses.EditAddress.Alert.Title.v129" = "Hapus Alamat";
+
+/* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
+"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Tambahkan alamat";
+
+/* Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses. */
+"Addresses.EditAddress.AutofillAddressArea.v129" = "Area";
+
+/* Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings. */
+"Addresses.EditAddress.AutofillAddressCity.v129" = "Kota";
+
+/* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "Negara";
+
+/* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Negara atau Wilayah";
+
 /* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
 "Addresses.EditAddress.AutofillAddressDepartment.v129" = "Departemen";
 

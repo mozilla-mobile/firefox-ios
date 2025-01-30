@@ -76,7 +76,10 @@ class TrackingProtectionViewController: UIViewController,
     private let connectionHorizontalLine: UIView = .build()
 
     // MARK: Toggle View
-    private let toggleView: TrackingProtectionToggleView = .build()
+    private lazy var toggleView: TrackingProtectionToggleView = .build { [weak self] view in
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self?.openSettingsTapped))
+        view.addGestureRecognizer(tapGesture)
+    }
 
     // MARK: Clear Cookies View
     private lazy var clearCookiesButton: TrackingProtectionButton = .build { button in
@@ -147,6 +150,7 @@ class TrackingProtectionViewController: UIViewController,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         scrollView.delegate = self
+        updateViewDetails()
     }
 
     override func viewDidLayoutSubviews() {
@@ -160,7 +164,8 @@ class TrackingProtectionViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateViewDetails()
+        updateBlockedTrackersCount()
+        updateConnectionStatus()
         applyTheme()
         getCertificates(for: model.url) { [weak self] certificates in
             if let certificates {
@@ -169,6 +174,16 @@ class TrackingProtectionViewController: UIViewController,
                 }
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        notificationCenter.post(name: .TrackingProtectionViewControllerDidAppear, withObject: windowUUID)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        notificationCenter.post(name: .TrackingProtectionViewControllerDidDismiss, withObject: windowUUID)
     }
 
     private func setupView() {
@@ -437,9 +452,6 @@ class TrackingProtectionViewController: UIViewController,
                                      title: model.displayTitle,
                                      icon: headerIcon)
 
-        updateBlockedTrackersCount()
-        updateConnectionStatus()
-
         toggleView.setupDetails(isOn: !model.isURLSafelisted())
         model.isProtectionEnabled = toggleView.toggleIsOn
         updateProtectionViewStatus()
@@ -557,6 +569,17 @@ class TrackingProtectionViewController: UIViewController,
         )
     }
 
+    @objc
+    func openSettingsTapped() {
+        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
+        if !isContentBlockingConfigEnabled {
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowSettings)
+            )
+        }
+    }
+
     private func showBlockedTrackersController() {
         blockedTrackersVC = BlockedTrackersTableViewController(with: model.getBlockedTrackersModel(),
                                                                windowUUID: windowUUID)
@@ -627,11 +650,13 @@ class TrackingProtectionViewController: UIViewController,
     private func updateProtectionViewStatus() {
         let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
         if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
-            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText)
+            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText,
+                                          and: !isContentBlockingConfigEnabled)
             trackersView.setVisibility(isHidden: false)
             model.isProtectionEnabled = true
         } else {
-            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOffText)
+            toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOffText,
+                                          and: !isContentBlockingConfigEnabled)
             trackersView.setVisibility(isHidden: true)
             model.isProtectionEnabled = false
         }

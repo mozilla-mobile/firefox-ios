@@ -1,3 +1,6 @@
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "അടയ്ക്കുക";
+
 /* The title for the certificate common name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "പൊതുപ്പേരു്";
 
@@ -9,6 +12,9 @@
 
 /* The title for the certificate issuer organization inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "സ്ഥാപനം";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "ഒന്നിടവിട്ട വിഷയ പേരുകൾ";
 
 /* The title for the certificate subject alt names DNS name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "ഡിഎന്‍എസ് പേരു്";

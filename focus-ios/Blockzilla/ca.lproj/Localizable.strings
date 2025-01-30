@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Bloca els elements de seguiment de contingut";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Això ajuda a Mozilla a estimar els usuaris actius.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping d’ús diari";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Fosc";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Ajuden a diagnosticar i solucionar problemes del navegador.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "El %@ enviarà al motor de cerca tot allò que escriviu a la barra d'adreces.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Xarxes socials";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Envia automàticament informes de fallada";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Utilitza el Face ID per desblocar l'aplicació";

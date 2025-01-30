@@ -76,6 +76,12 @@
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "കൂടുതല്‍ അറിയുക";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "സജീവ ഉപയോക്താക്കളുടെ കണക്കെടുക്കാൻ %@ സഹായിക്കുന്നു.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "പ്രതിദിന ഉപയോഗ പിംഗ്";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "അക്കൗണ്ട്";
 
@@ -87,6 +93,9 @@
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "അറിയിപ്പുകള്‍";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "%@-ൽ അറിയിപ്പുകൾ തുടങ്ങിവയ്ക്കാൻ താങ്ങളുടെ ഉപകരണ ക്രമീകരണത്തിലേക്ക് പോവുക";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "അറിയിപ്പുകൾ തുടങ്ങി വയ്ക്കുക";
@@ -111,6 +120,12 @@
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "തിരയല്‍ നിര്‍ദ്ദേശങ്ങള്‍ കാണിക്കുക";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "വിലാസ പട്ട - ഫയർഫോക്സ് നിർദ്ദേശം";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "ഫയര്‍ഫോക്സ് സച്ചസ്റ്റിനെപറ്റി കൂടുതലറിയുക";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "നാൾവഴി തിരയുക";

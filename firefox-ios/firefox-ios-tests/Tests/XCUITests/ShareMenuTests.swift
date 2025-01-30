@@ -4,6 +4,8 @@
 
 import Foundation
 
+let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf"
+
 class ShareMenuTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2863631
     func testShareNormalWebsiteTabViaReminders() {
@@ -23,17 +25,7 @@ class ShareMenuTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864049
     func testShareNormalWebsitePrint() {
         reachShareMenuLayoutAndSelectOption(option: "Print")
-        // The Print dialog appears
-        waitForElementsToExist(
-            [
-                app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
-                app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
-            ]
-        )
+        validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864047
@@ -51,16 +43,7 @@ class ShareMenuTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864048
     func testShareNormalWebsiteMarkup() {
         reachShareMenuLayoutAndSelectOption(option: "Markup")
-        // The Markup tool opens
-        waitForElementsToExist(
-            [
-                app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
-            ]
-        )
+        validateMarkupTool()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864046
@@ -86,17 +69,7 @@ class ShareMenuTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864082
     func testShareWebsiteReaderModePrint() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
-        // The Print dialog appears
-        waitForElementsToExist(
-            [
-                app.staticTexts["Printer"],
-                app.staticTexts["Copies"],
-                app.staticTexts["Paper Size"],
-                app.staticTexts["Letter"],
-                app.staticTexts["Orientation"],
-                app.staticTexts["Layout"]
-            ]
-        )
+        validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864079
@@ -120,16 +93,70 @@ class ShareMenuTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864081
     func testShareWebsiteReaderModeMarkup() {
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
+        validateMarkupTool()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864065
+    func testSharePdfFilePrint() {
+        reachShareMenuLayoutAndSelectOption(option: "Print", url: pdfUrl)
+        validatePrintLayout()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864064
+    func testSharePdfFileMarkup() {
+        reachShareMenuLayoutAndSelectOption(option: "Markup", url: pdfUrl)
+        validateMarkupTool()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864066
+    func testSharePdfFileSaveToFile() {
+        if #available(iOS 17, *) {
+            reachShareMenuLayoutAndSelectOption(option: "Save to Files", url: pdfUrl)
+            if !iPad() {
+                mozWaitForElementToExist(app.staticTexts["On My iPhone"])
+            } else {
+                mozWaitForElementToExist(app.staticTexts["On My iPad"])
+            }
+            app.buttons["Save"].waitAndTap()
+            waitForTabsButton()
+        }
+    }
+
+    private func validatePrintLayout() {
+        // The Print dialog appears
+        waitForElementsToExist(
+            [
+                app.staticTexts["Printer"],
+                app.staticTexts["Paper Size"]
+            ]
+        )
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["Layout"])
+        }
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.staticTexts["Options"])
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Print Options"])
+        }
+    }
+
+    private func validateMarkupTool() {
         // The Markup tool opens
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
-                app.buttons["Redo"],
-                app.buttons["autofill"],
-                app.buttons["Done"],
-                app.buttons["Color picker"]
+                app.buttons["Redo"]
             ]
         )
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.buttons["PKPalette-Multicolor-Swatch"])
+        }
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.buttons["autofill"])
+            mozWaitForElementToExist(app.buttons["Done"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Color picker"])
+        }
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {
@@ -141,16 +168,26 @@ class ShareMenuTests: BaseTestCase {
         navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 
-    private func reachShareMenuLayoutAndSelectOption(option: String) {
+    private func reachShareMenuLayoutAndSelectOption(option: String, url: String = url_3) {
         // Open a website in the browser
-        navigator.openURL(url_3)
+        navigator.openURL(url)
         waitForTabsButton()
         navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
-        app.collectionViews.cells[option].waitAndTap()
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
     }
 }

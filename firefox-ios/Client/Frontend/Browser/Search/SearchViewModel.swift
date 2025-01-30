@@ -32,12 +32,12 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     var bookmarkSites: [Site] {
         delegate?.searchData.compactMap { $0 }
-            .filter { $0.bookmarked == true } ?? []
+            .filter { $0.isBookmarked == true } ?? []
     }
 
     var historySites: [Site] {
         delegate?.searchData.compactMap { $0 }
-            .filter { $0.bookmarked == false } ?? []
+            .filter { $0.isBookmarked == false } ?? []
     }
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0ACC66782D3FA22200DA742D /* HeadersViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACC66762D3FA21800DA742D /* HeadersViewViewController.swift */; };
+		0ACC667B2D3FA29C00DA742D /* HeadersComponentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACC66792D3FA28A00DA742D /* HeadersComponentViewModel.swift */; };
 		8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */; };
 		8A2FE6542A55EE3D0036B6AF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */; };
 		8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2FE6552A55EE3D0036B6AF /* RootViewController.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0ACC66762D3FA21800DA742D /* HeadersViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadersViewViewController.swift; sourceTree = "<group>"; };
+		0ACC66792D3FA28A00DA742D /* HeadersComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadersComponentViewModel.swift; sourceTree = "<group>"; };
 		8A2FE64E2A55EE3D0036B6AF /* SampleComponentLibraryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleComponentLibraryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A2FE6532A55EE3D0036B6AF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +88,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0ACC667E2D3FA2AA00DA742D /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				0ACC66762D3FA21800DA742D /* HeadersViewViewController.swift */,
+				0ACC66792D3FA28A00DA742D /* HeadersComponentViewModel.swift */,
+			);
+			name = Headers;
+			path = SampleComponentLibraryApp/Headers;
+			sourceTree = SOURCE_ROOT;
+		};
 		8A2FE6452A55EE3D0036B6AF = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +127,7 @@
 				8A3BE7632AB1FDA300C7567C /* ContextualHintView */,
 				8ABC3CE42A6EECE100B69244 /* Dependency */,
 				8A6EE0A62A58658200B4D401 /* FadeScrollViewComponent */,
+				0ACC667E2D3FA2AA00DA742D /* Headers */,
 				8A6EE0AD2A5869C200B4D401 /* Protocol */,
 				E1E0E86E2A850479003D847E /* ShadowCardView */,
 				8A2FE6512A55EE3D0036B6AF /* AppDelegate.swift */,
@@ -241,10 +256,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8A2FE6782A55EE3F0036B6AF /* Build configuration list for PBXNativeTarget "SampleComponentLibraryApp" */;
 			buildPhases = (
+				8A2FE6922A55F1880036B6AF /* Swiftlint */,
 				8A2FE64A2A55EE3D0036B6AF /* Sources */,
 				8A2FE64C2A55EE3D0036B6AF /* Resources */,
 				8A2FE64B2A55EE3D0036B6AF /* Frameworks */,
-				8A2FE6922A55F1880036B6AF /* Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -321,7 +336,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -337,6 +352,7 @@
 				8A2FE6562A55EE3D0036B6AF /* RootViewController.swift in Sources */,
 				8ABE7C5C2AB36E1900C2172C /* ButtonsViewController.swift in Sources */,
 				8A6EE0A52A58642500B4D401 /* ComponentDataSource.swift in Sources */,
+				0ACC667B2D3FA29C00DA742D /* HeadersComponentViewModel.swift in Sources */,
 				8A6EE0AA2A5866C300B4D401 /* ComponentDelegate.swift in Sources */,
 				8A2FE6522A55EE3D0036B6AF /* AppDelegate.swift in Sources */,
 				8A6EE0AC2A5869BE00B4D401 /* Presenter.swift in Sources */,
@@ -351,6 +367,7 @@
 				8A6EE0992A5730FA00B4D401 /* ComponentViewModel.swift in Sources */,
 				8ABC3CE62A6EECF000B69244 /* DependencyHelper.swift in Sources */,
 				8A37CF1C2AB8B196005E30E1 /* CardContentView.swift in Sources */,
+				0ACC66782D3FA22200DA742D /* HeadersViewViewController.swift in Sources */,
 				E19891C82A790AB700CD256D /* CollapsibleCardViewViewController.swift in Sources */,
 				8A6EE09B2A57317200B4D401 /* ComponentCell.swift in Sources */,
 				8ABC3CED2A6EED7C00B69244 /* BottomSheetComponentViewModel.swift in Sources */,

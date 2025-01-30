@@ -62,13 +62,16 @@ struct ContextMenuState {
     // MARK: - Top sites item's context menu actions
     private func getTopSitesActions(site: Site) -> [PhotonRowActions] {
         let topSiteActions: [PhotonRowActions]
-        if site is PinnedSite {
-            topSiteActions = getPinnedTileActions(site: site)
-        } else if site as? SponsoredTile != nil {
+
+        switch site.type {
+        case .sponsoredSite:
             topSiteActions = getSponsoredTileActions(site: site)
-        } else {
+        case .pinnedSite:
+            topSiteActions = getPinnedTileActions(site: site)
+        default:
             topSiteActions = getOtherTopSitesActions(site: site)
         }
+
         return topSiteActions
     }
 

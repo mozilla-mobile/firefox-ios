@@ -106,6 +106,9 @@
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v135" = "ਸਹਿਮਤ ਅਤੇ ਜਾਰੀ ਰੱਖੋ";
 
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v136" = "ਸਹਿਮਤ ਅਤੇ ਜਾਰੀ ਰੱਖੋ";
+
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "ਬੰਦੋਬਸਤ";
 
@@ -150,6 +153,9 @@
 
 /* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
 "Onboarding.TermsOfService.Title.v135" = "%@ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ ਹਨ।";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "ਕਲਾਸਿਕ ਵਾਲਪੇਪਰ";
