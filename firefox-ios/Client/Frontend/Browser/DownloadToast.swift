@@ -12,6 +12,7 @@ class DownloadToast: Toast {
     }
 
     lazy var progressView: UIView = .build { view in
+        view.layer.cornerRadius = Toast.UX.toastCornerRadius
     }
 
     private var horizontalStackView: UIStackView = .build { stackView in
@@ -31,12 +32,12 @@ class DownloadToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Bold.footnote.scaledFont()
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
     }
 
@@ -134,14 +135,15 @@ class DownloadToast: Toast {
         self.addSubview(createView(download.filename, descriptionText: self.descriptionText))
 
         NSLayoutConstraint.activate([
-            toastView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            toastView.heightAnchor.constraint(equalTo: heightAnchor),
+            toastView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Toast.UX.shadowVerticalSpacing),
+            toastView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Toast.UX.shadowVerticalSpacing),
+            toastView.heightAnchor.constraint(equalTo: heightAnchor, constant: -Toast.UX.shadowHorizontalSpacing),
 
-            heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight)
+            heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithShadow)
         ])
 
-        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: Toast.UX.toastHeight)
+        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor,
+                                                             constant: Toast.UX.toastHeightWithShadow)
         animationConstraint?.isActive = true
         applyTheme(theme: theme)
     }
@@ -210,7 +212,6 @@ class DownloadToast: Toast {
                 ),
                 horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
                 horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
-                horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
 
                 closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
