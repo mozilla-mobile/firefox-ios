@@ -168,7 +168,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var isControl = true
     var title: String? = "Test"
     var text: String = "This is a test"
-    var buttonLabel: String?
+    var buttonLabel: String? = "This is a test button label"
     var experiment: String?
     var actionParams: [String: String] = [:]
     var microsurveyConfig: MicrosurveyConfig?

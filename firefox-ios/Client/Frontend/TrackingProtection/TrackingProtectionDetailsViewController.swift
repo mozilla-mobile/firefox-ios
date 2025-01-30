@@ -36,6 +36,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
     }
+    private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
@@ -245,6 +246,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         let certificatesController = CertificatesViewController(with: model.getCertificatesModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(certificatesController, animated: true)
+        telemetryWrapper.trackShowCertificates()
     }
 
     private func currentTheme() -> Theme {

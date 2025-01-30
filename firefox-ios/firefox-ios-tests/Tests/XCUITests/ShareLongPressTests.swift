@@ -139,6 +139,43 @@ class ShareLongPressTests: BaseTestCase {
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2864476
+    func testShareViaLongPressLinkReminders() {
+        if #available(iOS 17, *) {
+            longPressLinkAndSelectShareOption(option: "Reminders")
+            // The URL of the website is added in a new reminder
+            waitForElementsToExist(
+                [
+                    app.navigationBars["Reminders"],
+                    app.links.elementContainingText("example")
+                ]
+            )
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2864482
+    func testShareViaLongPressLinkCopy() {
+        longPressLinkAndSelectShareOption(option: "Copy")
+        openNewTabAndValidateURLisPaste(url: "example")
+    }
+
+    private func longPressLinkAndSelectShareOption(option: String) {
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        app.links.element(boundBy: 0).press(forDuration: 1.0)
+        mozWaitForElementToExist(app.buttons["Open in New Tab"])
+        if !iPad() {
+            app.swipeUp()
+        }
+        app.buttons["Share Link"].waitAndTap()
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
+        } else {
+            app.buttons[option].waitAndTap()
+        }
+    }
+
     private func longPressReadingListAndReachShareOptions(option: String) {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
@@ -154,7 +191,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -172,7 +210,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -193,7 +232,8 @@ class ShareLongPressTests: BaseTestCase {
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -207,7 +247,8 @@ class ShareLongPressTests: BaseTestCase {
             .staticTexts.firstMatch.press(forDuration: 1.5)
         app.tables["Context Menu"].cells.otherElements["shareLarge"].waitAndTap()
         if #available(iOS 16, *) {
-            app.collectionViews.cells[option].waitAndTap()
+            mozWaitForElementToExist(app.collectionViews.cells[option])
+            app.collectionViews.cells[option].tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }

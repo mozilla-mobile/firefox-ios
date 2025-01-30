@@ -9,29 +9,21 @@ import Shared
 /// State for the message cell that is used in the homepage view
 struct MessageCardState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var title: String?
-    var description: String?
-    var buttonLabel: String?
+    var messageCardConfiguration: MessageCardConfiguration?
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            title: nil,
-            description: nil,
-            buttonLabel: nil
+            messageCardConfiguration: nil
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        title: String?,
-        description: String?,
-        buttonLabel: String?
+        messageCardConfiguration: MessageCardConfiguration?
     ) {
         self.windowUUID = windowUUID
-        self.title = title
-        self.description = description
-        self.buttonLabel = buttonLabel
+        self.messageCardConfiguration = messageCardConfiguration
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -41,29 +33,39 @@ struct MessageCardState: StateType, Equatable, Hashable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case MessageCardMiddlewareActionType.initialize:
             return handleInitializeAction(for: state, with: action)
+        case MessageCardActionType.tappedOnActionButton, MessageCardActionType.tappedOnCloseButton:
+            return handleTappingAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
     }
 
     private static func handleInitializeAction(for state: MessageCardState, with action: Action) -> MessageCardState {
-        // TODO: FXIOS-11133 - Pull appropriate data from message card manager
+        guard let messageCardAction = action as? MessageCardAction,
+              let messageCardConfiguration = messageCardAction.messageCardConfiguration
+        else {
+            return defaultState(from: state)
+        }
         return MessageCardState(
             windowUUID: state.windowUUID,
-            title: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerTitle,
-            description: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription,
-            buttonLabel: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton
+            messageCardConfiguration: messageCardConfiguration
+        )
+    }
+
+    /// Tapping an action on the card should dismiss the message card and we do this by setting the configuration to nil
+    private static func handleTappingAction(for state: MessageCardState, with action: Action) -> MessageCardState {
+        return MessageCardState(
+            windowUUID: state.windowUUID,
+            messageCardConfiguration: nil
         )
     }
 
     static func defaultState(from state: MessageCardState) -> MessageCardState {
         return MessageCardState(
             windowUUID: state.windowUUID,
-            title: state.title,
-            description: state.description,
-            buttonLabel: state.buttonLabel
+            messageCardConfiguration: state.messageCardConfiguration
         )
     }
 }

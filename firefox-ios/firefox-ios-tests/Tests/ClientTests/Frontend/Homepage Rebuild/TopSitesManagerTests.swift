@@ -26,9 +26,9 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Google Top Site
-    func test_recalculateTopSites_shouldShowGoogle_returnGoogleTopSite() async throws {
+    func test_recalculateTopSites_shouldShowGoogle_returnGoogleTopSite() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
-        let topSites = await subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
 
         XCTAssertEqual(topSites.count, 1)
         XCTAssertEqual(topSites.first?.isPinned, true)
@@ -36,17 +36,17 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.first?.title, "Google Test")
     }
 
-    func test_recalculateTopSites_noGoogleSiteData_returnNoGoogleTopSite() async throws {
+    func test_recalculateTopSites_noGoogleSiteData_returnNoGoogleTopSite() throws {
         let subject = try createSubject()
-        let topSites = await subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
 
         XCTAssertEqual(topSites.count, 0)
         XCTAssertNil(topSites.first)
     }
 
-    func test_recalculateTopSites_withOtherSitesAndShouldShowGoogle_returnGoogleTopSite() async throws {
+    func test_recalculateTopSites_withOtherSitesAndShouldShowGoogle_returnGoogleTopSite() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: createOtherSites(),
             sponsoredSites: createSponsoredSites()
         )
@@ -57,9 +57,9 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.first?.title, "Google Test")
     }
 
-     func test_recalculateTopSites_withOtherSitesAndNoGoogleSite_returnNoGoogleTopSite() async throws {
+     func test_recalculateTopSites_withOtherSitesAndNoGoogleSite_returnNoGoogleTopSite() throws {
          let subject = try createSubject()
-         let topSites = await subject.recalculateTopSites(
+         let topSites = subject.recalculateTopSites(
             otherSites: createOtherSites(),
             sponsoredSites: createSponsoredSites()
          )
@@ -148,10 +148,10 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
-    func test_recalculateTopSites_shouldShowSponsoredSites_returnOnlyMaxSponsoredSites() async throws {
+    func test_recalculateTopSites_shouldShowSponsoredSites_returnOnlyMaxSponsoredSites() throws {
         // Max contiles is currently at 2, so it should add 2 contiles only.
         let subject = try createSubject()
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: createOtherSites(),
             sponsoredSites: createSponsoredSites()
         )
@@ -174,12 +174,12 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.title }, expectedTitles)
     }
 
-    func test_recalculateTopSites_shouldNotShowSponsoredSites_returnNoSponsoredSites() async throws {
+    func test_recalculateTopSites_shouldNotShowSponsoredSites_returnNoSponsoredSites() throws {
         profile?.prefs.setBool(false, forKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts)
 
         let subject = try createSubject()
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: [],
             sponsoredSites: createSponsoredSites()
         )
@@ -217,23 +217,23 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Tiles space calculation
-    func test_recalculateTopSites_maxCountZero_returnNoSites() async throws {
+    func test_recalculateTopSites_maxCountZero_returnNoSites() throws {
         let subject = try createSubject(
             googleTopSiteManager: MockGoogleTopSiteManager(),
             maxCount: 0
         )
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: createOtherSites(),
             sponsoredSites: createSponsoredSites()
         )
         XCTAssertEqual(topSites.count, 0)
     }
 
-    func test_recalculateTopSites_noAvailableSpace_returnOnlyPinnedSites() async throws {
+    func test_recalculateTopSites_noAvailableSpace_returnOnlyPinnedSites() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteState(site: $0) },
             sponsoredSites: createSponsoredSites()
         )
@@ -244,10 +244,10 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.mozilla.com", "www.firefox.com"])
     }
 
-    func test_recalculateTopSites_duplicatePinnedTile_doesNotShowDuplicateSponsoredSite() async throws {
+    func test_recalculateTopSites_duplicatePinnedTile_doesNotShowDuplicateSponsoredSite() throws {
         let subject = try createSubject()
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteState(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
@@ -259,9 +259,9 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://mozilla.com", "https://firefox.com"])
     }
 
-    func test_recalculateTopSites_andNoPinnedSites_returnGoogleAndSponsoredSites() async throws {
+    func test_recalculateTopSites_andNoPinnedSites_returnGoogleAndSponsoredSites() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
@@ -273,10 +273,10 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://www.google.com/webhp?client=firefox-b-1-m&channel=ts", "https://firefox.com"])
     }
 
-    func test_recalculateTopSites_availableSpace_returnSitesInOrder() async throws {
+    func test_recalculateTopSites_availableSpace_returnSitesInOrder() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteState(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
@@ -301,10 +301,10 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.compactMap { $0.site.url }, expectedURLs)
     }
 
-    func test_recalculateTopSites_matchingSponsoredAndHistoryBasedTiles_removeDuplicates() async throws {
+    func test_recalculateTopSites_matchingSponsoredAndHistoryBasedTiles_removeDuplicates() throws {
         let subject = try createSubject()
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
@@ -324,7 +324,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: - Search engine
-    func test_searchEngine_sponsoredSite_getsRemoved() async throws {
+    func test_searchEngine_sponsoredSite_getsRemoved() throws {
         let searchEngine = OpenSearchEngine(engineID: "Firefox",
                                             shortName: "Firefox",
                                             image: UIImage(),
@@ -336,7 +336,7 @@ final class TopSitesManagerTests: XCTestCase {
             searchEngineManager: MockSearchEnginesManager(searchEngines: [searchEngine])
         )
 
-        let topSites = await subject.recalculateTopSites(
+        let topSites = subject.recalculateTopSites(
             otherSites: [],
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )

@@ -28,7 +28,7 @@ protocol TopSitesManagerInterface {
     /// - Parameters:
     ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
     ///   - sponsoredSites: Contains the sponsored sites.
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState]
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) -> [TopSiteState]
 
     /// Removes the site out of the top sites.
     /// If site is pinned it removes it from pinned and top sites list.
@@ -78,12 +78,12 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.maxTopSites = maxTopSites
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) -> [TopSiteState] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
         let updatedSpaceCount = getUpdatedSpaceCount(with: googleTopSite, and: availableSpaceCount)
-        let sponsoredSites = await filterSponsoredSites(contiles: sponsoredSites, with: updatedSpaceCount, and: otherSites)
+        let sponsoredSites = filterSponsoredSites(contiles: sponsoredSites, with: updatedSpaceCount, and: otherSites)
 
         let totalTopSites = googleTopSite + sponsoredSites + otherSites
 
@@ -146,7 +146,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         contiles: [Site],
         with availableSpaceCount: Int,
         and otherSites: [TopSiteState]
-    ) async -> [TopSiteState] {
+    ) -> [TopSiteState] {
         guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
 
         guard !contiles.isEmpty else { return [] }

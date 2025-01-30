@@ -12,9 +12,7 @@ final class MessageCardStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertNil(initialState.title)
-        XCTAssertNil(initialState.description)
-        XCTAssertNil(initialState.buttonLabel)
+        XCTAssertNil(initialState.messageCardConfiguration)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -23,18 +21,65 @@ final class MessageCardStateTests: XCTestCase {
 
         let newState = reducer(
             initialState,
-            HomepageAction(
+            MessageCardAction(
+                messageCardConfiguration: MessageCardConfiguration(
+                    title: "Example Title",
+                    description: "Example Description",
+                    buttonLabel: "Example Button"
+                ),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.initialize
+                actionType: MessageCardMiddlewareActionType.initialize
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.title, "Switch Your Default Browser")
-        let expectedDescription = "Set links from websites, emails, and Messages to open automatically in Firefox."
-        XCTAssertEqual(newState.description, expectedDescription)
-        XCTAssertEqual(newState.buttonLabel, "Learn How")
+        XCTAssertEqual(newState.messageCardConfiguration?.title, "Example Title")
+        XCTAssertEqual(newState.messageCardConfiguration?.description, "Example Description")
+        XCTAssertEqual(newState.messageCardConfiguration?.buttonLabel, "Example Button")
     }
+
+    func test_tappedOnActionButton_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = messageCardReducer()
+
+        let newState = reducer(
+            initialState,
+            MessageCardAction(
+                messageCardConfiguration: MessageCardConfiguration(
+                    title: "Example Title",
+                    description: "Example Description",
+                    buttonLabel: "Example Button"
+                ),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MessageCardActionType.tappedOnActionButton
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertNil(newState.messageCardConfiguration)
+    }
+
+    func test_tappedOnCloseButtonAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = messageCardReducer()
+
+        let newState = reducer(
+            initialState,
+            MessageCardAction(
+                messageCardConfiguration: MessageCardConfiguration(
+                    title: "Example Title",
+                    description: "Example Description",
+                    buttonLabel: "Example Button"
+                ),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MessageCardActionType.tappedOnCloseButton
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertNil(newState.messageCardConfiguration)
+    }
+
     // MARK: - Private
     private func createSubject() -> MessageCardState {
         return MessageCardState(windowUUID: .XCTestDefaultUUID)

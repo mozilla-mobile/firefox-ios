@@ -115,6 +115,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertEqual(addedFolder.parentGUID, rootFolderGUID)
     }
 
+    @MainActor
     func testRestoreBookmarkNode_restoreSeparator() async throws {
         let subject = createSubject()
         // guid is not assigned since places will assign a custom one when creating a new bookmark
@@ -131,6 +132,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertNil(resultingGUID ?? nil)
     }
 
+    @MainActor
     func testRestoreBookmarkNode_restoreFolder() async throws {
         let subject = createSubject()
         // guid is not assigned since places will assign a custom one when creating a new bookmark
@@ -158,6 +160,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertEqual(addedFolder.position, folder.position)
     }
 
+    @MainActor
     func testRestoreBookmarkNode_restoreBookmark() async throws {
         let subject = createSubject()
         // guid is not assigned since places will assign a custom one when creating a new bookmark

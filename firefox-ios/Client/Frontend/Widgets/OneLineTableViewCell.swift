@@ -92,10 +92,14 @@ class OneLineTableViewCell: UITableViewCell,
 
         // Position the accessory at the trailing edge of the cell, accounting for safe area and padding
         if let accessoryView {
-            accessoryView.frame.origin.x = frame.width
-            - accessoryView.frame.width
-            - UX.accessoryViewTrailingPadding
-            - safeAreaInsets.right
+            if UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft {
+                accessoryView.frame.origin.x = UX.accessoryViewTrailingPadding + safeAreaInsets.left
+            } else {
+                accessoryView.frame.origin.x = frame.width
+                    - accessoryView.frame.width
+                    - UX.accessoryViewTrailingPadding
+                    - safeAreaInsets.right
+            }
         }
     }
 

@@ -109,3 +109,12 @@
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Эзләү тәкъдимнәрен күрсәтү";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Күбрәк белү";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "Күбрәк белү.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Күбрәк белү";
+

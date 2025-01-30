@@ -257,7 +257,7 @@
 "SearchSuggestions.promptEnable" = "დიახ";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებებისთვის, %@ უგზავნის მისამართის ველში აკრეფილ ტექსტს, შერჩეულ საძიებო სისტემას.";
+"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებებისთვის %@ უგზავნის მისამართის ველში აკრეფილ ტექსტს შერჩეულ საძიებო სისტემას.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "გსურთ ძიების შემოთავაზებების ჩვენება?";
@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "შიგთავსის მეთვალყურეების შეზღუდვა";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "მისი მეშვეობით Mozilla მიახლოებით ითვლის მოქმედ მომხმარებლებს.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "დღიური გამოყენების უწყება";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "მუქი";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
@@ -311,7 +320,7 @@
 "Settings.Search.AddSearchEngineButton" = "სხვა საძიებოს დამატება";
 
 /* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "საძიებო სისტემის დამატება";
+"Settings.Search.AddSearchEngineTitle" = "საძიებოს დამატება";
 
 /* Header for rows of installed search engines */
 "Settings.Search.InstalledSearchEngines" = "დაყენებული საძიებო სისტემები";

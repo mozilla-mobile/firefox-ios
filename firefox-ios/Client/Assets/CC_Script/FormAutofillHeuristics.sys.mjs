@@ -13,6 +13,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   FieldScanner: "resource://gre/modules/shared/FieldScanner.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
+  MLAutofill: "resource://autofill/MLAutofill.sys.mjs",
 });
 
 /**
@@ -326,6 +327,37 @@ export const FormAutofillHeuristics = {
   },
 
   /**
+   * If this is a house number field and there is no address-line1 or
+   * street-address field, change the house number field to address-line1.
+   *
+   * @param {FieldScanner} scanner
+   *        The current parsing status for all elements
+   * @returns {boolean}
+   *          Return true if there is any field can be recognized in the parser,
+   *          otherwise false.
+   */
+  _parseHouseNumberFields(scanner, fieldDetail) {
+    if (fieldDetail?.fieldName == "address-housenumber") {
+      const savedIndex = scanner.parsingIndex;
+      for (let idx = 0; !scanner.parsingFinished; idx++) {
+        const detail = scanner.getFieldDetailByIndex(idx);
+        if (!detail) {
+          break;
+        }
+
+        if (["address-line1", "street-address"].includes(detail?.fieldName)) {
+          return false;
+        }
+      }
+
+      // Return false so additional address handling still gets performed.
+      scanner.updateFieldName(savedIndex, "street-address");
+    }
+
+    return false;
+  },
+
+  /**
    * Try to find the correct address-line[1-3] sequence and correct their field
    * names.
    *
@@ -633,6 +665,26 @@ export const FormAutofillHeuristics = {
       prevCCFields.add(detail.fieldName);
     }
 
+    const subsequentCCFields = new Set();
+
+    for (let idx = scanner.parsingIndex + fields.length; ; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (
+        // For updates we only check subsequent fields that are not of type address or do not have an
+        // alternative field name that is of type address, to avoid falsely updating address
+        // form name fields to cc-*-name.
+        lazy.FormAutofillUtils.getCategoryFromFieldName(detail?.fieldName) !=
+          "creditCard" ||
+        (detail?.alternativeFieldName !== undefined &&
+          lazy.FormAutofillUtils.getCategoryFromFieldName(
+            detail?.alternativeFieldName
+          ) != "creditCard")
+      ) {
+        break;
+      }
+      subsequentCCFields.add(detail.fieldName);
+    }
+
     const isLastField =
       scanner.getFieldDetailByIndex(scanner.parsingIndex + 1) === null;
 
@@ -646,11 +698,17 @@ export const FormAutofillHeuristics = {
     //    because "cc-csc" is often the last field in a credit card form, and we want to
     //    avoid mistakenly updating fields in subsequent address forms.
     if (
-      ["cc-number"].some(f => prevCCFields.has(f)) &&
-      !["cc-name", "cc-given-name", "cc-family-name"].some(f =>
-        prevCCFields.has(f)
-      ) &&
-      (isLastField || !prevCCFields.has("cc-csc"))
+      (["cc-number"].some(f => prevCCFields.has(f)) &&
+        !["cc-name", "cc-given-name", "cc-family-name"].some(f =>
+          prevCCFields.has(f)
+        ) &&
+        (isLastField || !prevCCFields.has("cc-csc"))) || // 4. Or we update when current name field is followed by
+      //    creditcard form fields that contain cc-number
+      //    and no cc-*-name field is detected
+      (["cc-number"].some(f => subsequentCCFields.has(f)) &&
+        !["cc-name", "cc-given-name", "cc-family-name"].some(f =>
+          subsequentCCFields.has(f)
+        ))
     ) {
       // If there is only one field, assume the name field a `cc-name` field
       if (fields.length == 1) {
@@ -704,23 +762,37 @@ export const FormAutofillHeuristics = {
    * in the belonging section. The details contain the autocomplete info
    * (e.g. fieldName, section, etc).
    *
-   * @param {HTMLFormElement} form
+   * @param {formLike} formLike
    *        the elements in this form to be predicted the field info.
+   * @param {boolean} ignoreInvisibleInput
+   *        True to NOT run heuristics on invisible <input> fields.
    * @returns {Array<FormSection>}
    *        all sections within its field details in the form.
    */
-  getFormInfo(form) {
-    const elements = Array.from(form.elements).filter(element =>
+  getFormInfo(formLike, ignoreInvisibleInput) {
+    const elements = Array.from(formLike.elements).filter(element =>
       lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
     );
 
+    let closestHeaders;
+    let closestButtons;
+    if (FormAutofill.isMLExperimentEnabled && elements.length) {
+      closestHeaders = lazy.MLAutofill.closestHeaderAbove(elements);
+      closestButtons = lazy.MLAutofill.closestButtonBelow(elements);
+    }
+
     const fieldDetails = [];
-    for (const element of elements) {
+    for (let idx = 0; idx < elements.length; idx++) {
+      const element = elements[idx];
       // Ignore invisible <input>, we still keep invisible <select> since
       // some websites implements their custom dropdown and use invisible <select>
       // to store the value.
       const isVisible = lazy.FormAutofillUtils.isFieldVisible(element);
-      if (!HTMLSelectElement.isInstance(element) && !isVisible) {
+      if (
+        !HTMLSelectElement.isInstance(element) &&
+        !isVisible &&
+        ignoreInvisibleInput
+      ) {
         continue;
       }
 
@@ -742,11 +814,13 @@ export const FormAutofillHeuristics = {
       }
 
       fieldDetails.push(
-        lazy.FieldDetail.create(element, form, fieldName, {
+        lazy.FieldDetail.create(element, formLike, fieldName, {
           autocompleteInfo: inferInfo.autocompleteInfo,
           fathomLabel: inferInfo.fathomLabel,
           fathomConfidence: inferInfo.fathomConfidence,
           isVisible,
+          mlHeaderInput: closestHeaders?.[idx] ?? null,
+          mlButtonInput: closestButtons?.[idx] ?? null,
         })
       );
     }
@@ -812,6 +886,7 @@ export const FormAutofillHeuristics = {
       // Attempt to parse the field using different parsers.
       if (
         this._parseNameFields(scanner, fieldDetail) ||
+        this._parseHouseNumberFields(scanner, fieldDetail) ||
         this._parseStreetAddressFields(scanner, fieldDetail) ||
         this._parseAddressFields(scanner, fieldDetail) ||
         this._parseCreditCardExpiryFields(scanner, fieldDetail) ||

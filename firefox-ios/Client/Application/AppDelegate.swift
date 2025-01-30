@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
-    lazy var gleanLifecycleObserver = GleanLifecycleObserver()
+    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
-    private var metricKitWrapper = MetricKitWrapper()
+    private lazy var metricKitWrapper = MetricKitWrapper()
     private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(

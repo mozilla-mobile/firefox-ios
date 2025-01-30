@@ -673,9 +673,9 @@ app:
     description: |
       Is Firefox the default browser
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -684,9 +684,9 @@ app:
     description: |
       The user installed the app via the browser choice screen
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -752,9 +752,10 @@ usage:
     expires: never
     send_in_pings:
       - usage-reporting
+      - usage-deletion-request
 
   duration:
-    type: timing_distribution
+    type: timespan
     time_unit: millisecond
     description: |
       The duration of the last foreground session.
@@ -4350,6 +4351,83 @@ tracking_protection:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14903
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/15503
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_clear_cookies_alert:
+    type: event
+    description: |
+      Records when the clear cookies alert is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_blocked_trackers_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection blocked trackers details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_settings:
+    type: event
+    description: |
+      Records when the enhanced tracking protection settings screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  tapped_clear_cookies:
+    type: event
+    description: |
+      Records when the clear cookies button from the etp alert is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  dismiss_etp_panel:
+    type: event
+    description: |
+      Records when the enhanced tracking protection panel is dismissed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_certificates:
+    type: event
+    description: |
+      Records when the certificates screen from the enhanced tracking protection panel is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"

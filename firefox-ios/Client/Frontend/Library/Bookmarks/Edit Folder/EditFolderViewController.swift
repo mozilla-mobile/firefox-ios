@@ -52,6 +52,7 @@ class EditFolderViewController: UIViewController,
             target: self,
             action: #selector(saveButtonAction)
         )
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
         return button
     }()
 
@@ -186,6 +187,8 @@ class EditFolderViewController: UIViewController,
                 configureDesktopBookmarksHeaderCell(cell)
             } else {
                 configureParentFolderCell(cell, folder: folder)
+                cell.accessibilityIdentifier =
+                "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.row)"
             }
             return cell
         }

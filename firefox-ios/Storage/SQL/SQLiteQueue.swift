@@ -13,19 +13,16 @@ open class SQLiteQueue: TabQueue {
     }
 
     open func addToQueue(_ tab: ShareItem) -> Success {
-        let args: Args = [tab.url, tab.title]
-        return db.run("INSERT OR IGNORE INTO queue (url, title) VALUES (?, ?)", withArgs: args)
+        return db.run("INSERT OR IGNORE INTO queue (url) VALUES (?)", withArgs: [tab.url])
     }
 
     fileprivate func factory(_ row: SDRow) -> ShareItem {
-        guard let url = row["url"] as? String, let title = row["title"] as? String else {
-            return ShareItem(url: "", title: "")
-        }
-        return ShareItem(url: url, title: title)
+        let url = row["url"] as? String ?? ""
+        return ShareItem(url: url, title: "")
     }
 
     open func getQueuedTabs(completion: @escaping ([ShareItem]) -> Void) {
-        let sql = "SELECT url, title FROM queue"
+        let sql = "SELECT url FROM queue"
         let deferredResponse = db.runQuery(sql, args: nil, factory: self.factory) >>== { cursor in
             return deferMaybe(cursor.asArray())
         }

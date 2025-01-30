@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Izvještaji o padu omogućavaju nam da dijagnosticiramo i popravimo probleme s preglednikom.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Ovo nam pomaže da dijagnosticiramo i riješimo probleme s preglednikom.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Automatski šalji izvještaje o padu";
 

@@ -40,6 +40,9 @@
 /* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.MoreButton.Title.v120" = "Күбрәк күрсәтү";
 
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Төрү материалы";
+
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Price.Title.v120" = "Бәя";
 
@@ -55,6 +58,9 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Бу бәяләмәләрне тикшерә алмыйбыз";
 
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Мәгълүмат тиздән өстәләчәк";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Хәзер тикшерү";
 
@@ -63,6 +69,9 @@
 
 /* Title for info card when no information is available at the moment */
 "Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Хәзерге моментта мәгълүмат юк";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Бәяләмәләр җитәрлек түгел әле";
 
 /* This title is displayed on the information card as a confirmation message after a user reports that a previously out-of-stock product is now available. It's meant to acknowledge the user's contribution and encourage community engagement by letting them know their report has been successfully submitted. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Title.v121" = "Белдерүегез өчен рәхмәт!";

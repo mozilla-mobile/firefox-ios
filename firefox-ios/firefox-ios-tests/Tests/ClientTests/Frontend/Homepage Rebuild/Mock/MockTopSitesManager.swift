@@ -28,7 +28,7 @@ final class MockTopSitesManager: TopSitesManagerInterface {
         return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) async -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) -> [TopSiteState] {
         recalculateTopSitesCalledCount += 1
         return createSites(subtitle: ": total top sites")
     }

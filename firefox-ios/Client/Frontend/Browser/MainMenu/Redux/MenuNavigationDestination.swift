@@ -19,6 +19,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case syncSignIn
     case printSheet
     case shareSheet
+    case saveAsPDF
     case zoom
 }
 

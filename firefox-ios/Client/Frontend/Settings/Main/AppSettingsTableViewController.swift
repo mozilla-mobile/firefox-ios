@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Glean
 
 // MARK: - Settings Flow Delegate Protocol
 
@@ -49,7 +50,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
-    private let gleanLifecycleObserver: GleanLifecycleObserver
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -65,7 +66,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         and tabManager: TabManager,
         settingsDelegate: SettingsDelegate,
         parentCoordinator: SettingsFlowDelegate,
-        gleanLifecycleObserver: GleanLifecycleObserver,
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         logger: Logger = DefaultLogger.shared
@@ -73,7 +74,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
-        self.gleanLifecycleObserver = gleanLifecycleObserver
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
@@ -96,8 +97,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
         configureAccessibilityIdentifiers()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         askedToReload()
     }
 
@@ -226,9 +228,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
         )
         sendDailyUsagePingSettings.shouldSendData = { [weak self] value in
             if value {
-                self?.gleanLifecycleObserver.startObserving()
+                self?.gleanUsageReportingMetricsService.start()
             } else {
-                self?.gleanLifecycleObserver.stopObserving()
+                self?.gleanUsageReportingMetricsService.stop()
             }
         }
         sendDailyUsagePingSetting = sendDailyUsagePingSettings
