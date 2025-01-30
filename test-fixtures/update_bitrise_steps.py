@@ -11,6 +11,11 @@ BITRISE_STEPLIB_URL = "https://api.github.com/repos/bitrise-io/bitrise-steplib/c
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 # Step versions that should NOT be updated
+"""
+We need to lock this version because the new version of git-clone step brokes the decision 
+to run UI test step due to the change in the variables available. Once we investigate this
+failure in the workflow, eventually we can remove the locked version.
+"""
 LOCKED_VERSIONS = {
     "git-clone": "6.2"
 }
