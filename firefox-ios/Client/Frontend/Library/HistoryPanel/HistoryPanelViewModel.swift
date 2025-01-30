@@ -198,9 +198,11 @@ class HistoryPanelViewModel: FeatureFlaggable {
     /// Based on the latest visit of the group items gets the section where the group should be added
     /// if the section is available (visible) and not hidden returns it if not returns nil
     /// - Parameter group: ASGroup
+    /// - Parameter comparisonDate: Comparison date is used to control unit tests outcome.
     /// - Returns: Section where group should be added
-    func shouldAddGroupToSections(group: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
-        guard let section = groupBelongsToSection(asGroup: group),
+    func shouldAddGroupToSections(group: ASGroup<Site>,
+                                  comparisonDate: Date = Date()) -> HistoryPanelViewModel.Sections? {
+        guard let section = groupBelongsToSection(asGroup: group, comparisonDate: comparisonDate),
                 visibleSections.contains(section),
               !hiddenSections.contains(section) else {
             return nil
@@ -210,7 +212,11 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     /// This helps us place an ASGroup<Site> in the correct section.
-    func groupBelongsToSection(asGroup: ASGroup<Site>) -> HistoryPanelViewModel.Sections? {
+    /// - Parameters:
+    ///   - asGroup: ASGroup
+    ///   - comparisonDate: Comparison date is used to control unit tests outcome.
+    /// - Returns: Section where group should be added
+    func groupBelongsToSection(asGroup: ASGroup<Site>, comparisonDate: Date = Date()) -> HistoryPanelViewModel.Sections? {
         guard let individualItem = asGroup.groupedItems.last,
               let lastVisit = individualItem.latestVisit
         else { return nil }
@@ -218,15 +224,15 @@ class HistoryPanelViewModel: FeatureFlaggable {
         let groupDate = TimeInterval.timeIntervalSince1970ToDate(
             timeInterval: TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
         )
-        if groupDate.isWithinLastHour() {
+        if groupDate.isWithinLastHour(comparisonDate: comparisonDate) {
             return .lastHour
         } else if groupDate.isToday() {
             return .today
         } else if groupDate.isYesterday() {
             return .yesterday
-        } else if groupDate.isWithinLast7Days() {
+        } else if groupDate.isWithinLast7Days(comparisonDate: comparisonDate) {
             return .lastWeek
-        } else if groupDate.isWithinLast14Days() {
+        } else if groupDate.isWithinLast14Days(comparisonDate: comparisonDate) {
             // Since two weeks falls within here, lastMonth will have an ASGroup, if it exists.
             return .lastMonth
         }
