@@ -117,14 +117,7 @@ class DefaultImageHandler: ImageHandler {
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
-            let isClientError = ServerErrorHelper.isClientError(error)
-
-            // If the error is related to connectivity, don't cache the fallback favicon.
-            if isClientError {
-                return await fallbackToLetterFavicon(imageModel: imageModel, shouldCache: false)
-            } else {
-                return await fallbackToLetterFavicon(imageModel: imageModel, shouldCache: true)
-            }
+            return await fallbackToLetterFavicon(imageModel: imageModel)
         }
     }
 
@@ -138,7 +131,7 @@ class DefaultImageHandler: ImageHandler {
         }
     }
 
-    private func fallbackToLetterFavicon(imageModel: SiteImageModel, shouldCache: Bool) async -> UIImage {
+    private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
             var siteString = imageModel.cacheKey
             if imageModel.siteURL.scheme == "internal", imageModel.siteURL.lastPathComponent == "home" {
@@ -149,12 +142,8 @@ class DefaultImageHandler: ImageHandler {
 
             let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
 
-            //If there was a client-side error retrieving the image (e.g. lost internet connection),
-            //then we should not cache the fallback letter favicon.
-            //But if we receive a server error, we should cache it so we don't keep hitting the server with favicon requests.
-            if shouldCache {
-                await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
-            }
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+
             return image
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
