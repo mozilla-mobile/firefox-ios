@@ -211,7 +211,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     // MARK: - Remove Tab
     @MainActor
-    func removeTab(_ tabUUID: TabUUID) {
+    func removeTab(_ tabUUID: TabUUID) async {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -268,7 +268,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         }
     }
 
-    func removeAllTabs(isPrivateMode: Bool) {
+    @MainActor
+    func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?
 
@@ -282,7 +283,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            self.removeTab(tab)
+            await self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
@@ -976,11 +977,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     @MainActor
-    func removeAllInactiveTabs() {
+    func removeAllInactiveTabs() async {
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
+            await self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }

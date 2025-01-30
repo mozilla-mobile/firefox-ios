@@ -1304,7 +1304,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
-        tabManager.removeAllInactiveTabs()
+        await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         // We expect a new normal active tab will be created, all inactive tabs removed
@@ -1342,7 +1342,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
 
-        tabManager.removeAllInactiveTabs()
+        await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
@@ -1379,7 +1379,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
 
-        tabManager.removeAllInactiveTabs()
+        await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalPrivateTabs, "Number of private tabs should not have changed")
