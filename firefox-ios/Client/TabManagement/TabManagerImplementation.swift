@@ -9,8 +9,17 @@ import Common
 import Shared
 import WebKit
 
-// This class subclasses the legacy tab manager temporarily so we can
-// gradually migrate to the new system
+enum SwitchPrivacyModeResult {
+    case createdNewTab
+    case usedExistingTab
+}
+
+struct BackupCloseTab {
+    var tab: Tab
+    var restorePosition: Int?
+    var isSelected: Bool
+}
+
 class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEventHandler {
     let windowUUID: WindowUUID
     let delaySelectingNewPopupTab: TimeInterval = 0.1
@@ -19,7 +28,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     var isRestoringTabs = false
     var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
-    // TODO: Does this need to be internally accessible?
     var tabs = [Tab]()
 
     var isInactiveTabsEnabled: Bool {

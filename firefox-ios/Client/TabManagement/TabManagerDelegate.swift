@@ -52,14 +52,3 @@ class WeakTabManagerDelegate: CustomDebugStringConvertible {
         return "<\(className): \(memAddr)> Value: \(valueStr)"
     }
 }
-
-enum SwitchPrivacyModeResult {
-    case createdNewTab
-    case usedExistingTab
-}
-
-struct BackupCloseTab {
-    var tab: Tab
-    var restorePosition: Int?
-    var isSelected: Bool
-}

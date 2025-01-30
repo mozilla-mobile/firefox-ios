@@ -566,7 +566,7 @@
 		5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
 		5A5AB980296CA03500485E06 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5AB97F296CA03500485E06 /* SiteImageView */; };
-		5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */; };
+		5A64225129CB506500EEC3E5 /* TabManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */; };
 		5A679E4B2B239FAE004F2B0D /* TabPeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */; };
 		5A68F0AB2AF2E5E00089AC62 /* TabDataStore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A68F0AA2AF2E5E00089AC62 /* TabDataStore */; };
 		5A70EF0E295DFCCF00790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF0D295DFCCF00790249 /* Common */; };
@@ -7109,7 +7109,7 @@
 		5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDataStore.swift; sourceTree = "<group>"; };
 		5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskImageStore.swift; sourceTree = "<group>"; };
 		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
-		5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabManager.swift; sourceTree = "<group>"; };
+		5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerDelegate.swift; sourceTree = "<group>"; };
 		5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekViewController.swift; sourceTree = "<group>"; };
 		5A70EF18295E2E1600790249 /* DependencyHelperMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelperMock.swift; sourceTree = "<group>"; };
 		5A70EF1C295E3C3500790249 /* TestSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSetup.swift; sourceTree = "<group>"; };
@@ -11175,7 +11175,6 @@
 				8A03309428C2653600286539 /* LegacyTabFileManager.swift */,
 				215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */,
 				215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */,
-				5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -11792,6 +11791,7 @@
 			children = (
 				5A9FFB3629C0F99C001793A0 /* Legacy */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				39455F761FC83F430088A22C /* TabEventHandler.swift */,
 				39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */,
@@ -16762,7 +16762,7 @@
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				0AFF7F682C78989000265214 /* CertificatesHeaderItem.swift in Sources */,
 				B2999FF32B194A8300F0FEC1 /* FillCreditCardForm.swift in Sources */,
-				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
+				5A64225129CB506500EEC3E5 /* TabManagerDelegate.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */,
