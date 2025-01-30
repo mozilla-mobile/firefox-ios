@@ -41,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
+        gleanUsageReportingMetricsService: gleanUsageReportingMetricsService,
         themeManager: themeManager
     )
 
@@ -51,6 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
+    private lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService()
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
@@ -360,10 +362,10 @@ extension AppDelegate {
 
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
 
-        if TelemetryManager.shared.isGleanEnabled {
-            UsageProfileManager.checkAndSetUsageProfileId()
+        if TelemetryManager.shared.isNewTosEnabled {
+            gleanUsageReportingMetricsService.start()
         } else {
-            UsageProfileManager.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)

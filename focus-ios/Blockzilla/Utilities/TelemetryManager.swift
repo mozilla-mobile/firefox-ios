@@ -23,10 +23,18 @@ class TelemetryManager {
     }
     
     var isNewTosEnabled: Bool {
-        // Return the value of the new toggle if set, otherwise mirror the old toggle
-        if Settings.getToggleIfAvailable(.dailyUsagePing) != nil {
-            return Settings.getToggle(.dailyUsagePing)
+        if let dailyUsagePing = Settings.getToggleIfAvailable(.dailyUsagePing) {
+            // If dailyUsagePing is explicitly set, use its value
+            return dailyUsagePing
+        } else if let sendAnonymousUsageData = Settings.getToggleIfAvailable(.sendAnonymousUsageData) {
+            // If dailyUsagePing is not set, fall back to sendAnonymousUsageData
+            // Persist this value into dailyUsagePing for future consistency
+            Settings.set(sendAnonymousUsageData, forToggle: .dailyUsagePing)
+            return sendAnonymousUsageData
+        } else {
+            // Default to true if neither setting is available
+            Settings.set(true, forToggle: .dailyUsagePing)
+            return true
         }
-        return Settings.getToggle(.sendAnonymousUsageData)
     }
 }
