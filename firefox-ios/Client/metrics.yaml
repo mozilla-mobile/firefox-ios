@@ -673,9 +673,9 @@ app:
     description: |
       Is Firefox the default browser
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -684,9 +684,9 @@ app:
     description: |
       The user installed the app via the browser choice screen
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
