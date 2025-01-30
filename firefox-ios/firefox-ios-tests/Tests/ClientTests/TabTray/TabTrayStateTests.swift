@@ -16,7 +16,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(initialState.selectedPanel, .tabs)
         XCTAssertEqual(initialState.hasSyncableAccount, false)
         XCTAssertEqual(initialState.shouldDismiss, false)
-        XCTAssertEqual(initialState.shareURL, nil)
         XCTAssertEqual(initialState.normalTabsCount, "0")
         XCTAssertEqual(initialState.showCloseConfirmation, false)
     }
@@ -31,7 +30,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -47,7 +45,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -63,7 +60,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, true)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -79,7 +75,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .privateTabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -95,7 +90,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .syncedTabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -111,7 +105,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -127,7 +120,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -143,7 +135,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -159,7 +150,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -175,7 +165,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -191,23 +180,21 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, true)
     }
 
-    func testShowShareSheetAction() {
+    func testSelectTabAction() {
         let initialState = createSubject()
         let reducer = tabTrayReducer()
 
-        let action = getTabPanelViewAction(for: .showShareSheet)
+        let action = getTabPanelViewAction(for: .selectTab)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.isPrivateMode, false)
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -223,7 +210,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -240,7 +226,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.selectedPanel, .tabs)
         XCTAssertEqual(newState.hasSyncableAccount, false)
         XCTAssertEqual(newState.shouldDismiss, false)
-        XCTAssertEqual(newState.shareURL, nil)
         XCTAssertEqual(newState.normalTabsCount, "0")
         XCTAssertEqual(newState.showCloseConfirmation, false)
     }
@@ -256,7 +241,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(defaultState.isPrivateMode, initialState.isPrivateMode)
         XCTAssertEqual(defaultState.selectedPanel, initialState.selectedPanel)
         XCTAssertEqual(defaultState.hasSyncableAccount, initialState.hasSyncableAccount)
-        XCTAssertEqual(defaultState.shareURL, initialState.shareURL)
         XCTAssertEqual(defaultState.normalTabsCount, initialState.normalTabsCount)
         XCTAssertNotEqual(defaultState.shouldDismiss, initialState.shouldDismiss)
         XCTAssertNotEqual(defaultState.showCloseConfirmation, initialState.showCloseConfirmation)
