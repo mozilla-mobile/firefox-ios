@@ -768,10 +768,6 @@ class BrowserViewController: UIViewController,
             // in getting the value. When the delay happens the credit cards might not sync
             // as the default value is false
             self.profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
-
-            self.creditCardInitialSetupTelemetry()
-
-            FakespotUtils().addSettingTelemetry()
         }
     }
 
@@ -781,7 +777,7 @@ class BrowserViewController: UIViewController,
 
         DispatchQueue.main.async {
             self.overlayManager.setURLBar(urlBarView: self.urlBarView)
-            self.updateToolbarStateForTraitCollection(self.traitCollection)
+//            self.updateToolbarStateForTraitCollection(self.traitCollection)
 
             // Update theme of already existing views
             let theme = self.currentTheme()
@@ -4371,6 +4367,8 @@ extension BrowserViewController {
         trackAccessibility()
         trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
+        creditCardInitialSetupTelemetry()
+        FakespotUtils().addSettingTelemetry()
     }
 
     func trackAccessibility() {
