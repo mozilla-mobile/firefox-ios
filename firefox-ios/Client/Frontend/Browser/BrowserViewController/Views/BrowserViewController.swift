@@ -751,9 +751,13 @@ class BrowserViewController: UIViewController,
         setupEssentialUI()
         subscribeToRedux()
 
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+            // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
+            self.trackStartupTelemetry()
+        }
+
         // Non-UI tasks only
         DispatchQueue.global(qos: .background).async {
-            self.trackTelemetry()
             self.setupNotifications()
             SearchBarSettingsViewModel.recordLocationTelemetry(for: self.isBottomSearchBar ? .bottom : .top)
 
@@ -4363,7 +4367,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 }
 
 extension BrowserViewController {
-    func trackTelemetry() {
+    func trackStartupTelemetry() {
         trackAccessibility()
         trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
@@ -4402,15 +4406,17 @@ extension BrowserViewController {
             extras: [Key.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
         )
 
-        let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
-        let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .dynamicTextSize,
-            object: .app,
-            extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
-                     Key.preferredContentSizeCategory.rawValue: a11yCategory]
-        )
+        ensureMainThread {
+            let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
+            let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .dynamicTextSize,
+                object: .app,
+                extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
+                         Key.preferredContentSizeCategory.rawValue: a11yCategory]
+            )
+        }
     }
 
     func trackNotificationPermission() {
