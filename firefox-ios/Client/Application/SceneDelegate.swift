@@ -59,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func cancelStartupTimeRecordIfNeeded(options: UIScene.ConnectionOptions) {
         // if the conditions are met it means the app was launched with no deeplink options
         guard options.urlContexts.isEmpty, options.shortcutItem == nil, options.userActivities.isEmpty else { return }
-        AppEventQueue.signal(event: .recordStartupTimeOpenURLCanceled)
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLCancelled)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

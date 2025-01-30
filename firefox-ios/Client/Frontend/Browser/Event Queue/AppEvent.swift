@@ -24,7 +24,7 @@ public enum AppEvent: AppEventType {
 
     // Events: Open URL startup time record
     case recordStartupTimeOpenURLComplete
-    case recordStartupTimeOpenURLCanceled
+    case recordStartupTimeOpenURLCancelled
 
     // Activities: Profile Syncing
     case profileSyncing

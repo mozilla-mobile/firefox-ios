@@ -103,17 +103,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private func startRecordingStartupOpenURLTime() {
         shareTelemetry.recordOpenURLTime()
         var recordCompleteToken: ActionToken?
-        var recordCanceledToken: ActionToken?
+        var recordCancelledToken: ActionToken?
         recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
             self?.shareTelemetry.sendOpenURLTimeRecord()
-            guard let recordCanceledToken, let recordCompleteToken  else { return }
-            AppEventQueue.cancelAction(token: recordCanceledToken)
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
             AppEventQueue.cancelAction(token: recordCompleteToken)
         }
-        recordCanceledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCanceled) { [weak self] in
+        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCancelled) { [weak self] in
             self?.shareTelemetry.cancelOpenURLTimeRecord()
-            guard let recordCanceledToken, let recordCompleteToken  else { return }
-            AppEventQueue.cancelAction(token: recordCanceledToken)
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
             AppEventQueue.cancelAction(token: recordCompleteToken)
         }
     }
