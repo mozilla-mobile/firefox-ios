@@ -148,9 +148,9 @@ class GleanUsageReportingMetricsService {
 
     func stop() {
         lifecycleObserver.gleanUsageReportingApi.setEnabled(false)
-        unsetUsageProfileId()
         lifecycleObserver.stopObserving()
         lifecycleObserver.gleanUsageReportingApi.requestDataDeletion()
+        unsetUsageProfileId()
     }
 
     struct Constants {
