@@ -123,14 +123,6 @@ final class ImageHandlerTests: XCTestCase {
         let model = createSiteImageModel(resourceURL: faviconURL)
         let result = await subject.fetchFavicon(imageModel: model)
 
-        // Simulate a server-side error (5xx HTTP status code)
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
         XCTAssertEqual(letterImageGenerator.image, result)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
@@ -139,12 +131,8 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
 
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
 
         // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
@@ -159,13 +147,6 @@ final class ImageHandlerTests: XCTestCase {
 
         let result = await subject.fetchFavicon(imageModel: site)
 
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
         XCTAssertEqual(letterImageGenerator.image, result)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
@@ -174,12 +155,8 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
 
         XCTAssertEqual(letterImageGenerator.capturedSiteString, siteURL.shortDomain)
@@ -211,13 +188,6 @@ final class ImageHandlerTests: XCTestCase {
         let model = createSiteImageModel(resourceURL: nil)
         let result = await subject.fetchFavicon(imageModel: model)
 
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
         XCTAssertEqual(letterImageGenerator.image, result)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
@@ -226,12 +196,8 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
 
         // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
@@ -249,13 +215,6 @@ final class ImageHandlerTests: XCTestCase {
                                    image: nil)
         let result = await subject.fetchFavicon(imageModel: model)
 
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
         XCTAssertEqual(letterImageGenerator.image, result)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
@@ -265,12 +224,8 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
         XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
 
         // ImageHandler has a special site string override for internal strings
@@ -388,72 +343,6 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(siteImageCache.cachedWithType, .heroImage)
         XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-    }
-
-    func testFetchFaviconFromFetcher_whenServerError_shouldFallbackAndCache() async {
-        // Arrange
-        let faviconFetcher = MockFaviconFetcher()
-        let siteImageCache = MockSiteImageCache()
-        let letterImageGenerator = MockLetterImageGenerator()
-        let imageHandler = DefaultImageHandler(imageCache: siteImageCache,
-                                               faviconFetcher: faviconFetcher,
-                                               letterImageGenerator: letterImageGenerator,
-                                               heroImageFetcher: MockHeroImageFetcher())
-
-        let siteImageModel = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL)
-
-        faviconFetcher.image = nil // Simulate fetch failure
-
-        // Simulate a server-side error (5xx HTTP status code)
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
-        // Act
-        _ = await imageHandler.fetchFavicon(imageModel: siteImageModel)
-
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when server-side error occurs.")
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when client-side error occurs.")
-        }
-        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1, "Fallback letter image should be generated.")
-    }
-
-    func testFetchFaviconFromFetcher_whenNotServerError_shouldFallbackWithoutCaching() async {
-        // Arrange
-        let faviconFetcher = MockFaviconFetcher()
-        let siteImageCache = MockSiteImageCache()
-        let letterImageGenerator = MockLetterImageGenerator()
-        let imageHandler = DefaultImageHandler(imageCache: siteImageCache,
-                                               faviconFetcher: faviconFetcher,
-                                               letterImageGenerator: letterImageGenerator,
-                                               heroImageFetcher: MockHeroImageFetcher())
-
-        let siteImageModel = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL)
-
-        faviconFetcher.image = nil // Simulate fetch failure
-
-        // Simulate a server-side error (5xx HTTP status code)
-        guard let error = HTTPURLResponse(url: siteURL,
-                                          statusCode: 500,
-                                          httpVersion: nil,
-                                          headerFields: nil) as? Error else { return }
-
-        let isClientError = ServerErrorHelper.isClientError(error)
-
-        // Act
-        _ = await imageHandler.fetchFavicon(imageModel: siteImageModel)
-
-        if !isClientError {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1, "Cache fallback image when server-side error occurs.")
-        } else {
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0, "Don't cache fallback image when client-side error occurs.")
-        }
-        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1, "Fallback letter image should be generated.")
     }
 
     func testClearCache() async {
