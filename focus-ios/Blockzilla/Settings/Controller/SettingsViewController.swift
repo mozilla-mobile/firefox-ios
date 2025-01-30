@@ -89,6 +89,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let authenticationManager: AuthenticationManager
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     private lazy var sections = {
         Section.getSections()
     }()
@@ -178,6 +179,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         searchEngineManager: SearchEngineManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandling,
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         themeManager: ThemeManager,
         dismissScreenCompletion: @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
@@ -186,6 +188,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.shouldScrollToSiri = shouldScrollToSiri
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.themeManager = themeManager
         self.dismissScreenCompletion =  dismissScreenCompletion
         super.init(nibName: nil, bundle: nil)
@@ -656,8 +659,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         } else if toggle.setting == .dailyUsagePing {
-            if !sender.isOn {
-                GleanMetrics.Pings.shared.usageDeletionRequest.submit()
+            if sender.isOn {
+                gleanUsageReportingMetricsService.start()
+            } else {
+                gleanUsageReportingMetricsService.stop()
             }
         }
 
