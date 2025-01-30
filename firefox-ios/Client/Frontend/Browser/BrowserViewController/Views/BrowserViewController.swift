@@ -2608,6 +2608,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
+        openBlankNewTab(focusLocationField: false, isPrivate: false)
         navigationHandler?.showQRCode(delegate: self)
     }
 
