@@ -107,8 +107,14 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         toggleSwitch.isHidden = isHidden
     }
 
-    func setStatusLabelText(with text: String) {
+    func setStatusLabelText(with text: String, and shouldUseButtonTrait: Bool) {
         toggleStatusLabel.text = text
+        toggleLabelsContainer.accessibilityHint = text
+        if shouldUseButtonTrait {
+            toggleLabelsContainer.accessibilityTraits = .button
+        } else {
+            toggleLabelsContainer.accessibilityTraits.remove(.button)
+        }
     }
 
     func setupDetails(isOn: Bool) {
