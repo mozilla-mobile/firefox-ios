@@ -14,11 +14,11 @@ class ServerErrorHelperTests {
         XCTAssertTrue(isClientError, "The error should be identified as a client error.")
     }
 
-    func testIsClientError_whenServerErrorOccurs() async {
+    func testIsClientError_whenServerError() async {
         let serverError = URLError(.badServerResponse)
 
         let isClientError = ServerErrorHelper.isClientError(serverError)
-        
+
         XCTAssertFalse(isClientError, "The error should be identified as a server error.")
     }
 }

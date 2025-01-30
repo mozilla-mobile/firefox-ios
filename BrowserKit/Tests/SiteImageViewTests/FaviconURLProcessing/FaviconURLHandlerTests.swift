@@ -102,7 +102,7 @@ class FaviconURLHandlerTests: XCTestCase {
         mockFetcher.error = URLError(.notConnectedToInternet)
         let model = createSiteImageModel(siteURL: siteURL)
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher, urlCache: mockCache)
-        
+
         do {
             _ = try await subject.getFaviconURL(model: model)
             XCTFail("Request should have thrown a client error")
@@ -117,7 +117,7 @@ class FaviconURLHandlerTests: XCTestCase {
         mockFetcher.error = URLError(.badServerResponse)
         let model = createSiteImageModel(siteURL: siteURL)
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher, urlCache: mockCache)
-        
+
         do {
             _ = try await subject.getFaviconURL(model: model)
             XCTFail("Request should have thrown a server error")

@@ -48,7 +48,7 @@ class FaviconURLFetcherTests: XCTestCase {
         networkMock.error = URLError(.badURL)
 
         do {
-            _ = try await subject.fetchFaviconURL(siteURL: .init(string: "")!)
+            _ = try await subject.fetchFaviconURL(siteURL: url)
             XCTFail("fetchFaviconURL should throw an error when a network error occurs")
         } catch {
             let responseError = try XCTUnwrap(error as? URLError)
