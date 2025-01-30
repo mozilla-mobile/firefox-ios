@@ -211,11 +211,16 @@ extension String {
                     tableName: "Bookmarks",
                     value: "No bookmarks yet",
                     comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
-                public static let Body = MZLocalizedString(
+                public static let BodySignedIn = MZLocalizedString(
                     key: "Bookmarks.EmptyState.Root.Body.v135",
                     tableName: "Bookmarks",
                     value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
-                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                    comment: "The body text for the placeholder screen shown when the user is signed in and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                public static let BodySignedOut = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.BodySignedOut.v135",
+                    tableName: "Bookmarks",
+                    value: "Save sites as you browse. Sign in to grab bookmarks from other synced devices.",
+                    comment: "The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
                 public static let ButtonTitle = MZLocalizedString(
                     key: "Bookmarks.EmptyState.Root.ButtonTitle.v136",
                     tableName: "Bookmarks",
