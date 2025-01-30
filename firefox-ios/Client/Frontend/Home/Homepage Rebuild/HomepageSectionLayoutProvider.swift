@@ -60,6 +60,10 @@ final class HomepageSectionLayoutProvider {
             static let cellEstimatedSize = CGSize(width: 85, height: 94)
             static let minCards = 4
         }
+
+        struct JumpBackInConstants {
+            static let itemHeight: CGFloat = 112
+        }
     }
 
     private var logger: Logger
@@ -92,6 +96,8 @@ final class HomepageSectionLayoutProvider {
                 for: traitCollection,
                 numberOfTilesPerRow: numberOfTilesPerRow
             )
+        case .jumpBackIn:
+            return createJumpBackInSectionLayout(for: traitCollection)
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
@@ -204,6 +210,33 @@ final class HomepageSectionLayoutProvider {
             trailing: leadingInset
         )
         section.interGroupSpacing = UX.standardSpacing
+
+        return section
+    }
+
+    private func createJumpBackInSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        // TODO: FXIOS-11224 Update section layout for jump back in
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitem: item,
+                                                       count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: leadingInset,
+                    bottom: UX.spacingBetweenSections,
+                    trailing: leadingInset)
 
         return section
     }

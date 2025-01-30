@@ -186,7 +186,7 @@ private extension JumpBackInViewModel {
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
-    func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
+    func configureJumpBackInCellForTab(item: Tab, cell: LegacyJumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
@@ -237,7 +237,7 @@ private extension JumpBackInViewModel {
                                                      heightDimension: .estimated(UX.syncedTabCellHeight))
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
                                                            subitems: [jumpBackInItem, jumpBackInItem])
-        nestedGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        nestedGroup.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         // Main Group
         let mainGroupHeight: CGFloat = UX.syncedTabCellHeight
@@ -254,7 +254,7 @@ private extension JumpBackInViewModel {
         }
         let mainGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainGroupSize,
                                                            subitems: subItems)
-        mainGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        mainGroup.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         return NSCollectionLayoutSection(group: mainGroup)
     }
@@ -276,12 +276,12 @@ private extension JumpBackInViewModel {
         // Main Group
         let groupWidth = sectionLayout.widthDimension
         let groupHeight: CGFloat = syncedTabCellHeight + UX.jumpBackInCellHeight
-            + JumpBackInCell.UX.interItemSpacing.spacing
+            + LegacyJumpBackInCell.UX.interItemSpacing.spacing
         let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(groupHeight))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
                                                      subitems: [jumpBackInItem, syncedTabItem])
-        group.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        group.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         return NSCollectionLayoutSection(group: group)
     }
@@ -338,7 +338,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections,
                                                         trailing: 0)
-        section.interGroupSpacing = JumpBackInCell.UX.interGroupSpacing
+        section.interGroupSpacing = LegacyJumpBackInCell.UX.interGroupSpacing
 
         return section
     }
@@ -386,9 +386,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyJumpBackInCell.cellIdentifier,
                                                           for: indexPath)
-            guard let jumpBackInCell = cell as? JumpBackInCell else { return UICollectionViewCell() }
+            guard let jumpBackInCell = cell as? LegacyJumpBackInCell else { return UICollectionViewCell() }
 
             if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
