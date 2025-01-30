@@ -489,6 +489,10 @@ class BookmarksViewController: SiteTableViewController,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
 
+            let cellA11yId = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
+            cell.accessibilityIdentifier = cellA11yId
+            cell.accessibilityTraits = .button
+
             // BookmarkItemData requires:
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
@@ -503,6 +507,8 @@ class BookmarksViewController: SiteTableViewController,
                 }
 
                 let contextButton = createContextButton()
+                contextButton.accessibilityIdentifier = cellA11yId +
+                AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
                     guard let indexPath = tableView.indexPath(for: cell) else { return }
                     self?.presentContextMenu(for: indexPath)
@@ -510,7 +516,6 @@ class BookmarksViewController: SiteTableViewController,
                 viewModel.accessoryView = contextButton
             }
 
-            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell
