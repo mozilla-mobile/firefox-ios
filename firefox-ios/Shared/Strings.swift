@@ -5416,7 +5416,7 @@ extension String {
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains how Mozilla send crash reports.")
-    public static let SendCrashReportsSettingMessage = MZLocalizedString(
+    public static let SendCrashReportsSettingMessageV2 = MZLocalizedString(
         key: "Settings.CrashReports.Message.v136",
         tableName: "Settings",
         value: "This helps us diagnose and fix issues with the browser.",
