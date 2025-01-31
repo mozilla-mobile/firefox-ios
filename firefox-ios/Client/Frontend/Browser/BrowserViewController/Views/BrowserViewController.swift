@@ -2555,6 +2555,8 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
+    // MARK: - Handle Deeplink open URL / query
+
     func handle(query: String, isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if isToolbarRefactorEnabled {
@@ -2562,24 +2564,31 @@ class BrowserViewController: UIViewController,
         } else if let legacyUrlBar {
             urlBar(legacyUrlBar, didSubmitText: query)
         }
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         if let url = url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
                 isPrivate: isPrivate
             )
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
         if let url = url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
@@ -2600,10 +2609,33 @@ class BrowserViewController: UIViewController,
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
+<<<<<<< HEAD
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
+=======
+    func switchToTabForURLOrOpen(
+        _ url: URL,
+        uuid: String? = nil,
+        isPrivate: Bool = false,
+        completionHandler: (() -> Void)? = nil
+    ) {
+        // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
+        guard !tabManager.isRestoringTabs else {
+            AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
+                self?.switchToTabForURLOrOpen(
+                    url,
+                    uuid: uuid,
+                    isPrivate: isPrivate,
+                    completionHandler: completionHandler
+                )
+            }
+            return
+        }
+
+>>>>>>> d17d22be9 (Add FXIOS-11168 [Content Sharing Opt] Telemetry to track start up time for deeplinks (#24422))
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            completionHandler?()
             return
         }
 
@@ -2614,6 +2646,7 @@ class BrowserViewController: UIViewController,
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
+        completionHandler?()
     }
 
     @discardableResult

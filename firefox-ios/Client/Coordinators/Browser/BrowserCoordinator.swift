@@ -392,6 +392,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    // MARK: - Handle Deeplink Open URL / text
+
     private func handle(query: String, isPrivate: Bool) {
         browserViewController.handle(query: query, isPrivate: isPrivate)
     }

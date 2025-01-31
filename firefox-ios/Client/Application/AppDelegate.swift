@@ -37,6 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
+<<<<<<< HEAD
+=======
+    lazy var shareTelemetry = ShareTelemetry()
+    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
+>>>>>>> d17d22be9 (Add FXIOS-11168 [Content Sharing Opt] Telemetry to track start up time for deeplinks (#24422))
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -53,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        startRecordingStartupOpenURLTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -96,6 +102,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    category: .lifecycle)
 
         return true
+    }
+
+    private func startRecordingStartupOpenURLTime() {
+        shareTelemetry.recordOpenURLTime()
+        var recordCompleteToken: ActionToken?
+        var recordCancelledToken: ActionToken?
+        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
+        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCancelled) { [weak self] in
+            self?.shareTelemetry.cancelOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
     }
 
     func application(

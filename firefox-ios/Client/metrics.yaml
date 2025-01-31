@@ -5173,6 +5173,23 @@ share_sheet:
           Whether the user is opted in to the Sent from Firefox experiment.
           Only returns true if the user is both enrolled and opted in.
 
+# Share related metrics
+
+share:
+  deeplink_open_url_startup_time:
+    type: timing_distribution
+    description: |
+      Track the startup time of the application when the app was launched to open a url.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24325
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24422
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+
 # Device specific metrics
 
 device:
