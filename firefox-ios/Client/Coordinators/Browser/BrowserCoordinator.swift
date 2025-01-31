@@ -286,6 +286,10 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
+        if case .search = route {
+            return true
+        }
+
         guard browserIsReady, !tabManager.isRestoringTabs else {
             let readyMessage = "browser is ready? \(browserIsReady)"
             let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
@@ -304,6 +308,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
+        if case .search(let url, _, _) = route {
+            handle(url: url, isPrivate: false)
+            return
+        }
+
         guard browserIsReady, !tabManager.isRestoringTabs else {
             logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
                        level: .info,

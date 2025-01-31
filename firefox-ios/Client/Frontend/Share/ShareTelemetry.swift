@@ -8,6 +8,7 @@ import Glean
 class ShareTelemetry {
     private let gleanWrapper: GleanWrapper
     private var openURLTimerId: TimerId?
+    private var time = 0.0
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
@@ -34,12 +35,15 @@ class ShareTelemetry {
 
     func recordOpenURLTime() {
         openURLTimerId = gleanWrapper.startTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime)
+        time = CACurrentMediaTime()
     }
 
     func sendOpenURLTimeRecord() {
         guard let openURLTimerId else { return }
         gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime,
                                              timerId: openURLTimerId)
+        time = CACurrentMediaTime() - time
+        NSLog("FF: start up time \(time)")
     }
 
     func cancelOpenURLTimeRecord() {

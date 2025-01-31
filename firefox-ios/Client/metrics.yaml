@@ -5518,6 +5518,7 @@ share_sheet:
 share:
   deeplink_open_url_startup_time:
     type: timing_distribution
+    lifetime: application
     description: |
       Track the startup time of the application when the app was launched to open a url.
     bugs:
