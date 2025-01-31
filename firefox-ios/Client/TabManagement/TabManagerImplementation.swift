@@ -416,6 +416,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
+        privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         tabs = normalTabs
     }
 
