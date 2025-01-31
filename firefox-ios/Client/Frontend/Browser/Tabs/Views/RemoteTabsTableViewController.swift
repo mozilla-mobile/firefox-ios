@@ -332,9 +332,8 @@ class RemoteTabsTableViewController: UITableViewController,
 
             // Creating a modal with an undo button that will allow the user to undo closing the last remote tab
             // they attempted to close
-            let viewModel = ButtonToastViewModel(
-                labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
-                buttonText: .UndoString)
+            let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
+                                                 buttonText: .UndoString)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.getCurrentTheme(for: windowUUID),
                                     completion: { _ in self.undo() })
