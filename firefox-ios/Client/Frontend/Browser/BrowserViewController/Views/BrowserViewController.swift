@@ -763,43 +763,47 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         DispatchQueue.main.async {
-            self.overlayManager.setURLBar(urlBarView: self.urlBarView)
-
-            // Update theme of already existing views
-            let theme = self.currentTheme()
-            self.header.applyTheme(theme: theme)
-            self.overKeyboardContainer.applyTheme(theme: theme)
-            self.bottomContainer.applyTheme(theme: theme)
-            self.bottomContentStackView.applyTheme(theme: theme)
-            self.statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: self.traitCollection)
-            self.statusBarOverlay.applyTheme(theme: theme)
-
-            KeyboardHelper.defaultHelper.addDelegate(self)
-            self.listenForThemeChange(self.view)
-            self.setupAccessibleActions()
-
-            self.clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: self.profile.prefs,
-                                                                         tabManager: self.tabManager)
-            self.clipboardBarDisplayHandler?.delegate = self
-
-            self.navigationToolbarContainer.toolbarDelegate = self
-            self.scrollController.header = self.header
-            self.scrollController.overKeyboardContainer = self.overKeyboardContainer
-            self.scrollController.bottomContainer = self.bottomContainer
-
-            // Setup UIDropInteraction to handle dragging and dropping
-            // links into the view from other apps.
-            let dropInteraction = UIDropInteraction(delegate: self)
-            self.view.addInteraction(dropInteraction)
-
-            // Feature flag for credit card until we fully enable this feature
-            let autofillCreditCardStatus = self.featureFlags.isFeatureEnabled(
-                .creditCardAutofillStatus, checking: .buildOnly)
-            // We need to update autofill status on sync manager as there could be delay from nimbus
-            // in getting the value. When the delay happens the credit cards might not sync
-            // as the default value is false
-            self.profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+            self.setupNonEssentialUI()
         }
+    }
+
+    private func setupNonEssentialUI() {
+        overlayManager.setURLBar(urlBarView: urlBarView)
+
+        // Update theme of already existing views
+        let theme = currentTheme()
+        header.applyTheme(theme: theme)
+        overKeyboardContainer.applyTheme(theme: theme)
+        bottomContainer.applyTheme(theme: theme)
+        bottomContentStackView.applyTheme(theme: theme)
+        statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.applyTheme(theme: theme)
+
+        KeyboardHelper.defaultHelper.addDelegate(self)
+        listenForThemeChange(view)
+        setupAccessibleActions()
+
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                     tabManager: tabManager)
+        clipboardBarDisplayHandler?.delegate = self
+
+        navigationToolbarContainer.toolbarDelegate = self
+        scrollController.header = header
+        scrollController.overKeyboardContainer = overKeyboardContainer
+        scrollController.bottomContainer = bottomContainer
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links into the view from other apps.
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+
+        // Feature flag for credit card until we fully enable this feature
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
+            .creditCardAutofillStatus, checking: .buildOnly)
+        // We need to update autofill status on sync manager as there could be delay from nimbus
+        // in getting the value. When the delay happens the credit cards might not sync
+        // as the default value is false
+        profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
     }
 
     private func setupAccessibleActions() {
