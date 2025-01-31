@@ -21,7 +21,9 @@ const WebcompatAllFramesAtDocumentStart = glob.sync(
 const AutofillAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
-
+const NightModeMainFrameAtDocumentEnd = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/NightModeAtDocumentEnd/*.{js,mjs}"
+);
 const AddressFormManager = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
 );
@@ -36,6 +38,7 @@ const needsFirefoxFile = {
   // to include __firefox__.js for the document end scripts.
   // ¯\_(ツ)_/¯
   AllFramesAtDocumentEnd,
+  NightModeMainFrameAtDocumentEnd,
 };
 
 for (let [name, files] of Object.entries(needsFirefoxFile)) {
@@ -69,6 +72,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
+    NightModeMainFrameAtDocumentEnd,
     AutofillAllFramesAtDocumentStart,
     AddressFormManager,
   },

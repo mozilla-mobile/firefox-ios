@@ -15,6 +15,14 @@ extension WKWebView {
         self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
     }
 
+    /// This evaluates the provided JS in the specified content world
+    /// - Parameters:
+    ///     - javascript: String representing javascript to be evaluated
+    ///     - contentWorld: The content world in which to evaluate the script
+    public func evaluateJavascriptInCustomContentWorld(_ javascript: String, in contentWorld: WKContentWorld) {
+        self.evaluateJavaScript(javascript, in: nil, in: contentWorld, completionHandler: { _ in })
+    }
+
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version with
     /// a completion that passes a tuple with optional data or an optional error
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
@@ -72,6 +80,10 @@ extension WKUserContentController {
 
     public func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
         add(scriptMessageHandler, contentWorld: .page, name: name)
+    }
+
+    public func addInCustomContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        add(scriptMessageHandler, contentWorld: .world(name: name), name: name)
     }
 }
 

@@ -21,13 +21,20 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         return ["NightMode"]
     }
 
+    static func jsCallbackBuilder(_ enabled: Bool) -> String {
+        let isDarkReader = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.darkReader, checking: .buildOnly)
+        return "window.__firefox__.NightMode.setEnabled(\(enabled), \(isDarkReader))"
+    }
+
     func userContentController(
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let webView = message.frameInfo.webView else { return }
-        let jsCallback = "window.__firefox__.NightMode.setEnabled(\(NightModeHelper.isActivated()))"
-        webView.evaluateJavascriptInDefaultContentWorld(jsCallback)
+        webView.evaluateJavascriptInCustomContentWorld(
+            NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated()),
+            in: .world(name: NightModeHelper.name())
+        )
     }
 
     static func toggle(

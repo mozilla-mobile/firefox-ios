@@ -1248,6 +1248,7 @@
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
+		BA9AB4942D49A55900DD85E0 /* NightModeMainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = BA9AB4932D49A55700DD85E0 /* NightModeMainFrameAtDocumentEnd.js */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
@@ -8436,6 +8437,7 @@
 		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
+		BA9AB4932D49A55700DD85E0 /* NightModeMainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = NightModeMainFrameAtDocumentEnd.js; path = Client/Assets/NightModeMainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BAF14FEC94CB9DA4E08BA60C /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Storage.strings; sourceTree = "<group>"; };
 		BAF74394B38CDAE36910B788 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -14262,6 +14264,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				BA9AB4932D49A55700DD85E0 /* NightModeMainFrameAtDocumentEnd.js */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -15583,6 +15586,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9AB4942D49A55900DD85E0 /* NightModeMainFrameAtDocumentEnd.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,

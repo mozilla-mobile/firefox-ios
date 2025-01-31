@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
+    case darkReader
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -111,6 +112,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,
                 .closeRemoteTabs,
+                .darkReader,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
