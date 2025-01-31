@@ -16,6 +16,12 @@ protocol ShareTelemetry {
 }
 
 struct DefaultShareTelemetry: ShareTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func sharedTo(
         activityType: UIActivity.ActivityType?,
         shareType: ShareType,
@@ -30,6 +36,6 @@ struct DefaultShareTelemetry: ShareTelemetry {
             isOptedInSentFromFirefox: isOptedInSentFromFirefox,
             shareType: shareType.typeName
         )
-        GleanMetrics.ShareSheet.sharedTo.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.ShareSheet.sharedTo, extras: extra)
     }
 }
