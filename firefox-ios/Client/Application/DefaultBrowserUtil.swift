@@ -26,6 +26,15 @@ struct DefaultBrowserUtil {
         self.logger = logger
     }
 
+    enum UserDefaultsKey: String {
+        case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
+    }
+
+    static var isBrowserDefault: Bool {
+        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool ?? false }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) }
+    }
+
     func processUserDefaultState(isFirstRun: Bool) {
         guard #available(iOS 18.2, *) else { return }
 
