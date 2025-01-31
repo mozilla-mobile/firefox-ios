@@ -751,33 +751,19 @@ class BrowserViewController: UIViewController,
         setupEssentialUI()
         subscribeToRedux()
 
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.global(qos: .background).async {
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             self.trackStartupTelemetry()
-        }
-
-        // Non-UI tasks only
-        DispatchQueue.global(qos: .background).async {
-            self.setupNotifications()
-            SearchBarSettingsViewModel.recordLocationTelemetry(for: self.isBottomSearchBar ? .bottom : .top)
-
-            // Feature flag for credit card until we fully enable this feature
-            let autofillCreditCardStatus = self.featureFlags.isFeatureEnabled(
-                .creditCardAutofillStatus, checking: .buildOnly)
-            // We need to update autofill status on sync manager as there could be delay from nimbus
-            // in getting the value. When the delay happens the credit cards might not sync
-            // as the default value is false
-            self.profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         }
     }
 
     private func setupEssentialUI() {
         addSubviews()
         setupConstraints()
+        setupNotifications()
 
         DispatchQueue.main.async {
             self.overlayManager.setURLBar(urlBarView: self.urlBarView)
-//            self.updateToolbarStateForTraitCollection(self.traitCollection)
 
             // Update theme of already existing views
             let theme = self.currentTheme()
@@ -805,6 +791,14 @@ class BrowserViewController: UIViewController,
             // links into the view from other apps.
             let dropInteraction = UIDropInteraction(delegate: self)
             self.view.addInteraction(dropInteraction)
+
+            // Feature flag for credit card until we fully enable this feature
+            let autofillCreditCardStatus = self.featureFlags.isFeatureEnabled(
+                .creditCardAutofillStatus, checking: .buildOnly)
+            // We need to update autofill status on sync manager as there could be delay from nimbus
+            // in getting the value. When the delay happens the credit cards might not sync
+            // as the default value is false
+            self.profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         }
     }
 
@@ -4364,6 +4358,8 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
 extension BrowserViewController {
     func trackStartupTelemetry() {
+        let toolbarLocation: SearchBarPosition = self.isBottomSearchBar ? .bottom : .top
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: toolbarLocation)
         trackAccessibility()
         trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
