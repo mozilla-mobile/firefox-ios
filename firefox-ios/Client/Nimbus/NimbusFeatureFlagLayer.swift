@@ -97,9 +97,6 @@ final class NimbusFeatureFlagLayer {
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
 
-        case .closeRemoteTabs:
-            return checkCloseRemoteTabsFeature(from: nimbus)
-
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -399,11 +396,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
-    }
-
-    private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.remoteTabManagement.value()
-        return config.closeTabsEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
