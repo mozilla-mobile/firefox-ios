@@ -37,11 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
-<<<<<<< HEAD
-=======
     lazy var shareTelemetry = ShareTelemetry()
     lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
->>>>>>> d17d22be9 (Add FXIOS-11168 [Content Sharing Opt] Telemetry to track start up time for deeplinks (#24422))
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?

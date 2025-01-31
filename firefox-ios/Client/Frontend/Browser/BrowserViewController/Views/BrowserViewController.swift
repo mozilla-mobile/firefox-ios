@@ -2609,9 +2609,6 @@ class BrowserViewController: UIViewController,
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
-<<<<<<< HEAD
-    func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
-=======
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
@@ -2631,7 +2628,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
->>>>>>> d17d22be9 (Add FXIOS-11168 [Content Sharing Opt] Telemetry to track start up time for deeplinks (#24422))
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
