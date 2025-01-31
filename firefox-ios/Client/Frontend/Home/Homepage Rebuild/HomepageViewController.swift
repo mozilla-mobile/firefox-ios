@@ -397,6 +397,15 @@ final class HomepageViewController: UIViewController,
             jumpBackInCell.configure(state: state, theme: currentTheme)
             return jumpBackInCell
 
+        case .bookmark(let state):
+            guard let bookmarksCell = collectionView?.dequeueReusableCell(
+                cellType: BookmarksCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            bookmarksCell.configure(state: state, theme: currentTheme)
+            return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
