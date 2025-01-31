@@ -5416,7 +5416,7 @@ extension String {
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains how Mozilla send crash reports.")
-    public static let SendCrashReportsSettingMessageV2 = MZLocalizedString(
+    public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "Settings.CrashReports.Message.v136",
         tableName: "Settings",
         value: "This helps us diagnose and fix issues with the browser.",
@@ -7674,11 +7674,6 @@ extension String {
                 tableName: "Onboarding",
                 value: "%@ Terms of Service.",
                 comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
-            public static let SendCrashReportsSettingMessage = MZLocalizedString(
-                key: "Settings.CrashReports.Message.v135",
-                tableName: "Settings",
-                value: "Crash reports allow us diagnose and fix issues with the browser.",
-                comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
             public static let AgreementButtonTitle = MZLocalizedString(
                 key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
                 tableName: "Onboarding",
