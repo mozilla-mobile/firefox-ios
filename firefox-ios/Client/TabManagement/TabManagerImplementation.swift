@@ -111,7 +111,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     // MARK: - Webview configuration
-    // TODO: remove this
     // A WKWebViewConfiguration used for normal tabs
     private lazy var configuration: WKWebViewConfiguration = {
         return TabManagerImplementation.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
