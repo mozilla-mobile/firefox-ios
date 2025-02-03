@@ -4966,7 +4966,7 @@ extension String {
     public static let ExternalInvalidLinkMessage = MZLocalizedString(
         key: "ExternalLink.ExternalInvalidLinkMessage.v136",
         tableName: "ExternalLink",
-        value: "The application required to open that link can't be found.",
+        value: "The application required to open that link can’t be found.",
         comment: "A statement shown to user when tapping an external link and the link doesn't work."
     )
     public static let ExternalOpenMessage = MZLocalizedString(
