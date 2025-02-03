@@ -67,6 +67,7 @@ final class HomepageSectionLayoutProvider {
         }
 
         struct BookmarksConstants {
+            static let headerHeight: CGFloat = 34
             static let cellHeight: CGFloat = 110
             static let cellWidth: CGFloat = 150
         }
@@ -276,12 +277,23 @@ final class HomepageSectionLayoutProvider {
 
         let section = NSCollectionLayoutSection(group: group)
 
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.BookmarksConstants.headerHeight)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
             bottom: UX.spacingBetweenSections,
-            trailing: 0)
+            trailing: leadingInset)
 
         section.interGroupSpacing = UX.interGroupSpacing
         section.orthogonalScrollingBehavior = .continuous

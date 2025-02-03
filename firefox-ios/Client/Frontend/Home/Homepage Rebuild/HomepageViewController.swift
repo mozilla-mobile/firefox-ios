@@ -502,6 +502,16 @@ final class HomepageViewController: UIViewController,
                 theme: currentTheme
             )
             return sectionLabelCell
+        case .bookmarks(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.bookmarkState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToBookmarksPanel()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
@@ -615,6 +625,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.tabTray),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+            )
+        )
+    }
+
+    private func navigateToBookmarksPanel() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.bookmarksPanel),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
             )
         )
     }
