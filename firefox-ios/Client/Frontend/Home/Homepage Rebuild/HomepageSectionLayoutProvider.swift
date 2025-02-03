@@ -63,6 +63,7 @@ final class HomepageSectionLayoutProvider {
 
         struct JumpBackInConstants {
             static let itemHeight: CGFloat = 112
+            static let sectionHeaderHeight: CGFloat = 34
         }
 
         struct BookmarksConstants {
@@ -238,6 +239,18 @@ final class HomepageSectionLayoutProvider {
                                                        count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.sectionHeaderHeight)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
                     top: 0,

@@ -487,6 +487,16 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
+        case .jumpBackIn(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.jumpBackInState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToTabTray()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
@@ -590,6 +600,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.longPressOnCell
+            )
+        )
+    }
+
+    private func navigateToTabTray() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.tabTray),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
             )
         )
     }
