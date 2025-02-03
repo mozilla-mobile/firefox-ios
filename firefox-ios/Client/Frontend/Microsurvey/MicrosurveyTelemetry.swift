@@ -11,7 +11,7 @@ struct MicrosurveyTelemetry {
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-    
+
     func surveyViewed(surveyId: String) {
         let surveyIdExtra = GleanMetrics.Microsurvey.ShownExtra(surveyId: surveyId)
         gleanWrapper.recordEvent(for: GleanMetrics.Microsurvey.shown, extras: surveyIdExtra)
