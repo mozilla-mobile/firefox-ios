@@ -101,10 +101,6 @@ class MockTabManager: TabManager {
 
     func undoCloseTab() {}
 
-    func getTabFor(_ url: URL) -> Tab? {
-        return nil
-    }
-
     func clearAllTabsHistory() {}
 
     func willSwitchTabMode(leavingPBM: Bool) {}
