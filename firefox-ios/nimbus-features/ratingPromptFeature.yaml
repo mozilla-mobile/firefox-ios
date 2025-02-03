@@ -12,7 +12,7 @@ features:
     defaults:
       - channel: beta
         value:
-          new-variable: true
+          enabled: true
       - channel: developer
         value:
-          new-variable: true
+          enabled: true
