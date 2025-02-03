@@ -392,6 +392,12 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                        windowUUID: uuid,
                                                        actionType: GeneralBrowserActionType.showToast)
                 store.dispatch(toastAction)
+                ensureMainThread { [weak self] in
+                    let tabManager = self?.tabManager(for: uuid)
+                    if let selectedTab = tabManager?.selectedTab, selectedTab.isPrivate {
+                        tabManager?.addTab(nil, isPrivate: false)
+                    }
+                }
             } else {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
@@ -486,6 +492,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
+                    if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
+                        tabManager.addTab(nil, isPrivate: false)
+                    }
                 }
             }
         }
