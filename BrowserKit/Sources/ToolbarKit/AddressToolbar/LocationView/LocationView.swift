@@ -18,7 +18,7 @@ final class LocationView: UIView,
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconInitialTransform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-        static let iconAnimationTime: CGFloat = 0.15
+        static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.15
     }
 
