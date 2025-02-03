@@ -105,7 +105,7 @@ public class BrowserAddressToolbar: UIView,
     public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
         updateBorder(borderPosition: state.borderPosition)
 
-        updateActions(state: state) 
+        updateActions(state: state)
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         droppableUrl = state.locationViewState.droppableUrl
     }
@@ -254,8 +254,9 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateToolbarLayout(animated: Bool) {
-        let stacks = browserActionStack.arrangedSubviews + navigationActionStack.arrangedSubviews + pageActionStack.arrangedSubviews
-
+        let stacks = browserActionStack.arrangedSubviews +
+                     navigationActionStack.arrangedSubviews +
+                     pageActionStack.arrangedSubviews
         if animated {
             UIView.animate(withDuration: UX.toolbarAnimationTime) {
                 self.layoutIfNeeded()
