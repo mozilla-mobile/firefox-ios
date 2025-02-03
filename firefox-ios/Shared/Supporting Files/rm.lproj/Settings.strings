@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Ulteriuras infurmaziuns";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Rapports da collaps ans permettan da diagnostitgar e curreger problems cun il navigatur.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Quai ans gida da diagnostitgar e curreger problems cun il navigatur.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

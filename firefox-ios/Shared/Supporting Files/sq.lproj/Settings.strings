@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Mësoni Më Tepër";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Njoftimet e vithisjeve na lejojnë të diagnostikojmë dhe ndreqim probleme me shfletuesin.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Kjo na ndihmon të diagnostikojmë dhe ndreqim probleme me shfletuesin.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

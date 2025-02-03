@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Իմանալ ավելին";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Խափանումների հաշվետվությունները թույլ են տալիս ախտորոշել և շտկել դիտարկիչի հետ կապված խնդիրները:";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Սա օգնում է մեզ ախտորոշել և շտկել դիտարկիչի հետ կապված խնդիրները:";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
