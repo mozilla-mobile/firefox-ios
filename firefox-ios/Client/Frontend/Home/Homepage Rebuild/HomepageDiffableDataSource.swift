@@ -17,7 +17,7 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
-        case jumpBackIn
+        case jumpBackIn(TextColor?)
         case bookmarks
         case pocket(TextColor?)
         case customizeHomepage
@@ -68,8 +68,8 @@ final class HomepageDiffableDataSource:
         }
 
         if let tabs = getJumpBackInTabs(with: state.jumpBackInState) {
-            snapshot.appendSections([.jumpBackIn])
-            snapshot.appendItems(tabs, toSection: .jumpBackIn)
+            snapshot.appendSections([.jumpBackIn(textColor)])
+            snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor))
         }
 
         // TODO: FXIOS-11051 Update showing bookmarks

@@ -2156,6 +2156,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
+    /// Used to handle general navigation for views that can be presented from multiple places
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
         case .contextMenu:
@@ -2197,6 +2198,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
+        case .tabTray:
+            navigationHandler?.showTabTray(selectedPanel: .tabs)
         }
     }
 
@@ -2220,6 +2223,7 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
+            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
