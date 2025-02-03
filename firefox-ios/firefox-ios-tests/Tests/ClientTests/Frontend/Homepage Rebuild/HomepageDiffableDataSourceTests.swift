@@ -38,8 +38,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 3)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn, .customizeHomepage])
+        XCTAssertEqual(snapshot.numberOfSections, 4)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn, .bookmarks, .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
@@ -104,7 +104,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites(4), .jumpBackIn, .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites(4), .jumpBackIn, .bookmarks, .customizeHomepage])
     }
 
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
@@ -123,7 +123,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn, .pocket(nil), .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn, .bookmarks, .pocket(nil), .customizeHomepage])
     }
 
     func test_updateSnapshot_withValidState_returnMessageCard() throws {
@@ -148,7 +148,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .messageCard, .jumpBackIn, .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .messageCard, .jumpBackIn, .bookmarks, .customizeHomepage])
     }
 
     private func createSites(count: Int = 30) -> [TopSiteState] {
