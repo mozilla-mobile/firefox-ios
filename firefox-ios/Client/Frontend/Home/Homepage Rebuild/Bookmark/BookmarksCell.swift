@@ -7,8 +7,8 @@ import Foundation
 import SiteImageView
 import Shared
 
-/// A cell used in FxHomeScreen's Bookmarks section.
-class BookmarksCell: UICollectionViewCell, ReusableCell {
+/// A cell used in homepage's Bookmarks section.
+final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
         static let containerSpacing: CGFloat = 16
         static let heroImageSize = CGSize(width: 126, height: 82)
@@ -50,16 +50,19 @@ class BookmarksCell: UICollectionViewCell, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+        rootContainer.layer.shadowPath = UIBezierPath(
+            roundedRect: rootContainer.bounds,
+            cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
-    func configure(viewModel: BookmarksCellViewModel, theme: Theme) {
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.site.url,
-                                                            heroImageSize: UX.heroImageSize)
+    func configure(state: BookmarkState, theme: Theme) {
+        let heroImageViewModel = HomepageHeroImageViewModel(
+            urlStringRequest: state.site.url,
+            heroImageSize: UX.heroImageSize
+        )
         heroImageView.setHeroImage(heroImageViewModel)
-        itemTitle.text = viewModel.site.title
-        accessibilityLabel = viewModel.accessibilityLabel
+        itemTitle.text = state.site.title
+        accessibilityLabel = state.accessibilityLabel
         applyTheme(theme: theme)
     }
 
@@ -103,10 +106,8 @@ class BookmarksCell: UICollectionViewCell, ReusableCell {
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
-}
 
-// MARK: - ThemeApplicable
-extension BookmarksCell: ThemeApplicable {
+    // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         itemTitle.textColor = theme.colors.textPrimary
         let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
@@ -116,10 +117,8 @@ extension BookmarksCell: ThemeApplicable {
 
         adjustBlur(theme: theme)
     }
-}
 
-// MARK: - Blurrable
-extension BookmarksCell: Blurrable {
+    // MARK: - Blurrable
     func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {

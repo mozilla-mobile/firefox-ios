@@ -464,7 +464,7 @@
 "Home" = "בית";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.Bookmark" = "הוספה למועדפים";
+"HomePanel.ContextMenu.Bookmark" = "הוספת סימנייה";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "מחיקה מההיסטוריה";
