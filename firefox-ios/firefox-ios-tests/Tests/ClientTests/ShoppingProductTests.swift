@@ -15,8 +15,8 @@ final class ShoppingProductTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         client = nil
+        super.tearDown()
     }
 
     func testAmazonURL_returnsExpectedProduct() {

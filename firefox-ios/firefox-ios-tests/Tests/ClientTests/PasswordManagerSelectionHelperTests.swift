@@ -23,8 +23,8 @@ class PasswordManagerSelectionHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         selectionHelper = nil
+        super.tearDown()
     }
 
     func testSelectCellFromLoginRecord() {

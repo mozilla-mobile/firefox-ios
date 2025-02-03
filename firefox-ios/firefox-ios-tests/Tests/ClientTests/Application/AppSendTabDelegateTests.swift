@@ -17,9 +17,9 @@ final class AppFxACommandsTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.applicationStateProvider = nil
         self.applicationHelper = nil
+        super.tearDown()
     }
 
     func testOpenSendTabs_inactiveState_doesntCallDeeplink() {

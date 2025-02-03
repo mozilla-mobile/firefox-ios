@@ -17,9 +17,9 @@ class ThemableTests: XCTestCaseRootViewController {
     }
 
     override func tearDown() {
-        super.tearDown()
         tableViewDelegate = nil
         testThemable = nil
+        super.tearDown()
     }
 
     // MARK: Get all subviews

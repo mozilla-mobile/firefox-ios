@@ -14,8 +14,8 @@ final class DefaultRouterTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         navigationController = nil
+        super.tearDown()
     }
 
     func testInitialState() {

@@ -16,9 +16,9 @@ class TabCellTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         cellDelegate = nil
         profile = nil
+        super.tearDown()
     }
 
     func testTabCellDeinit() {

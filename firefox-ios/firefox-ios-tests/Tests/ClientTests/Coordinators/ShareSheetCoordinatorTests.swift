@@ -17,10 +17,10 @@ final class ShareSheetCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         parentCoordinator = nil
         mockRouter = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testStart_presentUIActivityViewController() {

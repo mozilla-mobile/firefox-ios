@@ -23,9 +23,9 @@ final class InactiveTabsManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         profile = nil
+        super.tearDown()
     }
 
     func testEmptyInactiveTabs_ForRegularTabs() throws {

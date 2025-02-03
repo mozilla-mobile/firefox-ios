@@ -20,9 +20,9 @@ class TopSitesViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile.shutdown()
         self.profile = nil
+        super.tearDown()
     }
 
     func testDeletionOfSingleSuggestedSite() {
