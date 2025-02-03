@@ -5,7 +5,7 @@
 import UIKit
 
 class NoSearchResultCell: UITableViewCell {
-    static let identifier = "noSearchResultCell"
+    static let identifier:String = "noSearchResultCell"
 
     private lazy var titleLabel: UILabel = .build { label in
         label.textColor = CredentialProvider.titleColor
