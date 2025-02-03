@@ -16,8 +16,8 @@ final class RatingPromptManager {
 
     struct Constants {
         static let minDaysBetweenReviewRequest = 60
-        static let firstThreshold = 30
-        static let secondThreshold = 90
+        static let firstThreshold = 15
+        static let secondThreshold = 40
         static let thirdThreshold = 120
     }
 
