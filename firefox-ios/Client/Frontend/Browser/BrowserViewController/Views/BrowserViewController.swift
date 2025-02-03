@@ -345,7 +345,9 @@ class BrowserViewController: UIViewController,
         }
 
         ratingPromptManager.updateData()
-        ratingPromptManager.showRatingPromptIfNeeded()
+        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
+            ratingPromptManager.showRatingPromptIfNeeded()
+        }
     }
 
     @objc
