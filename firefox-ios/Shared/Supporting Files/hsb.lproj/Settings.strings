@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Dalše informacije";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Spadowe rozprawy nam zmóžnjeja, problemy z wobhladowakom diagnosticěrować a rozrisać.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "To nam zmóžnja, problemy z wobhladowakom diagnosticěrować a rozrisać.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

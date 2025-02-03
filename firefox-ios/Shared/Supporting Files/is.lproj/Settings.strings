@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Kanna nánar";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Hrunskýrslur gera okkur kleift að greina og laga vandamál í vafranum.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Þetta hjálpar okkur að greina og laga vandamál í vafranum.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
