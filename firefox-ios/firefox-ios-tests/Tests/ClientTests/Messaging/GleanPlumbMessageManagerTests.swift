@@ -32,10 +32,9 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         messagingStore = nil
         subject = nil
+        super.tearDown()
     }
 
     func testMessagingFeatureIsCoenrolling() {

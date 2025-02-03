@@ -16,9 +16,8 @@ class CreditCardValidatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         creditCardValidator = nil
+        super.tearDown()
     }
 
     func testCardTypeForVisa() {

@@ -18,9 +18,9 @@ final class FakespotSettingsCardViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         viewModel = nil
         mockProfile = nil
+        super.tearDown()
     }
 
     func testInitialViewModelValues() {

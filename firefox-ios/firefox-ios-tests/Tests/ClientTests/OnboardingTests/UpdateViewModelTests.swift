@@ -19,9 +19,9 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        super.tearDown()
     }
 
     // MARK: Enable cards

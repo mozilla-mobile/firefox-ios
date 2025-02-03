@@ -18,8 +18,8 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         nimbusUtility = nil
+        super.tearDown()
     }
 
     // MARK: - Test `getNextOnboardingCard` forward

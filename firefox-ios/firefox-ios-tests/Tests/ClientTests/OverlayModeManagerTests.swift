@@ -16,9 +16,9 @@ class OverlayModeManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         urlBar = nil
         subject = nil
+        super.tearDown()
     }
 
     // MARK: - Test URLBarView nil

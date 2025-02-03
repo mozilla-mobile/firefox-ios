@@ -17,9 +17,9 @@ class DefaultBackgroundTabLoaderTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.applicationHelper = nil
         self.tabQueue = nil
+        super.tearDown()
     }
 
     func testLoadBackgroundTabs_noTabs_doesntLoad() {

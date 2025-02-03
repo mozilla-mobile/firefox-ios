@@ -15,9 +15,8 @@ class GeneralizedImageFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         clearState()
+        super.tearDown()
     }
 
     func testErrorResponse() {

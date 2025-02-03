@@ -16,9 +16,9 @@ class MessageCardDataAdaptorImplementationTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         messageManager = nil
         didLoadNewDataCalled = 0
+        super.tearDown()
     }
 
     func testEmptyData() {

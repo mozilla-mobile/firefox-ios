@@ -31,13 +31,12 @@ class HistoryHighlightsTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         manager = nil
         profile.shutdown()
         profile = nil
         entryProvider = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testEmptyRead() {
