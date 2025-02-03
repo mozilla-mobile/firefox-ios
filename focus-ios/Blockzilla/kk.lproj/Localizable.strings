@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Мазмұндық трекерлерді блоктау";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Бұл Mozilla-ға белсенді пайдаланушылар санын бағалауға көмектеседі.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Күнделікті пайдалану пингі";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Күңгірт";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Бұл браузердегі ақауларды анықтауға және түзетуге көмектеседі.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Әлеуметтік";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Құлау хабарламаларын автоматты түрде жіберу";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Қолданбаны босату үшін Face ID қолданыңыз";

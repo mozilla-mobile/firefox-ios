@@ -14,9 +14,9 @@ class URLValidationTests: BaseTestCase {
         super.setUp()
         continueAfterFailure = true
         navigator.goto(SearchSettings)
-        app.tables.switches["Show Search Suggestions"].tap()
+        app.tables.switches["Show Search Suggestions"].waitAndTap()
         scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
-        app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].tap()
+        app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].waitAndTap()
         navigator.goto(NewTabScreen)
     }
 

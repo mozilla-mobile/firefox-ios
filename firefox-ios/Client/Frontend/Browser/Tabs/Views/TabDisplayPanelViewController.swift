@@ -49,6 +49,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     func removeTabPanel() {
+        guard isViewLoaded else { return }
         view.removeConstraints(view.constraints)
         view.subviews.forEach { $0.removeFromSuperview() }
         view.removeFromSuperview()

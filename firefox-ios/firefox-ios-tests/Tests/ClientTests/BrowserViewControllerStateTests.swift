@@ -88,16 +88,16 @@ final class BrowserViewControllerStateTests: XCTestCase {
     }
 
     // MARK: - Navigation Browser Action
-    func test_customizeHomepage_navigationBrowserAction_returnsExpectedState() {
+    func test_tapOnCustomizeHomepage_navigationBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage)
+        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage, destination: .settings(.homePage))
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .customizeHomepage)
+        XCTAssertEqual(newState.navigationDestination?.destination, .settings(.homePage))
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -108,7 +108,7 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertNil(initialState.navigationDestination)
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
-        let action = getNavigationBrowserAction(for: .tapOnCell, url: url)
+        let action = getNavigationBrowserAction(for: .tapOnCell, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .link)
@@ -122,11 +122,105 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertNil(initialState.navigationDestination)
 
         let url = try XCTUnwrap(URL(string: "www.example.com"))
-        let action = getNavigationBrowserAction(for: .tapOnLink, url: url)
+        let action = getNavigationBrowserAction(for: .tapOnLink, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .link)
         XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
+    }
+
+    func test_tapOnShareSheet_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let shareSheetConfiguration = ShareSheetConfiguration(
+            shareType: .site(url: url),
+            shareMessage: nil,
+            sourceView: UIView(),
+            sourceRect: nil,
+            toastContainer: UIView(),
+            popoverArrowDirection: [.up]
+        )
+        let action = getNavigationBrowserAction(
+            for: .tapOnShareSheet,
+            destination: .shareSheet(shareSheetConfiguration)
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .shareSheet(shareSheetConfiguration))
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
+    func test_longPressOnCell_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let action = getNavigationBrowserAction(for: .longPressOnCell, destination: .link, url: url)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
+    }
+
+    func test_tapOnOpenInNewTab_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.newTab, url: url, isPrivate: false, selectNewTab: false),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+        )
+        let newState = reducer(initialState, action)
+
+        let navigationDestination = try XCTUnwrap(newState.navigationDestination)
+        XCTAssertEqual(navigationDestination.destination, .newTab)
+        XCTAssertEqual(navigationDestination.url?.absoluteString, "www.example.com")
+        XCTAssertFalse(navigationDestination.isPrivate ?? true)
+        XCTAssertFalse(navigationDestination.selectNewTab ?? true)
+    }
+
+    func test_tapOnOpenInNewTab_forPrivateTab_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.newTab, url: url, isPrivate: true, selectNewTab: true),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+        )
+        let newState = reducer(initialState, action)
+
+        let navigationDestination = try XCTUnwrap(newState.navigationDestination)
+        XCTAssertEqual(navigationDestination.destination, .newTab)
+        XCTAssertEqual(navigationDestination.url?.absoluteString, "www.example.com")
+        XCTAssertTrue(navigationDestination.isPrivate ?? false)
+        XCTAssertTrue(navigationDestination.selectNewTab ?? false)
+    }
+
+    func test_tapOnSettingsSection_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnSettingsSection, destination: .settings(.topSites))
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .settings(.topSites))
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
     // MARK: - Private
@@ -144,10 +238,11 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
     private func getNavigationBrowserAction(
         for actionType: NavigationBrowserActionType,
+        destination: BrowserNavigationDestination,
         url: URL? = nil
     ) -> NavigationBrowserAction {
         return NavigationBrowserAction(
-            url: url,
+            navigationDestination: NavigationDestination(destination, url: url),
             windowUUID: .XCTestDefaultUUID,
             actionType: actionType
         )

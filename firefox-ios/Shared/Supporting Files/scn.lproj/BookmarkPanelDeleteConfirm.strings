@@ -2,7 +2,7 @@
 "Bookmarks.DeleteFolderWarning.CancelButton.Label" = "Sfai";
 
 /* Button label for the button that deletes a folder and all of its children. */
-"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "Cancella";
+"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "Scancella";
 
 /* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
 "Bookmarks.DeleteFolderWarning.Description" = "Cancillari sta carpetta cu tuttu chiḍḍu chi cunteni?";

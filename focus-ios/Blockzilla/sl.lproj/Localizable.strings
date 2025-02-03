@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Zavračaj sledilce vsebine";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "To Mozilli pomaga oceniti število aktivnih uporabnikov.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping za dnevno uporabo";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Temna";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "To nam omogoča diagnosticiranje in odpravljanje težav z brskalnikom.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bo natipkano v naslovno vrstico poslal iskalniku.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Družbeno";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Samodejno pošlji poročila o sesutjih";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uporabljaj Face ID za odklepanje aplikacije";

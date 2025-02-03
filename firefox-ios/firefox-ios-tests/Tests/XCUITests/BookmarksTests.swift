@@ -64,9 +64,9 @@ class BookmarksTests: BaseTestCase {
             app.collectionViews
                 .cells["Example Domain"].children(matching: .other)
                 .element.children(matching: .other)
-                .element.tap()
+                .element.waitAndTap()
         } else {
-            app.cells.staticTexts["Example Domain"].tap()
+            app.cells.staticTexts["Example Domain"].waitAndTap()
         }
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -175,7 +175,7 @@ class BookmarksTests: BaseTestCase {
     func testAddBookmark() {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 1).tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
     }
 
@@ -187,8 +187,8 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars["Bookmarks"])
         // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
         app.tables.cells.textFields.element(boundBy: 0).tapAndTypeText("Test Folder")
-        app.buttons["Save"].tap()
-        app.buttons["Done"].tap()
+        app.buttons["Save"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
         checkItemsInBookmarksList(items: 2)
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
@@ -208,7 +208,7 @@ class BookmarksTests: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.AddNewSeparator)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // There is one item plus the default Desktop Bookmarks folder
         checkItemsInBookmarksList(items: 2)
 
@@ -237,7 +237,7 @@ class BookmarksTests: BaseTestCase {
         // Remove by long press and select option from context menu
         app.tables.staticTexts.element(boundBy: 1).press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.otherElements["Remove Bookmark"].tap()
+        app.tables.otherElements["Remove Bookmark"].waitAndTap()
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)
     }
@@ -307,7 +307,7 @@ class BookmarksTests: BaseTestCase {
 
         // Delete the Bookmark added, check it is removed
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-        app.buttons["Delete"].tap()
+        app.buttons["Delete"].waitAndTap()
         mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
     }
 
@@ -323,7 +323,7 @@ class BookmarksTests: BaseTestCase {
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
 
         // There is only three folders inside the desktop bookmarks
-        app.tables["Bookmarks List"].cells.firstMatch.tap()
+        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
         mozWaitForElementToExist(app.tables["Bookmarks List"])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
@@ -349,12 +349,12 @@ class BookmarksTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         bookmarkPageAndTapEdit()
-        app.buttons["Close"].tap()
+        app.buttons["Close"].waitAndTap()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         unbookmark()
         bookmarkPageAndTapEdit()
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap()
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: true)
@@ -399,7 +399,7 @@ class BookmarksTests: BaseTestCase {
             ]
         )
         // Tap to "Open in New Tab"
-        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].tap()
+        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
         switchToTabAndValidate(nrOfTabs: "3")
 
@@ -435,6 +435,7 @@ class BookmarksTests: BaseTestCase {
 
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         scrollToElement(bookMarkCell)
         bookMarkCell.press(forDuration: 1.5)
     }

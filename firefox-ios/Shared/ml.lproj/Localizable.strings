@@ -185,7 +185,7 @@
 "ContextMenu.CopyLinkButtonTitle" = "കണ്ണി പകര്‍ത്തുക";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "കണ്ണി ഡൗൺലോഡ് ചെയ്യുക";
+"ContextMenu.DownloadLinkButtonTitle" = "കണ്ണി ഇറക്കിവയ്ക്കുക";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "പുതിയ ടാബില്‍ തുറക്കുക";
@@ -251,7 +251,7 @@
 "Done" = "സമ്പൂര്‍ണം";
 
 /* Panel accessibility label */
-"Downloads" = "ഡൌണ്‍ലോഡുകള്‍";
+"Downloads" = "ഇറക്കിവയ്ക്കലുകൾ";
 
 /* The label of the button the user will press to start downloading a file */
 "Downloads.Alert.DownloadNow" = "ഇപ്പോള്‍ ഇറക്കിവയ്ക്കുക";
@@ -260,7 +260,7 @@
 "Downloads.CancelDialog.Cancel" = "റദ്ദാക്കുക";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "ഈ ഡൗണ്‍ലോഡ് റദ്ദാക്കണമെന്ന് ഉറപ്പാ​ണോ?";
+"Downloads.CancelDialog.Message" = "ഈ ഇറക്കിവയ്ക്കൽ റദ്ദാക്കണമെന്ന് ഉറപ്പാ​ണോ?";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "തുടരുക";
@@ -332,7 +332,7 @@
 "Firefox.HomePage.Title" = "ഫയർഫോക്സ് പൂമുഖം";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
-"FirefoxHome.CustomizeHomeButton.Title" = "ആമുഖം സ്വന്തമാക്കുക";
+"FirefoxHome.CustomizeHomeButton.Title" = "ആമുഖം ഇഷ്ടാനുസൃതമാക്കുക";
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "കുടുതൽ ആരായുക";
@@ -360,6 +360,9 @@
 
 /* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "എല്ലാ സമന്വയിപ്പിച്ച ടാബുകൾ കാണുക";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "സമന്വയിപ്പുതോടു് എടുത്തതു്";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "പണം കൊണ്ടു് പ്രചരിപ്പിച്ചതു്";
@@ -757,6 +760,12 @@
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "പുതിയ ടാബ്";
 
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "രാത്രി രീതി അണക്കുക";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "രാത്രി രീതി തുടങ്ങി വയ്ക്കുക";
+
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "രഹസ്യവാക്കുകൾ";
 
@@ -797,7 +806,7 @@
 "Menu.Share.v99" = "പങ്കിടുക";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
-"Menu.SyncAndSaveData.v103" = "ദത്ത സമന്വയിപ്പിച്ചും കരുതിവയ്ക്കുക";
+"Menu.SyncAndSaveData.v103" = "ദത്ത സമന്വയിപ്പിച്ചു് കരുതിവയ്ക്കുക";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ടാബ് അയച്ചു";
@@ -925,6 +934,9 @@
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "അതിവേഗ തിരച്ചിലിനായുള്ള പ്രയോഗങ്ങള്‍";
 
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "പ്രയോഗ പീടികയിൽ അവലോകനം കൊടുക്കുക";
+
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "വായിക്കുക";
 
@@ -988,11 +1000,14 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ഈ ഡാറ്റ അസാധുവാണ്";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "ഉപകരണ 'ക്രമീകരണങ്ങൾ' > 'ഫയർഫോക്സ്' എന്നതിലേക്ക് പോകുക. ക്യാമറ ഉപയോഗിക്കാൻ Firefox-നെ അനുവാദം കൊടുക്കുക.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "QR സങ്കേതം പരിശോധിക്കുക";
 
 /* Open search section of settings */
-"Search" = "തെരയുക";
+"Search" = "തിരയുക";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "തെരയൂ അല്ലെങ്കില്‍ വിലാസം നല്‍കൂ";
@@ -1129,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "യുആര്‍എല്‍ (ക്വറിയെ %s കൊണ്ട് മാറ്റുക)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "ബാഹ്യ പ്രയോഗങ്ങളെ തുറക്കുന്നത് തടയുക";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "എല്ലാ വെബ്സൈറ്റ് ഡാറ്റയും മായ്ക്കുക";
 
@@ -1202,16 +1220,16 @@
 "Settings.DisplayTheme.SwitchTitle" = "യാന്ത്രികമായി";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "സിസ്റ്റം തീം";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "വ്യവസ്ഥ അലങ്കാരം";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "സിസ്റ്റം ലൈറ്റ്/ഡാർക്ക് മോഡ് ഉപയോഗിക്കുക";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "വ്യവസ്ഥ വെള്ളിച്ച/ഇരുണ്ട രീതി ഉപയോഗിക്കുക";
 
 /* Theme picker settings section title */
-"Settings.DisplayTheme.ThemePicker.SectionHeader" = "തീം പിക്കർ";
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "അലങ്കാര കവാടഫലകം";
 
 /* Title in main app settings for Theme settings */
-"Settings.DisplayTheme.Title.v2" = "തീം";
+"Settings.DisplayTheme.Title.v2" = "അലങ്കാരം";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "ഉപകരണത്തിന്റെ പേരു്";
@@ -1267,8 +1285,26 @@
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "ചുവർകടലാസു്";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കുപ്പിക്കല്ലു് രചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കടല്ത്തീരക്കുന്നുകളുള്ള രചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, ആകാശനീല രചന.";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "തനതു തെളിഞ്ഞ ചുവർകടലാസു്.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, കിഴക്കരചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "ഫയർഫോക്സു് ചുവർക്കടലാസു്, സന്ധ്യക്കുന്നരചന.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ക്ലാസിക് %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ആദ്യ തിര";
@@ -1278,6 +1314,12 @@
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "പുതിയ ശേഖരം ഉപയോഗിച്ചു നോക്കൂ.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "പരിമിത പതിപ്പു്";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "ഫയർഫോക്സു് ആമുഖയടയാളത്തിൽ അമർത്തി താങ്ങളുടെ ചുവൎക്കടലാസു് മാറ്റുക";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "ചുവർകടലാസു്";
@@ -1427,10 +1469,10 @@
 "Settings.Sync.ButtonDescription.v103" = "ടാബുകളും അടയാളക്കുറിപ്പുകളും രഹസ്യവാക്കുകളും മറ്റും സമന്വയിപ്പിക്കാൻ പ്രവേശിക്കൽ ചെയ്യുക.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
-"Settings.Sync.ButtonTitle.v103" = "ദത്ത സമന്വയിപ്പിച്ചും കരുതിവയ്ക്കുക";
+"Settings.Sync.ButtonTitle.v103" = "ദത്ത സമന്വയിപ്പിച്ചു് കരുതിവയ്ക്കുക";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
-"Settings.Sync.SignInView.Title.v103" = "ദത്ത സമന്വയിപ്പിച്ചും കരുതിവയ്ക്കുക";
+"Settings.Sync.SignInView.Title.v103" = "ദത്ത സമന്വയിപ്പിച്ചു് കരുതിവയ്ക്കുക";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "നിഷ്ക്രിയ ടാബുകൾ";

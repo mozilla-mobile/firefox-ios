@@ -673,9 +673,9 @@ app:
     description: |
       Is Firefox the default browser
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -684,9 +684,9 @@ app:
     description: |
       The user installed the app via the browser choice screen
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -752,6 +752,182 @@ usage:
     expires: never
     send_in_pings:
       - usage-reporting
+      - usage-deletion-request
+
+  duration:
+    type: timespan
+    time_unit: millisecond
+    description: |
+      The duration of the last foreground session.
+    time_unit: second
+    send_in_pings:
+      - usage-reporting
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+      - https://bugzilla.mozilla.org/1519120
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  reason:
+    type: string
+    lifetime: ping
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The optional reason the ping was submitted.
+      The specific values for reason are specific to each ping, and are
+      documented in the ping's pings.yaml file.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1557048
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1609218#c4
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  os:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The name of the operating system.
+      Possible values:
+      Android, iOS, Linux, Darwin, Windows,
+      FreeBSD, NetBSD, OpenBSD, Solaris, Unknown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  os_version:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The user-visible version of the operating system (e.g. "1.2.3").
+      If the version detection fails, this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1497894
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_display_version:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The user visible version string (e.g. "1.0.3").
+      If the value was not provided through configuration,
+      this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1508305#c9
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_channel:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The channel the application is being distributed on.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1520741
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1520741#c18
+    data_sensitivity:
+      - technical
+    notification_emails:
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  first_run_date:
+    type: datetime
+    lifetime: user
+    send_in_pings:
+      - usage-reporting
+    time_unit: day
+    description: |
+      The date of the first run of the application.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1525045
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1525045#c18
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
+
+  app_build:
+    type: string
+    lifetime: application
+    send_in_pings:
+      - usage-reporting
+    description: |
+      The build identifier generated by the CI system (e.g. "1234/A").
+      If the value was not provided through configuration,
+      this metric gets set to `Unknown`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23785
+      - https://bugzilla.mozilla.org/1508305
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23950
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1512938#c3
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: never
 
 # Downloads
 downloads:
@@ -1363,6 +1539,93 @@ key_commands:
 
 # Onboarding metrics
 onboarding:
+  terms_of_service_card:
+    type: event
+    description: |
+      User viewed the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_accepted:
+    type: event
+    description: |
+      User clicked accept button on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_link_clicked:
+    type: event
+    description: |
+      User clicked the terms of service link on the onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_manage_link_clicked:
+    type: event
+    description: |
+      User clicked the manage link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  terms_of_service_privacy_notice_link_clicked:
+    type: event
+    description: |
+      User clicked the privacy policy link on the terms of service onboarding card.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  toggle_technical_interaction_data:
+    type: event
+    description: |
+      User toggled the preference to share technical and interaction data from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the technical interaction data switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  toggle_automatic_crash_reports:
+    type: event
+    description: |
+      User toggled the preference to automatically send crash reports from the manage modal on the terms of service onboarding card.
+    extra_keys:
+      changed_to:
+        type: boolean
+        description: |
+          The value of the automatic crash reports switch.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24123
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
   card_view:
     type: event
     description: |
@@ -4091,6 +4354,83 @@ tracking_protection:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+  show_clear_cookies_alert:
+    type: event
+    description: |
+      Records when the clear cookies alert is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_blocked_trackers_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection blocked trackers details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_settings:
+    type: event
+    description: |
+      Records when the enhanced tracking protection settings screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  tapped_clear_cookies:
+    type: event
+    description: |
+      Records when the clear cookies button from the etp alert is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  dismiss_etp_panel:
+    type: event
+    description: |
+      Records when the enhanced tracking protection panel is dismissed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_certificates:
+    type: event
+    description: |
+      Records when the certificates screen from the enhanced tracking protection panel is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
 widget:
@@ -5172,6 +5512,23 @@ share_sheet:
         description: |
           Whether the user is opted in to the Sent from Firefox experiment.
           Only returns true if the user is both enrolled and opted in.
+
+# Share related metrics
+
+share:
+  deeplink_open_url_startup_time:
+    type: timing_distribution
+    description: |
+      Track the startup time of the application when the app was launched to open a url.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24325
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24422
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 
 # Device specific metrics
 

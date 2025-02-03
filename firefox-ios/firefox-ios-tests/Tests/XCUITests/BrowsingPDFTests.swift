@@ -42,14 +42,14 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
         if checkboxValidation.exists {
-            checkboxValidation.tap()
+            checkboxValidation.waitAndTap()
         }
         mozWaitForValueContains(url, value: PDF_website["urlValue"]!)
         // Let's comment the next line until that fails intermittently due to the page re-direction
         // mozWaitForElementToExist(app.staticTexts["Education and schools"])
 
         // Go back to pdf view
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
     }
 
@@ -58,12 +58,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        if !iPad() {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
-            longPressOnPdfLink()
-        } else {
-            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
-        }
+        longPressOnPdfLink()
 
         waitForElementsToExist(
             [
@@ -85,15 +80,10 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        if !iPad() {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
-            longPressOnPdfLink()
-        } else {
-            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
-        }
+        longPressOnPdfLink()
 
         mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
-        app.buttons["Add to Reading List"].tap()
+        app.buttons["Add to Reading List"].waitAndTap()
         navigator.nowAt(BrowserTab)
 
         // Go to reading list and check that the item is there
@@ -124,7 +114,7 @@ class BrowsingPDFTests: BaseTestCase {
             .element
             .children(matching: .other)
             .element(boundBy: 0)
-        pdfTopSite.tap()
+        pdfTopSite.waitAndTap()
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
 
@@ -132,8 +122,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
         pdfTopSite.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
-        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
+        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         waitForElementsToExist(
             [
             app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],

@@ -274,14 +274,23 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "拦截内容跟踪器";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "此数据可帮助 Mozilla 估算活跃用户数量。";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "每日使用情况报告";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "深色";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "我们可借助此信息来诊断和修复浏览器的问题。";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ 会将您在地址栏中输入的内容发送至您的搜索引擎。";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla 坚持仅收集用来为大众改进 %@ 所必需的数据。";
+"Settings.detailTextSendUsageData" = "Mozilla 力图仅收集用来为大众改进 %@ 所必需的数据。";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "社交";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "自动发送崩溃报告";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "使用面容 ID 解锁应用";

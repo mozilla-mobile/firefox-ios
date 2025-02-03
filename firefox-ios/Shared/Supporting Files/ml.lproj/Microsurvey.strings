@@ -22,6 +22,9 @@
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
 "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "കണക്കെടുപ്പു് അവസാനിച്ചു";
 
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v129" = "ദയവായി സൎവ്വേ പൂർത്തിയാക്കുക";
+
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
 "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ അടയാളം";
 

@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Chặn trình theo dõi nội dung";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Điều này giúp Mozilla ước tính số người dùng đang hoạt động.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping sử dụng hàng ngày";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tối";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Điều này giúp chúng tôi chẩn đoán và khắc phục sự cố của trình duyệt.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sẽ gửi nội dung bạn nhập vào thanh địa chỉ đến công cụ tìm kiếm của bạn.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Xã hội";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Tự động gửi báo cáo sự cố";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Sử dụng nhận dạng khuôn mặt để mở ứng dụng";

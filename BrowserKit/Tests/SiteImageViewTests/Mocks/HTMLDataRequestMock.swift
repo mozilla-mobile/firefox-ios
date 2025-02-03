@@ -8,7 +8,7 @@ import Foundation
 class HTMLDataRequestMock: HTMLDataRequest {
     var fetchDataForURLCount = 0
     var data: Data?
-    var error: SiteImageError?
+    var error: (any Error)?
 
     func fetchDataForURL(_ url: URL) async throws -> Data {
         fetchDataForURLCount += 1

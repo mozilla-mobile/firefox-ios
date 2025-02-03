@@ -14,7 +14,7 @@ import DesignSystem
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case defaultBrowser, general, privacy, usageData, studies, search, siri, integration, mozilla, secret
+        case defaultBrowser, general, privacy, usageData, crashReports, studies, dailyUsagePing, search, siri, integration, mozilla, secret
 
         var headerText: String? {
             switch self {
@@ -28,14 +28,35 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .integration: return UIConstants.strings.toggleSectionSafari
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
             case .secret: return nil
+            case .crashReports: return nil
+            case .dailyUsagePing: return nil
             }
         }
 
         static func getSections() -> [Section] {
-            var sections = [.defaultBrowser, .general, .privacy, .usageData, .studies, .search, .siri, integration, .mozilla]
+            var sections: [Section] = [
+                .defaultBrowser,
+                .general,
+                .privacy
+                ]
+            
+            if TelemetryManager.shared.isTelemetryFeatureEnabled {
+                sections.append(contentsOf: [.studies, .usageData])
+            }
+
+            sections.append(contentsOf: [
+                .dailyUsagePing,
+                .crashReports,
+                .search,
+                .siri,
+                integration,
+                .mozilla
+            ])
+
             if Settings.getToggle(.displaySecretMenu) {
                 sections.append(.secret)
             }
+
             return sections
         }
     }
@@ -68,6 +89,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let authenticationManager: AuthenticationManager
     private var isSafariEnabled = false
     private let searchEngineManager: SearchEngineManager
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     private lazy var sections = {
         Section.getSections()
     }()
@@ -106,6 +128,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let studiesToggle = BlockerToggle(label: UIConstants.strings.labelStudies, setting: SettingsToggle.studies, subtitle: studiesSubtitle)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
+        let crashToggle = BlockerToggle(
+            label: UIConstants.strings.labelCrashReports,
+            setting: SettingsToggle.crashToggle,
+            subtitle: UIConstants.strings.detailTextCrashReportsV2
+        )
+        let dailyUsageToggle = BlockerToggle(
+            label: UIConstants.strings.labelDailyUsagePing,
+            setting: SettingsToggle.dailyUsagePing,
+            subtitle: UIConstants.strings.detailTextDailyUsagePing
+        )
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
         let searchSuggestionToggle = BlockerToggle(label: UIConstants.strings.settingsSearchSuggestions, setting: SettingsToggle.enableSearchSuggestions, subtitle: searchSuggestionSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
@@ -124,6 +156,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if let studiesIndex = getSectionIndex(Section.studies) {
             toggles[studiesIndex] = [0: studiesToggle]
         }
+        if let dailyUsageIndex = getSectionIndex(.dailyUsagePing) {
+            toggles[dailyUsageIndex] = [0: dailyUsageToggle]
+        }
+        if let crashIndex = getSectionIndex(.crashReports) {
+            toggles[crashIndex] = [0: crashToggle]
+        }
         if let searchIndex = getSectionIndex(Section.search) {
             toggles[searchIndex] = [2: searchSuggestionToggle]
         }
@@ -141,6 +179,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         searchEngineManager: SearchEngineManager,
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandling,
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         themeManager: ThemeManager,
         dismissScreenCompletion: @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
@@ -149,6 +188,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.shouldScrollToSiri = shouldScrollToSiri
         self.authenticationManager = authenticationManager
         self.onboardingEventsHandler = onboardingEventsHandler
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.themeManager = themeManager
         self.dismissScreenCompletion =  dismissScreenCompletion
         super.init(nibName: nil, bundle: nil)
@@ -183,7 +223,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 toggle.onTintColor = .accent
                 toggle.tintColor = .darkGray
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-                toggle.isOn = Settings.getToggle(blockerToggle.setting)
+                if blockerToggle.setting == .dailyUsagePing {
+                    toggle.isOn = TelemetryManager.shared.isNewTosEnabled
+                } else {
+                    toggle.isOn = Settings.getToggle(blockerToggle.setting)
+                }
                 if blockerToggle.setting == .studies {
                     toggle.isEnabled = Settings.getToggle(.sendAnonymousUsageData)
                 }
@@ -355,6 +399,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .secret:
             cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "secretSettingsCell")
             cell.textLabel?.text = "Internal Settings"
+        case .crashReports:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
+        case .dailyUsagePing:
+            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         }
 
         cell.textLabel?.textColor = .primaryText
@@ -378,6 +426,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .integration: return 1
         case .mozilla: return 3
         case .secret: return 1
+        case .crashReports: return 1
+        case .dailyUsagePing: return 1
         }
     }
 
@@ -394,32 +444,39 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // If a toggle subtitle exists, create a standard footer with optional learn more actions
         if let text = toggles[section]?.first?.value.subtitle {
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.text = text
+            var learnMoreActions = [Int: Selector]()
 
-            if section == getSectionIndex(.usageData) || section == getSectionIndex(.studies) || section == getSectionIndex(.search) {
-                var selector: Selector?
-                if section == getSectionIndex(.usageData) {
-                    selector = #selector(tappedLearnMoreFooter)
-                } else if section == getSectionIndex(.search) {
-                    selector =  #selector(tappedLearnMoreSearchSuggestionsFooter)
-                } else if section == getSectionIndex(.studies) {
-                    selector = #selector(tappedLearnMoreStudies)
+            let actions: [(Int?, Selector)] = [
+                (getSectionIndex(.usageData), #selector(tappedLearnMoreFooter)),
+                (getSectionIndex(.search), #selector(tappedLearnMoreSearchSuggestionsFooter)),
+                (getSectionIndex(.studies), #selector(tappedLearnMoreStudies)),
+                (getSectionIndex(.crashReports), #selector(tappedLearnMoreCrashReports)),
+                (getSectionIndex(.dailyUsagePing), #selector(tappedLearnMoreDailyUsagePing))
+            ]
+
+            for (index, action) in actions {
+                if let index {
+                    learnMoreActions[index] = action
                 }
+            }
 
+            if let selector = learnMoreActions[section] {
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
             }
             return footer
-        } else if section == getSectionIndex(.defaultBrowser) {
+        }
+        if section == getSectionIndex(.defaultBrowser) {
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.text = String(format: UIConstants.strings.setAsDefaultBrowserDescriptionLabel, AppInfo.productName)
             return footer
-        } else {
-            return nil
         }
+        return nil
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -519,6 +576,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc
+    func tappedLearnMoreCrashReports() {
+        tappedFooter(forSupportTopic: .mobileCrashReports)
+    }
+    
+    @objc
+    func tappedLearnMoreDailyUsagePing() {
+        tappedFooter(forSupportTopic: .usagePingSettingsMobile)
+    }
+
+    @objc
     private func dismissSettings() {
         #if DEBUG
         if let browserViewController = presentingViewController as? BrowserViewController {
@@ -591,6 +658,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
+        } else if toggle.setting == .dailyUsagePing {
+            if sender.isOn {
+                gleanUsageReportingMetricsService.start()
+            } else {
+                gleanUsageReportingMetricsService.stop()
+            }
         }
 
         switch toggle.setting {

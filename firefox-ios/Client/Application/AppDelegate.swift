@@ -11,7 +11,7 @@ import TabDataStore
 
 import class MozillaAppServices.Viaduct
 
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-    lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -37,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
+    lazy var shareTelemetry = ShareTelemetry()
+    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -45,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
-    private var metricKitWrapper = MetricKitWrapper()
+    private lazy var metricKitWrapper = MetricKitWrapper()
     private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(
@@ -53,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        startRecordingStartupOpenURLTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -96,6 +98,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    category: .lifecycle)
 
         return true
+    }
+
+    private func startRecordingStartupOpenURLTime() {
+        shareTelemetry.recordOpenURLTime()
+        var recordCompleteToken: ActionToken?
+        var recordCancelledToken: ActionToken?
+        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
+        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCancelled) { [weak self] in
+            self?.shareTelemetry.cancelOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
     }
 
     func application(
@@ -154,7 +174,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             profile.removeAccount()
         }
 
-        profile.syncManager.applicationDidBecomeActive()
+        profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
@@ -164,9 +184,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            // TODO: testing to see if this fixes https://mozilla-hub.atlassian.net/browse/FXIOS-7632
-            // self?.profile.cleanupHistoryIfNeeded()
-            self?.ratingPromptManager.updateData()
+            if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
+                self?.profile.cleanupHistoryIfNeeded()
+            }
         }
 
         DispatchQueue.global().async { [weak self] in
@@ -192,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
-        profile.syncManager.applicationDidEnterBackground()
+        profile.syncManager?.applicationDidEnterBackground()
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.

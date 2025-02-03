@@ -45,7 +45,14 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
                     prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-                )
+                ) { _ in
+                    store.dispatch(
+                        TopSitesAction(
+                            windowUUID: self.windowUUID,
+                            actionType: TopSitesActionType.toggleShowSponsoredSettings
+                        )
+                    )
+                }
             ]
             let toggleSection = SettingSection(title: nil, children: toggleSettings)
             sections.append(toggleSection)
@@ -69,7 +76,13 @@ extension TopSitesSettingsViewController {
         override var status: NSAttributedString {
             let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
             let numberOfRows = profile?.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
-
+            store.dispatch(
+                TopSitesAction(
+                    numberOfRows: Int(numberOfRows),
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.updatedNumberOfRows
+                )
+            )
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
 

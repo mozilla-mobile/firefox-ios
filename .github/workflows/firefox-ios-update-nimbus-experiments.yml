@@ -45,7 +45,7 @@ jobs:
           add-paths: firefox-ios/Client/Experiments/initial_experiments.json
           branch: automation/update-nimbus-experiments
           commit-message: "update initial_experiments.json based on the current first-run experiments in experimenter"
-          title: "Refactor [vXXX] Update initial experiments JSON for Nimbus"
+          title: "Refactor FXIOS [Nimbus] Update initial experiments JSON for Nimbus"
           body: "This (automated) PR updates the initial_experiments.json on the `main` branch"
           delete-branch: true
           labels: Needs Code Review

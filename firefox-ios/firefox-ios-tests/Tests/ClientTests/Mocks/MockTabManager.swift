@@ -146,7 +146,7 @@ class MockTabManager: TabManager {
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Client.Tab], previousTabUUID: String, isPrivate: Bool) {}
 
     @discardableResult
-    func addTab(_ request: URLRequest!,
+    func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool

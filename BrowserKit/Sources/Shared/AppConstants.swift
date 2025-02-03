@@ -87,29 +87,15 @@ public class AppConstants {
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {
-        #if MOZ_CHANNEL_RELEASE
-        return AppBuildChannel.release
-        #elseif MOZ_CHANNEL_BETA
-        return AppBuildChannel.beta
-        #elseif MOZ_CHANNEL_FENNEC
-        return AppBuildChannel.developer
-        #else
-        return AppBuildChannel.other
-        #endif
+        let channelRaw = Bundle.main.infoDictionary?["CHANNEL"] as? String ?? "other"
+        let channel = AppBuildChannel(rawValue: channelRaw) ?? .other
+        return channel
     }()
 
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
     public static let punyCode: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
+        return buildChannel == .developer || buildChannel == .other
     }()
 
     /// The maximum length of a URL stored by Firefox. Shared with Places on desktop.

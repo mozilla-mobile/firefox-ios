@@ -6,10 +6,12 @@ import Common
 import WebKit
 import Photos
 import Shared
+import Storage
 
 class ActionProviderBuilder {
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+    private let bookmarksTelemetry = BookmarksTelemetry()
 
     func build() -> [UIAction] {
         return actions
@@ -37,34 +39,28 @@ class ActionProviderBuilder {
             })
     }
 
-    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
+    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuBookmarkLink,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
-            ) { _ in
-                addBookmark(url.absoluteString, title)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .add,
-                                             object: .bookmark,
-                                             value: .contextMenu)
+            ) { [weak self] _ in
+                addBookmark(url.absoluteString, title, nil)
+                self?.bookmarksTelemetry.addBookmark(eventLabel: .contextMenu)
             }
         )
     }
 
-    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
+    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?, Site?) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
-            ) { _ in
-                removeBookmark(url, title)
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .delete,
-                                             object: .bookmark,
-                                             value: .contextMenu)
+            ) { [weak self] _ in
+                removeBookmark(url, title, nil)
+                self?.bookmarksTelemetry.deleteBookmark(eventLabel: .contextMenu)
             }
         )
     }

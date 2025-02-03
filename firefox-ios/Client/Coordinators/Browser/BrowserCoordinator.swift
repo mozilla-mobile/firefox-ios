@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import TabDataStore
+import PDFKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -39,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
@@ -141,12 +141,14 @@ class BrowserCoordinator: BaseCoordinator,
     func showHomepage(
         overlayManager: OverlayModeManager,
         isZeroSearch: Bool,
-        statusBarScrollDelegate: StatusBarScrollDelegate
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        toastContainer: UIView
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager,
-            statusBarScrollDelegate: statusBarScrollDelegate
+            statusBarScrollDelegate: statusBarScrollDelegate,
+            toastContainer: toastContainer
         )
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -157,27 +159,31 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
-        let privateHomepageController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
+        let privateHomepageController = PrivateHomepageViewController(
+            windowUUID: windowUUID,
+            overlayManager: overlayManager
+        )
         privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
         }
-        self.privateViewController = privateHomepageController
     }
 
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
-    func showContextMenu() {
-        // TODO: FXIOS-10613 - Add proper context menu actions
-        let state = ContextMenuState()
-        let viewModel = PhotonActionSheetViewModel(actions: state.actions,
-                                                   modalStyle: .overFullScreen)
-        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
-        sheet.modalTransitionStyle = .crossDissolve
-        present(sheet)
+    func showContextMenu(for configuration: ContextMenuConfiguration) {
+        let coordinator = ContextMenuCoordinator(
+            configuration: configuration,
+            router: router,
+            windowUUID: windowUUID,
+            bookmarksHandlerDelegate: browserViewController
+        )
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
     }
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
@@ -202,11 +208,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        browserViewController.homePanelDidRequestToOpenInNewTab(
-            url,
-            isPrivate: isPrivate,
-            selectNewTab: selectNewTab
-        )
+        openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
     func switchMode() {
@@ -386,11 +388,13 @@ class BrowserCoordinator: BaseCoordinator,
         case .topSites:
             browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab:
-            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
+            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: true)
         case .newTab:
-            browserViewController.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: true)
         }
     }
+
+    // MARK: - Handle Deeplink Open URL / text
 
     private func handle(query: String, isPrivate: Bool) {
         browserViewController.handle(query: query, isPrivate: isPrivate)
@@ -442,7 +446,10 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
 
-        let settingsCoordinator = SettingsCoordinator(router: settingsRouter, tabManager: tabManager)
+        let settingsCoordinator = SettingsCoordinator(
+            router: settingsRouter,
+            tabManager: tabManager
+        )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
@@ -598,6 +605,37 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func presentSavePDFController() {
+        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
+        webView.createPDF { [weak self] result in
+            switch result {
+            case .success(let data):
+                guard let pdf = PDFDocument(data: data),
+                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
+                    return
+                }
+                pdf.write(to: outputURL)
+                if FileManager.default.fileExists(atPath: outputURL.path) {
+                    let url = URL(fileURLWithPath: outputURL.path)
+                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    self?.present(controller)
+                }
+            case .failure(let error):
+                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                 level: .debug,
+                                 category: .webview)
+            }
+        }
+    }
+
+    func showPrintSheet() {
+        if let webView = browserViewController.tabManager.selectedTab?.webView {
+            let printController = UIPrintInteractionController.shared
+            printController.printFormatter = webView.viewPrintFormatter()
+            printController.present(animated: true, completionHandler: nil)
+        }
+    }
+
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             mainMenuCoordinator.dismissMenuModal(animated: false)
@@ -668,7 +706,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
-
+    func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        browserViewController.homePanelDidRequestToOpenInNewTab(
+            url,
+            isPrivate: isPrivate,
+            selectNewTab: selectNewTab
+        )
+    }
     func showShareSheet(
         shareType: ShareType,
         shareMessage: ShareMessage?,

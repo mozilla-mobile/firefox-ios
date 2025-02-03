@@ -257,7 +257,7 @@
 "SearchSuggestions.promptEnable" = "დიახ";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებებისთვის, %@ უგზავნის მისამართის ველში აკრეფილ ტექსტს, შერჩეულ საძიებო სისტემას.";
+"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებებისთვის %@ უგზავნის მისამართის ველში აკრეფილ ტექსტს შერჩეულ საძიებო სისტემას.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "გსურთ ძიების შემოთავაზებების ჩვენება?";
@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "შიგთავსის მეთვალყურეების შეზღუდვა";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "მისი მეშვეობით Mozilla მიახლოებით ითვლის მოქმედ მომხმარებლებს.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "დღიური გამოყენების უწყება";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "მუქი";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
@@ -311,7 +320,7 @@
 "Settings.Search.AddSearchEngineButton" = "სხვა საძიებოს დამატება";
 
 /* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "საძიებო სისტემის დამატება";
+"Settings.Search.AddSearchEngineTitle" = "საძიებოს დამატება";
 
 /* Header for rows of installed search engines */
 "Settings.Search.InstalledSearchEngines" = "დაყენებული საძიებო სისტემები";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "სოცქსელების";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "გამოიყენეთ სახის ამომცნობი, პროგრამის გასახსნელად";
@@ -482,13 +494,13 @@
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "ხანგრძლივად დააჭირეთ მთავარ ეკრანს, სანამ ხატულები რხევას დაიწყებს.";
 
 /* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
-"ShowMeHowOnboarding.SubtitleStepThree.V2" = "მონახეთ %@. შემდეგ აირჩიეთ ვიჯეტი.";
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "მონახეთ %@. შემდეგ აირჩიეთ ჩანამატი.";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "შეეხეთ დამატების ნიშანს.";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
-"ShowMeHowOnboarding.Title.V2" = "დაამატეთ ვიჯეტი %@";
+"ShowMeHowOnboarding.Title.V2" = "გამოიყენეთ %@ ჩანამატით";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "დამატება";
@@ -641,7 +653,7 @@
 "WidgetOnboardingCard.ActionButton" = "იხილეთ, როგორ";
 
 /* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
-"WidgetOnboardingCard.Subtitle" = "ახლა გადადით პირად ფანჯარაზე, თუმცა შემდეგ ჯერზე სწრაფად გახსნისთვის გამოიყენეთ %@-ვიჯეტი მთავარი ეკრანიდან.";
+"WidgetOnboardingCard.Subtitle" = "ახლა კი დარჩით თქვენს პირად ფანჯარაში, მაგრამ მომავალში სწრაფად რომ გაიხსნას %@, გამოიყენეთ ჩანამატი მთავარ ეკრანზე.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "დათვალიერების ისტორია გასუფთავებულია! 🎉";

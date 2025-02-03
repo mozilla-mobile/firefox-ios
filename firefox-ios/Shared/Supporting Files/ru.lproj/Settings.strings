@@ -76,6 +76,9 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v135" = "Сообщения о падении позволяют нам диагностировать и устранять проблемы с браузером.";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Это помогает нам диагностировать и устранять проблемы с браузером.";
+
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Автоматически отправлять сообщения о падениях";
 

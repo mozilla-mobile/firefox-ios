@@ -6,11 +6,15 @@ import Common
 import Redux
 
 final class HomepageAction: Action {
-    override init(windowUUID: WindowUUID, actionType: any ActionType) {
+    var showiPadSetup: Bool?
+
+    init(showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.showiPadSetup = showiPadSetup
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum HomepageActionType: ActionType {
     case initialize
+    case traitCollectionDidChange
 }

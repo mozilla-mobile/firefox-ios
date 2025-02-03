@@ -25,7 +25,7 @@ struct SectionHeaderState: Equatable {
     }
 }
 
-struct PocketDiscoverState: Equatable {
+struct PocketDiscoverState: Equatable, Hashable {
     var title: String
     var url: URL?
 }
@@ -33,28 +33,36 @@ struct PocketDiscoverState: Equatable {
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var pocketData: [PocketStoryState]
+    let pocketData: [PocketStoryState]
+    let shouldShowSection: Bool
+
     let sectionHeaderState = SectionHeaderState()
     let pocketDiscoverItem = PocketDiscoverState(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL
     )
-
     let footerURL = SupportUtils.URLForPocketLearnMore
 
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
+        let userPrefs = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        let isLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
+        let shouldShowSection = userPrefs && isLocaleSupported
+
         self.init(
             windowUUID: windowUUID,
-            pocketData: []
+            pocketData: [],
+            shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryState]
+        pocketData: [PocketStoryState],
+        shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.pocketData = pocketData
+        self.shouldShowSection = shouldShowSection
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -65,13 +73,15 @@ struct PocketState: StateType, Equatable {
 
         switch action.actionType {
         case PocketMiddlewareActionType.retrievedUpdatedStories:
-            return handlePocketAction(action, state: state)
+            return handlePocketStoriesAction(action, state: state)
+        case PocketActionType.toggleShowSectionSetting:
+            return handleSettingsToggleAction(action, state: state)
         default:
             return defaultState(from: state)
         }
     }
 
-    private static func handlePocketAction(_ action: Action, state: PocketState) -> PocketState {
+    private static func handlePocketStoriesAction(_ action: Action, state: PocketState) -> PocketState {
         guard let pocketAction = action as? PocketAction,
               let pocketStories = pocketAction.pocketStories
         else {
@@ -80,14 +90,30 @@ struct PocketState: StateType, Equatable {
 
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: pocketStories
+            pocketData: pocketStories,
+            shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
+        )
+    }
+
+    private static func handleSettingsToggleAction(_ action: Action, state: PocketState) -> PocketState {
+        guard let pocketAction = action as? PocketAction,
+              let isEnabled = pocketAction.isEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        return PocketState(
+            windowUUID: state.windowUUID,
+            pocketData: state.pocketData,
+            shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: PocketState) -> PocketState {
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData
+            pocketData: state.pocketData,
+            shouldShowSection: state.shouldShowSection
         )
     }
 }

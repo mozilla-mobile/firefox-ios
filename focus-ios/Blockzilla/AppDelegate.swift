@@ -41,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
+        gleanUsageReportingMetricsService: gleanUsageReportingMetricsService,
         themeManager: themeManager
     )
 
@@ -51,6 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
+    private lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService()
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
@@ -327,7 +329,7 @@ private let SentryDSNKey = "SentryDSN"
 extension AppDelegate {
     func setupCrashReporting() {
         // Do not enable crash reporting if collection of anonymous usage data is disabled.
-        if !Settings.getToggle(.sendAnonymousUsageData) {
+        if !Settings.getToggle(.crashToggle) {
             return
         }
 
@@ -357,11 +359,13 @@ extension AppDelegate {
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
-        
-        if Settings.getToggle(.sendAnonymousUsageData) {
-            UsageProfileManager.checkAndSetUsageProfileId()
+
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+
+        if TelemetryManager.shared.isNewTosEnabled {
+            gleanUsageReportingMetricsService.start()
         } else {
-            UsageProfileManager.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
@@ -371,7 +375,12 @@ extension AppDelegate {
             channel: channel,
             pingSchedule: ["baseline": ["usage-reporting"]]
         )
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
+
+        Glean.shared.initialize(
+            uploadEnabled: TelemetryManager.shared.isGleanEnabled,
+            configuration: configuration,
+            buildInfo: GleanMetrics.GleanBuild.info
+        )
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry

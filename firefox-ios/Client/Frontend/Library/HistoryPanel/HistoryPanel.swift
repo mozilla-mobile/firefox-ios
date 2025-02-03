@@ -410,7 +410,8 @@ class HistoryPanel: UIViewController,
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
                                                       leftImageView: historyActionable.itemImage,
                                                       accessoryView: nil,
-                                                      accessoryType: .none)
+                                                      accessoryType: .none,
+                                                      editingAccessoryView: nil)
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
@@ -854,7 +855,7 @@ extension HistoryPanel {
     }
 
     private func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(.main) { syncResult in
+        profile.syncManager?.syncHistory().uponQueue(.main) { syncResult in
             self.endRefreshing()
 
             if syncResult.isSuccess {

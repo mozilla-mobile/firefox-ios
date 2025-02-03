@@ -11,7 +11,7 @@ class EditFolderViewController: UIViewController,
                                 Themeable {
     private struct UX {
         static let editFolderCellTopPadding: CGFloat = 25.0
-        static let parentFolderHeaderHorizzontalPadding: CGFloat = 16.0
+        static let parentFolderHeaderHorizontalPadding: CGFloat = 16.0
         static let parentFolderHeaderBottomPadding: CGFloat = 8.0
         static let parentFolderHeaderIdentifier = "parentFolderHeaderIdentifier"
     }
@@ -42,6 +42,7 @@ class EditFolderViewController: UIViewController,
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
         view.tableHeaderView = headerSpacerView
+        view.keyboardDismissMode = .onDrag
     }
 
     private lazy var saveBarButton: UIBarButtonItem =  {
@@ -51,6 +52,7 @@ class EditFolderViewController: UIViewController,
             target: self,
             action: #selector(saveButtonAction)
         )
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
         return button
     }()
 
@@ -63,6 +65,7 @@ class EditFolderViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
@@ -180,7 +183,13 @@ class EditFolderViewController: UIViewController,
                                                            for: indexPath) as? OneLineTableViewCell,
                   let folder = viewModel.folderStructures[safe: indexPath.row]
             else { return UITableViewCell() }
-            configureParentFolderCell(cell, folder: folder)
+            if folder.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
+                configureDesktopBookmarksHeaderCell(cell)
+            } else {
+                configureParentFolderCell(cell, folder: folder)
+                cell.accessibilityIdentifier =
+                "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarkParentFolderCell)_\(indexPath.row)"
+            }
             return cell
         }
     }
@@ -202,7 +211,25 @@ class EditFolderViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.accessibilityTraits = .button
+        cell.customization = .regular
         cell.applyTheme(theme: theme)
+    }
+
+    private func configureDesktopBookmarksHeaderCell(_ cell: OneLineTableViewCell) {
+        cell.titleLabel.text = String.Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel
+        cell.customization = .desktopBookmarksLabel
+        cell.indentationLevel = 1
+        cell.accessoryType = .none
+        cell.selectionStyle = .none
+        cell.applyTheme(theme: theme)
+    }
+
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if viewModel.folderStructures[safe: indexPath.row]?.guid == Folder.DesktopFolderHeaderPlaceholderGuid {
+            return nil
+        }
+        return indexPath
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -222,9 +249,9 @@ class EditFolderViewController: UIViewController,
         configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
         configuration.textProperties.color = theme.colors.textSecondary
         let layoutMargins = NSDirectionalEdgeInsets(top: 0,
-                                                    leading: UX.parentFolderHeaderHorizzontalPadding,
+                                                    leading: UX.parentFolderHeaderHorizontalPadding,
                                                     bottom: UX.parentFolderHeaderBottomPadding,
-                                                    trailing: UX.parentFolderHeaderHorizzontalPadding)
+                                                    trailing: UX.parentFolderHeaderHorizontalPadding)
         configuration.directionalLayoutMargins = layoutMargins
         header.contentConfiguration = configuration
         header.directionalLayoutMargins = .zero

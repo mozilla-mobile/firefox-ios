@@ -64,14 +64,22 @@ class EditBookmarkViewModel: ParentFolderSelector {
         selectedFolder = folder
     }
 
-    func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
-        return isFolderSelected && !isFolderCollapsed
+    func shouldShowDisclosureIndicatorForFolder(_ folder: Folder) -> Bool {
+        let shouldShowDisclosureIndicator = folder.guid == selectedFolder?.guid
+        return shouldShowDisclosureIndicator && !isFolderCollapsed
+    }
+
+    func indentationForFolder(_ folder: Folder) -> Int {
+        if isFolderCollapsed {
+            return 0
+        }
+        return folder.indentation
     }
 
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
+        selectedFolder = folder
         if isFolderCollapsed {
-            selectedFolder = folder
             folderStructures = [folder]
             onFolderStatusUpdate?()
         } else {
@@ -91,7 +99,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
             let folders = await self?.folderFetcher.fetchFolders()
             guard let folders else { return }
             self?.folderStructures = folders
-            self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
         }
     }

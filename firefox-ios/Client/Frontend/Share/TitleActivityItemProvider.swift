@@ -16,7 +16,12 @@ import Foundation
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
+    private struct ActivityIdentifiers {
+        static let whatsApp = "net.whatsapp.WhatsApp.ShareExtension"
+    }
+
     private let title: String
+    private let applySentFromFirefoxTreatment: Bool // FXIOS-9879 For the Sent from Firefox experiment
 
     /// We do not want to append titles to website URL shares to the pasteboard, Messages, and Mail body.
     /// However, this provider will append the title to the Mail subject line.
@@ -26,8 +31,9 @@ class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
         UIActivity.ActivityType.mail
     ]
 
-    init(title: String) {
+    init(title: String, applySentFromFirefoxTreatment: Bool = false) {
         self.title = title
+        self.applySentFromFirefoxTreatment = applySentFromFirefoxTreatment
 
         super.init(placeholderItem: title)
     }
@@ -38,6 +44,9 @@ class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     ) -> Any? {
         // For excluded activites, we don't want to provide any content
         if let activityType = activityType, TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
+            return NSNull()
+        } else if applySentFromFirefoxTreatment, activityType?.rawValue == ActivityIdentifiers.whatsApp {
+            // FXIOS-9879 For the Sent from Firefox experiment, we never want a title, just the explicit share text
             return NSNull()
         }
 

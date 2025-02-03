@@ -74,7 +74,7 @@ dau-reporting:
 
 usage-reporting:
   description: |
-    Minimal ping to measure DAU.
+    Minimal ping to measure the usage frequency of Firefox.
     Sent on the baseline schedule.
   include_client_id: false
   send_if_empty: true
@@ -88,6 +88,61 @@ usage-reporting:
     - jrediger@mozilla.com
     - loines@mozilla.com
   metadata:
+    follows_collection_enabled: false
     include_info_sections: false
-    ping_schedule:
-      - baseline
+  reasons:
+    dirty_startup: |
+      Defined to avoid error logging.
+      *Note*: this ping will not actually send a ping reason.
+    inactive: |
+      Defined to avoid error logging.
+      *Note*: this ping will not actually send a ping reason.
+    active: |
+      Defined to avoid error logging.
+      *Note*: this ping will not actually send a ping reason.
+
+onboarding-opt-out:
+  description: |
+    This ping is submitted when a user opts out of 
+    usage-reporting during the onboarding process. 
+    It is sent immediately upon opting out of Telemetry/Usage Tracking (T/UT) 
+    at ToS consent. This ping will only ever be sent during the 
+    initial onboarding flow. 
+    If the global telemetry preference is disabled, this ping 
+    includes specific settings to ensure it can still be submitted.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24101
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false
+    
+usage-deletion-request:
+  description: |
+    This ping is submitted when a user opts out of sending usage
+    frequency of Firefox to Mozilla.
+    Sent in response to user action.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-10902
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24263
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    follows_collection_enabled: false
+    include_info_sections: false
+  reasons:
+    set_upload_enabled: |
+      The ping was submitted due to the usage-reporting data preference changing from
+      enabled to disabled.

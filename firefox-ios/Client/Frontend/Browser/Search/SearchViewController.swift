@@ -21,6 +21,8 @@ private struct SearchViewControllerUX {
     static let FaviconSize: CGFloat = 29
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
+
+    static let AppendButtonSize: CGFloat = 44
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
@@ -721,8 +723,10 @@ class SearchViewController: SiteTableViewController,
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
                 appendButton.tintColor = currentTheme().colors.iconPrimary
-                appendButton.sizeToFit()
+                appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
+                                            height: SearchViewControllerUX.AppendButtonSize)
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+                oneLineCell.isAccessoryViewInteractive = true
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -774,7 +778,7 @@ class SearchViewController: SiteTableViewController,
                     twoLineCell,
                     site.title,
                     site.url,
-                    site.bookmarked ?? false
+                    site.isBookmarked ?? false
                 )
                 cell = twoLineCell
             }

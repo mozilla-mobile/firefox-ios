@@ -144,12 +144,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.showHomepage(
             overlayManager: overlayModeManager,
             isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
         )
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
-        XCTAssertNil(subject.privateViewController)
     }
 
     func testShowNewHomepage_hasSameInstance() {
@@ -157,7 +157,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.showHomepage(
             overlayManager: overlayModeManager,
             isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
         )
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
@@ -165,7 +166,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.showHomepage(
             overlayManager: overlayModeManager,
             isZeroSearch: false,
-            statusBarScrollDelegate: scrollDelegate
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
         )
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
@@ -431,6 +433,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
+    func testShowContextMenu_addsContextMenuCoordinator() {
+        let subject = createSubject()
+        let config = ContextMenuConfiguration(homepageSection: .customizeHomepage, toastContainer: UIView())
+        subject.showContextMenu(for: config)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ContextMenuCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is PhotonActionSheet)
     }
 
     // MARK: - ParentCoordinatorDelegate

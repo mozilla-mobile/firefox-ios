@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Blokovat sledovací obsah";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Toto Mozille pomáhá odhadnout počet aktivních uživatelů.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping denního používání";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tmavý";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Toto nám umožňují diagnostikovat a opravit problémy s prohlížečem.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ bude odesílat text zadávaný to adresního řádku vyhledávači.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Sociální sítě";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Automaticky odesílat hlášení o pádech";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Použít Face ID pro odemčení aplikace";

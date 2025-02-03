@@ -40,9 +40,6 @@ class DependencyHelperMock {
         let themeManager: ThemeManager = MockThemeManager()
         AppContainer.shared.register(service: themeManager)
 
-        let ratingPromptManager = RatingPromptManager(profile: profile)
-        AppContainer.shared.register(service: ratingPromptManager)
-
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
@@ -54,6 +51,10 @@ class DependencyHelperMock {
 
         let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
         AppContainer.shared.register(service: pocketManager)
+
+        let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
+        MockGleanUsageReportingMetricsService(profile: profile)
+        AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

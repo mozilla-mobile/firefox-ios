@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "İçerik takip kodlarını engelle";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Bu sayede Mozilla aktif kullanıcı sayısını tahmin edebilir.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Günlük kullanım ping’i";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Koyu";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Bu, tarayıcıyla ilgili sorunları teşhis edip düzeltmemize yardımcı olur.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
@@ -381,6 +390,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Sosyal";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Çökme raporlarını otomatik olarak gönder";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Uygulamanın kilidini açmak için Face ID’yi kullan";

@@ -7,8 +7,8 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Body.v135" = "Salve sites enquanto navega. Também são trazidos favoritos de outros dispositivos sincronizados.";
 
-/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data */
-"Bookmarks.EmptyState.Root.ButtonTitle.v135" = "Entrar na conta para sincronizar";
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Entrar na conta para sincronizar";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Title.v135" = "Nenhum favorito ainda";
@@ -28,6 +28,9 @@
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Editar favorito";
 
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "FAVORITOS DO COMPUTADOR";
+
 /* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
 "Bookmarks.Menu.EditBookmarkSave.v135" = "Salvar";
 
@@ -39,6 +42,15 @@
 
 /* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
 "Bookmarks.Menu.EditFolder.v131" = "Editar pasta";
+
+/* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Mais opções";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Salvo em “Favoritos”";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+"Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Salvo em “%@”";
 
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "Editar";

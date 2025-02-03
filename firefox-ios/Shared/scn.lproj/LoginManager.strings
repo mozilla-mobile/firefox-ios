@@ -5,7 +5,7 @@
 "Cancel" = "Sfai";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
-"Clear Search" = "Cancella risciduta";
+"Clear Search" = "Scancella risciduta";
 
 /* Copy password text selection menu item */
 "Copy" = "Copia";
@@ -14,7 +14,7 @@
 "Created %@" = "Criatu %@";
 
 /* Label for the button used to delete the current login. */
-"Delete" = "Cancella";
+"Delete" = "Scancella";
 
 /* Prompt option for cancelling out of deletion */
 "DeleteLoginAlert.DeleteButton.Cancel.v122" = "Sfai";
@@ -26,7 +26,7 @@
 "DeleteLoginAlert.Message.Local.v122" = "Nun poi sfari st'azzioni.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "Chistu cancella a chiavi di tutti i to dispusitivi sincrunizzati.";
+"DeleteLoginAlert.Message.Synced.v122" = "Chistu scancella a chiavi di tutti i to dispusitivi sincrunizzati.";
 
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Livari a chiavi?";
@@ -44,10 +44,10 @@
 "LoginList.DeleteToast.v135" = "Chiavi livata";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "I cridinziali vennu cancillati pi sempri.";
+"Logins will be permanently removed." = "I cridinziali vennu scancillati pi sempri.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "I cridinziali vennu cancillati di tutti i dispusitivi cullijati.";
+"Logins will be removed from all connected devices." = "I cridinziali vennu scancillati di tutti i dispusitivi cullijati.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
 "Modified %@" = "Canciatu %@";

@@ -94,7 +94,7 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup)
         if iPad() {
-            app.textFields.element(boundBy: 0).tap()
+            app.textFields.element(boundBy: 0).waitAndTap()
             app.typeText("mozilla.org\n")
         } else {
             navigator.openURL("mozilla.org")

@@ -36,6 +36,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
     }
+    private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
@@ -175,6 +176,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
+        viewCertificatesButton.applyUnderline(underlinedText: model.viewCertificatesButtonTitle)
         baseView.addArrangedSubview(viewCertificatesButton)
     }
 
@@ -191,6 +193,13 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
+        headerView.setupAccessibility(
+            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
+            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
+            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
+        )
     }
 
     // MARK: View Transitions
@@ -237,6 +246,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         let certificatesController = CertificatesViewController(with: model.getCertificatesModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(certificatesController, animated: true)
+        telemetryWrapper.trackShowCertificates()
     }
 
     private func currentTheme() -> Theme {

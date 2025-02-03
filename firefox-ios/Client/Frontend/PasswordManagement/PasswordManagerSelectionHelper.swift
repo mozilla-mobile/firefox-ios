@@ -34,6 +34,6 @@ class PasswordManagerSelectionHelper {
     }
 
     private func getKeyFromLoginRecord(_ loginRecord: LoginRecord) -> String {
-        "\(loginRecord.hostname)\(loginRecord.decryptedUsername)"
+        "\(loginRecord.hostname)\(loginRecord.username)"
     }
 }

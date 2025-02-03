@@ -43,14 +43,14 @@ class MultiWindowTests: IpadOnlyTestCase {
         let homeButtom = AccessibilityIdentifiers.Toolbar.addNewTabButton
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).firstMatch.waitAndTap()
-        app.buttons[homeButtom].firstMatch.tap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.tap()
+        app.buttons[homeButtom].firstMatch.waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.waitAndTap()
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
         XCTAssertEqual(tabButtonSecondWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).waitAndTap()
-        app.buttons[homeButtom].firstMatch.tap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.tap()
+        app.buttons[homeButtom].firstMatch.waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.waitAndTap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
         XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }
@@ -64,7 +64,7 @@ class MultiWindowTests: IpadOnlyTestCase {
     private func splitViewFromHomeScreen() {
         dotMenu.waitAndTap()
         splitView.waitAndTap()
-        springboard.icons.elementContainingText("split view with Fennec").tap()
+        springboard.icons.elementContainingText("split view with Fennec").waitAndTap()
     }
 
     // Param windowsNumber - number of tab windows to open from switcher
@@ -72,7 +72,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         for  _ in 1...windowsNumber {
             dotMenu.waitAndTap()
             let cardOrgMozillaIosFennecButton = springboard.buttons["card:org.mozilla.ios.Fennec:"]
-            cardOrgMozillaIosFennecButton.tap()
+            cardOrgMozillaIosFennecButton.waitAndTap()
         }
     }
 

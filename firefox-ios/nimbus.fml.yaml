@@ -17,7 +17,9 @@ include:
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
+  - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/contextualHintFeature.yaml
+  - nimbus-features/darkReaderFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
@@ -25,6 +27,7 @@ include:
   - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
+  - nimbus-features/jsAlertRefactor.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
@@ -34,7 +37,6 @@ include:
   - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pullToRefreshRefactorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
-  - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
@@ -44,5 +46,4 @@ include:
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/unifiedAds.yaml
-  - nimbus-features/universalLinks.yaml
   - nimbus-features/zoomFeature.yaml

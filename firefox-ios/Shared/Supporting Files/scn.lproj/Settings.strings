@@ -65,7 +65,7 @@
 "Settings.AddressAutofill.Title.v126" = "Nnirizzi";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v122" = "Mètudi di pagamentu";
+"Settings.AutofillCreditCard.Title.v122" = "Furmi di pagamentu";
 
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "Cchiù nfurmazzioni.";
@@ -74,7 +74,10 @@
 "Settings.CrashReports.Link.v136" = "Cchiù nfurmazzioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navigaturi.";
+"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navicaturi.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Chistu ni pirmetti di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Manna 'n autumàticu i signalijazzioni di scasciu";
@@ -155,7 +158,7 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "Mustra suggirimenti di Firefox nnê sissioni privati";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Riscedi nnâ crunuluggìa di navigazzioni";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Riscedi nnâ crunuluggìa di navicazzioni";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Riscedi nnê nzingalibbra";

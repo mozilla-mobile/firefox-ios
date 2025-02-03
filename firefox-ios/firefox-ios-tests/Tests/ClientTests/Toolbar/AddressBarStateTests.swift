@@ -428,7 +428,31 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.showQRPageAction)
     }
 
-    func test_cancelEditAction_onHomepage_returnsExpectedState() {
+    func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let didChangeURLAction = ToolbarAction(url: URL(string: "https://mozilla.com")!,
+                                               windowUUID: windowUUID,
+                                               actionType: ToolbarActionType.urlDidChange
+        )
+
+        let stateWithURL = reducer(initialState, didChangeURLAction)
+
+        let newState = reducer(
+            stateWithURL,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.cancelEditOnHomepage
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertFalse(newState.shouldShowKeyboard)
+        XCTAssertEqual(newState.isEditing, initialState.isEditing)
+    }
+
+    func test_cancelEditOnHomepageAction_withNoURL_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -437,26 +461,13 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEdit
+                actionType: ToolbarActionType.cancelEditOnHomepage
             )
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
-
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
-
-        XCTAssertEqual(newState.browserActions.count, 2)
-        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
-        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
-
-        XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
         XCTAssertTrue(newState.shouldShowKeyboard)
-        XCTAssertFalse(newState.shouldSelectSearchTerm)
-        XCTAssertFalse(newState.didStartTyping)
-        XCTAssertTrue(newState.showQRPageAction)
     }
 
     func test_cancelEditAction_withWebsite_returnsExpectedState() {
