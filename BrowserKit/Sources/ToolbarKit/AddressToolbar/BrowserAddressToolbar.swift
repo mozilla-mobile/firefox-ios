@@ -27,6 +27,7 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
+        static let toolbarAnimationTime: CGFloat = 0.15
     }
 
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
@@ -102,16 +103,11 @@ public class BrowserAddressToolbar: UIView,
     }
 
     public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
-
         updateBorder(borderPosition: state.borderPosition)
 
         updateActions(state: state) 
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         droppableUrl = state.locationViewState.droppableUrl
-
-
-//        setNeedsLayout()
-//        layoutIfNeeded()
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -241,7 +237,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(state: AddressToolbarState, completion: (() -> Void)? = nil) {
+    internal func updateActions(state: AddressToolbarState) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
 
@@ -253,10 +249,28 @@ public class BrowserAddressToolbar: UIView,
 
         updateActionSpacing()
 
-        UIView.animate(withDuration: animationTime, delay: 0) {
-            self.layoutIfNeeded()
-        } completion: { _ in
-            completion?()
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        updateToolbarLayout(animated: isAnimationEnabled)
+    }
+
+    private func updateToolbarLayout(animated: Bool) {
+        let stacks = browserActionStack.arrangedSubviews + navigationActionStack.arrangedSubviews + pageActionStack.arrangedSubviews
+
+        if animated {
+            UIView.animate(withDuration: UX.toolbarAnimationTime) {
+                self.layoutIfNeeded()
+            } completion: { _ in
+                UIView.animate(withDuration: UX.toolbarAnimationTime) {
+                    stacks.forEach {
+                        $0.alpha = 1.0
+                    }
+                }
+            }
+        } else {
+            stacks.forEach {
+                $0.alpha = 1.0
+            }
+            layoutIfNeeded()
         }
     }
 
@@ -288,23 +302,13 @@ public class BrowserAddressToolbar: UIView,
         return button
     }
 
-    let animationTime = 0.2
-    lazy var delay = animationTime - 0.1
-
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
-        stackView.removeAllArrangedViews()
-
-        toolbarElements.forEach { toolbarElement in
+        let buttons = toolbarElements.map { toolbarElement in
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
-            button.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-            button.alpha = 0
-            stackView.addArrangedSubview(button)
-
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-            ])
+            if !stackView.arrangedSubviews.contains(button) {
+                button.alpha = 0
+            }
 
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
@@ -314,12 +318,18 @@ public class BrowserAddressToolbar: UIView,
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
+            return button
         }
-        UIView.animate(withDuration: animationTime, delay: delay) {
-            stackView.arrangedSubviews.forEach {
-                $0.transform = .identity
-                $0.alpha = 1
-            }
+
+        stackView.removeAllArrangedViews()
+
+        buttons.forEach { button in
+            stackView.addArrangedSubview(button)
+
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+            ])
         }
     }
 

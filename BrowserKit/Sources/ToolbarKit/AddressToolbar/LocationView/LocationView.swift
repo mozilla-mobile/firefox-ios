@@ -17,6 +17,9 @@ final class LocationView: UIView,
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
+        static let iconInitialTransform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+        static let iconAnimationTime: CGFloat = 0.15
+        static let iconAnimationDelay: CGFloat = 0.15
     }
 
     private var urlAbsolutePath: String?
@@ -128,7 +131,6 @@ final class LocationView: UIView,
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        
         searchEngineContentView.configure(state, delegate: delegate)
 
         configureLockIconButton(state)
@@ -231,40 +233,53 @@ final class LocationView: UIView,
         iconContainerStackView.removeAllArrangedViews()
     }
 
-    let animationTime = 0.2
-    lazy var delay = animationTime - 0.1
-
     private func updateIconContainer() {
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
         guard !isEditing else {
-            lockIconButton.alpha = 0
-            lockIconButton.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             updateUIForSearchEngineDisplay()
             urlTextFieldTrailingConstraint?.constant = 0
-            UIView.animate(withDuration: animationTime, delay: delay) {
-                self.searchEngineContentView.alpha = 1
-                self.searchEngineContentView.transform = .identity
-            }
+            animateIconAppearance(animated: isAnimationEnabled)
             return
         }
 
         if isURLTextFieldEmpty {
-            lockIconButton.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             updateUIForSearchEngineDisplay()
-            UIView.animate(withDuration: animationTime, delay: delay) {
-                self.lockIconButton.alpha = 0
-                self.searchEngineContentView.alpha = 1
-                self.searchEngineContentView.transform = .identity
+        } else {
+            updateUIForLockIconDisplay()
+        }
+        animateIconAppearance(animated: isAnimationEnabled)
+        urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
+    }
+
+    private func animateIconAppearance(animated: Bool) {
+        let shouldShowLockIcon: Bool
+        if isEditing {
+            lockIconButton.alpha = 0
+            shouldShowLockIcon = false
+        } else if isURLTextFieldEmpty {
+            shouldShowLockIcon = false
+        } else {
+            shouldShowLockIcon = true
+        }
+        if animated {
+            UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+                self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+                if shouldShowLockIcon {
+                    self.lockIconButton.transform = .identity
+                } else {
+                    self.searchEngineContentView.transform = .identity
+                }
             }
         } else {
-            searchEngineContentView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
-            updateUIForLockIconDisplay()
-            UIView.animate(withDuration: animationTime, delay: delay) {
-                self.searchEngineContentView.alpha = 0
-                self.lockIconButton.alpha = 1
-                self.lockIconButton.transform = .identity
+            searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+            lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+            if shouldShowLockIcon {
+                lockIconButton.transform = .identity
+            } else {
+                searchEngineContentView.transform = .identity
             }
         }
-        urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
     }
 
     private func updateUIForSearchEngineDisplay() {
@@ -310,12 +325,15 @@ final class LocationView: UIView,
         }
 
         if state.isEditing {
-            UIView.animate(withDuration: animationTime, delay: delay) {
-                self.urlTextField.clearButton?.alpha = 1
-                self.urlTextField.clearButton?.transform = .identity
+            let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+            if isAnimationEnabled {
+                UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                    self.urlTextField.clearButton?.alpha = 1
+                }
+            } else {
+                urlTextField.clearButton?.alpha = 1
             }
         } else {
-            urlTextField.clearButton?.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
             urlTextField.clearButton?.alpha = 0
         }
 
