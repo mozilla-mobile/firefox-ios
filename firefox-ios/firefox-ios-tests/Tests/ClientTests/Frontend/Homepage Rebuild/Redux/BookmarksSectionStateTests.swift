@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Storage
 import XCTest
 
 @testable import Client
@@ -28,8 +29,29 @@ final class BookmarksSectionStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.bookmarks.count, 1)
+        XCTAssertEqual(newState.bookmarks.count, 0)
+    }
 
+    func test_fetchBookmarksAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                bookmarks: [BookmarkState(
+                    site: Site.createBasicSite(
+                        url: "www.mozilla.org",
+                        title: "Bookmarks Title"
+                    )
+                )],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksMiddlewareActionType.initialize
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.bookmarks.count, 1)
         XCTAssertEqual(newState.bookmarks.first?.site.url, "www.mozilla.org")
         XCTAssertEqual(newState.bookmarks.first?.site.title, "Bookmarks Title")
         XCTAssertEqual(newState.bookmarks.first?.accessibilityLabel, "Bookmarks Title")
