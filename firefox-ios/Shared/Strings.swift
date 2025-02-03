@@ -211,11 +211,16 @@ extension String {
                     tableName: "Bookmarks",
                     value: "No bookmarks yet",
                     comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
-                public static let Body = MZLocalizedString(
+                public static let BodySignedIn = MZLocalizedString(
                     key: "Bookmarks.EmptyState.Root.Body.v135",
                     tableName: "Bookmarks",
                     value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
-                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                    comment: "The body text for the placeholder screen shown when the user is signed in and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                public static let BodySignedOut = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.BodySignedOut.v135",
+                    tableName: "Bookmarks",
+                    value: "Save sites as you browse. Sign in to grab bookmarks from other synced devices.",
+                    comment: "The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
                 public static let ButtonTitle = MZLocalizedString(
                     key: "Bookmarks.EmptyState.Root.ButtonTitle.v136",
                     tableName: "Bookmarks",
@@ -4939,18 +4944,37 @@ extension String {
     }
 }
 
-// MARK: - Snackbar shown when tapping app store link
+// MARK: - Alert controller shown when tapping sms, email or app store links
 extension String {
     public static let ExternalLinkAppStoreConfirmationTitle = MZLocalizedString(
         key: "ExternalLink.AppStore.ConfirmationTitle",
         tableName: nil,
         value: "Open this link in the App Store?",
         comment: "Question shown to user when tapping a link that opens the App Store app")
-    public static let ExternalLinkGenericConfirmation = MZLocalizedString(
-        key: "ExternalLink.AppStore.GenericConfirmationTitle",
-        tableName: nil,
-        value: "Open this link in external app?",
-        comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+    public static let ExternalSmsLinkConfirmation = MZLocalizedString(
+        key: "ExternalLink.ExternalSmsLinkConfirmation.v136",
+        tableName: "ExternalLink",
+        value: "Open sms in an external application?",
+        comment: "Question shown to user when tapping an SMS link that opens the external app for those."
+    )
+    public static let ExternalMailLinkConfirmation = MZLocalizedString(
+        key: "ExternalLink.ExternalMailLinkConfirmation.v136",
+        tableName: "ExternalLink",
+        value: "Open email in the default mail application?",
+        comment: "Question shown to user when tapping a mail link that opens the external app for those."
+    )
+    public static let ExternalInvalidLinkMessage = MZLocalizedString(
+        key: "ExternalLink.ExternalInvalidLinkMessage.v136",
+        tableName: "ExternalLink",
+        value: "The application required to open that link can't be found.",
+        comment: "A statement shown to user when tapping an external link and the link doesn't work."
+    )
+    public static let ExternalOpenMessage = MZLocalizedString(
+        key: "ExternalLink.ExternalOpenMessage.v136",
+        tableName: "ExternalLink",
+        value: "Open",
+        comment: "The call to action button for a user to open an external link."
+    )
 }
 
 // MARK: Enhanced Tracking Protection/Unified Trust Panel
@@ -7653,7 +7677,7 @@ extension String {
             public static let SendCrashReportsSettingMessage = MZLocalizedString(
                 key: "Settings.CrashReports.Message.v135",
                 tableName: "Settings",
-                value: "Crash reports allow us diagnose and fix issues with the browser.",
+                value: "Crash reports allow us to diagnose and fix issues with the browser.",
                 comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
             public static let AgreementButtonTitle = MZLocalizedString(
                 key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
@@ -7695,6 +7719,13 @@ extension String {
                 tableName: "Settings",
                 value: "Learn More.",
                 comment: "Title for a link that explains how Mozilla send crash reports.")
+        }
+        struct v136 {
+            public static let ExternalLinkGenericConfirmation = MZLocalizedString(
+                key: "ExternalLink.AppStore.GenericConfirmationTitle",
+                tableName: nil,
+                value: "Open this link in external app?",
+                comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
         }
     }
 }

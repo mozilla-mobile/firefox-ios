@@ -30,6 +30,9 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
+        case .darkReader:
+            return checkDarkReaderFeature(from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -93,9 +96,6 @@ final class NimbusFeatureFlagLayer {
 
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
-
-        case .closeRemoteTabs:
-            return checkCloseRemoteTabsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -355,6 +355,11 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
+    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.darkReaderFeature.value()
+        return config.status
+    }
+
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.zoomFeature.value()
 
@@ -391,11 +396,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
-    }
-
-    private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.remoteTabManagement.value()
-        return config.closeTabsEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {

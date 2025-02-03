@@ -364,7 +364,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            messageCardCell.configure(with: config, theme: currentTheme)
+            messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
             return messageCardCell
         case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
@@ -387,6 +387,25 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
+        case .jumpBackIn(let state):
+            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
+                cellType: JumpBackInCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            jumpBackInCell.configure(state: state, theme: currentTheme)
+            return jumpBackInCell
+
+        case .bookmark(let state):
+            guard let bookmarksCell = collectionView?.dequeueReusableCell(
+                cellType: BookmarksCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            bookmarksCell.configure(state: state, theme: currentTheme)
+            return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,

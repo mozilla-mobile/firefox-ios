@@ -11,6 +11,7 @@ class MockWKEngineConfiguration: WKEngineConfiguration {
     var addUserScriptCalled = 0
     var addInDefaultContentWorldCalled = 0
     var addInPageContentWorldCalled = 0
+    var addInCustomContentWorldCalled = 0
     var removeScriptMessageHandlerCalled = 0
     var removeAllUserScriptsCalled = 0
 
@@ -26,6 +27,11 @@ class MockWKEngineConfiguration: WKEngineConfiguration {
     func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
         scriptNameAdded = name
         addInPageContentWorldCalled += 1
+    }
+
+    func addInCustomContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        scriptNameAdded = name
+        addInCustomContentWorldCalled += 1
     }
 
     func removeScriptMessageHandler(forName name: String) {

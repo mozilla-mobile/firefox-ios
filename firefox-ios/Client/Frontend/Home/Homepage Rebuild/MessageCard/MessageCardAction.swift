@@ -18,6 +18,11 @@ final class MessageCardAction: Action {
     }
 }
 
+enum MessageCardActionType: ActionType {
+    case tappedOnActionButton
+    case tappedOnCloseButton
+}
+
 enum MessageCardMiddlewareActionType: ActionType {
     case initialize
 }

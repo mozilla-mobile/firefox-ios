@@ -15,19 +15,16 @@ class AppLaunchUtil {
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
-    private let gleanLifecycleObserver: GleanLifecycleObserver
 
     init(
         logger: Logger = DefaultLogger.shared,
-        profile: Profile,
-        gleanLifecycleObserver: GleanLifecycleObserver = AppContainer.shared.resolve()
+        profile: Profile
     ) {
         self.logger = logger
         self.profile = profile
 //        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
-        self.gleanLifecycleObserver = gleanLifecycleObserver
     }
 
     func setUpPreLaunchDependencies() {
@@ -57,8 +54,6 @@ class AppLaunchUtil {
                 TelemetryWrapper.shared.setup(profile: profile)
                 TelemetryWrapper.shared.recordStartUpTelemetry()
             }
-
-            gleanLifecycleObserver.startObserving()
         } else {
             logger.setup(sendCrashReports: sendCrashReports)
             TelemetryWrapper.shared.setup(profile: profile)

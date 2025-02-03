@@ -101,7 +101,9 @@ class ShareSheetCoordinator: BaseCoordinator,
             default:
                 showSendToDevice(url: shareType.wrappedURL, relatedTab: nil)
             }
-
+        case .copyToPasteboard:
+            showToast(text: .LegacyAppMenu.AppMenuCopyURLConfirmMessage)
+            dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
         }
@@ -154,6 +156,12 @@ class ShareSheetCoordinator: BaseCoordinator,
         router.present(alertController)
     }
 
+    private func showToast(text: String) {
+        SimpleToast().showAlertWithText(text,
+                                        bottomContainer: self.alertContainer,
+                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
+    }
+
     // MARK: DevicePickerViewControllerDelegate
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
@@ -194,10 +202,8 @@ class ShareSheetCoordinator: BaseCoordinator,
             guard let self = self else { return }
             self.router.dismiss()
             self.parentCoordinator?.didFinish(from: self)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
-                                                bottomContainer: self.alertContainer,
-                                                theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
             }
         }
     }
