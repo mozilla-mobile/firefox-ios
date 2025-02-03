@@ -163,6 +163,16 @@ class RemoteTabsTableViewController: UITableViewController,
         if let buttonToast = toast as? ButtonToast {
             self.buttonToast = buttonToast
         }
+
+        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ]
+        }
     }
 
     // MARK: - Refreshing TableView
@@ -330,7 +340,11 @@ class RemoteTabsTableViewController: UITableViewController,
                                                  buttonText: .UndoString)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.getCurrentTheme(for: windowUUID),
-                                    completion: { _ in self.undo() })
+                                    completion: { didTapUndoButton in
+                                        if didTapUndoButton {
+                                            self.undo()
+                                        }
+                                    })
             show(toast: toast)
 
             self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: fxaDeviceId, url: tab.URL)
