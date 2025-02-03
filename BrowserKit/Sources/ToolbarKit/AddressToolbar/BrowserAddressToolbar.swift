@@ -97,7 +97,7 @@ public class BrowserAddressToolbar: UIView,
         self.previousLocationViewState = state.locationViewState
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
         if state.locationViewState.isEditing {
-            leadingNavigationActionStackConstraint?.constant = 8
+            leadingNavigationActionStackConstraint?.constant = UX.horizontalSpace
         }
         configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
