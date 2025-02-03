@@ -17,7 +17,6 @@ final class LocationView: UIView,
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
-        static let iconInitialTransform = CGAffineTransform(scaleX: 0.4, y: 0.4)
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.15
     }
@@ -234,11 +233,10 @@ final class LocationView: UIView,
     }
 
     private func updateIconContainer() {
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
         guard !isEditing else {
             updateUIForSearchEngineDisplay()
             urlTextFieldTrailingConstraint?.constant = 0
-            animateIconAppearance(animated: isAnimationEnabled)
+            animateIconAppearance()
             return
         }
 
@@ -247,11 +245,11 @@ final class LocationView: UIView,
         } else {
             updateUIForLockIconDisplay()
         }
-        animateIconAppearance(animated: isAnimationEnabled)
+        animateIconAppearance()
         urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
     }
 
-    private func animateIconAppearance(animated: Bool) {
+    private func animateIconAppearance() {
         let shouldShowLockIcon: Bool
         if isEditing {
             lockIconButton.alpha = 0
@@ -261,24 +259,16 @@ final class LocationView: UIView,
         } else {
             shouldShowLockIcon = true
         }
-        if animated {
+
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        if isAnimationEnabled {
             UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
                 self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
                 self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
-                if shouldShowLockIcon {
-                    self.lockIconButton.transform = .identity
-                } else {
-                    self.searchEngineContentView.transform = .identity
-                }
             }
         } else {
             searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
             lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
-            if shouldShowLockIcon {
-                lockIconButton.transform = .identity
-            } else {
-                searchEngineContentView.transform = .identity
-            }
         }
     }
 

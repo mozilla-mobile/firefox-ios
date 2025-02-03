@@ -28,6 +28,7 @@ public class BrowserAddressToolbar: UIView,
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
         static let toolbarAnimationTime: CGFloat = 0.15
+        static let iconsAnimationTime: CGFloat = 0.1
     }
 
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
@@ -96,9 +97,6 @@ public class BrowserAddressToolbar: UIView,
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewState = state.locationViewState
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
-        if state.locationViewState.isEditing {
-            leadingNavigationActionStackConstraint?.constant = UX.horizontalSpace
-        }
         configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
 
@@ -248,20 +246,20 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
-
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
-        updateToolbarLayout(animated: isAnimationEnabled)
+        updateToolbarLayout()
     }
 
-    private func updateToolbarLayout(animated: Bool) {
+    private func updateToolbarLayout() {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
-        if animated {
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+
+        if isAnimationEnabled {
             UIView.animate(withDuration: UX.toolbarAnimationTime) {
                 self.layoutIfNeeded()
             } completion: { _ in
-                UIView.animate(withDuration: UX.toolbarAnimationTime) {
+                UIView.animate(withDuration: UX.iconsAnimationTime) {
                     stacks.forEach {
                         $0.alpha = 1.0
                     }
