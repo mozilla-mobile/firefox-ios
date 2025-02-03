@@ -121,17 +121,23 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
 
     private func showRetryAutofillAlert(for credentialIdentity: ASPasswordCredentialIdentity) {
         let alertController = UIAlertController(
-            title: "Autofill Error",
-            message: "There was an issue with autofill. Please try again.",
+            title: .CredentialProviderRetryAlertTitle,
+            message: .CredentialProviderRetryAlertMessage,
             preferredStyle: .alert
         )
 
-        let retryAction = UIAlertAction(title: "Retry", style: .default) { [unowned self] _ in
+        let retryAction = UIAlertAction(
+            title: .CredentialProviderRetryAlertRetryActionTitle,
+            style: .default
+        ) { [unowned self] _ in
             provideCredentialWithoutUserInteraction(for: credentialIdentity)
         }
         alertController.addAction(retryAction)
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] _ in
+        let cancelAction = UIAlertAction(
+            title: .CredentialProviderRetryAlertCancelActionTitle,
+            style: .cancel
+        ) { [unowned self] _ in
             extensionContext.cancelRequest(withError: ASExtensionError(.userCanceled))
         }
         alertController.addAction(cancelAction)
