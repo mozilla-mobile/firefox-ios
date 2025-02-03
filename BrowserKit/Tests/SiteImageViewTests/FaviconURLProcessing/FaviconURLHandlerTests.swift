@@ -6,8 +6,8 @@ import XCTest
 @testable import SiteImageView
 
 class FaviconURLHandlerTests: XCTestCase {
-    let siteURL = URL(string: "www.firefox.com")!
-    let faviconURL = URL(string: "www.firefox.com/image")!
+    let siteURL = URL(string: "https://www.firefox.com")!
+    let faviconURL = URL(string: "https://www.firefox.com/image")!
 
     var mockFetcher: FaviconURLFetcherMock!
     var mockCache: FaviconURLCacheMock!
@@ -18,43 +18,37 @@ class FaviconURLHandlerTests: XCTestCase {
         mockCache = FaviconURLCacheMock()
     }
 
-    func testGetFaviconURL_inCache() async {
+    func testGetFaviconURL_inCache() async throws {
         await mockCache.setTestResult(url: faviconURL)
         let model = createSiteImageModel(siteURL: siteURL)
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
                                                urlCache: mockCache)
-        do {
-            let url = try await subject.getFaviconURL(model: model)
 
-            XCTAssertEqual(url, faviconURL)
-            let getURLCount = await mockCache.getURLFromCacheCalledCount
-            let cacheURLCount = await mockCache.cacheURLCalledCount
-            XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
-            XCTAssertEqual(cacheURLCount, 0, "cache url should not have been called")
-            XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 0, "fetch favicon url should not have been called")
-        } catch {
-            XCTFail("failed to get favicon url from cache")
-        }
+        let url = try await subject.getFaviconURL(model: model)
+
+        XCTAssertEqual(url, faviconURL)
+        let getURLCount = await mockCache.getURLFromCacheCalledCount
+        let cacheURLCount = await mockCache.cacheURLCalledCount
+        XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
+        XCTAssertEqual(cacheURLCount, 0, "cache url should not have been called")
+        XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 0, "fetch favicon url should not have been called")
     }
 
-    func testGetFaviconURL_notInCache() async {
+    func testGetFaviconURL_notInCache() async throws {
         await mockCache.setTestResult(error: .noURLInCache)
         mockFetcher.url = faviconURL
         let model = createSiteImageModel(siteURL: siteURL)
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
                                                urlCache: mockCache)
-        do {
-            let url = try await subject.getFaviconURL(model: model)
 
-            XCTAssertEqual(url, faviconURL)
-            let getURLCount = await mockCache.getURLFromCacheCalledCount
-            let cacheURLCount = await mockCache.cacheURLCalledCount
-            XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
-            XCTAssertEqual(cacheURLCount, 1, "cache url should have been called")
-            XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 1, "fetch favicon url should have been called")
-        } catch {
-            XCTFail("failed to get fetch favicon")
-        }
+        let url = try await subject.getFaviconURL(model: model)
+
+        XCTAssertEqual(url, faviconURL)
+        let getURLCount = await mockCache.getURLFromCacheCalledCount
+        let cacheURLCount = await mockCache.cacheURLCalledCount
+        XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
+        XCTAssertEqual(cacheURLCount, 1, "cache url should have been called")
+        XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 1, "fetch favicon url should have been called")
     }
 
     func testGetFaviconURL_forInternalURL() async {
@@ -75,7 +69,7 @@ class FaviconURLHandlerTests: XCTestCase {
 
     func testGetFaviconURL_errorNoFaviconFound() async {
         await mockCache.setTestResult(error: .noURLInCache)
-        mockFetcher.error = .noFaviconFound
+        mockFetcher.error = SiteImageError.noFaviconFound
         let model = createSiteImageModel(siteURL: siteURL)
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
                                                urlCache: mockCache)
@@ -101,6 +95,40 @@ class FaviconURLHandlerTests: XCTestCase {
         XCTAssertEqual(count, 1)
         XCTAssertEqual(key, "key")
         XCTAssertEqual(url, "myUrl")
+    }
+
+    func testGetFaviconURL_whenClientError() async throws {
+        await mockCache.setTestResult(error: .noURLInCache)
+        mockFetcher.error = URLError(.notConnectedToInternet)
+        let model = createSiteImageModel(siteURL: siteURL)
+        let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher, urlCache: mockCache)
+
+        do {
+            _ = try await subject.getFaviconURL(model: model)
+            XCTFail("Request should have thrown a client error")
+        } catch {
+            let responseError = try XCTUnwrap(error as? SiteImageError)
+            XCTAssertEqual(responseError, SiteImageError.noFaviconURLFound)
+            let cacheURLCalledCount = await mockCache.cacheURLCalledCount
+            XCTAssertEqual(cacheURLCalledCount, 0)
+        }
+    }
+
+    func testGetFaviconURL_whenServerError() async throws {
+        await mockCache.setTestResult(error: .noURLInCache)
+        mockFetcher.error = URLError(.badServerResponse)
+        let model = createSiteImageModel(siteURL: siteURL)
+        let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher, urlCache: mockCache)
+
+        do {
+            _ = try await subject.getFaviconURL(model: model)
+            XCTFail("Request should have thrown a server error")
+        } catch {
+            let responseError = try XCTUnwrap(error as? SiteImageError)
+            XCTAssertEqual(responseError, SiteImageError.noFaviconURLFound)
+            let cacheURLCalledCount = await mockCache.cacheURLCalledCount
+            XCTAssertEqual(cacheURLCalledCount, 1)
+        }
     }
 
     func testClearCache() async {

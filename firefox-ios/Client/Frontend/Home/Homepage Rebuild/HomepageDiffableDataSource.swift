@@ -17,6 +17,7 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
+        case jumpBackIn
         case pocket(TextColor?)
         case customizeHomepage
     }
@@ -26,6 +27,7 @@ final class HomepageDiffableDataSource:
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
+        case jumpBackIn(JumpBackInTabState)
         case pocket(PocketStoryState)
         case pocketDiscover(PocketDiscoverState)
         case customizeHomepage
@@ -36,6 +38,7 @@ final class HomepageDiffableDataSource:
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
+                JumpBackInCell.self,
                 PocketStandardCell.self,
                 PocketDiscoverCell.self,
                 CustomizeHomepageSectionCell.self
@@ -59,6 +62,11 @@ final class HomepageDiffableDataSource:
         if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
             snapshot.appendSections([.topSites(numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
+        }
+
+        if let tabs = getJumpBackInTabs(with: state.jumpBackInState) {
+            snapshot.appendSections([.jumpBackIn])
+            snapshot.appendItems(tabs, toSection: .jumpBackIn)
         }
 
         if let stories = getPocketStories(with: state.pocketState) {
@@ -99,5 +107,12 @@ final class HomepageDiffableDataSource:
         }
         guard !topSites.isEmpty else { return nil }
         return topSites
+    }
+
+    private func getJumpBackInTabs(
+        with jumpBackInSectionState: JumpBackInSectionState
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
+        return jumpBackInSectionState.jumpBackInTabs.compactMap { .jumpBackIn($0) }
     }
 }

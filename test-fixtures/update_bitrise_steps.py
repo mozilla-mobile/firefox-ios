@@ -10,8 +10,22 @@ BITRISE_STEPLIB_URL = "https://api.github.com/repos/bitrise-io/bitrise-steplib/c
 # GitHub Access Token
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
+# Step versions that should NOT be updated
+"""
+We need to lock this version because the new version of git-clone step brokes the decision 
+to run UI test step due to the change in the variables available. Once we investigate this
+failure in the workflow, eventually we can remove the locked version.
+"""
+LOCKED_VERSIONS = {
+    "git-clone": "6.2"
+}
+
 def fetch_latest_version(step_id):
     """Fetch the latest version of a step from the Bitrise Step Library."""
+    if step_id in LOCKED_VERSIONS:
+        print(f"Skipping update for {step_id}, keeping version {LOCKED_VERSIONS[step_id]}")
+        return LOCKED_VERSIONS[step_id]  # Return locked version
+
     try:
         url = f"{BITRISE_STEPLIB_URL}/{step_id}"
         headers = {"Authorization": f"token {GITHUB_TOKEN}"}

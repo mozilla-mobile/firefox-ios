@@ -387,6 +387,16 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
+        case .jumpBackIn(let state):
+            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
+                cellType: JumpBackInCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            jumpBackInCell.configure(state: state, theme: currentTheme)
+            return jumpBackInCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,

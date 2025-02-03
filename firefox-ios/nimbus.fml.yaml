@@ -19,6 +19,7 @@ include:
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/contextualHintFeature.yaml
+  - nimbus-features/darkReaderFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
@@ -36,7 +37,6 @@ include:
   - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pullToRefreshRefactorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
-  - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

@@ -142,21 +142,8 @@ class ShareToolbarTests: BaseTestCase {
 
     private func validateMarkupTool() {
         // The Markup tool opens
-        waitForElementsToExist(
-            [
-                app.buttons["Undo"],
-                app.buttons["Redo"]
-            ]
-        )
-        if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.buttons["PKPalette-Multicolor-Swatch"])
-        }
-        if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.buttons["autofill"])
-            mozWaitForElementToExist(app.buttons["Done"])
-        } else {
-            mozWaitForElementToExist(app.buttons["Color picker"])
-        }
+        mozWaitForElementToExist(app.switches["Markup"])
+        mozWaitForElementToExist(app.buttons["Done"])
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {

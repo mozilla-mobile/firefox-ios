@@ -46,7 +46,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 LegacyHomepageMessageCardCell.self,
                 TopSiteItemCell.self,
                 EmptyTopSiteCell.self,
-                JumpBackInCell.self,
+                LegacyJumpBackInCell.self,
                 PocketDiscoverCell.self,
                 LegacyPocketStandardCell.self,
                 BookmarksCell.self,

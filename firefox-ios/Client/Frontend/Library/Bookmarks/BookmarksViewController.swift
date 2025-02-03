@@ -271,9 +271,11 @@ class BookmarksViewController: SiteTableViewController,
             })
             toast.showToast(viewController: self, delay: UX.toastDelayBefore, duration: UX.toastDismissDelay) { toast in
                 [
-                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                 ]
             }
         }
@@ -489,6 +491,10 @@ class BookmarksViewController: SiteTableViewController,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
 
+            let cellA11yId = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
+            cell.accessibilityIdentifier = cellA11yId
+            cell.accessibilityTraits = .button
+
             // BookmarkItemData requires:
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
@@ -503,6 +509,8 @@ class BookmarksViewController: SiteTableViewController,
                 }
 
                 let contextButton = createContextButton()
+                contextButton.accessibilityIdentifier = cellA11yId +
+                AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
                     guard let indexPath = tableView.indexPath(for: cell) else { return }
                     self?.presentContextMenu(for: indexPath)
@@ -510,7 +518,6 @@ class BookmarksViewController: SiteTableViewController,
                 viewModel.accessoryView = contextButton
             }
 
-            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell
