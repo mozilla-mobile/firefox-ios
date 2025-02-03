@@ -27,8 +27,8 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
-        static let toolbarAnimationTime: CGFloat = 0.15
-        static let iconsAnimationTime: CGFloat = 0.1
+        static let toolbarAnimationTime: CGFloat = 0.25
+        static let iconsAnimationTime: CGFloat = 0.15
     }
 
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
