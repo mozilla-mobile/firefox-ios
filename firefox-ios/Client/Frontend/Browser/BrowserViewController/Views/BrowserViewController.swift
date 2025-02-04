@@ -2174,13 +2174,17 @@ class BrowserViewController: UIViewController,
         case .settings(let section):
             navigationHandler?.show(settings: section)
         case .link:
-            guard let url = type.url else {
-                logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
+            guard let url = type.url, let visitType = type.visitType else {
+                logger.log(
+                    "url or visitType should not be nil when navigating for a link type, instead received \(String(describing: type.url)) and \(String(describing: type.visitType))",
+                    level: .warning,
+                    category: .coordinator
+                )
                 return
             }
             navigationHandler?.navigateFromHomePanel(
                 to: url,
-                visitType: .link,
+                visitType: visitType,
                 isGoogleTopSite: type.isGoogleTopSite ?? false
             )
         case .newTab:
