@@ -6,7 +6,10 @@ import UIKit
 
 public struct DarkTheme: Theme {
     public var type: ThemeType = .dark
+    /* Ecosia: Use Ecosia color palette subclass
     public var colors: ThemeColourPalette = DarkColourPalette()
+     */
+    public var colors: EcosiaThemeColourPalette = DarkColourPalette()
 
     public init() {}
 }
@@ -17,12 +20,22 @@ public struct DarkTheme: Theme {
 /// and a regular dark theme.
 public struct NightModeTheme: Theme {
     public var type: ThemeType = .nightMode
+    /* Ecosia: Use Ecosia color palette subclass
     public var colors: ThemeColourPalette = DarkColourPalette()
+     */
+    public var colors: EcosiaThemeColourPalette = DarkColourPalette()
 
     public init() {}
 }
 
+/* Ecosia: Use Ecosia color palette subclass
 private struct DarkColourPalette: ThemeColourPalette {
+ */
+private struct DarkColourPalette: EcosiaThemeColourPalette {
+    var ecosia: EcosiaSemanticColors {
+        FakeEcosiaSemanticColors()
+    }
+
     // MARK: - Layers
     var layer1: UIColor = FXColors.DarkGrey60
     var layer2: UIColor = FXColors.DarkGrey30

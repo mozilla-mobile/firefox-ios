@@ -104,9 +104,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         backgroundView?.backgroundColor = theme.colors.layer1
         collapsibleImageView.image = collapsibleState?.image?.tinted(withColor: theme.colors.iconAccent)
          */
-        titleLabel.textColor = UIColor.legacyTheme.ecosia.secondaryText
+        titleLabel.textColor = theme.colors.ecosia.textSecondary
         backgroundView?.backgroundColor = .clear
-        collapsibleImageView.image = collapsibleState?.image?.tinted(withColor: .legacyTheme.ecosia.secondaryText)
+        collapsibleImageView.image = collapsibleState?.image?.tinted(withColor: theme.colors.ecosia.textSecondary)
 
         bordersHelper.applyTheme(theme: theme)
     }

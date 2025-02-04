@@ -430,9 +430,10 @@ class LegacyHomepageViewController:
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         viewModel.theme = theme
-        // Ecosia: Update NTP background
-        // view.backgroundColor = theme.colors.layer1
-        view.backgroundColor = .legacyTheme.ecosia.ntpBackground
+        /* Ecosia: Update NTP background
+        view.backgroundColor = theme.colors.layer1
+         */
+        view.backgroundColor = theme.colors.ecosia.ntpBackground
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -660,6 +661,7 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
             let text = NTPTooltip.highlight()?.text,
             kind == UICollectionView.elementKindSectionHeader {
             let tooltip = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPTooltip.key, for: indexPath) as! NTPTooltip
+            tooltip.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             tooltip.setText(text)
             tooltip.delegate = self
             return tooltip
@@ -667,7 +669,12 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
 
         // Ecosia: footer for impact
         if sectionViewModel.sectionType == .impact, kind == UICollectionView.elementKindSectionFooter {
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPImpactDividerFooter.cellIdentifier, for: indexPath)
+            let dividerFooter = collectionView
+                .dequeueReusableSupplementaryView(ofKind: kind,
+                                                  withReuseIdentifier: NTPImpactDividerFooter.cellIdentifier,
+                                                  for: indexPath) as? NTPImpactDividerFooter
+            dividerFooter?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return dividerFooter ?? UICollectionReusableView()
         }
 
         guard let headerView = collectionView.dequeueReusableSupplementaryView(

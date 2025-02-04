@@ -11,6 +11,7 @@ private let items: [(AdultFilter, String)] = [
     (.moderate, .localized(.moderate)),
     (.off, .localized(.off))]
 
+// TODO: Can we use ThemedTableViewController?
 final class FilterController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
     private weak var table: UITableView!
 
@@ -19,21 +20,19 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
         items.first(where: { $0.0 == User.shared.adultFilter }).map { $0.1 }
     }
 
-    init(windowUUID: WindowUUID) {
+    required init?(coder: NSCoder) { nil }
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.windowUUID = windowUUID
+        self.themeManager = themeManager
         super.init()
-    }
-
-    required init?(coder: NSCoder) {
-        self.windowUUID = nil
-        super.init(coder: coder)
     }
 
     // MARK: - Themeable Properties
 
     let windowUUID: WindowUUID?
     var currentWindowUUID: Common.WindowUUID? { return windowUUID }
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
@@ -79,13 +78,15 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         table.visibleCells.forEach {
             ($0 as? Themeable)?.applyTheme()
+            ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
         }
 
-        view.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
-        table.tintColor = UIColor.legacyTheme.ecosia.primaryBrand
-        table.separatorColor = UIColor.legacyTheme.tableView.separator
-        table.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
+        view.backgroundColor = theme.colors.ecosia.ntpBackground
+        table.tintColor = theme.colors.ecosia.brandPrimary
+        table.separatorColor = theme.colors.ecosia.borderDecorative
+        table.backgroundColor = theme.colors.ecosia.ntpBackground
     }
 }

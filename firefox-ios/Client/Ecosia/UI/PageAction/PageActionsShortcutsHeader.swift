@@ -12,7 +12,7 @@ protocol PageActionsShortcutsDelegate: AnyObject {
     func pageOptionsSettings()
 }
 
-class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
+class PageActionsShortcutsHeader: UITableViewHeaderFooterView, ThemeApplicable {
 
     var mainView = UIStackView()
     weak var delegate: PageActionsShortcutsDelegate?
@@ -71,26 +71,20 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
             mainView.addArrangedSubview(view)
             shortcuts.append(view)
         }
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func applyTheme() {
+    func applyTheme(theme: Theme) {
         backgroundView?.backgroundColor = .clear
 
         shortcuts.forEach { item in
-            item.title.textColor = .legacyTheme.ecosia.primaryText
-            item.button.tintColor = .legacyTheme.ecosia.secondaryText
-            item.button.backgroundColor = .legacyTheme.ecosia.impactMultiplyCardBackground
+            item.title.textColor = theme.colors.ecosia.textPrimary
+            item.button.tintColor = theme.colors.ecosia.textSecondary
+            item.button.backgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
         }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
     }
 
     @objc func tapped(_ sender: UIButton) {

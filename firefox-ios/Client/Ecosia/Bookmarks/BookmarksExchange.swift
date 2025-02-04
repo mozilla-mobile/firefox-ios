@@ -6,6 +6,7 @@ import Foundation
 import Core
 import Shared
 import Storage
+import Common
 
 import class MozillaAppServices.BookmarkFolderData
 
@@ -36,8 +37,10 @@ final class BookmarksExchange: BookmarksExchangable {
     func export(bookmarks: [Core.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws {
         guard let view = viewController.view else { return }
 
+        let theme = themeFromView(view: view)
+
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = UIColor.legacyTheme.ecosia.primaryBrand
+        activityIndicator.color = theme.colors.ecosia.brandPrimary
         activityIndicator.startAnimating()
 
         let toast = SimpleToast()
@@ -46,6 +49,7 @@ final class BookmarksExchange: BookmarksExchangable {
             .localized(.exportingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
+            theme: theme,
             bottomInset: view.layoutMargins.bottom
         )
 
@@ -64,6 +68,7 @@ final class BookmarksExchange: BookmarksExchangable {
                 .localized(.bookmarksExported),
                 image: .named("bookmarkSuccess"),
                 bottomContainer: view,
+                theme: theme,
                 bottomInset: view.layoutMargins.bottom
             )
         }
@@ -84,6 +89,7 @@ final class BookmarksExchange: BookmarksExchangable {
             .localized(.importingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
+            theme: themeFromView(view: view),
             bottomInset: view.layoutMargins.bottom
         )
 
@@ -129,6 +135,7 @@ final class BookmarksExchange: BookmarksExchangable {
             .localized(.bookmarksImported),
             image: .named("bookmarkSuccess"),
             bottomContainer: view,
+            theme: themeFromView(view: view),
             bottomInset: view.layoutMargins.bottom
         )
     }
@@ -157,6 +164,11 @@ final class BookmarksExchange: BookmarksExchangable {
                 try await createBookmark(parentGUID: parentGUID, url: url, title: title)
             }
         }
+    }
+
+    private func themeFromView(view: UIView) -> Theme {
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.getCurrentTheme(for: view.currentWindowUUID)
     }
 }
 

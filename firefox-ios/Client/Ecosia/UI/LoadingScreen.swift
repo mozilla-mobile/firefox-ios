@@ -4,6 +4,7 @@
 
 import UIKit
 import Core
+import Common
 
 final class LoadingScreen: UIViewController {
     private weak var profile: Profile!
@@ -11,12 +12,20 @@ final class LoadingScreen: UIViewController {
     private weak var referrals: Referrals!
     private var referralCode: String?
 
+    var themeManager: ThemeManager
+    let windowUUID: WindowUUID
     let loadingGroup = DispatchGroup()
 
     required init?(coder: NSCoder) { nil }
-    init(profile: Profile, referrals: Referrals, referralCode: String? = nil) {
+    init(profile: Profile,
+         referrals: Referrals,
+         windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         referralCode: String? = nil) {
         self.profile = profile
         self.referrals = referrals
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
         self.referralCode = referralCode
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
@@ -25,7 +34,8 @@ final class LoadingScreen: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.legacyTheme.ecosia.primaryBackground
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.ecosia.backgroundPrimary
 
         let logo = UIImageView(image: UIImage(named: "ecosiaLogoLaunch"))
         logo.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +45,7 @@ final class LoadingScreen: UIViewController {
 
         let progress = UIProgressView()
         progress.translatesAutoresizingMaskIntoConstraints = false
-        progress.progressTintColor = UIColor.legacyTheme.ecosia.primaryBrand
+        progress.progressTintColor = theme.colors.ecosia.brandPrimary
         view.addSubview(progress)
         self.progress = progress
 
@@ -45,7 +55,7 @@ final class LoadingScreen: UIViewController {
         message.font = .preferredFont(forTextStyle: .footnote)
         message.numberOfLines = 0
         message.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        message.textColor = UIColor.legacyTheme.ecosia.primaryText
+        message.textColor = theme.colors.ecosia.textPrimary
         message.textAlignment = .center
         view.addSubview(message)
 

@@ -113,11 +113,12 @@ class LegacyBookmarksPanel: SiteTableViewController,
     private lazy var emptyHeader = EmptyHeader(icon: "bookmarksEmpty", title: .localized(.noBookmarksYet), subtitle: .localized(.AddYourFavoritePages))
 
     // Ecosia: Tooltip
-    private let bookmarksTooltip: NTPTooltip = {
+    private lazy var bookmarksTooltip: NTPTooltip = {
         let tooltip = NTPTooltip()
         tooltip.tailPosition = .leading
+        tooltip.applyTheme(theme: currentTheme())
         tooltip.setText(.localized(.bookmarksToolTipText))
-        tooltip.setLinkTitle(.localized(.learnMore))
+        tooltip.setLinkTitle(.localized(.learnMore), theme: currentTheme())
         return tooltip
     }()
 
@@ -160,7 +161,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
         tableView.allowsSelectionDuringEditing = true
         tableView.dragInteractionEnabled = false
         // Ecosia: Update TableView properties
-        tableView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer6
+        tableView.backgroundColor = currentTheme().colors.ecosia.modalBackground
         tableView.contentInset.top = 32
     }
 
@@ -210,6 +211,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
              */
             let emptyBookmarksView = EmptyBookmarksView(initialBottomMargin: topAnchorDelta)
             emptyBookmarksView.delegate = self
+            emptyBookmarksView.applyTheme(theme: currentTheme())
             tableView.tableHeaderView = nil
             tableView.backgroundView = emptyBookmarksView
         case (false, true): // is folder which is empty -> show "old" empty view
@@ -800,7 +802,7 @@ extension LegacyBookmarksPanel {
             self?.moreButton.isEnabled = true
         }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.view.tintColor = UIColor.legacyTheme.ecosia.primaryButton
+        alert.view.tintColor = currentTheme().colors.ecosia.buttonBackgroundPrimary
         alert.popoverPresentationController?.barButtonItem = moreButton
         [importAction, exportAction, cancelAction].forEach(alert.addAction)
         present(alert, animated: true)

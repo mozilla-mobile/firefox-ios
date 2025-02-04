@@ -74,7 +74,7 @@ extension BrowserViewController {
     }
 
     private func presentLoadingScreen() {
-        present(LoadingScreen(profile: profile, referrals: referrals, referralCode: User.shared.referrals.pendingClaim), animated: true)
+        present(LoadingScreen(profile: profile, referrals: referrals, windowUUID: windowUUID, referralCode: User.shared.referrals.pendingClaim), animated: true)
     }
 
     private func handleFirstTimeUserActions() {

@@ -78,6 +78,7 @@ extension NTPAboutEcosiaCellViewModel: HomepageSectionHandler {
             return UICollectionViewCell()
         }
         cell.configure(section: sections[indexPath.row], viewModel: self)
+        cell.applyTheme(theme: theme)
         return cell
     }
 

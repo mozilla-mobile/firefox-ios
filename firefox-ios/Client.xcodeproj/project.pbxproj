@@ -68,24 +68,21 @@
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
+		120251112D439F4000039A2F /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120251102D439F3600039A2F /* EcosiaColor.swift */; };
+		120251122D439F4000039A2F /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120251102D439F3600039A2F /* EcosiaColor.swift */; };
+		1202511E2D47885D00039A2F /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1202511D2D47885700039A2F /* EcosiaLightTheme.swift */; };
+		1202511F2D47885D00039A2F /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1202511D2D47885700039A2F /* EcosiaLightTheme.swift */; };
+		120251212D48EF8D00039A2F /* EcosiaPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120251202D48EF8600039A2F /* EcosiaPrimaryButton.swift */; };
 		121E65DF2D36514E00DFBFA2 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4B8E81D38497A00493393 /* BaseTestCase.swift */; };
 		121E65E02D36515700DFBFA2 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		121E65E12D36585A00DFBFA2 /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		121E65E22D36588400DFBFA2 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		121E65E32D36595900DFBFA2 /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
-		124DAE7F2D301B290050104C /* RecoveredLegacyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */; };
-		124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */; };
-		124DAE812D301C550050104C /* LegacyDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */; };
 		124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		124DAE832D350F750050104C /* EcosiaThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E792D2825AF00E4DDBF /* EcosiaThemeManager.swift */; };
-		124DAE842D350F8A0050104C /* EcosiaThemeColourPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E782D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift */; };
-		124DAE852D350F8E0050104C /* EcosiaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB288E52B07C8F000A8FCB3 /* EcosiaTheme.swift */; };
+		124DAE842D350F8A0050104C /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E782D2825AF00E4DDBF /* EcosiaDarkTheme.swift */; };
 		124DAE862D3510330050104C /* SemanticColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB288DD2B07C8EF00A8FCB3 /* SemanticColor.swift */; };
-		124DAE872D35106F0050104C /* LegacyDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */; };
-		124DAE882D3510750050104C /* RecoveredLegacyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */; };
-		124DAE892D35107A0050104C /* LegacyThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */; };
 		124DAE8A2D3512FA0050104C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
-		124DAE8B2D35137C0050104C /* LegacyThemeManager+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E9B2D28289900E4DDBF /* LegacyThemeManager+Ecosia.swift */; };
 		126509852CD925B40011BA36 /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 126509842CD925B40011BA36 /* BrazeKit */; };
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		1265098A2CDA32790011BA36 /* BrazeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126509882CDA31890011BA36 /* BrazeServiceTests.swift */; };
@@ -165,8 +162,7 @@
 		12C11E762D28254A00E4DDBF /* AboutEcosiaSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2890F2B07C8F000A8FCB3 /* AboutEcosiaSection.swift */; };
 		12C11E772D28254A00E4DDBF /* NTPAboutEcosiaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289112B07C8F000A8FCB3 /* NTPAboutEcosiaCell.swift */; };
 		12C11E7A2D2825AF00E4DDBF /* EcosiaThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E792D2825AF00E4DDBF /* EcosiaThemeManager.swift */; };
-		12C11E7B2D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E782D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift */; };
-		12C11E7C2D2825B300E4DDBF /* EcosiaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB288E52B07C8F000A8FCB3 /* EcosiaTheme.swift */; };
+		12C11E7B2D2825AF00E4DDBF /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E782D2825AF00E4DDBF /* EcosiaDarkTheme.swift */; };
 		12C11E7D2D28261400E4DDBF /* Colours.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB289122B07C8F000A8FCB3 /* Colours.xcassets */; };
 		12C11E7E2D28261800E4DDBF /* EcosiaNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289132B07C8F000A8FCB3 /* EcosiaNavigation.swift */; };
 		12C11E7F2D28267100E4DDBF /* FilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289142B07C8F000A8FCB3 /* FilterController.swift */; };
@@ -192,7 +188,6 @@
 		12C11E982D28279C00E4DDBF /* NewsletterCardExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E952D28279C00E4DDBF /* NewsletterCardExperiment.swift */; };
 		12C11E992D28279C00E4DDBF /* SeedCounterNTPExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E962D28279C00E4DDBF /* SeedCounterNTPExperiment.swift */; };
 		12C11E9A2D28281100E4DDBF /* WebsiteConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289422B07C8F000A8FCB3 /* WebsiteConnectionStatus.swift */; };
-		12C11EA12D28291300E4DDBF /* LegacyThemeManager+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E9B2D28289900E4DDBF /* LegacyThemeManager+Ecosia.swift */; };
 		12C11EA22D28291300E4DDBF /* DeviceInfo+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2894E2B07C8F000A8FCB3 /* DeviceInfo+Ecosia.swift */; };
 		12C11EA32D28291300E4DDBF /* AppInfo+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2894B2B07C8F000A8FCB3 /* AppInfo+Ecosia.swift */; };
 		12C11EA42D28291300E4DDBF /* URL+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2894D2B07C8F000A8FCB3 /* URL+Ecosia.swift */; };
@@ -208,8 +203,6 @@
 		12C11EAE2D28291300E4DDBF /* SimpleToast+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E9D2D2828AA00E4DDBF /* SimpleToast+Ecosia.swift */; };
 		12C11EAF2D28291300E4DDBF /* UIButton+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E9C2D28289900E4DDBF /* UIButton+Ecosia.swift */; };
 		12C11EB02D28291900E4DDBF /* DispatchQueueHelper+BuildChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11EA02D2828EA00E4DDBF /* DispatchQueueHelper+BuildChannel.swift */; };
-		12C11EB12D28292000E4DDBF /* ConnectionStatusImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289522B07C8F000A8FCB3 /* ConnectionStatusImage.swift */; };
-		12C11EB22D28292000E4DDBF /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289502B07C8F000A8FCB3 /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift */; };
 		12C11EB92D2829B200E4DDBF /* BookmarksExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289542B07C8F000A8FCB3 /* BookmarksExchange.swift */; };
 		12C11EBA2D2829BC00E4DDBF /* markets.json in Resources */ = {isa = PBXBuildFile; fileRef = 2CB289562B07C8F000A8FCB3 /* markets.json */; };
 		12C11EC82D282A3D00E4DDBF /* EcosiaInstallType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11EC22D282A3D00E4DDBF /* EcosiaInstallType+Extensions.swift */; };
@@ -2415,11 +2408,11 @@
 		109E4D959F25FF2F13848417 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		10CD44F0A402C84BB31E5474 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		11F747589EB8A55A47647C93 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		120251102D439F3600039A2F /* EcosiaColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaColor.swift; sourceTree = "<group>"; };
+		1202511D2D47885700039A2F /* EcosiaLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaLightTheme.swift; sourceTree = "<group>"; };
+		120251202D48EF8600039A2F /* EcosiaPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaPrimaryButton.swift; sourceTree = "<group>"; };
 		120F42119EB30F217AB9493E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		123045959E0F295753B4B4DB /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Today.strings; sourceTree = "<group>"; };
-		124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDarkTheme.swift; sourceTree = "<group>"; };
-		124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveredLegacyTheme.swift; sourceTree = "<group>"; };
-		124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyThemeManager.swift; sourceTree = "<group>"; };
 		126509882CDA31890011BA36 /* BrazeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrazeServiceTests.swift; sourceTree = "<group>"; };
 		12674A038346A46589A0AC0B /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = "el.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		126A40A4A5AFDFD655B0FDF4 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -2463,12 +2456,11 @@
 		12C11E562D28238700E4DDBF /* NTPNewsletterCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPNewsletterCardViewModel.swift; sourceTree = "<group>"; };
 		12C11E582D28238700E4DDBF /* NTPConfigurableNudgeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPConfigurableNudgeCardCell.swift; sourceTree = "<group>"; };
 		12C11E592D28238700E4DDBF /* NTPConfigurableNudgeCardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPConfigurableNudgeCardCellViewModel.swift; sourceTree = "<group>"; };
-		12C11E782D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaThemeColourPalette.swift; sourceTree = "<group>"; };
+		12C11E782D2825AF00E4DDBF /* EcosiaDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaDarkTheme.swift; sourceTree = "<group>"; };
 		12C11E792D2825AF00E4DDBF /* EcosiaThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaThemeManager.swift; sourceTree = "<group>"; };
 		12C11E942D28279C00E4DDBF /* BrazeIntegrationExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrazeIntegrationExperiment.swift; sourceTree = "<group>"; };
 		12C11E952D28279C00E4DDBF /* NewsletterCardExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsletterCardExperiment.swift; sourceTree = "<group>"; };
 		12C11E962D28279C00E4DDBF /* SeedCounterNTPExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedCounterNTPExperiment.swift; sourceTree = "<group>"; };
-		12C11E9B2D28289900E4DDBF /* LegacyThemeManager+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LegacyThemeManager+Ecosia.swift"; sourceTree = "<group>"; };
 		12C11E9C2D28289900E4DDBF /* UIButton+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ecosia.swift"; sourceTree = "<group>"; };
 		12C11E9D2D2828AA00E4DDBF /* SimpleToast+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimpleToast+Ecosia.swift"; sourceTree = "<group>"; };
 		12C11E9F2D2828C200E4DDBF /* BrowserCoordinator+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserCoordinator+Ecosia.swift"; sourceTree = "<group>"; };
@@ -2885,7 +2877,6 @@
 		2CB288E22B07C8EF00A8FCB3 /* EmptyBookmarksViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyBookmarksViewDelegate.swift; sourceTree = "<group>"; };
 		2CB288E32B07C8EF00A8FCB3 /* EcosiaFindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaFindInPageBar.swift; sourceTree = "<group>"; };
 		2CB288E42B07C8F000A8FCB3 /* Ecosia.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Ecosia.xcassets; sourceTree = "<group>"; };
-		2CB288E52B07C8F000A8FCB3 /* EcosiaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaTheme.swift; sourceTree = "<group>"; };
 		2CB288E62B07C8F000A8FCB3 /* EmptyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyHeader.swift; sourceTree = "<group>"; };
 		2CB288E82B07C8F000A8FCB3 /* WhatsNewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatsNewCell.swift; sourceTree = "<group>"; };
 		2CB288E92B07C8F000A8FCB3 /* WhatsNewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatsNewViewModel.swift; sourceTree = "<group>"; };
@@ -2962,8 +2953,6 @@
 		2CB2894C2B07C8F000A8FCB3 /* NumberFormatter+Ecosia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Ecosia.swift"; sourceTree = "<group>"; };
 		2CB2894D2B07C8F000A8FCB3 /* URL+Ecosia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Ecosia.swift"; sourceTree = "<group>"; };
 		2CB2894E2B07C8F000A8FCB3 /* DeviceInfo+Ecosia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceInfo+Ecosia.swift"; sourceTree = "<group>"; };
-		2CB289502B07C8F000A8FCB3 /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConnectionStatusImage+WebsiteConnectionTypeStatus.swift"; sourceTree = "<group>"; };
-		2CB289522B07C8F000A8FCB3 /* ConnectionStatusImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionStatusImage.swift; sourceTree = "<group>"; };
 		2CB289542B07C8F000A8FCB3 /* BookmarksExchange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksExchange.swift; sourceTree = "<group>"; };
 		2CB289562B07C8F000A8FCB3 /* markets.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = markets.json; sourceTree = "<group>"; };
 		2CB289582B07C8F000A8FCB3 /* FakeTelemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeTelemetry.swift; sourceTree = "<group>"; };
@@ -2976,7 +2965,6 @@
 		2CCF17522105E4FD00705AE5 /* DisplaySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySettingsTests.swift; sourceTree = "<group>"; };
 		2CD368492C5BC31700972871 /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2CD48B7E2C7F7E4100A70908 /* EcosiaOverlayModeManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaOverlayModeManagerTests.swift; sourceTree = "<group>"; };
-		2CDF61902B56E7B6001186DB /* EcosiaLegacyTabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaLegacyTabTrayViewController.swift; sourceTree = "<group>"; };
 		2CE294672B7FC5A4006C22B2 /* EcosiaInstallTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaInstallTypeTests.swift; sourceTree = "<group>"; };
 		2CE294692B7FC5A5006C22B2 /* AnalyticsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
 		2CE2946B2B7FC5A5006C22B2 /* WhatsNewLocalDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatsNewLocalDataProviderTests.swift; sourceTree = "<group>"; };
@@ -10013,10 +10001,7 @@
 		124DAE782D2FD0C90050104C /* RecoveredFromUpgrade */ = {
 			isa = PBXGroup;
 			children = (
-				124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */,
 				12AEB1252D3A51670035D7D8 /* LegacySessionData.swift */,
-				124DAE7B2D2FD1330050104C /* LegacyThemeManager.swift */,
-				124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */,
 				12AEB1272D3A568D0035D7D8 /* SessionRestoreHandler.swift */,
 			);
 			path = RecoveredFromUpgrade;
@@ -10198,7 +10183,6 @@
 				C81AC6B526160091007800C5 /* LegacyTabTrayViewModel.swift */,
 				968BD7EA27DFF0F8003148B3 /* ASGroup.swift */,
 				216C133D29DCA8FF0097533B /* LegacyTabLayoutDelegate.swift */,
-				2CDF61902B56E7B6001186DB /* EcosiaLegacyTabTrayViewController.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -10657,9 +10641,11 @@
 		2C7DC2392B16352200C049C8 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				2CB288E52B07C8F000A8FCB3 /* EcosiaTheme.swift */,
-				12C11E782D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift */,
+				1202511D2D47885700039A2F /* EcosiaLightTheme.swift */,
+				120251102D439F3600039A2F /* EcosiaColor.swift */,
+				12C11E782D2825AF00E4DDBF /* EcosiaDarkTheme.swift */,
 				12C11E792D2825AF00E4DDBF /* EcosiaThemeManager.swift */,
+				2CB288DD2B07C8EF00A8FCB3 /* SemanticColor.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -10712,8 +10698,8 @@
 		2CB288DC2B07C8EF00A8FCB3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				120251202D48EF8600039A2F /* EcosiaPrimaryButton.swift */,
 				12C11E2A2D281E7600E4DDBF /* LoadingScreen.swift */,
-				2CB288DD2B07C8EF00A8FCB3 /* SemanticColor.swift */,
 				2CB288DE2B07C8EF00A8FCB3 /* PageAction */,
 				2CB288E22B07C8EF00A8FCB3 /* EmptyBookmarksViewDelegate.swift */,
 				2CB288E32B07C8EF00A8FCB3 /* EcosiaFindInPageBar.swift */,
@@ -10930,7 +10916,6 @@
 			isa = PBXGroup;
 			children = (
 				2CB289442B07C8F000A8FCB3 /* BrowserViewController+Ecosia.swift */,
-				12C11E9B2D28289900E4DDBF /* LegacyThemeManager+Ecosia.swift */,
 				12C11E9C2D28289900E4DDBF /* UIButton+Ecosia.swift */,
 				2CB289452B07C8F000A8FCB3 /* UIFont+Ecosia.swift */,
 				2CB289462B07C8F000A8FCB3 /* ErrorPageHandler+Ecosia.swift */,
@@ -10944,19 +10929,9 @@
 				12C11E9F2D2828C200E4DDBF /* BrowserCoordinator+Ecosia.swift */,
 				2CF2206E2B72B0530038157D /* AppSettingsTableViewController+Ecosia.swift */,
 				2CB2894E2B07C8F000A8FCB3 /* DeviceInfo+Ecosia.swift */,
-				2CB2894F2B07C8F000A8FCB3 /* Toolbar+URLBar */,
 				12C11EA02D2828EA00E4DDBF /* DispatchQueueHelper+BuildChannel.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		2CB2894F2B07C8F000A8FCB3 /* Toolbar+URLBar */ = {
-			isa = PBXGroup;
-			children = (
-				2CB289502B07C8F000A8FCB3 /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift */,
-				2CB289522B07C8F000A8FCB3 /* ConnectionStatusImage.swift */,
-			);
-			path = "Toolbar+URLBar";
 			sourceTree = "<group>";
 		};
 		2CB289532B07C8F000A8FCB3 /* Bookmarks */ = {
@@ -16466,7 +16441,6 @@
 				8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */,
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
-				124DAE812D301C550050104C /* LegacyDarkTheme.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */,
@@ -16534,6 +16508,7 @@
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				8AD40FCF27BADC6B00672675 /* URLTextField.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
+				120251112D439F4000039A2F /* EcosiaColor.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* LegacyTheme.swift in Sources */,
 				2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */,
@@ -16590,7 +16565,6 @@
 				C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */,
 				12AEB1262D3A51670035D7D8 /* LegacySessionData.swift in Sources */,
 				EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */,
-				124DAE802D301C490050104C /* LegacyThemeManager.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
 				B2FEA68D2B460D390058E616 /* AddressAutofillSettingsViewController.swift in Sources */,
@@ -16653,7 +16627,6 @@
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */,
-				124DAE7F2D301B290050104C /* RecoveredLegacyTheme.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,
 				C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */,
@@ -16817,6 +16790,7 @@
 				E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				12C11E342D28205E00E4DDBF /* EmptyHeader.swift in Sources */,
+				120251212D48EF8D00039A2F /* EcosiaPrimaryButton.swift in Sources */,
 				8A3EF8092A2FD02B00796E3A /* ExperimentsSettings.swift in Sources */,
 				C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */,
 				8AD08D1527E9198E00B8E907 /* TabsTelemetry.swift in Sources */,
@@ -16862,8 +16836,6 @@
 				8C2937702BF79F0300146613 /* EditAddressLocalization.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
-				12C11EB12D28292000E4DDBF /* ConnectionStatusImage.swift in Sources */,
-				12C11EB22D28292000E4DDBF /* ConnectionStatusImage+WebsiteConnectionTypeStatus.swift in Sources */,
 				E1442FD3294782D9003680B0 /* UIView+Constraints.swift in Sources */,
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
@@ -16915,7 +16887,6 @@
 				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */,
-				12C11E7C2D2825B300E4DDBF /* EcosiaTheme.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				B2999FF52B194AB200F0FEC1 /* FormAutofillHelperError.swift in Sources */,
@@ -17253,7 +17224,6 @@
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */,
-				12C11EA12D28291300E4DDBF /* LegacyThemeManager+Ecosia.swift in Sources */,
 				12C11EA22D28291300E4DDBF /* DeviceInfo+Ecosia.swift in Sources */,
 				12C11EA32D28291300E4DDBF /* AppInfo+Ecosia.swift in Sources */,
 				12C11EA42D28291300E4DDBF /* URL+Ecosia.swift in Sources */,
@@ -17348,6 +17318,7 @@
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
+				1202511E2D47885D00039A2F /* EcosiaLightTheme.swift in Sources */,
 				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				81E1914D2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift in Sources */,
@@ -17471,7 +17442,7 @@
 				12C11E5D2D28238700E4DDBF /* NTPConfigurableNudgeCardCell.swift in Sources */,
 				12C11E5E2D28238700E4DDBF /* NTPConfigurableNudgeCardCellViewModel.swift in Sources */,
 				12C11E7A2D2825AF00E4DDBF /* EcosiaThemeManager.swift in Sources */,
-				12C11E7B2D2825AF00E4DDBF /* EcosiaThemeColourPalette.swift in Sources */,
+				12C11E7B2D2825AF00E4DDBF /* EcosiaDarkTheme.swift in Sources */,
 				21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
@@ -17869,12 +17840,11 @@
 				E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */,
 				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
 				BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */,
-				124DAE882D3510750050104C /* RecoveredLegacyTheme.swift in Sources */,
 				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
 				124DAE862D3510330050104C /* SemanticColor.swift in Sources */,
+				1202511F2D47885D00039A2F /* EcosiaLightTheme.swift in Sources */,
 				F8A0B08429AD64790091C75B /* RustSyncManager.swift in Sources */,
 				EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */,
-				124DAE892D35107A0050104C /* LegacyThemeManager.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				2C7DC2462B16493C00C049C8 /* UIConstants.swift in Sources */,
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
@@ -17882,27 +17852,25 @@
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearchParser.swift in Sources */,
 				D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				124DAE832D350F750050104C /* EcosiaThemeManager.swift in Sources */,
-				124DAE872D35106F0050104C /* LegacyDarkTheme.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				ED07C0E72CCACE18006C0627 /* Locale+possibilitiesForLanguageIdentifier.swift in Sources */,
 				E1CD81C3290C670A00124B27 /* HostingTableViewCell.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
-				124DAE852D350F8E0050104C /* EcosiaTheme.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				EB9407492081353100702E05 /* UXConstants.swift in Sources */,
 				F8B710A02ABE38980029726E /* RustErrors.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncDisplayState.swift in Sources */,
-				124DAE8B2D35137C0050104C /* LegacyThemeManager+Ecosia.swift in Sources */,
 				210E0EBB298D9D6600BB4F33 /* OpenSearchEngine.swift in Sources */,
 				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
 				E136D41A2B19D35D003D0302 /* EmbeddedNavController.swift in Sources */,
+				120251122D439F4000039A2F /* EcosiaColor.swift in Sources */,
 				124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */,
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */,
-				124DAE842D350F8A0050104C /* EcosiaThemeColourPalette.swift in Sources */,
+				124DAE842D350F8A0050104C /* EcosiaDarkTheme.swift in Sources */,
 				1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);

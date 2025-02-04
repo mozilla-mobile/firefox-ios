@@ -57,6 +57,7 @@ extension NTPCustomizationCellViewModel: HomepageSectionHandler {
             return UICollectionViewCell()
         }
         cell.delegate = delegate
+        cell.applyTheme(theme: theme)
         return cell
     }
 }

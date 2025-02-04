@@ -181,7 +181,7 @@ class SiteTableViewController: UIViewController,
             header.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
             header.contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
              */
-            header.textLabel?.textColor = .legacyTheme.ecosia.secondaryText
+            header.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.ecosia.textSecondary
             header.contentView.backgroundColor = .clear
         }
     }

@@ -104,16 +104,19 @@ class MultiplyImpact: UIViewController, Themeable {
 
     let windowUUID: WindowUUID
     var currentWindowUUID: WindowUUID? { windowUUID }
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
     required init?(coder: NSCoder) { nil }
-    init(referrals: Referrals, windowUUID: WindowUUID) {
+    init(referrals: Referrals,
+         windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.referrals = referrals
         self.windowUUID = windowUUID
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -135,7 +138,6 @@ class MultiplyImpact: UIViewController, Themeable {
 
         let topBackground = UIView()
         topBackground.translatesAutoresizingMaskIntoConstraints = false
-        topBackground.backgroundColor = .legacyTheme.ecosia.primaryBrand.withAlphaComponent(0.2)
         content.addSubview(topBackground)
         self.topBackground = topBackground
 
@@ -221,7 +223,7 @@ class MultiplyImpact: UIViewController, Themeable {
         sharing.addSubview(moreSharingMethods)
         self.moreSharingMethods = moreSharingMethods
 
-        let inviteFriends = EcosiaPrimaryButton(type: .custom)
+        let inviteFriends = EcosiaPrimaryButton(windowUUID: windowUUID)
         inviteFriends.setTitle(.localized(.inviteFriends), for: [])
         inviteFriends.titleLabel!.font = .preferredFont(forTextStyle: .callout)
         inviteFriends.titleLabel!.adjustsFontForContentSizeCategory = true
@@ -420,55 +422,57 @@ class MultiplyImpact: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = .legacyTheme.ecosia.modalBackground
-        inviteButton.backgroundColor = .legacyTheme.ecosia.primaryBrand
-        inviteButton.setTitleColor(.legacyTheme.ecosia.primaryTextInverted, for: .normal)
-        inviteButton.setTitleColor(.legacyTheme.ecosia.primaryTextInverted, for: .highlighted)
-        inviteButton.setTitleColor(.legacyTheme.ecosia.primaryTextInverted, for: .selected)
-        learnMoreButton?.setTitleColor(.legacyTheme.ecosia.primaryBrand, for: .normal)
-        waves?.tintColor = .legacyTheme.ecosia.modalBackground
-        topBackground?.backgroundColor = .legacyTheme.ecosia.modalHeader
-        forestOverlay?.backgroundColor = .legacyTheme.ecosia.modalBackground
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+
+        view.backgroundColor = theme.colors.ecosia.modalBackground
+        topBackground?.backgroundColor = theme.colors.ecosia.brandPrimary.withAlphaComponent(0.2)
+        inviteButton.backgroundColor = theme.colors.ecosia.brandPrimary
+        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
+        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .highlighted)
+        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .selected)
+        learnMoreButton?.setTitleColor(theme.colors.ecosia.brandPrimary, for: .normal)
+        waves?.tintColor = theme.colors.ecosia.modalBackground
+        topBackground?.backgroundColor = theme.colors.ecosia.modalBackground
+        forestOverlay?.backgroundColor = theme.colors.ecosia.modalBackground
         subtitle?.textColor = .Dark.Text.primary
-        copyControl?.backgroundColor = .legacyTheme.ecosia.secondaryBackground
-        copyControl?.layer.borderColor = UIColor.legacyTheme.ecosia.border.cgColor
-        moreSharingMethods?.textColor = .legacyTheme.ecosia.secondaryText
-        copyText?.textColor = .legacyTheme.ecosia.primaryBrand
+        copyControl?.backgroundColor = theme.colors.ecosia.backgroundSecondary
+        copyControl?.layer.borderColor = theme.colors.ecosia.borderDecorative.cgColor
+        moreSharingMethods?.textColor = theme.colors.ecosia.textSecondary
+        copyText?.textColor = theme.colors.ecosia.brandPrimary
 
         [yourInvites, sharingYourLink, flowTitle, copyLink].forEach {
-            $0?.textColor = .legacyTheme.ecosia.primaryText
+            $0?.textColor = theme.colors.ecosia.textPrimary
         }
 
         [sharing, flowBackground].forEach {
-            $0?.backgroundColor = .legacyTheme.ecosia.impactMultiplyCardBackground
+            $0?.backgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
         }
 
         [firstStep, secondStep, thirdStep, fourthStep].forEach {
-            $0?.applyTheme()
+            $0?.applyTheme(theme: theme)
         }
 
         [copyDividerLeft, copyDividerRight].forEach {
-            $0?.backgroundColor = .legacyTheme.ecosia.border
+            $0?.backgroundColor = theme.colors.ecosia.borderDecorative
         }
 
-        referralImpactRowView.customBackgroundColor = .legacyTheme.ecosia.impactMultiplyCardBackground
-        referralImpactRowView.applyTheme()
+        referralImpactRowView.customBackgroundColor = theme.colors.ecosia.impactMultiplyCardBackground
+        referralImpactRowView.applyTheme(theme: theme)
 
-        updateBarAppearance()
+        updateBarAppearance(theme: theme)
     }
 
-    private func updateBarAppearance() {
+    private func updateBarAppearance(theme: Theme) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.Dark.Text.primary]
         appearance.titleTextAttributes = [.foregroundColor: UIColor.Dark.Text.primary]
-        appearance.backgroundColor = .legacyTheme.ecosia.modalHeader
+        appearance.backgroundColor = theme.colors.ecosia.modalBackground
         appearance.shadowColor = nil
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.backgroundColor = .legacyTheme.ecosia.modalHeader
-        navigationController?.navigationBar.tintColor = themeManager
-            .getCurrentTheme(for: currentWindowUUID).type == .light ? UIColor.Dark.Text.primary : .legacyTheme.ecosia.primaryBrand
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.modalBackground
+        navigationController?.navigationBar.tintColor = theme.type == .light ? UIColor.Dark.Text.primary : theme.colors.ecosia.brandPrimary
     }
 
     private func updateInviteLink() {

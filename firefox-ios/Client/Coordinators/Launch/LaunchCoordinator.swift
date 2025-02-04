@@ -60,7 +60,7 @@ class LaunchCoordinator: BaseCoordinator,
             self.parentCoordinator?.didFinishLaunch(from: self)
         }
          */
-        let introViewController = WelcomeNavigation(rootViewController: Welcome(delegate: self))
+        let introViewController = WelcomeNavigation(rootViewController: Welcome(delegate: self, windowUUID: windowUUID))
         introViewController.isNavigationBarHidden = true
         introViewController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         if isFullScreen {

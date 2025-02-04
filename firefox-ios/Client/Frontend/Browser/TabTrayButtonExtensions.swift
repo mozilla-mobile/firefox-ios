@@ -26,14 +26,15 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         isSelected = isPrivate
 
-        // Ecosia: Update tint
-        // tintColor = isPrivate ? theme.colors.iconOnColor : theme.colors.iconPrimary
-        tintColor = isPrivate ? .legacyTheme.ecosia.primaryBackground : .legacyTheme.ecosia.primaryText
+        /* Ecosia: Update tint
+        tintColor = isPrivate ? theme.colors.iconOnColor : theme.colors.iconPrimary
+         */
+        tintColor = isPrivate ? theme.colors.ecosia.backgroundPrimary : theme.colors.ecosia.textPrimary
         imageView?.tintColor = tintColor
 
         // Ecosia: Modify background layer
         backgroundLayer.backgroundColor = isPrivate
-            ? UIColor.legacyTheme.ecosia.privateButtonBackground.cgColor
+            ? theme.colors.ecosia.privateButtonBackground.cgColor
             : UIColor.clear.cgColor
 
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff

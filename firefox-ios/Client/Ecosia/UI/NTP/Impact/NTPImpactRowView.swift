@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 
 /// A view representing an individual impact row, used in the New Tab Page to display environmental impact information.
-final class NTPImpactRowView: UIView, Themeable {
+final class NTPImpactRowView: UIView, ThemeApplicable {
 
     // MARK: - UX Constants
 
@@ -134,12 +134,6 @@ final class NTPImpactRowView: UIView, Themeable {
     /// Optional background color for the row.
     var customBackgroundColor: UIColor?
 
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Initialization
 
     /// Initializes a new `NTPImpactRowView` with the provided `ClimateImpactInfo`.
@@ -154,7 +148,6 @@ final class NTPImpactRowView: UIView, Themeable {
         }
         setupView()
         setupConstraints()
-        applyTheme()
     }
 
     /// Not supported, as `NTPImpactRowView` requires `ClimateImpactInfo` during initialization.
@@ -234,17 +227,16 @@ final class NTPImpactRowView: UIView, Themeable {
         ])
     }
 
-    // MARK: - Themeable
+    // MARK: - ThemeApplicable
 
-    /// Applies the current theme to the view, updating colors and styles as needed.
-    func applyTheme() {
-        backgroundColor = customBackgroundColor ?? .legacyTheme.ecosia.secondaryBackground
-        titleLabel.textColor = .legacyTheme.ecosia.primaryText
-        subtitleLabel.textColor = .legacyTheme.ecosia.secondaryText
-        actionButton.setTitleColor(.legacyTheme.ecosia.primaryButton, for: .normal)
-        dividerView.backgroundColor = .legacyTheme.ecosia.border
-        totalProgressView.color = .legacyTheme.ecosia.ntpBackground
-        currentProgressView.color = .legacyTheme.ecosia.treeCounterProgressCurrent
+    func applyTheme(theme: Theme) {
+        backgroundColor = customBackgroundColor ?? theme.colors.ecosia.backgroundSecondary
+        titleLabel.textColor = theme.colors.ecosia.textPrimary
+        subtitleLabel.textColor = theme.colors.ecosia.textSecondary
+        actionButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
+        dividerView.backgroundColor = theme.colors.ecosia.borderDecorative
+        totalProgressView.color = theme.colors.ecosia.ntpBackground
+        currentProgressView.color = theme.colors.ecosia.brandPrimary
     }
 
     // MARK: - Actions

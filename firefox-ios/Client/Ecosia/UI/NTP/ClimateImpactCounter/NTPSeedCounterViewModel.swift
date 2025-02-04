@@ -75,6 +75,7 @@ extension NTPSeedCounterViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let seedCounterCell = cell as? NTPSeedCounterCell else { return UICollectionViewCell() }
         seedCounterCell.delegate = delegate
+        seedCounterCell.applyTheme(theme: theme)
         return seedCounterCell
     }
 }

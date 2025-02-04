@@ -95,8 +95,8 @@ extension NTPNewsCellViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cell as? NTPNewsCell else { return UICollectionViewCell() }
         let itemCount = numberOfItemsInSection()
-        cell.defaultBackgroundColor = { .legacyTheme.ecosia.ntpImpactBackground }
         cell.configure(items[indexPath.row], images: images, row: indexPath.row, totalCount: itemCount)
+        cell.applyTheme(theme: theme)
         return cell
     }
 

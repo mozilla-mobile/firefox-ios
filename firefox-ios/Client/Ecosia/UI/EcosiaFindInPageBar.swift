@@ -16,7 +16,7 @@ protocol EcosiaFindInPageBarDelegate: AnyObject {
 /// Ecosia's custom UI for FindInPageBar.
 ///
 /// You can find the Firefox original view in Client/Frontend/Browser/FindInPageBar (removed from Target since no longer used)
-final class EcosiaFindInPageBar: UIView, Themeable {
+final class EcosiaFindInPageBar: UIView, ThemeApplicable {
     private struct UX {
         static let barHeight: CGFloat = 60
         static let searchViewTopBottomSpacing: CGFloat = 8
@@ -120,12 +120,6 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         }
     }
 
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Init
 
     override init(frame: CGRect) {
@@ -139,10 +133,7 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         addSubview(closeButton)
         addSubview(topBorder)
 
-        applyTheme()
         setupConstraints()
-
-        listenForThemeChange(self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -158,17 +149,17 @@ final class EcosiaFindInPageBar: UIView, Themeable {
         return super.becomeFirstResponder()
     }
 
-    @objc func applyTheme() {
-        backgroundColor = .legacyTheme.ecosia.secondaryBackground
-        searchView.backgroundColor = .legacyTheme.ecosia.tertiaryBackground
-        searchTextField.textColor = .legacyTheme.ecosia.primaryText
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.ecosia.backgroundSecondary
+        searchView.backgroundColor = theme.colors.ecosia.backgroundTertiary
+        searchTextField.textColor = theme.colors.ecosia.textPrimary
         searchTextField.attributedPlaceholder = .init(string: .localized(.findInPage),
-                                                      attributes: [.foregroundColor: UIColor.legacyTheme.ecosia.secondaryText])
-        matchCountLabel.textColor = .legacyTheme.ecosia.secondaryText
-        previousButton.tintColor = .legacyTheme.ecosia.primaryIcon
-        nextButton.tintColor = .legacyTheme.ecosia.primaryIcon
-        closeButton.setTitleColor(.legacyTheme.ecosia.primaryButton, for: .normal)
-        topBorder.backgroundColor = .legacyTheme.ecosia.border
+                                                      attributes: [.foregroundColor: theme.colors.ecosia.textSecondary])
+        matchCountLabel.textColor = theme.colors.ecosia.textSecondary
+        previousButton.tintColor = theme.colors.ecosia.iconPrimary
+        nextButton.tintColor = theme.colors.ecosia.iconPrimary
+        closeButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
+        topBorder.backgroundColor = theme.colors.ecosia.borderDecorative
     }
 
     private func setupConstraints() {

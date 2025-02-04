@@ -56,10 +56,7 @@ extension BrowserViewController {
             greaterThanOrEqualToConstant: UIConstants.ToolbarHeight
         ).isActive = true
 
-        /* Ecosia: EcosiaFindInPageBar.applyTheme needs no arguments
         findInPageBar.applyTheme(theme: currentTheme())
-         */
-        findInPageBar.applyTheme()
 
         updateViewConstraints()
 

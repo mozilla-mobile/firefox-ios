@@ -6,12 +6,22 @@ import UIKit
 
 public struct PrivateModeTheme: Theme {
     public var type: ThemeType = .privateMode
+    /* Ecosia: Use Ecosia color palette subclass
     public var colors: ThemeColourPalette = PrivateModeColorPalette()
+     */
+    public var colors: EcosiaThemeColourPalette = PrivateModeColorPalette()
 
     public init() {}
 }
 
+/* Ecosia: Use Ecosia color palette subclass
 private struct PrivateModeColorPalette: ThemeColourPalette {
+ */
+private struct PrivateModeColorPalette: EcosiaThemeColourPalette {
+    var ecosia: EcosiaSemanticColors {
+        FakeEcosiaSemanticColors()
+    }
+
     // MARK: - Layers
     var layer1: UIColor = FXColors.Violet90
     var layer2: UIColor = FXColors.Violet90

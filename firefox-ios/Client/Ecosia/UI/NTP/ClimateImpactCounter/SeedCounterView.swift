@@ -60,8 +60,8 @@ struct SeedCounterView: View {
     // MARK: - Helpers
 
     func applyTheme(theme: Theme) {
-        self.theme.backgroundColor = Color(.legacyTheme.ecosia.primaryBackground)
-        self.theme.progressColor = Color(.legacyTheme.ecosia.primaryButtonActive)
+        self.theme.backgroundColor = Color(theme.colors.ecosia.backgroundPrimary)
+        self.theme.progressColor = Color(theme.colors.ecosia.buttonBackgroundPrimaryActive)
     }
 
     private func triggerUpdateValues() {
@@ -77,15 +77,31 @@ struct SeedCounterView: View {
     }
 }
 struct NewSeedCollectedCircleView: View {
+    let windowUUID: WindowUUID?
+    @Environment(\.themeManager) var themeManager
+
+    @State private var newSeedCollectedCircleColor: Color = .clear
+
     var seedsCollected: Int
 
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color(.legacyTheme.ecosia.peach))
+                .fill(newSeedCollectedCircleColor)
             Text("+\(seedsCollected)")
                 .font(.caption)
         }
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        newSeedCollectedCircleColor = Color(theme.colors.ecosia.newSeedCollectedCircle)
     }
 }
 

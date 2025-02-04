@@ -86,9 +86,7 @@ class URLBarView: UIView,
             }
         }
     }
-    // Ecosia: Update `locationActiveBorderColor`
-    // @objc dynamic lazy var locationActiveBorderColor: UIColor = .clear {
-    @objc dynamic lazy var locationActiveBorderColor = UIColor.legacyTheme.ecosia.primaryButton {
+    @objc dynamic lazy var locationActiveBorderColor: UIColor = .clear {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor
@@ -338,8 +336,6 @@ class URLBarView: UIView,
         // Ecosia: ProgressBar sits at the back of the LocationView
         locationView.addSubview(progressBar)
         locationView.sendSubviewToBack(progressBar)
-        // Ecosia: Update Search Engine Image
-        updateSearchEngineImage()
 
         profile.searchEnginesManager.delegate = self
 
@@ -1059,17 +1055,19 @@ extension URLBarView: ThemeApplicable {
 
         cancelTintColor = theme.colors.textPrimary
         showQRButtonTintColor = theme.colors.textPrimary
-        // Ecosia: update background
-        // backgroundColor = theme.colors.layer1
-        // line.backgroundColor = theme.colors.borderPrimary
-        backgroundColor = .legacyTheme.ecosia.primaryBackground
-        line.backgroundColor = .legacyTheme.ecosia.barSeparator
+        /* Ecosia: update background
+        backgroundColor = theme.colors.layer1
+        line.backgroundColor = theme.colors.borderPrimary
+         */
+        backgroundColor = theme.colors.ecosia.backgroundPrimary
+        line.backgroundColor = theme.colors.ecosia.barSeparator
 
         locationBorderColor = theme.colors.borderPrimary
-        // Ecosia: Take into account overlay mode for `locationView` background
-        // locationView.backgroundColor = theme.colors.layer3
-        // locationContainer.backgroundColor = theme.colors.layer3
-        locationView.backgroundColor = inOverlayMode ? .legacyTheme.ecosia.primaryBackground : .legacyTheme.ecosia.tertiaryBackground
+        /* Ecosia: Take into account overlay mode for `locationView` background
+        locationView.backgroundColor = theme.colors.layer3
+        locationContainer.backgroundColor = theme.colors.layer3
+         */
+        locationView.backgroundColor = inOverlayMode ? theme.colors.ecosia.backgroundPrimary : theme.colors.ecosia.backgroundTertiary
         locationContainer.backgroundColor = locationView.backgroundColor
 
         /* Ecosia: Remove private mode badge
@@ -1077,11 +1075,13 @@ extension URLBarView: ThemeApplicable {
         */
 
         // Ecosia: Update Search Image Color
-        searchIconImageView.tintColor = isPrivate ? UIColor.legacyTheme.ecosia.primaryText : UIColor.legacyTheme.ecosia.textfieldIconTint
+        searchIconImageView.tintColor = isPrivate ? theme.colors.ecosia.textPrimary : theme.colors.ecosia.buttonBackgroundPrimary
 
         warningMenuBadge.badge.tintBackground(color: theme.colors.layer1)
         // Ecosia: Update UI Elements with helper
         updateUIElementsWithTheme(theme)
+        // Ecosia: Update Search Engine Image
+        updateSearchEngineImage()
     }
 }
 
@@ -1116,12 +1116,13 @@ extension URLBarView: PrivateModeUI {
 extension URLBarView {
 
     func updateUIElementsWithTheme(_ theme: Theme) {
-        progressBar.backgroundColor = .legacyTheme.ecosia.tertiaryBackground
-        progressBar.setGradientColors(startColor: .legacyTheme.ecosia.highlightedBackground,
-                                      middleColor: .legacyTheme.ecosia.highlightedBackground,
-                                      endColor: .legacyTheme.ecosia.highlightedBackground)
+        progressBar.backgroundColor = theme.colors.ecosia.backgroundTertiary
+        progressBar.setGradientColors(startColor: theme.colors.ecosia.backgroundHighlighted,
+                                      middleColor: theme.colors.ecosia.backgroundHighlighted,
+                                      endColor: theme.colors.ecosia.backgroundHighlighted)
         locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
         locationTextField?.applyTheme(theme: theme)
+        locationActiveBorderColor = theme.colors.ecosia.buttonBackgroundPrimary
     }
 }
 
@@ -1133,7 +1134,7 @@ extension URLBarView {
             if isPrivate {
                 searchIconImageView.image = .templateImageNamed(StandardImageIdentifiers.Large.privateMode)?.tinted(withColor: locationActiveBorderColor)
             } else {
-                searchIconImageView.image = .init(themed: "searchLogo")
+                searchIconImageView.image = .init(named: "searchLogo")
             }
         } else {
             searchIconImageView.image = .templateImageNamed("searchUrl")

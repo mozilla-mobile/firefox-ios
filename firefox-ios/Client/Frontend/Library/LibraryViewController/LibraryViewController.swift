@@ -329,9 +329,9 @@ class LibraryViewController: UIViewController, Themeable {
         /* Ecosia: Update theming
         standardAppearance.backgroundColor = theme.colors.layer1
         */
-        standardAppearance.backgroundColor = theme.colors.layer6
-        standardAppearance.backgroundColor = .legacyTheme.ecosia.barBackground
-        standardAppearance.shadowColor = .legacyTheme.ecosia.barSeparator
+        standardAppearance.backgroundColor = theme.colors.ecosia.modalBackground
+        standardAppearance.backgroundColor = theme.colors.ecosia.barBackground
+        standardAppearance.shadowColor = theme.colors.ecosia.barSeparator
 
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
@@ -359,12 +359,12 @@ class LibraryViewController: UIViewController, Themeable {
         segmentControlToolbar.barTintColor = theme.colors.layer1
          */
         view.backgroundColor = theme.colors.layer3
-        navigationController?.navigationBar.barTintColor = theme.colors.layer6
+        navigationController?.navigationBar.barTintColor = theme.colors.ecosia.modalBackground
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        navigationController?.navigationBar.backgroundColor = theme.colors.layer6
-        navigationController?.toolbar.barTintColor = theme.colors.layer6
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.modalBackground
+        navigationController?.toolbar.barTintColor = theme.colors.ecosia.modalBackground
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = theme.colors.layer6
+        segmentControlToolbar.barTintColor = theme.colors.ecosia.modalBackground
 
         segmentControlToolbar.tintColor = theme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false

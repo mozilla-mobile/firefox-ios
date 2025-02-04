@@ -194,27 +194,9 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         case .dark:
             return EcosiaDarkTheme()
         case .nightMode:
-            return EcosiaDarkTheme() // TODO Ecosia Upgrade: Is this what we want? [MOB-3152]
+            return EcosiaDarkTheme()
         case .privateMode:
             return EcosiaLightTheme()
-        }
-    }
-
-    // TODO Ecosia Upgrade: Is migration still needed? [MOB-3152]
-    private func migrateDefaultsToUseStandard() {
-        guard let oldDefaultsStore = UserDefaults(suiteName: sharedContainerIdentifier) else { return }
-
-        if let systemThemeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.systemThemeIsOn) {
-            userDefaults.set(systemThemeIsOn, forKey: ThemeKeys.systemThemeIsOn)
-        }
-        if let nightModeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.NightMode.isOn) {
-            userDefaults.set(nightModeIsOn, forKey: ThemeKeys.NightMode.isOn)
-        }
-        if let automaticBrightnessIsOn = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.isOn) {
-            userDefaults.set(automaticBrightnessIsOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
-        }
-        if let automaticBrighnessValue = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.thresholdValue) {
-            userDefaults.set(automaticBrighnessValue, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         }
     }
 
@@ -230,14 +212,3 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
         }
     }
 }
-
-/* TODO Ecosia Upgrade: Is this still needed? [MOB-3152]
-extension EcosiaThemeManager {
-
-    func updateLegacyThemeIfSystemThemeON() {
-        if LegacyThemeManager.instance.systemThemeIsOn {
-            LegacyThemeManager.updateBasedOnCurrentSystemThemeType()
-        }
-    }
-}
-*/

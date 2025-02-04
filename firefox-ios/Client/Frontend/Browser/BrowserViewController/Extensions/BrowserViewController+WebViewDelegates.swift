@@ -980,7 +980,7 @@ private extension BrowserViewController {
         let alert = UIAlertController(title: .localized(.openExternalLinkTitle),
                                       message: String(format: .localized(.openExternalLinkDescription), url.absoluteString),
                                       preferredStyle: .alert)
-        alert.view.tintColor = .legacyTheme.ecosia.primaryButton
+        alert.view.tintColor = currentTheme().colors.ecosia.buttonBackgroundPrimary
         let cancelAction = UIAlertAction(title: .localized(.cancel), style: .default) { _ in
             completion(false)
         }

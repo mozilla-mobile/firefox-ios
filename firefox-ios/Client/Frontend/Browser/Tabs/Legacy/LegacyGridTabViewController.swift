@@ -718,7 +718,7 @@ extension LegacyGridTabViewController {
         let closeAllAction = UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil)
-        closeAllAction.setValue(UIColor.legacyTheme.ecosia.actionSheetCancelButton, forKey: "titleTextColor")
+        closeAllAction.setValue(currentTheme().colors.ecosia.buttonBackgroundPrimaryActive, forKey: "titleTextColor")
         controller.addAction(closeAllAction,
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender

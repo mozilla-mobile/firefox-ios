@@ -6,7 +6,7 @@ import Core
 import UIKit
 import Common
 
-final class NTPNewsCell: UICollectionViewCell, Themeable, ReusableCell {
+final class NTPNewsCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     private var imageUrl: URL?
     private lazy var background: UIView = {
         let background = UIView()
@@ -90,13 +90,8 @@ final class NTPNewsCell: UICollectionViewCell, Themeable, ReusableCell {
         bottomLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return bottomLabel
     }()
-    var defaultBackgroundColor: (() -> UIColor) = { .legacyTheme.ecosia.ntpCellBackground }
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var defaultBackgroundColor: UIColor = .clear
+    var selectedBackgroundColor: UIColor = .clear
 
     // MARK: - Init
 
@@ -162,9 +157,6 @@ final class NTPNewsCell: UICollectionViewCell, Themeable, ReusableCell {
         border.rightAnchor.constraint(equalTo: background.rightAnchor, constant: -16).isActive = true
         border.bottomAnchor.constraint(equalTo: background.bottomAnchor).isActive = true
         border.heightAnchor.constraint(equalToConstant: 1).isActive = true
-
-        applyTheme()
-        listenForThemeChange(contentView)
     }
 
     override var isSelected: Bool {
@@ -200,7 +192,6 @@ final class NTPNewsCell: UICollectionViewCell, Themeable, ReusableCell {
         border.isHidden = row == totalCount - 1
 
         background.setMaskedCornersUsingPosition(row: row, totalCount: totalCount)
-        applyTheme()
 
         isAccessibilityElement = true
         accessibilityIdentifier = "news_item"
@@ -217,16 +208,18 @@ final class NTPNewsCell: UICollectionViewCell, Themeable, ReusableCell {
     }
 
     private func hover() {
-        background.backgroundColor = isSelected || isHighlighted ? .legacyTheme.ecosia.secondarySelectedBackground : defaultBackgroundColor()
+        background.backgroundColor = isSelected || isHighlighted ? selectedBackgroundColor : defaultBackgroundColor
     }
 
-    func applyTheme() {
-        background.backgroundColor = defaultBackgroundColor()
-        placeholder.tintColor = .legacyTheme.ecosia.decorativeIcon
-        placeholder.backgroundColor = .legacyTheme.ecosia.newsPlaceholder
-        border.backgroundColor = .legacyTheme.ecosia.border
-        title.textColor = .legacyTheme.ecosia.primaryText
-        bottomLabel.textColor = .legacyTheme.ecosia.secondaryText
-        highlightLabel.textColor = .legacyTheme.ecosia.secondaryText
+    func applyTheme(theme: Theme) {
+        defaultBackgroundColor = theme.colors.ecosia.ntpCellBackground
+        selectedBackgroundColor = theme.colors.ecosia.secondarySelectedBackground
+        background.backgroundColor = defaultBackgroundColor
+        placeholder.tintColor = theme.colors.ecosia.iconDecorative
+        placeholder.backgroundColor = theme.colors.ecosia.newsPlaceholder
+        border.backgroundColor = theme.colors.ecosia.borderDecorative
+        title.textColor = theme.colors.ecosia.textPrimary
+        bottomLabel.textColor = theme.colors.ecosia.textSecondary
+        highlightLabel.textColor = theme.colors.ecosia.textSecondary
     }
 }

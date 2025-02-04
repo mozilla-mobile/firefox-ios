@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, Themeable {
+final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, ThemeApplicable {
     struct UX {
         static let dividerHeight: CGFloat = 1
         static let dividerTop: CGFloat = 20
@@ -19,12 +19,6 @@ final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, Them
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
@@ -41,13 +35,9 @@ final class NTPImpactDividerFooter: UICollectionReusableView, ReusableCell, Them
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.dividerInset),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.dividerBottom)
         ])
-
-        applyTheme()
-
-        listenForThemeChange(self)
     }
 
-    @objc func applyTheme() {
-        dividerView.backgroundColor = .legacyTheme.ecosia.border
+    func applyTheme(theme: Theme) {
+        dividerView.backgroundColor = theme.colors.ecosia.borderDecorative
     }
 }

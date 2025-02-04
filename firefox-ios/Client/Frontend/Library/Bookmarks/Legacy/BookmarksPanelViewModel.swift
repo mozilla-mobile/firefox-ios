@@ -197,7 +197,9 @@ extension BookmarksPanelViewModel {
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.html"], in: .open)
         documentPicker.allowsMultipleSelection = false
         // Ecosia: Theming
-        documentPicker.view.tintColor = .legacyTheme.ecosia.primaryButton
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        let theme = themeManager.getCurrentTheme(for: viewController.view.currentWindowUUID)
+        documentPicker.view.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
         documentPicker.delegate = self
         viewController.present(documentPicker, animated: true)
     }

@@ -6,7 +6,7 @@ import Shared
 import UIKit
 import Common
 
-class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
+class NTPLibraryCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     var mainView = UIStackView()
     weak var widthConstraint: NSLayoutConstraint!
@@ -49,12 +49,6 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
 
     var shortcuts: [NTPLibraryShortcutView] = []
 
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Init
 
     override init(frame: CGRect) {
@@ -95,25 +89,18 @@ class NTPLibraryCell: UICollectionViewCell, Themeable, ReusableCell {
             mainView.addArrangedSubview(view)
             shortcuts.append(view)
         }
-        applyTheme()
-        listenForThemeChange(contentView)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         shortcuts.forEach { item in
-            item.title.textColor = .legacyTheme.ecosia.primaryText
-            item.button.tintColor = .legacyTheme.ecosia.primaryButton
-            item.button.backgroundColor = .legacyTheme.ecosia.secondaryButton
+            item.title.textColor = theme.colors.ecosia.textPrimary
+            item.button.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
+            item.button.backgroundColor = theme.colors.ecosia.buttonBackgroundSecondary
         }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
     }
 
     @objc func tapped(_ sender: UIButton) {

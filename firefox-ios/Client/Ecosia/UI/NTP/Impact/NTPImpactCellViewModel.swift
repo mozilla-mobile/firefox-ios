@@ -151,6 +151,7 @@ extension NTPImpactCellViewModel: HomepageSectionHandler {
         let items = infoItemSections[indexPath.row]
         cell.configure(items: items)
         cell.delegate = delegate
+        cell.applyTheme(theme: theme)
         cells[indexPath.row] = cell
         return cell
     }

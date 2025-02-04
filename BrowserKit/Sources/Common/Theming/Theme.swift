@@ -9,5 +9,8 @@ import Foundation
 /// dark mode) and fonts for the application.
 public protocol Theme {
     var type: ThemeType { get }
+    /* Ecosia: Use Ecosia color palette subclass
     var colors: ThemeColourPalette { get }
+     */
+    var colors: EcosiaThemeColourPalette { get }
 }

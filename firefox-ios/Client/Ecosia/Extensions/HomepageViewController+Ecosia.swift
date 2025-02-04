@@ -118,7 +118,8 @@ extension LegacyHomepageViewController: NTPImpactCellDelegate {
 
 extension LegacyHomepageViewController: NTPNewsCellDelegate {
     func openSeeAllNews() {
-        let news = NewsController(windowUUID: windowUUID, items: viewModel.newsViewModel.items)
+        let news = NewsController(items: viewModel.newsViewModel.items,
+                                  windowUUID: windowUUID)
         news.delegate = self
         let nav = EcosiaNavigation(rootViewController: news)
         present(nav, animated: true)

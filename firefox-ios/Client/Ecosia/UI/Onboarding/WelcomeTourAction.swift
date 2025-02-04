@@ -6,17 +6,11 @@ import UIKit
 import Core
 import Common
 
-final class WelcomeTourAction: UIView, Themeable {
+final class WelcomeTourAction: UIView, ThemeApplicable {
 
     // MARK: - Properties
 
     private weak var stack: UIStackView!
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
@@ -70,9 +64,9 @@ final class WelcomeTourAction: UIView, Themeable {
         stack.addArrangedSubview(bottom)
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         stack.arrangedSubviews.forEach { view in
-            (view as? Themeable)?.applyTheme()
+            (view as? ThemeApplicable)?.applyTheme(theme: theme)
         }
     }
 

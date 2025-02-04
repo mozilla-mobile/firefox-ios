@@ -6,16 +6,10 @@ import UIKit
 import Core
 import Common
 
-final class WelcomeTourTransparent: UIView, Themeable {
+final class WelcomeTourTransparent: UIView, ThemeApplicable {
     private weak var stack: UIStackView!
     private weak var monthView: UIView!
     private weak var monthViewLabel: UILabel!
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
@@ -23,7 +17,6 @@ final class WelcomeTourTransparent: UIView, Themeable {
         super.init(frame: frame)
         setup()
         updateAccessibilitySettings()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {  nil }
@@ -59,11 +52,11 @@ final class WelcomeTourTransparent: UIView, Themeable {
         }
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         stack.arrangedSubviews.forEach { view in
-            (view as? Themeable)?.applyTheme()
+            (view as? ThemeApplicable)?.applyTheme(theme: theme)
         }
-        applyThemeToMonthView()
+        applyThemeToMonthView(theme: theme)
     }
 
     func updateAccessibilitySettings() {
@@ -107,8 +100,8 @@ final class WelcomeTourTransparent: UIView, Themeable {
         parentStack.addArrangedSubview(UIView(frame: .init(width: 0, height: 8)))
     }
 
-    func applyThemeToMonthView() {
-        monthView.backgroundColor = .legacyTheme.ecosia.primaryButton
-        monthViewLabel.textColor = .legacyTheme.ecosia.tertiaryText
+    func applyThemeToMonthView(theme: Theme) {
+        monthView.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimary
+        monthViewLabel.textColor = theme.colors.ecosia.textTertiary
     }
 }

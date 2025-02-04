@@ -26,10 +26,12 @@ final class Welcome: UIViewController {
 
     private var zoomedOut = false
     private weak var delegate: WelcomeDelegate?
+    let windowUUID: WindowUUID
 
     required init?(coder: NSCoder) { nil }
-    init(delegate: WelcomeDelegate) {
+    init(delegate: WelcomeDelegate, windowUUID: WindowUUID) {
         self.delegate = delegate
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         modalPresentationCapturesStatusBarAppearance = true
         definesPresentationContext = true
@@ -46,11 +48,6 @@ final class Welcome: UIViewController {
         addOverlay()
         addBackground()
         addStack()
-
-        /* TODO Ecosia Upgrade: Is this still needed? [MOB-3152]
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        (themeManager as? EcosiaThemeManager)?.updateLegacyThemeIfSystemThemeON()
-         */
 
         Task.detached {
             // Fetching FinancialReports async as some onboarding steps might use it
@@ -151,7 +148,7 @@ final class Welcome: UIViewController {
         stack.addArrangedSubview(label)
 
         let cta = UIButton(type: .system)
-        cta.backgroundColor = .Light.Button.secondary
+        cta.backgroundColor = .Light.Button.backgroundSecondary
         cta.setTitle(.localized(.getStarted), for: .normal)
         cta.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         cta.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -282,7 +279,7 @@ final class Welcome: UIViewController {
 
     // MARK: Actions
     @objc func getStarted() {
-        let tour = WelcomeTour(delegate: self)
+        let tour = WelcomeTour(delegate: self, windowUUID: windowUUID)
         tour.modalTransitionStyle = .crossDissolve
         tour.modalPresentationStyle = .overCurrentContext
         present(tour, animated: true, completion: nil)
@@ -292,11 +289,6 @@ final class Welcome: UIViewController {
     @objc func skip() {
         Analytics.shared.introClick(.skip, page: .start, index: 0)
         delegate?.welcomeDidFinish(self)
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        LegacyThemeManager.instance.themeChanged(from: previousTraitCollection, to: traitCollection)
     }
 }
 

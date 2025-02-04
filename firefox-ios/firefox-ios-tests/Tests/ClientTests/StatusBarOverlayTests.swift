@@ -12,6 +12,7 @@ class StatusBarOverlayTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
     private var notificationCenter: MockNotificationCenter!
+    private let theme = LightTheme()
 
     override func setUp() {
         super.setUp()
@@ -33,9 +34,10 @@ class StatusBarOverlayTests: XCTestCase {
 
         XCTAssertFalse(subject.hasTopTabs)
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnHomepage_withoutWallpaperWithBottomURLBar_isOpaque() throws {
@@ -45,9 +47,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnHomepage_withoutWallpaperWithTopURLBar_isOpaque() throws {
@@ -57,9 +60,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnHomepage_withWallpaperWithBottomURLBar_notOpaque() throws {
@@ -73,9 +77,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(0).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(0).cgColor)
     }
 
     func testOnHomepage_withWallpaperWithTopURLBar_isOpaque() throws {
@@ -89,9 +94,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithBottomURLBar_isOpaque() throws {
@@ -101,9 +107,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithTopURLBar_isOpaque() throws {
@@ -113,9 +120,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithBottomURLBar_isOpaque() throws {
@@ -129,9 +137,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithTopURLBar_isOpaque() throws {
@@ -145,9 +154,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer1.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testHasTopTabs_onHomepageWithoutWallpaperWithTopURLBar_isOpaque() throws {
@@ -157,9 +167,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testHasTopTabs_onHomepageWithWallpaperWithTopURLBar_isOpaque() throws {
@@ -174,9 +185,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: true)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testHasTopTabs_onWebpageWithoutWallpaperWithTopURLBar_isOpaque() throws {
@@ -187,9 +199,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     func testHasTopTabs_onWebpageWithWallpaperWithTopURLBar_isOpaque() throws {
@@ -204,9 +217,10 @@ class StatusBarOverlayTests: XCTestCase {
         subject.resetState(isHomepage: false)
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        // Ecosia: Update expected background color
-        // XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
-        XCTAssertEqual(backgroundColor.cgColor, UIColor.legacyTheme.ecosia.primaryBackground.withAlphaComponent(1).cgColor)
+        /* Ecosia: Update expected background color
+        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layer3.withAlphaComponent(1).cgColor)
+         */
+        XCTAssertEqual(backgroundColor.cgColor, theme.colors.ecosia.backgroundPrimary.withAlphaComponent(1).cgColor)
     }
 
     private func createSubject(hasTopTabs: Bool = false) -> StatusBarOverlay {
@@ -214,7 +228,7 @@ class StatusBarOverlayTests: XCTestCase {
                                        notificationCenter: notificationCenter,
                                        wallpaperManager: wallpaperManager)
         subject.hasTopTabs = hasTopTabs
-        subject.applyTheme(theme: LightTheme())
+        subject.applyTheme(theme: theme)
         trackForMemoryLeaks(subject)
         return subject
     }

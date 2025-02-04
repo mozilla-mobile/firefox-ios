@@ -275,7 +275,7 @@ class LegacyTabCell: UICollectionViewCell,
                                      right: LegacyTabCell.borderWidth)
         // Ecosia: Update border color
         // layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-        layer.borderColor = UIColor.legacyTheme.ecosia.primaryButton.cgColor
+        layer.borderColor = theme.colors.ecosia.buttonBackgroundPrimary.cgColor
         layer.borderWidth = LegacyTabCell.borderWidth
         layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
     }

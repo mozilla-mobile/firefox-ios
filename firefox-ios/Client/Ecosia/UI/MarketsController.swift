@@ -74,7 +74,8 @@ final class MarketsController: ThemedTableViewController {
 
     override func applyTheme() {
         super.applyTheme()
-        tableView.tintColor = UIColor.legacyTheme.ecosia.primaryBrand
-        view.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        tableView.tintColor = theme.colors.ecosia.brandPrimary
+        view.backgroundColor = theme.colors.ecosia.ntpBackground
     }
 }

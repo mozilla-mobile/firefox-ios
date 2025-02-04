@@ -6,18 +6,12 @@ import UIKit
 import Core
 import Common
 
-final class WhatsNewCell: UITableViewCell, Themeable {
+final class WhatsNewCell: UITableViewCell {
 
     // MARK: - Properties
 
     private var item: WhatsNewItem!
     private var contentConfigurationToUpdate: Any?
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Configuration
 
@@ -26,8 +20,6 @@ final class WhatsNewCell: UITableViewCell, Themeable {
         backgroundColor = .clear
         self.item = item
         configureBasedOnOSVersion()
-        applyTheme()
-        listenForThemeChange(contentView)
     }
 
     private func configureBasedOnOSVersion() {
@@ -81,15 +73,15 @@ final class WhatsNewCell: UITableViewCell, Themeable {
     }
 }
 
-extension WhatsNewCell {
+extension WhatsNewCell: ThemeApplicable {
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         if #available(iOS 14, *) {
             guard var updatedConfiguration = contentConfigurationToUpdate as? UIListContentConfiguration else { return }
-            updatedConfiguration.image = item.image?.tinted(withColor: .legacyTheme.ecosia.secondaryIcon)
+            updatedConfiguration.image = item.image?.tinted(withColor: theme.colors.ecosia.iconSecondary)
             contentConfiguration = updatedConfiguration
         } else {
-            imageView?.image = item.image?.tinted(withColor: .legacyTheme.ecosia.secondaryIcon)
+            imageView?.image = item.image?.tinted(withColor: theme.colors.ecosia.iconSecondary)
         }
     }
 }

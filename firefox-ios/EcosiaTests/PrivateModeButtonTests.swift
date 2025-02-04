@@ -20,8 +20,8 @@ final class PrivateModeButtonTests: XCTestCase {
         LegacyThemeManager.instance.current = LegacyNormalTheme()
         button.applyUIMode(isPrivate: true, theme: lightTheme)
 
-        XCTAssertEqual(button.tintColor, .legacyTheme.ecosia.primaryBackground)
-        XCTAssertEqual(button.imageView?.tintColor, .legacyTheme.ecosia.primaryBackground)
+        XCTAssertEqual(button.tintColor, lightTheme.colors.ecosia.backgroundPrimary)
+        XCTAssertEqual(button.imageView?.tintColor, lightTheme.colors.ecosia.backgroundPrimary)
         XCTAssertEqual(button.backgroundLayer.backgroundColor, UIColor.Photon.Grey70.cgColor)
         XCTAssertEqual(button.accessibilityValue, .TabTrayToggleAccessibilityValueOn)
     }

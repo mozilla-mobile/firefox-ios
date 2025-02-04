@@ -141,7 +141,7 @@ extension AppSettingsTableViewController {
             PushBackInstallation(settings: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             ToggleImpactIntro(settings: self),
-            ShowTour(settings: self),
+            ShowTour(settings: self, windowUUID: windowUUID),
             CreateReferralCode(settings: self),
             AddReferral(settings: self),
             AddClaim(settings: self),

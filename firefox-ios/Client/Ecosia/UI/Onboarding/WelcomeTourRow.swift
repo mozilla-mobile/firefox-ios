@@ -5,19 +5,13 @@
 import Foundation
 import Common
 
-final class WelcomeTourRow: UIView, Themeable {
+final class WelcomeTourRow: UIView, ThemeApplicable {
     let image: String
     let title: String
     let text: String
 
     weak var titleLabel: UILabel!
     weak var textLabel: UILabel!
-
-    // MARK: - Themeable Properties
-
-    var themeManager: ThemeManager { AppContainer.shared.resolve() }
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Init
 
@@ -28,7 +22,6 @@ final class WelcomeTourRow: UIView, Themeable {
 
         super.init(frame: .zero)
         setup()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {  nil }
@@ -76,9 +69,9 @@ final class WelcomeTourRow: UIView, Themeable {
         self.textLabel = textLabel
     }
 
-    func applyTheme() {
-        backgroundColor = .legacyTheme.ecosia.welcomeElementBackground
-        titleLabel.textColor = .legacyTheme.ecosia.primaryText
-        textLabel.textColor = .legacyTheme.ecosia.secondaryText
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.ecosia.barBackground
+        titleLabel.textColor = theme.colors.ecosia.textPrimary
+        textLabel.textColor = theme.colors.ecosia.textSecondary
     }
 }

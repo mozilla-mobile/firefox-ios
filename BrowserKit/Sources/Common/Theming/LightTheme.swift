@@ -6,12 +6,22 @@ import UIKit
 
 public struct LightTheme: Theme {
     public var type: ThemeType = .light
+    /* Ecosia: Use Ecosia color palette subclass
     public var colors: ThemeColourPalette = LightColourPalette()
+     */
+    public var colors: EcosiaThemeColourPalette = LightColourPalette()
 
     public init() {}
 }
 
+/* Ecosia: Use Ecosia color palette subclass
 private struct LightColourPalette: ThemeColourPalette {
+ */
+private struct LightColourPalette: EcosiaThemeColourPalette {
+    var ecosia: EcosiaSemanticColors {
+        FakeEcosiaSemanticColors()
+    }
+
     // MARK: - Layers
     var layer1: UIColor = FXColors.LightGrey10
     var layer2: UIColor = FXColors.White

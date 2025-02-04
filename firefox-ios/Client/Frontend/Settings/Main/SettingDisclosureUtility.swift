@@ -18,6 +18,6 @@ struct SettingDisclosureUtility {
         disclosureIndicator.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return disclosureIndicator
         */
-        ecosiaDisclosureIndicator
+        ecosiaDisclosureIndicator(theme: theme)
     }
 }

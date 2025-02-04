@@ -184,6 +184,6 @@ class OneLineTableViewCell: UITableViewCell,
         leftImageView.tintColor = theme.colors.textPrimary
 
         // Ecosia: update tint color
-        tintColor = UIColor.legacyTheme.ecosia.primaryButton
+        tintColor = theme.colors.ecosia.buttonBackgroundPrimary
     }
 }
