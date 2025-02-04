@@ -829,14 +829,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         tabDelegate?.tab(self, didAddLoginAlert: alert)
     }
 
+    // TODO: Laurie - Test if I add a login alert on one tab, can I show an alert on another tab?
+    // TODO: Laurie - What happens if I remove this tab? Is the alert deinit properly?
     func removeLoginAlert(_ alert: SaveLoginAlert) {
         loginAlert = nil
         tabDelegate?.tab(self, didRemoveLoginAlert: alert)
-    }
-
-    func expireLoginAlert() {
-        guard let loginAlert else { return }
-        removeLoginAlert(loginAlert)
     }
 
     func setFindInPage(isBottomSearchBar: Bool, doesFindInPageBarExist: Bool) {
