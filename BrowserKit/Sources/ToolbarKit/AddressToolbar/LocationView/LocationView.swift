@@ -17,6 +17,8 @@ final class LocationView: UIView,
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
+        static let iconAnimationTime: CGFloat = 0.15
+        static let iconAnimationDelay: CGFloat = 0.25
     }
 
     private var urlAbsolutePath: String?
@@ -127,6 +129,7 @@ final class LocationView: UIView,
         searchEngineContentView = isUnifiedSearchEnabled
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
+
         searchEngineContentView.configure(state, delegate: delegate)
 
         configureLockIconButton(state)
@@ -233,6 +236,7 @@ final class LocationView: UIView,
         guard !isEditing else {
             updateUIForSearchEngineDisplay()
             urlTextFieldTrailingConstraint?.constant = 0
+            animateIconAppearance()
             return
         }
 
@@ -241,7 +245,31 @@ final class LocationView: UIView,
         } else {
             updateUIForLockIconDisplay()
         }
+        animateIconAppearance()
         urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
+    }
+
+    private func animateIconAppearance() {
+        let shouldShowLockIcon: Bool
+        if isEditing {
+            lockIconButton.alpha = 0
+            shouldShowLockIcon = false
+        } else if isURLTextFieldEmpty {
+            shouldShowLockIcon = false
+        } else {
+            shouldShowLockIcon = true
+        }
+
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        if isAnimationEnabled {
+            UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+                self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+            }
+        } else {
+            searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+            lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+        }
     }
 
     private func updateUIForSearchEngineDisplay() {
@@ -284,6 +312,19 @@ final class LocationView: UIView,
         // custom drop interaction on the BVC can accept dropped URLs.
         if let dropInteraction = urlTextField.textDropInteraction {
             urlTextField.removeInteraction(dropInteraction)
+        }
+
+        if state.isEditing {
+            let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+            if isAnimationEnabled {
+                UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                    self.urlTextField.clearButton?.alpha = 1
+                }
+            } else {
+                urlTextField.clearButton?.alpha = 1
+            }
+        } else {
+            urlTextField.clearButton?.alpha = 0
         }
 
         // Once the user started typing we should not update the text anymore as that interferes with
