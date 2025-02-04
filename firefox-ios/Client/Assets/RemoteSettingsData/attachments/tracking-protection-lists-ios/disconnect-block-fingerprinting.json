@@ -107,7 +107,6 @@
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?vcmedia\\.vn","load-type":["third-party"],"unless-domain":["*admicro.vn"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?verticalhealth\\.net","load-type":["third-party"],"unless-domain":["*verticalhealth.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?vic-m\\.co","load-type":["third-party"],"unless-domain":["*vicinity.media"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?vidoomy\\.com","load-type":["third-party"],"unless-domain":["*vidoomy.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?warumbistdusoarm\\.space","load-type":["third-party"],"unless-domain":["*warumbistdusoarm.space"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?webmecanik\\.com","load-type":["third-party"],"unless-domain":["*webmecanik.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?wisokykulas\\.bid","load-type":["third-party"],"unless-domain":["*clickfrog.ru"]}},
