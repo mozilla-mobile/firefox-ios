@@ -751,7 +751,7 @@ class BrowserViewController: UIViewController,
         setupEssentialUI()
         subscribeToRedux()
 
-        DispatchQueue.global(qos: .background).async {
+        Task(priority: .background) {
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             self.trackStartupTelemetry()
         }
@@ -762,12 +762,6 @@ class BrowserViewController: UIViewController,
         setupConstraints()
         setupNotifications()
 
-        DispatchQueue.main.async {
-            self.setupNonEssentialUI()
-        }
-    }
-
-    private func setupNonEssentialUI() {
         overlayManager.setURLBar(urlBarView: urlBarView)
 
         // Update theme of already existing views
@@ -784,7 +778,7 @@ class BrowserViewController: UIViewController,
         setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                     tabManager: tabManager)
+                                                                tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
         navigationToolbarContainer.toolbarDelegate = self
