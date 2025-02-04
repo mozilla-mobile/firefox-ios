@@ -328,8 +328,9 @@ class TopTabDisplayManager: NSObject {
             // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
                tabsToDisplay.count == 1 {
-                self.tabManager.removeTabs([tab])
-                self.tabManager.selectTab(self.tabManager.addTab())
+                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
+                    self.tabManager.selectTab(self.tabManager.addTab())
+                }
                 return
             }
 
