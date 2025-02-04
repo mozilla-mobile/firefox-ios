@@ -72,9 +72,10 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor))
         }
 
-        // TODO: FXIOS-11051 Update showing bookmarks
-        snapshot.appendSections([.bookmarks])
-        snapshot.appendItems(state.bookmarkState.bookmarks.compactMap { .bookmark($0) }, toSection: .bookmarks)
+        if let bookmarks = getBookmarks(with: state.bookmarkState) {
+            snapshot.appendSections([.bookmarks])
+            snapshot.appendItems(bookmarks, toSection: .bookmarks)
+        }
 
         if let stories = getPocketStories(with: state.pocketState) {
             snapshot.appendSections([.pocket(textColor)])
@@ -121,5 +122,12 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
         return jumpBackInSectionState.jumpBackInTabs.compactMap { .jumpBackIn($0) }
+    }
+
+    private func getBookmarks(
+        with bookmarksSectionState: BookmarksSectionState
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
+        return bookmarksSectionState.bookmarks.compactMap { .bookmark($0) }
     }
 }

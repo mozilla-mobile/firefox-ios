@@ -33,7 +33,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case BookmarksMiddlewareActionType.initialize:
             return handleInitializeAction(for: state, with: action)
         default:
             return defaultState(from: state)
@@ -44,17 +44,14 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         for state: BookmarksSectionState,
         with action: Action
     ) -> BookmarksSectionState {
-        // TODO: FXIOS-11051 Update state from middleware
+        guard let bookmarksAction = action as? BookmarksAction,
+              let bookmarks = bookmarksAction.bookmarks
+        else {
+            return defaultState(from: state)
+        }
         return BookmarksSectionState(
             windowUUID: state.windowUUID,
-            bookmarks: [
-                BookmarkState(
-                    site: Site.createBasicSite(
-                        url: "www.mozilla.org",
-                        title: "Bookmarks Title"
-                    )
-                )
-            ]
+            bookmarks: bookmarks
         )
     }
 

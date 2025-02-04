@@ -79,12 +79,17 @@ final class HomepageViewController: UIViewController,
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          .FirefoxAccountChanged,
-                                                          .PrivateDataClearedHistory,
-                                                          .ProfileDidFinishSyncing,
-                                                          .TopSitesUpdated,
-                                                          .DefaultSearchEngineUpdated])
+        setupNotifications(forObserver: self, observing: [
+            UIApplication.didBecomeActiveNotification,
+            .FirefoxAccountChanged,
+            .PrivateDataClearedHistory,
+            .ProfileDidFinishSyncing,
+            .TopSitesUpdated,
+            .DefaultSearchEngineUpdated,
+            .BookmarksUpdated,
+            .RustPlacesOpened
+        ])
+
         subscribeToRedux()
     }
 
@@ -680,6 +685,13 @@ final class HomepageViewController: UIViewController,
                 TopSitesAction(
                     windowUUID: self.windowUUID,
                     actionType: TopSitesActionType.fetchTopSites
+                )
+            )
+        case .BookmarksUpdated, .RustPlacesOpened:
+            store.dispatch(
+                BookmarksAction(
+                    windowUUID: self.windowUUID,
+                    actionType: BookmarksActionType.fetchBookmarks
                 )
             )
         default: break
