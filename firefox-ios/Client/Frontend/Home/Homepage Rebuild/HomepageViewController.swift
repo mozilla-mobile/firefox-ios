@@ -619,6 +619,16 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -631,17 +641,21 @@ final class HomepageViewController: UIViewController,
         }
         switch item {
         case .topSite(let state, _):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: state.site.url.asURL,
-                        isGoogleTopSite: state.isGoogleURL
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: state.site.url.asURL,
+                isGoogleTopSite: state.isGoogleURL,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .bookmark(let config):
+            let destination = NavigationDestination(
+                .link,
+                url: URIFixup.getURL(config.site.url),
+                isGoogleTopSite: false,
+                visitType: .bookmark
+            )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
