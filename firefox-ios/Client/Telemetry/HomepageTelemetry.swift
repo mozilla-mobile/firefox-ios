@@ -6,8 +6,14 @@ import Foundation
 import Glean
 
 struct HomepageTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
-        let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
-        GleanMetrics.Homepage.privateModeToggle.record(isPrivateModeExtra)
+        let extras = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: extras)
     }
 }
