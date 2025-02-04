@@ -934,6 +934,7 @@
 		8A87B4342CC1A731003A9239 /* PocketMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B42E2CC1A3AA003A9239 /* PocketMiddlewareTests.swift */; };
 		8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4362CC1A910003A9239 /* MockPocketManager.swift */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
+		8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8904122D511E6A00A5BB29 /* TabManagerAction.swift */; };
 		8A8917692B57283B008B01EA /* LegacyHomepageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */; };
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
 		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
@@ -7822,6 +7823,7 @@
 		8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PocketManagerTests.swift; path = "firefox-ios-tests/Tests/ClientTests/Frontend/Homepage Rebuild/PocketManagerTests.swift"; sourceTree = SOURCE_ROOT; };
 		8A87B4362CC1A910003A9239 /* MockPocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketManager.swift; sourceTree = "<group>"; };
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
+		8A8904122D511E6A00A5BB29 /* TabManagerAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerAction.swift; sourceTree = "<group>"; };
 		8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyHomepageHeaderCell.swift; sourceTree = "<group>"; };
 		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
 		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
@@ -10418,6 +10420,7 @@
 		219914032AF963E000153598 /* Action */ = {
 			isa = PBXGroup;
 			children = (
+				8A8904122D511E6A00A5BB29 /* TabManagerAction.swift */,
 				1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */,
 				219914042AF963F900153598 /* TabTrayAction.swift */,
 				219935E82B070F9000E5966F /* TabPanelAction.swift */,
@@ -16684,6 +16687,7 @@
 				BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */,
+				8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */,
 				C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */,
 				8AB53B3E2D41463900C97590 /* MessageCardAction.swift in Sources */,
 				E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */,

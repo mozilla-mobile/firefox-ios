@@ -4,6 +4,7 @@
 
 import Common
 import Redux
+import Storage
 
 /// State for the jump back in section that is used in the homepage view
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
@@ -40,7 +41,8 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case TabManagerMiddlewareActionType.fetchRecentTabs:
+
             return handleInitializeAction(for: state, with: action)
         default:
             return defaultState(from: state)
@@ -51,14 +53,23 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         for state: JumpBackInSectionState,
         with action: Action
     ) -> JumpBackInSectionState {
-        // TODO: FXIOS-11225 Update state from middleware
+        guard let tabManagerAction = action as? TabManagerAction,
+              let recentTabs = tabManagerAction.recentTabs
+        else {
+            return defaultState(from: state)
+        }
+
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
-            jumpBackInTabs: [JumpBackInTabState(
-                titleText: "JumpBack In Title",
-                descriptionText: "JumpBack In Description",
-                siteURL: "www.mozilla.com"
-            )]
+            jumpBackInTabs: recentTabs.compactMap { tab in
+                let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
+                let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
+                return JumpBackInTabState(
+                    titleText: site.title,
+                    descriptionText: site.tileURL.shortDisplayString.capitalized,
+                    siteURL: itemURL
+                )
+            }
         )
     }
 

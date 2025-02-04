@@ -121,7 +121,11 @@ final class HomepageDiffableDataSource:
         with jumpBackInSectionState: JumpBackInSectionState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
-        return jumpBackInSectionState.jumpBackInTabs.compactMap { .jumpBackIn($0) }
+        // TODO: FXIOS-11224 Configure items to display based on device sizes
+        let maxItemsToDisplay = 2
+        return jumpBackInSectionState.jumpBackInTabs
+            .prefix(maxItemsToDisplay)
+            .compactMap { .jumpBackIn($0) }
     }
 
     private func getBookmarks(
