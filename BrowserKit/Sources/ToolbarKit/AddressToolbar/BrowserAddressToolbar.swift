@@ -27,6 +27,8 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
+        static let toolbarAnimationTime: CGFloat = 0.25
+        static let iconsAnimationTime: CGFloat = 0.15
     }
 
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
@@ -94,19 +96,16 @@ public class BrowserAddressToolbar: UIView,
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewState = state.locationViewState
-        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
+        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
 
     public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
-        updateActions(state: state)
         updateBorder(borderPosition: state.borderPosition)
 
+        updateActions(state: state)
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         droppableUrl = state.locationViewState.droppableUrl
-
-        setNeedsLayout()
-        layoutIfNeeded()
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -247,6 +246,31 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+        updateToolbarLayout()
+    }
+
+    private func updateToolbarLayout() {
+        let stacks = browserActionStack.arrangedSubviews +
+                     navigationActionStack.arrangedSubviews +
+                     pageActionStack.arrangedSubviews
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+
+        if isAnimationEnabled {
+            UIView.animate(withDuration: UX.toolbarAnimationTime) {
+                self.layoutIfNeeded()
+            } completion: { _ in
+                UIView.animate(withDuration: UX.iconsAnimationTime) {
+                    stacks.forEach {
+                        $0.alpha = 1.0
+                    }
+                }
+            }
+        } else {
+            stacks.forEach {
+                $0.alpha = 1.0
+            }
+            layoutIfNeeded()
+        }
     }
 
     private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
@@ -278,17 +302,12 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
-        stackView.removeAllArrangedViews()
-
-        toolbarElements.forEach { toolbarElement in
+        let buttons = toolbarElements.map { toolbarElement in
             let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
-            stackView.addArrangedSubview(button)
-
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-            ])
+            if !stackView.arrangedSubviews.contains(button) {
+                button.alpha = 0
+            }
 
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
@@ -298,6 +317,18 @@ public class BrowserAddressToolbar: UIView,
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
+            return button
+        }
+
+        stackView.removeAllArrangedViews()
+
+        buttons.forEach { button in
+            stackView.addArrangedSubview(button)
+
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+            ])
         }
     }
 
