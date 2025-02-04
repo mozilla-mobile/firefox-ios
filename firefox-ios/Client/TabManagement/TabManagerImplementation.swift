@@ -109,7 +109,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     private func restoreOnly() {
-        tabs = [Tab]()
+//        tabs = [Tab]()
         Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
@@ -165,9 +165,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         var tabToSelect: Tab?
 
         let isThereDeeplinkTab = tabs.count == 1
-        if isThereDeeplinkTab {
-            tabToSelect = tabs.first
-        }
 
         for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
@@ -194,7 +191,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             // Restore screenshot
             restoreScreenshot(tab: newTab)
 
-            guard tabToSelect == nil else { return }
+            guard !isThereDeeplinkTab else { continue }
             if windowData.activeTabId == tabData.id {
                 tabToSelect = newTab
             }
@@ -203,7 +200,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
-
+        guard !isThereDeeplinkTab else { return }
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {

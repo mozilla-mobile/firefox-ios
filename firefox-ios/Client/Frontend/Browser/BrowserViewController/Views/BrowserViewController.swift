@@ -998,7 +998,12 @@ class BrowserViewController: UIViewController,
         super.viewWillAppear(animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        tabManager.restoreTabs()
+        AppEventQueue.wait(for: [.recordStartupTimeOpenURLComplete]) { [weak self] in
+            self?.tabManager.restoreTabs()
+        }
+        AppEventQueue.wait(for: [.recordStartupTimeOpenURLCancelled]) { [weak self] in
+            self?.tabManager.restoreTabs()
+        }
 
         switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)

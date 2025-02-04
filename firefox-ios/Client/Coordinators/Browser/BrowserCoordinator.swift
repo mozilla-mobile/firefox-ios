@@ -1109,12 +1109,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
-        if let savedRoute {
-            logger.log("Find and handle route called after tabManagerDidRestoreTabs",
-                       level: .info,
-                       category: .coordinator)
-            findAndHandle(route: savedRoute)
-        }
+//        if let savedRoute {
+//            logger.log("Find and handle route called after tabManagerDidRestoreTabs",
+//                       level: .info,
+//                       category: .coordinator)
+//            findAndHandle(route: savedRoute)
+//        }
     }
 
     // MARK: - TabTrayCoordinatorDelegate
