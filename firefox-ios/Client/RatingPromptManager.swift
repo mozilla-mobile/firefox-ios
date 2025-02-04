@@ -13,11 +13,12 @@ final class RatingPromptManager {
     private let prefs: Prefs
     private let logger: Logger
     private let userDefaults: UserDefaultsInterface
+    private let crashTracker: CrashTracker
 
     struct Constants {
         static let minDaysBetweenReviewRequest = 60
-        static let firstThreshold = 30
-        static let secondThreshold = 90
+        static let firstThreshold = 15
+        static let secondThreshold = 40
         static let thirdThreshold = 120
     }
 
@@ -25,20 +26,23 @@ final class RatingPromptManager {
         case keyRatingPromptLastRequestDate = "com.moz.ratingPromptLastRequestDate.key"
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
         case keyRatingPromptThreshold = "com.moz.keyRatingPromptThreshold.key"
-        case keyLastCrashDateKey = "com.moz.lastCrashDateKey.key"
     }
 
-    /// Initializes the `RatingPromptManager` using the provided profile and the user's current days of use of Firefox
+    /// Initializes the `RatingPromptManager`
     ///
     /// - Parameters:
     ///   - prefs: User's profile data
-    ///   - logger: Logger protocol to override in Unit test
+    ///   - crashTracker: Used to track crash related information
+    ///   - logger: Logger protocol to override in Unit tests
+    ///   - userDefaults: UserDefaultsInterface to override in Unit tests
     init(prefs: Prefs,
+         crashTracker: CrashTracker,
          logger: Logger = DefaultLogger.shared,
          userDefaults: UserDefaultsInterface = UserDefaults.standard) {
         self.prefs = prefs
         self.logger = logger
         self.userDefaults = userDefaults
+        self.crashTracker = crashTracker
     }
 
     /// Show the in-app rating prompt if needed
@@ -46,13 +50,6 @@ final class RatingPromptManager {
         if shouldShowPrompt {
             requestRatingPrompt()
             userDefaults.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
-        }
-    }
-
-    /// Update rating prompt data
-    func updateData(currentDate: Date = Date()) {
-        if logger.crashedLastLaunch {
-            userDefaults.set(currentDate, forKey: UserDefaultsKey.keyLastCrashDateKey.rawValue)
         }
     }
 
@@ -113,7 +110,7 @@ final class RatingPromptManager {
         }
 
         // Required: has not crashed in the last 3 days
-        guard !hasCrashedInLast3Days() else { return false }
+        guard !crashTracker.hasCrashedInLast3Days else { return false }
 
         var daysSinceLastRequest = 0
         if let previousRequest = lastRequestDate {
@@ -161,15 +158,6 @@ final class RatingPromptManager {
         DispatchQueue.main.async {
             SKStoreReviewController.requestReview(in: scene)
         }
-    }
-
-    private func hasCrashedInLast3Days() -> Bool {
-        guard let lastCrashDate = userDefaults.object(
-            forKey: UserDefaultsKey.keyLastCrashDateKey.rawValue
-        ) as? Date else { return false }
-
-        let threeDaysAgo = Date(timeIntervalSinceNow: -(3 * 24 * 60 * 60))
-        return lastCrashDate >= threeDaysAgo
     }
 }
 
