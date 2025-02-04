@@ -11,12 +11,12 @@ struct SaveLoginAlertViewModel {
     let notNowButtonTitle: String
     let notNowButtonA11yId: String
     let titleText: String
-
-    let saveAction: (SaveLoginAlert) -> Void
-    let notNotAction: (SaveLoginAlert) -> Void
 }
 
 class SaveLoginAlert: UIView, ThemeApplicable {
+    var saveAction: (() -> Void)?
+    var notNotAction: (() -> Void)?
+
     private struct UX {
         static let cornerRadius: CGFloat = 8
         static let buttonSpacing: CGFloat = 12
@@ -56,11 +56,11 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     }
 
     private lazy var notNowButton: SecondaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.notNowAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.notNowButtonPressed), for: .touchUpInside)
     }
 
     private lazy var saveButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.saveAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 
     override init(frame: CGRect) {
@@ -135,13 +135,13 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     // MARK: Buttons Action
 
     @objc
-    private func notNowAction() {
-        // TODO: FXIOS-11219 Call action when we integrate the SaveLoginAlert
+    private func notNowButtonPressed() {
+        notNotAction?()
     }
 
     @objc
-    private func saveAction() {
-        // TODO: FXIOS-11219 Call action when we integrate the SaveLoginAlert
+    private func saveButtonPressed() {
+        saveAction?()
     }
 
     // MARK: ThemeApplicable
@@ -152,10 +152,6 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         imageView.tintColor = theme.colors.iconPrimary
         textLabel.textColor = theme.colors.textPrimary
         setupShadow(theme: theme)
-
-        // TODO: FXIOS-11219 Need to remove once we have the real flow of how SaveLoginAlert is shown
-        notNowButton.applyTheme(theme: theme)
-        saveButton.applyTheme(theme: theme)
     }
 
     private func setupShadow(theme: Theme) {

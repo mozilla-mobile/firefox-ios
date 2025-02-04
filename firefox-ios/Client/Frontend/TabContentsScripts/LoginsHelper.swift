@@ -258,27 +258,24 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             tab?.removeLoginAlert(existingPrompt)
         }
 
-        let saveAction = { bar in
-            self.tab?.removeLoginAlert(bar)
+        let alert = SaveLoginAlert()
+        alert.saveAction = {
+            self.tab?.removeLoginAlert(alert)
             self.loginAlert = nil
             self.sendLoginsSavedTelemetry()
             self.profile.logins.addLogin(login: login, completionHandler: { _ in })
         }
-
-        let notNotAction = { bar in
-            self.tab?.removeLoginAlert(bar)
+        alert.notNotAction = {
+            self.tab?.removeLoginAlert(alert)
             self.loginAlert = nil
         }
 
-        let alert = SaveLoginAlert()
         let viewModel = SaveLoginAlertViewModel(
             saveButtonTitle: .LoginsHelperSaveLoginButtonTitle,
             saveButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.saveButton,
             notNowButtonTitle: .LoginsHelperDontSaveButtonTitle,
             notNowButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.notNowButton,
-            titleText: promptMessage,
-            saveAction: saveAction,
-            notNotAction: notNotAction
+            titleText: promptMessage
         )
         alert.configure(viewModel: viewModel)
 
@@ -302,27 +299,24 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             tab?.removeLoginAlert(existingPrompt)
         }
 
-        let saveAction = { bar in
-            self.tab?.removeLoginAlert(bar)
+        let alert = SaveLoginAlert()
+        alert.saveAction = {
+            self.tab?.removeLoginAlert(alert)
             self.loginAlert = nil
             self.sendLoginsModifiedTelemetry()
             self.profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
         }
-
-        let notNotAction = { bar in
-            self.tab?.removeLoginAlert(bar)
+        alert.notNotAction = {
+            self.tab?.removeLoginAlert(alert)
             self.loginAlert = nil
         }
 
-        let alert = SaveLoginAlert()
         let viewModel = SaveLoginAlertViewModel(
             saveButtonTitle: .LoginsHelperUpdateButtonTitle,
             saveButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.updateButton,
             notNowButtonTitle: .LoginsHelperDontUpdateButtonTitle,
             notNowButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton,
-            titleText: formatted,
-            saveAction: saveAction,
-            notNotAction: notNotAction
+            titleText: formatted
         )
         alert.configure(viewModel: viewModel)
 
