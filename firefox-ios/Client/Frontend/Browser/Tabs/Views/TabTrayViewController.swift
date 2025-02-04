@@ -24,7 +24,8 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             UIPopoverPresentationControllerDelegate {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -217,6 +218,8 @@ class TabTrayViewController: UIViewController,
         subscribeToRedux()
         listenForThemeChange(view)
         updateToolbarItems()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePopupDismissal), name: .popupDismissed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePopupDismissal), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -532,24 +535,28 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeAllTabs)
-        store.dispatch(action)
+        showCloseAllConfirmation()
     }
 
     private func showCloseAllConfirmation() {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
+                                           handler: { _ in
+                                               self.confirmCloseAll()
+                                           }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = deleteButton
+        controller.popoverPresentationController?.delegate = self
         present(controller, animated: true, completion: nil)
+    }
+
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        // No need to handle dismissal as the button should always be enabled
     }
 
     private func confirmCloseAll() {
@@ -579,4 +586,17 @@ class TabTrayViewController: UIViewController,
                                            actionType: RemoteTabsPanelActionType.refreshTabs)
         store.dispatch(action)
     }
+
+    @objc
+    private func handlePopupDismissal() {
+        deleteButton.isEnabled = true
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension Notification.Name {
+    static let popupDismissed = Notification.Name("popupDismissed")
 }
