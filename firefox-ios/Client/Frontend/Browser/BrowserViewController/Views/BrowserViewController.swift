@@ -85,10 +85,10 @@ class BrowserViewController: UIViewController,
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
-
     var logger: Logger
 
     // MARK: Optional UI elements
+
     var topTabsViewController: TopTabsViewController?
     var tabTrayViewController: TabTrayController?
     var legacyUrlBar: URLBarView?
@@ -216,12 +216,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: Feature flags
 
-    var tabTrayViewController: TabTrayController?
-
-    let profile: Profile
-    let tabManager: TabManager
-    let crashTracker: CrashTracker
-    let ratingPromptManager: RatingPromptManager
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
@@ -263,11 +257,12 @@ class BrowserViewController: UIViewController,
 
     // MARK: Data management
 
-    private var browserViewControllerState: BrowserViewControllerState?
-    var appAuthenticator: AppAuthenticationProtocol
     let profile: Profile
     let tabManager: TabManager
+    let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
+    private var browserViewControllerState: BrowserViewControllerState?
+    var appAuthenticator: AppAuthenticationProtocol
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
