@@ -128,6 +128,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
@@ -279,7 +280,8 @@ class BrowserViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs)
+        self.crashTracker = DefaultCrashTracker()
+        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
@@ -344,7 +346,7 @@ class BrowserViewController: UIViewController,
             self?.browserDidBecomeActive()
         }
 
-        ratingPromptManager.updateData()
+        crashTracker.updateData()
         if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
             ratingPromptManager.showRatingPromptIfNeeded()
         }
