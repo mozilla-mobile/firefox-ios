@@ -2809,8 +2809,6 @@ class BrowserViewController: UIViewController,
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
-        tabManager.expireLoginAlerts()
-
         guard let webView = tab.webView else { return }
 
         self.screenshotHelper?.takeScreenshot(tab)

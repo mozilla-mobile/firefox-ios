@@ -47,7 +47,6 @@ protocol TabManager: AnyObject {
     func startAtHomeCheck() -> Bool
     func getTabForUUID(uuid: TabUUID) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
-    func expireLoginAlerts()
     @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
