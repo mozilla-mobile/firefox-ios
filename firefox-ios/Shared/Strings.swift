@@ -7460,6 +7460,26 @@ extension String {
         tableName: nil,
         value: "To use the AutoFill feature for Firefox, you must have a device passcode enabled.",
         comment: "Warning message shown when you try to enable or use native AutoFill without a device passcode setup")
+    public static let CredentialProviderRetryAlertTitle = MZLocalizedString(
+        key: "CredentialProvider.RetryAllert.Title.v137",
+        tableName: "CredentialProvider",
+        value: "Autofill Error",
+        comment: "Title label displayed for an alert when the password autofill fails and needs user interaction.")
+    public static let CredentialProviderRetryAlertMessage = MZLocalizedString(
+        key: "CredentialProvider.RetryAllert.Message.v137",
+        tableName: "CredentialProvider",
+        value: "There was an issue with autofill. Please try again.",
+        comment: "Message label displayed for an alert when the password autofill fails and needs user interaction.")
+    public static let CredentialProviderRetryAlertRetryActionTitle = MZLocalizedString(
+        key: "CredentialProvider.RetryAllert.RetryAction.Title.v137",
+        tableName: "CredentialProvider",
+        value: "Retry",
+        comment: "Title label displayed for the retry action in an alert when the password autofill fails and needs user interaction.")
+    public static let CredentialProviderRetryAlertCancelActionTitle = MZLocalizedString(
+        key: "CredentialProvider.RetryAllert.CancelAction.Title.v137",
+        tableName: "CredentialProvider",
+        value: "Cancel",
+        comment: "Title label displayed for the cancel action in an alert when the password autofill fails and needs user interaction.")
 }
 
 // MARK: - Password autofill
