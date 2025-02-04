@@ -238,8 +238,10 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         )
     }
 
-    func removeTab(_ tab: Tab, completion: (() -> Void)? = nil) {
-        guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
+    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)? = nil) {
+        guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
+        let tab = tabs[index]
+
         DispatchQueue.main.async { [weak self] in
             self?.removeTab(tab, flushToDisk: true)
             self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
@@ -269,9 +271,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            await withCheckedContinuation { continuation in
-                removeTab(tab) { continuation.resume() }
-            }
+            await removeTab(tab.tabUUID)
         }
     }
 
@@ -1017,16 +1017,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
-        removeTab(selectedTab)
         Task {
+            await removeTab(selectedTab.tabUUID)
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
-        }
-    }
-
-    func closeTab(by url: URL) {
-        // Find the tab with the specified URL
-        if let tabToClose = tabs.first(where: { $0.url == url }) {
-            self.removeTab(tabToClose)
         }
     }
 

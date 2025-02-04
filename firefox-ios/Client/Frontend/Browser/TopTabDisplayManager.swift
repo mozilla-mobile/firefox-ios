@@ -333,7 +333,7 @@ class TopTabDisplayManager: NSObject {
                 return
             }
 
-            self.tabManager.removeTab(tab)
+            self.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }
 
