@@ -14,6 +14,7 @@ import enum MozillaAppServices.BookmarkRoots
 /// The `RatingPromptManager` handles app store review requests and the internal logic of when
 /// they can be presented to a user.
 final class RatingPromptManager {
+<<<<<<< HEAD
     private let profile: Profile
     private let daysOfUseCounter: CumulativeDaysOfUseCounter
 
@@ -23,27 +24,58 @@ final class RatingPromptManager {
     private let group: DispatchGroupInterface
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
+=======
+    private let prefs: Prefs
+    private let logger: Logger
+    private let userDefaults: UserDefaultsInterface
+    private let crashTracker: CrashTracker
+
+    struct Constants {
+        static let minDaysBetweenReviewRequest = 60
+        static let firstThreshold = 15
+        static let secondThreshold = 40
+        static let thirdThreshold = 120
+    }
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 
     enum UserDefaultsKey: String {
         case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
         case keyRatingPromptLastRequestDate = "com.moz.ratingPromptLastRequestDate.key"
         case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
+<<<<<<< HEAD
+=======
+        case keyRatingPromptThreshold = "com.moz.keyRatingPromptThreshold.key"
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     }
 
-    /// Initializes the `RatingPromptManager` using the provided profile and the user's current days of use of Firefox
+    /// Initializes the `RatingPromptManager`
     ///
     /// - Parameters:
+<<<<<<< HEAD
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
     ///   - logger: Logger protocol to override in Unit test
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
+=======
+    ///   - prefs: User's profile data
+    ///   - crashTracker: Used to track crash related information
+    ///   - logger: Logger protocol to override in Unit tests
+    ///   - userDefaults: UserDefaultsInterface to override in Unit tests
+    init(prefs: Prefs,
+         crashTracker: CrashTracker,
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
          logger: Logger = DefaultLogger.shared,
          group: DispatchGroupInterface = DispatchGroup()) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
         self.logger = logger
+<<<<<<< HEAD
         self.group = group
+=======
+        self.userDefaults = userDefaults
+        self.crashTracker = crashTracker
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     }
 
     /// Show the in-app rating prompt if needed
@@ -55,6 +87,7 @@ final class RatingPromptManager {
         }
     }
 
+<<<<<<< HEAD
     /// Update rating prompt data. Bookmarks and pinned sites data is loaded asynchronously.
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
     ///                                    Used in unit tests
@@ -68,6 +101,8 @@ final class RatingPromptManager {
         }
     }
 
+=======
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     /// Go to the App Store review page of this application
     /// - Parameter urlOpener: Opens the App Store url
     static func goToAppStoreReview(with urlOpener: URLOpenerProtocol = UIApplication.shared) {
@@ -120,9 +155,14 @@ final class RatingPromptManager {
             return true
         }
 
+<<<<<<< HEAD
         // Required: 5th launch or more
         let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
         guard currentSessionCount >= 5 else { return false }
+=======
+        // Required: has not crashed in the last 3 days
+        guard !crashTracker.hasCrashedInLast3Days else { return false }
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 
         // Required: 5 consecutive days of use in the last 7 days
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
@@ -162,6 +202,7 @@ final class RatingPromptManager {
             SKStoreReviewController.requestReview(in: scene)
         }
     }
+<<<<<<< HEAD
 
     private func updateBookmarksCount(group: DispatchGroupInterface) {
         group.enter()
@@ -191,6 +232,8 @@ final class RatingPromptManager {
 
         return numberOfDays <= 14
     }
+=======
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 }
 
 // MARK: URLOpenerProtocol

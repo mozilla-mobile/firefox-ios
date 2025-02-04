@@ -88,6 +88,9 @@ final class NimbusFeatureFlagLayer {
         case .pullToRefreshRefactor:
             return checkPullToRefreshFeature(from: nimbus)
 
+        case .ratingPromptFeature:
+            return checkRatingPromptFeature(from: nimbus)
+
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
 
@@ -347,6 +350,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPullToRefreshFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pullToRefreshRefactorFeature.value().enabled
+    }
+
+    private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.ratingPromptFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {

@@ -1,0 +1,18 @@
+# The configuration for the ratingPromptRelease feature
+features:
+  rating-prompt-feature:
+    description: >
+      This feature enables the rating prompt so we ask in-app rating to users
+    variables:
+      enabled:
+        description: >
+          Enables the rating prompt
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
