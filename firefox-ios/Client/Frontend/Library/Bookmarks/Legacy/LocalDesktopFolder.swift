@@ -53,7 +53,9 @@ class LocalDesktopFolder: FxBookmarkNode,
 
 extension LocalDesktopFolder: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
-        let image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
         let accessoryView = isBookmarkRefactorEnabled ? UIImageView(image: image) : nil
 
         return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
