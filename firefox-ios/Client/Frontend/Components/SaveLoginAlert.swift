@@ -73,10 +73,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.shadowPath = UIBezierPath(
-            roundedRect: shadowView.bounds,
-            cornerRadius: UX.cornerRadius
-        ).cgPath
+        setShadowPath()
     }
 
     func configure(viewModel: SaveLoginAlertViewModel) {
@@ -159,11 +156,16 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     private func setupShadow(theme: Theme) {
         shadowView.layoutIfNeeded()
 
-        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds,
-                                                   cornerRadius: UX.cornerRadius).cgPath
         shadowView.layer.shadowRadius = UX.shadowRadius
         shadowView.layer.shadowOffset = UX.shadowOffset
         shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         shadowView.layer.shadowOpacity = UX.shadowOpacity
+    }
+
+    private func setShadowPath() {
+        shadowView.layer.shadowPath = UIBezierPath(
+            roundedRect: shadowView.bounds,
+            cornerRadius: UX.cornerRadius
+        ).cgPath
     }
 }
