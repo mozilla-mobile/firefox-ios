@@ -59,6 +59,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
         switch self {
         case    .bookmarksRefactor,
                 .homepageRebuild,
+                .feltPrivacyFeltDeletion,
+                .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
