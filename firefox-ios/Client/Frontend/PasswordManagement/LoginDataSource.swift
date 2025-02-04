@@ -8,7 +8,7 @@ import Shared
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
     // in case there are no items to run cellForRowAt on, use an empty state view
-    private let emptyStateView = NoLoginsView()
+    private lazy var emptyStateView = NoLoginsView()
     var viewModel: PasswordManagerViewModel
 
     let boolSettings: (BoolSetting, BoolSetting)
