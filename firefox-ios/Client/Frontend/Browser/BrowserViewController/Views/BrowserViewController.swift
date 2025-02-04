@@ -128,6 +128,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
@@ -281,7 +282,12 @@ class BrowserViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+<<<<<<< HEAD
         self.ratingPromptManager = ratingPromptManager
+=======
+        self.crashTracker = DefaultCrashTracker()
+        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
@@ -345,6 +351,14 @@ class BrowserViewController: UIViewController,
             guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
             self?.browserDidBecomeActive()
         }
+<<<<<<< HEAD
+=======
+
+        crashTracker.updateData()
+        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
+            ratingPromptManager.showRatingPromptIfNeeded()
+        }
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     }
 
     @objc

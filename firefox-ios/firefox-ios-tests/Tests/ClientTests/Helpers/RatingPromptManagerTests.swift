@@ -17,7 +17,13 @@ class RatingPromptManagerTests: XCTestCase {
     var mockProfile: MockProfile!
     var createdGuids: [String] = []
     var logger: CrashingMockLogger!
+<<<<<<< HEAD
     var mockDispatchGroup: MockDispatchGroup!
+=======
+    var userDefaults: MockUserDefaults!
+    var crashTracker: MockCrashTracker!
+    var subject: RatingPromptManager!
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 
     override func setUp() {
         super.setUp()
@@ -26,6 +32,15 @@ class RatingPromptManagerTests: XCTestCase {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
         urlOpenerSpy = URLOpenerSpy()
+<<<<<<< HEAD
+=======
+        userDefaults = MockUserDefaults()
+        crashTracker = MockCrashTracker()
+        subject = RatingPromptManager(prefs: prefs,
+                                      crashTracker: crashTracker,
+                                      logger: logger,
+                                      userDefaults: userDefaults)
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     }
 
     override func tearDown() {
@@ -38,6 +53,20 @@ class RatingPromptManagerTests: XCTestCase {
         mockProfile = nil
         logger = nil
         urlOpenerSpy = nil
+<<<<<<< HEAD
+=======
+        userDefaults = nil
+        crashTracker = nil
+        subject = nil
+
+        super.tearDown()
+    }
+
+    func testShouldShowPrompt_forceShow() {
+        userDefaults.set(true, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
+        subject.showRatingPromptIfNeeded()
+        XCTAssertEqual(ratingPromptOpenCount, 1)
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
     }
 
     func testShouldShowPrompt_requiredAreFalse_returnsFalse() {
@@ -76,13 +105,19 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_loggerHasCrashedInLastSession_returnsFalse() {
+<<<<<<< HEAD
         setupEnvironment(isBrowserDefault: true)
         logger?.enableCrashOnLastLaunch = true
+=======
+        crashTracker.mockHasCrashed = true
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 
         promptManager.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
+<<<<<<< HEAD
     func testShouldShowPrompt_isBrowserDefaultTrue_returnsTrue() {
         setupEnvironment(isBrowserDefault: true)
         promptManager.showRatingPromptIfNeeded()
@@ -95,6 +130,11 @@ class RatingPromptManagerTests: XCTestCase {
             BlockingStrength.strict.rawValue,
             forKey: ContentBlockingConfig.Prefs.StrengthKey
         )
+=======
+    func testShouldShowPrompt_currentLastRequestDate_returnsFalse() {
+        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
+        userDefaults.set(Date(), forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue)
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 
         promptManager.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 1)
@@ -298,6 +338,7 @@ private extension RatingPromptManagerTests {
             forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue
         ) as? Int ?? 0
     }
+<<<<<<< HEAD
 }
 
 // MARK: - CumulativeDaysOfUseCounterMock
@@ -310,6 +351,8 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
     override var hasRequiredCumulativeDaysOfUse: Bool {
         return hasMockRequiredDaysOfUse
     }
+=======
+>>>>>>> b7217ee09 (Refactor FXIOS-10855 #23671 Change rating prompt request threshold & adding experiment (#24523))
 }
 
 // MARK: - CrashingMockLogger
