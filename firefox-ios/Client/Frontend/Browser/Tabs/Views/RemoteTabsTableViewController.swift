@@ -48,7 +48,7 @@ class RemoteTabsTableViewController: UITableViewController,
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    var buttonToast: ButtonToast?
+    private var buttonToast: ButtonToast?
 
     // MARK: - Initializer
 
@@ -157,9 +157,9 @@ class RemoteTabsTableViewController: UITableViewController,
         emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
-    func show(toast: Toast,
-              afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
-              duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+    private func show(toast: Toast,
+                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
         if let buttonToast = toast as? ButtonToast {
             self.buttonToast = buttonToast
         }
