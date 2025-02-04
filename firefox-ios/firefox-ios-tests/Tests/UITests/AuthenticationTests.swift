@@ -47,7 +47,7 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Save the credentials.
-        tester().tapView(withAccessibilityIdentifier: "SaveLoginPrompt.saveLoginButton")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.SaveLoginAlert.saveButton)
         tester().waitForAnimationsToFinish(withTimeout: 3)
         logOut()
         loadAuthPage()

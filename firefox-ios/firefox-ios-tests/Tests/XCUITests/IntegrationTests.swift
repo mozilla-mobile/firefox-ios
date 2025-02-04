@@ -172,7 +172,7 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons["Sign in"].waitAndTap()
 
         // Save the login
-        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
 
         // Sign in with FxAccount
         signInFxAccounts()

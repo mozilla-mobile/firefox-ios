@@ -5,18 +5,18 @@
 import Common
 import ComponentLibrary
 
-// TODO: FXIOS-11219 Remove once SaveLoginAlert is integrated
-protocol SnackBarProtocol: UIView, ThemeApplicable {}
-
 struct SaveLoginAlertViewModel {
-    let saveButtonTitle: String = .LoginsHelperSaveLoginButtonTitle
-    let saveButtonA11yId: String = AccessibilityIdentifiers.SaveLoginAlert.saveButton
-    let notNowButtonTitle: String = .LoginsHelperDontSaveButtonTitle
-    let notNowButtonA11yId: String = AccessibilityIdentifiers.SaveLoginAlert.notNowButton
+    let saveButtonTitle: String
+    let saveButtonA11yId: String
+    let notNowButtonTitle: String
+    let notNowButtonA11yId: String
     let titleText: String
+
+    let saveAction: (SaveLoginAlert) -> Void
+    let notNotAction: (SaveLoginAlert) -> Void
 }
 
-class SaveLoginAlert: UIView, ThemeApplicable, SnackBarProtocol {
+class SaveLoginAlert: UIView, ThemeApplicable {
     private struct UX {
         static let cornerRadius: CGFloat = 8
         static let buttonSpacing: CGFloat = 12

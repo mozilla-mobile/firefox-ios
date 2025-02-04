@@ -29,7 +29,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
     }
 
     private func openLoginsSettings() {
@@ -130,7 +130,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.dontSaveButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.notNowButton].waitAndTap()
         // There should not be any login saved
         openLoginsSettings()
         mozWaitForElementToNotExist(app.staticTexts[domain])
@@ -238,7 +238,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
 
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)
