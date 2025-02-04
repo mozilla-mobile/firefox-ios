@@ -13,6 +13,8 @@ struct ContextMenuConfiguration: Equatable {
         switch item {
         case .topSite(let state, _):
             return state.site
+        case .bookmark(let state):
+            return Site.createBasicSite(url: state.site.url, title: state.site.title)
         case .pocket(let state):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         case .pocketDiscover(let state):

@@ -21,6 +21,15 @@ final class HomepageDiffableDataSource:
         case bookmarks
         case pocket(TextColor?)
         case customizeHomepage
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .topSites, .jumpBackIn, .bookmarks, .pocket:
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     enum HomeItem: Hashable {

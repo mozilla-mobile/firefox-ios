@@ -52,6 +52,8 @@ struct ContextMenuState {
         switch configuration.homepageSection {
         case .topSites:
             actions = [getTopSitesActions(site: site)]
+        case .bookmarks:
+            actions = [getBookmarksActions(site: site)]
         case .pocket:
             actions = [getPocketActions(site: site)]
         default:
@@ -162,6 +164,18 @@ struct ContextMenuState {
             dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
             // TODO: FXIOS-10171 - Add telemetry
         }).items
+    }
+
+    // MARK: - Homepage Bookmarks section item's context menu actions
+    private func getBookmarksActions(site: Site) -> [PhotonRowActions] {
+        guard let siteURL = site.url.asURL else { return [] }
+
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
+        let shareAction = getShareAction(siteURL: site.url)
+        let bookmarkAction = getBookmarkAction(site: site)
+
+        return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
     // MARK: - Pocket item's context menu actions
