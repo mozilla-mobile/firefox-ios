@@ -11,10 +11,14 @@ import Common
 final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+
+        // We must reset the global mock store prior to each test
+        setupStore()
     }
 
     override func tearDown() {
@@ -24,7 +28,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func tests_initialState_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
@@ -33,7 +36,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -60,7 +62,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -79,7 +80,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -104,7 +104,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_backForwardButtonStateChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -127,7 +126,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_showMenuWarningBadgeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -148,7 +146,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_borderPositionChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -167,7 +164,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_toolbarPositionChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -228,13 +224,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupStore(with initialToolbarState: ToolbarState) {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(with: initialToolbarState),
-            middlewares: [ToolbarMiddleware().toolbarProvider]
-        )
-    }
-
     func initialToolbarState(isShowingNavigationToolbar: Bool) -> ToolbarState {
         let toolbarState = ToolbarState(windowUUID: windowUUID)
         return ToolbarState(
@@ -275,10 +264,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func setupStore() {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(),
-            middlewares: [ToolbarMiddleware().toolbarProvider]
-        )
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // In order to avoid flaky tests, we should reset the store

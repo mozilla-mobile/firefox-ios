@@ -18,6 +18,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         toolbarManager = DefaultToolbarManager()
+
+        // We must reset the global mock store prior to each test
         setupStore()
     }
 
