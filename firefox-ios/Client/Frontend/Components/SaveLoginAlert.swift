@@ -152,6 +152,8 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         imageView.tintColor = theme.colors.iconPrimary
         textLabel.textColor = theme.colors.textPrimary
         setupShadow(theme: theme)
+        saveButton.applyTheme(theme: theme)
+        notNowButton.applyTheme(theme: theme)
     }
 
     private func setupShadow(theme: Theme) {
