@@ -154,12 +154,12 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
             table.cells[settingsQuery.ClearData.title], app.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
+            table.cells[settingsQuery.PrivacyPolicy.title], table.cells[settingsQuery.SendFeedback.title],
             table.cells[settingsQuery.ShowIntroduction.title],
             table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
             table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
             table.cells[settingsQuery.SendData.sendCrashReportsTitle],
             table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],
-            table.cells[settingsQuery.PrivacyPolicy.title], table.cells[settingsQuery.SendFeedback.title],
             table.cells[settingsQuery.Help.title], table.cells[settingsQuery.RateOnAppStore.title],
             table.cells[settingsQuery.Licenses.title], table.cells[settingsQuery.YourRights.title]
         ]
