@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
     lazy var shareTelemetry = ShareTelemetry()
-    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
