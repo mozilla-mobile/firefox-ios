@@ -14,8 +14,8 @@ class TelemetryContextualIdentifierTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         clearTest()
+        super.tearDown()
     }
 
     // MARK: Context id

@@ -17,8 +17,8 @@ final class ClientSyncManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         sut = nil
+        super.tearDown()
     }
 
     func testCreditCardEngineEnablement_WhenMockDeclinedEnginesIsNilAndMockEngineEnabledIsFalse() {

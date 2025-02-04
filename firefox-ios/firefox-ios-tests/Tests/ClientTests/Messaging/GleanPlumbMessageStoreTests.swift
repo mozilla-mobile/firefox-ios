@@ -17,9 +17,9 @@ class GleanPlumbMessageStoreTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         resetUserDefaults()
         subject = nil
+        super.tearDown()
     }
 
     func testImpression_OnMessageDisplayed() {

@@ -78,7 +78,6 @@ class FormAutofillHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         DependencyHelperMock().reset()
         tab = nil
@@ -87,6 +86,7 @@ class FormAutofillHelperTests: XCTestCase {
         validPayloadCaptureMockWKMessage = nil
         secureFrameMock = nil
         secureWebviewMock = nil
+        super.tearDown()
     }
 
     // MARK: Parsing

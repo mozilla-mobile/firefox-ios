@@ -26,13 +26,12 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile = nil
         dataAdaptor = nil
         subject = nil
         delegate = nil
         telemetry = nil
+        super.tearDown()
     }
 
     func testLoadNewDataIsEnabled() {

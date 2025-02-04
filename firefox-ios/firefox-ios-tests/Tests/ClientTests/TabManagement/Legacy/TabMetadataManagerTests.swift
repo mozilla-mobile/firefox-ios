@@ -21,10 +21,9 @@ class TabMetadataManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         metadataObserver = nil
         manager = nil
+        super.tearDown()
     }
 
     // MARK: - Should Update Search Term Data
