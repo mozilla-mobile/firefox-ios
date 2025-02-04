@@ -994,6 +994,7 @@
 		8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD002A001ADF0089941E /* ApplicationHelper.swift */; };
 		8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */; };
 		8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD042A0041380089941E /* MockCoordinator.swift */; };
+		8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */; };
 		8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */; };
 		8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA012BF5110A000C02B5 /* MicrosurveyAction.swift */; };
 		8AAEBA042BF51134000C02B5 /* MicrosurveyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA032BF51133000C02B5 /* MicrosurveyState.swift */; };
@@ -7887,6 +7888,7 @@
 		8AABBD002A001ADF0089941E /* ApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD042A0041380089941E /* MockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoordinator.swift; sourceTree = "<group>"; };
+		8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLoginAlert.swift; sourceTree = "<group>"; };
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewControllerTests.swift; sourceTree = "<group>"; };
 		8AAEBA012BF5110A000C02B5 /* MicrosurveyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyAction.swift; sourceTree = "<group>"; };
@@ -12464,12 +12466,13 @@
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				E17496362991A2480096900A /* SwiftUI */,
 				8AED23C427AC1F9500DE7E97 /* BaseAlphaStackView.swift */,
-				43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
+				43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */,
+				8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
+				E17496362991A2480096900A /* SwiftUI */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -17258,6 +17261,7 @@
 				ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */,
 				8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
+				8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */,
 				8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */,
 				E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */,
 				8A93F85E29D36DA9004159D9 /* Coordinator.swift in Sources */,

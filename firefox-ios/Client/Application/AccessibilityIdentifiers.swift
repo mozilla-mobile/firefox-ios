@@ -875,5 +875,10 @@ struct AccessibilityIdentifiers {
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
     }
+
+    struct SaveLoginAlert {
+        static let saveButton = "SaveLoginPrompt.saveLoginButton"
+        static let notNowButton = "SaveLoginPrompt.dontSaveButton"
+    }
 }
 // swiftlint:enable line_length
