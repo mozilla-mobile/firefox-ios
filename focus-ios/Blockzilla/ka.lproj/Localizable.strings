@@ -275,7 +275,7 @@
 "Settings.blockOtherYes2" = "შიგთავსის მეთვალყურეების შეზღუდვა";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
-"Settings.DailyUsagePing.Message" = "მისი მეშვეობით Mozilla მიახლოებით ითვლის მოქმედ მომხმარებლებს.";
+"Settings.DailyUsagePing.Message" = "ამით Mozilla მიახლოებით ითვლის მოქმედ მომხმარებლებს.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
 "Settings.DailyUsagePing.Title" = "დღიური გამოყენების უწყება";

@@ -4966,7 +4966,7 @@ extension String {
     public static let ExternalInvalidLinkMessage = MZLocalizedString(
         key: "ExternalLink.ExternalInvalidLinkMessage.v136",
         tableName: "ExternalLink",
-        value: "The application required to open that link can't be found.",
+        value: "The application required to open that link can’t be found.",
         comment: "A statement shown to user when tapping an external link and the link doesn't work."
     )
     public static let ExternalOpenMessage = MZLocalizedString(
@@ -7677,7 +7677,7 @@ extension String {
             public static let SendCrashReportsSettingMessage = MZLocalizedString(
                 key: "Settings.CrashReports.Message.v135",
                 tableName: "Settings",
-                value: "Crash reports allow us diagnose and fix issues with the browser.",
+                value: "Crash reports allow us to diagnose and fix issues with the browser.",
                 comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
             public static let AgreementButtonTitle = MZLocalizedString(
                 key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",

@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Dysgu Rhagor";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Mae adroddiadau chwalu'n ein galluogi i wneud diagnosis a thrwsio problemau gyda'r porwr.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Mae adroddiadau chwalu'n ein galluogi i wneud diagnosis a thrwsio problemau gyda'r porwr.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

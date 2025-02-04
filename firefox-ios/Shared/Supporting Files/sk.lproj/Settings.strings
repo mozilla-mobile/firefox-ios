@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Ďalšie informácie";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Správy o zlyhaní nám umožňujú diagnostikovať a opraviť problémy s prehliadačom.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Toto nám pomáha diagnostikovať a riešiť problémy s prehliadačom.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

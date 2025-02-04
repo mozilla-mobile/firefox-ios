@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Ulteriori informazioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "I rapporti sugli arresti anomali ci consentono di diagnosticare e risolvere problemi con il browser.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Questo ci aiuta a diagnosticare e risolvere problemi con il browser.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

@@ -10,6 +10,14 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var jumpBackInTabs: [JumpBackInTabState]
 
+    let sectionHeaderState = SectionHeaderState(
+        title: .FirefoxHomeJumpBackInSectionTitle,
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+        isButtonHidden: false,
+        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
+        buttonTitle: .BookmarksSavedShowAllText
+    )
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,

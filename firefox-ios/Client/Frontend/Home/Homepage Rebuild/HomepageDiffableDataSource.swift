@@ -17,7 +17,8 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
-        case jumpBackIn
+        case jumpBackIn(TextColor?)
+        case bookmarks
         case pocket(TextColor?)
         case customizeHomepage
     }
@@ -28,6 +29,7 @@ final class HomepageDiffableDataSource:
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case jumpBackIn(JumpBackInTabState)
+        case bookmark(BookmarkState)
         case pocket(PocketStoryState)
         case pocketDiscover(PocketDiscoverState)
         case customizeHomepage
@@ -39,6 +41,7 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 JumpBackInCell.self,
+                BookmarksCell.self,
                 PocketStandardCell.self,
                 PocketDiscoverCell.self,
                 CustomizeHomepageSectionCell.self
@@ -65,9 +68,13 @@ final class HomepageDiffableDataSource:
         }
 
         if let tabs = getJumpBackInTabs(with: state.jumpBackInState) {
-            snapshot.appendSections([.jumpBackIn])
-            snapshot.appendItems(tabs, toSection: .jumpBackIn)
+            snapshot.appendSections([.jumpBackIn(textColor)])
+            snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor))
         }
+
+        // TODO: FXIOS-11051 Update showing bookmarks
+        snapshot.appendSections([.bookmarks])
+        snapshot.appendItems(state.bookmarkState.bookmarks.compactMap { .bookmark($0) }, toSection: .bookmarks)
 
         if let stories = getPocketStories(with: state.pocketState) {
             snapshot.appendSections([.pocket(textColor)])

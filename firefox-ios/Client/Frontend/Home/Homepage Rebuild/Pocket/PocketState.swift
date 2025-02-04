@@ -7,24 +7,6 @@ import Foundation
 import Redux
 import Shared
 
-struct SectionHeaderState: Equatable {
-    var sectionHeaderTitle: String
-    var sectionTitleA11yIdentifier: String
-    var isSectionHeaderButtonHidden: Bool
-    var sectionButtonA11yIdentifier: String?
-
-    init(
-        sectionHeaderTitle: String = .FirefoxHomepage.Pocket.SectionTitle,
-        sectionTitleA11yIdentifier: String = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
-        isSectionHeaderButtonHidden: Bool = true,
-        sectionButtonA11yIdentifier: String? = nil) {
-        self.sectionHeaderTitle = sectionHeaderTitle
-        self.sectionTitleA11yIdentifier = sectionTitleA11yIdentifier
-        self.isSectionHeaderButtonHidden = isSectionHeaderButtonHidden
-        self.sectionButtonA11yIdentifier = sectionButtonA11yIdentifier
-    }
-}
-
 struct PocketDiscoverState: Equatable, Hashable {
     var title: String
     var url: URL?
@@ -36,7 +18,11 @@ struct PocketState: StateType, Equatable {
     let pocketData: [PocketStoryState]
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderState()
+    let sectionHeaderState = SectionHeaderState(
+        title: .FirefoxHomepage.Pocket.SectionTitle,
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
+    )
+
     let pocketDiscoverItem = PocketDiscoverState(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL

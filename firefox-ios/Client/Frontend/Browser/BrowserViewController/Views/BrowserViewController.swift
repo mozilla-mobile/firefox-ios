@@ -2156,6 +2156,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
+    /// Used to handle general navigation for views that can be presented from multiple places
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
         case .contextMenu:
@@ -2197,6 +2198,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
+        case .tabTray:
+            navigationHandler?.showTabTray(selectedPanel: .tabs)
         }
     }
 
@@ -2220,6 +2223,7 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
+            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
@@ -2579,6 +2583,8 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
+    // MARK: - Handle Deeplink open URL / query
+
     func handle(query: String, isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if isToolbarRefactorEnabled {
@@ -2586,28 +2592,36 @@ class BrowserViewController: UIViewController,
         } else if let legacyUrlBar {
             urlBar(legacyUrlBar, didSubmitText: query)
         }
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         if let url = url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
                 isPrivate: isPrivate
             )
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
         if let url = url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
+                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+            }
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handleQRCode() {
+        openBlankNewTab(focusLocationField: false, isPrivate: false)
         navigationHandler?.showQRCode(delegate: self)
     }
 
@@ -2624,11 +2638,21 @@ class BrowserViewController: UIViewController,
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
-    func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
+    func switchToTabForURLOrOpen(
+        _ url: URL,
+        uuid: String? = nil,
+        isPrivate: Bool = false,
+        completionHandler: (() -> Void)? = nil
+    ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
         guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
-                self?.switchToTabForURLOrOpen(url, uuid: uuid, isPrivate: isPrivate)
+                self?.switchToTabForURLOrOpen(
+                    url,
+                    uuid: uuid,
+                    isPrivate: isPrivate,
+                    completionHandler: completionHandler
+                )
             }
             return
         }
@@ -2636,6 +2660,7 @@ class BrowserViewController: UIViewController,
         popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            completionHandler?()
             return
         }
 
@@ -2646,6 +2671,7 @@ class BrowserViewController: UIViewController,
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
+        completionHandler?()
     }
 
     @discardableResult

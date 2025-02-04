@@ -14,7 +14,5 @@ extension UIColor {
         static let Blue50 = UIColor(rgb: 0x0060df)
 
         static let Purple60 = UIColor(rgb: 0x952bb9)
-
-        static let White100 = UIColor(rgb: 0xffffff)
     }
 }

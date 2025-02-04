@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Cchiù nfurmazzioni";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navicaturi.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Chistu ni pirmetti di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
