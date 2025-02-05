@@ -27,6 +27,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
         configurationProvider = nil
         webViewProvider = nil
         contentScriptManager = nil
@@ -34,7 +35,6 @@ final class WKEngineSessionTests: XCTestCase {
         engineSessionDelegate = nil
         findInPageDelegate = nil
         metadataFetcher = nil
-        super.tearDown()
     }
 
     // MARK: Load URL

@@ -20,8 +20,8 @@ final class ReduxIntegrationTests: XCTestCase {
     }
 
     override func tearDown() {
-        fakeViewController = nil
         super.tearDown()
+        fakeViewController = nil
     }
 
     func testDispatchStore_IncreaseCounter() {

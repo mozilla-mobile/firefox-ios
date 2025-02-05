@@ -14,8 +14,8 @@ final class WKEngineTests: XCTestCase {
     }
 
     override func tearDown() {
-        userScriptManager = nil
         super.tearDown()
+        userScriptManager = nil
     }
 
     func testCreateViewThenCreatesView() {

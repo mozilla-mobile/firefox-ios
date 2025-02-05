@@ -14,8 +14,8 @@ final class SiteImageViewTests: XCTestCase {
     }
 
     override func tearDown() {
-        self.imageFetcher = nil
         super.tearDown()
+        self.imageFetcher = nil
     }
 
     func testFaviconSetup() {

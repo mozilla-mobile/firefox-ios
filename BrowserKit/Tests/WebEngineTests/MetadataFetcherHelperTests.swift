@@ -14,8 +14,8 @@ final class MetadataFetcherHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        metadataDelegate = nil
         super.tearDown()
+        metadataDelegate = nil
     }
 
     func testFetchFromSessionGivenNotWebpageURLThenPageMetadataNil() {
