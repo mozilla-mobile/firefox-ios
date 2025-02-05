@@ -2809,7 +2809,7 @@ class BrowserViewController: UIViewController,
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
-        tabManager.expireSnackbars()
+        tabManager.expireLoginAlerts()
 
         guard let webView = tab.webView else { return }
 
@@ -3696,21 +3696,21 @@ extension BrowserViewController: LegacyTabDelegate {
         KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
     }
 
-    // MARK: Snack bar
+    // MARK: Save Login Alert
 
-    func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {
+    func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert) {
         // If the Tab that had a SnackBar added to it is not currently
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
-        bar.applyTheme(theme: currentTheme())
-        bottomContentStackView.addArrangedViewToBottom(bar, completion: {
+        alert.applyTheme(theme: currentTheme())
+        bottomContentStackView.addArrangedViewToBottom(alert, completion: {
             self.view.layoutIfNeeded()
         })
     }
 
-    func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
-        bottomContentStackView.removeArrangedView(bar)
+    func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert) {
+        bottomContentStackView.removeArrangedView(alert)
     }
 }
 
@@ -4006,8 +4006,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         bottomContentStackView.removeAllArrangedViews()
 
-        selectedTab.bars.forEach { bar in
-            bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
+        if let alert = selectedTab.loginAlert {
+            bottomContentStackView.addArrangedViewToBottom(alert, completion: { self.view.layoutIfNeeded() })
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)

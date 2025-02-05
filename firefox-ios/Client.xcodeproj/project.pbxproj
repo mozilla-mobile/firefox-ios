@@ -64,7 +64,6 @@
 		0BA1E0301B051A07007675AF /* NetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E02F1B051A07007675AF /* NetError.css */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
-		0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2861AC0A2B90052877D /* SnackBar.swift */; };
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */; };
 		0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */; };
@@ -997,6 +996,7 @@
 		8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD002A001ADF0089941E /* ApplicationHelper.swift */; };
 		8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */; };
 		8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABBD042A0041380089941E /* MockCoordinator.swift */; };
+		8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */; };
 		8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */; };
 		8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA012BF5110A000C02B5 /* MicrosurveyAction.swift */; };
 		8AAEBA042BF51134000C02B5 /* MicrosurveyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA032BF51133000C02B5 /* MicrosurveyState.swift */; };
@@ -1298,8 +1298,6 @@
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
 		BD2577992C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
-		BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */; };
-		BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */; };
 		BD57D9A729D4C42B00039394 /* ZoomLevelStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */; };
 		BD6B361E2B3C2511005E5345 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6B361D2B3C2511005E5345 /* CircularProgressView.swift */; };
 		BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */; };
@@ -2414,7 +2412,6 @@
 		0BA1E02F1B051A07007675AF /* NetError.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = NetError.css; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* ProfileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
-		0BB5B2861AC0A2B90052877D /* SnackBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnackBar.swift; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginsHelper.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = easterEggGif.gif; sourceTree = "<group>"; };
 		0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksRefactorFeatureFlagProvider.swift; sourceTree = "<group>"; };
@@ -7893,6 +7890,7 @@
 		8AABBD002A001ADF0089941E /* ApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD022A001CBC0089941E /* MockApplicationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApplicationHelper.swift; sourceTree = "<group>"; };
 		8AABBD042A0041380089941E /* MockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoordinator.swift; sourceTree = "<group>"; };
+		8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLoginAlert.swift; sourceTree = "<group>"; };
 		8AAD4900BB6F4DF6056B581F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewControllerTests.swift; sourceTree = "<group>"; };
 		8AAEBA012BF5110A000C02B5 /* MicrosurveyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyAction.swift; sourceTree = "<group>"; };
@@ -8572,8 +8570,6 @@
 		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2577972C9D85B5007B344C /* AnyHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashable.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
-		BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackButton.swift; sourceTree = "<group>"; };
-		BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSnackBar.swift; sourceTree = "<group>"; };
 		BD514C7EA4DD08E991E5AF7F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/Storage.strings; sourceTree = "<group>"; };
 		BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelStoreTests.swift; sourceTree = "<group>"; };
 		BD6B361D2B3C2511005E5345 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
@@ -12473,12 +12469,13 @@
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				E17496362991A2480096900A /* SwiftUI */,
 				8AED23C427AC1F9500DE7E97 /* BaseAlphaStackView.swift */,
-				43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
+				43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */,
+				8AAC7C442D52C18A0011F87A /* SaveLoginAlert.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
+				E17496362991A2480096900A /* SwiftUI */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -13585,15 +13582,12 @@
 				D0152244229855A8009DE753 /* OneLineTableViewCell.swift */,
 				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
 				E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */,
-				0BB5B2861AC0A2B90052877D /* SnackBar.swift */,
 				E660BDD81BB06521009AC090 /* TabsButton.swift */,
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
 				D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */,
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */,
-				BD4B2DE129BB4CD9005FAA50 /* SnackButton.swift */,
-				BD4B2DE329BB4D9A005FAA50 /* TimerSnackBar.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -16698,7 +16692,6 @@
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */,
-				BD4B2DE229BB4CD9005FAA50 /* SnackButton.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */,
 				8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */,
@@ -16746,7 +16739,6 @@
 				81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */,
 				8AED23062D400098000FF624 /* HomepageMessageCardCell.swift in Sources */,
 				C8BD87602A0C248000CD803A /* OnboardingButtonsModel.swift in Sources */,
-				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AA0A6652CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
@@ -17270,6 +17262,7 @@
 				ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */,
 				8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
+				8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */,
 				8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */,
 				E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */,
 				8A93F85E29D36DA9004159D9 /* Coordinator.swift in Sources */,
@@ -17352,7 +17345,6 @@
 				DF1E6AAB2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift in Sources */,
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* LegacyBookmarksPanel.swift in Sources */,
-				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
