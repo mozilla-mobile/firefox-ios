@@ -371,10 +371,7 @@ extension AppDelegate {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        let configuration = Configuration(
-            channel: channel,
-            pingSchedule: ["baseline": ["usage-reporting"]]
-        )
+        let configuration = Configuration(channel: channel)
 
         Glean.shared.initialize(
             uploadEnabled: TelemetryManager.shared.isGleanEnabled,
