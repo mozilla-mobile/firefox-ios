@@ -13840,7 +13840,6 @@
 				E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */,
 				E1AF3559286DE5F600960045 /* Smoketest4.xctestplan */,
 				E1AF355E286DE5F700960045 /* Smoketest1.xctestplan */,
-				5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */,
 				3B43E3D11D95C48D00BBA9DB /* StoragePerfTests */,
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				E1AF355C286DE5F600960045 /* SyncIntegrationTestPlan.xctestplan */,
@@ -13850,6 +13849,7 @@
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				E1AF355D286DE5F700960045 /* UnitTest.xctestplan */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
+				5FACA10B2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
