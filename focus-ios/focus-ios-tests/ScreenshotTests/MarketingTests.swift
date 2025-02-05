@@ -5,6 +5,7 @@
 import XCTest
 
 class MarketingTests: BaseTestCaseL10n {
+    @MainActor
     func testSettingsView() {
         if iPad() {
             app.windows.element(boundBy: 0).tap()
@@ -34,6 +35,7 @@ class MarketingTests: BaseTestCaseL10n {
         waitForExistence(app.cells["DuckDuckGo"])
     }
 
+    @MainActor
     func testVisitSite() {
         if iPad() {
             app.windows.element(boundBy: 0).tap()
@@ -47,6 +49,7 @@ class MarketingTests: BaseTestCaseL10n {
         snapshot("Website-Focus")
     }
 
+    @MainActor
     func testPinTopSites() {
         if iPad() {
             app.windows.element(boundBy: 0).tap()
