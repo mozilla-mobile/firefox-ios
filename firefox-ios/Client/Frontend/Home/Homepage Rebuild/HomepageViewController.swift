@@ -554,7 +554,7 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Item selected at \(point) but cannot be determined to navigate to context menu",
+                "Unable to handle whether context menu should be presented for item at \(point)",
                 level: .debug,
                 category: .homepage
             )
