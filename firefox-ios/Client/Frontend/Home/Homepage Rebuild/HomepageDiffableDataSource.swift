@@ -37,10 +37,10 @@ final class HomepageDiffableDataSource:
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
-        case jumpBackIn(JumpBackInTabState)
+        case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
-        case bookmark(BookmarkState)
-        case pocket(PocketStoryState)
+        case bookmark(BookmarkConfiguration)
+        case pocket(PocketStoryConfiguration)
         case pocketDiscover(PocketDiscoverConfiguration)
         case customizeHomepage
 

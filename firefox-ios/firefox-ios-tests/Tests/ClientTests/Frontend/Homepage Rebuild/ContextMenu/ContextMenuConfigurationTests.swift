@@ -10,7 +10,7 @@ import XCTest
 final class ContextMenuConfigurationTests: XCTestCase {
     func tests_initialState_forPocketItem_returnsExpectedState() {
         let pocketItem: HomepageItem = .pocket(
-            PocketStoryState(
+            PocketStoryConfiguration(
                 story: PocketStory(
                         url: URL("www.example.com/1234")!,
                         title: "Site 0",

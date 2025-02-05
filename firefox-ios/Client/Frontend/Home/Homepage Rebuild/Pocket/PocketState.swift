@@ -15,7 +15,7 @@ struct PocketDiscoverConfiguration: Equatable, Hashable {
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let pocketData: [PocketStoryState]
+    let pocketData: [PocketStoryConfiguration]
     let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderState(
@@ -43,7 +43,7 @@ struct PocketState: StateType, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryState],
+        pocketData: [PocketStoryConfiguration],
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID

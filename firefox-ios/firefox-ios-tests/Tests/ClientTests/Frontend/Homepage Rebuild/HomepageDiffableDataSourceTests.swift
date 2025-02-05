@@ -178,7 +178,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         return sites
     }
 
-    private func createStories(count: Int = 20) -> [PocketStoryState] {
+    private func createStories(count: Int = 20) -> [PocketStoryConfiguration] {
         var feedStories = [PocketFeedStory]()
         (0..<count).forEach {
             let story: PocketFeedStory = .make(title: "feed \($0)")
@@ -186,7 +186,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         }
 
         let stories = feedStories.compactMap {
-            PocketStoryState(story: PocketStory(pocketFeedStory: $0))
+            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
         }
         return stories
     }

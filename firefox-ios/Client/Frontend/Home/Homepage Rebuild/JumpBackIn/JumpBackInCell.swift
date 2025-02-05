@@ -101,7 +101,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
 
     // MARK: - Helpers
 
-    func configure(state: JumpBackInTabState, theme: Theme) {
+    func configure(config: JumpBackInTabConfiguration, theme: Theme) {
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: state.siteURL,
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
