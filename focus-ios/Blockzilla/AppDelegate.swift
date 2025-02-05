@@ -8,6 +8,7 @@ import Sentry
 import Combine
 import Onboarding
 import AppShortcuts
+import Shared
 
 enum AppPhase {
     case notRunning
@@ -322,11 +323,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+enum Environment: String {
+    case nightly = "Nightly"
+    case production = "Production"
+}
+
 // MARK: - Crash Reporting
 
 private let SentryDSNKey = "SentryDSN"
 
 extension AppDelegate {
+    private var environment: Environment {
+        var environment = Environment.production
+        if AppInfo.appVersion == AppConstants.nightlyAppVersion {
+            environment = Environment.nightly
+        }
+        return environment
+    }
+    
+    private var releaseName: String {
+        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
+    }
+
     func setupCrashReporting() {
         // Do not enable crash reporting if collection of anonymous usage data is disabled.
         if !Settings.getToggle(.crashToggle) {
@@ -336,6 +354,8 @@ extension AppDelegate {
         if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
             SentrySDK.start { options in
                 options.dsn = sentryDSN
+                options.environment = self.environment.rawValue
+                options.releaseName = self.releaseName
             }
         }
     }
