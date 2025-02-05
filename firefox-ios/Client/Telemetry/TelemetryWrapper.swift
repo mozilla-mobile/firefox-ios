@@ -102,6 +102,12 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
+        // Set the date that the app was last used as default browser
+        if let timestamp = profile.prefs.timestampForKey(PrefsKeys.LastOpenedAsDefaultBrowser) {
+            let date = Date.fromTimestamp(timestamp)
+            GleanMetrics.App.lastOpenedAsDefaultBrowser.set(date)
+        }
+
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"),
            let uuid = UUID(uuidString: uuidString) {
