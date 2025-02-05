@@ -123,18 +123,19 @@ typealias VoidReturnParameterCallback<T> = (T) -> Void
 
 import Common
 
-class PDFLoadingView: UIView {
-    private var document: PDFTemporaryDocument?
-    private var observedTokens = [NSKeyValueObservation]()
-    private let pdfIcon = UIImageView(image: UIImage(named: "pdf"))
+class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
+    private struct UX {
+        static let loadingBackgroundViewCornerRadius: CGFloat = 12.0
+    }
+
+    private let loadingBackgroundView = UIView()
+    private let loadingContainerView = UIStackView()
     private let loadingView = UIActivityIndicatorView(style: .large)
     private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
     private let filenameLabel = UILabel()
     private var isAnimating = false
-    private let theme: Theme
 
-    init(frame: CGRect, theme: Theme) {
-        self.theme = theme
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -143,14 +144,9 @@ class PDFLoadingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private struct UX {
-        static let pdfIconSize: CGFloat = 100
-    }
-
     // MARK: - Layout
 
     private func setup() {
-        backgroundColor = .clear
         backgroundView.alpha = 0.0
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(backgroundView)
@@ -161,116 +157,62 @@ class PDFLoadingView: UIView {
             backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
 
-        pdfIcon.contentMode = .scaleAspectFit
-        pdfIcon.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(pdfIcon)
+        loadingBackgroundView.alpha = 0.0
+        loadingBackgroundView.layer.cornerRadius = UX.loadingBackgroundViewCornerRadius
+        loadingBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(loadingBackgroundView)
         NSLayoutConstraint.activate([
-            pdfIcon.centerXAnchor.constraint(equalTo: centerXAnchor),
-            pdfIcon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -30.0),
-            pdfIcon.widthAnchor.constraint(equalToConstant: UX.pdfIconSize),
-            pdfIcon.heightAnchor.constraint(equalToConstant: UX.pdfIconSize)
+            loadingBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingBackgroundView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
-        filenameLabel.alpha = 0.0
-        filenameLabel.translatesAutoresizingMaskIntoConstraints = false
-        filenameLabel.text = "Loading... \(document?.filename ?? "")"
-        filenameLabel.textColor = theme.colors.textPrimary
-
-        addSubview(filenameLabel)
+        loadingContainerView.axis = .vertical
+        loadingContainerView.spacing = 8.0
+        loadingContainerView.translatesAutoresizingMaskIntoConstraints = false
+        loadingBackgroundView.addSubview(loadingContainerView)
         NSLayoutConstraint.activate([
-            filenameLabel.topAnchor.constraint(equalTo: pdfIcon.bottomAnchor, constant: 12.0),
-            filenameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingContainerView.leadingAnchor.constraint(equalTo: loadingBackgroundView.leadingAnchor, constant: 20.0),
+            loadingContainerView.trailingAnchor.constraint(equalTo: loadingBackgroundView.trailingAnchor, constant: -20.0),
+            loadingContainerView.topAnchor.constraint(equalTo: loadingBackgroundView.topAnchor, constant: 20.0),
+            loadingContainerView.bottomAnchor.constraint(equalTo: loadingBackgroundView.bottomAnchor, constant: -20.0)
         ])
 
         loadingView.alpha = 0.0
-        loadingView.color = theme.colors.iconPrimary
+        loadingView.style = .medium
         loadingView.startAnimating()
         loadingView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(loadingView)
-        NSLayoutConstraint.activate([
-            loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadingView.topAnchor.constraint(equalTo: filenameLabel.bottomAnchor, constant: 12.0)
-        ])
-    }
 
-    func addToSuperview(_ view: UIView) {
-        translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(self)
-        NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topAnchor.constraint(equalTo: view.topAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        filenameLabel.alpha = 0.0
+        filenameLabel.translatesAutoresizingMaskIntoConstraints = false
+        filenameLabel.text = "PDF Loading"
+        filenameLabel.font = FXFontStyles.Regular.footnote.scaledFont()
 
-        if let touchPoint = (view as? TabWebView)?.lastTouchedPoint {
-            let pdfIconPosition = CGPoint(x: touchPoint.x - frame.width / 2,
-                                          y: touchPoint.y - frame.height / 2 - (UX.pdfIconSize * 0.2 / 2.0))
-            pdfIcon.transform = CGAffineTransform(translationX: pdfIconPosition.x, y: pdfIconPosition.y).scaledBy(x: 0.2, y: 0.2)
-        }
+        filenameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        loadingContainerView.addArrangedSubview(loadingView)
+        loadingContainerView.addArrangedSubview(filenameLabel)
+
         UIView.animate(withDuration: 0.6, delay: 0.0) {
             self.isAnimating = true
-            self.pdfIcon.transform = .identity
         } completion: { _ in
             UIView.animate(withDuration: 0.3) {
                 self.backgroundView.alpha = 1
                 self.filenameLabel.alpha = 1
                 self.loadingView.alpha = 1
+                self.loadingBackgroundView.alpha = 1
             } completion: { _ in
                 self.isAnimating = false
-                if self.document?.localFileURL != nil {
-                    self.removeLoadingView()
-                }
             }
         }
     }
 
-    private func removeLoadingView() {
-        guard !self.isAnimating else { return }
-        guard let url = document?.localFileURL else { return }
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let data = try? Data(contentsOf: url) else { return }
-            ensureMainThread {
-                let webView = self.superview as? WKWebView
-                webView?.load(data, mimeType: "application/pdf", characterEncodingName: "", baseURL: url)
-            }
-        }
-    }
+    // MARK: - ThemeApplicable
 
-    // MARK: - Actions
-
-    func setDocument(_ document: PDFTemporaryDocument) {
-        self.document = document
-        filenameLabel.text = document.filename
-        setupObservers()
-        self.document?.download()
-    }
-
-    private func setupObservers() {
-        let documentLoadLocalURL = document?.observe(\.localFileURL) { [weak self] _, _ in
-            self?.removeLoadingView()
-            self?.document?.invalidateSession()
-        }
-        if let documentLoadLocalURL {
-            observedTokens.append(documentLoadLocalURL)
-        }
-        guard let webView = superview as? WKWebView else { return }
-        let goBackToken = webView.observe(\.canGoBack) { [weak self] _, _ in
-            self?.removeLoadingView()
-            self?.document?.invalidateSession()
-        }
-        let goForwardToken = webView.observe(\.canGoForward) { [weak self] _, _ in
-            self?.removeLoadingView()
-            self?.document?.invalidateSession()
-        }
-        observedTokens.append(contentsOf: [goBackToken, goForwardToken])
-    }
-
-    deinit {
-        observedTokens.forEach {
-            $0.invalidate()
-        }
+    func applyTheme(theme: any Theme) {
+        backgroundColor = theme.colors.layerScrim.withAlphaComponent(0.4)
+        loadingBackgroundView.backgroundColor = theme.colors.layer2
+        loadingView.color = theme.colors.iconPrimary
+        filenameLabel.textColor = theme.colors.textPrimary
     }
 }
 
@@ -289,6 +231,9 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
     @objc dynamic var localFileURL: URL?
     var onDownloadToURL: VoidReturnParameterCallback<URL>?
     var onDownloadProgressUpdate: VoidReturnParameterCallback<Double>?
+    var isDownloading: Bool {
+        return currentDownloadTask != nil
+    }
 
     init(
         filename: String?,
@@ -399,6 +344,8 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
 
     func invalidateSession() {
         currentDownloadTask?.cancel()
+        currentDownloadTask = nil
+        onDownloadProgressUpdate?(0.0)
         session.invalidateAndCancel()
     }
 
@@ -411,6 +358,7 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        currentDownloadTask = nil
         guard let url = storeTempDownloadFile(at: location) else { return }
         ensureMainThread { [weak self] in
             self?.onDownloadToURL?(url)
@@ -418,7 +366,7 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
-
+        currentDownloadTask = nil
     }
 
     func urlSession(

@@ -784,8 +784,9 @@ extension BrowserViewController: WKNavigationDelegate {
                            tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        let pdfLoadingView = PDFLoadingView(frame: webView.bounds, theme: currentTheme())
-        pdfLoadingView.addToSuperview(webView)
+        guard let webView = webView as? TabWebView else { return }
+        webView.showDocumentLoadingView()
+
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = PDFTemporaryDocument(
@@ -799,8 +800,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                    change: [.newKey: progress],
                                    context: nil)
             }
-            pdfLoadingView.setDocument(tempPDF)
-            tab?.temporaryDocument = tempPDF
+            tab?.enqueueDocument(tempPDF)
         }
     }
 
@@ -1017,7 +1017,7 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.stop()
         if webView.url?.isFileURL ?? false {
             let loadingView = webView.subviews.first {
-                $0 is PDFLoadingView
+                $0 is TemporaryDocumentLoadingView
             }
             UIView.animate(withDuration: 0.6, animations: {
                 loadingView?.alpha = 0

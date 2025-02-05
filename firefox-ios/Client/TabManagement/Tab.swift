@@ -460,6 +460,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isActive: Bool {
         return !isInactive
     }
+    private var observedKeyPathTokens = [NSKeyValueObservation]()
 
     init(profile: Profile,
          isPrivate: Bool = false,
@@ -610,7 +611,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         webView?.navigationDelegate = nil
 
         debugTabCount -= 1
-
+        removeKeyPathObservers()
 #if DEBUG
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
@@ -656,14 +657,17 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func goBack() {
+        guard !cancelTemporaryDocumentDownload() else { return }
         _ = webView?.goBack()
     }
 
     func goForward() {
+        guard !cancelTemporaryDocumentDownload() else { return }
         _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
+        cancelTemporaryDocumentDownload()
         _ = webView?.go(to: item)
     }
 
@@ -969,6 +973,57 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             return false
         }
     }
+
+    // MARK: - Temporary Document handling
+
+    /// Returns true if the download was cancelled
+    @discardableResult
+    private func cancelTemporaryDocumentDownload() -> Bool {
+        guard let temporaryDocument = temporaryDocument as? PDFTemporaryDocument else { return false }
+        if temporaryDocument.isDownloading {
+            temporaryDocument.invalidateSession()
+            self.temporaryDocument = nil
+            webView?.removeDocumentLoadingView()
+            return true
+        }
+        return false
+    }
+
+    func enqueueDocument(_ document: TemporaryDocument) {
+        temporaryDocument = document
+        guard let document = document as? PDFTemporaryDocument else { return }
+        setupObservers()
+        document.download()
+    }
+
+    private func setupObservers() {
+        guard let temporaryDocument = temporaryDocument as? PDFTemporaryDocument else { return }
+        removeKeyPathObservers()
+        let documentLoadToken = temporaryDocument.observe(\.localFileURL) { [weak temporaryDocument, weak self] _, _ in
+            temporaryDocument?.invalidateSession()
+            self?.webView?.removeDocumentLoadingView {
+                self?.loadDocumentOnWebView()
+            }
+        }
+        observedKeyPathTokens.append(documentLoadToken)
+    }
+
+    private func removeKeyPathObservers() {
+        for token in observedKeyPathTokens {
+            token.invalidate()
+        }
+        observedKeyPathTokens.removeAll()
+    }
+
+    private func loadDocumentOnWebView() {
+        guard let tempDocURL = (temporaryDocument as? PDFTemporaryDocument)?.localFileURL else { return }
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let data = try? Data(contentsOf: tempDocURL) else { return }
+            ensureMainThread {
+                self?.webView?.load(data, mimeType: "application/pdf", characterEncodingName: "", baseURL: tempDocURL)
+            }
+        }
+    }
 }
 
 extension Tab: UIGestureRecognizerDelegate {
@@ -1123,12 +1178,12 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, UIGestureRecognizerDelegate {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
-    var lastTouchedPoint: CGPoint = .zero
     let windowUUID: WindowUUID
+    private var documentLoadingView: TemporaryDocumentLoadingView?
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1170,19 +1225,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, UIGest
     init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(frame: frame, configuration: configuration)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        tapGesture.delegate = self
-        addGestureRecognizer(tapGesture)
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
-    }
-
-    @objc
-    private func onTap(_ gesture: UITapGestureRecognizer) {
-        lastTouchedPoint = gesture.location(in: self)
-        print(lastTouchedPoint)
     }
 
     required init?(coder: NSCoder) {
@@ -1242,6 +1284,33 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, UIGest
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+        }
+    }
+
+    // MARK: - Document loading handling
+
+    func showDocumentLoadingView() {
+        guard documentLoadingView == nil else { return }
+        let documentLoadingView = TemporaryDocumentLoadingView(frame: bounds)
+        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(documentLoadingView)
+        NSLayoutConstraint.activate([
+            documentLoadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            documentLoadingView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            documentLoadingView.topAnchor.constraint(equalTo: topAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        self.documentLoadingView = documentLoadingView
+    }
+
+    func removeDocumentLoadingView(_ completion: (() -> Void)? = nil) {
+        guard let documentLoadingView else { return }
+        UIView.animate(withDuration: 0.6) {
+            documentLoadingView.alpha = 0
+        } completion: { _ in
+            documentLoadingView.removeFromSuperview()
+            self.documentLoadingView = nil
+            completion?()
         }
     }
 }
