@@ -743,10 +743,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
-    // MARK: - Snackbars
-    func expireSnackbars() {
+    // MARK: - Login Alerts
+    func expireLoginAlerts() {
         for tab in tabs {
-            tab.expireSnackbars()
+            tab.expireLoginAlert()
         }
     }
 

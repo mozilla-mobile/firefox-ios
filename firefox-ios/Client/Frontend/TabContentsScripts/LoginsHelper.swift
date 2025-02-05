@@ -36,7 +36,9 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
-    private var snackBar: SnackBar?
+    private var loginAlert: SaveLoginAlert?
+    private var loginAlertTimer: Timer?
+    private var loginAlertTimeout: TimeInterval = 10
     private var currentRequestId: String = ""
     private var logger: Logger = DefaultLogger.shared
 
@@ -59,6 +61,14 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         self.tab = tab
         self.profile = profile
         self.theme = theme
+    }
+
+    func prepareForDeinit() {
+        self.loginAlertTimer = nil
+        if let loginAlert {
+            self.loginAlert = nil
+            tab?.removeLoginAlert(loginAlert)
+        }
     }
 
     func scriptMessageHandlerNames() -> [String]? {
@@ -280,35 +290,32 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             promptMessage = String(format: .SaveLoginPrompt, url)
         }
 
-        if let existingPrompt = self.snackBar {
-            tab?.removeSnackbar(existingPrompt)
+        if let existingPrompt = self.loginAlert {
+            tab?.removeLoginAlert(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: StandardImageIdentifiers.Large.login))
-        let dontSave = SnackButton(
-            title: .LoginsHelperDontSaveButtonTitle,
-            accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton",
-            bold: false
-        ) { bar in
-            self.tab?.removeSnackbar(bar)
-            self.snackBar = nil
-            return
-        }
-        let save = SnackButton(
-            title: .LoginsHelperSaveLoginButtonTitle,
-            accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton",
-            bold: true
-        ) { bar in
-            self.tab?.removeSnackbar(bar)
-            self.snackBar = nil
+        let alert = SaveLoginAlert()
+        alert.saveAction = {
+            self.tab?.removeLoginAlert(alert)
+            self.loginAlert = nil
             self.sendLoginsSavedTelemetry()
             self.profile.logins.addLogin(login: login, completionHandler: { _ in })
         }
+        alert.notNotAction = {
+            self.tab?.removeLoginAlert(alert)
+            self.loginAlert = nil
+        }
 
-        applyTheme(for: dontSave, save)
-        snackBar?.addButton(dontSave)
-        snackBar?.addButton(save)
-        tab?.addSnackbar(snackBar!)
+        let viewModel = SaveLoginAlertViewModel(
+            saveButtonTitle: .LoginsHelperSaveLoginButtonTitle,
+            saveButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.saveButton,
+            notNowButtonTitle: .LoginsHelperDontSaveButtonTitle,
+            notNowButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.notNowButton,
+            titleText: promptMessage
+        )
+        alert.configure(viewModel: viewModel)
+
+        show(alert)
     }
 
     private func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
@@ -322,34 +329,55 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             formatted = String(format: .UpdateLoginPrompt, new.hostname)
         }
 
-        if let existingPrompt = self.snackBar {
-            tab?.removeSnackbar(existingPrompt)
+        if let existingPrompt = self.loginAlert {
+            tab?.removeLoginAlert(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: StandardImageIdentifiers.Large.login))
-        let dontSave = SnackButton(
-            title: .LoginsHelperDontUpdateButtonTitle,
-            accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton",
-            bold: false
-        ) { bar in
-            self.tab?.removeSnackbar(bar)
-            self.snackBar = nil
-        }
-        let update = SnackButton(
-            title: .LoginsHelperUpdateButtonTitle,
-            accessibilityIdentifier: "UpdateLoginPrompt.updateButton",
-            bold: true
-        ) { bar in
-            self.tab?.removeSnackbar(bar)
-            self.snackBar = nil
+        let alert = SaveLoginAlert()
+        alert.saveAction = {
+            self.tab?.removeLoginAlert(alert)
+            self.loginAlert = nil
             self.sendLoginsModifiedTelemetry()
             self.profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
         }
+        alert.notNotAction = {
+            self.tab?.removeLoginAlert(alert)
+            self.loginAlert = nil
+        }
 
-        applyTheme(for: dontSave, update)
-        snackBar?.addButton(dontSave)
-        snackBar?.addButton(update)
-        tab?.addSnackbar(snackBar!)
+        let viewModel = SaveLoginAlertViewModel(
+            saveButtonTitle: .LoginsHelperUpdateButtonTitle,
+            saveButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.updateButton,
+            notNowButtonTitle: .LoginsHelperDontUpdateButtonTitle,
+            notNowButtonA11yId: AccessibilityIdentifiers.SaveLoginAlert.dontUpdateButton,
+            titleText: formatted
+        )
+        alert.configure(viewModel: viewModel)
+
+        show(alert)
+    }
+
+    private func show(_ alert: SaveLoginAlert) {
+        loginAlert = alert
+        loginAlert?.applyTheme(theme: theme)
+        tab?.addLoginAlert(alert)
+
+        let timer = Timer(
+            timeInterval: loginAlertTimeout,
+            target: self,
+            selector: #selector(timerDone),
+            userInfo: nil,
+            repeats: false
+        )
+        RunLoop.current.add(timer, forMode: RunLoop.Mode.default)
+        loginAlert?.shouldPersist = true
+        loginAlertTimer = timer
+    }
+
+    @objc
+    func timerDone() {
+        loginAlert?.shouldPersist = false
+        loginAlertTimer = nil
     }
 
     private func requestLogins(_ request: [String: Any], url: URL) {
