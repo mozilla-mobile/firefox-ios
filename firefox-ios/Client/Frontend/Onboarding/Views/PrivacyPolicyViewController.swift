@@ -89,7 +89,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
         }
 
         let config = WKWebViewConfiguration()
-        config.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
+        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
         let webView = WKWebView(frame: frame, configuration: config)
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
@@ -112,52 +112,8 @@ extension PrivacyPolicyViewController: WKNavigationDelegate {
         withError error: any Error
     ) {
         let error = error as NSError
-        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            guard var errorPageURLComponents = URLComponents(
-                string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
-                ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
-                return
-            }
-
-            errorPageURLComponents.queryItems = [
-                URLQueryItem(
-                    name: InternalURL.Param.url.rawValue,
-                    value: url.absoluteString
-                ),
-                URLQueryItem(
-                    name: "code",
-                    value: String(
-                        error.code
-                    )
-                )
-            ]
-
-            if let errorPageURL = errorPageURLComponents.url {
-                /// Used for checking if current error code is for no internet connection
-                let noInternetErrorCode = Int(
-                    CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-                )
-
-                if isNativeErrorPageEnabled {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else {
-                    ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
-                }
-            } else {
-                ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
-            }
+        if error.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
+            ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
         }
     }
 
