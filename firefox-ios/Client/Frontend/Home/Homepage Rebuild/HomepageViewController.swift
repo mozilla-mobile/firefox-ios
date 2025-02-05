@@ -554,13 +554,15 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Item selected at \(point) but does not navigate to context menu",
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
                 category: .homepage
             )
             return
         }
-        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        if section.canHandleLongPress {
+            navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        }
     }
 
     // MARK: Dispatch Actions
