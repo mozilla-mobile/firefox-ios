@@ -56,7 +56,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     let windowUUID: WindowUUID
     let logger: Logger
 
-    var isTrackingProtectionDisplayed: Bool = false
+    var isTrackingProtectionDisplayed = false
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
