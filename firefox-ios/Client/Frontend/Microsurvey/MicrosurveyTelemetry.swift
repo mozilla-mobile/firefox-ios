@@ -29,7 +29,7 @@ struct MicrosurveyTelemetry {
 
     func userResponseSubmitted(surveyId: String, userSelection: String) {
         let submitExtra = GleanMetrics.Microsurvey.SubmitButtonTappedExtra(surveyId: surveyId, userSelection: userSelection)
-        gleanWrapper.recordEvent(for: GleanMetrics.Microsurvey.submitButtonTapped, submitExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Microsurvey.submitButtonTapped, extras: submitExtra)
     }
 
     func confirmationShown(surveyId: String) {
