@@ -46,7 +46,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     }
 
     private lazy var textLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Bold.body.scaledFont()
         label.backgroundColor = .clear
     }
 
@@ -158,7 +158,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
 
         shadowView.layer.shadowRadius = UX.shadowRadius
         shadowView.layer.shadowOffset = UX.shadowOffset
-        shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        shadowView.layer.shadowColor = theme.colors.shadowStrong.cgColor
         shadowView.layer.shadowOpacity = UX.shadowOpacity
     }
 
