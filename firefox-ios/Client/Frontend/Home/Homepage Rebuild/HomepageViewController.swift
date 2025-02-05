@@ -429,7 +429,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(item: item, theme: currentTheme)
+            bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
