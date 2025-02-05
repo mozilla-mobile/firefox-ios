@@ -34,13 +34,13 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: NavigationToolbarState, toolbarDelegate: BrowserNavigationToolbarDelegate) {
+    public func configure(config: NavigationToolbarState, toolbarDelegate: BrowserNavigationToolbarDelegate) {
         self.toolbarDelegate = toolbarDelegate
 
-        updateActionStack(toolbarElements: state.actions)
+        updateActionStack(toolbarElements: config.actions)
 
         // Update border
-        toolbarBorderHeightConstraint?.constant = state.shouldDisplayBorder ? UX.borderHeight : 0
+        toolbarBorderHeightConstraint?.constant = config.shouldDisplayBorder ? UX.borderHeight : 0
     }
 
     // MARK: - Private

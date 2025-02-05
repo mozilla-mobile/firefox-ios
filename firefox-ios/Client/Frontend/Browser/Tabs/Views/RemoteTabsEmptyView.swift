@@ -68,7 +68,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(state: RemoteTabsPanelEmptyStateReason,
+    func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?) {
         self.delegate = delegate
 
