@@ -61,6 +61,13 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         self.theme = theme
     }
 
+    func prepareForDeinit() {
+        if let loginAlert {
+            self.loginAlert = nil
+            tab?.removeLoginAlert(loginAlert)
+        }
+    }
+
     func scriptMessageHandlerNames() -> [String]? {
         return ["loginsManagerMessageHandler"]
     }
