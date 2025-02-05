@@ -125,7 +125,7 @@ class MockTabManager: TabManager {
         return nil
     }
 
-    func expireSnackbars() {}
+    func expireLoginAlerts() {}
 
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         return .createdNewTab
