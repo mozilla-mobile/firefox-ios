@@ -11,6 +11,14 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var bookmarks: [BookmarkState]
 
+    let sectionHeaderState = SectionHeaderState(
+        title: .BookmarksSectionTitle,
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
+        isButtonHidden: false,
+        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
+        buttonTitle: .BookmarksSavedShowAllText
+    )
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,

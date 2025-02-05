@@ -14,6 +14,7 @@ final class HomepageSectionLayoutProvider {
         static let iPadInset: CGFloat = 50
         static let spacingBetweenSections: CGFloat = 62
         static let standardSingleItemHeight: CGFloat = 100
+        static let sectionHeaderHeight: CGFloat = 34
 
         static func leadingInset(
             traitCollection: UITraitCollection,
@@ -39,7 +40,6 @@ final class HomepageSectionLayoutProvider {
             static let numberOfItemsInColumn = 3
             static let fractionalWidthiPhonePortrait: CGFloat = 0.90
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.46
-            static let headerFooterHeight: CGFloat = 34
             static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
 
             // The dimension of a cell
@@ -63,7 +63,6 @@ final class HomepageSectionLayoutProvider {
 
         struct JumpBackInConstants {
             static let itemHeight: CGFloat = 112
-            static let sectionHeaderHeight: CGFloat = 34
         }
 
         struct BookmarksConstants {
@@ -169,7 +168,7 @@ final class HomepageSectionLayoutProvider {
         let section = NSCollectionLayoutSection(group: group)
 
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                      heightDimension: .estimated(UX.PocketConstants.headerFooterHeight))
+                                                      heightDimension: .estimated(UX.sectionHeaderHeight))
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize,
                                                                  elementKind: UICollectionView.elementKindSectionHeader,
                                                                  alignment: .top)
@@ -242,7 +241,7 @@ final class HomepageSectionLayoutProvider {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.sectionHeaderHeight)
+            heightDimension: .estimated(UX.sectionHeaderHeight)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -276,12 +275,23 @@ final class HomepageSectionLayoutProvider {
 
         let section = NSCollectionLayoutSection(group: group)
 
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.sectionHeaderHeight)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
             bottom: UX.spacingBetweenSections,
-            trailing: 0)
+            trailing: leadingInset)
 
         section.interGroupSpacing = UX.interGroupSpacing
         section.orthogonalScrollingBehavior = .continuous

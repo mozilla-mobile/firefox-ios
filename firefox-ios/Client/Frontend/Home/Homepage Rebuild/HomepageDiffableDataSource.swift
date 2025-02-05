@@ -18,7 +18,7 @@ final class HomepageDiffableDataSource:
         case messageCard
         case topSites(NumberOfTilesPerRow)
         case jumpBackIn(TextColor?)
-        case bookmarks
+        case bookmarks(TextColor?)
         case pocket(TextColor?)
         case customizeHomepage
 
@@ -84,8 +84,8 @@ final class HomepageDiffableDataSource:
         }
 
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
-            snapshot.appendSections([.bookmarks])
-            snapshot.appendItems(bookmarks, toSection: .bookmarks)
+            snapshot.appendSections([.bookmarks(textColor)])
+            snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
         if let stories = getPocketStories(with: state.pocketState) {
