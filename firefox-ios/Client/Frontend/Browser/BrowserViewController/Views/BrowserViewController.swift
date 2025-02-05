@@ -2591,6 +2591,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Handle Deeplink open URL / query
 
     func handle(query: String, isPrivate: Bool) {
+        cancelEditMode()
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if isToolbarRefactorEnabled {
             openBrowser(searchTerm: query)
@@ -2601,7 +2602,8 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        if let url = url {
+        cancelEditMode()
+        if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
                 AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
             }
@@ -2615,7 +2617,8 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
-        if let url = url {
+        cancelEditMode()
+        if let url {
             switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
                 AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
             }
@@ -2626,8 +2629,17 @@ class BrowserViewController: UIViewController,
     }
 
     func handleQRCode() {
+        cancelEditMode()
         openBlankNewTab(focusLocationField: false, isPrivate: false)
         navigationHandler?.showQRCode(delegate: self)
+    }
+
+    // MARK: - Toolbar Refactor Deeplink Helper Method.
+    private func cancelEditMode() {
+        if isToolbarRefactorEnabled {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
+        }
     }
 
     func closeAllPrivateTabs() {
