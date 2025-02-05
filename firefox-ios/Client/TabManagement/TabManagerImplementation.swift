@@ -1308,6 +1308,7 @@ extension TabManagerImplementation: WKNavigationDelegate {
 
             if let title = webView.title, selectedTab?.webView == webView {
                 selectedTab?.lastTitle = title
+                selectedTab?.displayTitle = title
             }
 
             storeChanges()

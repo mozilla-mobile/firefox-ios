@@ -230,6 +230,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         // Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
             return shownUrl
+            // this is what happens when we type the url but don't get the title
         }
 
         // Finally, somehow lastTitle is persisted (and webView's title isn't).
@@ -252,7 +253,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             backUpName = about
         }
 
-        return displayTitle.isEmpty ? backUpName : displayTitle
+        if displayTitle.isEmpty {
+            return backUpName
+        } else {
+            return displayTitle
+        }
+//        return displayTitle.isEmpty ? backUpName : displayTitle
     }
 
     var canGoBack: Bool {
@@ -385,7 +391,13 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var contentBlocker: FirefoxTabContentBlocker?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
-    var lastTitle: String?
+    var lastTitle: String? {
+        didSet {
+            guard let title = lastTitle else { return }
+            print(title)
+            print("hi")
+        }
+    }
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
     var changedUserAgent = false {
