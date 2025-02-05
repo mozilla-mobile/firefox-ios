@@ -38,7 +38,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         self.appAuthenticator = nil
         self.delegate = nil
         self.applicationHelper = nil
-
+        
         super.tearDown()
     }
 
