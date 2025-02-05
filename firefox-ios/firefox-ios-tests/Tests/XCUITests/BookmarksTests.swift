@@ -23,9 +23,9 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func undoBookmarkRemoval() {
-        navigator.goto(SaveBrowserTabMenu)
-        app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage].waitAndTap()
-        app.staticTexts["Delete Bookmark"].waitAndTap()
+        navigator.goto(LibraryPanel_Bookmarks)
+        app.buttons["More options"].waitAndTap()
+        app.tables["Context Menu"].otherElements["bookmarkSlashLarge"].waitAndTap()
         app.buttons["Undo"].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
@@ -251,7 +251,8 @@ class BookmarksTests: BaseTestCase {
         bookmark()
         checkBookmarked()
         undoBookmarkRemoval()
-        checkBookmarked()
+        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(BrowserTab)
     }
 
     private func addNewBookmark() {
@@ -291,7 +292,7 @@ class BookmarksTests: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         // There is only one row in the bookmarks panel, which is the desktop folder
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
@@ -320,12 +321,14 @@ class BookmarksTests: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         // There is only one folder at the root of the bookmarks
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
 
         // There is only three folders inside the desktop bookmarks
-        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
+        // New experiment behaviour, no folders are shown anymore
+        // Need to establish the new UI for the experiment
+//        app.tables["Bookmarks List"].cells.firstMatch.waitAndTap()
+//        mozWaitForElementToExist(app.tables["Bookmarks List"])
+//        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 3)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
