@@ -27,8 +27,7 @@ class SnapshotTests: BaseTestCaseL10n {
         app.cells["settingsViewController.siriOpenURLCell"].tap()
         snapshot("SiriMenu")
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
-        waitForExistence(app.cells["settingsViewController.siriOpenURLCell"])
-        app.swipeDown()
+        openSettings()
 
         // Tracking Protection menu
         waitForExistence(app.cells["settingsViewController.trackingCell"])
