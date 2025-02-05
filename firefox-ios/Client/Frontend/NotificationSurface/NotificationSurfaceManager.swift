@@ -14,10 +14,10 @@ protocol NotificationSurfaceDelegate: AnyObject {
 
 class NotificationSurfaceManager: NotificationSurfaceDelegate {
     struct Constant {
-        static let notificationBaseId: String = "org.mozilla.ios.notification"
-        static let notificationCategoryId: String = "org.mozilla.ios.notification.category"
+        static let notificationBaseId = "org.mozilla.ios.notification"
+        static let notificationCategoryId = "org.mozilla.ios.notification.category"
         static let messageDelay: CGFloat = 3 // seconds
-        static let messageIdKey: String = "messageId"
+        static let messageIdKey = "messageId"
     }
 
     // MARK: - Properties

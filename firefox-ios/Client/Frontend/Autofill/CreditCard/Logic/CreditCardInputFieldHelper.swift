@@ -46,7 +46,7 @@ class CreditCardInputFieldHelper {
 
     func addCreditCardDelimiter(sanitizedCCNum: String) -> String {
         let delimiter = "-"
-        let delimiterAfterXChars: Int = 4
+        let delimiterAfterXChars = 4
         let formattedText = updateStringWithInserting(
             valToUpdate: sanitizedCCNum,
             separator: delimiter,
@@ -57,7 +57,7 @@ class CreditCardInputFieldHelper {
     private func updateStringWithInserting(valToUpdate: String,
                                            separator: String,
                                            every n: Int) -> String {
-        var result: String = ""
+        var result = ""
         let characters = Array(valToUpdate)
         stride(from: 0, to: characters.count, by: n).forEach {
             result += String(characters[$0..<min($0+n, characters.count)])

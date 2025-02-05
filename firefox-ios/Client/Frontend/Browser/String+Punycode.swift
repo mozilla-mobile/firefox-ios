@@ -8,7 +8,7 @@ private let base = 36
 private let tMin = 1
 private let tMax = 26
 private let initialBias = 72
-private let initialN: Int = 128 // 0x80
+private let initialN = 128 // 0x80
 private let delimiter: Character = "-" // '\x2D'
 private let prefixPunycode = "xn--"
 private let asciiPunycode = Array("abcdefghijklmnopqrstuvwxyz0123456789")
@@ -38,7 +38,7 @@ extension String {
 
     fileprivate func encode(_ input: String) -> String {
         var output = ""
-        var d: Int = 0
+        var d = 0
         var extendedChars = [Int]()
         for c in input.unicodeScalars {
             if Int(c.value) < initialN {
@@ -58,8 +58,8 @@ extension String {
         var n = initialN
         var delta = 0
         var bias = initialBias
-        var h: Int = 0
-        var b: Int = 0
+        var h = 0
+        var b = 0
 
         if d > 0 {
             h = output.unicodeScalars.count - 1

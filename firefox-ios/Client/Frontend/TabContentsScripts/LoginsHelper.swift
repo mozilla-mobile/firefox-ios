@@ -22,7 +22,7 @@ struct FieldFocusMessage: Codable {
 
 struct LoginInjectionData: Codable {
     var requestId: String
-    var name: String = "RemoteLogins:loginsFound"
+    var name = "RemoteLogins:loginsFound"
     var logins: [LoginItem]
 }
 
@@ -37,7 +37,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private let profile: Profile
     private let theme: Theme
     private var snackBar: SnackBar?
-    private var currentRequestId: String = ""
+    private var currentRequestId = ""
     private var logger: Logger = DefaultLogger.shared
 
     public var foundFieldValues: ((FocusFieldType, String) -> Void)?

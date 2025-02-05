@@ -40,7 +40,7 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInFxaOptions: FxALaunchParams?
     var presentSignInFlowType: FxAPageType?
     var presentSignInReferringPage: ReferringPage?
-    var presentSignInCount: Int = 0
+    var presentSignInCount = 0
 
     var qrCodeCount = 0
     var closePrivateTabsWidgetAction = 0

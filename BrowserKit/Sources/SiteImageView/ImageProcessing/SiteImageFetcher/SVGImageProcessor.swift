@@ -11,7 +11,7 @@ import SwiftDraw
 public struct SVGImageProcessor: ImageProcessor {
     // `identifier` should be the same for processors with the same properties/functionality
     // It will be used when storing and retrieving the image to/from cache.
-    public var identifier: String = "com.mozilla.SVGImageProcessor"
+    public var identifier = "com.mozilla.SVGImageProcessor"
 
     private let defaultFaviconSize = CGSize(width: 360, height: 360)
 

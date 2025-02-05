@@ -114,7 +114,6 @@ file_header:
 
 redundant_type_annotation:
   consider_default_literal_types_redundant: true
-  ignore_properties: false
 
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import

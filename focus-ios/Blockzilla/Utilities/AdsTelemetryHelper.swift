@@ -104,7 +104,7 @@ class AdsTelemetryHelper {
     }
     var adsTelemetryRedirectUrlList = [URL]()
     var startingSearchUrlWithAds: URL?
-    var adsProviderName: String = ""
+    var adsProviderName = ""
 
     func trackAds(message: WKScriptMessage) {
         guard

@@ -12,7 +12,7 @@ public extension SetIterator {
             return []
         }
 
-        var count: Int = 0
+        var count = 0
         var out: [Element] = []
 
         while count < n {

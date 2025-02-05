@@ -7,7 +7,7 @@ import WidgetKit
 import Combine
 
 struct TopSitesWidget: Widget {
-    private let kind: String = "Top Sites"
+    private let kind = "Top Sites"
 
      var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TopSitesProvider()) { entry in
