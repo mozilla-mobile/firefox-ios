@@ -49,7 +49,7 @@ class ThrottlerTests: XCTestCase {
     }
 
     func testSecondCallAfterDelayThresholdCallsBothClosures() {
-        let threshold: Double = 0.5
+        let threshold = 0.5
         let step: Double = (threshold / 2.0)
         prepareTest(timeout: threshold)
 

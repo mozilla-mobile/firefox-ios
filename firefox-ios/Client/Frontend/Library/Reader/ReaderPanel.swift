@@ -27,7 +27,7 @@ private struct ReadingListTableViewCellUX {
 }
 
 class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
-    var title: String = "Example" {
+    var title = "Example" {
         didSet {
             titleLabel.text = title
             updateAccessibilityLabel()

@@ -11,7 +11,7 @@ import WebKit
 import SiteImageView
 import Common
 
-let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
+let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 
 private let searchableIndex = CSSearchableIndex.default()
 

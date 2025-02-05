@@ -10,7 +10,7 @@ class FakespotStarRatingView: UIView, ThemeApplicable {
         static let starCount = 5
     }
 
-    var rating: Double = 0.0
+    var rating = 0.0
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal

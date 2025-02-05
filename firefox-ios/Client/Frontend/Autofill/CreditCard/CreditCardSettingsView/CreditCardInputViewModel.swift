@@ -115,15 +115,15 @@ class CreditCardInputViewModel: ObservableObject {
                    _ successVal: Bool) -> Void)?
 
     @Published var state: CreditCardEditState
-    @Published var errorState: String = ""
-    @Published var enteredValue: String = ""
+    @Published var errorState = ""
+    @Published var enteredValue = ""
     @Published var cardType: CreditCardType?
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var showExpirationError = false
-    @Published var nameOnCard: String = ""
+    @Published var nameOnCard = ""
 
-    @Published var expirationDate: String = "" {
+    @Published var expirationDate = "" {
         didSet {
             var dateVal = expirationDate
             if state == .view {
@@ -133,7 +133,7 @@ class CreditCardInputViewModel: ObservableObject {
         }
     }
 
-    @Published var cardNumber: String = "" {
+    @Published var cardNumber = "" {
         willSet {
             // Set the card type
             self.cardType = creditCardValidator.cardTypeFor(newValue)

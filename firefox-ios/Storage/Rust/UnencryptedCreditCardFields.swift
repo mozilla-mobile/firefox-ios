@@ -8,12 +8,12 @@ import struct MozillaAppServices.CreditCard
 
 // Note: This was created in lieu of a view model
 public struct UnencryptedCreditCardFields {
-    public var ccName: String = ""
-    public var ccNumber: String = ""
-    public var ccNumberLast4: String = ""
+    public var ccName = ""
+    public var ccNumber = ""
+    public var ccNumberLast4 = ""
     public var ccExpMonth: Int64 = 0
     public var ccExpYear: Int64 = 0
-    public var ccType: String = ""
+    public var ccType = ""
 
     public init() { }
 

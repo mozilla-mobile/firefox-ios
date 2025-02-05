@@ -112,6 +112,9 @@ file_header:
                     // License, v. 2.0. If a copy of the MPL was not distributed with this
                     // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+redundant_type_annotation:
+  consider_default_literal_types_redundant: true
+
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 

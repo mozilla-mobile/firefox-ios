@@ -31,7 +31,7 @@ class RecordedNimbusContext: RecordedContext {
     /**
      * The following constants are string constants of the keys that appear in the [EVENT_QUERIES] map.
      */
-    static let DAYS_OPENED_IN_LAST_28: String = "days_opened_in_last_28"
+    static let DAYS_OPENED_IN_LAST_28 = "days_opened_in_last_28"
 
     /**
      * [EVENT_QUERIES] is a map of keys to Nimbus SDK EventStore queries.

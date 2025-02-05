@@ -15,9 +15,9 @@ struct UIConstants {
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let autocompleteAnimationDuration: TimeInterval = 0.2
         static let autocompleteAfterDelayDuration: TimeInterval = 0.5
-        static let overlayButtonHeight: Int = 56
-        static let smallDeviceMaxNumSuggestions: Int = 4
-        static let largeDeviceMaxNumSuggestions: Int = 5
+        static let overlayButtonHeight = 56
+        static let smallDeviceMaxNumSuggestions = 4
+        static let largeDeviceMaxNumSuggestions = 5
         static let searchButtonInset: CGFloat = 15
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
