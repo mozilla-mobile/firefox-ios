@@ -166,14 +166,14 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    private func createSites(count: Int = 30) -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
             let site = Site.createBasicSite(
                 url: "www.url\($0).com",
                 title: "Title \($0)"
             )
-            sites.append(TopSiteState(site: site))
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }

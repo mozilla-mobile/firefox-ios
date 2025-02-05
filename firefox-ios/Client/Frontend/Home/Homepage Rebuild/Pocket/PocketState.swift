@@ -7,7 +7,7 @@ import Foundation
 import Redux
 import Shared
 
-struct PocketDiscoverState: Equatable, Hashable {
+struct PocketDiscoverConfiguration: Equatable, Hashable {
     var title: String
     var url: URL?
 }
@@ -23,7 +23,7 @@ struct PocketState: StateType, Equatable {
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
     )
 
-    let pocketDiscoverItem = PocketDiscoverState(
+    let pocketDiscoverItem = PocketDiscoverConfiguration(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL
     )

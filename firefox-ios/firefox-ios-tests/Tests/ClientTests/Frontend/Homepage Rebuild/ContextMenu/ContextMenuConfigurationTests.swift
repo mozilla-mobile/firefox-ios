@@ -40,7 +40,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
 
     func tests_initialState_forPocketDiscoverItem_returnsExpectedState() {
         let pocketItem: HomepageItem = .pocketDiscover(
-            PocketDiscoverState(
+            PocketDiscoverConfiguration(
                 title: "Discover Site 0",
                 url: URL("www.example.com/1234")
             )
@@ -56,7 +56,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
 
     func tests_initialState_forTopSitesItem_returnsExpectedState() {
         let topSiteItem: HomepageItem = .topSite(
-            TopSiteState(
+            TopSiteConfiguration(
                 site: Site.createBasicSite(url: "www.example.com/1234", title: "Site 0")
             ), nil
         )

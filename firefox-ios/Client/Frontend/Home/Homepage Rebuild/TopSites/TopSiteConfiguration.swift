@@ -7,7 +7,7 @@ import Storage
 import Shared
 
 /// Top site UI class, used in the homepage top site section
-struct TopSiteState: Hashable, Equatable {
+struct TopSiteConfiguration: Hashable, Equatable {
     var site: Site
     var title: String
 

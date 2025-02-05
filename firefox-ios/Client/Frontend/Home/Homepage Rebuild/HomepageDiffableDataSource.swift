@@ -35,13 +35,13 @@ final class HomepageDiffableDataSource:
     enum HomeItem: Hashable {
         case header(HeaderState)
         case messageCard(MessageCardConfiguration)
-        case topSite(TopSiteState, TextColor?)
+        case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
         case jumpBackIn(JumpBackInTabState)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkState)
         case pocket(PocketStoryState)
-        case pocketDiscover(PocketDiscoverState)
+        case pocketDiscover(PocketDiscoverConfiguration)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
