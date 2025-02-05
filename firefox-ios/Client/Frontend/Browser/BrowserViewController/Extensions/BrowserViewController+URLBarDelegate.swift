@@ -206,7 +206,7 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.Search
             .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()
-        searchTelemetry?.shouldSetUrlTypeSearch = true
+        searchTelemetry.shouldSetUrlTypeSearch = true
 
         let searchData = LegacyTabGroupData(searchTerm: text,
                                             searchUrl: searchURL.absoluteString,
