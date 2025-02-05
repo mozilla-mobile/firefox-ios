@@ -8,7 +8,7 @@ class ItemListCell: UITableViewCell {
     static let identifier = "itemListCell"
 
     lazy var titleLabel: UILabel = .build { label in
-        label.textColor = UIColor.CredentialProvider.titleColor
+        label.textColor = CredentialProvider.titleColor
         label.font = .systemFont(ofSize: 16)
     }
 
@@ -25,7 +25,7 @@ class ItemListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = UIColor.CredentialProvider.cellBackgroundColor
+        backgroundColor = CredentialProvider.cellBackgroundColor
         contentView.addSubviews(titleLabel, detailLabel, separatorView)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 14),
@@ -44,6 +44,6 @@ class ItemListCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        backgroundColor = selected ? .lightGray : UIColor.CredentialProvider.cellBackgroundColor
+        backgroundColor = selected ? .lightGray : CredentialProvider.cellBackgroundColor
     }
 }

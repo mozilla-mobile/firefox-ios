@@ -16,7 +16,7 @@ class SelectPasswordCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+        backgroundColor = CredentialProvider.tableViewBackgroundColor
 
         contentView.addSubview(selectLabel)
         NSLayoutConstraint.activate([

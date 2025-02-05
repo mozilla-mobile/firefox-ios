@@ -9,7 +9,7 @@ class EmptyPlaceholderCell: UITableViewCell {
     static let identifier = "emptyPlaceholderCell"
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.textColor = UIColor.CredentialProvider.titleColor
+        label.textColor = CredentialProvider.titleColor
         label.text = .LoginsListNoLoginsFoundTitle
         label.font = UIFont.systemFont(ofSize: 15)
     }
@@ -25,7 +25,7 @@ class EmptyPlaceholderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+        backgroundColor = CredentialProvider.tableViewBackgroundColor
 
         contentView.addSubviews(titleLabel, descriptionLabel)
         NSLayoutConstraint.activate([

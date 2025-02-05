@@ -61,7 +61,7 @@ class CredentialWelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
+        view.backgroundColor = CredentialProvider.welcomeScreenBackgroundColor
 
         view.addSubviews(cancelButton, logoImageView, titleLabel, taglineLabel, proceedButton)
 

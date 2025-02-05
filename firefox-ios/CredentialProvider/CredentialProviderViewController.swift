@@ -17,7 +17,23 @@ protocol CredentialProviderViewProtocol: AnyObject {
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
-final class CredentialProviderViewController: ASCredentialProviderViewController {
+struct CredentialProvider {
+    static var titleColor: UIColor? {
+        return UIColor(named: "labelColor")
+    }
+
+    static var cellBackgroundColor: UIColor? {
+        return UIColor(named: "credentialCellColor")
+    }
+
+    static var tableViewBackgroundColor: UIColor = .systemGroupedBackground
+
+    static var welcomeScreenBackgroundColor: UIColor? {
+        return UIColor(named: "launchScreenBackgroundColor")
+    }
+}
+
+class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
     private let appAuthenticator = AppAuthenticator()
 
