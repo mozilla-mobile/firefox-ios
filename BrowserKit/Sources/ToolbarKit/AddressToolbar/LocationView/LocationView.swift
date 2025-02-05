@@ -331,9 +331,8 @@ final class LocationView: UIView,
         // Once the user started typing we should not update the text anymore as that interferes with
         // setting the autocomplete suggestions which is done using a delegate method.
         guard !config.didStartTyping else { return }
-
-        let configurationSearchTerm = config.searchTerm
-        let text = (configurationSearchTerm != nil) && configurationIsEditing ? configurationSearchTerm : config.url?.absoluteString
+        let shouldShowSearchTerm = (config.searchTerm != nil) && configurationIsEditing
+        let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
         // Start overlay mode & select text when in edit mode with a search term

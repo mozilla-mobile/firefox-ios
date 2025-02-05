@@ -34,7 +34,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(config: NavigationToolbarState, toolbarDelegate: BrowserNavigationToolbarDelegate) {
+    public func configure(config: NavigationToolbarConfiguration, toolbarDelegate: BrowserNavigationToolbarDelegate) {
         self.toolbarDelegate = toolbarDelegate
 
         updateActionStack(toolbarElements: config.actions)

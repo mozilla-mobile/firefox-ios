@@ -102,16 +102,16 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
     // MARK: - Helpers
 
     func configure(config: JumpBackInTabConfiguration, theme: Theme) {
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: state.siteURL,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: config.siteURL,
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
 
-        let faviconViewModel = FaviconImageViewModel(siteURLString: state.siteURL)
+        let faviconViewModel = FaviconImageViewModel(siteURLString: config.siteURL)
         websiteImage.setFavicon(faviconViewModel)
 
-        itemTitle.text = state.titleText
-        websiteLabel.text = state.descriptionText
-        accessibilityLabel = state.accessibilityLabel
+        itemTitle.text = config.titleText
+        websiteLabel.text = config.descriptionText
+        accessibilityLabel = config.accessibilityLabel
         adjustLayout()
 
         applyTheme(theme: theme)

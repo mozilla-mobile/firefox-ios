@@ -72,7 +72,11 @@ public class BrowserAddressToolbar: UIView,
         didSet {
             guard let previousLocationViewConfiguration, oldValue != isUnifiedSearchEnabled else { return }
 
-            locationView.configure(previousLocationViewConfiguration, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+            locationView.configure(
+                previousLocationViewConfiguration,
+                delegate: self,
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            )
         }
     }
 

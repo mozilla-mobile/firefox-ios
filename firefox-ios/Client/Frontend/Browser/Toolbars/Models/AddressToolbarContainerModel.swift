@@ -127,7 +127,7 @@ final class AddressToolbarContainerModel: Equatable {
         return query
     }
 
-    private static func mapActions(_ actions: [ToolbarActionState],
+    private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in

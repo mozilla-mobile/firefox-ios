@@ -55,14 +55,14 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
             cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
-    func configure(config: BookmarkConfiguration, theme: Theme) {
+    func configure(item: BookmarkConfiguration, theme: Theme) {
         let heroImageViewModel = HomepageHeroImageViewModel(
-            urlStringRequest: config.site.url,
+            urlStringRequest: item.site.url,
             heroImageSize: UX.heroImageSize
         )
         heroImageView.setHeroImage(heroImageViewModel)
-        itemTitle.text = config.site.title
-        accessibilityLabel = config.accessibilityLabel
+        itemTitle.text = item.site.title
+        accessibilityLabel = item.accessibilityLabel
         applyTheme(theme: theme)
     }
 

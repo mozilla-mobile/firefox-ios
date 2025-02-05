@@ -8,24 +8,24 @@ import ToolbarKit
 
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var actions: [ToolbarActionState]
+    var actions: [ToolbarActionConfiguration]
     var displayBorder: Bool
 
-    private static let searchAction = ToolbarActionState(
+    private static let searchAction = ToolbarActionConfiguration(
         actionType: .search,
         iconName: StandardImageIdentifiers.Large.search,
         isEnabled: true,
         a11yLabel: .TabToolbarSearchAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
 
-    private static let homeAction = ToolbarActionState(
+    private static let homeAction = ToolbarActionConfiguration(
         actionType: .home,
         iconName: StandardImageIdentifiers.Large.home,
         isEnabled: true,
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
-    private static let dataClearanceAction = ToolbarActionState(
+    private static let dataClearanceAction = ToolbarActionConfiguration(
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
@@ -33,7 +33,7 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
-    private static let newTabAction = ToolbarActionState(
+    private static let newTabAction = ToolbarActionConfiguration(
         actionType: .newTab,
         iconName: StandardImageIdentifiers.Large.plus,
         isEnabled: true,
@@ -47,7 +47,7 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         actions: [ToolbarActionState],
+         actions: [ToolbarActionConfiguration],
          displayBorder: Bool) {
         self.windowUUID = windowUUID
         self.actions = actions
@@ -171,8 +171,8 @@ struct NavigationBarState: StateType, Equatable {
     private static func navigationActions(
         action: ToolbarAction,
         navigationBarState: NavigationBarState)
-    -> [ToolbarActionState] {
-        var actions = [ToolbarActionState]()
+    -> [ToolbarActionConfiguration] {
+        var actions = [ToolbarActionConfiguration]()
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
@@ -208,7 +208,7 @@ struct NavigationBarState: StateType, Equatable {
                                               isPrivateMode: Bool,
                                               canShowDataClearanceAction: Bool,
                                               isNewTabFeatureEnabled: Bool)
-    -> ToolbarActionState {
+    -> ToolbarActionConfiguration {
         // WT ToDo
         let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
         let isNewTabEnabled = isNewTabFeatureEnabled
@@ -221,8 +221,8 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Helper
-    private static func backAction(enabled: Bool) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .back,
             iconName: StandardImageIdentifiers.Large.back,
             isFlippedForRTL: true,
@@ -232,8 +232,8 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(enabled: Bool) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .forward,
             iconName: StandardImageIdentifiers.Large.forward,
             isFlippedForRTL: true,
@@ -243,8 +243,8 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     private static func tabsAction(numberOfTabs: Int = 1,
-                                   isPrivateMode: Bool = false) -> ToolbarActionState {
-        return ToolbarActionState(
+                                   isPrivateMode: Bool = false) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
@@ -255,8 +255,8 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
             badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
