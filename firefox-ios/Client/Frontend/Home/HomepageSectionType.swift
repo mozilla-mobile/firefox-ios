@@ -52,7 +52,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 LegacyBookmarksCell.self,
                 HistoryHighlightsCell.self,
                 CustomizeHomepageSectionCell.self,
-                SyncedTabCell.self
+                LegacySyncedTabCell.self
         ]
     }
 

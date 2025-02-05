@@ -45,20 +45,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
-                                                           .FirefoxAccountChanged,
-                                                           .PrivateDataClearedHistory,
-                                                           .ProfileDidFinishSyncing,
-                                                           .TopSitesUpdated,
-                                                           .DefaultSearchEngineUpdated,
-                                                           .BookmarksUpdated,
-                                                           .RustPlacesOpened
-        ])
-
-        sut.loadViewIfNeeded()
-
-        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
         XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
@@ -68,6 +54,22 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                                                            .DefaultSearchEngineUpdated,
                                                            .BookmarksUpdated,
                                                            .RustPlacesOpened,
+                                                           .TabDataUpdated
+        ])
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 10)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated,
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened,
+                                                           .TabDataUpdated,
                                                            .ThemeDidChange
         ])
     }

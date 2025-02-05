@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Storage
 import XCTest
 
 @testable import Client
@@ -48,6 +49,26 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.jumpBackInTabs.first?.accessibilityLabel, "www.mozilla.org, Www.Mozilla.Org")
     }
 
+    func test_fetchMostRecentSyncedTabAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = jumpBackInSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            RemoteTabsAction(
+                mostRecentSyncedTab: RemoteTabConfiguration(client: remoteClient, tab: remoteTab),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.mostRecentSyncedTab?.titleText, "Mozilla")
+        XCTAssertEqual(newState.mostRecentSyncedTab?.descriptionText, "Fake client")
+        XCTAssertEqual(newState.mostRecentSyncedTab?.url.absoluteString, "www.mozilla.org")
+        XCTAssertEqual(newState.mostRecentSyncedTab?.accessibilityLabel, "Tab pickup: Mozilla, Fake client")
+    }
+
     // MARK: - Private
     private func createSubject() -> JumpBackInSectionState {
         return JumpBackInSectionState(windowUUID: .XCTestDefaultUUID)
@@ -61,5 +82,26 @@ final class JumpBackInSectionStateTests: XCTestCase {
         let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
         return tab
+    }
+
+    var remoteClient: RemoteClient {
+        return RemoteClient(guid: nil,
+                            name: "Fake client",
+                            modified: 1,
+                            type: nil,
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: nil)
+    }
+
+    var remoteTab: RemoteTab {
+        return RemoteTab(clientGUID: String(1),
+                         URL: URL(string: "www.mozilla.org")!,
+                         title: "Mozilla",
+                         history: [],
+                         lastUsed: UInt64(1),
+                         icon: nil,
+                         inactive: false)
     }
 }

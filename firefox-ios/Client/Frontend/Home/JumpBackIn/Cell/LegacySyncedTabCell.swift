@@ -28,7 +28,7 @@ struct SyncedTabCellViewModel {
 }
 
 /// A cell used in FxHomeScreen's Jump Back In section
-class SyncedTabCell: UICollectionViewCell, ReusableCell {
+class LegacySyncedTabCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
@@ -309,7 +309,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - ThemeApplicable
-extension SyncedTabCell: ThemeApplicable {
+extension LegacySyncedTabCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         cardTitle.textColor  = theme.colors.textPrimary
         tabItemTitle.textColor = theme.colors.textPrimary
@@ -327,7 +327,7 @@ extension SyncedTabCell: ThemeApplicable {
 }
 
 // MARK: - Blurrable
-extension SyncedTabCell: Blurrable {
+extension LegacySyncedTabCell: Blurrable {
     func adjustBlur(theme: Theme) {
         // Add blur
         if shouldApplyWallpaperBlur {
@@ -342,7 +342,7 @@ extension SyncedTabCell: Blurrable {
 }
 
 // MARK: - Notifiable
-extension SyncedTabCell: Notifiable {
+extension LegacySyncedTabCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
