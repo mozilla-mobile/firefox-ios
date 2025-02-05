@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
-        static let ActionSheetTitleMaxLength = 120
     }
 
     /// Describes the state of the current search session. This state is used
@@ -72,9 +71,6 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
-    var legacyUrlBar: URLBarView?
-
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
             return legacyUrlBar
@@ -82,63 +78,156 @@ class BrowserViewController: UIViewController,
         return addressToolbarContainer
     }
 
-    var urlBarHeightConstraint: Constraint?
-    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
-    var readerModeBar: ReaderModeBarView?
-    var readerModeCache: ReaderModeCache
-    var statusBarOverlay: StatusBarOverlay = .build { _ in }
-    var searchController: SearchViewController?
-    var searchSessionState: SearchSessionState?
-    var screenshotHelper: ScreenshotHelper?
-    var searchTelemetry: SearchTelemetry?
-    var searchLoader: SearchLoader?
-    var findInPageBar: FindInPageBar?
-    var zoomPageBar: ZoomPageBar?
-    var microsurvey: MicrosurveyPromptView?
-    lazy var mailtoLinkHandler = MailtoLinkHandler()
-    var currentMiddleButtonState: MiddleButtonState?
-    var passBookHelper: OpenPassBookHelper?
-    var overlayManager: OverlayModeManager
-    var appAuthenticator: AppAuthenticationProtocol
-    var toolbarContextHintVC: ContextualHintViewController
-    var dataClearanceContextHintVC: ContextualHintViewController
-    var navigationContextHintVC: ContextualHintViewController
-    let shoppingContextHintVC: ContextualHintViewController
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
 
-    // MARK: Telemetry Variables
-    var webviewTelemetry = WebViewLoadMeasurementTelemetry()
-    var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
-    var appStartupTelemetry = AppStartupTelemetry()
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+    var logger: Logger
+
+    // MARK: Optional UI elements
+
+    var topTabsViewController: TopTabsViewController?
+    var tabTrayViewController: TabTrayController?
+    var legacyUrlBar: URLBarView?
+    var legacyUrlBarHeightConstraint: Constraint?
+    var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
+    var readerModeBar: ReaderModeBarView?
+    var searchController: SearchViewController?
+    var searchSessionState: SearchSessionState?
+    var searchLoader: SearchLoader?
+    var findInPageBar: FindInPageBar?
+    var zoomPageBar: ZoomPageBar?
+    var microsurvey: MicrosurveyPromptView?
+    var currentMiddleButtonState: MiddleButtonState?
+    var passBookHelper: OpenPassBookHelper?
+    var keyboardBackdrop: UIView?
+    var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
+    var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?
+
+    // MARK: Lazy loading UI elements
+
+    private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
+    private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
+    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
+    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+    private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
+    private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
+
+    // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
+    private(set) lazy var header: BaseAlphaStackView = .build { _ in }
+
+    // OverKeyboardContainer stack view contains
+    // the bottom reader mode, the bottom url bar and the ZoomPageBar
+    private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
+
+    // Overlay dimming view for private mode
+    private lazy var privateModeDimmingView: UIView = .build { view in
+        view.backgroundColor = self.currentTheme().colors.layerScrim
+        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
+    }
+
+    // BottomContainer stack view contains toolbar
+    private lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
+
+    // Alert content that appears on top of the content
+    // ex: Find In Page, SnackBar from LoginsHelper
+    private(set) lazy var bottomContentStackView: BaseAlphaStackView = .build { stackview in
+        stackview.isClearBackground = true
+    }
+
+    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
+    private(set) lazy var contentStackView: SidebarEnabledView = .build()
+
+    // The content container contains the homepage, error page or webview. Embedded by the coordinator.
+    private(set) lazy var contentContainer: ContentContainer = .build { _ in }
+
+    private lazy var topTouchArea: UIButton = .build { topTouchArea in
+        topTouchArea.isAccessibilityElement = false
+        topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
+    }
+
+    private(set) lazy var scrollController = TabScrollingController(
+        windowUUID: windowUUID,
+        isPullToRefreshRefactorEnabled: featureFlags.isFeatureEnabled(
+            .pullToRefreshRefactor,
+            checking: .buildOnly
+        )
+    )
+
+    // Window helper used for displaying an opaque background for private tabs.
+    private lazy var privacyWindowHelper = PrivacyWindowHelper()
+
+    private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
+        view.windowUUID = self.windowUUID
+    }
+    private(set) lazy var toolbar = TabToolbar()
+    var navigationToolbar: TabToolbarProtocol {
+        guard let legacyUrlBar else {
+            return toolbar
+        }
+        return toolbar.isHidden ? legacyUrlBar : toolbar
+    }
+
+    // MARK: Contextual Hints
+
+    private lazy var toolbarContextHintVC: ContextualHintViewController = {
+        let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation, with: profile)
+        return ContextualHintViewController(with: contextualViewProvider, windowUUID: tabManager.windowUUID)
+    }()
+
+    private(set) lazy var shoppingContextHintVC: ContextualHintViewController = {
+        let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience, with: profile)
+        return ContextualHintViewController(with: shoppingViewProvider, windowUUID: tabManager.windowUUID)
+    }()
+
+    private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
+        let dataClearanceViewProvider = ContextualHintViewProvider(
+            forHintType: .dataClearance,
+            with: profile
+        )
+        return ContextualHintViewController(with: dataClearanceViewProvider,
+                                            windowUUID: windowUUID)
+    }()
+
+    var navigationHintDoubleTapTimer: Timer?
+    private(set) lazy var navigationContextHintVC: ContextualHintViewController = {
+        let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
+        return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
+    }()
+
+    // MARK: Telemetry Variables
+
+    private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
+    private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
+    private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
+    private lazy var appStartupTelemetry = AppStartupTelemetry()
 
     // location label actions
     var pasteGoAction: AccessibleAction?
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
-    var navigationHintDoubleTapTimer: Timer?
+    // MARK: Feature flags
 
-    var tabTrayViewController: TabTrayController?
-
-    let profile: Profile
-    let tabManager: TabManager
-    let crashTracker: CrashTracker
-    let ratingPromptManager: RatingPromptManager
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
+
     var isUnifiedSearchEnabled: Bool {
         return featureFlags.isFeatureEnabled(.unifiedSearch, checking: .buildOnly)
     }
+
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
     }
+
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
@@ -155,81 +244,30 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
-    private var browserViewControllerState: BrowserViewControllerState?
-
-    // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
-    var header: BaseAlphaStackView = .build { _ in }
-
-    // OverKeyboardContainer stack view contains
-    // the bottom reader mode, the bottom url bar and the ZoomPageBar
-    var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
-
-    // Overlay dimming view for private mode
-    lazy var privateModeDimmingView: UIView = .build { view in
-        view.backgroundColor = self.currentTheme().colors.layerScrim
-        view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
-    }
-
-    // BottomContainer stack view contains toolbar
-    var bottomContainer: BaseAlphaStackView = .build { _ in }
-
-    // Alert content that appears on top of the content
-    // ex: Find In Page, SnackBar from LoginsHelper
-    var bottomContentStackView: BaseAlphaStackView = .build { stackview in
-        stackview.isClearBackground = true
-    }
-
-    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
-    var contentStackView: SidebarEnabledView = .build()
-
-    // The content container contains the homepage, error page or webview. Embedded by the coordinator.
-    var contentContainer: ContentContainer = .build { _ in }
+    // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
         return searchBarPosition == .bottom
     }()
 
-    private lazy var topTouchArea: UIButton = .build { topTouchArea in
-        topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
-    }
-
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
-    // Window helper used for displaying an opaque background for private tabs.
-    private lazy var privacyWindowHelper = PrivacyWindowHelper()
-    var keyboardBackdrop: UIView?
 
-    lazy var scrollController = TabScrollingController(
-        windowUUID: windowUUID,
-        isPullToRefreshRefactorEnabled: featureFlags.isFeatureEnabled(
-            .pullToRefreshRefactor,
-            checking: .buildOnly
-        )
-    )
+    // MARK: Data management
+
+    let profile: Profile
+    let tabManager: TabManager
+    let crashTracker: CrashTracker
+    let ratingPromptManager: RatingPromptManager
+    private var browserViewControllerState: BrowserViewControllerState?
+    var appAuthenticator: AppAuthenticationProtocol
     private var keyboardState: KeyboardState?
-    var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
-    var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
     // Tracking navigation items to record history types.
-    // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
-
-    private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
-        view.windowUUID = self.windowUUID
-    }
-    lazy var toolbar = TabToolbar()
-    var navigationToolbar: TabToolbarProtocol {
-        guard let legacyUrlBar else {
-            return toolbar
-        }
-        return toolbar.isHidden ? legacyUrlBar : toolbar
-    }
-
-    var topTabsViewController: TopTabsViewController?
 
     // Keep track of allowed `URLRequest`s from `webView(_:decidePolicyFor:decisionHandler:)` so
     // that we can obtain the originating `URLRequest` when a `URLResponse` is received. This will
@@ -242,19 +280,13 @@ class BrowserViewController: UIViewController,
 
     let downloadQueue: DownloadQueue
 
-    private var keyboardPressesHandlerValue: Any?
-
     private let bookmarksSaver: BookmarksSaver
-
-    var themeManager: ThemeManager
-    var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
-
-    var logger: Logger
 
     var newTabSettings: NewTabPage {
         return NewTabAccessors.getNewTabPage(profile.prefs)
     }
+
+    private var keyboardPressesHandlerValue: Any?
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
@@ -282,32 +314,10 @@ class BrowserViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.crashTracker = DefaultCrashTracker()
         self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
-        self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
         self.appAuthenticator = appAuthenticator
-        self.overlayManager = DefaultOverlayModeManager()
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
-        let windowUUID = tabManager.windowUUID
-        let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
-                                                                with: profile)
-        self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider,
-                                                                 windowUUID: windowUUID)
-        let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
-                                                              with: profile)
-        shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider,
-                                                             windowUUID: windowUUID)
-        let dataClearanceViewProvider = ContextualHintViewProvider(
-            forHintType: .dataClearance,
-            with: profile
-        )
-        self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
-                                                                       windowUUID: windowUUID)
-
-        let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
-
-        self.navigationContextHintVC = ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
-        self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -336,7 +346,6 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func didInit() {
-        screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.addDelegate(self)
@@ -927,7 +936,7 @@ class BrowserViewController: UIViewController,
             createLegacyUrlBar()
 
             legacyUrlBar?.snp.makeConstraints { make in
-                urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
+                legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             }
         }
 
@@ -1134,7 +1143,7 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.removeBottomInsetSpacer()
         }
 
-        urlBarHeightConstraint?.update(offset: heightWithPadding)
+        legacyUrlBarHeightConstraint?.update(offset: heightWithPadding)
     }
 
     override func willTransition(
@@ -1221,7 +1230,7 @@ class BrowserViewController: UIViewController,
     private func setupConstraints() {
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.snp.makeConstraints { make in
-                urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
+                legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             }
         }
 
@@ -3724,7 +3733,7 @@ extension BrowserViewController: HomePanelDelegate {
         } else {
             if isGoogleTopSite {
                 tab.urlType = .googleTopSite
-                searchTelemetry?.shouldSetGoogleTopSiteSearch = true
+                searchTelemetry.shouldSetGoogleTopSiteSearch = true
             }
 
             // Handle keyboard shortcuts from homepage with url selection
@@ -3804,7 +3813,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
             searchData: searchData,
             isPrivate: tab.isPrivate
         )
-        searchTelemetry?.shouldSetUrlTypeSearch = true
+        searchTelemetry.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 

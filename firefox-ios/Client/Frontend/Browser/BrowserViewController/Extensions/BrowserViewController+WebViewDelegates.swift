@@ -943,7 +943,7 @@ extension BrowserViewController: WKNavigationDelegate {
               let metadataManager = tab.metadataManager
         else { return }
 
-        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
 
