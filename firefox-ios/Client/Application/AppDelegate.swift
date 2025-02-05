@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-    lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -37,7 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
-    lazy var gleanLifecycleObserver = GleanLifecycleObserver()
+    lazy var shareTelemetry = ShareTelemetry()
+    lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService(profile: profile)
     private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private var backgroundWorkUtility: BackgroundFetchAndProcessingUtility?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
-    private var metricKitWrapper = MetricKitWrapper()
+    private lazy var metricKitWrapper = MetricKitWrapper()
     private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(
@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        startRecordingStartupOpenURLTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -97,6 +98,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                    category: .lifecycle)
 
         return true
+    }
+
+    private func startRecordingStartupOpenURLTime() {
+        shareTelemetry.recordOpenURLTime()
+        var recordCompleteToken: ActionToken?
+        var recordCancelledToken: ActionToken?
+        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
+        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCancelled) { [weak self] in
+            self?.shareTelemetry.cancelOpenURLTimeRecord()
+            guard let recordCancelledToken, let recordCompleteToken  else { return }
+            AppEventQueue.cancelAction(token: recordCancelledToken)
+            AppEventQueue.cancelAction(token: recordCompleteToken)
+        }
     }
 
     func application(
@@ -168,7 +187,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             if self?.featureFlags.isFeatureEnabled(.cleanupHistoryReenabled, checking: .buildOnly) ?? false {
                 self?.profile.cleanupHistoryIfNeeded()
             }
-            self?.ratingPromptManager.updateData()
         }
 
         DispatchQueue.global().async { [weak self] in

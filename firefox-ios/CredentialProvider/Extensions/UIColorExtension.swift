@@ -11,13 +11,13 @@ extension UIColor {
         }
 
         static var cellBackgroundColor: UIColor {
-            return UIColor(named: "credentialCellColor") ?? UIColor.Photon.White100
+            return UIColor(named: "credentialCellColor") ?? UIColor.white
         }
 
         static var tableViewBackgroundColor: UIColor = .systemGroupedBackground
 
         static var welcomeScreenBackgroundColor: UIColor {
-            return UIColor(named: "launchScreenBackgroundColor") ?? UIColor.Photon.White100
+            return UIColor(named: "launchScreenBackgroundColor") ?? UIColor.white
         }
     }
 }

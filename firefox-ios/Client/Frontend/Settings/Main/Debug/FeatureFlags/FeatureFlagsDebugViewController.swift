@@ -38,13 +38,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
-                    with: .closeRemoteTabs,
-                    titleText: format(string: "Enable Close Remote Tabs"),
-                    statusText: format(string: "Toggle to enable closing tabs remotely feature")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
@@ -84,6 +77,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .noInternetConnectionErrorPage,
                     titleText: format(string: "Enable NIC Native Error Page"),
                     statusText: format(string: "Toggle to display natively created no internet connection error page")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacyFeltDeletion,
+                    titleText: format(string: "Enable Felt Privacy Deletion"),
+                    statusText: format(string: "Toggle to felt privacy deletion")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacySimplifiedUI,
+                    titleText: format(string: "Enable Felt Privacy UI"),
+                    statusText: format(string: "Toggle to felt privacy UI")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

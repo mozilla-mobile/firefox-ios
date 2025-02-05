@@ -363,9 +363,8 @@ public class RustSyncManager: NSObject, SyncManager {
                  self.profile?.tabs.registerWithSyncManager()
                  rustEngines.append(engine.rawValue)
              case .passwords:
-                 if let key = loginKey {
+                 if loginKey != nil {
                      self.profile?.logins.registerWithSyncManager()
-                     localEncryptionKeys[engine.rawValue] = key
                      rustEngines.append(engine.rawValue)
                  }
              case .creditcards:

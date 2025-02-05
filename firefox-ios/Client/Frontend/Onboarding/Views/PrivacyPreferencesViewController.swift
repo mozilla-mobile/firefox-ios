@@ -6,6 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 import Shared
+import Glean
 
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
@@ -85,6 +86,11 @@ final class PrivacyPreferencesViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: view)
     }
 
     // MARK: - View setup
@@ -168,6 +174,9 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         technicalDataSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
+            if !value {
+                GleanMetrics.Pings.shared.onboardingOptOut.submit()
+            }
             TermsOfServiceTelemetry().technicalInteractionDataSwitched(to: value)
         }
 
@@ -180,6 +189,8 @@ final class PrivacyPreferencesViewController: UIViewController,
     }
 
     private func setupAccessibility() {
+        contentView.accessibilityElements = [technicalDataSwitch, crashReportsSwitch]
+        view.accessibilityElements = [titleLabel, doneButton, contentScrollView]
         let identifiers = AccessibilityIdentifiers.TermsOfService.PrivacyNotice.self
         titleLabel.accessibilityIdentifier = identifiers.title
         doneButton.accessibilityIdentifier = identifiers.doneButton

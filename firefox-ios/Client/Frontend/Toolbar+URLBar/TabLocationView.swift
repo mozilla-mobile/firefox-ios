@@ -56,6 +56,8 @@ class TabLocationView: UIView, FeatureFlaggable {
     let windowUUID: WindowUUID
     let logger: Logger
 
+    var isTrackingProtectionDisplayed: Bool = false
+
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
         didSet {
@@ -204,7 +206,9 @@ class TabLocationView: UIView, FeatureFlaggable {
             forObserver: self,
             observing: [
                 .FakespotViewControllerDidDismiss,
-                .FakespotViewControllerDidAppear
+                .FakespotViewControllerDidAppear,
+                .TrackingProtectionViewControllerDidDismiss,
+                .TrackingProtectionViewControllerDidAppear
             ]
         )
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
@@ -452,7 +456,7 @@ private extension TabLocationView {
             self.trackingProtectionButton.isHidden = true
         }
 
-        if wasHidden != readerModeButton.isHidden {
+        if wasHidden != readerModeButton.isHidden && !isTrackingProtectionDisplayed {
             UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             if !readerModeButton.isHidden {
                 // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
@@ -479,6 +483,10 @@ extension TabLocationView: Notifiable {
             shoppingButton.isSelected = false
         case .FakespotViewControllerDidAppear:
             shoppingButton.isSelected = true
+        case .TrackingProtectionViewControllerDidDismiss:
+            isTrackingProtectionDisplayed = false
+        case .TrackingProtectionViewControllerDidAppear:
+            isTrackingProtectionDisplayed = true
         default: break
         }
     }

@@ -16,6 +16,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
+    case darkReader
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -38,8 +39,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
     case pullToRefreshRefactor
+    case ratingPromptFeature
     case reduxSearchSettings
-    case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
     case sentFromFirefox
@@ -47,7 +48,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case unifiedAds
     case unifiedSearch
-    case universalLinks
     case toolbarRefactor
     case toolbarOneTapNewTab
     case toolbarNavigationHint
@@ -59,8 +59,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
-                .closeRemoteTabs,
                 .homepageRebuild,
+                .feltPrivacyFeltDeletion,
+                .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
@@ -112,7 +113,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .closeRemoteTabs,
+                .darkReader,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
@@ -129,6 +130,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,
                 .pullToRefreshRefactor,
+                .ratingPromptFeature,
                 .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
@@ -138,7 +140,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
-                .universalLinks,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
                 .toolbarNavigationHint,

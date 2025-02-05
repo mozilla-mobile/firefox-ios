@@ -23,9 +23,13 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
     func fetchFaviconURL(siteURL: URL) async throws -> URL {
         do {
             let data = try await network.fetchDataForURL(siteURL)
-            let url = try await self.processHTMLDocument(siteURL: siteURL,
-                                                         data: data)
-            return url
+            do {
+                let url = try await self.processHTMLDocument(siteURL: siteURL,
+                                                             data: data)
+                return url
+            } catch {
+                throw SiteImageError.invalidHTML
+            }
         } catch {
             throw error
         }

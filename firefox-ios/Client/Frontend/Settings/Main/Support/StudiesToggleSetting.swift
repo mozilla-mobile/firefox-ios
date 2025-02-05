@@ -15,8 +15,7 @@ class StudiesToggleSetting: BoolSetting {
          settingsDelegate: SupportSettingsDelegate?,
          title: String,
          message: String,
-         linkedText: String,
-         isToSEnabled: Bool) {
+         linkedText: String) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -24,7 +23,7 @@ class StudiesToggleSetting: BoolSetting {
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
             )
         )
-        statusText.append(NSAttributedString(string: isToSEnabled ? "\n" : " "))
+        statusText.append(NSAttributedString(string: "\n"))
         statusText.append(
             NSAttributedString(
                 string: linkedText,

@@ -2,69 +2,54 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import StoreKit
 import Shared
-import Storage
-import Common
-
-import class MozillaAppServices.BookmarkFolderData
-import enum MozillaAppServices.BookmarkRoots
 
 /// The `RatingPromptManager` handles app store review requests and the internal logic of when
 /// they can be presented to a user.
 final class RatingPromptManager {
-    private let profile: Profile
-    private let daysOfUseCounter: CumulativeDaysOfUseCounter
-
-    private var hasMinimumMobileBookmarksCount = false
-    private let minimumMobileBookmarksCount = 5
+    private let prefs: Prefs
     private let logger: Logger
-    private let group: DispatchGroupInterface
+    private let userDefaults: UserDefaultsInterface
+    private let crashTracker: CrashTracker
 
-    private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
-
-    enum UserDefaultsKey: String {
-        case keyIsBrowserDefault = "com.moz.isBrowserDefault.key"
-        case keyRatingPromptLastRequestDate = "com.moz.ratingPromptLastRequestDate.key"
-        case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
+    struct Constants {
+        static let minDaysBetweenReviewRequest = 60
+        static let firstThreshold = 15
+        static let secondThreshold = 40
+        static let thirdThreshold = 120
     }
 
-    /// Initializes the `RatingPromptManager` using the provided profile and the user's current days of use of Firefox
+    enum UserDefaultsKey: String {
+        case keyRatingPromptLastRequestDate = "com.moz.ratingPromptLastRequestDate.key"
+        case keyRatingPromptRequestCount = "com.moz.ratingPromptRequestCount.key"
+        case keyRatingPromptThreshold = "com.moz.keyRatingPromptThreshold.key"
+    }
+
+    /// Initializes the `RatingPromptManager`
     ///
     /// - Parameters:
-    ///   - profile: User's profile data
-    ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
-    ///   - logger: Logger protocol to override in Unit test
-    init(profile: Profile,
-         daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
+    ///   - prefs: User's profile data
+    ///   - crashTracker: Used to track crash related information
+    ///   - logger: Logger protocol to override in Unit tests
+    ///   - userDefaults: UserDefaultsInterface to override in Unit tests
+    init(prefs: Prefs,
+         crashTracker: CrashTracker,
          logger: Logger = DefaultLogger.shared,
-         group: DispatchGroupInterface = DispatchGroup()) {
-        self.profile = profile
-        self.daysOfUseCounter = daysOfUseCounter
+         userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+        self.prefs = prefs
         self.logger = logger
-        self.group = group
+        self.userDefaults = userDefaults
+        self.crashTracker = crashTracker
     }
 
     /// Show the in-app rating prompt if needed
-    /// - Parameter date: Request at a certain date - Useful for unit tests
-    func showRatingPromptIfNeeded(at date: Date = Date()) {
+    func showRatingPromptIfNeeded() {
         if shouldShowPrompt {
-            requestRatingPrompt(at: date)
-            UserDefaults.standard.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
-        }
-    }
-
-    /// Update rating prompt data. Bookmarks and pinned sites data is loaded asynchronously.
-    /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
-    ///                                    Used in unit tests
-    func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
-        daysOfUseCounter.updateCounter()
-
-        updateBookmarksCount(group: group)
-
-        group.notify(queue: dataQueue) {
-            dataLoadingCompletion?()
+            requestRatingPrompt()
+            userDefaults.set(false, forKey: PrefsKeys.ForceShowAppReviewPromptOverride)
         }
     }
 
@@ -79,19 +64,14 @@ final class RatingPromptManager {
 
     // MARK: UserDefaults
 
-    static var isBrowserDefault: Bool {
-        get { UserDefaults.standard.object(forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) as? Bool ?? false }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyIsBrowserDefault.rawValue) }
-    }
-
     private var lastRequestDate: Date? {
         get {
-            return UserDefaults.standard.object(
+            return userDefaults.object(
                 forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue
             ) as? Date
         }
         set {
-            UserDefaults.standard.set(
+            userDefaults.set(
                 newValue,
                 forKey: UserDefaultsKey.keyRatingPromptLastRequestDate.rawValue
             )
@@ -100,59 +80,76 @@ final class RatingPromptManager {
 
     private var requestCount: Int {
         get {
-            UserDefaults.standard.object(
+            userDefaults.object(
                 forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue
             ) as? Int ?? 0
         }
-        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) }
+        set { userDefaults.set(newValue, forKey: UserDefaultsKey.keyRatingPromptRequestCount.rawValue) }
+    }
+
+    private var threshold: Int {
+        get {
+            userDefaults.object(
+                forKey: UserDefaultsKey.keyRatingPromptThreshold.rawValue
+            ) as? Int ?? Constants.firstThreshold
+        }
+        set { userDefaults.set(newValue, forKey: UserDefaultsKey.keyRatingPromptThreshold.rawValue) }
     }
 
     func reset() {
-        RatingPromptManager.isBrowserDefault = false
         lastRequestDate = nil
         requestCount = 0
+        threshold = 0
     }
 
     // MARK: Private
 
     private var shouldShowPrompt: Bool {
-        if UserDefaults.standard.bool(forKey: PrefsKeys.ForceShowAppReviewPromptOverride) {
+        if userDefaults.bool(forKey: PrefsKeys.ForceShowAppReviewPromptOverride) {
             return true
         }
 
-        // Required: 5th launch or more
-        let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
-        guard currentSessionCount >= 5 else { return false }
+        // Required: has not crashed in the last 3 days
+        guard !crashTracker.hasCrashedInLast3Days else { return false }
 
-        // Required: 5 consecutive days of use in the last 7 days
-        guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
+        var daysSinceLastRequest = 0
+        if let previousRequest = lastRequestDate {
+            daysSinceLastRequest = Calendar.current.numberOfDaysBetween(previousRequest, and: Date())
+        } else {
+            daysSinceLastRequest = Constants.minDaysBetweenReviewRequest
+        }
 
-        // Required: has not crashed in the last session
-        guard !logger.crashedLastLaunch else { return false }
+        // Required: More than `minDaysBetweenReviewRequest` since last request
+        guard daysSinceLastRequest >= Constants.minDaysBetweenReviewRequest else {
+            return false
+        }
 
-        // One of the following
-        let isBrowserDefault = RatingPromptManager.isBrowserDefault
-        let hasTPStrict = profile.prefs.stringForKey(
-            ContentBlockingConfig.Prefs.StrengthKey
-        ).flatMap({ BlockingStrength(rawValue: $0) }) == .strict
-        guard isBrowserDefault
-                || hasMinimumMobileBookmarksCount
-                || hasTPStrict
-        else { return false }
+        // Required: Launch count is greater than or equal to threshold
+        let launchCount = prefs.intForKey(PrefsKeys.Session.Count) ?? 0
+        guard launchCount >= threshold else {
+            return false
+        }
 
-        // Ensure we ask again only if 2 weeks has passed
-        guard !hasRequestedInTheLastTwoWeeks else { return false }
+        // Change threshold for next iteration of the prompt request
+        switch threshold {
+        case Constants.firstThreshold:
+            threshold = Constants.secondThreshold
+        case Constants.secondThreshold:
+            threshold = Constants.thirdThreshold
+        default:
+            break
+        }
 
-        // As per Apple's framework, an app can only present the prompt three times per period of 365 days.
-        // Because of this, Firefox will currently limit its request to show the ratings prompt to one time, given
-        // that the triggers are fulfilled. As such, requirements and attempts to further show the ratings prompt
-        // will be implemented later in the future.
-        return requestCount < 1
+        return true
     }
 
-    private func requestRatingPrompt(at date: Date) {
-        lastRequestDate = date
+    private func requestRatingPrompt() {
+        lastRequestDate = Date()
         requestCount += 1
+
+        logger.log("Rating prompt is being requested, this is the \(requestCount) number of time the request is made",
+                   level: .info,
+                   category: .setup)
 
         guard let scene = UIApplication.shared.connectedScenes.first(where: {
             $0.activationState == .foregroundActive
@@ -161,35 +158,6 @@ final class RatingPromptManager {
         DispatchQueue.main.async {
             SKStoreReviewController.requestReview(in: scene)
         }
-    }
-
-    private func updateBookmarksCount(group: DispatchGroupInterface) {
-        group.enter()
-        profile.places.getBookmarksTree(
-            rootGUID: BookmarkRoots.MobileFolderGUID,
-            recursive: false
-        ).uponQueue(.main) { [weak self] result in
-            guard let strongSelf = self,
-                  let mobileFolder = result.successValue as? BookmarkFolderData,
-                  let children = mobileFolder.children
-            else {
-                group.leave()
-                return
-            }
-
-            let bookmarksCounts = children.filter { $0.type == .bookmark }.count
-            strongSelf.hasMinimumMobileBookmarksCount = bookmarksCounts >= strongSelf.minimumMobileBookmarksCount
-            group.leave()
-        }
-    }
-
-    private var hasRequestedInTheLastTwoWeeks: Bool {
-        guard let lastRequestDate = lastRequestDate else { return false }
-
-        let currentDate = Date()
-        let numberOfDays = Calendar.current.numberOfDaysBetween(lastRequestDate, and: currentDate)
-
-        return numberOfDays <= 14
     }
 }
 

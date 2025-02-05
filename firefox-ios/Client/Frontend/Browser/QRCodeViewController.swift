@@ -9,7 +9,7 @@ import Common
 
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
-    func didScanQRCodeWithText(_ text: String)
+    func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText: String)
     var qrCodeScanningPermissionLevel: QRCodeScanPermissions { get }
 }
 
@@ -350,6 +350,18 @@ class QRCodeViewController: UIViewController {
     private func dismissController(_ completion: (() -> Void)? = nil) {
         dismissHandler?.dismiss(completion)
     }
+
+    // MARK: - Utilities
+
+    private func promptPreviewURL(for url: URL) -> String? {
+        let websiteHost: String?
+        if #available(iOS 16.0, *) {
+            websiteHost = url.host()
+        } else {
+            websiteHost = url.host
+        }
+        return websiteHost
+    }
 }
 
 extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
@@ -365,6 +377,11 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
 
         func openScannedQRCodeURL(_ url: URL) {
             qrCodeDelegate?.didScanQRCodeWithURL(url)
+            cleanUpAndRemoveQRCodeScanner()
+        }
+
+        func openScannedQRCodeTextContent(_ content: TextContentDetector.DetectedType?, rawText: String) {
+            qrCodeDelegate?.didScanQRCodeWithTextContent(content, rawText: rawText)
             cleanUpAndRemoveQRCodeScanner()
         }
 
@@ -384,15 +401,13 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                let qrCodeDelegate = self.qrCodeDelegate,
                let text = metaData.stringValue {
                 captureSession.stopRunning()
+                let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage(), url.baseDomain != nil {
-                    let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
-
                     if shouldPrompt {
                         // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
                         state = .promptingUser
-                        let websiteHost: String?
-                        if #available(iOS 16.0, *) { websiteHost = url.host() } else { websiteHost = url.host }
+                        let websiteHost = promptPreviewURL(for: url)
                         presentConfirmationAlert(urlDisplayString: websiteHost ?? text,
                                                  onCancel: { _ in cleanUpAndRemoveQRCodeScanner() },
                                                  onConfirm: { _ in openScannedQRCodeURL(url) })
@@ -401,7 +416,21 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                         openScannedQRCodeURL(url)
                     }
                 } else {
-                    qrCodeDelegate.didScanQRCodeWithText(text)
+                    let content = TextContentDetector.detectTextContent(text)
+
+                    // If we should prompt for URLs and our text type has detected a website link, show alert first
+                    switch (shouldPrompt, content) {
+                    case (true, .link(let url)):
+                        // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
+                        state = .promptingUser
+                        let websiteHost = promptPreviewURL(for: url)
+                        presentConfirmationAlert(urlDisplayString: websiteHost ?? text,
+                                                 onCancel: { _ in cleanUpAndRemoveQRCodeScanner() },
+                                                 onConfirm: { _ in openScannedQRCodeTextContent(content, rawText: text) })
+                        return
+                    default:
+                        openScannedQRCodeTextContent(content, rawText: text)
+                    }
                 }
             }
             cleanUpAndRemoveQRCodeScanner()

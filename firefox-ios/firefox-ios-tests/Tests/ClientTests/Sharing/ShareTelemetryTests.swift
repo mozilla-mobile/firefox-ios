@@ -21,7 +21,7 @@ final class ShareTelemetryTests: XCTestCase {
         super.setUp()
         // Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to puth them in a state in which they can collect data.
+        // tests in order to put them in a state in which they can collect data.
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
     }
@@ -104,7 +104,34 @@ final class ShareTelemetryTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?[hasIsOptedInSentFromFirefoxKey], String(testIsOptedInSentFromFirefox))
     }
 
+    func testRecordOpenURLTime_whenSendRecord_returnTimeGreaterThenZero() async throws {
+        let subject = createSubject()
+
+        subject.recordOpenURLTime()
+        // simulate startup time
+        try await Task.sleep(nanoseconds: 1_000)
+        subject.sendOpenURLTimeRecord()
+
+        let metric = GleanMetrics.Share.deeplinkOpenUrlStartupTime
+        let recordedTime = try XCTUnwrap(metric.testGetValue()?.sum)
+
+        XCTAssertGreaterThan(recordedTime, 0)
+    }
+
+    func testRecordOpenURLTime_whenRecordCancelled_returnNilMetric() async throws {
+        let subject = createSubject()
+
+        subject.recordOpenURLTime()
+        // simulate startup time
+        try await Task.sleep(nanoseconds: 1_000)
+        subject.cancelOpenURLTimeRecord()
+
+        let metric = GleanMetrics.Share.deeplinkOpenUrlStartupTime
+
+        XCTAssertNil(metric.testGetValue())
+    }
+
     func createSubject() -> ShareTelemetry {
-        return DefaultShareTelemetry()
+        return ShareTelemetry()
     }
 }

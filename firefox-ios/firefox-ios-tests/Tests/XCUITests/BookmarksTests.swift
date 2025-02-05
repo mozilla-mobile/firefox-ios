@@ -435,7 +435,8 @@ class BookmarksTests: BaseTestCase {
 
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
-        app.swipeUp()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        scrollToElement(bookMarkCell)
         bookMarkCell.press(forDuration: 1.5)
     }
 

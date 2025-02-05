@@ -8,31 +8,37 @@ import Shared
 
 // Top site UI class, used in the home top site section
 final class TopSite: FeatureFlaggable {
-    var site: Site
-    var title: String
+    let site: Site
+    let title: String
 
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
 
     var accessibilityLabel: String? {
-        return isSponsoredTile ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(title), \(sponsoredText)" : title
     }
 
     var isPinned: Bool {
-        return (site as? PinnedSite) != nil
+        return site.isPinnedSite
     }
 
     var isSuggested: Bool {
-        return (site as? SuggestedSite) != nil
+        return site.isSuggestedSite
     }
 
-    var isSponsoredTile: Bool {
-        return (site as? SponsoredTile) != nil
+    var isSponsored: Bool {
+        return site.isSponsoredSite
     }
 
-    var isGoogleGUID: Bool {
-        return site.guid == GoogleTopSiteManager.Constants.googleGUID
+    var type: SiteType {
+        return site.type
+    }
+
+    var isGooglePinnedTile: Bool {
+        guard case SiteType.pinnedSite(let siteInfo) = site.type else { return false }
+
+        return siteInfo.isGooglePinnedTile
     }
 
     var isGoogleURL: Bool {
@@ -52,25 +58,14 @@ final class TopSite: FeatureFlaggable {
 
     // MARK: Telemetry
 
-    func impressionTracking(position: Int, unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry) {
-        // Only sending sponsored tile impressions for now
-        guard let tile = site as? SponsoredTile else { return }
-
-        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
-        } else {
-            SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
-        }
-    }
-
     func getTelemetrySiteType() -> String {
-        if isPinned && isGoogleGUID {
+        if isGooglePinnedTile {
             return "google"
         } else if isPinned {
             return "user-added"
         } else if isSuggested {
             return "suggested"
-        } else if isSponsoredTile {
+        } else if isSponsored {
             return "sponsored"
         }
 

@@ -74,7 +74,7 @@
 "Settings.CrashReports.Link.v136" = "ვრცლად";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "უეცარი გათიშვის შეტყობინებები გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
+"Settings.CrashReports.Message.v136" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
@@ -86,7 +86,7 @@
 "Settings.DailyUsagePing.Link.v136" = "ვრცლად";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
-"Settings.DailyUsagePing.Message.v135" = "ამის მეშვეობით %@ მიახლოებით არკვევს მოქმედ მომხმარებლებს.";
+"Settings.DailyUsagePing.Message.v135" = "ამით %@ მიახლოებით ითვლის მოქმედ მომხმარებლებს.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
 "Settings.DailyUsagePing.Title.v135" = "დღიური გამოყენების უწყება";
@@ -125,7 +125,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "ვრცლად Firefox-შემოთავაზების შესახებ";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "საძიებო სისტემების შემნაცვლებლები";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "სათადარიგო საძიებოები";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "ნაგულისხმევი საძიებო";
@@ -155,13 +155,13 @@
 "Settings.Search.Suggest.PrivateSession.Description.v125" = "Firefox-შემოთავაზების ჩვენება პირად ფანჯრებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
-"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ძიება დათვალიერების ისტორიაში";
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ძიება ნანახ გვერდებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
-"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "სანიშნების ძიება";
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "ძიება სანიშნებში";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
-"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "დასინქ. ჩანართების მოძიება";
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "ძიება დასინქ. ჩანართებში";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "შემოთავაზებებს გაჩვენებთ %@ თქვენ მიერ მოძიებულის შესაბამისად";
@@ -179,7 +179,7 @@
 "Settings.Studies.Link.v136" = "ვრცლად";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Message.v136" = "გამოცადეთ შესაძლებლობები ჯერ კიდევ ჩანაფიქრის დონეზე, სანამ სხვების გახდება ხილული.";
+"Settings.Studies.Message.v136" = "გამოცადეთ ჯერ კიდევ ჩანაფიქრის დონეზე მყოფი შესაძლებლობები, სანამ ყველა იხილავს.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "ჩადგამს და გაუშვებს კვლევებს";

@@ -99,7 +99,9 @@ struct AccessibilityIdentifiers {
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
+        static let saveAsPDF = "MainMenu.SaveAsPDF"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
@@ -463,12 +465,14 @@ struct AccessibilityIdentifiers {
 
         struct BookmarksPanel {
             static let tableView = "Bookmarks List"
+            static let bookmarksCell = "BookmarksPanel.BookmarksCell"
+            static let bookmarksCellDisclosureButton = ".DisclosureButton"
+            static let emptyStateSignInButton = "BookmarksPanel.EmptyState.signInButton"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
-
-            struct EmptyState {
-                static let signInButton = "BookmarksPanel.RootEmptyState.signInButton"
-            }
+            static let bookmarkParentFolderCell = "BookmarksDetail.ParentFolderSelector.FolderCell"
+            static let newFolderCell = "BookmarksDetail.ParentFolderSelector.NewFolderCell"
+            static let saveButton = "BookmarksDetail.SaveButton"
         }
 
         struct HistoryPanel {
@@ -713,7 +717,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct SendData {
-            static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"

@@ -7,7 +7,7 @@ import Foundation
 import Storage
 import Shared
 
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 import struct MozillaAppServices.LoginEntry
 
 struct NewSearchInProgressError: MaybeErrorType {
@@ -46,7 +46,7 @@ final class PasswordManagerViewModel {
     var hasLoadedBreaches = false
     var theme: Theme
 
-    init(profile: Profile, searchController: UISearchController, theme: Theme, loginProvider: LoginProvider) {
+    init(profile: Profile, searchController: UISearchController?, theme: Theme, loginProvider: LoginProvider) {
         self.profile = profile
         self.searchController = searchController
         self.theme = theme
@@ -78,7 +78,7 @@ final class PasswordManagerViewModel {
 
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
-    func queryLogins(_ query: String, completion: @escaping ([EncryptedLogin]) -> Void) {
+    func queryLogins(_ query: String, completion: @escaping ([Login]) -> Void) {
         loginProvider.searchLoginsWithQuery(query) { result in
             ensureMainThread {
                 switch result {

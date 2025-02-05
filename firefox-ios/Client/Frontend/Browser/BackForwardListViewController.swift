@@ -303,9 +303,9 @@ class BackForwardListViewController: UIViewController,
         let isAboutHomeURL = InternalURL(item.url)?.isAboutHomeURL ?? false
         var site: Site
         if isAboutHomeURL {
-            site = Site(url: item.url.absoluteString, title: .FirefoxHomePage)
+            site = Site.createBasicSite(url: item.url.absoluteString, title: .FirefoxHomePage)
         } else {
-            site = sites[urlString] ?? Site(url: urlString, title: item.title ?? "")
+            site = sites[urlString] ?? Site.createBasicSite(url: urlString, title: item.title ?? "")
         }
 
         let viewModel = BackForwardCellViewModel(site: site,

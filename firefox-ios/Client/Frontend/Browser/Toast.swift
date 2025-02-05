@@ -9,11 +9,21 @@ import Shared
 
 class Toast: UIView, ThemeApplicable {
     struct UX {
-        static let toastHeight: CGFloat = 56
+        static let toastHeightWithoutShadow: CGFloat = 56
+        static let toastHeightWithShadow: CGFloat = 68
         static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
         static let toastAnimationDuration = 0.5
+        static let toastCornerRadius: CGFloat = 8
+        static let toastSidePadding: CGFloat = 16
+
+        // Shadow
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1
+        static let shadowHorizontalSpacing: CGFloat = 16 // Accounts for top and bottom shadow
+        static let shadowVerticalSpacing: CGFloat = 8
     }
 
     var animationConstraint: NSLayoutConstraint?
@@ -29,11 +39,19 @@ class Toast: UIView, ThemeApplicable {
         return gestureRecognizer
     }()
 
-    lazy var toastView: UIView = .build { view in }
+    lazy var toastView: UIView = .build { _ in }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         superview?.addGestureRecognizer(gestureRecognizer)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(
+            roundedRect: self.toastView.bounds,
+            cornerRadius: UX.toastCornerRadius
+        ).cgPath
     }
 
     func showToast(viewController: UIViewController? = nil,
@@ -54,7 +72,7 @@ class Toast: UIView, ThemeApplicable {
             UIView.animate(
                 withDuration: UX.toastAnimationDuration,
                 animations: {
-                    self.animationConstraint?.constant = 0
+                    self.animationConstraint?.constant = UX.shadowRadius
                     self.layoutIfNeeded()
                 }
             ) { finished in
@@ -76,7 +94,7 @@ class Toast: UIView, ThemeApplicable {
         UIView.animate(
             withDuration: UX.toastAnimationDuration,
             animations: {
-                self.animationConstraint?.constant = UX.toastHeight
+                self.animationConstraint?.constant = UX.toastHeightWithShadow
                 self.layoutIfNeeded()
             }
         ) { finished in
@@ -94,5 +112,14 @@ class Toast: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         toastView.backgroundColor = theme.colors.actionPrimary
+        setupShadow(theme: theme)
+    }
+
+    private func setupShadow(theme: Theme) {
+        toastView.layer.cornerRadius = UX.toastCornerRadius
+        toastView.layer.shadowRadius = UX.shadowRadius
+        toastView.layer.shadowOffset = UX.shadowOffset
+        toastView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        toastView.layer.shadowOpacity = UX.shadowOpacity
     }
 }

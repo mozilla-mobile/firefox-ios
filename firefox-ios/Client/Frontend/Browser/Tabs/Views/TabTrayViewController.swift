@@ -452,16 +452,17 @@ class TabTrayViewController: UIViewController,
                                     theme: currentTheme(),
                                     completion: { buttonPressed in
                                         completion(buttonPressed)
-                                    })
+            })
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
-                                [
-                                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                                                  constant: -self.toolbarHeight)
-                                ]
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                ]
             }
             shownToast = toast
         } else {

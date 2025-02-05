@@ -71,6 +71,10 @@ struct Settings {
         }
     }
 
+    static func getToggleIfAvailable(_ toggle: SettingsToggle) -> Bool? {
+        return prefs.object(forKey: toggle.rawValue) as? Bool
+    }
+
     static func getToggle(_ toggle: SettingsToggle) -> Bool {
         return prefs.object(forKey: toggle.rawValue) as? Bool ?? defaultForToggle(toggle)
     }

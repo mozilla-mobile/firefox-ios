@@ -249,9 +249,9 @@ final class SearchViewModelTests: XCTestCase {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         XCTAssertEqual(subject.delegate?.searchData.count, 0)
-        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
-                                             Site(url: "https://example.com", title: "Test2"),
-                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        let data = ArrayCursor<Site>(data: [ Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site.createBasicSite(url: "https://example.com", title: "Test2"),
+                                             Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3")])
         subject.loader(dataLoaded: data)
         XCTAssertEqual(subject.delegate?.searchData.count, 3)
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
@@ -260,9 +260,9 @@ final class SearchViewModelTests: XCTestCase {
     func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() async throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
-        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
-                                             Site(url: "https://example.com", title: "Test2"),
-                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        let data = ArrayCursor<Site>(data: [ Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site.createBasicSite(url: "https://example.com", title: "Test2"),
+                                             Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3")])
         subject.loader(dataLoaded: data)
         subject.loader(dataLoaded: data)
         XCTAssertEqual(subject.delegate?.searchData.count, 3)

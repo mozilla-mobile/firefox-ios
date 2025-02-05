@@ -8,7 +8,7 @@ import WebEngine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var engineProvider: EngineProvider = {
+    var engineProvider: EngineProvider? = {
         let dependencies = EngineSessionDependencies(telemetryProxy: TelemetryHandler())
         return EngineProvider(sessionDependencies: dependencies)
     }()
@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene), let engineProvider else { return }
         let windowUUID = UUID()
         let baseViewController = RootViewController(engineProvider: engineProvider, windowUUID: windowUUID)
         window = UIWindow(windowScene: windowScene)

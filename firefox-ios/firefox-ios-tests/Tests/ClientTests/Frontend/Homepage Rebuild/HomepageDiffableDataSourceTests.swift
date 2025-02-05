@@ -35,11 +35,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 2)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .customizeHomepage])
+        XCTAssertEqual(snapshot.numberOfSections, 4)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .bookmarks, .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
@@ -73,7 +73,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: updatedState)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 21)
@@ -100,20 +100,18 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        let finalState = HomepageState.reducer(
-            updatedState,
-            TopSitesAction(
-                numberOfTilesPerRow: 4,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-            )
-        )
-
-        dataSource.updateSnapshot(state: finalState)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites(4), .customizeHomepage])
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .topSites(4),
+            .jumpBackIn(nil),
+            .bookmarks,
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
@@ -128,18 +126,53 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state)
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .pocket(nil), .customizeHomepage])
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .jumpBackIn(nil),
+            .bookmarks,
+            .pocket(nil),
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    func test_updateSnapshot_withValidState_returnMessageCard() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let configuration = MessageCardConfiguration(
+            title: "Example Title",
+            description: "Example Description",
+            buttonLabel: "Example Button"
+        )
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MessageCardAction(
+                messageCardConfiguration: configuration,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MessageCardMiddlewareActionType.initialize
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
+        let expectedSections: [HomepageSection] = [.header, .messageCard, .jumpBackIn(nil), .bookmarks, .customizeHomepage]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     private func createSites(count: Int = 30) -> [TopSiteState] {
         var sites = [TopSiteState]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0)")
+            let site = Site.createBasicSite(
+                url: "www.url\($0).com",
+                title: "Title \($0)"
+            )
             sites.append(TopSiteState(site: site))
         }
         return sites
