@@ -155,10 +155,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
-
-        if isEditing {
-            textColor = colors.textPrimary
-        }
+        textColor = colors.textPrimary
 
         attributedPlaceholder = NSAttributedString(
             string: placeholder ?? "",

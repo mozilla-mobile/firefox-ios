@@ -521,6 +521,10 @@ final class LocationView: UIView,
         lockIconImageColor = colors.iconPrimary
 
         setLockIconImage()
+
+        // Applying the theme to urlTextField can cause the url formatting to get removed
+        // so we apply it again
+        formatAndTruncateURLTextField()
     }
 
     // MARK: - UIGestureRecognizerDelegate
