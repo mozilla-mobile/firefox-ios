@@ -8,7 +8,7 @@ import Foundation
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
         guard let theme else { return nil }
-        return NSAttributedString(string: .AppSettingsYourRights,
+        return NSAttributedString(string: .AppSettingsTermsOfUse,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
