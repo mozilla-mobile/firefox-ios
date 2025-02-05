@@ -22,7 +22,6 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             }
         }
     }
-    private var webView: WKWebView?
     private var url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -30,6 +29,14 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+
+    var isNativeErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+    }
+
+    var isNICErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+    }
 
     init(
         url: URL,
@@ -80,10 +87,12 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
                            width: view.frame.width * UX.contentScalePhone,
                            height: view.frame.height - UX.topPaddingPhone)
         }
-        let webView = WKWebView(frame: frame)
+
+        let config = WKWebViewConfiguration()
+        config.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
+        let webView = WKWebView(frame: frame, configuration: config)
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
-        self.webView = webView
 
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
@@ -97,6 +106,61 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 }
 
 extension PrivacyPolicyViewController: WKNavigationDelegate {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation?,
+        withError error: any Error
+    ) {
+        let error = error as NSError
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+            guard var errorPageURLComponents = URLComponents(
+                string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
+                ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
+                return
+            }
+
+            errorPageURLComponents.queryItems = [
+                URLQueryItem(
+                    name: InternalURL.Param.url.rawValue,
+                    value: url.absoluteString
+                ),
+                URLQueryItem(
+                    name: "code",
+                    value: String(
+                        error.code
+                    )
+                )
+            ]
+
+            if let errorPageURL = errorPageURLComponents.url {
+                /// Used for checking if current error code is for no internet connection
+                let noInternetErrorCode = Int(
+                    CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
+                )
+
+                if isNativeErrorPageEnabled {
+                    let action = NativeErrorPageAction(networkError: error,
+                                                       windowUUID: windowUUID,
+                                                       actionType: NativeErrorPageActionType.receivedError
+                    )
+                    store.dispatch(action)
+                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
+                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
+                    let action = NativeErrorPageAction(networkError: error,
+                                                       windowUUID: windowUUID,
+                                                       actionType: NativeErrorPageActionType.receivedError
+                    )
+                    store.dispatch(action)
+                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
+                } else {
+                    ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
+                }
+            } else {
+                ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
+            }
+        }
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         let contentSize = webView.scrollView.contentSize
         let viewSize = self.view.bounds.size
