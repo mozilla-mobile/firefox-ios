@@ -37,6 +37,8 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private let profile: Profile
     private let theme: Theme
     private var loginAlert: SaveLoginAlert?
+    private var loginAlertTimer: Timer?
+    private var loginAlertTimeout: TimeInterval = 10
     private var currentRequestId: String = ""
     private var logger: Logger = DefaultLogger.shared
 
@@ -62,6 +64,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     }
 
     func prepareForDeinit() {
+        self.loginAlertTimer = nil
         if let loginAlert {
             self.loginAlert = nil
             tab?.removeLoginAlert(loginAlert)
@@ -286,9 +289,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         )
         alert.configure(viewModel: viewModel)
 
-        loginAlert = alert
-        loginAlert?.applyTheme(theme: theme)
-        tab?.addLoginAlert(loginAlert!)
+        show(alert)
     }
 
     private func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
@@ -327,9 +328,30 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         )
         alert.configure(viewModel: viewModel)
 
+        show(alert)
+    }
+
+    private func show(_ alert: SaveLoginAlert) {
         loginAlert = alert
         loginAlert?.applyTheme(theme: theme)
-        tab?.addLoginAlert(loginAlert!)
+        tab?.addLoginAlert(alert)
+
+        let timer = Timer(
+            timeInterval: loginAlertTimeout,
+            target: self,
+            selector: #selector(timerDone),
+            userInfo: nil,
+            repeats: false
+        )
+        RunLoop.current.add(timer, forMode: RunLoop.Mode.default)
+        loginAlert?.shouldPersist = true
+        loginAlertTimer = timer
+    }
+
+    @objc
+    func timerDone() {
+        loginAlert?.shouldPersist = false
+        loginAlertTimer = nil
     }
 
     private func requestLogins(_ request: [String: Any], url: URL) {

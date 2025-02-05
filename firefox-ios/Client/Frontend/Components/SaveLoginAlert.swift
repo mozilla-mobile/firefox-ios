@@ -16,6 +16,8 @@ struct SaveLoginAlertViewModel {
 class SaveLoginAlert: UIView, ThemeApplicable {
     var saveAction: (() -> Void)?
     var notNotAction: (() -> Void)?
+    // Used to persist the alert a certain amount of time only
+    var shouldPersist = false
 
     private struct UX {
         static let cornerRadius: CGFloat = 8

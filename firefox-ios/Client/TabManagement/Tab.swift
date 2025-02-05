@@ -834,6 +834,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         loginAlert = nil
     }
 
+    func expireLoginAlert() {
+        if let loginAlert, !loginAlert.shouldPersist {
+            removeLoginAlert(loginAlert)
+        }
+    }
+
     func setFindInPage(isBottomSearchBar: Bool, doesFindInPageBarExist: Bool) {
         if #available(iOS 16, *) {
             guard let webView = self.webView,

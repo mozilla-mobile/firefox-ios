@@ -1075,6 +1075,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return false
     }
 
+    func expireLoginAlerts() {
+        for tab in tabs {
+            tab.expireLoginAlert()
+        }
+    }
+
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         var result = SwitchPrivacyModeResult.usedExistingTab
         guard let selectedTab = selectedTab else { return result }
