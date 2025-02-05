@@ -15,6 +15,11 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "A11yOnboardingTests",
+        "A11yOnboardingTests\/testA11yFirstRunTour()",
+        "A11ySearchTest",
+        "A11ySearchTest\/testA11ySearchSuggestions()",
+        "A11yUtils",
         "ActivityStreamTest",
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testDefaultSites()",
@@ -221,6 +226,8 @@
         "SyncUITests\/testTypeOnGivenFields()",
         "SyncUITests\/testUIFromSettings()",
         "TabCounterTests",
+        "TabTrayTests",
+        "TabTrayTests\/testAccessibility()",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
