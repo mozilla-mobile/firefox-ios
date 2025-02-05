@@ -45,25 +45,31 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 6)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
-                                                           .FirefoxAccountChanged,
-                                                           .PrivateDataClearedHistory,
-                                                           .ProfileDidFinishSyncing,
-                                                           .TopSitesUpdated,
-                                                           .DefaultSearchEngineUpdated])
-
-        sut.loadViewIfNeeded()
-
-        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 7)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,
                                                            .TopSitesUpdated,
                                                            .DefaultSearchEngineUpdated,
-                                                           .ThemeDidChange])
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened
+        ])
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated,
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened,
+                                                           .ThemeDidChange
+        ])
     }
 
     // MARK: - Deinit State

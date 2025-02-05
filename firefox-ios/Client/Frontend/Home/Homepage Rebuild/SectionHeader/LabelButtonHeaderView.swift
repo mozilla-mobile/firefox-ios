@@ -16,7 +16,6 @@ class LabelButtonHeaderView: UICollectionReusableView,
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
         static let leadingInset: CGFloat = 0
-        static let trailingInset: CGFloat = 16
     }
 
     // MARK: - UIElements
@@ -72,8 +71,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                constant: -UX.trailingInset),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
         ])
 
@@ -104,18 +102,19 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     func configure(
         state: SectionHeaderState,
+        moreButtonAction: ((UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme
     ) {
-        self.title = state.sectionHeaderTitle
-        titleLabel.accessibilityIdentifier = state.sectionTitleA11yIdentifier
+        self.title = state.title
+        titleLabel.accessibilityIdentifier = state.a11yIdentifier
 
-        moreButton.isHidden = state.isSectionHeaderButtonHidden
-        if !state.isSectionHeaderButtonHidden {
+        moreButton.isHidden = state.isButtonHidden
+        if !state.isButtonHidden {
             let moreButtonViewModel = ActionButtonViewModel(
                 title: .BookmarksSavedShowAllText,
-                a11yIdentifier: state.sectionButtonA11yIdentifier,
-                touchUpAction: nil
+                a11yIdentifier: state.buttonA11yIdentifier,
+                touchUpAction: moreButtonAction
             )
             moreButton.configure(
                 viewModel: moreButtonViewModel

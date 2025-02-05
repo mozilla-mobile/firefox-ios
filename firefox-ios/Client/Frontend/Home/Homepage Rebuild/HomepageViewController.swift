@@ -79,12 +79,17 @@ final class HomepageViewController: UIViewController,
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          .FirefoxAccountChanged,
-                                                          .PrivateDataClearedHistory,
-                                                          .ProfileDidFinishSyncing,
-                                                          .TopSitesUpdated,
-                                                          .DefaultSearchEngineUpdated])
+        setupNotifications(forObserver: self, observing: [
+            UIApplication.didBecomeActiveNotification,
+            .FirefoxAccountChanged,
+            .PrivateDataClearedHistory,
+            .ProfileDidFinishSyncing,
+            .TopSitesUpdated,
+            .DefaultSearchEngineUpdated,
+            .BookmarksUpdated,
+            .RustPlacesOpened
+        ])
+
         subscribeToRedux()
     }
 
@@ -487,6 +492,16 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
+        case .jumpBackIn(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.jumpBackInState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToTabTray()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
@@ -594,6 +609,26 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func navigateToTabTray() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.tabTray),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+            )
+        )
+    }
+
+    private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -606,17 +641,21 @@ final class HomepageViewController: UIViewController,
         }
         switch item {
         case .topSite(let state, _):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: state.site.url.asURL,
-                        isGoogleTopSite: state.isGoogleURL
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: state.site.url.asURL,
+                isGoogleTopSite: state.isGoogleURL,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .bookmark(let config):
+            let destination = NavigationDestination(
+                .link,
+                url: URIFixup.getURL(config.site.url),
+                isGoogleTopSite: false,
+                visitType: .bookmark
+            )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
@@ -660,6 +699,13 @@ final class HomepageViewController: UIViewController,
                 TopSitesAction(
                     windowUUID: self.windowUUID,
                     actionType: TopSitesActionType.fetchTopSites
+                )
+            )
+        case .BookmarksUpdated, .RustPlacesOpened:
+            store.dispatch(
+                BookmarksAction(
+                    windowUUID: self.windowUUID,
+                    actionType: BookmarksActionType.fetchBookmarks
                 )
             )
         default: break

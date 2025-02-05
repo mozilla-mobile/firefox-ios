@@ -17,7 +17,7 @@ final class HomepageDiffableDataSource:
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
-        case jumpBackIn
+        case jumpBackIn(TextColor?)
         case bookmarks
         case pocket(TextColor?)
         case customizeHomepage
@@ -68,13 +68,14 @@ final class HomepageDiffableDataSource:
         }
 
         if let tabs = getJumpBackInTabs(with: state.jumpBackInState) {
-            snapshot.appendSections([.jumpBackIn])
-            snapshot.appendItems(tabs, toSection: .jumpBackIn)
+            snapshot.appendSections([.jumpBackIn(textColor)])
+            snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor))
         }
 
-        // TODO: FXIOS-11051 Update showing bookmarks
-        snapshot.appendSections([.bookmarks])
-        snapshot.appendItems(state.bookmarkState.bookmarks.compactMap { .bookmark($0) }, toSection: .bookmarks)
+        if let bookmarks = getBookmarks(with: state.bookmarkState) {
+            snapshot.appendSections([.bookmarks])
+            snapshot.appendItems(bookmarks, toSection: .bookmarks)
+        }
 
         if let stories = getPocketStories(with: state.pocketState) {
             snapshot.appendSections([.pocket(textColor)])
@@ -120,6 +121,17 @@ final class HomepageDiffableDataSource:
         with jumpBackInSectionState: JumpBackInSectionState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
-        return jumpBackInSectionState.jumpBackInTabs.compactMap { .jumpBackIn($0) }
+        // TODO: FXIOS-11224 Configure items to display based on device sizes
+        let maxItemsToDisplay = 2
+        return jumpBackInSectionState.jumpBackInTabs
+            .prefix(maxItemsToDisplay)
+            .compactMap { .jumpBackIn($0) }
+    }
+
+    private func getBookmarks(
+        with bookmarksSectionState: BookmarksSectionState
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
+        return bookmarksSectionState.bookmarks.compactMap { .bookmark($0) }
     }
 }

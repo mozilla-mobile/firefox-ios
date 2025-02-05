@@ -21,9 +21,7 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
-    var selectedTabUUID: UUID? { get }
     var backupCloseTab: BackupCloseTab? { get set }
-    var backupCloseTabs: [Tab] { get set }
     var normalTabs: [Tab] { get } // Includes active and inactive tabs
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
@@ -41,9 +39,7 @@ protocol TabManager: AnyObject {
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab()
     func getMostRecentHomepageTab() -> Tab?
-    func getTabFor(_ url: URL) -> Tab?
     func clearAllTabsHistory()
-    func willSwitchTabMode(leavingPBM: Bool)
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool)
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
@@ -55,21 +51,12 @@ protocol TabManager: AnyObject {
     @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
-    func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
-                                         isPrivate: Bool,
-                                         previousTabUUID: TabUUID)
-    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
-    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
-    func backgroundRemoveAllTabs(isPrivate: Bool,
-                                 didClearTabs: @escaping (_ tabsToRemove: [Tab],
-                                                          _ isPrivate: Bool,
-                                                          _ previousTabUUID: String) -> Void)
     // MARK: TabTray refactor interfaces
 
     /// Async Remove tab option using tabUUID. Replaces direct usage of removeTab where the whole Tab is needed
@@ -139,14 +126,6 @@ extension TabManager {
                afterTab: afterTab,
                zombie: zombie,
                isPrivate: isPrivate)
-    }
-
-    func backgroundRemoveAllTabs(isPrivate: Bool = false,
-                                 didClearTabs: @escaping (_ tabsToRemove: [Tab],
-                                                          _ isPrivate: Bool,
-                                                          _ previousTabUUID: TabUUID) -> Void) {
-        backgroundRemoveAllTabs(isPrivate: isPrivate,
-                                didClearTabs: didClearTabs)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {

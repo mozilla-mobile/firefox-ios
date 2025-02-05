@@ -11,10 +11,14 @@ import Common
 final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+
+        // We must reset the global mock store prior to each test
+        setupStore()
     }
 
     override func tearDown() {
@@ -24,7 +28,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func tests_initialState_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
@@ -44,7 +47,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -75,7 +77,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_borderPositionChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -94,7 +95,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -108,7 +108,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSetTextInLocationViewAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -125,7 +124,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didPasteSearchTermAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -142,7 +140,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didStartEditingUrlAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -158,7 +155,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_cancelEditAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -174,7 +170,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_cancelEditOnHomepageAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -190,7 +185,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_hideKeyboardAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -206,7 +200,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -223,7 +216,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_searchEngineDidChangeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -239,7 +231,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_clearSearchAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -255,7 +246,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didDeleteSearchTermAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -271,7 +261,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didEnterSearchTermAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -287,7 +276,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSetSearchTermAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -304,7 +292,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didStartTypingAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -320,7 +307,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_showMenuWarningBadgeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -338,7 +324,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -357,7 +342,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_toolbarPositionChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -377,7 +361,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -395,7 +378,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_backForwardButtonStateChangedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -416,7 +398,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_traitCollectionDidChangeAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -436,7 +417,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_navigationButtonDoubleTappedAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -453,7 +433,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_navigationHintFinishedPresentingAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -470,7 +449,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didTapSearchEngineAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
         let searchEngineModel = SearchEngineModel(
@@ -491,7 +469,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didClearAlternativeSearchEngineAction_returnsExpectedState() {
-        setupStore()
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
@@ -554,10 +531,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func setupStore() {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(),
-            middlewares: [ToolbarMiddleware().toolbarProvider]
-        )
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // In order to avoid flaky tests, we should reset the store

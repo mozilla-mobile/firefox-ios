@@ -8,6 +8,18 @@ import XCTest
 @testable import Client
 
 final class JumpBackInSectionStateTests: XCTestCase {
+    var mockProfile: MockProfile!
+
+    override func setUp() {
+        super.setUp()
+        mockProfile = MockProfile()
+    }
+
+    override func tearDown() {
+        mockProfile = nil
+        super.tearDown()
+    }
+
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
@@ -21,19 +33,19 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
         let newState = reducer(
             initialState,
-            HomepageAction(
+            TabManagerAction(
+                recentTabs: [createTab(urlString: "www.mozilla.org")],
                 windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.initialize
+                actionType: TabManagerMiddlewareActionType.fetchRecentTabs
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.jumpBackInTabs.count, 1)
-
-        XCTAssertEqual(newState.jumpBackInTabs.first?.titleText, "JumpBack In Title")
-        XCTAssertEqual(newState.jumpBackInTabs.first?.descriptionText, "JumpBack In Description")
-        XCTAssertEqual(newState.jumpBackInTabs.first?.siteURL, "www.mozilla.com")
-        XCTAssertEqual(newState.jumpBackInTabs.first?.accessibilityLabel, "JumpBack In Title, JumpBack In Description")
+        XCTAssertEqual(newState.jumpBackInTabs.first?.titleText, "www.mozilla.org")
+        XCTAssertEqual(newState.jumpBackInTabs.first?.descriptionText, "Www.Mozilla.Org")
+        XCTAssertEqual(newState.jumpBackInTabs.first?.siteURL, "www.mozilla.org")
+        XCTAssertEqual(newState.jumpBackInTabs.first?.accessibilityLabel, "www.mozilla.org, Www.Mozilla.Org")
     }
 
     // MARK: - Private
@@ -43,5 +55,11 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
     private func jumpBackInSectionReducer() -> Reducer<JumpBackInSectionState> {
         return JumpBackInSectionState.reducer
+    }
+
+    func createTab(urlString: String) -> Tab {
+        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: urlString)!
+        return tab
     }
 }
