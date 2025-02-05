@@ -554,7 +554,7 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Unable to handle whether context menu should be presented for item at \(point)",
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
                 category: .homepage
             )
