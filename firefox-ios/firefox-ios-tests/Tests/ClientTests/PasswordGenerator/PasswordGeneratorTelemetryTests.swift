@@ -12,8 +12,8 @@ final class PasswordGeneratorTelemetryTests: XCTestCase {
     var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
-        gleanWrapper = MockGleanWrapper()
         super.setUp()
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
@@ -22,13 +22,13 @@ final class PasswordGeneratorTelemetryTests: XCTestCase {
     }
 
     func testShowPasswordGeneratorDialog() {
-        let subject = self.createSubject(gleanWrapper: gleanWrapper)
+        let subject = createSubject(gleanWrapper: gleanWrapper)
         subject.passwordGeneratorDialogShown()
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
 
     func testUsePasswordButtonPressed() {
-        let subject = self.createSubject(gleanWrapper: gleanWrapper)
+        let subject = createSubject(gleanWrapper: gleanWrapper)
         subject.usePasswordButtonPressed()
         XCTAssertEqual(gleanWrapper.incrementCounterCalled, 1)
     }
