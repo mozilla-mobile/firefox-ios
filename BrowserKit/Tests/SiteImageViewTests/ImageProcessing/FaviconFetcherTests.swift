@@ -16,8 +16,8 @@ final class FaviconFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockImageDownloader = nil
+        super.tearDown()
     }
 
     func testReturnsFailure_onAnyError() async {

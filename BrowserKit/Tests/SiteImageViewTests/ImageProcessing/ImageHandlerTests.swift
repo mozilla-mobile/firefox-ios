@@ -24,11 +24,11 @@ final class ImageHandlerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.heroImageFetcher = nil
         self.siteImageCache = nil
         self.faviconFetcher = nil
         self.letterImageGenerator = nil
+        super.tearDown()
     }
 
     // MARK: - Favicon
