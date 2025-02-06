@@ -741,7 +741,7 @@ app:
     no_lint:
       - BASELINE_PING
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/FXIOS-11280
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24599
       - https://bugzilla.mozilla.org/1941035
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/24594
