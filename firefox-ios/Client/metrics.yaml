@@ -750,7 +750,7 @@ app:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - glean-team@mozilla.com
-    expires: never
+    expires: "2025-07-01"
 
 # Usage reporting
 usage:
