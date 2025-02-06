@@ -102,12 +102,12 @@ enum ToolbarActionType: ActionType {
 }
 
 class ToolbarMiddlewareAction: Action {
-    let buttonType: ToolbarActionState.ActionType?
+    let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
 
-    init(buttonType: ToolbarActionState.ActionType? = nil,
+    init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,

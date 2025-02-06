@@ -8,7 +8,7 @@ import Redux
 /// State for the jump back in section that is used in the homepage view
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var jumpBackInTabs: [JumpBackInTabState]
+    var jumpBackInTabs: [JumpBackInTabConfiguration]
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -19,7 +19,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
 
     private init(
         windowUUID: WindowUUID,
-        jumpBackInTabs: [JumpBackInTabState]
+        jumpBackInTabs: [JumpBackInTabConfiguration]
     ) {
         self.windowUUID = windowUUID
         self.jumpBackInTabs = jumpBackInTabs

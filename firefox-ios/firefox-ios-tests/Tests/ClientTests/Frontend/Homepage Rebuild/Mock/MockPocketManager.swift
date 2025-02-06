@@ -8,7 +8,7 @@ import Foundation
 
 final class MockPocketManager: PocketManagerProvider {
     var getPocketItemsCalled = 0
-    func getPocketItems() async -> [PocketStoryState] {
+    func getPocketItems() async -> [PocketStoryConfiguration] {
         getPocketItemsCalled += 1
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
@@ -16,6 +16,6 @@ final class MockPocketManager: PocketManagerProvider {
             .make(title: "feed3"),
         ]
 
-        return stories.compactMap { PocketStoryState(story: PocketStory(pocketFeedStory: $0)) }
+        return stories.compactMap { PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0)) }
     }
 }

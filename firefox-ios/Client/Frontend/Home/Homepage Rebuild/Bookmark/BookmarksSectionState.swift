@@ -9,7 +9,7 @@ import Storage
 /// State for the bookmark section that is used in the homepage view
 struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var bookmarks: [BookmarkState]
+    var bookmarks: [BookmarkConfiguration]
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -20,7 +20,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
 
     private init(
         windowUUID: WindowUUID,
-        bookmarks: [BookmarkState]
+        bookmarks: [BookmarkConfiguration]
     ) {
         self.windowUUID = windowUUID
         self.bookmarks = bookmarks

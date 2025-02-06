@@ -815,7 +815,7 @@
 		8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2D2CB81668009436D9 /* PocketAction.swift */; };
 		8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */; };
 		8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D312CB8170D009436D9 /* PocketManager.swift */; };
-		8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketStoryState.swift */; };
+		8A454D362CB86993009436D9 /* PocketStoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */; };
 		8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D332CB85C7D009436D9 /* PocketStateTests.swift */; };
 		8A454D3F2CB9B8A0009436D9 /* TopSitesSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */; };
 		8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */; };
@@ -1086,7 +1086,7 @@
 		8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BB92891C0C300BC12EA /* JumpBackInSectionLayout.swift */; };
 		8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BBB2891C20D00BC12EA /* JumpBackInList.swift */; };
 		8AE80BBE2891C21A00BC12EA /* JumpBackInSyncedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BBD2891C21A00BC12EA /* JumpBackInSyncedTab.swift */; };
-		8AE938192CD91D5A0020E6CF /* TopSiteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE938182CD91D5A0020E6CF /* TopSiteState.swift */; };
+		8AE938192CD91D5A0020E6CF /* TopSiteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE938182CD91D5A0020E6CF /* TopSiteConfiguration.swift */; };
 		8AE9381D2CD920310020E6CF /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE9381C2CD920310020E6CF /* TopSiteCell.swift */; };
 		8AE9FD262CF66301001053EE /* UnifiedAdsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE9FD252CF662FF001053EE /* UnifiedAdsProvider.swift */; };
 		8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD9F22C3D7B3E001A2C5A /* FeatureFlagsSettings.swift */; };
@@ -1678,7 +1678,7 @@
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
 		E13C07292C217D700087E404 /* NavigationBarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C07282C217D700087E404 /* NavigationBarState.swift */; };
 		E13C072B2C2184C80087E404 /* AddressBarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C072A2C2184C80087E404 /* AddressBarState.swift */; };
-		E13C072D2C2189B80087E404 /* ToolbarActionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C072C2C2189B70087E404 /* ToolbarActionState.swift */; };
+		E13C072D2C2189B80087E404 /* ToolbarActionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13C072C2C2189B70087E404 /* ToolbarActionConfiguration.swift */; };
 		E13E9AB32AAB0FB5001A0E9D /* FakespotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */; };
 		E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */; };
 		E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */; };
@@ -7832,7 +7832,7 @@
 		8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMiddleware.swift; sourceTree = "<group>"; };
 		8A454D312CB8170D009436D9 /* PocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketManager.swift; sourceTree = "<group>"; };
 		8A454D332CB85C7D009436D9 /* PocketStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStateTests.swift; sourceTree = "<group>"; };
-		8A454D352CB86993009436D9 /* PocketStoryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStoryState.swift; sourceTree = "<group>"; };
+		8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStoryConfiguration.swift; sourceTree = "<group>"; };
 		8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionState.swift; sourceTree = "<group>"; };
 		8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesAction.swift; sourceTree = "<group>"; };
 		8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesManager.swift; sourceTree = "<group>"; };
@@ -8111,7 +8111,7 @@
 		8AE80BB92891C0C300BC12EA /* JumpBackInSectionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInSectionLayout.swift; sourceTree = "<group>"; };
 		8AE80BBB2891C20D00BC12EA /* JumpBackInList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInList.swift; sourceTree = "<group>"; };
 		8AE80BBD2891C21A00BC12EA /* JumpBackInSyncedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInSyncedTab.swift; sourceTree = "<group>"; };
-		8AE938182CD91D5A0020E6CF /* TopSiteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteState.swift; sourceTree = "<group>"; };
+		8AE938182CD91D5A0020E6CF /* TopSiteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteConfiguration.swift; sourceTree = "<group>"; };
 		8AE9381A2CD91FDB0020E6CF /* TopSitesSectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionStateTests.swift; sourceTree = "<group>"; };
 		8AE9381C2CD920310020E6CF /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
 		8AE9FD252CF662FF001053EE /* UnifiedAdsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsProvider.swift; sourceTree = "<group>"; };
@@ -9581,7 +9581,7 @@
 		E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManagerMock.swift; sourceTree = "<group>"; };
 		E13C07282C217D700087E404 /* NavigationBarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarState.swift; sourceTree = "<group>"; };
 		E13C072A2C2184C80087E404 /* AddressBarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarState.swift; sourceTree = "<group>"; };
-		E13C072C2C2189B70087E404 /* ToolbarActionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarActionState.swift; sourceTree = "<group>"; };
+		E13C072C2C2189B70087E404 /* ToolbarActionConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarActionConfiguration.swift; sourceTree = "<group>"; };
 		E13E9AB02AAB0FB4001A0E9D /* FakespotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewController.swift; path = Client/Frontend/Fakespot/FakespotViewController.swift; sourceTree = SOURCE_ROOT; };
 		E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotCoordinator.swift; path = Client/Frontend/Fakespot/FakespotCoordinator.swift; sourceTree = SOURCE_ROOT; };
 		E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewModel.swift; path = Client/Frontend/Fakespot/FakespotViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -11914,7 +11914,7 @@
 				8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */,
 				8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */,
 				8A454D452CB9C83F009436D9 /* TopSitesMiddleware.swift */,
-				8AE938182CD91D5A0020E6CF /* TopSiteState.swift */,
+				8AE938182CD91D5A0020E6CF /* TopSiteConfiguration.swift */,
 				8AE9381C2CD920310020E6CF /* TopSiteCell.swift */,
 			);
 			path = TopSites;
@@ -12378,7 +12378,7 @@
 				8A454D312CB8170D009436D9 /* PocketManager.swift */,
 				8A454D2D2CB81668009436D9 /* PocketAction.swift */,
 				8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */,
-				8A454D352CB86993009436D9 /* PocketStoryState.swift */,
+				8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -14162,7 +14162,7 @@
 				E17798992BD7D44200F6F0EB /* ToolbarState.swift */,
 				E13C07282C217D700087E404 /* NavigationBarState.swift */,
 				E13C072A2C2184C80087E404 /* AddressBarState.swift */,
-				E13C072C2C2189B70087E404 /* ToolbarActionState.swift */,
+				E13C072C2C2189B70087E404 /* ToolbarActionConfiguration.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -16907,7 +16907,7 @@
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* DownloadHelper.swift in Sources */,
-				8AE938192CD91D5A0020E6CF /* TopSiteState.swift in Sources */,
+				8AE938192CD91D5A0020E6CF /* TopSiteConfiguration.swift in Sources */,
 				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
@@ -17231,7 +17231,7 @@
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
-				8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */,
+				8A454D362CB86993009436D9 /* PocketStoryConfiguration.swift in Sources */,
 				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
@@ -17496,7 +17496,7 @@
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */,
-				E13C072D2C2189B80087E404 /* ToolbarActionState.swift in Sources */,
+				E13C072D2C2189B80087E404 /* ToolbarActionConfiguration.swift in Sources */,
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				E58368AA287D632F0087A449 /* StoryProvider.swift in Sources */,
 				8A3EF7FF2A2FCFBB00796E3A /* ChangeToChinaSetting.swift in Sources */,

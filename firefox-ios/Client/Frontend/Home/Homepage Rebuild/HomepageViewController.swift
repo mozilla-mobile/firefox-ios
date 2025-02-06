@@ -387,14 +387,14 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
-        case .jumpBackIn(let state):
+        case .jumpBackIn(let tab):
             guard let jumpBackInCell = collectionView?.dequeueReusableCell(
                 cellType: JumpBackInCell.self,
                 for: indexPath
             ) else {
                 return UICollectionViewCell()
             }
-            jumpBackInCell.configure(state: state, theme: currentTheme)
+            jumpBackInCell.configure(config: tab, theme: currentTheme)
             return jumpBackInCell
 
         case .bookmark(let state):
@@ -404,7 +404,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(state: state, theme: currentTheme)
+            bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
