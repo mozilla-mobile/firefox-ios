@@ -2169,6 +2169,8 @@ class BrowserViewController: UIViewController,
     /// Used to handle general navigation for views that can be presented from multiple places
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
+        case .bookmarksPanel:
+            navigationHandler?.show(homepanelSection: .bookmarks)
         case .contextMenu:
             guard let configuration = type.contextMenuConfiguration else {
                 logger.log(

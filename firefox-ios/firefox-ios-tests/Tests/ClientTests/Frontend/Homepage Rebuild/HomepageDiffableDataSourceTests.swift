@@ -39,7 +39,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .bookmarks, .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .bookmarks(nil), .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
@@ -108,7 +108,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             .header,
             .topSites(4),
             .jumpBackIn(nil),
-            .bookmarks,
+            .bookmarks(nil),
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -133,7 +133,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .jumpBackIn(nil),
-            .bookmarks,
+            .bookmarks(nil),
             .pocket(nil),
             .customizeHomepage
         ]
@@ -162,7 +162,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
-        let expectedSections: [HomepageSection] = [.header, .messageCard, .jumpBackIn(nil), .bookmarks, .customizeHomepage]
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .messageCard,
+            .jumpBackIn(nil),
+            .bookmarks(nil),
+            .customizeHomepage
+        ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
