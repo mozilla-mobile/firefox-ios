@@ -18,7 +18,8 @@ class A11yUtils: XCTestCase {
     }
 
     public static func checkMissingLabels(in elements: [XCUIElement],
-                                          screenName: String, missingLabels: inout [MissingAccessibilityElement],
+                                          screenName: String,
+                                          missingLabels: inout [MissingAccessibilityElement],
                                           elementType: String) {
         for element in elements {
             let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)

@@ -60,38 +60,37 @@ class A11ySearchTest: BaseTestCase {
 
             // Check accessibility
             // swiftlint:disable empty_count
-            if !iPad() {
-                try app.performAccessibilityAudit { issue in
-                    guard let element = issue.element else { return false }
+            guard iPad() == false else { return }
+            try app.performAccessibilityAudit { issue in
+                guard let element = issue.element else { return false }
 
-                    var shouldIgnore = false
-                    // number of tabs in navigation toolbar
-                    let isDynamicTypeTabButton = element.label == "1" &&
-                    issue.auditType == .dynamicType
+                var shouldIgnore = false
+                // number of tabs in navigation toolbar
+                let isDynamicTypeTabButton = element.label == "1" &&
+                issue.auditType == .dynamicType
 
-                    // clipped text on homepage
-                    let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-                        .firstMatch
-                    let isDescendantOfHomepage = homepage.descendants(matching: element.elementType)
-                        .containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-                    let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
+                // clipped text on homepage
+                let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+                    .firstMatch
+                let isDescendantOfHomepage = homepage.descendants(matching: element.elementType)
+                    .containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
 
-                    // clipped text in search suggestions
-                    let suggestions = self.app.tables["SiteTable"].firstMatch
-                    let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType)
-                        .containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-                    let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
+                // clipped text in search suggestions
+                let suggestions = self.app.tables["SiteTable"].firstMatch
+                let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType)
+                    .containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
 
-                    // text in the address toolbar text field
-                    let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
+                // text in the address toolbar text field
+                let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
 
-                    if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
-                        shouldIgnore = true
-                    }
-
-                    return shouldIgnore
+                if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
+                    shouldIgnore = true
                 }
-                // swiftlint:enable empty_count
+
+                return shouldIgnore
             }
+                // swiftlint:enable empty_count
         }
 }
