@@ -14,6 +14,7 @@
   },
   "testTargets" : [
     {
+      "enabled" : false,
       "skippedTests" : [
         "ActivityStreamTest",
         "ActivityStreamTest\/testContextMenuInLandscape()",

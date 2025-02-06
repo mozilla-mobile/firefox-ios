@@ -9,8 +9,7 @@
   "devices": [
     {
       "name": "iPhone SE (3rd generation)",
-      "orientation": "portrait",
-      "os": "17.5"
+      "orientation": "portrait"
     },
     {
       "name": "iPhone 15 Pro",
@@ -23,11 +22,11 @@
       "orientation": "landscape"
     },
     {
-      "name": "iPad Pro (12.9-inch) (6th generation)",
+      "name": "iPad Pro 11-inch (M4)",
       "orientation": "portrait"
     }
   ],
-  "testPlans": [
+  "testBundles": [
     {
       "name": "EcosiaSnapshotTests",
       "testClasses": [

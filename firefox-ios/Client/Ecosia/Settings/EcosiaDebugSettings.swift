@@ -4,9 +4,9 @@
 
 import Foundation
 import UIKit
-import Core
 import Shared
 import Common
+import Ecosia
 
 final class PushBackInstallation: HiddenSetting {
     override var title: NSAttributedString? {
@@ -238,32 +238,5 @@ final class AnalyticsIdentifierSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         UIPasteboard.general.string = analyticsIdentifier
-    }
-}
-
-final class UnleashNewsletterCardSetting: UnleashVariantResetSetting {
-    override var titleName: String? {
-        "Newsletter Card"
-    }
-
-    override var unleashEnabled: Bool? {
-        Unleash.isEnabled(.newsletterCard)
-    }
-}
-
-final class NewsletterCardDismissSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Unset Newsletter card dismissed", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])
-    }
-
-    override var status: NSAttributedString? {
-        let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText]
-        let hintText = NewsletterCardExperiment.isDismissed ? "dismissed (Click to unset)" : "showing (Nothing to do here)"
-        return NSAttributedString(string: "Card is currently \(hintText)", attributes: attributes)
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        NewsletterCardExperiment.unsetDismissed()
-        self.settings.tableView.reloadData()
     }
 }

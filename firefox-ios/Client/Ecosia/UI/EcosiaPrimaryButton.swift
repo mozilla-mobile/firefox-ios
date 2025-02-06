@@ -7,9 +7,10 @@ import Common
 
 class EcosiaPrimaryButton: UIButton {
     let windowUUID: WindowUUID
+
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
-        super.init(type: .custom)
+        super.init(frame: .zero)
     }
     required init?(coder: NSCoder) { nil }
 

@@ -6,6 +6,7 @@ import Foundation
 
 import XCTest
 @testable import Client
+@testable import Ecosia
 
 final class AnalyticsTests: XCTestCase {
 

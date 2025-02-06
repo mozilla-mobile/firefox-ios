@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import Core
+@testable import Ecosia
 @testable import Client
 
 class EcosiaNTPTooltipHighlightTests: XCTestCase {
 
-    var user: Core.User!
+    var user: Ecosia.User!
 
     override func setUpWithError() throws {
         try? FileManager().removeItem(at: FileManager.user)

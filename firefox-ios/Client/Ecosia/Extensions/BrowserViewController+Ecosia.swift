@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
 import Shared
+import Ecosia
 
 extension BrowserViewController: HomepageViewControllerDelegate {
     func homeDidTapSearchButton(_ home: HomepageViewController) {

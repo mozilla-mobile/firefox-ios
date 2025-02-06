@@ -31,9 +31,9 @@ enum DeviceType: String, CaseIterable {
         case .iPhone15ProMax_Landscape:
             return ViewImageConfig.iPhone13ProMax(.landscape)
         case .iPadPro_Portrait:
-            return ViewImageConfig.iPadPro12_9(.portrait)
+            return ViewImageConfig.iPadPro11(.portrait)
         case .iPadPro_Landscape:
-            return ViewImageConfig.iPadPro12_9(.landscape)
+            return ViewImageConfig.iPadPro11(.landscape)
         }
     }
 
@@ -46,7 +46,7 @@ enum DeviceType: String, CaseIterable {
         case .iPhone15ProMax_Portrait, .iPhone15ProMax_Landscape:
             return "iPhone 15 Pro Max"
         case .iPadPro_Portrait, .iPadPro_Landscape:
-            return "iPad Pro (12.9-inch) (6th generation)"
+            return "iPad Pro 11-inch (M4)"
         }
     }
 
@@ -70,9 +70,9 @@ enum DeviceType: String, CaseIterable {
             return .iPhone15ProMax_Portrait
         case ("iPhone 15 Pro Max", "landscape"):
             return .iPhone15ProMax_Landscape
-        case ("iPad Pro (12.9-inch) (6th generation)", "portrait"):
+        case ("iPad Pro 11-inch (M4)", "portrait"):
             return .iPadPro_Portrait
-        case ("iPad Pro (12.9-inch) (6th generation)", "landscape"):
+        case ("iPad Pro 11-inch (M4)", "landscape"):
             return .iPadPro_Landscape
         default:
             fatalError("Device Name \(deviceName) and Orientation \(orientation) not found. Please add them correctly.")

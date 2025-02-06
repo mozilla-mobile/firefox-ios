@@ -15,8 +15,7 @@ import Common
 import ComponentLibrary
 import Redux
 import ToolbarKit
-// Ecosia: Import Core
-import Core
+import Ecosia
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData

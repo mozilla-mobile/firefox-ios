@@ -11,7 +11,7 @@ import Common
 import Glean
  */
 import TabDataStore
-import Core
+import Ecosia
 
 import class MozillaAppServices.Viaduct
 

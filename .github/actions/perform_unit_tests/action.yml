@@ -13,7 +13,7 @@ runs:
     - name: Run Unit Tests
       shell: bash
       run: |
-        bundle exec fastlane run run_tests prelaunch_simulator:true testplan:"UnitTest"
+        bundle exec fastlane run run_tests prelaunch_simulator:true
 
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v3.7.6

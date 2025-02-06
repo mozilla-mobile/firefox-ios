@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Core
+import Ecosia
 import Common
 
 typealias NTPAboutEcosiaCellDelegate = SharedHomepageCellDelegate & SharedHomepageCellLayoutDelegate
@@ -78,7 +78,6 @@ extension NTPAboutEcosiaCellViewModel: HomepageSectionHandler {
             return UICollectionViewCell()
         }
         cell.configure(section: sections[indexPath.row], viewModel: self)
-        cell.applyTheme(theme: theme)
         return cell
     }
 

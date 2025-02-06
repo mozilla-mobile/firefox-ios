@@ -3,8 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Ecosia
+import SiteImageView
 
 open class DefaultSuggestedSites {
+    /* Ecosia: Replace Default Suggested Sites
     private static let urlMap = [
         "https://www.amazon.com/": [
             "as": "https://www.amazon.in",
@@ -129,8 +132,31 @@ open class DefaultSuggestedSites {
             )
         ]
     ]
+     */
+
+    public static let sites = [
+            SuggestedSite(
+                url: Ecosia.Environment.current.urlProvider.financialReports.absoluteString,
+                title: NSLocalizedString("Financial reports", tableName: "Ecosia", comment: ""),
+                trackingId: 901,
+                faviconResource: .bundleAsset(name: "financialReports", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+            ),
+            SuggestedSite(
+                url: Ecosia.Environment.current.urlProvider.privacy.absoluteString,
+                title: NSLocalizedString("Privacy", tableName: "Ecosia", comment: ""),
+                trackingId: 902,
+                faviconResource: .bundleAsset(name: "privacy", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+            ),
+            SuggestedSite(
+                url: Ecosia.Environment.current.urlProvider.trees.absoluteString,
+                title: NSLocalizedString("Trees update", tableName: "Ecosia", comment: ""),
+                trackingId: 903,
+                faviconResource: .bundleAsset(name: "treesUpdate", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+            )
+    ]
 
     public static func defaultSites() -> [Site] {
+        /* Ecosia: Simply return Ecosia sites
         let locale = Locale.current
         let defaultSites = sites[locale.identifier] ?? sites["default"]
         return defaultSites?.map { data in
@@ -142,5 +168,7 @@ open class DefaultSuggestedSites {
             }
             return data
         } ?? []
+         */
+        sites
     }
 }

@@ -3,15 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Core
 import Shared
 import Storage
 import Common
 
 import class MozillaAppServices.BookmarkFolderData
+import Ecosia
 
 protocol BookmarksExchangable {
-    func export(bookmarks: [Core.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws
+    func export(bookmarks: [Ecosia.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws
     func `import`(from fileURL: URL, in viewController: UIViewController) async throws
 }
 
@@ -34,7 +34,7 @@ final class BookmarksExchange: BookmarksExchangable {
     }
 
     @MainActor
-    func export(bookmarks: [Core.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws {
+    func export(bookmarks: [Ecosia.BookmarkItem], in viewController: UIViewController, barButtonItem: UIBarButtonItem) async throws {
         guard let view = viewController.view else { return }
 
         let theme = themeFromView(view: view)
@@ -107,7 +107,7 @@ final class BookmarksExchange: BookmarksExchangable {
     }
 
     private func importBookmarks(
-        _ bookmarks: [Core.BookmarkItem],
+        _ bookmarks: [Ecosia.BookmarkItem],
         viewController: UIViewController,
         toast: SimpleToast
     ) async throws {
@@ -154,7 +154,7 @@ final class BookmarksExchange: BookmarksExchangable {
         }
     }
 
-    private func processBookmarks(_ bookmarks: [Core.BookmarkItem], parentGUID: GUID) async throws {
+    private func processBookmarks(_ bookmarks: [Ecosia.BookmarkItem], parentGUID: GUID) async throws {
         for bookmark in bookmarks {
             switch bookmark {
             case let .folder(title, children, _):

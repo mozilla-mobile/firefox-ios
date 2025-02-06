@@ -7,7 +7,7 @@ import UIKit
 import Storage
 import Shared
 import SiteImageView
-import Core
+import Ecosia
 
 import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData

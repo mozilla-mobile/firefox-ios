@@ -5,6 +5,7 @@
 import SnapshotTesting
 import UIKit
 import Common
+import XCTest
 @testable import Client
 
 struct ThemeConfiguration {
@@ -78,11 +79,6 @@ final class SnapshotTestHelper {
 
             for locale in locales {
                 for (themeStyle, themeSuffix) in themes {
-                    let traitsArray: [UITraitCollection] = [
-                        config.traits,
-                        .init(userInterfaceStyle: themeStyle)
-                    ]
-
                     setLocale(locale)
                     changeThemeTo(themeStyle, suffix: themeSuffix, themeManager: themeManager)
                     updateContentInitializingWith(initializer, inWindow: window)
@@ -98,13 +94,33 @@ final class SnapshotTestHelper {
 
                     let snapshotName = "\(String.cleanFunctionName(testName))_\(themeSuffix.rawValue)_\(deviceType.rawValue)_\(locale.identifier)"
 
-                    SnapshotTesting.assertSnapshot(
+                    let fileUrl = URL(fileURLWithPath: "\(file)", isDirectory: false)
+                    let fileName = fileUrl.deletingPathExtension().lastPathComponent
+                    let domain = fileUrl.deletingLastPathComponent().lastPathComponent
+                    let snapshotDirectoryUrl = fileUrl
+                      .deletingLastPathComponent()
+                      .deletingLastPathComponent()
+                      .appendingPathComponent("SnapshotArtifacts", isDirectory: true)
+                      .appendingPathComponent(domain, isDirectory: true)
+                      .appendingPathComponent(fileName, isDirectory: true)
+
+                    var snapshotDirectory: String!
+                    if #available(iOS 16.0, *) {
+                        snapshotDirectory = snapshotDirectoryUrl.path()
+                    } else {
+                        snapshotDirectory = snapshotDirectoryUrl.path
+                    }
+
+                    let failure = verifySnapshot(
                         of: window,
                         as: snapshotting,
+                        snapshotDirectory: snapshotDirectory,
                         file: file,
-                        testName: snapshotName,
-                        line: line
+                        testName: snapshotName
                     )
+
+                    guard let message = failure else { return }
+                    XCTFail(message, file: file, line: line)
                 }
             }
         }
@@ -147,8 +163,7 @@ final class SnapshotTestHelper {
     ///   - suffix: The `ThemeConfiguration.Theme` that specifies additional theme details, typically used for naming or logging.
     ///   - themeManager: The `ThemeManager` responsible for applying theme changes across the app.
     private static func changeThemeTo(_ theme: UIUserInterfaceStyle, suffix: ThemeConfiguration.Theme, themeManager: ThemeManager) {
-        LegacyThemeManager.instance.current = suffix == .light ? LegacyNormalTheme() : LegacyDarkTheme()
-        themeManager.changeCurrentTheme(suffix == .light ? .light : .dark)
+        themeManager.setManualTheme(to: suffix == .light ? .light : .dark)
     }
 
     /// Captures snapshots of a `UIViewController` across multiple device configurations.

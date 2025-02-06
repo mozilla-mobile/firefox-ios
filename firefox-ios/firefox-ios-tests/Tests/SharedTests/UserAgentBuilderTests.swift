@@ -42,7 +42,10 @@ final class UserAgentBuilderTests: XCTestCase {
     func testDefaultMobileUserAgent() {
         let builder = UserAgentBuilder.defaultMobileUserAgent()
         let systemInfo = "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)"
+        /* Ecosia: Update extensions
         let extensions = "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
+         */
+        let extensions = "Ecosia/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
         let testAgent = "\(UserAgent.product) \(systemInfo) \(UserAgent.platform) \(UserAgent.platformDetails) \(extensions)"
         XCTAssertEqual(builder.userAgent(), testAgent)
     }
@@ -50,7 +53,10 @@ final class UserAgentBuilderTests: XCTestCase {
     func testDefaultDesktopUserAgent() {
         let builder = UserAgentBuilder.defaultDesktopUserAgent()
         let systemInfo = "(Macintosh; Intel Mac OS X 10.15)"
-        let extensions = "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"
+        /* Ecosia: Update extensions
+        let extensions = "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
+         */
+        let extensions = "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
         let testAgent = "\(UserAgent.product) \(systemInfo) \(UserAgent.platform) \(UserAgent.platformDetails) \(extensions)"
         XCTAssertEqual(builder.userAgent(), testAgent)
     }

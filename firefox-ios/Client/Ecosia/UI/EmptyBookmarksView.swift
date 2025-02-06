@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Ecosia
 
 final class EmptyBookmarksView: UIView, ThemeApplicable {
 

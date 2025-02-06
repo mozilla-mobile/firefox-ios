@@ -16,65 +16,66 @@ class DefaultSearchPrefsTests: XCTestCase {
         )!
 
         // setup the most popular locales
+        // Ecosia: update values to include ecosia
         let usa = (
             lang: ["en-US", "en"],
             region: "US",
-            resultList: ["google-b-1-m", "bing", "ddg", "ebay", "wikipedia"],
-            resultDefault: "Google"
+            resultList: ["google-b-1-m", "bing", "ddg", "wikipedia", "ecosia"],
+            resultDefault: "ecosia"
         )
         let england = (
             lang: ["en-GB", "en"],
             region: "GB",
-            resultList: ["google-b-m", "bing", "ddg", "ebay-co-uk", "qwant", "wikipedia"],
-            resultDefault: "Google"
+            resultList: ["google-b-m", "bing", "ddg", "wikipedia", "ecosia"],
+            resultDefault: "ecosia"
         )
         let france = (
             lang: ["fr-FR", "fr"],
             region: "FR",
-            resultList: ["google-b-m", "bing", "ddg", "ebay-fr", "qwant", "wikipedia-fr"],
-            resultDefault: "Google"
+            resultList: ["google-b-m", "bing", "ddg", "wikipedia-fr", "ecosia"],
+            resultDefault: "ecosia"
         )
         let japan = (
             lang: ["ja-JP", "ja"],
             region: "JP",
-            resultList: ["google-b-m", "amazon-jp", "bing", "ebay", "wikipedia-ja", "yahoo-jp"],
-            resultDefault: "Google"
+            resultList: ["google-b-m", "bing", "wikipedia-ja", "ecosia"],
+            resultDefault: "ecosia"
         )
         let canada = (
             lang: ["en-CA", "en"],
             region: "CA",
-            resultList: ["google-b-m", "bing", "ddg", "ebay", "wikipedia"],
-            resultDefault: "Google"
+            resultList: ["ecosia", "wikipedia", "google-b-m", "bing", "ddg"],
+            resultDefault: "ecosia"
         )
         let russia = (
             lang: ["ru-RU", "ru"],
             region: "RU",
-            resultList: ["google-com-nocodes", "ebay", "wikipedia-ru"],
-            resultDefault: "Google"
+            resultList: ["google-com-nocodes", "wikipedia-ru", "ecosia"],
+            resultDefault: "ecosia"
         )
         let taiwan = (
             lang: ["zh-TW", "zh"],
             region: "TW",
-            resultList: ["google-b-m", "bing", "ddg", "wikipedia-zh-TW"],
-            resultDefault: "Google"
+            resultList: ["google-b-m", "bing", "ddg", "wikipedia-zh-TW", "ecosia"],
+            resultDefault: "ecosia"
         )
         let china = (
             lang: ["zh-hans-CN", "zh-CN", "zh"],
             region: "CN",
-            resultList: ["google-b-m", "baidu", "bing", "wikipedia-zh-CN"],
+            resultList: ["google-b-m", "bing", "wikipedia-zh-CN", "ecosia"],
             resultDefault: "百度"
         )
         let germany = (
             lang: ["de-DE", "de"],
             region: "DE",
-            resultList: ["google-b-m", "bing", "ddg", "ebay-de", "ecosia", "qwant", "wikipedia-de"],
-            resultDefault: "Google"
+            resultList: ["google-b-m", "bing", "ddg", "ecosia", "wikipedia-de"],
+            resultDefault: "ecosia"
         )
         let southAfrica = (
             lang: ["en-SA", "en"],
             region: "SA",
-            resultList: ["google-b-m", "bing", "ddg", "ebay", "wikipedia"],
-            resultDefault: "Google"
+            resultList: ["ecosia", "wikipedia", "google-b-m", "bing", "ddg"],
+            resultDefault: "ecosia"
         )
         let testLocales = [
             usa,

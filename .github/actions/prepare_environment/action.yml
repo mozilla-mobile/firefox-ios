@@ -9,6 +9,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Xcode Select Version
+      uses: mobiledevops/xcode-select-version-action@v1
+      with:
+        xcode-select-version: 16.2
+
     - name: Fix-up private Github URLs
       shell: bash
       run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/${GITHUB_ACCESS_TOKEN}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
@@ -40,19 +45,19 @@ runs:
       uses: actions/cache/restore@v3
       with:
         path: SourcePackages/
-        key: ${{ runner.os }}-spm-cache-${{ hashFiles('Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
 
     - name: Install SPM if cache not found
       shell: bash
       if: steps.restore-spm-cache.outputs.cache-hit != 'true'
-      run: xcodebuild -resolvePackageDependencies -clonedSourcePackagesDirPath "SourcePackages/"
+      run: xcodebuild -resolvePackageDependencies -clonedSourcePackagesDirPath "firefox-ios/SourcePackages/"
 
     - name: Save SPM Cache if needed
       if: steps.restore-spm-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v3
       with:
-        path: SourcePackages/
-        key: ${{ runner.os }}-spm-cache-${{ hashFiles('Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}  
+        path: firefox-ios/SourcePackages/
+        key: ${{ runner.os }}-spm-cache-${{ hashFiles('firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}  
 
     - name: Extract Staging XCConfig
       shell: bash

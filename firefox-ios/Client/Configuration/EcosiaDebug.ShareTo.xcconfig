@@ -3,6 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 PROVISIONING_PROFILE_SPECIFIER = match Development com.ecosia.ecosiaapp.ShareTo
-CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/AppExtensions/Ecosia.entitlements
+CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/AppExtensions/Ecosia.entitlements
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp
 PRODUCT_BUNDLE_IDENTIFIER = $(MOZ_BUNDLE_ID).$(PRODUCT_NAME)

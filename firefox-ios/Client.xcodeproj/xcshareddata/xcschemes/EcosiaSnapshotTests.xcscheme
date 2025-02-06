@@ -14,7 +14,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:EcosiaTests/SnapshotTests/EcosiaSnapshotTests.xctestplan"
+            reference = "container:EcosiaTests/SnapshotTests/SnapshotTests.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

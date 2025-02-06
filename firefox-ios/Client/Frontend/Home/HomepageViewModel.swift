@@ -4,7 +4,7 @@
 
 import Common
 import Shared
-import Core
+import Ecosia
 
 protocol HomepageViewModelDelegate: AnyObject {
     func reloadView()
@@ -133,7 +133,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
 
     // Ecosia: Add Ecosia's ViewModels
     var libraryViewModel: NTPLibraryCellViewModel
-    var newsletterCardViewModel: NTPNewsletterCardViewModel
     var impactViewModel: NTPImpactCellViewModel
     var newsViewModel: NTPNewsCellViewModel
     var aboutEcosiaViewModel: NTPAboutEcosiaCellViewModel
@@ -143,7 +142,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
      Ecosia: Represents the container that stores some of the `HomepageSectionType`s.
      The earlier a section type appears in the array, the higher its priority.
      */
-    private let cardsPrioritySectionTypes: [HomepageSectionType] = [.newsletterCard]
+    private let cardsPrioritySectionTypes: [HomepageSectionType] = []
 
     // MARK: - Initializers
     init(profile: Profile,
@@ -172,7 +171,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                                   wallpaperManager: wallpaperManager)
         // Ecosia: Add Ecosia's ViewModels
         self.libraryViewModel = NTPLibraryCellViewModel(theme: theme)
-        self.newsletterCardViewModel = NTPNewsletterCardViewModel(theme: theme)
         self.impactViewModel = NTPImpactCellViewModel(referrals: referrals, theme: theme)
         self.newsViewModel = NTPNewsCellViewModel(theme: theme)
         self.aboutEcosiaViewModel = NTPAboutEcosiaCellViewModel(theme: theme)
@@ -234,7 +232,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         // Ecosia: Those models needs to follow strictly the order defined in `enum HomepageSectionType`
         self.childViewModels = [climateImpactCounterViewModel,
                                 headerViewModel,
-                                newsletterCardViewModel,
                                 libraryViewModel,
                                 topSiteViewModel,
                                 impactViewModel,

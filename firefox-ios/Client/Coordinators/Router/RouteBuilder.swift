@@ -5,6 +5,7 @@
 import Foundation
 import CoreSpotlight
 import Shared
+import Ecosia
 
 final class RouteBuilder {
     private var isPrivate = false

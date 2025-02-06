@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Core
 import Storage
 import SnowplowTracker
+import Common
 @testable import Client
+@testable import Ecosia
 
 // MARK: - AnalyticsSpy
 
@@ -131,27 +132,25 @@ final class AnalyticsSpyTests: XCTestCase {
     // MARK: - Properties and Setup
 
     var analyticsSpy: AnalyticsSpy!
-
     var profileMock: MockProfile { MockProfile() }
     var tabManagerMock: TabManager {
         let mock = MockTabManager()
-        mock.selectedTab = .init(profile: profileMock, configuration: .init())
+        mock.selectedTab = .init(profile: profileMock, windowUUID: .XCTestDefaultUUID)
         mock.selectedTab?.url = URL(string: "https://example.com")
         return mock
     }
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManagerMock, themeManager: EcosiaMockThemeManager())
         analyticsSpy = AnalyticsSpy()
         Analytics.shared = analyticsSpy
-        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
         analyticsSpy = nil
         Analytics.shared = Analytics()
-        DependencyHelperMock().reset()
     }
 
     // MARK: - AppDelegate Tests
@@ -193,9 +192,11 @@ final class AnalyticsSpyTests: XCTestCase {
 
     // MARK: - Bookmarks Tests
 
-    var panel: BookmarksPanel {
-        let viewModel = BookmarksPanelViewModel(profile: profileMock, bookmarkFolderGUID: "TestGuid")
-        return BookmarksPanel(viewModel: viewModel)
+    var panel: LegacyBookmarksPanel {
+        let viewModel = BookmarksPanelViewModel(profile: profileMock,
+                                                bookmarksHandler: profileMock.places,
+                                                bookmarkFolderGUID: "TestGuid")
+        return LegacyBookmarksPanel(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)
     }
 
     func testTrackImportClick() {
@@ -245,16 +246,16 @@ final class AnalyticsSpyTests: XCTestCase {
     func testTrackMenuAction() {
         let testCases: [(Analytics.Label.Menu, String)] = [
             (.openInSafari, .localized(.openInSafari)),
-            (.history, .AppMenu.AppMenuHistory),
-            (.downloads, .AppMenu.AppMenuDownloads),
-            (.zoom, String(format: .AppMenu.ZoomPageTitle, NumberFormatter.localizedString(from: NSNumber(value: 1), number: .percent))),
-            (.findInPage, .AppMenu.AppMenuFindInPageTitleString),
-            (.requestDesktopSite, .AppMenu.AppMenuViewDesktopSiteTitleString),
-            (.copyLink, .AppMenu.AppMenuCopyLinkTitleString),
-            (.help, .AppMenu.Help),
-            (.customizeHomepage, .AppMenu.CustomizeHomePage),
-            (.readingList, .AppMenu.ReadingList),
-            (.bookmarks, .AppMenu.Bookmarks)
+            (.history, .LegacyAppMenu.AppMenuHistory),
+            (.downloads, .LegacyAppMenu.AppMenuDownloads),
+            (.zoom, String(format: .LegacyAppMenu.ZoomPageTitle, NumberFormatter.localizedString(from: NSNumber(value: 1), number: .percent))),
+            (.findInPage, .LegacyAppMenu.AppMenuFindInPageTitleString),
+            (.requestDesktopSite, .LegacyAppMenu.AppMenuViewDesktopSiteTitleString),
+            (.copyLink, .LegacyAppMenu.AppMenuCopyLinkTitleString),
+            (.help, .LegacyAppMenu.Help),
+            (.customizeHomepage, .LegacyAppMenu.CustomizeHomePage),
+            (.readingList, .LegacyAppMenu.ReadingList),
+            (.bookmarks, .LegacyAppMenu.Bookmarks)
         ]
 
         for (label, title) in testCases {
@@ -325,10 +326,10 @@ final class AnalyticsSpyTests: XCTestCase {
 
         let testCases: [MenuStatusTestCase] = [
             MenuStatusTestCase(label: .readingList, value: true, title: .ShareAddToReadingList),
-            MenuStatusTestCase(label: .readingList, value: false, title: .AppMenu.RemoveReadingList),
+            MenuStatusTestCase(label: .readingList, value: false, title: .LegacyAppMenu.RemoveReadingList),
             MenuStatusTestCase(label: .bookmark, value: true, title: .KeyboardShortcuts.AddBookmark),
             MenuStatusTestCase(label: .shortcut, value: true, title: .AddToShortcutsActionTitle),
-            MenuStatusTestCase(label: .shortcut, value: false, title: .AppMenu.RemoveFromShortcuts)
+            MenuStatusTestCase(label: .shortcut, value: false, title: .LegacyAppMenu.RemoveFromShortcuts)
         ]
 
         for testCase in testCases {
@@ -371,8 +372,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeViewDidAppearTracksIntroDisplayingAndIntroClickStart() {
         // Arrange
-        let welcomeDelegate = MockWelcomeDelegate()
-        let welcome = Welcome(delegate: welcomeDelegate)
+        let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introDisplayingPageCalled)
         XCTAssertNil(analyticsSpy.introDisplayingIndexCalled)
 
@@ -387,8 +387,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeGetStartedTracksIntroClickNext() {
         // Arrange
-        let welcomeDelegate = MockWelcomeDelegate()
-        let welcome = Welcome(delegate: welcomeDelegate)
+        let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
         XCTAssertNil(analyticsSpy.introClickIndexCalled)
@@ -404,8 +403,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeSkipTracksIntroClickSkip() {
         // Arrange
-        let welcomeDelegate = MockWelcomeDelegate()
-        let welcome = Welcome(delegate: welcomeDelegate)
+        let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
         XCTAssertNil(analyticsSpy.introClickIndexCalled)
@@ -423,8 +421,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeTourViewDidAppearTracksIntroDisplaying() {
         // Arrange
-        let welcomeTourDelegate = MockWelcomeTourDelegate()
-        let welcomeTour = WelcomeTour(delegate: welcomeTourDelegate)
+        let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introDisplayingPageCalled)
         XCTAssertNil(analyticsSpy.introDisplayingIndexCalled)
 
@@ -439,8 +436,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeTourNextTracksIntroClickNext() {
         // Arrange
-        let welcomeTourDelegate = MockWelcomeTourDelegate()
-        let welcomeTour = WelcomeTour(delegate: welcomeTourDelegate)
+        let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
         XCTAssertNil(analyticsSpy.introClickIndexCalled)
@@ -458,8 +454,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeTourSkipTracksIntroClickSkip() {
         // Arrange
-        let welcomeTourDelegate = MockWelcomeTourDelegate()
-        let welcomeTour = WelcomeTour(delegate: welcomeTourDelegate)
+        let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
         XCTAssertNil(analyticsSpy.introClickIndexCalled)
@@ -477,8 +472,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testWelcomeTourTracksAnalyticsForAllPages() {
         // Arrange
-        let welcomeTourDelegate = MockWelcomeTourDelegate()
-        let welcomeTour = WelcomeTour(delegate: welcomeTourDelegate)
+        let welcomeTour = makeWelcomeTour()
         let pages: [Analytics.Property.OnboardingPage] = [
             .greenSearch,
             .profits,
@@ -517,7 +511,7 @@ final class AnalyticsSpyTests: XCTestCase {
         do {
             let item = try createMockNewsModel()!
             let items = [item]
-            let newsController = NewsController(items: items)
+            let newsController = NewsController(items: items, windowUUID: .XCTestDefaultUUID)
             XCTAssertNil(analyticsSpy.navigationActionCalled)
             XCTAssertNil(analyticsSpy.navigationLabelCalled)
 
@@ -538,7 +532,7 @@ final class AnalyticsSpyTests: XCTestCase {
         do {
             let item = try createMockNewsModel()!
             let items = [item]
-            let newsController = NewsController(items: items)
+            let newsController = NewsController(items: items, windowUUID: .XCTestDefaultUUID)
             XCTAssertNil(analyticsSpy.navigationOpenNewsIdCalled)
             newsController.loadView()
             newsController.collection.reloadData()
@@ -559,7 +553,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testMultiplyImpactViewDidAppearTracksReferralViewInviteScreen() {
         // Arrange
         let referrals = Referrals()
-        let multiplyImpact = MultiplyImpact(referrals: referrals)
+        let multiplyImpact = MultiplyImpact(referrals: referrals, windowUUID: .XCTestDefaultUUID)
         multiplyImpact.loadViewIfNeeded()
 
         // Act
@@ -573,7 +567,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testMultiplyImpactLearnMoreButtonTracksReferralClickLearnMore() {
         // Arrange
         let referrals = Referrals()
-        let multiplyImpact = MultiplyImpact(referrals: referrals)
+        let multiplyImpact = MultiplyImpact(referrals: referrals, windowUUID: .XCTestDefaultUUID)
         multiplyImpact.loadViewIfNeeded()
 
         // Ensure learnMoreButton is not nil
@@ -600,7 +594,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testMultiplyImpactInviteFriendsTracksReferralClickInvite() {
         // Arrange
         let referrals = Referrals()
-        let multiplyImpact = MultiplyImpact(referrals: referrals)
+        let multiplyImpact = MultiplyImpact(referrals: referrals, windowUUID: .XCTestDefaultUUID)
         User.shared.referrals.code = "testCode"
         multiplyImpact.loadViewIfNeeded()
 
@@ -628,7 +622,7 @@ final class AnalyticsSpyTests: XCTestCase {
     func testMultiplyImpactInviteFriendsCompletionTracksReferralSendInvite() {
         // Arrange
         let referrals = Referrals()
-        let multiplyImpact = MultiplyImpactTestable(referrals: referrals)
+        let multiplyImpact = MultiplyImpactTestable(referrals: referrals, windowUUID: .XCTestDefaultUUID)
         User.shared.referrals.code = "testCode"
         multiplyImpact.loadViewIfNeeded()
 
@@ -688,7 +682,7 @@ final class AnalyticsSpyTests: XCTestCase {
                                           isZeroSearch: false,
                                           theme: EcosiaLightTheme(),
                                           wallpaperManager: WallpaperManager())
-        let topSite = TopSite(site: PinnedSite(site: Site(url: "http://www.example.com", title: "Example Site")))
+        let topSite = TopSite(site: PinnedSite(site: Site(url: "http://www.example.com", title: "Example Site"), faviconResource: nil))
         let position = 1
 
         // Act
@@ -842,6 +836,14 @@ extension AnalyticsSpyTests {
         let mockNotificationCenter = MockAnalyticsUserNotificationCenter(mockSettings: mockSettings)
         let analyticsSpy = AnalyticsSpy(notificationCenter: mockNotificationCenter)
         return analyticsSpy
+    }
+
+    func makeWelcomeTour() -> WelcomeTour {
+        WelcomeTour(delegate: MockWelcomeTourDelegate(), windowUUID: .XCTestDefaultUUID)
+    }
+
+    func makeWelcome() -> Welcome {
+        Welcome(delegate: MockWelcomeDelegate(), windowUUID: .XCTestDefaultUUID)
     }
 }
 

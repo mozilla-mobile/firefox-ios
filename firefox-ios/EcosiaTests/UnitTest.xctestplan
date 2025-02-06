@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "9989C302-1D94-43E1-BC80-01AAA064C73B",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "2CFE996E2D45329300B25CE0",
+        "name" : "EcosiaTests"
+      }
+    }
+  ],
+  "version" : 1
+}

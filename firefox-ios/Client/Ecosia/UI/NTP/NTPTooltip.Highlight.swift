@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Core
+import Ecosia
 
 extension NTPTooltip {
     enum Highlight {
@@ -33,7 +33,7 @@ extension NTPTooltip {
         }
     }
 
-    class func highlight(for user: Core.User = User.shared) -> NTPTooltip.Highlight? {
+    class func highlight(for user: User = User.shared) -> NTPTooltip.Highlight? {
         guard !user.firstTime else { return nil }
 
         if user.referrals.isNewClaim {

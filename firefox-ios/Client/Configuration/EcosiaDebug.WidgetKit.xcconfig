@@ -6,5 +6,5 @@
 
 ECOSIA_PRODUCT_NAME = WidgetKit
 PROVISIONING_PROFILE_SPECIFIER = match Development com.ecosia.ecosiaapp.WidgetKit
-CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/AppExtensions/Ecosia.entitlements
+CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/AppExtensions/Ecosia.entitlements
 PRODUCT_BUNDLE_IDENTIFIER = $(MOZ_BUNDLE_ID).$(ECOSIA_PRODUCT_NAME)

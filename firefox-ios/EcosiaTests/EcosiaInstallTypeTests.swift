@@ -4,7 +4,7 @@
 
 import XCTest
 @testable import Client
-@testable import Core
+@testable import Ecosia
 
 final class EcosiaInstallTypeTests: XCTestCase {
 

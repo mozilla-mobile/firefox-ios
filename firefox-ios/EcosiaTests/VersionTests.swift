@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import Client
+@testable import Ecosia
 
 final class VersionTests: XCTestCase {
 
@@ -100,7 +101,7 @@ extension VersionTests {
         // Setup
         let version = Version("8.3.0")!
         let appVersionInfoProvider = MockAppVersionInfoProvider(mockedAppVersion: version.description)
-        let dataProvider = WhatsNewLocalDataProvider()
+        let dataProvider = WhatsNewLocalDataProvider(versionProvider: appVersionInfoProvider)
 
         // Given: An initial version of 8.3.0 and a "toVersion" of 8.3.0
         Version.updateFromCurrent(forKey: Self.appVersionUpdateTestKey,
@@ -119,7 +120,7 @@ extension VersionTests {
         let fromVersion = Version("8.3.0")!
         let toVersion = Version("8.3.1")!
         let appVersionInfoProvider = MockAppVersionInfoProvider(mockedAppVersion: toVersion.description)
-        let dataProvider = WhatsNewLocalDataProvider()
+        let dataProvider = WhatsNewLocalDataProvider(versionProvider: appVersionInfoProvider)
 
         // Given: An initial version of 8.3.0 and a "toVersion" of 8.3.1
         Version.updateFromCurrent(forKey: Self.appVersionUpdateTestKey, provider: MockAppVersionInfoProvider(mockedAppVersion: fromVersion.description))

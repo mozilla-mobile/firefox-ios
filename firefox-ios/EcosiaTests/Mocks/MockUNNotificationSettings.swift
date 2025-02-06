@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import Client
+@testable import Ecosia
 
 struct MockUNNotificationSettings: AnalyticsUNNotificationSettingsProtocol {
     var authorizationStatus: UNAuthorizationStatus

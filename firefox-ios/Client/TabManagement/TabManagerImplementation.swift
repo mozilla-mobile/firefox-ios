@@ -8,6 +8,7 @@ import Storage
 import Common
 import Shared
 import WebKit
+import Ecosia
 
 // Ecosia: Used to get last visited sites
 import struct MozillaAppServices.VisitTransitionSet

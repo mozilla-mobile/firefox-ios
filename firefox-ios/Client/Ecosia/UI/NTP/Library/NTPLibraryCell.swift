@@ -5,6 +5,7 @@
 import Shared
 import UIKit
 import Common
+import Ecosia
 
 class NTPLibraryCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 

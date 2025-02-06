@@ -1,0 +1,15 @@
+# Analytics Events Testing
+
+- In the context of: `testing wether Analytics events are properly tracked troughout the app` ([Jira ticket](https://ecosia.atlassian.net/browse/MOB-2979))
+- facing: `previous issues caused by regression`
+- we decided: `to unit test wherever Analytics is called, replacing our shared singleton with a "spy".`
+- and neglected `following a protocol-oriented approach, which would require injecting dependencies on every class.`,
+- to achieve: `decoupled tests that are easy to maintain and require no change in the classes that use Analytics.`
+- accepting that: `making our shared Analytics singleton a variable brings risks and is usually a bad programming practice. To mitigate that, we also set up a SwiftLint rule that flags updating the shared instance outside tests as an error.`
+
+## Related Code
+
+- [Pull Request with Initial setup](https://github.com/ecosia/ios-browser/pull/799)
+- [AnalyticsSpyTests](https://github.com/ecosia/ios-browser/blob/3bcc8af58bf24e2eb718d27f4b5fd6955db09ad8/EcosiaTests/Analytics/AnalyticsSpyTests.swift)
+- [Variable Analytics shared singletion](https://github.com/ecosia/ios-browser/blob/3bcc8af58bf24e2eb718d27f4b5fd6955db09ad8/Client/Ecosia/Analytics/Analytics.swift#L22)
+- [SwiftLint custom rule](https://github.com/ecosia/ios-browser/blob/3bcc8af58bf24e2eb718d27f4b5fd6955db09ad8/.swiftlint.yml#L100-L116)

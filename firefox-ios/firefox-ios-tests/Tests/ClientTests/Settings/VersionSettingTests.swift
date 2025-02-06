@@ -39,7 +39,10 @@ class VersionSettingTests: XCTestCase {
 
         // Then
         let appVersionString = UIPasteboard.general.string
+        /* Ecosia: Update appversion predicate
         let appVersionPredicate = (appVersionString?.contains("Firefox") ?? false) == true
+        */
+        let appVersionPredicate = (appVersionString?.contains("Ecosia") ?? false) == true
         XCTAssertNotNil(appVersionString, "App version not copied")
         XCTAssert(appVersionPredicate, "Pasteboard doesn't contain app version")
     }

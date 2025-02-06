@@ -6,8 +6,7 @@ import Common
 import Foundation
 import Shared
 import Storage
-// Ecosia: importing Core
-import Core
+import Ecosia
 
 class TopSitesViewModel {
     struct UX {

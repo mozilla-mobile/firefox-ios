@@ -10,7 +10,9 @@ final class UserAgentTests: XCTestCase {
     func testGetUserAgentDesktop_withListedDomain_returnProperUserAgent() {
         let domains = CustomUserAgentConstant.customDesktopUAForDomain
         domains.forEach { domain, agent in
-            XCTAssertEqual(agent, UserAgent.getUserAgent(domain: domain, platform: .Desktop))
+            // Ecosia: Add not nil check for domain
+            XCTAssertNotNil(domain)
+            XCTAssertEqual(agent, UserAgent.getUserAgent(domain: domain!, platform: .Desktop))
         }
     }
 

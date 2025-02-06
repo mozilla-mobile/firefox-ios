@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
+import Ecosia
 
 protocol HomepageViewControllerDelegate: AnyObject {
     func homeDidTapSearchButton(_ home: HomepageViewController)
@@ -79,26 +79,6 @@ extension LegacyHomepageViewController: NTPLibraryDelegate {
 
     func libraryCellOpenDownloads() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
-    }
-}
-
-extension LegacyHomepageViewController: NTPConfigurableNudgeCardCellDelegate {
-    func nudgeCardRequestToPerformAction(for cardType: HomepageSectionType) {
-        switch cardType {
-        case .newsletterCard:
-            BrazeService.shared.logCustomEvent(.newsletterCardClick)
-            Analytics.shared.newsletterCardExperiment(action: .click)
-            NewsletterCardExperiment.setDismissed()
-        default:
-            return
-        }
-        reloadView()
-    }
-
-    func nudgeCardRequestToDimiss(for cardType: HomepageSectionType) {
-        Analytics.shared.newsletterCardExperiment(action: .dismiss)
-        NewsletterCardExperiment.setDismissed()
-        reloadView()
     }
 }
 

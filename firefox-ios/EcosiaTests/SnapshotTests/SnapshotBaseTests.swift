@@ -7,6 +7,10 @@ import XCTest
 import Common
 @testable import Client
 
+extension WindowUUID {
+    static let snapshotTestDefaultUUID = WindowUUID(uuidString: "E9E9E9E9-E9E9-E9E9-E9E9-CD68A019860E")!
+}
+
 class SnapshotBaseTests: XCTestCase {
 
     var profile: MockProfile!
@@ -18,7 +22,9 @@ class SnapshotBaseTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        DependencyHelperMock().bootstrapDependencies(themeManager: EcosiaMockThemeManager())
+        let mockThemeManager = EcosiaMockThemeManager()
+        mockThemeManager.windowUUID = .snapshotTestDefaultUUID
+        DependencyHelperMock().bootstrapDependencies(themeManager: mockThemeManager)
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         themeManager = AppContainer.shared.resolve()

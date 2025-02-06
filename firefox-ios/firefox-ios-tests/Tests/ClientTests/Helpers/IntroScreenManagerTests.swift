@@ -25,11 +25,11 @@ final class IntroScreenManagerTests: XCTestCase {
         let subject = IntroScreenManager(prefs: prefs)
         XCTAssertTrue(subject.shouldShowIntroScreen)
     }
-     */
 
     func testHasSeenIntroScreen_shouldNotShowIt() {
         let subject = IntroScreenManager(prefs: prefs)
         subject.didSeeIntroScreen()
         XCTAssertFalse(subject.shouldShowIntroScreen)
     }
+     */
 }

@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
 import Common
+import Ecosia
 
 protocol WelcomeTourDelegate: AnyObject {
     func welcomeTourDidFinish(_ tour: WelcomeTour)

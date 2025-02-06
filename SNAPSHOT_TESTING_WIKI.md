@@ -58,9 +58,9 @@ This array specifies the devices on which the snapshot tests will be executed. E
 - **`"os"`**: The operating system version to simulate (e.g., `"17.5"`). If `"os"` is not specified, the default would be used.
 > Make sure the devices you are going to list down are present or available in the machine you are going to run the tests.
 
-#### 3. Test Plans (`"testPlans"`)
-This array defines the test plans, which are groups of tests to be executed under the specified configurations. Each test plan contains:
-- **`"name"`**: The name of the test plan (e.g., `"EcosiaSnapshotTests"`).
+#### 3. Test Bundles (`"testBundles"`)
+This array defines the test bundles, which are groups of tests to be executed under the specified configurations. Each test plan contains:
+- **`"name"`**: The name of the test bundle (e.g., `"EcosiaSnapshotTests"`).
 - **`"testClasses"`**: An array of test classes to be executed within this plan. Each test class includes:
   - **`"name"`**: The name of the test class (e.g., `"OnboardingTests"`).
   - **`"devices"`**: An array specifying the devices this test class should run on. If `"all"` is specified, the test will run on all devices listed in the `"devices"` section.
@@ -147,7 +147,7 @@ SnapshotTestHelper will take care of retrieving all the details and configure th
       "orientation": "portrait"
     }
   ],
-  "testPlans": [
+  "testBundles": [
     {
       "name": "EcosiaSnapshotTests",
       "testClasses": [
@@ -206,7 +206,7 @@ SnapshotTestHelper will take care of retrieving all the details and configure th
       "orientation": "portrait"
     }
   ],
-  "testPlans": [
+  "testBundles": [
     {
       "name": "EcosiaSnapshotTests",
       "testClasses": [
@@ -294,7 +294,7 @@ Do not forget to also declare the new device in the `snapshot_configuration.json
     }
     ...
   ],
-  "testPlans": [
+  "testBundles": [
     {
       "name": "EcosiaSnapshotTests",
       "testClasses": [
@@ -343,7 +343,7 @@ You can specify the requirements as part of the devices list of that test class.
     }
     ...
   ],
-  "testPlans": [
+  "testBundles": [
     {
       "name": "EcosiaSnapshotTests",
       "testClasses": [

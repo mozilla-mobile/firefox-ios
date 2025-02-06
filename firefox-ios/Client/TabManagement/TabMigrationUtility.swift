@@ -5,6 +5,7 @@
 import Common
 import Shared
 import TabDataStore
+import Ecosia
 
 protocol TabMigrationUtility {
     var shouldRunMigration: Bool { get }

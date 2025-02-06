@@ -9,8 +9,7 @@ import Shared
 import Storage
 import Redux
 import TabDataStore
-// Ecosia: Import Core
-import Core
+import Ecosia
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard

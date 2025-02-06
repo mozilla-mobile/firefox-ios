@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1020"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -37,12 +37,30 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Testing"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       language = "en"
       region = "US">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "sh &quot;${SRCROOT}/../test-fixtures/scheme-postbuild.sh&quot; || exit 1&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+                     BuildableName = "Client.app"
+                     BlueprintName = "Client"
+                     ReferencedContainer = "container:Client.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -64,7 +82,172 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testDelegateMemoryLeak()">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testDeleteGroupItem()">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testDeleteIndividualItem()">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testInitialLoadWithHistoryData()">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testInitialLoadWithNoHistoryData()">
+               </Test>
+               <Test
+                  Identifier = "HistoryHighlightsDataAdaptorTests/testReloadDataOnNotification()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testURIFixupPunyCode()">
+               </Test>
+               <Test
+                  Identifier = "ShortcutRouteTests/testOpenLastBookmarkShortcutWithInvalidUrl()">
+               </Test>
+               <Test
+                  Identifier = "SyncContentSettingsViewControllerTests">
+               </Test>
+               <Test
+                  Identifier = "SyncContentSettingsViewControllerTests/test_syncContentSettingsViewController_engineSectionForSettings()">
+               </Test>
+               <Test
+                  Identifier = "SyncContentSettingsViewControllerTests/test_syncContentSettingsViewController_generateSettingsCount()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forDeletedIndexAtEnd()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forDeletedIndexAtStart()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forDeletedIndexInMiddle_mixedTabTypes()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forDeletedIndexInMiddle_uniformTabTypes()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forEmptyArray()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forSingleTabInArray_ofDifferentType()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_forSingleTabInArray_ofSameType()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testFindRightOrLeftTab_prefersRightTabOverLeftTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testGetActiveAndInactiveTabs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testPreserveTabsWithManyTabs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testPreserveTabsWithNoTabs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testPreserveTabsWithOneTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveAllInactiveTabs_whenNormalActiveTabsExist_isNormalBrowsingMode()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveAllInactiveTabs_whenOnlyInactiveTabs_opensNewActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveAllInactiveTabs_whenOnlyPrivateTabsExist_isPrivateBrowsingMode()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveScreenshotWithImage()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeFirstTab_removeLastTime_removeOnlyTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastNormalActiveTab_hasInactiveTabs_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastNormalActiveTab_isOnlyTab_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastNormalInactiveTab_isOnlyTab_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastPrivateTab_hasInactiveTabs_hasNoActiveTabs_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastPrivateTab_hasNormalTabs_selectsRecentNormalTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastPrivateTab_isOnlyTab_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeLastPrivateTab_onlyOtherTabsAreNormalInactiveTabs_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedNormalActiveTab_selectsRecentParentNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftActiveTab_ifParentNotRecent()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftNormalActiveTab_ifNoParent()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedNormalInactiveTab_createsNewNormalActiveTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedPrivateTab_selectsRecentParentPrivateTab()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifNoRecentParent()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifParentNotRecent()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_causesArrayShift()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_noArrayShift()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeUnselectedNormalInactiveTab_fromManyMixedTabs_causesArrayShift()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_causesArrayShift()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_noArrayShift()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRestoreScreenshotsForTabs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRestoreTabs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testRestoreTabsForced()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testSaveScreenshotWithImage()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/testSaveScreenshotWithNoImage()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/test_addTabsForURLs()">
+               </Test>
+               <Test
+                  Identifier = "TabManagerTests/test_addTabsForURLs_forPrivateMode()">
                </Test>
                <Test
                   Identifier = "TestFavicons/testFaviconFetcherParse()">
@@ -72,7 +255,8 @@
             </SkippedTests>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
@@ -114,6 +298,16 @@
                BlueprintIdentifier = "2C6C90812C614A16007D9B43"
                BuildableName = "EcosiaSnapshotTests.xctest"
                BlueprintName = "EcosiaSnapshotTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2CFE996E2D45329300B25CE0"
+               BuildableName = "EcosiaTests.xctest"
+               BlueprintName = "EcosiaTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>

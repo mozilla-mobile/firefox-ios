@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
 import Common
 
 /// Reusable Nudge Card Cell that can be configured with any view model.

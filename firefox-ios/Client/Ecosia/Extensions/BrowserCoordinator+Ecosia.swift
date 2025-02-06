@@ -4,6 +4,5 @@
 
 import Foundation
 import Shared
-import Core
 
 extension BrowserCoordinator { }

@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Common
+import Ecosia
 
 final class NTPCustomizationSettingsViewController: SettingsTableViewController {
     init(windowUUID: WindowUUID) {

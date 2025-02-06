@@ -6,7 +6,7 @@ import SnapshotTesting
 import XCTest
 import Common
 import Shared
-import Core
+import Ecosia
 import MozillaAppServices
 @testable import Client
 
@@ -16,13 +16,17 @@ final class NTPComponentTests: SnapshotBaseTests {
 
     func testNTPLogoCell() {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
-            NTPLogoCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            let logo = NTPLogoCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            logo.applyTheme(theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
+            return logo
         })
     }
 
     func testNTPLibraryCell() {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
-            NTPLibraryCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            let libraryCell = NTPLibraryCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            libraryCell.applyTheme(theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
+            return libraryCell
         })
     }
 
@@ -38,8 +42,7 @@ final class NTPComponentTests: SnapshotBaseTests {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
             let cell = NTPImpactCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
             let mockInfoItemSection: ClimateImpactInfo = .totalTrees(value: 200356458)
-            cell.configure(items: [mockInfoItemSection])
-            cell.layoutIfNeeded()
+            cell.configure(items: [mockInfoItemSection], delegate: nil, theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
             return cell
         })
     }
@@ -52,8 +55,7 @@ final class NTPComponentTests: SnapshotBaseTests {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
             let cell = NTPImpactCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
             let mockInfoItemSection: ClimateImpactInfo = .totalInvested(value: 89942822)
-            cell.configure(items: [mockInfoItemSection])
-            cell.layoutIfNeeded()
+            cell.configure(items: [mockInfoItemSection], delegate: nil, theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
             return cell
         },
                                           precision: 0.97)
@@ -66,6 +68,7 @@ final class NTPComponentTests: SnapshotBaseTests {
             SnapshotTestHelper.assertSnapshot(initializingWith: {
                 let cell = NTPNewsCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
                 cell.configure(mockNews!, images: Images(.init(configuration: .ephemeral)), row: 0, totalCount: 1)
+                cell.applyTheme(theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
                 return cell
             },
                                               precision: 0.98)
@@ -88,7 +91,9 @@ final class NTPComponentTests: SnapshotBaseTests {
 
     func testNTPCustomizationCell() {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
-            NTPCustomizationCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            let customizationCell = NTPCustomizationCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
+            customizationCell.applyTheme(theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
+            return customizationCell
         })
     }
 }
@@ -99,7 +104,7 @@ extension NTPComponentTests {
         let sectionTitle = aboutEcosiaSection.image.lowercased().camelCaseToSnakeCase()
         SnapshotTestHelper.assertSnapshot(initializingWith: {
             let cell = NTPAboutEcosiaCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 240))
-            let viewModel = NTPAboutEcosiaCellViewModel(theme: self.themeManager.currentTheme)
+            let viewModel = NTPAboutEcosiaCellViewModel(theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
             cell.configure(section: aboutEcosiaSection, viewModel: viewModel)
             return cell
         }, testName: "testNTPAboutSection_\(sectionTitle)")
@@ -110,7 +115,7 @@ extension NTPComponentTests {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
             let cell = NTPImpactCell(frame: CGRect(x: 0, y: 0, width: self.commonWidth, height: 100))
             let mockInfoItemSection: ClimateImpactInfo = .referral(value: invites)
-            cell.configure(items: [mockInfoItemSection])
+            cell.configure(items: [mockInfoItemSection], delegate: nil, theme: self.themeManager.getCurrentTheme(for: .snapshotTestDefaultUUID))
             return cell
         }, testName: "testNTPReferralInvitesCell_\(invitesTestNameString)")
     }

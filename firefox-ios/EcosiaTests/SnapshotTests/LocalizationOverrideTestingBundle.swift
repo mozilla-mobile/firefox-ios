@@ -4,6 +4,7 @@
 
 import Foundation
 import ObjectiveC.runtime
+import Ecosia
 
 var overriddenLocaleIdentifier: String = ""
 
@@ -11,7 +12,7 @@ final class LocalizationOverrideTestingBundle: Bundle {
 
     override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
         // You can dynamically choose the table based on a stored locale or use a predetermined table
-        guard let path = Bundle.main.path(forResource: overriddenLocaleIdentifier, ofType: "lproj"),
+        guard let path = Bundle.ecosia.path(forResource: overriddenLocaleIdentifier, ofType: "lproj"),
               let bundle = Bundle(path: path) else {
             return super.localizedString(forKey: key, value: value, table: tableName)
         }

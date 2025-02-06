@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Ecosia
 
 enum SearchBarPosition: String, FlaggableFeatureOptions {
     case bottom

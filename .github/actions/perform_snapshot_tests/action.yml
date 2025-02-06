@@ -9,7 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-
       - name: Set up Homebrew and Install Dependencies
         shell: bash
         run: |
@@ -32,24 +31,12 @@ runs:
           echo "jq version:"
           jq --version
 
-      - name: Validate JSON Configuration
-        shell: bash
-        run: |
-          jq empty "EcosiaTests/SnapshotTests/snapshot_configuration.json"
-          echo "JSON configuration is valid."
-
       - name: Run Snapshot Tests
         shell: bash
-        run: |
-          mkdir -p EcosiaTests/Results/
-          ./perform_snapshot_tests.sh "EcosiaTests/SnapshotTests/snapshot_configuration.json" "EcosiaTests/SnapshotTests/environment.json" "EcosiaTests/Results" "EcosiaSnapshotTests"
+        run: ./perform_snapshot_tests.sh "EcosiaTests/SnapshotTests/snapshot_configuration.json" "EcosiaTests/SnapshotTests/environment.json" "EcosiaTests/Results" "EcosiaSnapshotTests"
 
-      - name: Process xcresult files
-        uses: kishikawakatsumi/xcresulttool@v1
+      - name: Upload test result as artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: 'EcosiaTests/Results/all_tests.xcresult'
-          token: ${{ inputs.github-token }}
-          show-passed-tests: false
-          show-code-coverage: false
-          upload-bundles: 'failure'
-        if: success() || failure()
+          name: test-result
+          path: 'firefox-ios/EcosiaTests/Results/all_tests.xcresult'

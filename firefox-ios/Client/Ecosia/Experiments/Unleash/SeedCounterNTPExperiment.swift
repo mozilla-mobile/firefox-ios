@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Core
+import Ecosia
 
 struct SeedCounterNTPExperiment {
     private enum Variant: String {

@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Ecosia
 
 final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
     struct UX {
@@ -194,6 +195,7 @@ final class NTPAboutEcosiaCell: UICollectionViewCell, ReusableCell {
             row: viewModel.sections.firstIndex(of: section) ?? 0,
             totalCount: viewModel.sections.count
         )
+        applyTheme(theme: viewModel.theme)
     }
 
     func updateAccessibility(isExpanded: Bool) {

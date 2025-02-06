@@ -5,8 +5,7 @@
 import Common
 import WebKit
 import UIKit
-// Ecosia: importing Core
-import Core
+import Ecosia
 
 open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
@@ -105,12 +104,12 @@ open class UserAgent {
          */
         switch platform {
         case .Desktop:
-            if let customUA = CustomUserAgentConstant.customDesktopUAFor[domain] {
+            if let customUA = CustomUserAgentConstant.customDesktopUAForDomain[domain] {
                 return customUA
             }
             return desktopUserAgent()
         case .Mobile:
-            if let customUA = CustomUserAgentConstant.customUAFor[domain] {
+            if let customUA = CustomUserAgentConstant.customMobileUAForDomain[domain] {
                 return customUA
             } else {
                 return mobileUserAgent()
@@ -138,17 +137,18 @@ struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
 
-    public static let customUAFor = [
+    public static let customMobileUAForDomain = [
         // Ecosia: Update paypal UA
         // "paypal.com": defaultMobileUA,
         "paypal.com": UserAgentBuilder.defaultPayPalMobileUserAgent().userAgent(),
         "yahoo.com": defaultMobileUA,
         "disneyplus.com": customDesktopUA]
 
-    // Ecosia: Add custom desktop UA
-    public static let customDesktopUAFor = [
-        URLProvider.production.domain: UserAgent.ecosiaDesktopUA,
-        URLProvider.staging.domain: UserAgent.ecosiaDesktopUA
+    public static let customDesktopUAForDomain = [
+        "firefox.com": defaultMobileUA,
+        // Ecosia: Add Ecosia URLs
+        Ecosia.URLProvider.production.domain: UserAgent.ecosiaDesktopUA,
+        Ecosia.URLProvider.staging.domain: UserAgent.ecosiaDesktopUA
     ]
 }
 
@@ -208,8 +208,9 @@ public struct UserAgentBuilder {
             systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            // Ecosia: Update extension
-            // extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+            /* Ecosia: Update extension
+            extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+             */
             extensions: "Ecosia/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 
@@ -219,8 +220,9 @@ public struct UserAgentBuilder {
             systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            // Ecosia: Update extension
-            // extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+            /* Ecosia: Update extension
+            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+             */
             extensions: "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
 }

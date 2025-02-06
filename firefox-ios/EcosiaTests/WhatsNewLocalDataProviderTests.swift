@@ -4,7 +4,7 @@
 
 import XCTest
 @testable import Client
-@testable import Core
+@testable import Ecosia
 
 // This tests are dependant on WhatsNewLocalDataProvider.whatsNewItems hardcoded implementation
 final class WhatsNewLocalDataProviderTests: XCTestCase {

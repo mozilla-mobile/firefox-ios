@@ -10,7 +10,7 @@ final class OnboardingTests: SnapshotBaseTests {
 
     func testWelcomeScreen() {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
-            Welcome(delegate: MockWelcomeDelegate())
+            Welcome(delegate: MockWelcomeDelegate(), windowUUID: .snapshotTestDefaultUUID)
         }, wait: 1.0)
     }
 
@@ -28,7 +28,7 @@ final class OnboardingTests: SnapshotBaseTests {
              in the current language.
              */
             SnapshotTestHelper.assertSnapshot(initializingWith: {
-                WelcomeTour(delegate: MockWelcomeTourDelegate(), startingStep: startingStep)
+                WelcomeTour(delegate: MockWelcomeTourDelegate(), windowUUID: .snapshotTestDefaultUUID, startingStep: startingStep)
             },
                                               wait: 1.0,
                                               precision: 0.95,

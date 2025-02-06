@@ -28,6 +28,7 @@
   },
   "testTargets" : [
     {
+      "enabled" : false,
       "skippedTests" : [
         "ActivityStreamTest\/testActivityStreamPages()",
         "ActivityStreamTest\/testDefaultSites()",

@@ -1,0 +1,3 @@
+[submodule "firefox-ios/EcosiaTests/SnapshotTests/SnapshotArtifacts"]
+	path = firefox-ios/EcosiaTests/SnapshotTests/SnapshotArtifacts
+	url = git@github.com:ecosia/ios-snapshot-tests-files.git

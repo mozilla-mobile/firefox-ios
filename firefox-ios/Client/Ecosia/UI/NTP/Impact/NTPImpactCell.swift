@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
 import Common
 
 final class NTPImpactCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
@@ -11,7 +10,7 @@ final class NTPImpactCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let cellsSpacing: CGFloat = 12
     }
 
-    weak var delegate: NTPImpactCellDelegate? {
+    private(set) weak var delegate: NTPImpactCellDelegate? {
         didSet {
             impactRows.forEach { $0.delegate = delegate }
         }
@@ -66,7 +65,8 @@ final class NTPImpactCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         }
     }
 
-    func configure(items: [ClimateImpactInfo]) {
+    func configure(items: [ClimateImpactInfo], delegate: NTPImpactCellDelegate?, theme: Theme) {
+        self.delegate = delegate
         containerStack.removeAllArrangedViews() // Remove existing view upon reuse
 
         for (index, info) in items.enumerated() {
@@ -75,6 +75,7 @@ final class NTPImpactCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             row.delegate = delegate
             containerStack.addArrangedSubview(row)
         }
+        applyTheme(theme: theme)
     }
 
     func refresh(items: [ClimateImpactInfo]) {

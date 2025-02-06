@@ -3,11 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Core
 import UniformTypeIdentifiers
 import MobileCoreServices
 import LinkPresentation
 import Common
+import Ecosia
 
 class MultiplyImpact: UIViewController, Themeable {
 

@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Core
+@testable import Ecosia
 
 func createMockNewsModel() throws -> NewsModel? {
     let currentTimestamp = Date().timeIntervalSince1970

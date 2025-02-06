@@ -147,10 +147,11 @@ vendor/bundle
 Staging.xcconfig
 Production.xcconfig
 .github/workflows/firefox-*.yml
-SourcePackages
+firefox-ios/SourcePackages
 test_output
 .vscode
 firefox-ios/EcosiaTests/Results
+firefox-ios/EcosiaTests/SnapshotTests/SnapshotArtifacts/*
 
 # TODO Ecosia Upgrade: Remove once confirmed not needed
 # (they are still above but prefixed with `firefox-ios/`)

@@ -6,5 +6,5 @@
 
 ECOSIA_PRODUCT_NAME = WidgetKit
 PROVISIONING_PROFILE_SPECIFIER = match AdHoc com.ecosia.ecosiaapp.firefox.WidgetKit
-CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/AppExtensions/EcosiaBeta.entitlements
+CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/AppExtensions/EcosiaBeta.entitlements
 PRODUCT_BUNDLE_IDENTIFIER = $(MOZ_BUNDLE_ID).$(ECOSIA_PRODUCT_NAME)

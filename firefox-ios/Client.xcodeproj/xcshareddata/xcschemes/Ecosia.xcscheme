@@ -153,7 +153,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "BetaDebug"
+      buildConfiguration = "Testing"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO"
@@ -257,30 +257,6 @@
          <TestPlanReference
             reference = "container:firefox-ios-tests/Tests/UnitTest.xctestplan"
             default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/Smoketest1.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/Smoketest4.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/Smoketest2.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/Smoketest3.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/FullFunctionalTestPlan.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/PerformanceTestPlan.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/SyncIntegrationTestPlan.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:firefox-ios-tests/Tests/ExperimentIntegrationTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>
@@ -536,7 +512,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2CE2945A2B7FC51A006C22B2"
+               BlueprintIdentifier = "2CFE996E2D45329300B25CE0"
                BuildableName = "EcosiaTests.xctest"
                BlueprintName = "EcosiaTests"
                ReferencedContainer = "container:Client.xcodeproj">

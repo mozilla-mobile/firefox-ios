@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Ecosia
 
 class DefaultBrowserSetting: Setting {
     override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }

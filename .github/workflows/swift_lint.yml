@@ -9,8 +9,8 @@ jobs:
       image: ghcr.io/realm/swiftlint:latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: SwiftLint
-      run: |
-        swiftlint --reporter github-actions-logging --strict
+      - name: SwiftLint
+        run: |
+          swiftlint --reporter github-actions-logging --strict

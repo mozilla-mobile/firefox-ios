@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Ecosia
 
 @available(iOS 14, *)
 protocol DefaultBrowserDelegate: AnyObject {

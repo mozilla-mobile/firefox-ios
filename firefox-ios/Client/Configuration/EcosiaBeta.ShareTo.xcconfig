@@ -6,5 +6,5 @@
 
 PROVISIONING_PROFILE_SPECIFIER = match AdHoc com.ecosia.ecosiaapp.firefox.ShareTo
 PRODUCT_BUNDLE_IDENTIFIER = $(MOZ_BUNDLE_ID).$(PRODUCT_NAME)
-CODE_SIGN_ENTITLEMENTS = Client/Ecosia/Entitlements/AppExtensions/EcosiaBeta.entitlements
+CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/AppExtensions/EcosiaBeta.entitlements
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox

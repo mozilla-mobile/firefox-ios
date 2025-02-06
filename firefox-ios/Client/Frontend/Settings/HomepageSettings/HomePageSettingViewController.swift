@@ -5,8 +5,7 @@
 import Foundation
 import Shared
 import Common
-// Ecosia: import Core
-import Core
+import Ecosia
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
     // MARK: - Variables

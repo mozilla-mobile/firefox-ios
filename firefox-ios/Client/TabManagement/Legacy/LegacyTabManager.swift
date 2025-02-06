@@ -7,8 +7,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-// Ecosia
-import Core
+import Ecosia
 import Combine
 
 // MARK: - TabManagerDelegate

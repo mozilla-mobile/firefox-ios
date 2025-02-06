@@ -4,8 +4,8 @@
 
 import Foundation
 import Shared
-import Core
 import Common
+import Ecosia
 
 protocol NTPNewsCellDelegate: AnyObject {
     func openSeeAllNews()
@@ -13,7 +13,7 @@ protocol NTPNewsCellDelegate: AnyObject {
 
 final class NTPNewsCellViewModel {
     private let news = News()
-    private (set) var items = [NewsModel]()
+    private(set) var items = [NewsModel]()
     private let images = Images(.init(configuration: .ephemeral))
     weak var delegate: NTPNewsCellDelegate?
     weak var dataModelDelegate: HomepageDataModelDelegate?

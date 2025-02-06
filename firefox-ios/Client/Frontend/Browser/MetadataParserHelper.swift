@@ -6,8 +6,7 @@ import Foundation
 import Shared
 import Storage
 import WebKit
-// Ecosia:
-import Core
+import Ecosia
 
 class MetadataParserHelper: TabEventHandler {
     let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .allWindows

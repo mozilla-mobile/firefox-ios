@@ -24,6 +24,7 @@
 @testable import Client
 import Foundation
 import Storage
+import MozillaAppServices
 import XCTest
 
 final class EcosiaPerformanceTestHistory: ProfileTest {

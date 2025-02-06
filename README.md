@@ -45,6 +45,29 @@ If more information is required or you have any questions then we suggest reachi
 
 Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK), but make sure to read the [Contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
 
+## Update Ecosia Comments
+
+To ensure consistency when commenting code in Firefox for Ecosia updates, you could document the following approach:
+
+Commenting Guidelines for Ecosia Code in Firefox:
+	1.	One-liner Comments:
+Use `//` for introducing new code or brief explanations.
+
+```
+// Ecosia: Update appversion predicate
+let appVersionPredicate = (appVersionString?.contains("Ecosia") ?? false) == true
+```
+
+	2.	Block Comments:
+Use `/* */` when commenting out existing Firefox code for easier readability and conflict resolution.
+
+```
+/* Ecosia: Update appversion predicate
+let appVersionPredicate = (appVersionString?.contains("Firefox") ?? false) == true
+*/
+let appVersionPredicate = (appVersionString?.contains("Ecosia") ?? false) == true
+```
+
 After cloning (for Ecosians)
 -----------
 

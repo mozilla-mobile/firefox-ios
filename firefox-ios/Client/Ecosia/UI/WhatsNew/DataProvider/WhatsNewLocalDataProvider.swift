@@ -4,8 +4,8 @@
 
 import Foundation
 import Shared
-import Core
 import Common
+import Ecosia
 
 /// A local data provider for fetching What's New items based on app version updates.
 final class WhatsNewLocalDataProvider: WhatsNewDataProvider {

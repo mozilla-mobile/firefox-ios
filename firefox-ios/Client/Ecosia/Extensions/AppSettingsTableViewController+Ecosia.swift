@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Ecosia
 
 extension AppSettingsTableViewController {
 
@@ -152,12 +153,7 @@ extension AppSettingsTableViewController {
             UnleashBrazeIntegrationSetting(settings: self),
             UnleashAPNConsent(settings: self),
             UnleashSeedCounterNTPSetting(settings: self),
-            UnleashNewsletterCardSetting(settings: self)
         ]
-
-        if NewsletterCardExperiment.isEnabled {
-            hiddenDebugSettings.append(NewsletterCardDismissSetting(settings: self))
-        }
 
         if SeedCounterNTPExperiment.isEnabled {
             hiddenDebugSettings.append(AddOneSeedSetting(settings: self,

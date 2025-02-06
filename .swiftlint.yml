@@ -163,8 +163,10 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # Temporarly ignore focus-ios folder
   - focus-ios/
   # Ecosia: Exclude Swift Packages
-  - SourcePackages
-
+  - firefox-ios/SourcePackages
+  # Ecosia: Remove Metrics.swift as part of Glean
+  - Storage/Generated/Metrics.swift
+  
 included:
   - /Users/vagrant/git
   - .

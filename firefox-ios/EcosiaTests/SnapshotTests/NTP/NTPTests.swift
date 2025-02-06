@@ -4,7 +4,7 @@
 
 import SnapshotTesting
 import XCTest
-import Core
+import Ecosia
 import Common
 @testable import Client
 
@@ -24,22 +24,21 @@ final class NTPTests: SnapshotBaseTests {
 extension NTPTests {
     fileprivate func snapshotNTP(impactIntroShown: Bool) {
         SnapshotTestHelper.assertSnapshot(initializingWith: {
-            let tabManager = TabManagerImplementation(profile: self.profile, imageStore: nil)
-            let urlBar = URLBarView(profile: self.profile)
+            let urlBar = URLBarView(profile: self.profile, windowUUID: .snapshotTestDefaultUUID)
             let overlayManager = MockOverlayModeManager()
             overlayManager.setURLBar(urlBarView: urlBar)
 
-            let homePageViewController = HomepageViewController(profile: self.profile,
-                                                                toastContainer: UIView(),
-                                                                tabManager: tabManager,
-                                                                overlayManager: overlayManager,
-                                                                referrals: .init(),
-                                                                delegate: nil)
+            let homePageViewController = LegacyHomepageViewController(profile: self.profile,
+                                                                      toastContainer: UIView(),
+                                                                      tabManager: MockTabManager(),
+                                                                      overlayManager: overlayManager,
+                                                                      referrals: .init(),
+                                                                      delegate: nil)
             return homePageViewController
         },
-        // Precision at .95 to accommodate a snapshot looking slightly different due to the different data output
-        // from the statistics json
-        precision: 0.95,
-        testName: impactIntroShown ? "NTP_with_impact_intro" : "NTP_without_impact_intro")
+                                          // Precision at .95 to accommodate a snapshot looking slightly different due to the different data output
+                                          // from the statistics json
+                                          precision: 0.95,
+                                          testName: impactIntroShown ? "NTP_with_impact_intro" : "NTP_without_impact_intro")
     }
 }

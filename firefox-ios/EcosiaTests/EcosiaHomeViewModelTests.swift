@@ -3,9 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-
+import Common
 @testable import Client
-@testable import Core
+@testable import Ecosia
 
 class EcosiaHomeViewModelTests: XCTestCase {
 
@@ -21,6 +21,7 @@ class EcosiaHomeViewModelTests: XCTestCase {
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
@@ -39,7 +40,7 @@ class EcosiaHomeViewModelTests: XCTestCase {
                                           theme: EcosiaLightTheme())
         // Ecosia: Update shown sections
         XCTAssertEqual(viewModel.shownSections.count, 5)
-        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)
         XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.impact)
         // News is not shown without items
