@@ -23,7 +23,7 @@ public protocol EngineSession {
     func stopLoading()
 
     /// Reloads the current URL.
-    func reload()
+    func reload(bypassCache: Bool)
 
     /// Navigates back in the history of this session.
     func goBack()
@@ -71,4 +71,10 @@ public protocol EngineSession {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
+}
+
+extension EngineSession {
+    func reload(bypassCache: Bool = false) {
+        reload(bypassCache: bypassCache)
+    }
 }
