@@ -141,8 +141,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Initialize Glean telemetry
         let gleanConfig = Configuration(
             channel: AppConstants.buildChannel.rawValue,
-            logLevel: .off,
-            pingSchedule: ["baseline": ["usage-reporting"]]
+            logLevel: .off
         )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,

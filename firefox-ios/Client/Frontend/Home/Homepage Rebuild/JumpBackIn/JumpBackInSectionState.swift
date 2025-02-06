@@ -10,6 +10,7 @@ import Storage
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var jumpBackInTabs: [JumpBackInTabState]
+    var mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
 
     let sectionHeaderState = SectionHeaderState(
         title: .FirefoxHomeJumpBackInSectionTitle,
@@ -22,16 +23,19 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            jumpBackInTabs: []
+            jumpBackInTabs: [],
+            mostRecentSyncedTab: nil
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        jumpBackInTabs: [JumpBackInTabState]
+        jumpBackInTabs: [JumpBackInTabState],
+        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil
     ) {
         self.windowUUID = windowUUID
         self.jumpBackInTabs = jumpBackInTabs
+        self.mostRecentSyncedTab = mostRecentSyncedTab
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -42,8 +46,9 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
 
         switch action.actionType {
         case TabManagerMiddlewareActionType.fetchRecentTabs:
-
             return handleInitializeAction(for: state, with: action)
+        case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
+            return handleRemoteTabsAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
@@ -69,14 +74,41 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                     descriptionText: site.tileURL.shortDisplayString.capitalized,
                     siteURL: itemURL
                 )
-            }
+            },
+            mostRecentSyncedTab: state.mostRecentSyncedTab
+        )
+    }
+
+    private static func handleRemoteTabsAction(
+        for state: JumpBackInSectionState,
+        with action: Action
+    ) -> JumpBackInSectionState {
+        guard let tabManagerAction = action as? RemoteTabsAction,
+              let mostRecentSyncedTab = tabManagerAction.mostRecentSyncedTab
+        else {
+            return defaultState(from: state)
+        }
+
+        let itemURL = mostRecentSyncedTab.tab.URL.absoluteString
+        let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
+        let descriptionText = mostRecentSyncedTab.client.name
+
+        return JumpBackInSectionState(
+            windowUUID: state.windowUUID,
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
+                titleText: site.title,
+                descriptionText: descriptionText,
+                url: mostRecentSyncedTab.tab.URL
+            )
         )
     }
 
     static func defaultState(from state: JumpBackInSectionState) -> JumpBackInSectionState {
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: state.mostRecentSyncedTab
         )
     }
 }

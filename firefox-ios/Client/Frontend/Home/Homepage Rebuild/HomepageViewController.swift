@@ -87,7 +87,8 @@ final class HomepageViewController: UIViewController,
             .TopSitesUpdated,
             .DefaultSearchEngineUpdated,
             .BookmarksUpdated,
-            .RustPlacesOpened
+            .RustPlacesOpened,
+            .TabDataUpdated
         ])
 
         subscribeToRedux()
@@ -402,6 +403,25 @@ final class HomepageViewController: UIViewController,
             jumpBackInCell.configure(state: state, theme: currentTheme)
             return jumpBackInCell
 
+        case .jumpBackInSyncedTab(let config):
+            guard let syncedTabCell = collectionView?.dequeueReusableCell(
+                cellType: SyncedTabCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            syncedTabCell.configure(
+                configuration: config,
+                theme: currentTheme,
+                onTapShowAllAction: {
+                    // TODO: FXIOS-11229 - Handle actions
+                },
+                onOpenSyncedTabAction: { _ in
+                    // TODO: FXIOS-11229 - Handle actions
+                }
+            )
+            return syncedTabCell
+
         case .bookmark(let state):
             guard let bookmarksCell = collectionView?.dequeueReusableCell(
                 cellType: BookmarksCell.self,
@@ -554,13 +574,15 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Item selected at \(point) but does not navigate to context menu",
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
                 category: .homepage
             )
             return
         }
-        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        if section.canHandleLongPress {
+            navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        }
     }
 
     // MARK: Dispatch Actions
@@ -690,17 +712,10 @@ final class HomepageViewController: UIViewController,
                     actionType: PocketActionType.enteredForeground
                 )
             )
-        case .ProfileDidFinishSyncing,
-                .PrivateDataClearedHistory,
-                .FirefoxAccountChanged,
+        case .PrivateDataClearedHistory,
                 .TopSitesUpdated,
                 .DefaultSearchEngineUpdated:
-            store.dispatch(
-                TopSitesAction(
-                    windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.fetchTopSites
-                )
-            )
+            dispatchActionToFetchTopSites()
         case .BookmarksUpdated, .RustPlacesOpened:
             store.dispatch(
                 BookmarksAction(
@@ -708,7 +723,28 @@ final class HomepageViewController: UIViewController,
                     actionType: BookmarksActionType.fetchBookmarks
                 )
             )
+        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+            dispatchActionToFetchTopSites()
+            dispatchActionToFetchRemoteTabs()
         default: break
         }
+    }
+
+    private func dispatchActionToFetchTopSites() {
+        store.dispatch(
+            TopSitesAction(
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.fetchTopSites
+            )
+        )
+    }
+
+    private func dispatchActionToFetchRemoteTabs() {
+        store.dispatch(
+            JumpBackInAction(
+                windowUUID: self.windowUUID,
+                actionType: JumpBackInActionType.fetchRemoteTabs
+            )
+        )
     }
 }

@@ -21,6 +21,15 @@ final class HomepageDiffableDataSource:
         case bookmarks
         case pocket(TextColor?)
         case customizeHomepage
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .topSites, .jumpBackIn, .bookmarks, .pocket:
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     enum HomeItem: Hashable {
@@ -29,6 +38,7 @@ final class HomepageDiffableDataSource:
         case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case jumpBackIn(JumpBackInTabState)
+        case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkState)
         case pocket(PocketStoryState)
         case pocketDiscover(PocketDiscoverState)
@@ -41,6 +51,7 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 JumpBackInCell.self,
+                SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
                 PocketDiscoverCell.self,
@@ -122,10 +133,14 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
         // TODO: FXIOS-11224 Configure items to display based on device sizes
-        let maxItemsToDisplay = 2
-        return jumpBackInSectionState.jumpBackInTabs
+        let maxItemsToDisplay = 1
+        var tabs: [HomeItem] = jumpBackInSectionState.jumpBackInTabs
             .prefix(maxItemsToDisplay)
             .compactMap { .jumpBackIn($0) }
+        if let mostRecentSyncedTab = jumpBackInSectionState.mostRecentSyncedTab {
+            tabs.append(.jumpBackInSyncedTab(mostRecentSyncedTab))
+        }
+        return tabs
     }
 
     private func getBookmarks(
