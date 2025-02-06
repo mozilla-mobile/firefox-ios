@@ -42,7 +42,7 @@ jobs:
           name: Build and deploy to Testflight
           command: bundle exec fastlane testflight_beta
 
-  build-and-deploy-appcenter-and-browserstack:
+  build-and-deploy-firebase-and-browserstack:
     <<: *environment_common
     <<: *macos_common
     steps:
@@ -71,8 +71,8 @@ jobs:
           name: Build the Ecosia app
           command: bundle exec fastlane build_ecosia_app
       - run:
-          name: Upload to AppCenter
-          command: bundle exec fastlane upload_to_appcenter
+          name: Upload to Firebase
+          command: bundle exec fastlane upload_to_firebase
       - run:
           name: Upload to Browserstack
           command: bundle exec fastlane upload_to_browserstack
@@ -104,8 +104,8 @@ workflows:
               only: /^beta.*/
             branches:
               ignore: /.*/
-      - build-and-deploy-appcenter-and-browserstack:
-          name: Deploy ad-hoc version over AppCenter + Upload to Browserstack
+      - build-and-deploy-firebase-and-browserstack:
+          name: Deploy ad-hoc version over Firebase + Upload to Browserstack
           filters:
             branches:
               only: 

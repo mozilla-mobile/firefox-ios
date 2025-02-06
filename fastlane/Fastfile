@@ -43,7 +43,7 @@ platform :ios do
       scheme: "Ecosia",
       project: project_path,
       export_method: "ad-hoc",
-      configuration: "Development_AppCenter",
+      configuration: "Development_Firebase",
       export_options: {iCloudContainerEnvironment: 'Development'}
     )
   end
@@ -63,24 +63,21 @@ platform :ios do
     )
   end
 
-  desc "Upload to MS App-Center"
-  lane :upload_to_appcenter do
+  desc "Upload to Firebase"
+  lane :upload_to_firebase do
     ensure_env_vars(
       env_vars: [
         'IPA_PATH',
         'DSYM_PATH',
-        'APPCENTER_API_TOKEN',
-        'APPCENTER_OWNER_NAME']
+        'FIREBASE_TOKEN',
+        'FIREBASE_APP_ID']
     )
-    appcenter_upload(
-      api_token: ENV["APPCENTER_API_TOKEN"],
-      owner_name: ENV["APPCENTER_OWNER_NAME"],
-      app_name: "iOS-FF-Beta",
-      file: ENV["IPA_PATH"],
-      dsym: ENV["DSYM_PATH"],
-      should_clip: false,
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID"],
+      firebase_cli_token: ENV["FIREBASE_TOKEN"],
+      ipa_path: ENV["IPA_PATH"],
       release_notes: ENV["CIRCLE_BRANCH"],
-      notify_testers: false
+      groups: "ecosia-internal-testers"
     )
   end
   

@@ -5,3 +5,4 @@
 gem 'fastlane-plugin-appcenter'
 gem 'fastlane-plugin-xcconfig'
 gem 'fastlane-plugin-browserstack'
+gem 'fastlane-plugin-firebase_app_distribution'
