@@ -24,7 +24,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
 
-        DependencyHelperMock().bootstrapDependencies()
+        let mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         toolbarManager = DefaultToolbarManager()
 
         // We must reset the global mock store prior to each test
@@ -193,6 +194,28 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
     }
 
+    func testDidTapButton_tapOnTabsButton_dispatchesShowTabTray() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .tabs,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        try cancelEditMode(dispatchedActionsCount: 3)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showTabTray)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayButtonTapped)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayButtonTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
     func testDidTapButton_tapOnTrackingProtectionButton_dispatchesShowTrackingProtectionDetails() throws {
         try didTapButton(
             buttonType: .trackingProtection,
@@ -201,6 +224,42 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.siteInfoButtonTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.siteInfoButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_tapOnMenuButton_dispatchesShowMenu() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .menu,
+            buttonTapped: UIButton(),
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        try cancelEditMode(dispatchedActionsCount: 3)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.last as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showMenu)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.appMenuButtonTapped)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.appMenuButtonTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_tapOnCancelEditButton_dispatchesShowMenu() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .cancelEdit,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        try cancelEditMode(dispatchedActionsCount: 2)
     }
 
     func testDidTapButton_tapOnReaderModeButton_dispatchesShowReaderModes() throws {
@@ -298,6 +357,17 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, expectedActionType)
+    }
+
+    private func cancelEditMode(dispatchedActionsCount: Int = 2) throws {
+        let firstActionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? ToolbarActionType)
+        let secondActionCalled = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
+        let secondActionType = try XCTUnwrap(secondActionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, dispatchedActionsCount)
+        XCTAssertEqual(firstActionType, ToolbarActionType.cancelEdit)
+        XCTAssertEqual(secondActionType, GeneralBrowserActionType.leaveOverlay)
     }
 
     func setupEditingAppState() -> AppState {

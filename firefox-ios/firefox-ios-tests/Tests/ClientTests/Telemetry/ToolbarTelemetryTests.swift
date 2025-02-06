@@ -73,14 +73,6 @@ final class ToolbarTelemetryTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
     }
 
-    func testRecordToolbarWhenMenuTappedThenGleanIsCalled() throws {
-        subject?.menuButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.appMenuButtonTapped)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.appMenuButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
     func testRecordToolbarWhenLocationDraggedThenGleanIsCalled() throws {
         subject?.dragInteractionStarted()
         testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.dragLocationBar)
