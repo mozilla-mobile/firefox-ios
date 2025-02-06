@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 struct JumpBackInTabConfiguration: Equatable, Hashable {
+    let tabUUID: String
     let titleText: String
     let descriptionText: String
     let siteURL: String
@@ -32,5 +33,22 @@ struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
     }
     var syncedTabOpenActionTitle: String {
         return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
+    }
+}
+
+struct JumpBackInSectionLayoutConfiguration: Equatable, Hashable {
+    let numberOfTabsWithRemoteTab: Int
+    let numberOfTabsWithoutRemoteTab: Int
+    let layoutType: LayoutType
+    var hasSyncedTab: Bool?
+
+    enum LayoutType: Equatable, Hashable {
+        case compact
+        case medium
+        case regular
+    }
+
+    var getMaxNumberOfLocalTabsLayout: Int {
+        return hasSyncedTab ?? false ? numberOfTabsWithRemoteTab : numberOfTabsWithoutRemoteTab
     }
 }

@@ -6,7 +6,7 @@ import XCTest
 
 @testable import Client
 
-class TopSitesDimensionCalculatorTests: XCTestCase {
+class HomepageDimensionCalculatorTests: XCTestCase {
     struct UX {
         struct DeviceSize {
             static let iPhone14 = CGSize(width: 390, height: 844)
@@ -15,11 +15,68 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         }
     }
 
+    // MARK: - maxJumpBackInItemsToDisplay
+    func test_maxJumpBackInItemsToDisplay_withPortraitIphone_showsExpectedConfiguration() {
+        let trait = MockTraitCollection(horizontalSizeClass: .compact).getTraitCollection()
+
+        let configuration = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: trait,
+            for: .phone,
+            and: false
+        )
+
+        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 1)
+        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 2)
+        XCTAssertEqual(configuration.layoutType, .compact)
+    }
+
+    func test_maxJumpBackInItemsToDisplay_withLandscapeIphone_showsExpectedConfiguration() {
+        let trait = MockTraitCollection().getTraitCollection()
+
+        let configuration = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: trait,
+            for: .phone,
+            and: true
+        )
+
+        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 2)
+        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 4)
+        XCTAssertEqual(configuration.layoutType, .medium)
+    }
+
+    func test_maxJumpBackInItemsToDisplay_withPortraitIpad_showsExpectedConfiguration() {
+        let trait = MockTraitCollection().getTraitCollection()
+
+        let configuration = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: trait,
+            for: .pad,
+            and: false
+        )
+
+        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 2)
+        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 4)
+        XCTAssertEqual(configuration.layoutType, .medium)
+    }
+
+    func test_maxJumpBackInItemsToDisplay_withLandscapeIpad_andWithSyncedTab_showsExpectedTabs() {
+        let trait = MockTraitCollection().getTraitCollection()
+
+        let configuration = HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: trait,
+            for: .pad,
+            and: true
+        )
+        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 4)
+        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 6)
+        XCTAssertEqual(configuration.layoutType, .regular)
+    }
+
+    // MARK: - getNumberOfTilesPerRow
     func test_getNumberOfTilesPerRow_withPortraitIphone_showsExpectedRowNumber() {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.width,
             leadingInset: leadingInset
         )
@@ -31,7 +88,7 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPhone14.height,
             leadingInset: leadingInset
         )
@@ -43,7 +100,7 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.width,
             leadingInset: leadingInset
         )
@@ -55,7 +112,7 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPadAir.height,
             leadingInset: leadingInset
         )
@@ -67,7 +124,7 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.width,
             leadingInset: leadingInset
         )
@@ -79,7 +136,7 @@ class TopSitesDimensionCalculatorTests: XCTestCase {
         let trait = MockTraitCollection().getTraitCollection()
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
-        let numberOfTilesPerRow = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: UX.DeviceSize.iPadAirCompactSplit.height,
             leadingInset: leadingInset
         )

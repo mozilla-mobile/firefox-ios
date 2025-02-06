@@ -17,4 +17,5 @@ final class HomepageAction: Action {
 enum HomepageActionType: ActionType {
     case initialize
     case traitCollectionDidChange
+    case viewWillTransition
 }
