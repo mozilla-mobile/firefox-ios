@@ -211,7 +211,7 @@ extension BrowserViewController: WKUIDelegate {
                  type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
+        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasAnyHomepage else {
             decisionHandler(.deny)
             return
         }
