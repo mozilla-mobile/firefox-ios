@@ -475,6 +475,7 @@ bookmarks:
       following:
       * Page Action Menu
       * Share Menu
+      * Activity stream
 
     labels:
       - page-action-menu

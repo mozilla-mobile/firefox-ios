@@ -1758,7 +1758,8 @@ class BrowserViewController: UIViewController,
     internal func openBookmarkEditPanel() {
         guard !profile.isShutdown else { return }
 
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
+        let bookmarksTelemetry = BookmarksTelemetry()
+        bookmarksTelemetry.editBookmark(eventLabel: .addBookmarkToast)
 
         // Open refactored bookmark edit view
         if isBookmarkRefactorEnabled {
