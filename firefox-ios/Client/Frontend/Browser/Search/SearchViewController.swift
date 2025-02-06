@@ -45,7 +45,7 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 
-class SearchViewController: SiteTableViewController,
+final class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             SearchViewDelegate,
                             FeatureFlaggable,

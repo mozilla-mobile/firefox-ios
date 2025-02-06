@@ -4252,10 +4252,23 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     private func finishEditionMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
+        guard shouldCancelEditing else { return }
+        overlayManager.cancelEditing(shouldCancelLoading: false)
+    }
+
+    private var shouldCancelEditing: Bool {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
-        if newTabChoice != .topSites, newTabChoice != .blankPage {
-            overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
+        guard newTabChoice != .topSites, newTabChoice != .blankPage else { return false }
+
+        guard isToolbarRefactorEnabled else { return true }
+
+        let searchTerm = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.addressToolbar.searchTerm
+
+        return searchTerm == nil
     }
 }
 
@@ -4287,16 +4300,8 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
-        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
-
-        if shouldLoadCustomHomePage, let url = homePageURL {
-            openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
-            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
-        } else {
-            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-            overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
-        }
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
     }
 
     func topTabsDidLongPressNewTab(button: UIButton) {
