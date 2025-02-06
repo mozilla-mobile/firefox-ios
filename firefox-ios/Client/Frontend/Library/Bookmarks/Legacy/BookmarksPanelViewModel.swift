@@ -91,7 +91,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     /// we need to account for this when saving bookmark index in A-S. This is done by subtracting
     /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
-        var isDesktopFolderPresent: Bool = false
+        var isDesktopFolderPresent = false
         if isBookmarkRefactorEnabled && hasDesktopFolders {
             isDesktopFolderPresent = true
         } else if isBookmarkRefactorEnabled == false {

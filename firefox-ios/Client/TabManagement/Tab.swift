@@ -144,7 +144,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
     var adsTelemetryRedirectUrlList = [URL]()
     var startingSearchUrlWithAds: URL?
-    var adsProviderName: String = ""
+    var adsProviderName = ""
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
     var isFindInPageMode = false
@@ -244,7 +244,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     /// Use the display title unless it's an empty string, then use the base domain from the url
     func getTabTrayTitle() -> String {
         let baseDomain = url?.baseDomain
-        var backUpName: String = "" // In case display title is empty
+        var backUpName = "" // In case display title is empty
 
         if let baseDomain = baseDomain {
             backUpName = baseDomain.contains("local") ? .LegacyAppMenu.AppMenuOpenHomePageTitleString : baseDomain

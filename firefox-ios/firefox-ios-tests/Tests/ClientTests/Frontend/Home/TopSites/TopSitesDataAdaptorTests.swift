@@ -581,7 +581,7 @@ class TopSiteHistoryManagerStub: TopSiteHistoryManager {
     }
 
     var siteCount = 10
-    var addPinnedSiteCount: Int = 0
+    var addPinnedSiteCount = 0
     var duplicatePinnedSiteURL = false
 
     func createHistorySites() -> [Site] {

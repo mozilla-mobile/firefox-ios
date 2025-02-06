@@ -54,7 +54,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private let dispatchQueue: DispatchQueueInterface
 
     private let maxTopSites: Int
-    private let maxNumberOfSponsoredTile: Int = 2
+    private let maxNumberOfSponsoredTile = 2
 
     init(
         profile: Profile,

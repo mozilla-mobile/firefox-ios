@@ -22,7 +22,7 @@ struct FieldFocusMessage: Codable {
 
 struct LoginInjectionData: Codable {
     var requestId: String
-    var name: String = "RemoteLogins:loginsFound"
+    var name = "RemoteLogins:loginsFound"
     var logins: [LoginItem]
 }
 
@@ -36,10 +36,15 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
+<<<<<<< HEAD
     private var loginAlert: SaveLoginAlert?
     private var loginAlertTimer: Timer?
     private var loginAlertTimeout: TimeInterval = 10
     private var currentRequestId: String = ""
+=======
+    private var snackBar: SnackBar?
+    private var currentRequestId = ""
+>>>>>>> 68d5a4aaf (run swiftlint --fix to fix redudant type annotations in project)
     private var logger: Logger = DefaultLogger.shared
 
     public var foundFieldValues: ((FocusFieldType, String) -> Void)?
