@@ -16,9 +16,10 @@ class MarketingTests: BaseTestCaseL10n {
 
         snapshot("Home")
         // Go to ETP Menu
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.tables.cells["Settings"])
-        app.tables.cells["Settings"].tap()
+        app.images["icon_settings"].tap()
+        waitForExistence(app.tables.cells["settingsViewController.defaultBrowserCell"])
         waitForExistence(app.cells["settingsViewController.trackingCell"])
         app.cells["settingsViewController.trackingCell"].tap()
         snapshot("Settings-TP")
@@ -44,8 +45,7 @@ class MarketingTests: BaseTestCaseL10n {
         }
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText("https://www.mozilla.org/de/firefox/browsers/mobile/focus\n")
-        waitForExistence(app.webViews.buttons["Close"])
-        app.webViews.buttons["Close"].tap()
+        waitForNoExistence(app.progressIndicators.firstMatch)
         snapshot("Website-Focus")
     }
 
@@ -58,8 +58,8 @@ class MarketingTests: BaseTestCaseL10n {
         }
         saveTopSite(TopSite: "mozilla.org")
         saveTopSite(TopSite: "pocket.com")
-        saveTopSite(TopSite: "relay.com")
-        saveTopSite(TopSite: "monitor.com")
+        saveTopSite(TopSite: "relay.firefox.com")
+        saveTopSite(TopSite: "monitor.mozilla.org")
 
         app.buttons["URLBar.deleteButton"].tap()
         waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
@@ -71,9 +71,10 @@ class MarketingTests: BaseTestCaseL10n {
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText(TopSite)
         app.textFields.firstMatch.typeText("\n")
+        waitForNoExistence(app.progressIndicators.firstMatch, timeoutValue: 45)
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.cells["icon_shortcuts_add"])
-        app.tables.cells["icon_shortcuts_add"].tap()
+        waitForExistence(app.images["icon_shortcuts_add"])
+        app.images["icon_shortcuts_add"].tap()
     }
 }
