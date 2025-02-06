@@ -5,6 +5,8 @@
 import UIKit
 import Shared
 import Common
+import ActivityKit
+import WidgetKit
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
@@ -68,6 +70,22 @@ class DownloadsPanel: UIViewController,
                 name: $0,
                 object: nil
             )
+        }
+
+        if #available(iOS 16.2, *) {
+            let attributes = LiveDownloadWidgetAttributes(test: 10)
+            let state = LiveDownloadWidgetAttributes.ContentState(placeholder: "test")
+
+            do {
+                let activity = try Activity<LiveDownloadWidgetAttributes>.request(
+                    attributes: attributes,
+                    content: .init(state: state, staleDate: nil),
+                    pushType: nil
+                )
+                print("Live Activity started: \(activity.id)")
+            } catch {
+                print("Failed to start Live Activity: \(error.localizedDescription)")
+            }
         }
     }
 
