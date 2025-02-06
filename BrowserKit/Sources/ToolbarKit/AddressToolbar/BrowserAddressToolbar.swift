@@ -67,12 +67,16 @@ public class BrowserAddressToolbar: UIView,
     private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
-    private var previousLocationViewState: LocationViewState?
+    private var previousLocationViewConfiguration: LocationViewConfiguration?
     public var isUnifiedSearchEnabled = false {
         didSet {
-            guard let previousLocationViewState, oldValue != isUnifiedSearchEnabled else { return }
+            guard let previousLocationViewConfiguration, oldValue != isUnifiedSearchEnabled else { return }
 
-            locationView.configure(previousLocationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+            locationView.configure(
+                previousLocationViewConfiguration,
+                delegate: self,
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            )
         }
     }
 
@@ -88,24 +92,28 @@ public class BrowserAddressToolbar: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState,
+    public func configure(config: AddressToolbarConfiguration,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        self.previousLocationViewState = state.locationViewState
+        self.previousLocationViewConfiguration = config.locationViewConfiguration
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
-        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        configure(config: config, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
 
-    public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
-        updateBorder(borderPosition: state.borderPosition)
+    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool) {
+        updateBorder(borderPosition: config.borderPosition)
 
-        updateActions(state: state)
-        locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-        droppableUrl = state.locationViewState.droppableUrl
+        updateActions(config: config)
+        locationView.configure(
+            config.locationViewConfiguration,
+            delegate: self,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+        )
+        droppableUrl = config.locationViewConfiguration.droppableUrl
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -235,15 +243,15 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(state: AddressToolbarState) {
+    internal func updateActions(config: AddressToolbarConfiguration) {
         // Browser actions
-        updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
+        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
 
         // Navigation actions
-        updateActionStack(stackView: navigationActionStack, toolbarElements: state.navigationActions)
+        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
 
         // Page actions
-        updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
+        updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
 
         updateActionSpacing()
         updateToolbarLayout()

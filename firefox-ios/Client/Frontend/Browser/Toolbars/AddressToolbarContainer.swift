@@ -192,12 +192,12 @@ final class AddressToolbarContainer: UIView,
                 enterOverlayMode(nil, pasted: false, search: true)
             }
             updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: newModel.addressToolbarState,
+            compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
                                      isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-            regularToolbar.configure(state: newModel.addressToolbarState,
+            regularToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),

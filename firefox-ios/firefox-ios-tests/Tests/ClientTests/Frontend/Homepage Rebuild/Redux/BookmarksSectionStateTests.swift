@@ -39,7 +39,7 @@ final class BookmarksSectionStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             BookmarksAction(
-                bookmarks: [BookmarkState(
+                bookmarks: [BookmarkConfiguration(
                     site: Site.createBasicSite(
                         url: "www.mozilla.org",
                         title: "Bookmarks Title"

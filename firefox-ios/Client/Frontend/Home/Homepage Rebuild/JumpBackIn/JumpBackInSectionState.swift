@@ -9,7 +9,7 @@ import Storage
 /// State for the jump back in section that is used in the homepage view
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var jumpBackInTabs: [JumpBackInTabState]
+    var jumpBackInTabs: [JumpBackInTabConfiguration]
     var mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
 
     let sectionHeaderState = SectionHeaderState(
@@ -30,7 +30,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
 
     private init(
         windowUUID: WindowUUID,
-        jumpBackInTabs: [JumpBackInTabState],
+        jumpBackInTabs: [JumpBackInTabConfiguration],
         mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil
     ) {
         self.windowUUID = windowUUID
@@ -69,7 +69,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             jumpBackInTabs: recentTabs.compactMap { tab in
                 let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
                 let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
-                return JumpBackInTabState(
+                return JumpBackInTabConfiguration(
                     titleText: site.title,
                     descriptionText: site.tileURL.shortDisplayString.capitalized,
                     siteURL: itemURL

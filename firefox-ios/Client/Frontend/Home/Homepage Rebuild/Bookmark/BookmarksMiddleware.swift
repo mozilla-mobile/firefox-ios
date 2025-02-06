@@ -28,7 +28,7 @@ final class BookmarksMiddleware {
     private func handleInitializeBookmarksAction(windowUUID: WindowUUID) {
         bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { [weak self] bookmarks in
             let bookmarks = bookmarks.map {
-                BookmarkState(
+                BookmarkConfiguration(
                     site: Site.createBasicSite(
                         url: $0.url,
                         title: $0.title,
@@ -40,7 +40,7 @@ final class BookmarksMiddleware {
         }
     }
 
-    private func dispatchBookmarksAction(windowUUID: WindowUUID, updatedBookmarks: [BookmarkState]) {
+    private func dispatchBookmarksAction(windowUUID: WindowUUID, updatedBookmarks: [BookmarkConfiguration]) {
         let newAction = BookmarksAction(
             bookmarks: updatedBookmarks,
             windowUUID: windowUUID,
