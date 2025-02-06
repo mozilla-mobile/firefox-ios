@@ -1120,7 +1120,7 @@ private extension BrowserViewController {
 
     // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
     // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
-    // so we will block so we will block the creation of a new Webview with this check
+    // so we will block the creation of a new Webview with this check
     func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
         return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
     }
