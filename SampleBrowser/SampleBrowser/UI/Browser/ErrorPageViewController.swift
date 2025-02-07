@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 class ErrorPageViewController: UIViewController {
@@ -15,12 +16,7 @@ class ErrorPageViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(errorLabel)
 
-        NSLayoutConstraint.activate([
-            errorLabel.topAnchor.constraint(equalTo: view.topAnchor),
-            errorLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        errorLabel.pinToSuperview()
     }
 
     func configure(errorMessage: String) {
