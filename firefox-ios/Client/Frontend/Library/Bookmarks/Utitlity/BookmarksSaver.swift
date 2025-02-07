@@ -138,6 +138,9 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
             let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
 
             if folder.parentGUID == nil {
+                let bookmarksTelemetry = BookmarksTelemetry()
+                bookmarksTelemetry.addBookmarkFolder()
+
                 profile.places.createFolder(parentGUID: parentFolderGUID,
                                             title: folder.title,
                                             position: position) { result in

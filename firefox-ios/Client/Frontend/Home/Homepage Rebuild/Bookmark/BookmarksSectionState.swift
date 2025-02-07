@@ -9,7 +9,15 @@ import Storage
 /// State for the bookmark section that is used in the homepage view
 struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var bookmarks: [BookmarkState]
+    var bookmarks: [BookmarkConfiguration]
+
+    let sectionHeaderState = SectionHeaderState(
+        title: .BookmarksSectionTitle,
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
+        isButtonHidden: false,
+        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
+        buttonTitle: .BookmarksSavedShowAllText
+    )
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -20,7 +28,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
 
     private init(
         windowUUID: WindowUUID,
-        bookmarks: [BookmarkState]
+        bookmarks: [BookmarkConfiguration]
     ) {
         self.windowUUID = windowUUID
         self.bookmarks = bookmarks

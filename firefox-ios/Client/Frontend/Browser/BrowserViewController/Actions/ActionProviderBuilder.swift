@@ -11,7 +11,6 @@ import Storage
 class ActionProviderBuilder {
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-    private let bookmarksTelemetry = BookmarksTelemetry()
 
     func build() -> [UIAction] {
         return actions
@@ -45,9 +44,10 @@ class ActionProviderBuilder {
                 title: .ContextMenuBookmarkLink,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
-            ) { [weak self] _ in
+            ) { _ in
                 addBookmark(url.absoluteString, title, nil)
-                self?.bookmarksTelemetry.addBookmark(eventLabel: .contextMenu)
+                let bookmarksTelemetry = BookmarksTelemetry()
+                bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
             }
         )
     }
@@ -58,9 +58,10 @@ class ActionProviderBuilder {
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
-            ) { [weak self] _ in
+            ) { _ in
                 removeBookmark(url, title, nil)
-                self?.bookmarksTelemetry.deleteBookmark(eventLabel: .contextMenu)
+                let bookmarksTelemetry = BookmarksTelemetry()
+                bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
             }
         )
     }

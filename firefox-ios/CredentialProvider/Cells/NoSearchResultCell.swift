@@ -8,7 +8,7 @@ class NoSearchResultCell: UITableViewCell {
     static let identifier = "noSearchResultCell"
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.textColor = UIColor.CredentialProvider.titleColor
+        label.textColor = CredentialProvider.titleColor
         label.text = .LoginsListNoMatchingResultTitle
         label.font = UIFont.systemFont(ofSize: 15)
     }
@@ -25,7 +25,7 @@ class NoSearchResultCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         selectionStyle = .none
-        backgroundColor = UIColor.CredentialProvider.tableViewBackgroundColor
+        backgroundColor = CredentialProvider.tableViewBackgroundColor
 
         contentView.addSubviews(titleLabel, descriptionLabel)
         NSLayoutConstraint.activate([

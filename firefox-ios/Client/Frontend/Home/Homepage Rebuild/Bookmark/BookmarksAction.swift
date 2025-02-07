@@ -7,9 +7,9 @@ import Redux
 import Common
 
 final class BookmarksAction: Action {
-    let bookmarks: [BookmarkState]?
+    let bookmarks: [BookmarkConfiguration]?
 
-    init(bookmarks: [BookmarkState]? = nil,
+    init(bookmarks: [BookmarkConfiguration]? = nil,
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {

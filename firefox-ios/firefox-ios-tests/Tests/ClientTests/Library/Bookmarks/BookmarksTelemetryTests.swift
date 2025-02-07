@@ -46,7 +46,7 @@ final class BookmarksTelemetryTests: XCTestCase {
     }
 
     func testRecordBookmark_WhenOpenedSite_ThenGleanIsCalled() throws {
-        subject?.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.bookmarksPanel)
+        subject?.openBookmarksSite(eventLabel: .bookmarksPanel)
 
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>)
         let expectedMetricType = type(of: GleanMetrics.Bookmarks.open)

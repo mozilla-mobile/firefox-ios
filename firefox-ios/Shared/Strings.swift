@@ -7104,11 +7104,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG")
-    public static let AppSettingsYourRights = MZLocalizedString(
-        key: "Your Rights",
-        tableName: nil,
-        value: nil,
-        comment: "Your Rights settings section title")
+    public static let AppSettingsTermsOfUse = MZLocalizedString(
+        key: "Settings.TermsOfUse.Title.v137",
+        tableName: "Settings",
+        value: "Terms of Use",
+        comment: "Terms of Use settings section title")
     public static let AppSettingsShowTour = MZLocalizedString(
         key: "Show Tour",
         tableName: nil,
@@ -7129,11 +7129,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Open search section of settings")
-    public static let AppSettingsPrivacyPolicy = MZLocalizedString(
-        key: "Privacy Policy",
-        tableName: nil,
-        value: nil,
-        comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
+    public static let AppSettingsPrivacyNotice = MZLocalizedString(
+        key: "Settings.PrivacyNotice.Title.v137",
+        tableName: "Settings",
+        value: "Privacy Notice",
+        comment: "Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
     public static let AppSettingsTitle = MZLocalizedString(
         key: "Settings",
         tableName: nil,
@@ -7746,6 +7746,16 @@ extension String {
                 tableName: nil,
                 value: "Open this link in external app?",
                 comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+            public static let AppSettingsPrivacyPolicy = MZLocalizedString(
+                key: "Privacy Policy",
+                tableName: nil,
+                value: nil,
+                comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
+            public static let AppSettingsYourRights = MZLocalizedString(
+                key: "Your Rights",
+                tableName: nil,
+                value: nil,
+                comment: "Your Rights settings section title")
         }
     }
 }

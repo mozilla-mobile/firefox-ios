@@ -13,10 +13,12 @@ enum InternalPageSchemeHandlerError: Error {
 }
 
 protocol InternalSchemeResponse {
-    func response(forRequest: URLRequest) -> (URLResponse, Data)?
+    func response(forRequest: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)?
 }
 
 class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
+    private var shouldUseOldErrorPage = false
+
     static func response(forUrl url: URL) -> URLResponse {
         return URLResponse(url: url, mimeType: "text/html", expectedContentLength: -1, textEncodingName: "utf-8")
     }
@@ -24,6 +26,10 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
     // Responders are looked up based on the path component, for instance
     // responder["about/license"] is used for 'internal://local/about/license'
     static var responders = [String: InternalSchemeResponse]()
+
+    init(shouldUseOldErrorPage: Bool = false) {
+        self.shouldUseOldErrorPage = shouldUseOldErrorPage
+    }
 
     // Unprivileged internal:// urls might be internal resources in the
     // app bundle ( i.e. <link href="errorpage-resource/NetError.css"> )
@@ -85,7 +91,8 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
             return
         }
 
-        guard let (urlResponse, data) = responder.response(forRequest: urlSchemeTask.request) else {
+        guard let (urlResponse, data) = responder.response(forRequest: urlSchemeTask.request,
+                                                           useOldErrorPage: shouldUseOldErrorPage) else {
             urlSchemeTask.didFailWithError(InternalPageSchemeHandlerError.responderUnableToHandle)
             return
         }

@@ -27,7 +27,7 @@ class SyncedTabCellTests: XCTestCase {
             XCTAssertEqual(url, testUrl)
         }
 
-        let subject = SyncedTabCell(frame: CGRect.zero)
+        let subject = LegacySyncedTabCell(frame: CGRect.zero)
         trackForMemoryLeaks(subject)
 
         subject.configure(viewModel: viewModel,

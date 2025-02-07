@@ -5,7 +5,7 @@
 import Foundation
 
 /// Defines the state for the navigation toolbar.
-public struct NavigationToolbarState {
+public struct NavigationToolbarConfiguration {
     /// Actions of the navigation toolbar
     let actions: [ToolbarElement]
 
