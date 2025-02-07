@@ -1,0 +1,31 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import XCTest
+@testable import WebEngine
+
+final class EngineURLTests: XCTestCase {
+    func testLoadURLGivenEmptyThenDoesntCreate() {
+        let context = BrowsingContext(type: .internalNavigation, url: "")
+        let subject = EngineURL(browsingContext: context)
+
+        XCTAssertNil(subject)
+    }
+
+    func testLoadURLGivenNotAURLThenDoesntCreate() {
+        let url = "blablablablabla"
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let subject = EngineURL(browsingContext: context)
+
+        XCTAssertNil(subject)
+    }
+
+    func testLoadURLGivenExampleURLThenCreate() {
+        let url = "https://www.example.com"
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let subject = EngineURL(browsingContext: context)
+
+        XCTAssertNotNil(subject)
+    }
+}

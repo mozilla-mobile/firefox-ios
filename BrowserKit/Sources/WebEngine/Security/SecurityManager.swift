@@ -23,8 +23,6 @@ public class DefaultSecurityManager: SecurityManager {
             return handleExternalNavigation(url: url)
         case .internalNavigation:
             return handleInternalNavigation(url: url)
-        case .redirectionNavigation:
-            return handleRedirectionNavigation(url: url)
         }
     }
 
@@ -54,30 +52,4 @@ public class DefaultSecurityManager: SecurityManager {
         let urlIsNotComposedOnlyOfAScheme = url.absoluteURL.absoluteString.lowercased() != scheme + ":"
         return isValidScheme && urlIsNotComposedOnlyOfAScheme
     }
-
-    // MARK: - Redirection
-
-    private func handleRedirectionNavigation(url: URL) -> NavigationDecisionType {
-        return .allowed
-        // TODO: FXIOS-8375 - Handle redirection navigation
-//        if schemeIsRedirectionNavigationValid(for: url) {
-//            return .allowed
-//        } else if schemeIsRedirectionThirdPartyNavigationValid(for: url) {
-//            return .clientHandled
-//        } else {
-//            return .refused
-//        }
-    }
-
-//    private func schemeIsRedirectionNavigationValid(for url: URL) -> Bool {
-//        let acceptedSchemes = [SchemesDefinition.standardSchemes.data] + SchemesDefinition.callingSchemes
-//        return acceptedSchemes.contains { $0.rawValue == url.scheme }
-//    }
-//
-//    private func schemeIsRedirectionThirdPartyNavigationValid(for url: URL) -> Bool {
-//        let acceptedSchemes = [SchemesDefinition.standardSchemes.mailto]
-//        + SchemesDefinition.appStoreSchemes
-//        + SchemesDefinition.callingSchemes
-//        return acceptedSchemes.contains { $0.rawValue == url.scheme }
-//    }
 }

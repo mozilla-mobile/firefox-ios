@@ -33,7 +33,6 @@ class WKEngineSession: NSObject,
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
-    private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
     private let navigationHandler: WKNavigationHandler
@@ -46,7 +45,6 @@ class WKEngineSession: NSObject,
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
-          securityManager: SecurityManager = DefaultSecurityManager(),
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
@@ -61,7 +59,6 @@ class WKEngineSession: NSObject,
         self.logger = logger
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
-        self.securityManager = securityManager
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
@@ -80,29 +77,23 @@ class WKEngineSession: NSObject,
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
-    func load(url: String) {
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
-        guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return }
-
+    func load(engineURL: EngineURL) {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-        if let url = URL(string: url),
-           let syncedReaderModeURL = url.decodeReaderModeURL,
+        if let syncedReaderModeURL = engineURL.url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL
             .encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             sessionData.lastRequest = readerModeRequest
-            sessionData.url = url
+            sessionData.url = engineURL.url
 
             webView.load(readerModeRequest)
             logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
         }
 
-        guard let url = URL(string: url) else { return }
-        let request = URLRequest(url: url)
-
+        let request = URLRequest(url: engineURL.url)
         sessionData.lastRequest = request
-        sessionData.url = url
+        sessionData.url = engineURL.url
 
         if let url = request.url, url.isFileURL {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())

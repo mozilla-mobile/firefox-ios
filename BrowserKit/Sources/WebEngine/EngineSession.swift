@@ -16,8 +16,8 @@ public protocol EngineSession {
     var findInPageDelegate: FindInPageHelperDelegate? { get set }
 
     /// The engine received a request to load a URL.
-    /// - Parameter url: The URL string that is requested
-    func load(url: String)
+    /// - Parameter engineURL: The EngineURL that is requested to load
+    func load(engineURL: EngineURL)
 
     /// Stops loading the current session.
     func stopLoading()
