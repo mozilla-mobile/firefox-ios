@@ -4224,7 +4224,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        finishEditionMode()
+        cancelEditingMode()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
@@ -4250,7 +4250,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
-    private func finishEditionMode() {
+    private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
