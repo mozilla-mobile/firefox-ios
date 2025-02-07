@@ -20,4 +20,16 @@ final class UserAgentTests: XCTestCase {
             XCTAssertEqual(agent, UserAgent.getUserAgent(domain: domain, platform: .Mobile))
         }
     }
+
+    func testGetUserAgentDesktop_withPaypalDomain_returnMobileUserAgent() {
+        let paypalDomain = "paypal.com"
+        XCTAssertEqual(UserAgent.mobileUserAgent(),
+                       UserAgent.getUserAgent(domain: paypalDomain, platform: .Desktop))
+    }
+
+    func testGetUserAgentMobile_withPaypalDomain_returnProperUserAgent() {
+        let paypalDomain = "paypal.com"
+        XCTAssertEqual(UserAgent.mobileUserAgent(),
+                       UserAgent.getUserAgent(domain: paypalDomain, platform: .Mobile))
+    }
 }

@@ -274,8 +274,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Блокувати стеження вмісту";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Це допомагає Mozilla оцінити кількість активних користувачів.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Щоденний сигнал використання";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Темна";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Це допомагає нам діагностувати й усувати проблеми з браузером.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ відправлятиме пошуковій системі текст, введений в адресному рядку.";

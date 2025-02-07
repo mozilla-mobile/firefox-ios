@@ -5,9 +5,10 @@
 import Foundation
 import Common
 
-/// Internal URLs helps with error pages, session restore and about pages
+/// Internal URLs helps with error pages and about pages
 protocol InternalURL {
     var isAuthorized: Bool { get }
+    var isAboutHomeURL: Bool { get }
 
     func authorize()
     func stripAuthorization()
@@ -98,5 +99,24 @@ final class WKInternalURL: InternalURL {
 
     private var isErrorPage: Bool {
         return WKInternalURL.Path.errorpage.matches(url.path)
+    }
+
+    var isAboutHomeURL: Bool {
+        if let urlParam = extractedUrlParam,
+            let internalUrlParam = WKInternalURL(urlParam) {
+            return internalUrlParam.aboutComponent?.hasPrefix("home") ?? false
+        }
+        return aboutComponent?.hasPrefix("home") ?? false
+    }
+
+    /// Return the path after "about/" in the URI.
+    private var aboutComponent: String? {
+        let aboutPath = "/about/"
+        stripAuthorization()
+
+        if url.path.hasPrefix(aboutPath) {
+            return String(url.path.dropFirst(aboutPath.count))
+        }
+        return nil
     }
 }

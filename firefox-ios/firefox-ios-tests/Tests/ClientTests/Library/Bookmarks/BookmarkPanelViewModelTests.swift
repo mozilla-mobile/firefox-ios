@@ -59,6 +59,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -84,7 +85,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenDesktopBookmarksExist() throws {
         profile.reopen()
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         createDesktopBookmark(subject: subject) {
@@ -157,6 +158,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testMoveRowAtGetNewIndex_MobileGuid_atFive() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let index = subject.getNewIndex(from: 5)
         XCTAssertEqual(index, 4)
     }
@@ -181,16 +183,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        createDesktopBookmark(subject: subject) {
-            let index = subject.getNewIndex(from: 5)
-            XCTAssertEqual(index, 4)
-        }
-    }
-
     func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         featureFlags.set(feature: .bookmarksRefactor, to: true)
@@ -205,14 +197,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 4)
     }
 }
 

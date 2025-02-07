@@ -31,6 +31,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -203,6 +205,21 @@ extension BrowserViewController: WKUIDelegate {
         completionHandler(contextMenuConfiguration(for: url, webView: webView))
     }
 
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView === webView, !contentContainer.hasAnyHomepage else {
+            decisionHandler(.deny)
+            return
+        }
+
+        decisionHandler(.prompt)
+    }
+
+    // MARK: - Helpers
     private func contextMenuConfiguration(for url: URL, webView: WKWebView) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
@@ -389,21 +406,6 @@ extension BrowserViewController: WKUIDelegate {
         pendingDownloadWebView = webView
     }
 
-    @available(iOS 15, *)
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
-            decisionHandler(.deny)
-            return
-        }
-
-        decisionHandler(.prompt)
-    }
-
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
@@ -507,8 +509,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
             if url.scheme == "sms" { // All the other types show a native prompt
-                showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                    guard isOk else { return }
+                showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                     UIApplication.shared.open(url, options: [:])
                 }
             } else {
@@ -540,17 +541,18 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
 
             // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-            DispatchQueue.main.asyncAfter(deadline: .now() + tabManager.delaySelectingNewPopupTab + 0.1) {
-                // Show only if no other snack bar
-                guard let tab = self.tabManager.selectedTab, tab.bars.isEmpty else { return }
-                TimerSnackBar.showAppStoreConfirmationBar(
-                    forTab: tab,
-                    appStoreURL: url,
-                    theme: self.currentTheme()
-                ) { _ in
-                    // If a new window was opened for this URL (it will have no history), close it.
-                    if tab.historyList.isEmpty {
-                        self.tabManager.removeTab(tab)
+            // Otherwise the AppStoreAlert is shown on the wrong tab
+            let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+            DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
+                self?.showAppStoreAlert { isOpened in
+                    if isOpened {
+                        UIApplication.shared.open(url, options: [:])
+                    }
+                    // If a new window was opened for this URL, close it
+                    if let currentTab = self?.tabManager.selectedTab,
+                       currentTab.historyList.count == 1,
+                       self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                        self?.tabManager.removeTab(tab)
                     }
                 }
             }
@@ -559,9 +561,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                guard isOk else { return }
-
+            showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
                 if let mailToMetadata = url.mailToMetadata(),
                    let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
                    mailScheme != "mailto" {
@@ -627,20 +627,18 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
-                guard isOk else { return }
-                UIApplication.shared.open(url, options: [:]) { openedURL in
-                    // Do not show error message for JS navigated links or 
-                    // redirect as it's not the result of a user action.
-                    if !openedURL, navigationAction.navigationType == .linkActivated {
-                        let alert = UIAlertController(
-                            title: .UnableToOpenURLErrorTitle,
-                            message: .UnableToOpenURLError,
-                            preferredStyle: .alert
-                        )
-                        alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    }
+            // Try to open the custom scheme URL, if it doesn't work we show an error alert
+            UIApplication.shared.open(url, options: [:]) { openedURL in
+                // Do not show error message for JS navigated links or
+                // redirect as it's not the result of a user action.
+                if !openedURL, navigationAction.navigationType == .linkActivated {
+                    let alert = UIAlertController(
+                        title: nil,
+                        message: .ExternalInvalidLinkMessage,
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
         }
@@ -948,7 +946,7 @@ extension BrowserViewController: WKNavigationDelegate {
               let metadataManager = tab.metadataManager
         else { return }
 
-        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
 
@@ -1057,28 +1055,51 @@ private extension BrowserViewController {
       return isHttpScheme && isAppStoreHost
     }
 
-    // Use for sms and mailto links, which do not show a confirmation before opening.
-    func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
-        let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
-        let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
-            tab.removeSnackbar(bar)
-            completion(true)
-        }
-        let cancel = SnackButton(
-            title: .CancelString,
-            accessibilityIdentifier: "AppOpenExternal.button.cancel"
-        ) { bar in
-            tab.removeSnackbar(bar)
-            completion(false)
-        }
-        let theme = currentTheme()
-        ok.applyTheme(theme: theme)
-        cancel.applyTheme(theme: theme)
-        snackBar.applyTheme(theme: theme)
+    // Use for sms and mailto, which do not show a confirmation before opening.
+    func showExternalAlert(withText text: String, completion: @escaping (UIAlertAction) -> Void) {
+        let alert = UIAlertController(title: nil,
+                                      message: text,
+                                      preferredStyle: .alert)
 
-        snackBar.addButton(ok)
-        snackBar.addButton(cancel)
-        tab.addSnackbar(snackBar)
+        let okOption = UIAlertAction(
+            title: .ExternalOpenMessage,
+            style: .default,
+            handler: completion
+        )
+
+        let cancelOption = UIAlertAction(
+            title: .CancelString,
+            style: .cancel,
+            handler: nil
+        )
+
+        alert.addAction(okOption)
+        alert.addAction(cancelOption)
+
+        present(alert, animated: true, completion: nil)
+    }
+
+    func showAppStoreAlert(completion: @escaping (Bool) -> Void) {
+        let alert = UIAlertController(title: nil,
+                                      message: .ExternalLinkAppStoreConfirmationTitle,
+                                      preferredStyle: .alert)
+
+        let okOption = UIAlertAction(
+            title: .AppStoreString,
+            style: .default,
+            handler: { _ in completion(true) }
+        )
+
+        let cancelOption = UIAlertAction(
+            title: .NotNowString,
+            style: .cancel,
+            handler: { _ in completion(false) }
+        )
+
+        alert.addAction(okOption)
+        alert.addAction(cancelOption)
+
+        present(alert, animated: true, completion: nil)
     }
 
     func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
@@ -1097,9 +1118,16 @@ private extension BrowserViewController {
         return false
     }
 
+    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+    // so we will block the creation of a new Webview with this check
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+    }
+
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView === webView))
             && (self.presentedViewController == nil)
     }
 

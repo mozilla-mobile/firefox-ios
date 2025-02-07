@@ -29,7 +29,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
     }
 
     private func openLoginsSettings() {
@@ -121,16 +121,7 @@ class LoginTest: BaseTestCase {
             openLoginsSettings()
             mozWaitForElementToExist(app.tables["Login List"])
             mozWaitForElementToExist(app.staticTexts[domain])
-            // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-            // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
-            if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-            // Workaround for Github Actions specific issue. "runner" user is used in Github Actions.
-            } else if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("runner")) {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-            } else {
-                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
-            }
+            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
         }
     }
 
@@ -139,7 +130,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.dontSaveButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.notNowButton].waitAndTap()
         // There should not be any login saved
         openLoginsSettings()
         mozWaitForElementToNotExist(app.staticTexts[domain])
@@ -247,7 +238,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].waitAndTap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.SaveLoginAlert.saveButton].waitAndTap()
 
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)

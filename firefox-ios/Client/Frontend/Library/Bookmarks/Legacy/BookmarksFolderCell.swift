@@ -104,8 +104,6 @@ extension BookmarkItemData: BookmarksFolderCell {
             return
         }
         libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-        let bookmarksTelemetry = BookmarksTelemetry()
-        bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.bookmarksPanel)
     }
 }
 
@@ -116,6 +114,8 @@ extension FxBookmarkNode {
     }
 
     var chevronImage: UIImage? {
-        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        return UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
     }
 }

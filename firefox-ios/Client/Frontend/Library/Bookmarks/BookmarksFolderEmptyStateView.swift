@@ -41,7 +41,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     private lazy var signInButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .Bookmarks.EmptyState.Root.ButtonTitle,
-            a11yIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.EmptyState.signInButton
+            a11yIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
         )
         button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.didTapSignIn), for: .touchUpInside)
@@ -66,7 +66,12 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
 
     func configure(isRoot: Bool, isSignedIn: Bool) {
         titleLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Title : .Bookmarks.EmptyState.Nested.Title
-        bodyLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Body : .Bookmarks.EmptyState.Nested.Body
+        if isRoot {
+            bodyLabel.text = isSignedIn ? .Bookmarks.EmptyState.Root.BodySignedIn
+                                        : .Bookmarks.EmptyState.Root.BodySignedOut
+        } else {
+            bodyLabel.text = .Bookmarks.EmptyState.Nested.Body
+        }
         logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
         signInButton.isHidden = !isRoot || isSignedIn
     }

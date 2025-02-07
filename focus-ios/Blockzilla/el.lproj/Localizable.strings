@@ -274,11 +274,11 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Φραγή ιχνηλατών περιεχομένου";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
 "Settings.DailyUsagePing.Message" = "Αυτό βοηθά τη Mozilla να εκτιμήσει τους ενεργούς χρήστες.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title" = "Ενημέρωση ημερήσιας χρήσης";
+"Settings.DailyUsagePing.Title" = "Ping ημερήσιας χρήσης";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Σκουρόχρωμο";

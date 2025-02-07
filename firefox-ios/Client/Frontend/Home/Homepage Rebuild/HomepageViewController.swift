@@ -59,7 +59,6 @@ final class HomepageViewController: UIViewController,
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
-    private let mainQueue: DispatchQueueInterface
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -68,8 +67,7 @@ final class HomepageViewController: UIViewController,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared,
-         mainQueue: DispatchQueueInterface = DispatchQueue.main
+         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -78,16 +76,21 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
-        self.mainQueue = mainQueue
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          .FirefoxAccountChanged,
-                                                          .PrivateDataClearedHistory,
-                                                          .ProfileDidFinishSyncing,
-                                                          .TopSitesUpdated,
-                                                          .DefaultSearchEngineUpdated])
+        setupNotifications(forObserver: self, observing: [
+            UIApplication.didBecomeActiveNotification,
+            .FirefoxAccountChanged,
+            .PrivateDataClearedHistory,
+            .ProfileDidFinishSyncing,
+            .TopSitesUpdated,
+            .DefaultSearchEngineUpdated,
+            .BookmarksUpdated,
+            .RustPlacesOpened,
+            .TabDataUpdated
+        ])
+
         subscribeToRedux()
     }
 
@@ -111,7 +114,6 @@ final class HomepageViewController: UIViewController,
         store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
-                numberOfTilesPerRow: numberOfTilesPerRow(for: availableWidth),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
             )
@@ -125,13 +127,6 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        store.dispatch(
-            TopSitesAction(
-                numberOfTilesPerRow: numberOfTilesPerRow(for: size.width),
-                windowUUID: self.windowUUID,
-                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-            )
-        )
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -188,12 +183,13 @@ final class HomepageViewController: UIViewController,
     /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
     /// - Returns: The number of tiles that can fit in a single row within the available width.
     private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
-        return TopSitesDimensionImplementation().getNumberOfTilesPerRow(
+        let tiles = TopSitesDimensionCalculator.numberOfTilesPerRow(
             availableWidth: availableWidth,
             leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
                 traitCollection: traitCollection
             )
         )
+        return tiles
     }
 
     // MARK: - Redux
@@ -217,9 +213,9 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
-        homepageState = state
+        self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
-        dataSource?.updateSnapshot(state: state)
+        dataSource?.updateSnapshot(state: state, numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth))
     }
 
     func unsubscribeFromRedux() {
@@ -366,6 +362,16 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
+        case .messageCard(let config):
+            guard let messageCardCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageMessageCardCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
+            return messageCardCell
         case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
@@ -387,6 +393,44 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
+        case .jumpBackIn(let tab):
+            guard let jumpBackInCell = collectionView?.dequeueReusableCell(
+                cellType: JumpBackInCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            jumpBackInCell.configure(config: tab, theme: currentTheme)
+            return jumpBackInCell
+
+        case .jumpBackInSyncedTab(let config):
+            guard let syncedTabCell = collectionView?.dequeueReusableCell(
+                cellType: SyncedTabCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            syncedTabCell.configure(
+                configuration: config,
+                theme: currentTheme,
+                onTapShowAllAction: {
+                    // TODO: FXIOS-11229 - Handle actions
+                },
+                onOpenSyncedTabAction: { _ in
+                    // TODO: FXIOS-11229 - Handle actions
+                }
+            )
+            return syncedTabCell
+
+        case .bookmark(let item):
+            guard let bookmarksCell = collectionView?.dequeueReusableCell(
+                cellType: BookmarksCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            bookmarksCell.configure(config: item, theme: currentTheme)
+            return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
@@ -468,6 +512,26 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
+        case .jumpBackIn(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.jumpBackInState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToTabTray()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
+        case .bookmarks(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.bookmarkState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToBookmarksPanel()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
@@ -520,13 +584,15 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Item selected at \(point) but does not navigate to context menu",
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
                 category: .homepage
             )
             return
         }
-        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        if section.canHandleLongPress {
+            navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        }
     }
 
     // MARK: Dispatch Actions
@@ -575,6 +641,36 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func navigateToTabTray() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.tabTray),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+            )
+        )
+    }
+
+    private func navigateToBookmarksPanel() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.bookmarksPanel),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
+            )
+        )
+    }
+
+    private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -587,17 +683,21 @@ final class HomepageViewController: UIViewController,
         }
         switch item {
         case .topSite(let state, _):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: state.site.url.asURL,
-                        isGoogleTopSite: state.isGoogleURL
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: state.site.url.asURL,
+                isGoogleTopSite: state.isGoogleURL,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .bookmark(let config):
+            let destination = NavigationDestination(
+                .link,
+                url: URIFixup.getURL(config.site.url),
+                isGoogleTopSite: false,
+                visitType: .bookmark
+            )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
@@ -632,23 +732,39 @@ final class HomepageViewController: UIViewController,
                     actionType: PocketActionType.enteredForeground
                 )
             )
-        case .ProfileDidFinishSyncing,
-                .PrivateDataClearedHistory,
-                .FirefoxAccountChanged,
+        case .PrivateDataClearedHistory,
                 .TopSitesUpdated,
                 .DefaultSearchEngineUpdated:
-            // To ensure that `numberOfTilesPerRow` is calculated on the main thread
-            mainQueue.ensureMainThread { [weak self] in
-                guard let self else { return }
-                store.dispatch(
-                    TopSitesAction(
-                        numberOfTilesPerRow: self.numberOfTilesPerRow(for: availableWidth),
-                        windowUUID: self.windowUUID,
-                        actionType: TopSitesActionType.fetchTopSites
-                    )
+            dispatchActionToFetchTopSites()
+        case .BookmarksUpdated, .RustPlacesOpened:
+            store.dispatch(
+                BookmarksAction(
+                    windowUUID: self.windowUUID,
+                    actionType: BookmarksActionType.fetchBookmarks
                 )
-            }
+            )
+        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+            dispatchActionToFetchTopSites()
+            dispatchActionToFetchRemoteTabs()
         default: break
         }
+    }
+
+    private func dispatchActionToFetchTopSites() {
+        store.dispatch(
+            TopSitesAction(
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.fetchTopSites
+            )
+        )
+    }
+
+    private func dispatchActionToFetchRemoteTabs() {
+        store.dispatch(
+            JumpBackInAction(
+                windowUUID: self.windowUUID,
+                actionType: JumpBackInActionType.fetchRemoteTabs
+            )
+        )
     }
 }

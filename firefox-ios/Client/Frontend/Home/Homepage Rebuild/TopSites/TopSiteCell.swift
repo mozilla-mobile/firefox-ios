@@ -13,7 +13,7 @@ import UIKit
 class TopSiteCell: UICollectionViewCell, ReusableCell {
     // MARK: - Variables
 
-    private var homeTopSite: TopSiteState?
+    private var homeTopSite: TopSiteConfiguration?
 
     struct UX {
         static let titleOffset: CGFloat = 4
@@ -135,7 +135,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSiteState,
+    func configure(_ topSite: TopSiteConfiguration,
                    position: Int,
                    theme: Theme,
                    textColor: UIColor?) {
@@ -147,16 +147,21 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         let siteURLString = topSite.site.url
         var imageResource: SiteResource?
 
-        if let site = topSite.site as? SponsoredTile,
-           let url = URL(string: site.imageURL, invalidCharacters: false) {
-            imageResource = .remoteURL(url: url)
-        } else if let site = topSite.site as? PinnedSite {
-            imageResource = site.faviconResource
-        } else if let site = topSite.site as? SuggestedSite {
-            imageResource = site.faviconResource
-        } else if let siteURL = URL(string: siteURLString),
-                  let domainNoTLD = siteURL.baseDomain?.split(separator: ".").first,
-                  domainNoTLD == "google" {
+        switch topSite.type {
+        case .sponsoredSite(let siteInfo):
+            if let url = URL(string: siteInfo.imageURL, invalidCharacters: false) {
+                imageResource = .remoteURL(url: url)
+            }
+        case .pinnedSite, .suggestedSite:
+            imageResource = topSite.site.faviconResource
+        default:
+            break
+        }
+
+        if imageResource == nil,
+           let siteURL = URL(string: siteURLString),
+           let domainNoTLD = siteURL.baseDomain?.split(separator: ".").first,
+           domainNoTLD == "google" {
             // Exception for Google top sites, which all return blurry low quality favicons that on the home screen.
             // Return our bundled G icon for all of the Google Suite.
             // Parse example: "https://drive.google.com/drive/home" > "drive.google.com" > "google"
@@ -229,15 +234,15 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         ])
     }
 
-    private func configurePinnedSite(_ topSite: TopSiteState) {
+    private func configurePinnedSite(_ topSite: TopSiteConfiguration) {
         guard topSite.isPinned else { return }
 
         pinViewHolder.isHidden = false
         pinImageView.isHidden = false
     }
 
-    private func configureSponsoredSite(_ topSite: TopSiteState) {
-        guard topSite.isSponsoredTile else { return }
+    private func configureSponsoredSite(_ topSite: TopSiteConfiguration) {
+        guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
     }

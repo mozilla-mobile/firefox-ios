@@ -184,8 +184,10 @@ extension LegacyTopSitesDimensionTests {
     func createSites(count: Int = 30) -> [TopSite] {
         var sites = [TopSite]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0)")
+            let site = Site.createBasicSite(
+                url: "www.url\($0).com",
+                title: "Title \($0)"
+            )
             sites.append(TopSite(site: site))
         }
         return sites

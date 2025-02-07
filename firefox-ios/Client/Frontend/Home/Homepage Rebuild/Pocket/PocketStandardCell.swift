@@ -85,7 +85,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
 
     // MARK: - Helpers
 
-    func configure(story: PocketStoryState, theme: Theme) {
+    func configure(story: PocketStoryConfiguration, theme: Theme) {
         titleLabel.text = story.title
         descriptionLabel.text = story.description
         accessibilityLabel = story.accessibilityLabel

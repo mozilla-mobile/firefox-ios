@@ -12,9 +12,8 @@ import Shared
 /// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let topSitesData: [TopSiteState]
+    let topSitesData: [TopSiteConfiguration]
     let numberOfRows: Int
-    let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
@@ -27,22 +26,19 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards,
             shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        topSitesData: [TopSiteState],
+        topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
-        numberOfTilesPerRow: Int,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
-        self.numberOfTilesPerRow = numberOfTilesPerRow
         self.shouldShowSection = shouldShowSection
     }
 
@@ -57,8 +53,6 @@ struct TopSitesSectionState: StateType, Equatable {
             return handleRetrievedUpdatedSitesAction(action: action, state: state)
         case TopSitesActionType.updatedNumberOfRows:
             return handleUpdatedNumberOfRowsAction(action: action, state: state)
-        case TopSitesActionType.updatedNumberOfTilesPerRow:
-            return handleUpdatedNumberOfTilesPerRowAction(action: action, state: state)
         case TopSitesActionType.toggleShowSectionSetting:
             return handleToggleShowSectionSettingAction(action: action, state: state)
         default:
@@ -72,14 +66,12 @@ struct TopSitesSectionState: StateType, Equatable {
         else {
             return defaultState(from: state)
         }
-        let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow ?? state.numberOfTilesPerRow
-        let filteredSites = filter(sites: sites, with: state.numberOfRows, and: numberOfTilesPerRow)
+
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
-            topSitesData: filteredSites,
+            topSitesData: sites,
             numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: numberOfTilesPerRow,
-            shouldShowSection: !filteredSites.isEmpty && state.shouldShowSection
+            shouldShowSection: !sites.isEmpty && state.shouldShowSection
         )
     }
 
@@ -90,29 +82,10 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let filteredSites = filter(sites: state.topSitesData, with: numberOfRows, and: state.numberOfTilesPerRow)
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
-            topSitesData: filteredSites,
+            topSitesData: state.topSitesData,
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
-        )
-    }
-
-    private static func handleUpdatedNumberOfTilesPerRowAction(action: Action, state: Self) -> TopSitesSectionState {
-        guard let topSitesAction = action as? TopSitesAction,
-              let numberOfTilesPerRow = topSitesAction.numberOfTilesPerRow
-        else {
-            return defaultState(from: state)
-        }
-
-        let filteredSites = filter(sites: state.topSitesData, with: state.numberOfRows, and: numberOfTilesPerRow)
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: filteredSites,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: numberOfTilesPerRow,
             shouldShowSection: state.shouldShowSection
         )
     }
@@ -128,23 +101,8 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: isEnabled
         )
-    }
-
-    /// Filters the top sites to be displayed in the view based on user preferences and layout configuration.
-    /// - Parameters:
-    ///   - sites: The full list of sites fetched from the top sites manager.
-    ///   - numberOfRows: The maximum number of rows to display, determined by user preferences or default value.
-    ///   - numberOfTilesPerRow: The number of tiles displayed per row, determined by the view's layout.
-    /// - Returns: A list of top sites to be displayed, limited to the specified number of rows and tiles per row.
-    private static func filter(
-        sites: [TopSiteState],
-        with numberOfRows: Int,
-        and numberOfTilesPerRow: Int
-    ) -> [TopSiteState] {
-        return Array(sites.prefix(numberOfRows * numberOfTilesPerRow))
     }
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
@@ -152,7 +110,6 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: state.shouldShowSection
         )
     }

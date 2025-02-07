@@ -108,7 +108,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
 // MARK: - HomepageSectionHandler
 extension HomepageMessageCardViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let messageCell = cell as? HomepageMessageCardCell else {
+        guard let messageCell = cell as? LegacyHomepageMessageCardCell else {
             return UICollectionViewCell()
         }
 

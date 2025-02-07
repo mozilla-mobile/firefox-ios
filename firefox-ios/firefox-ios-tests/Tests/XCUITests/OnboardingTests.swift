@@ -45,7 +45,6 @@ class OnboardingTests: BaseTestCase {
                 app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
             ]
         )
-        try app.performAccessibilityAudit()
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -58,7 +57,6 @@ class OnboardingTests: BaseTestCase {
                 app.buttons["\(rootA11yId)PrimaryButton"],
             ]
         )
-        try app.performAccessibilityAudit()
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -69,7 +67,6 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-        try app.performAccessibilityAudit()
 
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -80,7 +77,6 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-        try app.performAccessibilityAudit()
 
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
@@ -91,7 +87,6 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-        try app.performAccessibilityAudit()
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()

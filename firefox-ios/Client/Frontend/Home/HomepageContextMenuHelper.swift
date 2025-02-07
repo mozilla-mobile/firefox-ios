@@ -52,10 +52,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     func presentContextMenu(for site: Site,
                             with sourceView: UIView?,
                             sectionType: HomepageSectionType,
-                            completionHandler: @escaping () -> PhotonActionSheet?
+                            completionHandler: @escaping (Site) -> PhotonActionSheet?
     ) {
-        fetchBookmarkStatus(for: site) {
-            guard let contextMenu = completionHandler() else { return }
+        fetchBookmarkStatus(for: site) { site in
+            guard let contextMenu = completionHandler(site) else { return }
             self.delegate?.present(contextMenu, animated: true, completion: nil)
         }
     }
@@ -123,7 +123,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     ) -> [PhotonRowActions]? {
         guard let siteURL = highlightItem.siteUrl else { return nil }
 
-        let site = Site(url: siteURL.absoluteString, title: highlightItem.displayTitle)
+        let site = Site.createBasicSite(url: siteURL.absoluteString, title: highlightItem.displayTitle)
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .historyHighlights)
         let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .historyHighlights)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
@@ -190,7 +190,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
 
     private func getBookmarkAction(site: Site) -> PhotonRowActions {
         let bookmarkAction: SingleActionViewModel
-        if site.bookmarked ?? false {
+        if site.isBookmarked ?? false {
             bookmarkAction = getRemoveBookmarkAction(site: site)
         } else {
             bookmarkAction = getAddBookmarkAction(site: site)
@@ -203,9 +203,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
-                site.setBookmarked(false)
-            }
+            // We don't need to do anything after this call completes
+            _ = self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
 
             let url = URL(string: site.url)
             self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
@@ -231,7 +230,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
             QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
-            site.setBookmarked(true)
 
             self.delegate?.homePanelDidRequestBookmarkToast(url: nil, action: .add)
             self.bookmarksTelemetry.addBookmark(eventLabel: .activityStream)
@@ -266,25 +264,29 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         guard let siteURL = site.url.asURL else { return nil }
 
         let topSiteActions: [PhotonRowActions]
-        if let site = site as? PinnedSite {
-            topSiteActions = [getRemovePinTopSiteAction(site: site),
-                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getRemoveTopSiteAction(site: site),
-                              getShareAction(site: site, sourceView: sourceView)]
-        } else if site as? SponsoredTile != nil {
+
+        switch site.type {
+        case .sponsoredSite:
             topSiteActions = [getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
                               getSponsoredContentAction(),
                               getShareAction(site: site, sourceView: sourceView)]
-        } else {
+
+        case .pinnedSite:
+            topSiteActions = [getRemovePinTopSiteAction(site: site),
+                              getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
+                              getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
+                              getRemoveTopSiteAction(site: site),
+                              getShareAction(site: site, sourceView: sourceView)]
+        default:
             topSiteActions = [getPinTopSiteAction(site: site),
                               getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getRemoveTopSiteAction(site: site),
                               getShareAction(site: site, sourceView: sourceView)]
         }
+
         return topSiteActions
     }
 
@@ -345,11 +347,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         }).items
     }
 
-    private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping () -> Void) {
+    private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping (Site) -> Void) {
         viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
-            let isBookmarked = result.successValue ?? false
-            site.setBookmarked(isBookmarked)
-            completionHandler()
+            var updatedSite = site
+            updatedSite.isBookmarked = result.successValue ?? false
+            completionHandler(updatedSite)
         }
     }
 

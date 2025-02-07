@@ -30,7 +30,13 @@ final class TopsSitesSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
-        let exampleTopSite = TopSiteState(site: Site(url: "https://www.example.com", title: "hello", bookmarked: false, guid: nil))
+        let exampleTopSite = TopSiteConfiguration(
+            site: Site.createBasicSite(
+                url: "https://www.example.com",
+                title: "hello",
+                isBookmarked: false
+            )
+        )
 
         let newState = reducer(
             initialState,
@@ -66,27 +72,6 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, [])
     }
 
-    func test_retrievedUpdatedStoriesAction_withNumberOfTilesPerRow_returnsDefaultState() throws {
-        let initialState = createSubject()
-        let reducer = topSiteReducer()
-
-        let exampleTopSites = createSites(count: 15)
-
-        let newState = reducer(
-            initialState,
-            TopSitesAction(
-                topSites: exampleTopSites,
-                numberOfTilesPerRow: 1,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.topSitesData.count, 2)
-        XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["Title 0", "Title 1"])
-    }
-
     func test_updatedNumberOfRows_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -102,23 +87,6 @@ final class TopsSitesSectionStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.numberOfRows, 4)
-    }
-
-    func test_updatedNumberOfTilesPerRow_returnsExpectedState() throws {
-        let initialState = createSubject()
-        let reducer = topSiteReducer()
-
-        let newState = reducer(
-            initialState,
-            TopSitesAction(
-                numberOfTilesPerRow: 8,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesActionType.updatedNumberOfTilesPerRow
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
@@ -168,12 +136,12 @@ final class TopsSitesSectionStateTests: XCTestCase {
         return TopSitesSectionState.defaultState(from: state)
     }
 
-    private func createSites(count: Int = 30) -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0)")
-            sites.append(TopSiteState(site: site))
+            let site = Site.createBasicSite(url: "www.url\($0).com",
+                                            title: "Title \($0)")
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }

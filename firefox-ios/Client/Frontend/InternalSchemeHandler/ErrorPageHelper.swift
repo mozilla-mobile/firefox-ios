@@ -151,17 +151,17 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
 class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
-    // html page with gray background similar to homepage or privatehomepage.
+    // html page with gray background similar to homepage or private homepage.
     // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
     var isNativeErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
     }
 
     var isNICErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
+    func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
         guard let url = request.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let code = components.valueForQuery("code"),
@@ -174,9 +174,9 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        if isNativeErrorPageEnabled {
+        if isNativeErrorPageEnabled && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
-        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) {
+        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

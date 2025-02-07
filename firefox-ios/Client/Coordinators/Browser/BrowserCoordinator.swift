@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import TabDataStore
+import PDFKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -39,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
@@ -159,13 +159,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
-        let privateHomepageController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
+        let privateHomepageController = PrivateHomepageViewController(
+            windowUUID: windowUUID,
+            overlayManager: overlayManager
+        )
         privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
         }
-        self.privateViewController = privateHomepageController
     }
 
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
@@ -216,14 +218,11 @@ class BrowserCoordinator: BaseCoordinator,
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
-            webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            webviewController.update(webView: webView)
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(
-                webView: webView,
-                isPrivate: tabManager.selectedTab?.isPrivate ?? false
-            )
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -386,11 +385,13 @@ class BrowserCoordinator: BaseCoordinator,
         case .topSites:
             browserViewController.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab:
-            browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
+            browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: true)
         case .newTab:
-            browserViewController.openBlankNewTab(focusLocationField: false)
+            browserViewController.openBlankNewTab(focusLocationField: true)
         }
     }
+
+    // MARK: - Handle Deeplink Open URL / text
 
     private func handle(query: String, isPrivate: Bool) {
         browserViewController.handle(query: query, isPrivate: isPrivate)
@@ -599,6 +600,37 @@ class BrowserCoordinator: BaseCoordinator,
             toastContainer: self.browserViewController.contentContainer,
             popoverArrowDirection: .any
         )
+    }
+
+    func presentSavePDFController() {
+        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
+        webView.createPDF { [weak self] result in
+            switch result {
+            case .success(let data):
+                guard let pdf = PDFDocument(data: data),
+                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
+                    return
+                }
+                pdf.write(to: outputURL)
+                if FileManager.default.fileExists(atPath: outputURL.path) {
+                    let url = URL(fileURLWithPath: outputURL.path)
+                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    self?.present(controller)
+                }
+            case .failure(let error):
+                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                 level: .debug,
+                                 category: .webview)
+            }
+        }
+    }
+
+    func showPrintSheet() {
+        if let webView = browserViewController.tabManager.selectedTab?.webView {
+            let printController = UIPrintInteractionController.shared
+            printController.printFormatter = webView.viewPrintFormatter()
+            printController.present(animated: true, completionHandler: nil)
+        }
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {

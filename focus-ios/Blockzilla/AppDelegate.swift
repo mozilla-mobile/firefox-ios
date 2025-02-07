@@ -8,6 +8,7 @@ import Sentry
 import Combine
 import Onboarding
 import AppShortcuts
+import Shared
 
 enum AppPhase {
     case notRunning
@@ -41,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
         onboardingEventsHandler: onboardingEventsHandler,
+        gleanUsageReportingMetricsService: gleanUsageReportingMetricsService,
         themeManager: themeManager
     )
 
@@ -51,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
     private lazy var shortcutManager: ShortcutsManager = .init()
+    private lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService()
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
@@ -320,11 +323,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+enum Environment: String {
+    case nightly = "Nightly"
+    case production = "Production"
+}
+
 // MARK: - Crash Reporting
 
 private let SentryDSNKey = "SentryDSN"
 
 extension AppDelegate {
+    private var environment: Environment {
+        var environment = Environment.production
+        if AppInfo.appVersion == AppConstants.nightlyAppVersion {
+            environment = Environment.nightly
+        }
+        return environment
+    }
+    
+    private var releaseName: String {
+        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
+    }
+
     func setupCrashReporting() {
         // Do not enable crash reporting if collection of anonymous usage data is disabled.
         if !Settings.getToggle(.crashToggle) {
@@ -334,6 +354,8 @@ extension AppDelegate {
         if let sentryDSN = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String {
             SentrySDK.start { options in
                 options.dsn = sentryDSN
+                options.environment = self.environment.rawValue
+                options.releaseName = self.releaseName
             }
         }
     }
@@ -357,21 +379,25 @@ extension AppDelegate {
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
-        
-        if Settings.getToggle(.sendAnonymousUsageData) {
-            UsageProfileManager.checkAndSetUsageProfileId()
+
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+
+        if TelemetryManager.shared.isNewTosEnabled {
+            gleanUsageReportingMetricsService.start()
         } else {
-            UsageProfileManager.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
 
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        let configuration = Configuration(
-            channel: channel,
-            pingSchedule: ["baseline": ["usage-reporting"]]
+        let configuration = Configuration(channel: channel)
+
+        Glean.shared.initialize(
+            uploadEnabled: TelemetryManager.shared.isGleanEnabled,
+            configuration: configuration,
+            buildInfo: GleanMetrics.GleanBuild.info
         )
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry

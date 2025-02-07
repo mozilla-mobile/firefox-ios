@@ -421,7 +421,7 @@ open class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var legacyPlaces: PinnedSites  = {
+    private lazy var legacyPlaces: PinnedSites = {
         return BrowserDBSQLite(database: self.database, prefs: self.prefs)
     }()
 

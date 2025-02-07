@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Storage
+
 struct ContextMenuConfiguration: Equatable {
     var homepageSection: HomepageSection
     var sourceView: UIView?
@@ -12,12 +13,12 @@ struct ContextMenuConfiguration: Equatable {
         switch item {
         case .topSite(let state, _):
             return state.site
+        case .bookmark(let state):
+            return Site.createBasicSite(url: state.site.url, title: state.site.title)
         case .pocket(let state):
-            return Site(url: state.url?.absoluteString ?? "",
-                        title: state.title)
+            return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         case .pocketDiscover(let state):
-            return Site(url: state.url?.absoluteString ?? "",
-                        title: state.title)
+            return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
         }

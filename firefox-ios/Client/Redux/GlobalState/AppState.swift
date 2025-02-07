@@ -63,6 +63,7 @@ extension AppState {
 let middlewares = [
     FeltPrivacyMiddleware().privacyManagerProvider,
     MainMenuMiddleware().mainMenuProvider,
+    MessageCardMiddleware().messageCardProvider,
     MicrosurveyMiddleware().microsurveyProvider,
     MicrosurveyPromptMiddleware().microsurveyProvider,
     RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
@@ -75,7 +76,8 @@ let middlewares = [
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
     PocketMiddleware().pocketSectionProvider,
     NativeErrorPageMiddleware().nativeErrorPageProvider,
-    WallpaperMiddleware().wallpaperProvider
+    WallpaperMiddleware().wallpaperProvider,
+    BookmarksMiddleware().bookmarksProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

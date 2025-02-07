@@ -34,7 +34,9 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private var lastReplacement: String?
     private var hideCursor = false
     private var isSettingMarkedText = false
-
+    var clearButton: UIButton? {
+        return value(forKey: "_clearButton") as? UIButton
+    }
     private let copyShortcutKey = "c"
 
     // MARK: - Init
@@ -153,10 +155,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
-
-        if isEditing {
-            textColor = colors.textPrimary
-        }
+        textColor = colors.textPrimary
 
         attributedPlaceholder = NSAttributedString(
             string: placeholder ?? "",

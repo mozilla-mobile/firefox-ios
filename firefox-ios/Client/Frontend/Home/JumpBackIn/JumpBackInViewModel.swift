@@ -22,7 +22,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
-    var prepareContextualHint: ((SyncedTabCell) -> Void)?
+    var prepareContextualHint: ((LegacySyncedTabCell) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -186,9 +186,9 @@ private extension JumpBackInViewModel {
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
-    func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
+    func configureJumpBackInCellForTab(item: Tab, cell: LegacyJumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
-        let site = Site(url: itemURL, title: item.displayTitle)
+        let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
@@ -196,9 +196,9 @@ private extension JumpBackInViewModel {
         cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
-    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
+    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: LegacySyncedTabCell, indexPath: IndexPath) {
         let itemURL = item.tab.URL.absoluteString
-        let site = Site(url: itemURL, title: item.tab.title)
+        let site = Site.createBasicSite(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
         let image = UIImage(named: StandardImageIdentifiers.Large.syncTabs)
 
@@ -237,7 +237,7 @@ private extension JumpBackInViewModel {
                                                      heightDimension: .estimated(UX.syncedTabCellHeight))
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
                                                            subitems: [jumpBackInItem, jumpBackInItem])
-        nestedGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        nestedGroup.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         // Main Group
         let mainGroupHeight: CGFloat = UX.syncedTabCellHeight
@@ -254,7 +254,7 @@ private extension JumpBackInViewModel {
         }
         let mainGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainGroupSize,
                                                            subitems: subItems)
-        mainGroup.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        mainGroup.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         return NSCollectionLayoutSection(group: mainGroup)
     }
@@ -276,12 +276,12 @@ private extension JumpBackInViewModel {
         // Main Group
         let groupWidth = sectionLayout.widthDimension
         let groupHeight: CGFloat = syncedTabCellHeight + UX.jumpBackInCellHeight
-            + JumpBackInCell.UX.interItemSpacing.spacing
+            + LegacyJumpBackInCell.UX.interItemSpacing.spacing
         let groupSize = NSCollectionLayoutSize(widthDimension: groupWidth,
                                                heightDimension: .estimated(groupHeight))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
                                                      subitems: [jumpBackInItem, syncedTabItem])
-        group.interItemSpacing = JumpBackInCell.UX.interItemSpacing
+        group.interItemSpacing = LegacyJumpBackInCell.UX.interItemSpacing
 
         return NSCollectionLayoutSection(group: group)
     }
@@ -338,7 +338,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                                                         leading: leadingInset,
                                                         bottom: HomepageViewModel.UX.spacingBetweenSections,
                                                         trailing: 0)
-        section.interGroupSpacing = JumpBackInCell.UX.interGroupSpacing
+        section.interGroupSpacing = LegacyJumpBackInCell.UX.interGroupSpacing
 
         return section
     }
@@ -386,9 +386,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JumpBackInCell.cellIdentifier,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyJumpBackInCell.cellIdentifier,
                                                           for: indexPath)
-            guard let jumpBackInCell = cell as? JumpBackInCell else { return UICollectionViewCell() }
+            guard let jumpBackInCell = cell as? LegacyJumpBackInCell else { return UICollectionViewCell() }
 
             if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
@@ -396,9 +396,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             return jumpBackInCell
         } else if hasSyncedTab {
             // SyncedTab cell
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacySyncedTabCell.cellIdentifier,
                                                           for: indexPath)
-            guard let syncedTabCell = cell as? SyncedTabCell,
+            guard let syncedTabCell = cell as? LegacySyncedTabCell,
                   let mostRecentSyncedTab = mostRecentSyncedTab,
                   let prepareContextualHint = prepareContextualHint
             else { return UICollectionViewCell() }
@@ -434,13 +434,13 @@ extension JumpBackInViewModel: HomepageSectionHandler {
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = onLongPressTileAction else { return }
 
-        var site = Site(url: "", title: "")
+        var site = Site.createBasicSite(url: "", title: "")
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
             if let item = jumpBackInList.tabs[safe: jumpBackInItemRow] {
-                site = Site(url: item.url?.absoluteString ?? "", title: item.title ?? "")
+                site = Site.createBasicSite(url: item.url?.absoluteString ?? "", title: item.title ?? "")
             }
         } else if hasSyncedTab {
-            site = Site(
+            site = Site.createBasicSite(
                 url: mostRecentSyncedTab?.tab.URL.absoluteString ?? "",
                 title: mostRecentSyncedTab?.tab.title ?? ""
             )

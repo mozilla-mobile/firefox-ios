@@ -155,7 +155,7 @@ class BookmarksViewController: SiteTableViewController,
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
                 }
-                self?.updateEmptyState()
+                self?.updateEmptyState(animated: false)
                 self?.updateParentViewControllerTitle()
             }
         }
@@ -271,9 +271,11 @@ class BookmarksViewController: SiteTableViewController,
             })
             toast.showToast(viewController: self, delay: UX.toastDelayBefore, duration: UX.toastDismissDelay) { toast in
                 [
-                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                 ]
             }
         }
@@ -285,7 +287,7 @@ class BookmarksViewController: SiteTableViewController,
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
         viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
         tableView.endUpdates()
-        updateEmptyState()
+        updateEmptyState(animated: false)
     }
 
     /// Performs the delete asynchronously even though we update the
@@ -305,7 +307,7 @@ class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        updateEmptyState()
+        updateEmptyState(animated: false)
     }
 
     // MARK: Button Actions helpers
@@ -315,6 +317,7 @@ class BookmarksViewController: SiteTableViewController,
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
         sendPanelChangeNotification()
+        updateEmptyState(animated: true)
     }
 
     func disableEditMode() {
@@ -323,6 +326,7 @@ class BookmarksViewController: SiteTableViewController,
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
         sendPanelChangeNotification()
+        updateEmptyState(animated: true)
     }
 
     private func sendPanelChangeNotification() {
@@ -372,13 +376,23 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    private func updateEmptyState() {
-        a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
-        if !a11yEmptyStateScrollView.isHidden {
-            let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-            let isSignedIn = profile.hasAccount()
-            emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
+    private func updateEmptyState(animated: Bool) {
+        let showEmptyState = viewModel.bookmarkNodes.isEmpty && !tableView.isEditing
+
+        if animated {
+            a11yEmptyStateScrollView.isHidden = false
+            UIView.animate(withDuration: 0.2, animations: {
+                self.a11yEmptyStateScrollView.alpha = showEmptyState ? 1 : 0
+            }) { _ in
+                self.a11yEmptyStateScrollView.isHidden = !showEmptyState
+            }
+        } else {
+            a11yEmptyStateScrollView.alpha = showEmptyState ? 1 : 0
+            a11yEmptyStateScrollView.isHidden = !showEmptyState
         }
+
+        emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
+                                 isSignedIn: profile.hasAccount())
     }
 
     private func createContextButton() -> UIButton {
@@ -489,19 +503,26 @@ class BookmarksViewController: SiteTableViewController,
                 for: indexPath) as? OneLineTableViewCell {
             var viewModel = bookmarkCell.getViewModel()
 
+            let cellA11yId = "\(AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCell)_\(indexPath.row)"
+            cell.accessibilityIdentifier = cellA11yId
+            cell.accessibilityTraits = .button
+
             // BookmarkItemData requires:
             // - Site to setup cell image
             // - AccessoryView to setup context menu button affordance
             if let node = node as? BookmarkItemData {
-                let site = Site(url: node.url,
-                                title: node.title,
-                                bookmarked: true,
-                                guid: node.guid)
+                let site = Site.createBasicSite(
+                    url: node.url,
+                    title: node.title,
+                    isBookmarked: true
+                )
                 if viewModel.leftImageView == nil {
                     cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 }
 
                 let contextButton = createContextButton()
+                contextButton.accessibilityIdentifier = cellA11yId +
+                AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksCellDisclosureButton
                 contextButton.addAction(UIAction { [weak self] _ in
                     guard let indexPath = tableView.indexPath(for: cell) else { return }
                     self?.presentContextMenu(for: indexPath)
@@ -509,7 +530,6 @@ class BookmarksViewController: SiteTableViewController,
                 viewModel.accessoryView = contextButton
             }
 
-            cell.accessibilityTraits = .button
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
             return cell
@@ -618,13 +638,17 @@ class BookmarksViewController: SiteTableViewController,
                     viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
-                    updateEmptyState()
+                    updateEmptyState(animated: false)
                     profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 }
             default:
                 return
             }
         }
+    }
+
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        updateEmptyState(animated: false)
     }
 }
 
@@ -679,7 +703,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             return nil
         }
 
-        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+        return Site.createBasicSite(url: bookmarkItem.url, title: bookmarkItem.title, isBookmarked: true)
     }
 
     private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {

@@ -36,13 +36,14 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
     }
+    private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
     private let baseView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
     }
 
     private let headerView: NavigationHeaderView = .build { header in
@@ -245,6 +246,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         let certificatesController = CertificatesViewController(with: model.getCertificatesModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(certificatesController, animated: true)
+        telemetryWrapper.trackShowCertificates()
     }
 
     private func currentTheme() -> Theme {

@@ -35,8 +35,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
-        } else if let action = action as? HeaderAction {
-            self.resolveHomepageHeaderActions(with: action)
+        } else {
+            self.resolveHomepageActions(with: action)
         }
     }
 
@@ -876,11 +876,19 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         }
     }
 
-    // MARK: - Homepage Header Actions
-    private func resolveHomepageHeaderActions(with action: HeaderAction) {
+    // MARK: - Homepage Related Actions
+    private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
+        case HomepageActionType.initialize:
+            store.dispatch(
+                TabManagerAction(
+                    recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
+                    windowUUID: action.windowUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                )
+            )
         default:
             break
         }
@@ -956,7 +964,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
 
@@ -977,7 +986,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
               let url = tab.url?.displayURL?.absoluteString
         else { return }
 
-        let site = Site(url: url, title: tab.displayTitle)
+        let site = Site.createBasicSite(url: url, title: tab.displayTitle)
+
         profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             store.dispatch(

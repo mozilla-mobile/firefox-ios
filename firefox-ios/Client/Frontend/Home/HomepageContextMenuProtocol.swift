@@ -21,7 +21,7 @@ protocol HomepageContextMenuProtocol {
         for site: Site,
         with sourceView: UIView?,
         sectionType: HomepageSectionType,
-        completionHandler: @escaping () -> PhotonActionSheet?
+        completionHandler: @escaping (Site) -> PhotonActionSheet?
     )
 
     func getContextMenuActions(
@@ -45,7 +45,7 @@ protocol HomepageContextMenuProtocol {
 extension HomepageContextMenuProtocol {
     // MARK: Site
     func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) {
-        presentContextMenu(for: site, with: sourceView, sectionType: sectionType, completionHandler: {
+        presentContextMenu(for: site, with: sourceView, sectionType: sectionType, completionHandler: { site in
             return self.contextMenu(for: site, with: sourceView, sectionType: sectionType)
         })
     }
@@ -104,7 +104,7 @@ extension HomepageContextMenuProtocol {
         switch highlightItem.type {
         case .item:
             guard let urlString = highlightItem.urlString else { return nil }
-            let site = Site(url: urlString, title: highlightItem.displayTitle)
+            let site = Site.createBasicSite(url: urlString, title: highlightItem.displayTitle)
 
             viewModel = PhotonActionSheetViewModel(actions: [actions],
                                                    site: site,

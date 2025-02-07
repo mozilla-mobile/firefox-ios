@@ -373,9 +373,9 @@ class BaseTestCase: XCTestCase {
         var nrOfSwipes = 0
         while(!element.isVisible() || isHittable && !element.isHittable) && nrOfSwipes < maxNumberOfScreenSwipes {
             if swipe == "down" {
-                swipeableElement.swipeDown()
+                swipeableElement.partialSwipeDown()
             } else {
-                swipeableElement.swipeUp()
+                swipeableElement.partialSwipeUp()
             }
             usleep(1000)
             nrOfSwipes += 1
@@ -428,7 +428,7 @@ class BaseTestCase: XCTestCase {
         if #available(iOS 17, *) {
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         } else {
-            navigator.performAction(Action.CloseURLBarOpen)
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
         }
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -602,6 +602,33 @@ extension XCUIElement {
             self.typeText(String(character))
             Thread.sleep(forTimeInterval: delay)
         }
+    }
+
+    // Swipe up a little less than half the element
+    func partialSwipeUp(distance: CGFloat = 0.5) {
+        let elementBounds = self.frame
+        let centerX = elementBounds.width/2
+        let centerY = elementBounds.height/2
+        // Start cooordinate about from the center of the element, end coordinate at the top
+        let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: centerX, dy: centerY))
+        let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: centerX, dy: centerY - (elementBounds.size.height/2) * distance))
+        startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
+    }
+
+    // Swipe down a little less than half the element
+    func partialSwipeDown(distance: CGFloat = 0.5) {
+        let elementBounds = self.frame
+        let centerX = elementBounds.width/2
+        let centerY = elementBounds.height/2
+        // Start cooordinate about from the center of the element, end coordinate at the bottom
+        // Done rather than top to middle to avoid pulling down the notification bar
+        let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: centerX, dy: centerY))
+        let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            .withOffset(CGVector(dx: centerX, dy: centerY + (elementBounds.size.height/2) * distance))
+        startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
     }
 }
 

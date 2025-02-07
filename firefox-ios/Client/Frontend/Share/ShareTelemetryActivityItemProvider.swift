@@ -25,11 +25,11 @@ class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sen
     init(
         shareType: ShareType,
         shareMessage: ShareMessage?,
-        telemetry: ShareTelemetry = DefaultShareTelemetry()
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.shareType = shareType
         self.shareMessage = shareMessage
-        self.telemetry = telemetry
+        self.telemetry = ShareTelemetry(gleanWrapper: gleanWrapper)
 
         super.init(placeholderItem: NSNull())
     }

@@ -72,7 +72,9 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.viewModel?.setColors(theme: theme)
         // Take view model color if it exists, otherwise fallback to default colors
         textLabel?.textColor = viewModel?.textColor ?? theme.colors.textPrimary
-        detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
+        if let detailColor = viewModel?.detailTextColor {
+            detailTextLabel?.textColor = detailColor
+        }
         backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
         tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
     }

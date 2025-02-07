@@ -78,7 +78,11 @@
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
 		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
+		8C28008F2D49354400ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C28008E2D49354400ED6D07 /* Shared */; };
+		8C2800912D49357C00ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C2800902D49357C00ED6D07 /* Shared */; };
+		8C75DF662D3E636A00924EAB /* TelemetryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C75DF652D3E636A00924EAB /* TelemetryManager.swift */; };
 		8C8906AC2D0B3E9F003734FE /* UsageProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */; };
+		8C90C3BE2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -679,7 +683,9 @@
 		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
 		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
+		8C75DF652D3E636A00924EAB /* TelemetryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryManager.swift; sourceTree = "<group>"; };
 		8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProfileManager.swift; sourceTree = "<group>"; };
+		8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReportingMetricsService.swift; sourceTree = "<group>"; };
 		A847EEFA289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1232,6 +1238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2800912D49357C00ED6D07 /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1294,6 +1301,7 @@
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
 				451B81BF2BA4DB9F00CF3C50 /* RustMozillaAppServices.framework in Frameworks */,
+				8C28008F2D49354400ED6D07 /* Shared in Frameworks */,
 				C809130E2A08F245000889B0 /* Licenses in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1640,6 +1648,7 @@
 				C8AC706327DF972B00165824 /* AuthenticationManager.swift */,
 				2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */,
 				D0967A801EC50002009D937F /* TelemetryIntegration.swift */,
+				8C75DF652D3E636A00924EAB /* TelemetryManager.swift */,
 				F805722E1DBEE504004339C1 /* WebCacheUtils.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				C8A9FE0926E7A5B900A9C72B /* UserDefault.swift */,
@@ -1888,6 +1897,7 @@
 			children = (
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */,
+				8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
 				C8D0305A27E89CC0000664DA /* InternalSettings */,
@@ -2146,6 +2156,7 @@
 				C809130D2A08F245000889B0 /* Licenses */,
 				8A0E7F2D2BA0F0EE006BC6B6 /* Fuzi */,
 				ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */,
+				8C28008E2D49354400ED6D07 /* Shared */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -2645,6 +2656,7 @@
 				D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */,
 				1215EC0928D316B500AECC75 /* NavigationPath.swift in Sources */,
 				C89AA96E271720330089838F /* ThemeTableViewToggleCell.swift in Sources */,
+				8C75DF662D3E636A00924EAB /* TelemetryManager.swift in Sources */,
 				C8337DF82710898800093D42 /* TrackingProtectionDelegate.swift in Sources */,
 				C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
@@ -2737,6 +2749,7 @@
 				E5639E652940B39300E55B9B /* Combine+UIControl.swift in Sources */,
 				C8DB37C6294B27ED00F2B0EB /* DomainCompletion+ErrorMessage.swift in Sources */,
 				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
+				8C90C3BE2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
@@ -7198,7 +7211,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 136.0.20250118050318;
+				version = 137.0.20250207050303;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7250,6 +7263,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */;
 			productName = Fuzi;
+		};
+		8C28008E2D49354400ED6D07 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		8C2800902D49357C00ED6D07 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
 		};
 		C809130D2A08F245000889B0 /* Licenses */ = {
 			isa = XCSwiftPackageProductDependency;

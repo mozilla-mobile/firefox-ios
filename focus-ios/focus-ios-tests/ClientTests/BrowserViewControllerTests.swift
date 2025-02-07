@@ -29,6 +29,7 @@ class BrowserViewControllerTests: XCTestCase {
             shortcutManager: ShortcutsManager(),
             authenticationManager: AuthenticationManager(),
             onboardingEventsHandler: onboardingEventsHandler,
+            gleanUsageReportingMetricsService: GleanUsageReportingMetricsService(),
             themeManager: themeManager
         )
         mockUserDefaults.clear()

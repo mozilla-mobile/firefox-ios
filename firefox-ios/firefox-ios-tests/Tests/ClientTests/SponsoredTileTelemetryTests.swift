@@ -6,6 +6,7 @@
 
 import Glean
 import XCTest
+import Storage
 
 class SponsoredTileTelemetryTests: XCTestCase {
     private var gleanWrapper: MockGleanWrapper!
@@ -27,10 +28,10 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
-        subject.sendImpressionTelemetry(tile: topSite, position: 2)
+        subject.sendImpressionTelemetry(tileSite: topSite, position: 2)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)
@@ -50,10 +51,10 @@ class SponsoredTileTelemetryTests: XCTestCase {
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
-        let topSite = SponsoredTile(contile: contile)
+        let topSite = Site.createSponsoredSite(fromContile: contile)
 
         let subject = createSubject()
-        subject.sendClickTelemetry(tile: topSite, position: 3)
+        subject.sendClickTelemetry(tileSite: topSite, position: 3)
 
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordStringCalled, 1)

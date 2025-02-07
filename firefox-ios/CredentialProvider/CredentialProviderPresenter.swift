@@ -3,21 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
 
-class CredentialProviderPresenter {
+final class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
     private let appAuthenticator: AppAuthenticator
+    private let logger: Logger
 
     init(view: CredentialProviderViewProtocol,
          profile: Profile = BrowserProfile(localName: "profile"),
-         appAuthenticator: AppAuthenticator = AppAuthenticator()) {
+         appAuthenticator: AppAuthenticator = AppAuthenticator(),
+         logger: Logger = DefaultLogger.shared) {
         self.view = view
         self.profile = profile
         self.appAuthenticator = appAuthenticator
+        self.logger = logger
     }
 
     func extensionConfigurationRequested() {
@@ -29,9 +33,17 @@ class CredentialProviderPresenter {
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if self.profile.logins.reopenIfClosed() != nil {
+        let maxRetries = 3
+        var currentRetry = 0
+
+        guard profile.logins.reopenIfClosed() == nil else {
             cancel(with: .failed)
-        } else if let id = credentialIdentity.recordIdentifier {
+            return
+        }
+
+        guard let id = credentialIdentity.recordIdentifier else { return }
+
+        func attemptProvision() {
             profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
                 switch result {
                 case .failure:
@@ -39,15 +51,32 @@ class CredentialProviderPresenter {
                 case .success(let record):
                     if let passwordCredential = record?.passwordCredential {
                         self?.view?.extensionContext.completeRequest(
-                            withSelectedCredential: passwordCredential,
-                            completionHandler: nil
-                        )
+                            withSelectedCredential: passwordCredential)
                     } else {
-                        self?.cancel(with: .userInteractionRequired)
+                        if currentRetry < maxRetries {
+                            currentRetry += 1
+                            self?.logger.log(
+                                "Failed to retrieve credentials. Will retry. Retry #\(currentRetry)",
+                                level: .warning,
+                                category: .autofill
+                            )
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                attemptProvision()
+                            }
+                        } else {
+                            self?.logger.log(
+                                "Failed to retrieve credentials after all \(maxRetries) attempts. No further retries. Will cancel the request with `userInteractionRequired` error.",
+                                level: .warning,
+                                category: .autofill
+                            )
+                            self?.cancel(with: .userInteractionRequired)
+                        }
                     }
                 }
             })
         }
+
+        attemptProvision()
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {

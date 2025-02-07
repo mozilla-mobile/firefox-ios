@@ -218,7 +218,7 @@ struct UIConstants {
         static let detailTextDailyUsagePing = NSLocalizedString(
             "Settings.DailyUsagePing.Message",
             value: "This helps Mozilla to estimate active users.",
-            comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla.")
+            comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping.")
         static let general = NSLocalizedString("Settings.general", value: "General", comment: "Title for section in settings menu")
         static let theme = NSLocalizedString("Settings.theme", value: "Theme", comment: "Theme section in settings menu")
         static let systemTheme = NSLocalizedString("Settings.systemTheme", value: "System Theme", comment: "System value for theme section in settings menu")

@@ -475,6 +475,7 @@ bookmarks:
       following:
       * Page Action Menu
       * Share Menu
+      * Activity stream
 
     labels:
       - page-action-menu
@@ -673,9 +674,9 @@ app:
     description: |
       Is Firefox the default browser
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -684,9 +685,9 @@ app:
     description: |
       The user installed the app via the browser choice screen
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23411
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23426
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -730,6 +731,27 @@ app:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+  last_opened_as_default_browser:
+    type: datetime
+    time_unit: day
+    description: |
+      The date of when the app was last opened as default browser.
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24599
+      - https://bugzilla.mozilla.org/1941035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24594
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
+    expires: "2025-07-01"
 
 # Usage reporting
 usage:
@@ -752,9 +774,10 @@ usage:
     expires: never
     send_in_pings:
       - usage-reporting
+      - usage-deletion-request
 
   duration:
-    type: timing_distribution
+    type: timespan
     time_unit: millisecond
     description: |
       The duration of the last foreground session.
@@ -4353,6 +4376,83 @@ tracking_protection:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+  show_clear_cookies_alert:
+    type: event
+    description: |
+      Records when the clear cookies alert is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_blocked_trackers_details:
+    type: event
+    description: |
+      Records when the enhanced tracking protection blocked trackers details screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_etp_settings:
+    type: event
+    description: |
+      Records when the enhanced tracking protection settings screen is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  tapped_clear_cookies:
+    type: event
+    description: |
+      Records when the clear cookies button from the etp alert is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  dismiss_etp_panel:
+    type: event
+    description: |
+      Records when the enhanced tracking protection panel is dismissed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  show_certificates:
+    type: event
+    description: |
+      Records when the certificates screen from the enhanced tracking protection panel is shown
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20371
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 # iOS 14 widget metrics
 # m: medium, s: small, l: large
 widget:
@@ -5434,6 +5534,23 @@ share_sheet:
         description: |
           Whether the user is opted in to the Sent from Firefox experiment.
           Only returns true if the user is both enrolled and opted in.
+
+# Share related metrics
+
+share:
+  deeplink_open_url_startup_time:
+    type: timing_distribution
+    description: |
+      Track the startup time of the application when the app was launched to open a url.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24325
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24422
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 
 # Device specific metrics
 

@@ -41,8 +41,8 @@ extension TabContentScript {
 }
 
 protocol LegacyTabDelegate: AnyObject {
-    func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
-    func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
+    func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert)
+    func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
@@ -272,7 +272,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var userActivity: NSUserActivity?
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
-    var bars = [SnackBar]()
+    var loginAlert: SaveLoginAlert?
     var lastExecutedTime: Timestamp
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
@@ -370,9 +370,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-
-            webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
-
+            webView?.evaluateJavascriptInCustomContentWorld(
+                NightModeHelper.jsCallbackBuilder(nightMode),
+                in: .world(name: NightModeHelper.name())
+            )
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
@@ -791,57 +792,30 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         contentScriptManager.addContentScriptToPage(helper, name: name, forTab: self)
     }
 
+    func addContentScriptToCustomWorld(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScriptToCustomWorld(helper, name: name, forTab: self)
+    }
+
     func getContentScript(name: String) -> TabContentScript? {
         return contentScriptManager.getContentScript(name)
     }
 
-    func hideContent(_ animated: Bool = false) {
-        webView?.isUserInteractionEnabled = false
-        if animated {
-            UIView.animate(withDuration: 0.25, animations: { () in
-                self.webView?.alpha = 0.0
-            })
-        } else {
-            webView?.alpha = 0.0
+    func addLoginAlert(_ alert: SaveLoginAlert) {
+        // Only one login alert can show per tab
+        guard loginAlert == nil else { return }
+        loginAlert = alert
+        tabDelegate?.tab(self, didAddLoginAlert: alert)
+    }
+
+    func removeLoginAlert(_ alert: SaveLoginAlert) {
+        tabDelegate?.tab(self, didRemoveLoginAlert: alert)
+        loginAlert = nil
+    }
+
+    func expireLoginAlert() {
+        if let loginAlert, !loginAlert.shouldPersist {
+            removeLoginAlert(loginAlert)
         }
-    }
-
-    func showContent(_ animated: Bool = false) {
-        webView?.isUserInteractionEnabled = true
-        if animated {
-            UIView.animate(withDuration: 0.25, animations: { () in
-                self.webView?.alpha = 1.0
-            })
-        } else {
-            webView?.alpha = 1.0
-        }
-    }
-
-    func addSnackbar(_ bar: SnackBar) {
-        if bars.count > 2 { return } // maximum 3 snackbars allowed on a tab
-        bars.append(bar)
-        tabDelegate?.tab(self, didAddSnackbar: bar)
-    }
-
-    func removeSnackbar(_ bar: SnackBar) {
-        if let index = bars.firstIndex(of: bar) {
-            bars.remove(at: index)
-            tabDelegate?.tab(self, didRemoveSnackbar: bar)
-        }
-    }
-
-    func removeAllSnackbars() {
-        // Enumerate backwards here because we'll remove items from the list as we go.
-        bars.reversed().forEach { removeSnackbar($0) }
-    }
-
-    func expireSnackbars() {
-        // Enumerate backwards here because we may remove items from the list as we go.
-        bars.reversed().filter({ !$0.shouldPersist(self) }).forEach({ removeSnackbar($0) })
-    }
-
-    func expireSnackbars(withClass snackbarClass: String) {
-        bars.reversed().filter({ $0.snackbarClassIdentifier == snackbarClass }).forEach({ removeSnackbar($0) })
     }
 
     func setFindInPage(isBottomSearchBar: Bool, doesFindInPageBarExist: Bool) {
@@ -1081,6 +1055,22 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // receives all messages and then dispatches them to the right TabHelper.
         helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
             tab.webView?.configuration.userContentController.addInPageContentWorld(
+                scriptMessageHandler: self,
+                name: scriptMessageHandlerName
+            )
+        }
+    }
+
+    func addContentScriptToCustomWorld(_ helper: TabContentScript, name: String, forTab tab: Tab) {
+        // If a helper script already exists on the page, skip adding this duplicate.
+        guard helpers[name] == nil else { return }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handlers names and register them. The Browser
+        // receives all messages and then dispatches them to the right TabHelper.
+        helper.scriptMessageHandlerNames()?.forEach { scriptMessageHandlerName in
+            tab.webView?.configuration.userContentController.addInCustomContentWorld(
                 scriptMessageHandler: self,
                 name: scriptMessageHandlerName
             )

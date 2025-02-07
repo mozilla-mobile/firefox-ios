@@ -5,12 +5,12 @@
 import UIKit
 import Common
 
+// Only used in two places in the application, please avoid using this class and use ButtonToast instead
 final class ActionToast: ThemeApplicable {
     private let text: String
     private let theme: Theme
     private let buttonTitle: String
     private let buttonAction: () -> Void
-    private var bottomConstraintPadding: CGFloat
     private var bottomContainer: UIView
 
     struct UX {
@@ -38,12 +38,13 @@ final class ActionToast: ThemeApplicable {
         stack.alignment = .center
         stack.isLayoutMarginsRelativeArrangement = true
         stack.layoutMargins = UX.stackViewLayoutMargins
+        stack.layer.cornerRadius = Toast.UX.toastCornerRadius
         return stack
     }()
 
     private lazy var toastLabel: UILabel = {
         let label = UILabel()
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.text = text
         label.textAlignment  = .center
         label.numberOfLines = 1
@@ -69,21 +70,19 @@ final class ActionToast: ThemeApplicable {
     }()
 
     private lazy var heightConstraint: NSLayoutConstraint = {
-        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight)
+        self.toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithoutShadow)
     }()
 
     init(
         text: String,
         bottomContainer: UIView,
         theme: Theme,
-        bottomConstraintPadding: CGFloat = 0,
         buttonTitle: String,
         buttonAction: @escaping () -> Void
     ) {
         self.text = text
         self.bottomContainer = bottomContainer
         self.theme = theme
-        self.bottomConstraintPadding = bottomConstraintPadding
         self.buttonTitle = buttonTitle
         self.buttonAction = buttonAction
     }
@@ -100,11 +99,12 @@ final class ActionToast: ThemeApplicable {
         NSLayoutConstraint.activate(
             [
                 heightConstraint,
-                stackView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor),
-                stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor),
+                stackView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                stackView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
                 stackView.bottomAnchor.constraint(
-                    equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
-                    constant: bottomConstraintPadding
+                    equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor
                 ),
                 actionButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
             ]
@@ -135,8 +135,8 @@ final class ActionToast: ThemeApplicable {
             withDuration: Toast.UX.toastAnimationDuration,
             animations: {
                 var frame = toast.frame
-                frame.origin.y = frame.origin.y - Toast.UX.toastHeight
-                frame.size.height = Toast.UX.toastHeight
+                frame.origin.y = frame.origin.y - Toast.UX.toastHeightWithoutShadow
+                frame.size.height = Toast.UX.toastHeightWithoutShadow
                 toast.frame = frame
             },
             completion: { finished in

@@ -16,29 +16,29 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     var pinTopSiteCalledCount = 0
     var unpinTopSiteCalledCount = 0
 
-    func getOtherSites() async -> [TopSiteState] {
+    func getOtherSites() async -> [TopSiteConfiguration] {
         getOtherSitesCalledCount += 1
         return createSites(count: 15, subtitle: ": otherSites")
     }
 
-    func fetchSponsoredSites() async -> [SponsoredTile] {
+    func fetchSponsoredSites() async -> [Site] {
         fetchSponsoredSitesCalledCount += 1
 
         let contiles = MockSponsoredProvider.defaultSuccessData
-        return contiles.compactMap { SponsoredTile(contile: $0) }
+        return contiles.compactMap { Site.createSponsoredSite(fromContile: $0) }
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [SponsoredTile]) async -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         recalculateTopSitesCalledCount += 1
         return createSites(subtitle: ": total top sites")
     }
 
-    func createSites(count: Int = 30, subtitle: String = "") -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    func createSites(count: Int = 30, subtitle: String = "") -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
-            let site = Site(url: "www.url\($0).com",
-                            title: "Title \($0) \(subtitle)")
-            sites.append(TopSiteState(site: site))
+            let site = Site.createBasicSite(url: "www.url\($0).com",
+                                            title: "Title \($0) \(subtitle)")
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }

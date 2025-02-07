@@ -10,6 +10,11 @@ import Shared
 class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
+    struct UX {
+        // We use the SecondaryRoundedButton default corner radius for the UIVisualEffectView blur effect
+        static let buttonCornerRadius: CGFloat = 12
+    }
+
     // MARK: - UI Elements
     private lazy var goToSettingsButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
@@ -69,6 +74,7 @@ extension CustomizeHomepageSectionCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             goToSettingsButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            goToSettingsButton.layer.cornerRadius = UX.buttonCornerRadius
         } else {
             goToSettingsButton.removeVisualEffectView()
         }

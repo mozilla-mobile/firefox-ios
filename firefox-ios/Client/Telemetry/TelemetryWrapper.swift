@@ -54,10 +54,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     private var profile: Profile?
     private var logger: Logger
+    private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve()) {
         crashedLastLaunch = logger.crashedLastLaunch
         self.logger = logger
+        self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -99,24 +102,44 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
+        // Set the date that the app was last used as default browser
+        if let timestamp = profile.prefs.timestampForKey(PrefsKeys.LastOpenedAsDefaultBrowser) {
+            let date = Date.fromTimestamp(timestamp)
+            GleanMetrics.App.lastOpenedAsDefaultBrowser.set(date)
+        }
+
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"),
            let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
-        // Set or generate profile id used for usage reporting
-        if sendUsageData {
-            if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId),
-                let uuid = UUID(uuidString: uuidString) {
-                GleanMetrics.Usage.profileId.set(uuid)
-            } else {
-                let uuid = GleanMetrics.Usage.profileId.generateAndSet()
-                profile.prefs.setString(uuid.uuidString, forKey: PrefsKeys.Usage.profileId)
-            }
-        } else if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
-            // set dummy uuid to make sure the previous one is deleted
-            GleanMetrics.Usage.profileId.set(uuid)
+        GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
+        GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
+
+        let shouldSendUsagePing: Bool
+
+        if let dailyUsagePing = profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing) {
+            // If SendDailyUsagePing is explicitly set, use its value
+            shouldSendUsagePing = dailyUsagePing
+        } else if let usageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) {
+            // If SendDailyUsagePing is not set, follow SendUsageData
+            shouldSendUsagePing = usageData
+
+            // Persist the SendDailyUsagePing value to ensure it is explicitly set for future launches
+            profile.prefs.setBool(usageData, forKey: AppConstants.prefSendDailyUsagePing)
+        } else {
+            // Default to true if neither is set
+            shouldSendUsagePing = true
+
+            // Persist the default to ensure consistency on subsequent launches
+            profile.prefs.setBool(true, forKey: AppConstants.prefSendDailyUsagePing)
+        }
+
+        if shouldSendUsagePing {
+            gleanUsageReportingMetricsService.start()
+        } else {
+            gleanUsageReportingMetricsService.unsetUsageProfileId()
         }
 
         glean.registerPings(GleanMetrics.Pings.shared)
@@ -124,8 +147,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Initialize Glean telemetry
         let gleanConfig = Configuration(
             channel: AppConstants.buildChannel.rawValue,
-            logLevel: .off,
-            pingSchedule: ["baseline": ["usage-reporting"]]
+            logLevel: .off
         )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,

@@ -69,12 +69,12 @@ class TopSitesViewModel {
         guard !hasSentImpressionForTile(homeTopSite) else { return }
 
         // Only sending sponsored tile impressions for now
-        guard let tile = homeTopSite.site as? SponsoredTile else { return }
+        guard homeTopSite.isSponsored else { return }
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: homeTopSite.site, position: position)
         } else {
-            sponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: homeTopSite.site, position: position)
         }
     }
 
@@ -92,7 +92,7 @@ class TopSitesViewModel {
         let isBookmarkedSite = profile.places.isBookmarked(url: homeTopSite.site.url).value.successValue ?? false
         if isBookmarkedSite {
             let bookmarksTelemetry = BookmarksTelemetry()
-            bookmarksTelemetry.openBookmarksSite(eventLabel: BookmarksTelemetry.EventLabel.topSites)
+            bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
         }
 
         TelemetryWrapper.recordEvent(category: .action,
@@ -102,11 +102,11 @@ class TopSitesViewModel {
                                      extras: extras)
 
         // Sponsored tile specific telemetry
-        if let tile = homeTopSite.site as? SponsoredTile {
+        if case SiteType.sponsoredSite = homeTopSite.type {
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-                unifiedAdsTelemetry.sendClickTelemetry(tile: tile, position: position)
+                unifiedAdsTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
             } else {
-                sponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
+                sponsoredTileTelemetry.sendClickTelemetry(tileSite: homeTopSite.site, position: position)
             }
         }
     }

@@ -38,6 +38,12 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
                 await urlCache.cacheURL(cacheKey: model.cacheKey, faviconURL: url)
                 return url
             } catch {
+                let isClientError = ServerErrorHelper.isClientError(error)
+
+                if !isClientError, let fallbackFaviconURL = model.siteURL.faviconUrl() {
+                    await urlCache.cacheURL(cacheKey: model.cacheKey, faviconURL: fallbackFaviconURL)
+                }
+
                 throw SiteImageError.noFaviconURLFound
             }
         }

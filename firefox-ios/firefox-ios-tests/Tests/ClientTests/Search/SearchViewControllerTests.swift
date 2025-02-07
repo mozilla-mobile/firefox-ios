@@ -49,9 +49,9 @@ class SearchViewControllerTest: XCTestCase {
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
         searchEnginesManager.shouldShowSponsoredSuggestions = true
-        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
-                                             Site(url: "https://example.com", title: "Test2"),
-                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        let data = ArrayCursor<Site>(data: [ Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site.createBasicSite(url: "https://example.com", title: "Test2"),
+                                             Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3")])
 
         searchViewController.viewModel.loader(dataLoaded: data)
         XCTAssertEqual(searchViewController.data.count, 2)
@@ -59,9 +59,9 @@ class SearchViewControllerTest: XCTestCase {
 
     func testHistoryAndBookmarksAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
-        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
-                                             Site(url: "https://example.com", title: "Test2"),
-                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        let data = ArrayCursor<Site>(data: [ Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site.createBasicSite(url: "https://example.com", title: "Test2"),
+                                             Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3")])
         searchViewController.viewModel.loader(dataLoaded: data)
         XCTAssertEqual(searchViewController.data.count, 3)
     }

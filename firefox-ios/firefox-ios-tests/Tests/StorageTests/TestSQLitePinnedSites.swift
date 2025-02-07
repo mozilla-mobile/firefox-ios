@@ -40,8 +40,8 @@ class TestSQLitePinnedSites: XCTestCase {
         // make sure pinned sites dont exist
 
         // create pinned sites.
-        let site1 = Site(url: "http://s\(1)ite\(1).com/foo", title: "A \(1)")
-        let site2 = Site(url: "http://s\(2)ite\(2).com/foo", title: "A \(2)")
+        let site1 = Site.createBasicSite(url: "http://s\(1)ite\(1).com/foo", title: "A \(1)")
+        let site2 = Site.createBasicSite(url: "http://s\(2)ite\(2).com/foo", title: "A \(2)")
 
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
@@ -106,8 +106,8 @@ class TestSQLitePinnedSites: XCTestCase {
         let pinnedSites = BrowserDBSQLite(database: database, prefs: prefs)
 
         // create pinned sites with a same domain name
-        let site1 = Site(url: "http://site.com/foo1", title: "A duplicate domain \(1)")
-        let site2 = Site(url: "http://site.com/foo2", title: "A duplicate domain \(2)")
+        let site1 = Site.createBasicSite(url: "http://site.com/foo1", title: "A duplicate domain \(1)")
+        let site2 = Site.createBasicSite(url: "http://site.com/foo2", title: "A duplicate domain \(2)")
 
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
@@ -162,7 +162,12 @@ class TestSQLitePinnedSites: XCTestCase {
 
         // create pinned sites with a same domain name
         let siteId = Int.max
-        let site = Site(id: Int.max, url: "http://site.com/foo1", title: "A domain")
+        let site = Site.createPinnedSite(
+            id: Int.max,
+            url: "http://site.com/foo1",
+            title: "A domain",
+            isGooglePinnedTile: false
+        )
 
         let expectation = self.expectation(description: "Add site")
         func done() -> Success {

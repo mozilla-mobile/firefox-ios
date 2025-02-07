@@ -44,7 +44,7 @@ extension BrowserViewController {
         guard let tab = tabManager.selectedTab,
               let url = tab.canonicalURL?.displayURL else { return }
 
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             addBookmark(url: url.absoluteString, title: tab.title)
         }
     }
@@ -60,7 +60,7 @@ extension BrowserViewController {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.reloadWebsite))
         } else {
-            if !contentContainer.hasLegacyHomepage {
+            if !contentContainer.hasAnyHomepage {
                 tab.reload()
             }
         }
@@ -77,7 +77,7 @@ extension BrowserViewController {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
         } else {
-            if !contentContainer.hasLegacyHomepage {
+            if !contentContainer.hasAnyHomepage {
                 tab.reload(bypassCache: true)
             }
         }
@@ -94,7 +94,7 @@ extension BrowserViewController {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.navigateBack))
         } else {
-            if !contentContainer.hasLegacyHomepage {
+            if !contentContainer.hasAnyHomepage {
                 tab.goBack()
             }
         }
@@ -111,7 +111,7 @@ extension BrowserViewController {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.navigateForward))
         } else {
-            if !contentContainer.hasLegacyHomepage {
+            if !contentContainer.hasAnyHomepage {
                 tab.goForward()
             }
         }
@@ -134,7 +134,7 @@ extension BrowserViewController {
     private func findInPage(withText text: String) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
@@ -341,7 +341,7 @@ extension BrowserViewController {
     func zoomIn() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             currentTab.zoomIn()
         }
     }
@@ -350,7 +350,7 @@ extension BrowserViewController {
     func zoomOut() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             currentTab.zoomOut()
         }
     }
@@ -359,7 +359,7 @@ extension BrowserViewController {
     func resetZoom() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             currentTab.resetZoom()
         }
     }

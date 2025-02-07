@@ -28,7 +28,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_homepageInitializeAction_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = HomepageAction(
-            numberOfTilesPerRow: 4,
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
         )
@@ -50,18 +49,15 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
-        let numberOfTilesPerRow = try XCTUnwrap(actionsCalled.compactMap { $0.numberOfTilesPerRow } as? [Int])
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
-        XCTAssertEqual(numberOfTilesPerRow, [4, 4, 4])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
     func test_fetchTopSitesAction_returnsTopSitesSection() throws {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = TopSitesAction(
-            numberOfTilesPerRow: 4,
             windowUUID: .XCTestDefaultUUID,
             actionType: TopSitesActionType.fetchTopSites
         )
@@ -83,17 +79,15 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [TopSitesAction])
         let actionsType = try XCTUnwrap(actionsCalled.compactMap { $0.actionType } as? [TopSitesMiddlewareActionType])
-        let numberOfTilesPerRow = try XCTUnwrap(actionsCalled.compactMap { $0.numberOfTilesPerRow } as? [Int])
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         XCTAssertEqual(actionsType, [.retrievedUpdatedSites, .retrievedUpdatedSites, .retrievedUpdatedSites])
-        XCTAssertEqual(numberOfTilesPerRow, [4, 4, 4])
         XCTAssertEqual(actionsCalled.last?.topSites?.count, 30)
     }
 
     func test_tappedOnPinTopSite_withSite_callsPinTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,
@@ -119,7 +113,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnUnpinTopSite_withSite_callsUnpinTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,
@@ -142,7 +136,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnRemoveTopSite_withSite_callsRemoveTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
-        let site = Site(url: "www.example.com", title: "Pinned Top Site")
+        let site = Site.createBasicSite(url: "www.example.com", title: "Pinned Top Site")
         let action = ContextMenuAction(
             site: site,
             windowUUID: .XCTestDefaultUUID,
