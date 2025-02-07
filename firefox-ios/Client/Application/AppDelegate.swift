@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-    lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
@@ -163,10 +162,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         updateTopSitesWidget()
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             // TODO: testing to see if this fixes https://mozilla-hub.atlassian.net/browse/FXIOS-7632
             // self?.profile.cleanupHistoryIfNeeded()
-            self?.ratingPromptManager.updateData()
         }
 
         DispatchQueue.global().async { [weak self] in
