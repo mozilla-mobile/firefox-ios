@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 private struct UX {
     // The amount of pixels the toggle button will expand over the normal size.
@@ -14,7 +15,7 @@ private struct UX {
     static let BackgroundSize = CGSize(width: 32, height: 32)
 }
 
-class ToggleButton: UIButton {
+class ToggleButton: UIButton, ThemeApplicable {
     func setSelected(_ selected: Bool, animated: Bool = true) {
         self.isSelected = selected
         if animated {
@@ -121,7 +122,7 @@ class ToggleButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateBackgroundLayerColor(_ color: UIColor) {
-        backgroundLayer.backgroundColor = color.cgColor
+    func applyTheme(theme: Theme) {
+        backgroundLayer.backgroundColor = theme.colors.layerAccentPrivate.cgColor
     }
 }

@@ -32,10 +32,10 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }
 
-    func applyTheme(theme: Theme) {
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
         let colors = theme.colors
         tintColor = isSelected ? colors.iconOnColor : colors.iconPrimary
         imageView?.tintColor = tintColor
-        updateBackgroundLayerColor(colors.layerAccentPrivate)
     }
 }
