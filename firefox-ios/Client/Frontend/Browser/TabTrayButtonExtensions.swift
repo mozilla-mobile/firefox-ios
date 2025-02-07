@@ -32,7 +32,9 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
     }
 
     func applyTheme(theme: Theme) {
-        tintColor = isSelected ? theme.colors.iconOnColor : theme.colors.iconPrimary
+        let color = theme.colors
+        tintColor = isSelected ? color.iconOnColor : color.iconPrimary
         imageView?.tintColor = tintColor
+        updateBackgroundLayerColor(color.layerAccentPrivate)
     }
 }

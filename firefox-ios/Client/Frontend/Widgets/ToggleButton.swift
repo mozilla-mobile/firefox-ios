@@ -5,8 +5,6 @@
 import UIKit
 
 private struct UX {
-    static let BackgroundColor = UIColor.Photon.Purple60
-
     // The amount of pixels the toggle button will expand over the normal size.
     // This results in the larger -> contract animation.
     static let ExpandDelta: CGFloat = 5
@@ -94,7 +92,6 @@ class ToggleButton: UIButton {
 
     fileprivate lazy var backgroundLayer: CALayer = {
         let backgroundLayer = CALayer()
-        backgroundLayer.backgroundColor = UX.BackgroundColor.cgColor
         backgroundLayer.mask = self.maskShapeLayer
         return backgroundLayer
     }()
@@ -122,5 +119,9 @@ class ToggleButton: UIButton {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateBackgroundLayerColor(_ color: UIColor) {
+        backgroundLayer.backgroundColor = color.cgColor
     }
 }
