@@ -6,6 +6,8 @@ import UIKit
 import WebKit
 @testable import WebEngine
 
+/// Necessary since some methods of `WKWebView` cannot be overriden. An abstraction need to be used to be able
+/// to mock all methods.
 class MockWKEngineWebView: UIView, WKEngineWebView {
     var delegate: WKEngineWebViewDelegate?
     var uiDelegate: WKUIDelegate?

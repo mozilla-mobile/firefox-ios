@@ -9,6 +9,7 @@ import Foundation
 protocol SessionHandler: AnyObject {
     func commitURLChange()
     func fetchMetadata(withURL url: URL)
+    func received(error: NSError, forURL url: URL)
 }
 
 class WKEngineSession: NSObject,
@@ -351,6 +352,11 @@ class WKEngineSession: NSObject,
 
     func fetchMetadata(withURL url: URL) {
         metadataFetcher.fetch(fromSession: self, url: url)
+    }
+
+    func received(error: NSError, forURL url: URL) {
+        telemetryProxy?.handleTelemetry(event: .showErrorPage(errorCode: error.code))
+        delegate?.onErrorPageRequest(error: error)
     }
 
     // MARK: - Content scripts

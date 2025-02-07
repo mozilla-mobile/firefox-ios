@@ -74,7 +74,7 @@ public protocol EngineSession {
     func updatePageZoom(_ change: ZoomChangeValue)
 }
 
-extension EngineSession {
+public extension EngineSession {
     func reload(bypassCache: Bool = false) {
         reload(bypassCache: bypassCache)
     }
