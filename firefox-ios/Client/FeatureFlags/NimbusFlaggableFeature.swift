@@ -37,6 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
     case pullToRefreshRefactor
+    case ratingPromptFeature
     case reduxSearchSettings
     case closeRemoteTabs
     case reportSiteIssue
@@ -127,6 +128,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,
                 .pullToRefreshRefactor,
+                .ratingPromptFeature,
                 .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
