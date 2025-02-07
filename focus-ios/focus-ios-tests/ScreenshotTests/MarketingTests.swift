@@ -43,9 +43,10 @@ class MarketingTests: BaseTestCaseL10n {
         } else {
             waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
         }
+        waitForExistence(app.textFields.firstMatch)
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText("https://www.mozilla.org/de/firefox/browsers/mobile/focus\n")
-        waitForNoExistence(app.progressIndicators.firstMatch)
+        waitForNoExistence(app.progressIndicators.firstMatch, timeoutValue: 45)
         snapshot("Website-Focus")
     }
 
