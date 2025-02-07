@@ -8,18 +8,22 @@ import Common
 
 final class BookmarksAction: Action {
     let bookmarks: [BookmarkConfiguration]?
+    var isEnabled: Bool?
 
     init(bookmarks: [BookmarkConfiguration]? = nil,
+         isEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {
         self.bookmarks = bookmarks
+        self.isEnabled = isEnabled
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum BookmarksActionType: ActionType {
     case fetchBookmarks
+    case toggleShowSectionSetting
 }
 
 enum BookmarksMiddlewareActionType: ActionType {

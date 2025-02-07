@@ -4,12 +4,14 @@
 
 import Common
 import Redux
+import Shared
 import Storage
 
 /// State for the bookmark section that is used in the homepage view
 struct BookmarksSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var bookmarks: [BookmarkConfiguration]
+    let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderState(
         title: .BookmarksSectionTitle,
@@ -19,19 +21,23 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         buttonTitle: .BookmarksSavedShowAllText
     )
 
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
+        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
         self.init(
             windowUUID: windowUUID,
-            bookmarks: []
+            bookmarks: [],
+            shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        bookmarks: [BookmarkConfiguration]
+        bookmarks: [BookmarkConfiguration],
+        shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.bookmarks = bookmarks
+        self.shouldShowSection = shouldShowSection
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -43,6 +49,8 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         switch action.actionType {
         case BookmarksMiddlewareActionType.initialize:
             return handleInitializeAction(for: state, with: action)
+        case BookmarksActionType.toggleShowSectionSetting:
+            return handleSettingsToggleAction(action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -59,14 +67,30 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         }
         return BookmarksSectionState(
             windowUUID: state.windowUUID,
-            bookmarks: bookmarks
+            bookmarks: bookmarks,
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func handleSettingsToggleAction(_ action: Action, state: BookmarksSectionState) -> BookmarksSectionState {
+        guard let bookmarksAction = action as? BookmarksAction,
+              let isEnabled = bookmarksAction.isEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        return BookmarksSectionState(
+            windowUUID: state.windowUUID,
+            bookmarks: state.bookmarks,
+            shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: BookmarksSectionState) -> BookmarksSectionState {
         return BookmarksSectionState(
             windowUUID: state.windowUUID,
-            bookmarks: state.bookmarks
+            bookmarks: state.bookmarks,
+            shouldShowSection: state.shouldShowSection
         )
     }
 }

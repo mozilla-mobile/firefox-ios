@@ -4,6 +4,7 @@
 
 import XCTest
 import Storage
+import MozillaAppServices
 
 @testable import Client
 
@@ -38,8 +39,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .bookmarks(nil), .customizeHomepage])
+        XCTAssertEqual(snapshot.numberOfSections, 3)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
@@ -108,7 +109,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             .header,
             .topSites(4),
             .jumpBackIn(nil),
-            .bookmarks(nil),
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -133,7 +133,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .jumpBackIn(nil),
-            .bookmarks(nil),
             .pocket(nil),
             .customizeHomepage
         ]
@@ -165,6 +164,36 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .messageCard,
+            .jumpBackIn(nil),
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    func test_updateSnapshot_withValidState_returnBookmarks() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            BookmarksAction(
+                bookmarks: [BookmarkConfiguration(
+                    site: Site.createBasicSite(
+                        url: "www.mozilla.org",
+                        title: "Title 1",
+                        isBookmarked: true
+                    )
+                )],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksMiddlewareActionType.initialize
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
+        let expectedSections: [HomepageSection] = [
+            .header,
             .jumpBackIn(nil),
             .bookmarks(nil),
             .customizeHomepage

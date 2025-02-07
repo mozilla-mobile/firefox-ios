@@ -9,6 +9,16 @@ import XCTest
 @testable import Client
 
 final class BookmarksSectionStateTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        super.tearDown()
+    }
+
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
@@ -55,6 +65,40 @@ final class BookmarksSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.bookmarks.first?.site.url, "www.mozilla.org")
         XCTAssertEqual(newState.bookmarks.first?.site.title, "Bookmarks Title")
         XCTAssertEqual(newState.bookmarks.first?.accessibilityLabel, "Bookmarks Title")
+    }
+
+    func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
+    func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = bookmarksSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            BookmarksAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldShowSection)
     }
 
     // MARK: - Private

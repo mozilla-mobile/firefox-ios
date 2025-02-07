@@ -144,9 +144,9 @@ final class HomepageDiffableDataSource:
     }
 
     private func getBookmarks(
-        with bookmarksSectionState: BookmarksSectionState
+        with state: BookmarksSectionState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
-        return bookmarksSectionState.bookmarks.compactMap { .bookmark($0) }
+        guard state.shouldShowSection, !state.bookmarks.isEmpty else { return nil }
+        return state.bookmarks.compactMap { .bookmark($0) }
     }
 }
