@@ -72,6 +72,8 @@ extension BrowserViewController: URLBarDelegate {
                   !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
             let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                                 // Ecosia: Re-add image so toast looks like v104
+                                                 imageName: "tabs",
                                                  buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: self.currentTheme(),

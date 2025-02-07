@@ -374,6 +374,8 @@ class BrowserViewController: UIViewController,
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
+        // Ecosia: Update toolbar search button
+        toolbar.circleButton.config = isBottomSearchBar ? .newTab : .search
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
@@ -388,7 +390,10 @@ class BrowserViewController: UIViewController,
 
     @objc
     fileprivate func appMenuBadgeUpdate() {
+        /* Ecosia: actionNeeded set to false
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
+         */
+        let isActionNeeded = false
         let showWarningBadge = isActionNeeded
 
         if isToolbarRefactorEnabled {
@@ -423,9 +428,10 @@ class BrowserViewController: UIViewController,
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
-            /* Ecosia: Remove `addNewTabButton`
+            /* Ecosia: Change to circle button
             toolbar.addNewTabButton.isHidden = showNavToolbar
              */
+            toolbar.circleButton.isHidden = false
 
             if showNavToolbar {
                 toolbar.isHidden = false
@@ -472,6 +478,9 @@ class BrowserViewController: UIViewController,
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
         }
+
+        // Ecosia: Update toolbar search/add button
+        toolbar.circleButton.config = isBottomSearchBar ? .newTab : .search
     }
 
     func dismissVisibleMenus() {
@@ -520,7 +529,10 @@ class BrowserViewController: UIViewController,
         else { return }
 
         contentStackView.alpha = 0
+        /* Ecosia: Update background overlay for private tabs
         privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.layer3)
+         */
+        privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.ecosia.backgroundPrimary)
 
         if isToolbarRefactorEnabled {
             addressToolbarContainer.alpha = 0
@@ -745,7 +757,9 @@ class BrowserViewController: UIViewController,
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
+        /* Ecosia: Remove SearchTelemetry
         searchTelemetry = SearchTelemetry(tabManager: tabManager)
+         */
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
@@ -761,6 +775,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
+        /* Ecosia: Remove Credit Cards Save/Autofill
         // Feature flag for credit card until we fully enable this feature
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
@@ -770,6 +785,7 @@ class BrowserViewController: UIViewController,
         profile.syncManager.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
         // Credit card initial setup telemetry
         creditCardInitialSetupTelemetry()
+         */
 
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
@@ -973,6 +989,9 @@ class BrowserViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        // Ecosia: Present Intro logic
+        presentIntroViewController()
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
@@ -1603,7 +1622,10 @@ class BrowserViewController: UIViewController,
         }
         overlayManager.finishEditing(shouldCancelLoading: false)
 
+        /* Ecosia: Update url with currentURL (ecosified)
         if let nav = tab.loadRequest(URLRequest(url: url)) {
+         */
+        if let currentURL = urlBar.currentURL, let nav = tab.loadRequest(URLRequest(url: currentURL)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -2286,9 +2308,14 @@ class BrowserViewController: UIViewController,
                 trait: self.traitCollection,
                 isBottomSearchBar: self.isBottomSearchBar
             )
+            // Ecosia: Add `isPhone`
+            let isPhone = self.traitCollection.userInterfaceIdiom == .phone
             let viewModel = PhotonActionSheetViewModel(
                 actions: actions,
+                /* Ecosia: Update modal style for phone
                 modalStyle: .popover,
+                 */
+                modalStyle: isPhone ? .pageSheet : .popover,
                 isMainMenu: true,
                 isMainMenuInverted: shouldInverse
             )
@@ -2570,7 +2597,10 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    /* Ecosia: Make available to BrowserViewController+Ecosia
     fileprivate func popToBVC() {
+     */
+    func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
@@ -3013,7 +3043,13 @@ class BrowserViewController: UIViewController,
         let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
+        /* Ecosia: Update backgrounds
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+         */
+        keyboardBackdrop?.backgroundColor = currentTheme.colors.ecosia.backgroundSecondary
+        navigationController?.view.backgroundColor = currentTheme.colors.ecosia.backgroundSecondary
+        header.backgroundColor = statusBarOverlay.backgroundColor
+
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3027,6 +3063,9 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+
+        // Ecosia: Update URLBar following PrivateModeUI
+        updateURLBarFollowingPrivateModeUI()
     }
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
@@ -3084,6 +3123,8 @@ class BrowserViewController: UIViewController,
         guard !topTabsVisible, !toolbar.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             // Ecosia: Re-add image so toast looks like v104
+                                             imageName: "tabs",
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: currentTheme(),
@@ -3381,8 +3422,10 @@ extension BrowserViewController: LegacyTabDelegate {
             }
         }
 
+        /* Ecosia: Remove Credit Cards Save/Autofill
         // Credit card autofill setup and callback
         autofillSetup(tab, didCreateWebView: webView)
+         */
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
@@ -3555,6 +3598,8 @@ extension BrowserViewController: HomePanelDelegate {
 
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             // Ecosia: Re-add image so toast looks like v104
+                                             imageName: "tabs",
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: currentTheme(),
@@ -3736,6 +3781,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
+
+            // Ecosia: Update search engine icon
+            urlBar.updateSearchEngineImage()
 
             // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates.
             var ui = [PrivateModeUI?]()

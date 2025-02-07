@@ -361,6 +361,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         switch toastAction {
         case .bookmarkPage:
             let viewModel = ButtonToastViewModel(labelText: message,
+                                                 // Ecosia: Re-add image so toast looks like v104
+                                                 imageName: StandardImageIdentifiers.Large.bookmarkSlash,
                                                  buttonText: .BookmarksEdit,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
@@ -370,6 +372,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
             self.show(toast: toast)
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
+                                                 // Ecosia: Re-add image so toast looks like v104
+                                                 imageName: "bookmarksEmpty",
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,

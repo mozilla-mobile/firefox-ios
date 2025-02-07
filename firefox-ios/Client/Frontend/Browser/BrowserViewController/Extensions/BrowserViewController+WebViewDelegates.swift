@@ -262,6 +262,8 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         let viewModel = ButtonToastViewModel(labelText: toastLabelText,
+                                             // Ecosia: Re-add image so toast looks like v104
+                                             imageName: "tabs",
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: self.currentTheme(),
