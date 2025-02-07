@@ -45,7 +45,7 @@ class CertificatesHandler {
 // Define a function to get the certificates for a given URL
 func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Void) {
     // Create a URL session with a custom delegate
-    let session = URLSession(configuration: .default,
+    let session = URLSession(configuration: .ephemeral,
                              delegate: CertificateDelegate(completion: completion),
                              delegateQueue: nil)
 
