@@ -558,6 +558,17 @@ final class WKEngineSessionTests: XCTestCase {
 //        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
     }
 
+    // MARK: Error page
+
+    func testReceivedErrorGivenErrorThenCallsErrorDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.received(error: NSError(), forURL: URL(string: "www.example.com")!)
+
+        XCTAssertEqual(engineSessionDelegate.onErrorPageCalled, 1)
+    }
+
     // MARK: User script manager
 
     func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
