@@ -123,7 +123,7 @@ final class URLActivityItemProviderTests: XCTestCase {
     func testOveridesWhatsAppShareItem_forTreatmentA() {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
-        let expectedShareContentA = "https://mozilla.org Sent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
+        let expectedShareContentA = "https://mozilla.org\n\nSent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
         let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: true)
@@ -138,7 +138,7 @@ final class URLActivityItemProviderTests: XCTestCase {
     func testOveridesWhatsAppShareItem_forTreatmentB() {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: false)
 
-        let expectedShareContentB = "https://mozilla.org Sent from Firefox 🦊 https://mzl.la/3YSUOl8"
+        let expectedShareContentB = "https://mozilla.org\n\nSent from Firefox 🦊 https://mzl.la/3YSUOl8"
         let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: true)
