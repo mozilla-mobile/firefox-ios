@@ -41,8 +41,8 @@ extension TabContentScript {
 }
 
 protocol LegacyTabDelegate: AnyObject {
-    func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
-    func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
+    func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert)
+    func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
@@ -272,7 +272,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var userActivity: NSUserActivity?
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
-    var bars = [SnackBar]()
+    var loginAlert: SaveLoginAlert?
     var lastExecutedTime: Timestamp
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
@@ -822,31 +822,22 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    func addSnackbar(_ bar: SnackBar) {
-        if bars.count > 2 { return } // maximum 3 snackbars allowed on a tab
-        bars.append(bar)
-        tabDelegate?.tab(self, didAddSnackbar: bar)
+    func addLoginAlert(_ alert: SaveLoginAlert) {
+        // Only one login alert can show per tab
+        guard loginAlert == nil else { return }
+        loginAlert = alert
+        tabDelegate?.tab(self, didAddLoginAlert: alert)
     }
 
-    func removeSnackbar(_ bar: SnackBar) {
-        if let index = bars.firstIndex(of: bar) {
-            bars.remove(at: index)
-            tabDelegate?.tab(self, didRemoveSnackbar: bar)
+    func removeLoginAlert(_ alert: SaveLoginAlert) {
+        tabDelegate?.tab(self, didRemoveLoginAlert: alert)
+        loginAlert = nil
+    }
+
+    func expireLoginAlert() {
+        if let loginAlert, !loginAlert.shouldPersist {
+            removeLoginAlert(loginAlert)
         }
-    }
-
-    func removeAllSnackbars() {
-        // Enumerate backwards here because we'll remove items from the list as we go.
-        bars.reversed().forEach { removeSnackbar($0) }
-    }
-
-    func expireSnackbars() {
-        // Enumerate backwards here because we may remove items from the list as we go.
-        bars.reversed().filter({ !$0.shouldPersist(self) }).forEach({ removeSnackbar($0) })
-    }
-
-    func expireSnackbars(withClass snackbarClass: String) {
-        bars.reversed().filter({ $0.snackbarClassIdentifier == snackbarClass }).forEach({ removeSnackbar($0) })
     }
 
     func setFindInPage(isBottomSearchBar: Bool, doesFindInPageBarExist: Bool) {

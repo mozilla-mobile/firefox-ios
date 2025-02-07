@@ -68,21 +68,21 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(state: RemoteTabsPanelEmptyStateReason,
+    func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?) {
         self.delegate = delegate
 
         emptyStateImageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cloud)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
-        instructionsLabel.text = state.localizedString()
+        instructionsLabel.text = config.localizedString()
 
-        if state == .notLoggedIn || state == .failedToSync {
+        if config == .notLoggedIn || config == .failedToSync {
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
-        } else if state == .syncDisabledByUser {
+        } else if config == .syncDisabledByUser {
             signInButton.addTarget(self, action: #selector(openAccountSettings), for: .touchUpInside)
         }
 
-        signInButton.isHidden = shouldHideButton(state)
+        signInButton.isHidden = shouldHideButton(config)
     }
 
     private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {

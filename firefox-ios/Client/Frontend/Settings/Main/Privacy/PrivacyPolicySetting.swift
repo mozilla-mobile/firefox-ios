@@ -22,7 +22,7 @@ class PrivacyPolicySetting: Setting {
         self.settingsDelegate = settingsDelegate
         super.init(
             title: NSAttributedString(
-                string: .AppSettingsPrivacyPolicy,
+                string: .AppSettingsPrivacyNotice,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
             )
         )

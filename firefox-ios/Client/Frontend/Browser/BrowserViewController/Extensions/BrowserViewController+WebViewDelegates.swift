@@ -31,6 +31,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -203,6 +205,21 @@ extension BrowserViewController: WKUIDelegate {
         completionHandler(contextMenuConfiguration(for: url, webView: webView))
     }
 
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
+            decisionHandler(.deny)
+            return
+        }
+
+        decisionHandler(.prompt)
+    }
+
+    // MARK: - Helpers
     private func contextMenuConfiguration(for url: URL, webView: WKWebView) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
@@ -387,20 +404,6 @@ extension BrowserViewController: WKUIDelegate {
 
     func assignWebView(_ webView: WKWebView?) {
         pendingDownloadWebView = webView
-    }
-
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
-            decisionHandler(.deny)
-            return
-        }
-
-        decisionHandler(.prompt)
     }
 
     func writeToPhotoAlbum(image: UIImage) {
@@ -943,7 +946,7 @@ extension BrowserViewController: WKNavigationDelegate {
               let metadataManager = tab.metadataManager
         else { return }
 
-        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
 
@@ -1113,6 +1116,13 @@ private extension BrowserViewController {
         }
 
         return false
+    }
+
+    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+    // so we will block the creation of a new Webview with this check
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

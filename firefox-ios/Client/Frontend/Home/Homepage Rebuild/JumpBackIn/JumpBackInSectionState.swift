@@ -4,11 +4,13 @@
 
 import Common
 import Redux
+import Storage
 
 /// State for the jump back in section that is used in the homepage view
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var jumpBackInTabs: [JumpBackInTabState]
+    var jumpBackInTabs: [JumpBackInTabConfiguration]
+    var mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
 
     let sectionHeaderState = SectionHeaderState(
         title: .FirefoxHomeJumpBackInSectionTitle,
@@ -21,16 +23,19 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            jumpBackInTabs: []
+            jumpBackInTabs: [],
+            mostRecentSyncedTab: nil
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        jumpBackInTabs: [JumpBackInTabState]
+        jumpBackInTabs: [JumpBackInTabConfiguration],
+        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil
     ) {
         self.windowUUID = windowUUID
         self.jumpBackInTabs = jumpBackInTabs
+        self.mostRecentSyncedTab = mostRecentSyncedTab
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -40,8 +45,10 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case TabManagerMiddlewareActionType.fetchRecentTabs:
             return handleInitializeAction(for: state, with: action)
+        case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
+            return handleRemoteTabsAction(for: state, with: action)
         default:
             return defaultState(from: state)
         }
@@ -51,21 +58,57 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         for state: JumpBackInSectionState,
         with action: Action
     ) -> JumpBackInSectionState {
-        // TODO: FXIOS-11225 Update state from middleware
+        guard let tabManagerAction = action as? TabManagerAction,
+              let recentTabs = tabManagerAction.recentTabs
+        else {
+            return defaultState(from: state)
+        }
+
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
-            jumpBackInTabs: [JumpBackInTabState(
-                titleText: "JumpBack In Title",
-                descriptionText: "JumpBack In Description",
-                siteURL: "www.mozilla.com"
-            )]
+            jumpBackInTabs: recentTabs.compactMap { tab in
+                let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
+                let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
+                return JumpBackInTabConfiguration(
+                    titleText: site.title,
+                    descriptionText: site.tileURL.shortDisplayString.capitalized,
+                    siteURL: itemURL
+                )
+            },
+            mostRecentSyncedTab: state.mostRecentSyncedTab
+        )
+    }
+
+    private static func handleRemoteTabsAction(
+        for state: JumpBackInSectionState,
+        with action: Action
+    ) -> JumpBackInSectionState {
+        guard let tabManagerAction = action as? RemoteTabsAction,
+              let mostRecentSyncedTab = tabManagerAction.mostRecentSyncedTab
+        else {
+            return defaultState(from: state)
+        }
+
+        let itemURL = mostRecentSyncedTab.tab.URL.absoluteString
+        let site = Site.createBasicSite(url: itemURL, title: mostRecentSyncedTab.tab.title)
+        let descriptionText = mostRecentSyncedTab.client.name
+
+        return JumpBackInSectionState(
+            windowUUID: state.windowUUID,
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: JumpBackInSyncedTabConfiguration(
+                titleText: site.title,
+                descriptionText: descriptionText,
+                url: mostRecentSyncedTab.tab.URL
+            )
         )
     }
 
     static func defaultState(from state: JumpBackInSectionState) -> JumpBackInSectionState {
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
-            jumpBackInTabs: state.jumpBackInTabs
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: state.mostRecentSyncedTab
         )
     }
 }

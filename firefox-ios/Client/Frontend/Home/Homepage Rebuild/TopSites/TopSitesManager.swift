@@ -10,7 +10,7 @@ import Storage
 protocol TopSitesManagerInterface {
     /// Returns a list of top sites state using the top site history manager to fetch the other sites
     /// which is composed of history-based (Frecency) + pinned + default suggested tiles
-    func getOtherSites() async -> [TopSiteState]
+    func getOtherSites() async -> [TopSiteConfiguration]
 
     /// Returns a list of sponsored tiles using the contile provider
     func fetchSponsoredSites() async -> [Site]
@@ -28,7 +28,7 @@ protocol TopSitesManagerInterface {
     /// - Parameters:
     ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
     ///   - sponsoredSites: Contains the sponsored sites.
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) -> [TopSiteState]
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration]
 
     /// Removes the site out of the top sites.
     /// If site is pinned it removes it from pinned and top sites list.
@@ -78,7 +78,7 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.maxTopSites = maxTopSites
     }
 
-    func recalculateTopSites(otherSites: [TopSiteState], sponsoredSites: [Site]) -> [TopSiteState] {
+    func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
         let availableSpaceCount = getAvailableSpaceCount(with: otherSites)
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
@@ -92,13 +92,13 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     // MARK: Google tile
-    private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteState] {
+    private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteConfiguration] {
         guard googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0),
               let googleSite = googleTopSiteManager.pinnedSiteData
         else {
             return []
         }
-        return [TopSiteState(site: googleSite)]
+        return [TopSiteConfiguration(site: googleSite)]
     }
 
     // MARK: Sponsored tiles (Contiles)
@@ -145,8 +145,8 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private func filterSponsoredSites(
         contiles: [Site],
         with availableSpaceCount: Int,
-        and otherSites: [TopSiteState]
-    ) -> [TopSiteState] {
+        and otherSites: [TopSiteConfiguration]
+    ) -> [TopSiteConfiguration] {
         guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
 
         guard !contiles.isEmpty else { return [] }
@@ -154,16 +154,16 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         let filteredContiles = contiles
             .prefix(maxNumberOfSponsoredTile)
             .filter { shouldShowSponsoredSite(with: $0, and: otherSites) }
-            .compactMap { TopSiteState(site: $0) }
+            .compactMap { TopSiteConfiguration(site: $0) }
 
         return filteredContiles
     }
 
     /// Show the sponsored site only if site is not already present in the pinned sites
     /// and it's not the default search engine
-    private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
+    private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteConfiguration]) -> Bool {
         let siteDomain = sponsoredSite.url.asURL?.shortDomain
-        let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteState) in
+        let sponsoredSiteIsAlreadyPresent = otherSites.contains { (topSite: TopSiteConfiguration) in
             (topSite.site.url.asURL?.shortDomain == siteDomain) && (topSite.isPinned)
         }
 
@@ -176,14 +176,14 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     // MARK: Other Sites
-    func getOtherSites() async -> [TopSiteState] {
+    func getOtherSites() async -> [TopSiteConfiguration] {
         let otherSites = await withCheckedContinuation { continuation in
             topSiteHistoryManager.getTopSites { sites in
                 continuation.resume(returning: sites)
             }
         }
 
-        return otherSites?.compactMap { TopSiteState(site: $0) } ?? []
+        return otherSites?.compactMap { TopSiteConfiguration(site: $0) } ?? []
     }
 
     // MARK: - Tiles space calculation
@@ -191,12 +191,12 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     /// Get available space count for the sponsored tiles and Google tiles, pinned tiles are prioritized first
     /// - Parameter otherSites: Comes from fetching the other top sites that are not sponsored or google tile
     /// - Returns: The available space count for the rest of the calculation
-    private func getAvailableSpaceCount(with otherSites: [TopSiteState]) -> Int {
+    private func getAvailableSpaceCount(with otherSites: [TopSiteConfiguration]) -> Int {
         let pinnedSiteCount = otherSites.filter { $0.isPinned }.count
         return maxTopSites - pinnedSiteCount
     }
 
-    private func getUpdatedSpaceCount(with googleTopSite: [TopSiteState], and availableSpaceCount: Int) -> Int {
+    private func getUpdatedSpaceCount(with googleTopSite: [TopSiteConfiguration], and availableSpaceCount: Int) -> Int {
         guard !googleTopSite.isEmpty else { return availableSpaceCount }
         return availableSpaceCount - GoogleTopSiteManager.Constants.reservedSpaceCount
     }
@@ -205,9 +205,9 @@ class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // Ex: If a sponsored tile is present then it has precedence over the history sites.
     // Ex: A default site is present but user has recent history site of the same site.
     // That recent history tile won't be added.
-    private func removeDuplicates(for sites: [TopSiteState]) -> [TopSiteState] {
-        var previousStates = Set<TopSiteState>()
-        return sites.compactMap { (state) -> TopSiteState? in
+    private func removeDuplicates(for sites: [TopSiteConfiguration]) -> [TopSiteConfiguration] {
+        var previousStates = Set<TopSiteConfiguration>()
+        return sites.compactMap { (state) -> TopSiteConfiguration? in
             // Do not remove sponsored tiles or pinned tiles duplicates
             guard !state.isSponsored, !state.isPinned else {
                 previousStates.insert(state)

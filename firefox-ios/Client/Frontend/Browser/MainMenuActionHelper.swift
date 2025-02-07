@@ -735,12 +735,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             // The method in BVC also handles the toast for this use case
             self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, site: nil)
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .add,
-                object: .bookmark,
-                value: .pageActionMenu
-            )
+            let bookmarksTelemetry = BookmarksTelemetry()
+            bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
         }
     }
 
@@ -757,13 +753,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 )
                 self.removeBookmarkShortcut()
             }
-
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .delete,
-                object: .bookmark,
-                value: .pageActionMenu
-            )
+            let bookmarksTelemetry = BookmarksTelemetry()
+            bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
         }
     }
 

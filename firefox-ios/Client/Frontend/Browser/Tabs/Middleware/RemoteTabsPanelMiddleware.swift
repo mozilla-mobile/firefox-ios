@@ -27,7 +27,16 @@ class RemoteTabsPanelMiddleware {
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
         let uuid = action.windowUUID
-        guard let action = action as? RemoteTabsPanelAction else { return }
+        if let action = action as? RemoteTabsPanelAction {
+            self.resolveRemoteTabsPanelActions(action: action, state: state)
+        } else {
+            self.resolveHomepageActions(action: action, state: state)
+        }
+    }
+
+    // MARK: - Internal Utilities
+    private func resolveRemoteTabsPanelActions(action: RemoteTabsPanelAction, state: AppState) {
+        let uuid = action.windowUUID
         switch action.actionType {
         case RemoteTabsPanelActionType.panelDidAppear:
             self.getSyncState(window: uuid)
@@ -44,7 +53,15 @@ class RemoteTabsPanelMiddleware {
         }
     }
 
-    // MARK: - Internal Utilities
+    private func resolveHomepageActions(action: Action, state: AppState) {
+        switch action.actionType {
+        case HomepageActionType.initialize, JumpBackInActionType.fetchRemoteTabs:
+            self.handleFetchingMostRecentRemoteTab(windowUUID: action.windowUUID)
+        default:
+            break
+        }
+    }
+
     private func getSyncState(window: WindowUUID, useCache: Bool = false) {
         ensureMainThread { [self] in
             guard self.hasSyncableAccount else {
@@ -107,6 +124,24 @@ class RemoteTabsPanelMiddleware {
         } else {
             profile.getClientsAndTabs(completion: completion)
         }
+    }
+
+    private func handleFetchingMostRecentRemoteTab(windowUUID: WindowUUID) {
+        // TODO: FXIOS-11297 Should properly fetch the most recent tabs
+        let completion = { (result: [ClientAndTabs]?) in
+            guard let remoteClient = result?.first?.client, let remoteTab = result?.first?.tabs.first else { return }
+            store.dispatch(
+                RemoteTabsAction(
+                    mostRecentSyncedTab: RemoteTabConfiguration(
+                        client: remoteClient,
+                        tab: remoteTab
+                    ),
+                    windowUUID: windowUUID,
+                    actionType: RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab
+                )
+            )
+        }
+        profile.getCachedClientsAndTabs(completion: completion)
     }
 
     // MARK: - Notifications
