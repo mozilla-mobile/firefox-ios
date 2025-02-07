@@ -95,7 +95,7 @@ class BrowserViewController: UIViewController,
     }
 
     func reload() {
-        engineSession.reload()
+        engineSession.reload(bypassCache: false)
     }
 
     func stop() {
@@ -197,6 +197,16 @@ class BrowserViewController: UIViewController,
     func didLoad(pageMetadata: EnginePageMetadata) {
         // Page metadata can be used to fetch page favicons.
         // We currently do not handle favicons in SampleBrowser, so this is empty.
+    }
+
+    func onErrorPageRequest(error: NSError) {
+        let message = "Error \(String(error.code)) happened on domain \(error.domain): \(error.localizedDescription)"
+        let alert = UIAlertController(title: "Oh no!",
+                                      message: message,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
