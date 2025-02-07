@@ -23,6 +23,7 @@ public protocol EngineSession {
     func stopLoading()
 
     /// Reloads the current URL.
+    /// - Parameter bypassCache: Bypass the cache and fully reload from the origin
     func reload(bypassCache: Bool)
 
     /// Navigates back in the history of this session.
