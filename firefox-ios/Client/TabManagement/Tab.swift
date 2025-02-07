@@ -800,28 +800,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return contentScriptManager.getContentScript(name)
     }
 
-    func hideContent(_ animated: Bool = false) {
-        webView?.isUserInteractionEnabled = false
-        if animated {
-            UIView.animate(withDuration: 0.25, animations: { () in
-                self.webView?.alpha = 0.0
-            })
-        } else {
-            webView?.alpha = 0.0
-        }
-    }
-
-    func showContent(_ animated: Bool = false) {
-        webView?.isUserInteractionEnabled = true
-        if animated {
-            UIView.animate(withDuration: 0.25, animations: { () in
-                self.webView?.alpha = 1.0
-            })
-        } else {
-            webView?.alpha = 1.0
-        }
-    }
-
     func addLoginAlert(_ alert: SaveLoginAlert) {
         // Only one login alert can show per tab
         guard loginAlert == nil else { return }
