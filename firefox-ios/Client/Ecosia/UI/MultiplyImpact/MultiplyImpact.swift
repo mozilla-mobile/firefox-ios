@@ -15,6 +15,7 @@ class MultiplyImpact: UIViewController, Themeable {
 
     private struct UX {
         private init() {}
+        static let hardcodedDarkTextColor = EcosiaDarkTheme().colors.ecosia.textPrimary
         static let defaultPadding: CGFloat = 16
         static let subtitleTopMargin: CGFloat = 8
         static let defaultCornerRadius: CGFloat = 10
@@ -434,7 +435,7 @@ class MultiplyImpact: UIViewController, Themeable {
         waves?.tintColor = theme.colors.ecosia.modalBackground
         topBackground?.backgroundColor = theme.colors.ecosia.modalBackground
         forestOverlay?.backgroundColor = theme.colors.ecosia.modalBackground
-        subtitle?.textColor = .Dark.Text.primary
+        subtitle?.textColor = UX.hardcodedDarkTextColor
         copyControl?.backgroundColor = theme.colors.ecosia.backgroundSecondary
         copyControl?.layer.borderColor = theme.colors.ecosia.borderDecorative.cgColor
         moreSharingMethods?.textColor = theme.colors.ecosia.textSecondary
@@ -465,14 +466,14 @@ class MultiplyImpact: UIViewController, Themeable {
     private func updateBarAppearance(theme: Theme) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.Dark.Text.primary]
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.Dark.Text.primary]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
+        appearance.titleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
         appearance.backgroundColor = theme.colors.ecosia.modalBackground
         appearance.shadowColor = nil
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.modalBackground
-        navigationController?.navigationBar.tintColor = theme.type == .light ? UIColor.Dark.Text.primary : theme.colors.ecosia.brandPrimary
+        navigationController?.navigationBar.tintColor = theme.type == .light ? UX.hardcodedDarkTextColor : theme.colors.ecosia.brandPrimary
     }
 
     private func updateInviteLink() {

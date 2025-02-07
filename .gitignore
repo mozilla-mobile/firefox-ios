@@ -152,15 +152,3 @@ test_output
 .vscode
 firefox-ios/EcosiaTests/Results
 firefox-ios/EcosiaTests/SnapshotTests/SnapshotArtifacts/*
-
-# TODO Ecosia Upgrade: Remove once confirmed not needed
-# (they are still above but prefixed with `firefox-ios/`)
-Client/ContentBlocker/Lists/*
-Client/Assets/AllFramesAtDocumentStart.js
-Client/Assets/AllFramesAtDocumentEnd.js
-Client/Assets/MainFrameAtDocumentStart.js
-Client/Assets/MainFrameAtDocumentEnd.js
-Client/Assets/AutofillAllFramesAtDocumentStart.js
-Client/Assets/WebcompatAllFramesAtDocumentStart.js
-Client/Assets/*.js.LICENSE.txt
-/Storage/Generated

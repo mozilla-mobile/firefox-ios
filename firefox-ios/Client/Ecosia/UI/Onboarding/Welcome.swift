@@ -148,11 +148,11 @@ final class Welcome: UIViewController {
         stack.addArrangedSubview(label)
 
         let cta = UIButton(type: .system)
-        cta.backgroundColor = .Light.Button.backgroundSecondary
+        cta.backgroundColor = EcosiaLightTheme().colors.ecosia.buttonBackgroundSecondary
         cta.setTitle(.localized(.getStarted), for: .normal)
         cta.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         cta.titleLabel?.adjustsFontForContentSizeCategory = true
-        cta.setTitleColor(.Light.Text.primary, for: .normal)
+        cta.setTitleColor(EcosiaLightTheme().colors.ecosia.textPrimary, for: .normal)
         cta.layer.cornerRadius = 25
         cta.heightAnchor.constraint(equalToConstant: 50).isActive = true
         cta.addTarget(self, action: #selector(getStarted), for: .primaryActionTriggered)
@@ -165,7 +165,7 @@ final class Welcome: UIViewController {
         skipButton.backgroundColor = .clear
         skipButton.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         skipButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        skipButton.setTitleColor(.Dark.Text.secondary, for: .normal)
+        skipButton.setTitleColor(EcosiaDarkTheme().colors.ecosia.textSecondary, for: .normal)
         skipButton.setTitle(.localized(.skipWelcomeTour), for: .normal)
         skipButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         skipButton.addTarget(self, action: #selector(skip), for: .primaryActionTriggered)

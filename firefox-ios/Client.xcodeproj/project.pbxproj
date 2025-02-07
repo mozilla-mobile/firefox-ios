@@ -314,15 +314,12 @@
 		2C7DC2462B16493C00C049C8 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		2CC246602D520EF90098467A /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */; };
 		2CC246612D520EF90098467A /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465C2D520EF90098467A /* EcosiaColor.swift */; };
-		2CC246622D520EF90098467A /* SemanticColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465F2D520EF90098467A /* SemanticColor.swift */; };
 		2CC246632D520EF90098467A /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */; };
 		2CC246642D520EF90098467A /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */; };
 		2CC246652D520EF90098467A /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465C2D520EF90098467A /* EcosiaColor.swift */; };
-		2CC246662D520EF90098467A /* SemanticColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465F2D520EF90098467A /* SemanticColor.swift */; };
 		2CC246672D520EF90098467A /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */; };
 		2CC246682D520EF90098467A /* EcosiaLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */; };
 		2CC246692D520EF90098467A /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465C2D520EF90098467A /* EcosiaColor.swift */; };
-		2CC2466A2D520EF90098467A /* SemanticColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465F2D520EF90098467A /* SemanticColor.swift */; };
 		2CC2466B2D520EF90098467A /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */; };
 		2CC24C752D52478E0098467A /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
 		2CFE997B2D45329500B25CE0 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
@@ -2783,7 +2780,6 @@
 		2CC2465C2D520EF90098467A /* EcosiaColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaColor.swift; sourceTree = "<group>"; };
 		2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaDarkTheme.swift; sourceTree = "<group>"; };
 		2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaLightTheme.swift; sourceTree = "<group>"; };
-		2CC2465F2D520EF90098467A /* SemanticColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticColor.swift; sourceTree = "<group>"; };
 		2CCB296620A99C9500121DD8 /* LoginsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsTests.swift; sourceTree = "<group>"; };
 		2CCF17522105E4FD00705AE5 /* DisplaySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySettingsTests.swift; sourceTree = "<group>"; };
 		2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsUITest.swift; sourceTree = "<group>"; };
@@ -10687,7 +10683,6 @@
 				2CC2465C2D520EF90098467A /* EcosiaColor.swift */,
 				2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */,
 				2CC2465E2D520EF90098467A /* EcosiaLightTheme.swift */,
-				2CC2465F2D520EF90098467A /* SemanticColor.swift */,
 				2CFEA04A2D455BD500B25CE0 /* EcosiaThemeManager.swift */,
 			);
 			path = Theme;
@@ -15857,7 +15852,6 @@
 				4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */,
 				2CC246602D520EF90098467A /* EcosiaLightTheme.swift in Sources */,
 				2CC246612D520EF90098467A /* EcosiaColor.swift in Sources */,
-				2CC246622D520EF90098467A /* SemanticColor.swift in Sources */,
 				2CC246632D520EF90098467A /* EcosiaDarkTheme.swift in Sources */,
 				2CFEA0A42D455EB200B25CE0 /* EcosiaThemeManager.swift in Sources */,
 				435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */,
@@ -16653,7 +16647,6 @@
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				2CC246682D520EF90098467A /* EcosiaLightTheme.swift in Sources */,
 				2CC246692D520EF90098467A /* EcosiaColor.swift in Sources */,
-				2CC2466A2D520EF90098467A /* SemanticColor.swift in Sources */,
 				2CC2466B2D520EF90098467A /* EcosiaDarkTheme.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* LegacyTabPeekViewController.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
@@ -17539,7 +17532,6 @@
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				2CC246642D520EF90098467A /* EcosiaLightTheme.swift in Sources */,
 				2CC246652D520EF90098467A /* EcosiaColor.swift in Sources */,
-				2CC246662D520EF90098467A /* SemanticColor.swift in Sources */,
 				2CC246672D520EF90098467A /* EcosiaDarkTheme.swift in Sources */,
 				1D1933782AF2C8CE005089C9 /* AppEvent.swift in Sources */,
 				1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */,

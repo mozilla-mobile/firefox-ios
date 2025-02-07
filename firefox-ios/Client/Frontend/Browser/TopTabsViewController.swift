@@ -197,7 +197,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         /* Ecosia: update background
         view.backgroundColor = colors.layer3
         */
-        view.backgroundColor = currentTheme.type == .dark ? .Dark.Background.primary : .Light.Background.primary
+        view.backgroundColor = currentTheme.colors.ecosia.backgroundPrimary
 
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)

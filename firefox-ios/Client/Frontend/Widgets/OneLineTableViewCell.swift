@@ -170,15 +170,11 @@ class OneLineTableViewCell: UITableViewCell,
 
     func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer5Hover
+        /* Ecosia: Update custom theming
         backgroundColor = theme.colors.layer5
+        */
+        backgroundColor = theme.colors.ecosia.ntpCellBackground
         titleLabel.textColor = theme.colors.textPrimary
-        // Ecosia: Update custom theming
-        if theme.type == .dark {
-            self.backgroundColor = .Dark.Background.tertiary
-        } else {
-            self.backgroundColor = .Light.Background.primary
-        }
-
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
         accessoryView?.tintColor = theme.colors.iconSecondary
         leftImageView.tintColor = theme.colors.textPrimary

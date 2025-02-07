@@ -132,7 +132,7 @@ private final class Dot: UIVisualEffectView {
         let centerDot = UIView()
         centerDot.translatesAutoresizingMaskIntoConstraints = false
         centerDot.layer.cornerRadius = 4
-        centerDot.backgroundColor = .Light.Background.primary
+        centerDot.backgroundColor = EcosiaLightTheme().colors.ecosia.backgroundPrimary
         contentView.addSubview(centerDot)
 
         centerDot.heightAnchor.constraint(equalToConstant: 8).isActive = true

@@ -368,8 +368,8 @@ final class WelcomeTour: UIViewController, Themeable {
         backButton.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
         pageControl.pageIndicatorTintColor = theme.colors.ecosia.stateDisabled
         pageControl.currentPageIndicatorTintColor = theme.colors.ecosia.buttonBackgroundPrimary
-        ctaButton.backgroundColor = .Light.Button.backgroundSecondary
-        ctaButton.setTitleColor(.Light.Text.primary, for: .normal)
+        ctaButton.backgroundColor = EcosiaLightTheme().colors.ecosia.buttonBackgroundSecondary
+        ctaButton.setTitleColor(EcosiaLightTheme().colors.ecosia.textPrimary, for: .normal)
         container.subviews.forEach({ ($0 as? ThemeApplicable)?.applyTheme(theme: theme) })
 
         imageView.backgroundColor = current?.background.color ?? .clear

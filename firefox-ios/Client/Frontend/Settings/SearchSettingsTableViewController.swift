@@ -151,7 +151,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         switch section {
         case .defaultEngine:
                 engine = model.defaultEngine
+                /* Ecosia: Remove UI that let User indicate a detail scren
                 cell.editingAccessoryType = .disclosureIndicator
+                 */
                 cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
@@ -368,6 +370,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         switch section {
         case .defaultEngine:
             guard indexPath.item == 0 else { return nil }
+            /* Ecosia: Hide possibility to show Default Engine selection screen
             let searchEnginePicker = SearchEnginePicker(windowUUID: windowUUID)
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
@@ -375,6 +378,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
+             */
+            tableView.deselectRow(at: indexPath, animated: false)
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
             guard isLastItem else { return nil }

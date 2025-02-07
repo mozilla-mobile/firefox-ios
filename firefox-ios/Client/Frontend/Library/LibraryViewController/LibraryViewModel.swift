@@ -11,10 +11,18 @@ class LibraryViewModel {
     var selectedPanel: LibraryPanelType?
 
     var segmentedControlItems: [UIImage] {
+        /* Ecosia: Update images and positions
         [UIImage(named: StandardImageIdentifiers.Large.bookmarkTrayFill) ?? UIImage(),
          UIImage(named: StandardImageIdentifiers.Large.history) ?? UIImage(),
          UIImage(named: StandardImageIdentifiers.Large.download) ?? UIImage(),
          UIImage(named: StandardImageIdentifiers.Large.readingList) ?? UIImage()]
+         */
+        [
+            UIImage(named: "libraryFavorites"),
+            UIImage(named: "libraryHistory"),
+            UIImage(named: "libraryReading"),
+            UIImage(named: "libraryDownloads")
+        ].compactMap({ $0 })
     }
 
     init(withProfile profile: Profile) {
