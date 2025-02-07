@@ -8,7 +8,7 @@ import Ecosia
 
 final class Markets {
     private(set) static var all: [Market] = {
-        return (try? JSONDecoder().decode([Market].self, from: Data(contentsOf: Bundle.main.url(forResource: "markets", withExtension: "json")!)))?.sorted(by: { $0.displayName.compare($1.displayName) == .orderedAscending })  ?? []
+        return (try? JSONDecoder().decode([Market].self, from: Data(contentsOf: Bundle.ecosia.url(forResource: "markets", withExtension: "json")!)))?.sorted(by: { $0.displayName.compare($1.displayName) == .orderedAscending })  ?? []
     }()
 
     static var current: String? {
