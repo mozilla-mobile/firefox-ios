@@ -4,6 +4,7 @@
 
 import Foundation
 
+/// Used to setup internal scheme handlers
 struct InternalUtil {
     func setUpInternalHandlers() {
         let responders: [(String, WKInternalSchemeResponse)] =

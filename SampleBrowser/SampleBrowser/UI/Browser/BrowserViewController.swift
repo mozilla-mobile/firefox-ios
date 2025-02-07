@@ -97,7 +97,7 @@ class BrowserViewController: UIViewController,
     }
 
     func reload() {
-        engineSession.reload(bypassCache: false)
+        engineSession.reload()
     }
 
     func stop() {
