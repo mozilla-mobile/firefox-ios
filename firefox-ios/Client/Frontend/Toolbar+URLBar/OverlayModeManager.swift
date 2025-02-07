@@ -43,7 +43,7 @@ protocol OverlayModeManager: OverlayStateProtocol {
     func switchTab(shouldCancelLoading: Bool)
 }
 
-final class DefaultOverlayModeManager: OverlayModeManager {
+class DefaultOverlayModeManager: OverlayModeManager {
     private var urlBarView: URLBarViewProtocol?
 
     var inOverlayMode: Bool {
