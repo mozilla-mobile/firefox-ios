@@ -2588,7 +2588,6 @@ class BrowserViewController: UIViewController,
 
     func handleQRCode() {
         cancelEditMode()
-        openBlankNewTab(focusLocationField: false, isPrivate: false)
         navigationHandler?.showQRCode(delegate: self)
     }
 
