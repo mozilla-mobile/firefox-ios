@@ -1,4 +1,4 @@
-## Snapshot Testing Library
+# 📸 Snapshot Testing Library
 
 The SnapshotTesting library is a Swift package that allows you to capture screenshots of iOS views and compare them over time, ensuring your UI does not change unexpectedly. It is highly effective in preventing visual regressions during development.
 [Repo link](https://github.com/pointfreeco/swift-snapshot-testing?tab=readme-ov-file)
