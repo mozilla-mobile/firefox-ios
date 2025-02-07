@@ -73,9 +73,10 @@ public class DefaultURLFormatter: URLFormatter {
             }
         }
 
+        guard let url = URL(string: entry) else { return nil }
+
         // Only allow this URL if it's safe
-        let browsingContext = BrowsingContext(type: .internalNavigation,
-                                              url: entry)
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
         if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
             return URL(string: entry, invalidCharacters: false)
         } else {

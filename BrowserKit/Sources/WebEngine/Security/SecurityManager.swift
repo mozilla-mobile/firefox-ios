@@ -13,16 +13,11 @@ public class DefaultSecurityManager: SecurityManager {
     public init() {}
 
     public func canNavigateWith(browsingContext: BrowsingContext) -> NavigationDecisionType {
-        guard let url = URL(string: browsingContext.url) else {
-            // The URL is not a URL, refuse the navigation
-            return .refused
-        }
-
         switch browsingContext.type {
         case .externalNavigation:
-            return handleExternalNavigation(url: url)
+            return handleExternalNavigation(url: browsingContext.url)
         case .internalNavigation:
-            return handleInternalNavigation(url: url)
+            return handleInternalNavigation(url: browsingContext.url)
         }
     }
 

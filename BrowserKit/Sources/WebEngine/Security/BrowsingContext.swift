@@ -7,5 +7,10 @@ import Foundation
 /// The BrowsingContext is used by the Security Manager to determine if a URL can be navigated to
 public struct BrowsingContext {
     var type: BrowsingType
-    var url: String
+    var url: URL
+
+    public init(type: BrowsingType, url: URL) {
+        self.type = type
+        self.url = url
+    }
 }

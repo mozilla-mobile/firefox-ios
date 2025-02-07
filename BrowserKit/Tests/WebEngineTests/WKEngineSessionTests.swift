@@ -41,19 +41,19 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testLoadURLGivenNormalURLThenLoad() {
         let subject = createSubject()
-        let url = "https://example.com"
+        let url = URL(string: "https://example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let engineURL = EngineURL(browsingContext: context)!
 
         subject?.load(engineURL: engineURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
         let subject = createSubject()
-        let url = "about:reader?url=http://example.com"
+        let url = URL(string: "about:reader?url=http://example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let engineURL = EngineURL(browsingContext: context)!
 
@@ -66,7 +66,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testLoadURLGivenFileURLThenLoadFileURL() {
         let subject = createSubject()
-        let url = "file://path/to/abc/dirA/A.html"
+        let url = URL(string: "file://path/to/abc/dirA/A.html")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let engineURL = EngineURL(browsingContext: context)!
 
@@ -203,7 +203,7 @@ final class WKEngineSessionTests: XCTestCase {
     func testReloadWhenErrorPageThenLoadOriginalErrorPage() {
         let subject = createSubject()
         let errorPageURL = "errorpage"
-        let internalURL = "internal://local/errorpage?url=\(errorPageURL)"
+        let internalURL = URL(string: "internal://local/errorpage?url=\(errorPageURL)")!
         let context = BrowsingContext(type: .internalNavigation, url: internalURL)
         let engineURL = EngineURL(browsingContext: context)!
         subject?.load(engineURL: engineURL)
@@ -217,7 +217,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testReloadWhenHomepageThenLoadHomepageAsPrivileged() throws {
         let subject = createSubject()
-        let internalURL = "internal://local/about/home"
+        let internalURL = URL(string: "internal://local/about/home")!
         let context = BrowsingContext(type: .internalNavigation, url: internalURL)
         let engineURL = EngineURL(browsingContext: context)!
         subject?.load(engineURL: engineURL)
@@ -232,7 +232,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testReloadWhenBypassCacheThenReloadBypassingCache() {
         let subject = createSubject()
-        let url = "https://www.example.com"
+        let url = URL(string: "https://www.example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let engineURL = EngineURL(browsingContext: context)!
         subject?.load(engineURL: engineURL)
@@ -241,12 +241,12 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     func testReloadWhenReloadFromOriginFailsThenRestoreWebviewWithLastRequest() {
         let subject = createSubject()
-        let url = "https://www.example.com"
+        let url = URL(string: "https://www.example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let engineURL = EngineURL(browsingContext: context)!
         subject?.load(engineURL: engineURL)
@@ -255,7 +255,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     // MARK: Restore
@@ -273,7 +273,7 @@ final class WKEngineSessionTests: XCTestCase {
     func testRestoreWhenHasLastRequestThenLoadISCalled() {
         let subject = createSubject()
         let restoredState = Data()
-        let context = BrowsingContext(type: .internalNavigation, url: "https://example.com")
+        let context = BrowsingContext(type: .internalNavigation, url: URL(string: "https://example.com")!)
         let engineURL = EngineURL(browsingContext: context)!
         subject?.load(engineURL: engineURL)
 

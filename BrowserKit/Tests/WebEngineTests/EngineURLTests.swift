@@ -6,15 +6,8 @@ import XCTest
 @testable import WebEngine
 
 final class EngineURLTests: XCTestCase {
-    func testLoadURLGivenEmptyThenDoesntCreate() {
-        let context = BrowsingContext(type: .internalNavigation, url: "")
-        let subject = EngineURL(browsingContext: context)
-
-        XCTAssertNil(subject)
-    }
-
     func testLoadURLGivenNotAURLThenDoesntCreate() {
-        let url = "blablablablabla"
+        let url = URL(string: "blablablablabla")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let subject = EngineURL(browsingContext: context)
 
@@ -22,7 +15,7 @@ final class EngineURLTests: XCTestCase {
     }
 
     func testLoadURLGivenExampleURLThenCreate() {
-        let url = "https://www.example.com"
+        let url = URL(string: "https://www.example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
         let subject = EngineURL(browsingContext: context)
 

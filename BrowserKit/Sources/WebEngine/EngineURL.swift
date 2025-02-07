@@ -9,12 +9,10 @@ import Foundation
 public struct EngineURL {
     let url: URL
 
-    init?(browsingContext: BrowsingContext,
-          securityManager: SecurityManager = DefaultSecurityManager()) {
+    public init?(browsingContext: BrowsingContext,
+                 securityManager: SecurityManager = DefaultSecurityManager()) {
         guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return nil }
 
-        guard let url = URL(string: browsingContext.url) else { return nil }
-
-        self.url = url
+        self.url = browsingContext.url
     }
 }
