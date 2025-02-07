@@ -25,7 +25,6 @@ class BrowserViewController: UIViewController,
     private var engineSession: EngineSession
     private var engineView: EngineView
     private let urlFormatter: URLFormatter
-    private var errorPage: ErrorPageViewController?
 
     // MARK: - Init
 
