@@ -227,7 +227,7 @@
 "Forward" = "ಮುಂದೆ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox ಖಾತೆ";
+"FxA.FirefoxAccount" = "Ecosia ಖಾತೆ";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ಖಾತೆ ಮತ್ತು ಸಾಧನಗಳನ್ನು ನಿರ್ವಹಿಸು‍";
@@ -263,7 +263,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "ನಿಮ್ಮ ಬೇರೆ ಸಾಧನಗಳ ಟ್ಯಾಬ್‍‍ಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox ಸಿಂಕ್";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia ಸಿಂಕ್";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ಇತಿಹಾಸ";
@@ -563,7 +563,7 @@
 "SentTab.NoTabArrivingNotification.body" = "ಪ್ರಾರಂಭಿಸಲು ಮೆಲ್ಲಗೆ ತಟ್ಟಿ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox ಸಿಂಕ್";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia ಸಿಂಕ್";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ನೋಟ";
@@ -632,7 +632,7 @@
 "Settings.FxA.Sync.SectionName" = "ಸಿಂಕ್‍ನ ಸಿದ್ಧತೆಗಳು";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox ಖಾತೆ";
+"Settings.FxA.Title" = "Ecosia ಖಾತೆ";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ಸಾಮಾನ್ಯ";

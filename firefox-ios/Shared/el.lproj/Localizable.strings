@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Συνδεθείτε για να δείτε μια λίστα καρτελών από τις άλλες συσκευές σας.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Ιστορικό";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Αποστολή αναφοράς κατάρρευσης, ώστε να μπορέσει η Mozilla να διορθώσει το πρόβλημα;";
+"Send a crash report so Mozilla can fix the problem?" = "Αποστολή αναφοράς κατάρρευσης, ώστε να μπορέσει η Ecosia να διορθώσει το πρόβλημα;";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Αποστολή σχολίων";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Πατήστε για έναρξη";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Προβολή";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Κατά το άνοιγμα %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Κατά το άνοιγμα του Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Κατά το άνοιγμα του Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Επιλογή για άνοιγμα αντιγραμμένων συνδέσμων";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Μάθετε περισσότερα.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Η Mozilla αγωνίζεται για να συλλέγει μόνο ό,τι χρειάζεται για να παρέχει και να βελτιώνει το Ecosia για όλους.";
+"Settings.SendUsage.Message" = "Η Ecosia αγωνίζεται για να συλλέγει μόνο ό,τι χρειάζεται για να παρέχει και να βελτιώνει το Ecosia για όλους.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Αποστολή δεδομένων χρήσης";

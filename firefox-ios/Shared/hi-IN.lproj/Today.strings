@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "कोई खुला टैब नहीं।";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox खोलें";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia खोलें";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "निजी खोज";
@@ -32,13 +32,13 @@
 "TodayWidget.QuickActionsGalleryTitle" = "तुरंत कारवाई";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox शॉर्टकट";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia शॉर्टकट";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "अपने खुले टैब में शॉर्टकट जोड़ें।";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox में खोजें";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia में खोजें";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "निजी टैब में खोजें";

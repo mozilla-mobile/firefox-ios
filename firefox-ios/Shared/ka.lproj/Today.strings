@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox მალსახმობები";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia მალსახმობები";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "გახსნილი ჩანართების მალსახმობების დამატება.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "სწრაფი ხილვა";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox-ში მოძიება";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia-ში მოძიება";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "პირად ჩანართში\nმოძიება";

@@ -5,16 +5,16 @@
 "New Tab" = "Nova kartica";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox koristi tvoju kameru za snimanje QR kodova, fotografija i videa.";
+"NSCameraUsageDescription" = "Ecosia koristi tvoju kameru za snimanje QR kodova, fotografija i videa.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox zahtijeva Face ID za pristup tvojim spremljenim lozinkama i načinima plaćanja.";
+"NSFaceIDUsageDescription" = "Ecosia zahtijeva Face ID za pristup tvojim spremljenim lozinkama i načinima plaćanja.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Web stranice koje posjećuješ mogu zatražiti tvoju lokaciju.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox koristi tvoj mikrofon za snimanje i prijenos audiosnimaka.";
+"NSMicrophoneUsageDescription" = "Ecosia koristi tvoj mikrofon za snimanje i prijenos audiosnimaka.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ovo omogućuje spremanje fotografija.";

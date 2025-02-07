@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Nâng cao trình duyệt hàng ngày";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox chặn trung bình hơn 3.000 trình theo dõi trên mỗi người dùng mỗi tháng. Đặt chúng tôi làm trình duyệt mặc định của bạn để yên tâm về quyền riêng tư.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia chặn trung bình hơn 3.000 trình theo dõi trên mỗi người dùng mỗi tháng. Đặt chúng tôi làm trình duyệt mặc định của bạn để yên tâm về quyền riêng tư.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox bảo vệ riêng tư của bạn";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia bảo vệ riêng tư của bạn";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Đặt làm trình duyệt mặc định của bạn";

@@ -404,7 +404,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ଏକ ଡିଭାଇସ୍ Ecosia ସିଙ୍କ୍ ରୁ ସଫଳତାର ସହ ବିଚ୍ଛିନ୍ନ ହୋଇଛି।";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ଲୋଗୋ, ୱାଲ୍ପେପର ପରିବର୍ତ୍ତନ କରନ୍ତୁ।";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia ଲୋଗୋ, ୱାଲ୍ପେପର ପରିବର୍ତ୍ତନ କରନ୍ତୁ।";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ସହଯୋଗ";
@@ -914,7 +914,7 @@
 "Settings.DataManagement.SearchLabel" = "ସ୍କ୍ରିପ୍ଟଗୁଡ଼ିକୁ ଛାଣନ୍ତୁ";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ଆପଣଙ୍କ ଆକାଉଣ୍ଟ ସହ ସିଙ୍କ କରିବା ବନ୍ଦ କରିଦେଲେ ମଧ୍ୟ ଆପଣଙ୍କ ଏହି ଡିଭାଇସରେ ବ୍ରାଉଜିଂ ଡାଟା ଲିଭାଇବ ନାହିଁ ।";
+"Settings.Disconnect.Body" = "Ecosia ଆପଣଙ୍କ ଆକାଉଣ୍ଟ ସହ ସିଙ୍କ କରିବା ବନ୍ଦ କରିଦେଲେ ମଧ୍ୟ ଆପଣଙ୍କ ଏହି ଡିଭାଇସରେ ବ୍ରାଉଜିଂ ଡାଟା ଲିଭାଇବ ନାହିଁ ।";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "ବାତିଲ କରନ୍ତୁ";

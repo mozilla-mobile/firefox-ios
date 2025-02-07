@@ -101,7 +101,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Predvolený vyhľadávací modul";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Firefoxu";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Ecosia";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Alternatívne vyhľadávače";
@@ -137,13 +137,13 @@
 "Settings.Search.ShowSuggestions.v121" = "Zobrazovať návrhy vyhľadávania";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Panel s adresou – Návrhy Firefoxu";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Panel s adresou – Návrhy Ecosia";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Firefoxu";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Ecosia";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "Zobrazovať Návrhy Firefoxu v súkromných reláciách";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Zobrazovať Návrhy Ecosia v súkromných reláciách";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Navrhovať z histórie prehliadania";

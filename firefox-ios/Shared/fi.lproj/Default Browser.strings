@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefoxin asettaminen oletusselaimeksi on äänestys avoimen ja saavutettavan internetin puolesta.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosiain asettaminen oletusselaimeksi on äänestys avoimen ja saavutettavan internetin puolesta.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Oletuksena parempaan internetiin";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Paranna päivittäistä selailua";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox estää keskimäärin yli 3000 seurainta käyttäjää kohden kuukaudessa. Aseta Ecosia oletusselaimeksi yksityisyyden turvaamiseksi.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia estää keskimäärin yli 3000 seurainta käyttäjää kohden kuukaudessa. Aseta Ecosia oletusselaimeksi yksityisyyden turvaamiseksi.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox kattaa yksityisyyden";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia kattaa yksityisyyden";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Vaihda oletusselain";

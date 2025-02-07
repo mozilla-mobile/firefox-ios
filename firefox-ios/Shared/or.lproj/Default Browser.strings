@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefoxକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର କରିବା ଏକ ଖୋଲା, ଉପଲବ୍ଧ ଇଣ୍ଟରନେଟ୍ ପାଇଁ ଏକ ଭୋଟ୍ ଅଟେ।";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosiaକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର କରିବା ଏକ ଖୋଲା, ଉପଲବ୍ଧ ଇଣ୍ଟରନେଟ୍ ପାଇଁ ଏକ ଭୋଟ୍ ଅଟେ।";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "ଏକ ଉତ୍ତମ ଇଣ୍ଟରନେଟ୍ କୁ ଡିଫଲ୍ଟ କରନ୍ତୁ";
@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "ଶିଖନ୍ତୁ କିପରି";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Firefoxରେ ସ୍ୱତଃସ୍ପୃତ ଭାବେ ଖୋଲିବାକୁ ୱେବସାଇଟ୍, ଇମେଲ୍ ଏବଂ ମେସେଜଗୁଡିକରୁ ଲିଙ୍କ୍ ସେଟ୍ କରନ୍ତୁ।";
+"DefaultBrowserCard.Description" = "Ecosiaରେ ସ୍ୱତଃସ୍ପୃତ ଭାବେ ଖୋଲିବାକୁ ୱେବସାଇଟ୍, ଇମେଲ୍ ଏବଂ ମେସେଜଗୁଡିକରୁ ଲିଙ୍କ୍ ସେଟ୍ କରନ୍ତୁ।";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "ବେଗ, ନିରାପତ୍ତା ଏବଂ ଗୋପନୀୟତାକୁ ସ୍ୱୟଂଚାଳିତ କରିବାକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍ ଭାବରେ Ecosia ଚୟନ କରନ୍ତୁ।";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "ଦୈନନ୍ଦିନ ବ୍ରାଉଜିଂକୁ ଉନ୍ନତ କରନ୍ତୁ";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ପ୍ରତି ମାସରେ ହାରାହାରି ୩,୦୦୦ରୁ ଅଧିକ ଟ୍ରାକରକୁ ବ୍ଲକ କରିଥାଏ । ମନର ଗୋପନୀୟତା ଶାନ୍ତି ପାଇଁ ଆମକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର ତିଆରି କରନ୍ତୁ।";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ପ୍ରତି ମାସରେ ହାରାହାରି ୩,୦୦୦ରୁ ଅଧିକ ଟ୍ରାକରକୁ ବ୍ଲକ କରିଥାଏ । ମନର ଗୋପନୀୟତା ଶାନ୍ତି ପାଇଁ ଆମକୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର ତିଆରି କରନ୍ତୁ।";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefoxରେ ଗୋପନୀୟତା ଆଚ୍ଛାଦିତ ଅଛି";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosiaରେ ଗୋପନୀୟତା ଆଚ୍ଛାଦିତ ଅଛି";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍ ବଦଳାନ୍ତୁ";

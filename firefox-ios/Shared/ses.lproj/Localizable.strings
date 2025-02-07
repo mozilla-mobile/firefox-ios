@@ -203,7 +203,7 @@
 "Forward" = "Jine";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox kontu";
+"FxA.FirefoxAccount" = "Ecosia kontu";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Kontu nda jinawey juwal";
@@ -215,7 +215,7 @@
 "FxA.SyncNow" = "Hangandi sohõ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync dobu %@ ga";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync dobu %@ ga";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync dobandi";
@@ -251,7 +251,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Huru ka dii kanjey kaŋ goo war jinay tanawey ga maaŋey.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Taariki";
@@ -437,7 +437,7 @@
 "Open Tabs" = "Kanji feerantey";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ši hin ka moɲoo feeri zama woo šii nda aderesu boryo.";
+"OpenURL.Error.Message" = "Ecosia ši hin ka moɲoo feeri zama woo šii nda aderesu boryo.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ši hin ka moɲoo feeri";
@@ -542,7 +542,7 @@
 "Search.ThirdPartyEngines.OK" = "Ayyo";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Kaŋyan bayrandi sanba hala Mozilla ma hin ka layboo hanse?";
+"Send a crash report so Mozilla can fix the problem?" = "Kaŋyan bayrandi sanba hala Ecosia ma hin ka layboo hanse?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Zaabo sanba";
@@ -578,7 +578,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Naagu ka šintin";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Guna";
@@ -632,7 +632,7 @@
 "Settings.DataManagement.Title" = "Bayhaya juwalyan";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ši war kontoo hangandi koyne, amm'a ši war ceeciyan taariki bayhaya kul tuusu jinaa woo ga.";
+"Settings.Disconnect.Body" = "Ecosia ši war kontoo hangandi koyne, amm'a ši war ceeciyan taariki bayhaya kul tuusu jinaa woo ga.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Hun Sync ga";
@@ -668,7 +668,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync kayandiyaney";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox kontu";
+"Settings.FxA.Title" = "Ecosia kontu";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Hayakul";
@@ -704,7 +704,7 @@
 "Settings.OfferClipboardBar.Status" = "Waati kaŋ Ecosia ga feera";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Waati kaŋ Firefox ga feera";
+"Settings.OfferClipboardBar.StatusV2" = "Waati kaŋ Ecosia ga feera";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Noo dobu berantey se";
@@ -725,7 +725,7 @@
 "Settings.SendUsage.Link" = "Bay ka tonton.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ga durkutu ka alhabar de marga kaŋ ir g'a ka Ecosia tee k'a boryandi borey kul se.";
+"Settings.SendUsage.Message" = "Ecosia ga durkutu ka alhabar de marga kaŋ ir g'a ka Ecosia tee k'a boryandi borey kul se.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Goyyan bayhayey sanba";

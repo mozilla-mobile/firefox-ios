@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "يېڭى شەخسىي بەتكۈچ ئاچ";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox سىزنىڭ زىيارەت تارىخىڭىز ياكى ساقلانمىڭىزنى ئەستە تۇتمايدۇ، ئەمما خەتكۈچلىرىڭىزنى ساقلايدۇ.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia سىزنىڭ زىيارەت تارىخىڭىز ياكى ساقلانمىڭىزنى ئەستە تۇتمايدۇ، ئەمما خەتكۈچلىرىڭىزنى ساقلايدۇ.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "تەپسىلاتى";

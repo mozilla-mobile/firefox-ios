@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Nětko synchronizować";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync je z %@ zwjazany";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync je z %@ zwjazany";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync je zwjazany";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Přizjewće so, zo byšće sej lisćinu rajtarkow ze swojich druhich gratow wobhladał.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historija";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Wotewrjene rajtarki";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox njemóže stronu wočinić, dokelž ma njepłaćiwu adresu.";
+"OpenURL.Error.Message" = "Ecosia njemóže stronu wočinić, dokelž ma njepłaćiwu adresu.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Strona njeda so wočinić";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "To wam zmóžnja, wobraz do Camera Roll składować.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox by rady přistup k wašim fotam měł";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia by rady přistup k wašim fotam měł";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Začinić";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "W porjadku";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Chceće rozprawu wo spadźe słać, zo by Mozilla móhł problem rozrisać?";
+"Send a crash report so Mozilla can fix the problem?" = "Chceće rozprawu wo spadźe słać, zo by Ecosia móhł problem rozrisać?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Komentar pósłać";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Dótkńće so, zo byšće započał";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Pokazać";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Datowe rjadowanje";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox přestanje z wašim kontom synchronizować, ale njezhaša přehladowanske daty na tutym graće.";
+"Settings.Disconnect.Body" = "Ecosia přestanje z wašim kontom synchronizować, ale njezhaša přehladowanske daty na tutym graće.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sync dźělić";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Při wočinjenju %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Hdyž so Firefox wočinja";
+"Settings.OfferClipboardBar.StatusV2" = "Hdyž so Ecosia wočinja";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Poskićić, kopěrowane wotkazy wočinić";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Dalše informacije.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla so prócuje, jenož informacije hromadźić, kotrež trjebamy, zo bychmy Ecosia za kóždeho poskićili a polěpšili.";
+"Settings.SendUsage.Message" = "Ecosia so prócuje, jenož informacije hromadźić, kotrež trjebamy, zo bychmy Ecosia za kóždeho poskićili a polěpšili.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Wužiwanske daty pósłać";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Dalše informacije.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox móže hdys a hdys studije instalować a přewjesć.";
+"Settings.Studies.Toggle.Message" = "Ecosia móže hdys a hdys studije instalować a přewjesć.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studije";

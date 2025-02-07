@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Փակել\nգաղտնի ներդիրները";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox-ի դյուրանցումները ավելացնելք ձեր հիմնական էկրանին:";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ecosia-ի դյուրանցումները ավելացնելք ձեր հիմնական էկրանին:";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Անցնել պատճենված հղմանը";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Արագ գործողություններ";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-ի դյուրանցումներ";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia-ի դյուրանցումներ";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Հավելել դյուրանցումներ բաց ներդիրներին:";

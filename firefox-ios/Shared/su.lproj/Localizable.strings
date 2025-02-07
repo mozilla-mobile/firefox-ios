@@ -905,7 +905,7 @@
 "Open Tabs" = "Buka Tab";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox teu bisa muka ieu kaca lantaran alamatna henteu sohéh.";
+"OpenURL.Error.Message" = "Ecosia teu bisa muka ieu kaca lantaran alamatna henteu sohéh.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Teu Bisa Muka Kaca";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ku ieu anjeun bisa neundeun gambar kana Camera Roll anjeun.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox hayang ngaksés Poto anjeun";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia hayang ngaksés Poto anjeun";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Tutup";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Pindah ka tab";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Mesin pamaluruhan anyar bakal bijil dina wilah pamaluruhan gancang.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OKÉH";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Kirim laporan karuksakan sangkan Mozilla bisa ngoméan masalahna?";
+"Send a crash report so Mozilla can fix the problem?" = "Kirim laporan karuksakan sangkan Ecosia bisa ngoméan masalahna?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Kirim Pangdeudeul";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Manajemén Data";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox bakal eureun nyingkronkeun jeung akun anjeun, ngan moal mupus sakur data langlangan anjeun dina ieu parangkat.";
+"Settings.Disconnect.Body" = "Ecosia bakal eureun nyingkronkeun jeung akun anjeun, ngan moal mupus sakur data langlangan anjeun dina ieu parangkat.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Pegatkeun Singkronan";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Nalika muka %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Nalika Muka Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Nalika Muka Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Tawaran Muka Tutumbu Tironan";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Lenyepan.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla bakal kukumpul data nu diperlukeun hungkul jang nyadiakeun jeung ngoméan Ecosia pikeun balaréa.";
+"Settings.SendUsage.Message" = "Ecosia bakal kukumpul data nu diperlukeun hungkul jang nyadiakeun jeung ngoméan Ecosia pikeun balaréa.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Kirim Data Pamakéan";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Lenyepan.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox bisa masang jeung ngajalankeun studi iraha baé.";
+"Settings.Studies.Toggle.Message" = "Ecosia bisa masang jeung ngajalankeun studi iraha baé.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studi";

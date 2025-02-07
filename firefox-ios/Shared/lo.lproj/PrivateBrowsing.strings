@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "ເປີດໃນແທັບສ່ວນໂຕໃຫມ່";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ຈະບໍ່ບັນທຶກທຸກໆປະຫວັດການໃຊ້ງານ ຫລື ຄຸກກີ້ຂອງທ່ານ, ແຕ່ວ່າຈະບັນທຶກບຸກມາກໃຫມ່ໄວ້.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia ຈະບໍ່ບັນທຶກທຸກໆປະຫວັດການໃຊ້ງານ ຫລື ຄຸກກີ້ຂອງທ່ານ, ແຕ່ວ່າຈະບັນທຶກບຸກມາກໃຫມ່ໄວ້.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "ຮຽນຮູ້ເພີ່ມເຕີມ";

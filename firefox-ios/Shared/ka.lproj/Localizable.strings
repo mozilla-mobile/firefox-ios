@@ -377,7 +377,7 @@
 "Forward" = "მომდევნო";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox-ანგარიში";
+"FxA.FirefoxAccount" = "Ecosia-ანგარიში";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ანგარიშის და მოწყობილობების მართვა";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "დასინქრონება ახლავე";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync დაკავშირებულია %@-სთან";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync დაკავშირებულია %@-სთან";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync დაკავშირებულია";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "მოწყობილობა გამოთიშულია Ecosia-სინქრონიზაციიდან";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox-ლოგო, ფონის შეცვლა.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia-ლოგო, ფონის შეცვლა.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "დახმარება";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "შედით თქვენი სხვა მოწყობილობებიდან ჩანართების სიის სანახავად.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ისტორია";
@@ -902,7 +902,7 @@
 "Open Tabs" = "გახსნილი ჩანართები";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ვერ ახერხებს გვერდის გახსნას, რადგან არასწორი მისამართი აქვს.";
+"OpenURL.Error.Message" = "Ecosia ვერ ახერხებს გვერდის გახსნას, რადგან არასწორი მისამართი აქვს.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "გვერდი ვერ იხსნება";
@@ -914,7 +914,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ამის საშუალებით, შეგეძლებათ სურათის ფოტოგალერეაში შენახვა.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ცდილობს თქვენს სურათებთან წვდომის მიღებას";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia ცდილობს თქვენს სურათებთან წვდომის მიღებას";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "დახურვა";
@@ -1016,7 +1016,7 @@
 "Search.Awesomebar.SwitchToTab" = "ჩანართზე გადასვლა";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox-შეთავაზება";
+"Search.SuggestSectionTitle.v102" = "Ecosia-შეთავაზება";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ახალი საძიებო სისტემა გამოჩნდება, სწრაფი ძიების ველში.";
@@ -1052,7 +1052,7 @@
 "Search.ThirdPartyEngines.OK" = "კარგი";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "მოგვახსენებთ, უეცარი გათიშვის შესახებ, რომ Mozilla-მ შეძლოს ხარვეზის აღმოფხვრა?";
+"Send a crash report so Mozilla can fix the problem?" = "მოგვახსენებთ, უეცარი გათიშვის შესახებ, რომ Ecosia-მ შეძლოს ხარვეზის აღმოფხვრა?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "გამოხმაურება";
@@ -1082,7 +1082,7 @@
 "SendTo.NavBar.Title" = "ჩანართის გაგზავნა";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Firefox-ანგარიშთან, არცერთი სხვა მოწყობილობა არ გაქვთ დაკავშირებული, დასინქრონებისთვის.";
+"SendTo.NoDevicesFound.Message" = "Ecosia-ანგარიშთან, არცერთი სხვა მოწყობილობა არ გაქვთ დაკავშირებული, დასინქრონებისთვის.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "გასაგრძელებლად გთხოვთ, გახსნათ Ecosia, გადახვიდეთ პარამეტრებზე და შეხვიდეთ ანგარიშზე.";
@@ -1109,7 +1109,7 @@
 "SentTab.NoTabArrivingNotification.body" = "შეეხეთ დასაწყებად";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ჩვენება";
@@ -1169,7 +1169,7 @@
 "Settings.DataManagement.Title" = "მონაცემთა მართვა";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox შეწყვეტს ამ ანგარიშის სინქრონიზაციას, მაგრამ ამ მოწყობილობიდან დათვალიერების მონაცემები არ წაიშლება.";
+"Settings.Disconnect.Body" = "Ecosia შეწყვეტს ამ ანგარიშის სინქრონიზაციას, მაგრამ ამ მოწყობილობიდან დათვალიერების მონაცემები არ წაიშლება.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "გამოთიშვა სინქრონიზაციიდან";
@@ -1235,7 +1235,7 @@
 "Settings.FxA.Sync.SectionName" = "სინქრონიზაციის პარამეტრები";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox-ანგარიში";
+"Settings.FxA.Title" = "Ecosia-ანგარიში";
 
 /* General settings section title */
 "Settings.General.SectionName" = "მთავარი";
@@ -1283,25 +1283,25 @@
 "Settings.Home.Option.Wallpaper" = "ფონი";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox-ფონი, ამეთვისტოს მოხატულობა.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia-ფონი, ამეთვისტოს მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox-ფონი, სანაპირო მაღლობების მოხატულობა.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia-ფონი, სანაპირო მაღლობების მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox-ფონი, ლაჟვარდოვანი მოხატულობა.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia-ფონი, ლაჟვარდოვანი მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ნაგულისხმევი სუფთა ფონი.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox-ფონი, რიჟრაჟის მოხატულობა.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia-ფონი, რიჟრაჟის მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "საწყისი გვერდის ფონების წრიულად ცვლა";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox-ფონი, შებინდებული მაღლობების მოხატულობა.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia-ფონი, შებინდებული მაღლობების მოხატულობა.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ჩვეული %@";
@@ -1376,7 +1376,7 @@
 "Settings.NewTab.Option.Custom" = "მორგებული";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox საწყისი";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia საწყისი";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "საწყისი გვერდი";
@@ -1397,10 +1397,10 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "სურათების შეზღუდვა";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox-ის გახსნისას";
+"Settings.OfferClipboardBar.Status" = "Ecosia-ის გახსნისას";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox-ის გახსნისას";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia-ის გახსნისას";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "აღებულ ბმულებზე გადასვლის შემოთავაზება";
@@ -1436,7 +1436,7 @@
 "Settings.SendUsage.Link" = "ვრცლად.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც საჭიროა Ecosia-ის გასაუმჯობესებლად.";
+"Settings.SendUsage.Message" = "Ecosia აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც საჭიროა Ecosia-ის გასაუმჯობესებლად.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "მონაცემთა აღრიცხვა";
@@ -1466,7 +1466,7 @@
 "Settings.Studies.Toggle.Link" = "იხილეთ ვრცლად.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox დროდადრო აყენებს და ატარებს კვლევებს.";
+"Settings.Studies.Toggle.Message" = "Ecosia დროდადრო აყენებს და ატარებს კვლევებს.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "კვლევები";
@@ -1586,10 +1586,10 @@
 "ShareExtension.LoadInBackgroundActionDone.Title" = "იტვირთება Ecosia-ში";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox-ში გახსნა";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia-ში გახსნა";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox-ში მოძიება";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia-ში მოძიება";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "ასლი";
@@ -1736,7 +1736,7 @@
 "UIMenuItem.PasteGo" = "ჩასმა და გადასვლა";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox-ში მოძიება";
+"UIMenuItem.SearchWithFirefox" = "Ecosia-ში მოძიება";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "წასაკითხი";

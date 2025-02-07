@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "יש להיכנס כדי לצפות ברשימת לשוניות משאר המכשירים שלך.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "היסטוריה";
@@ -1052,7 +1052,7 @@
 "Search.ThirdPartyEngines.OK" = "אישור";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "האם לשלוח דיווח קריסה אל Mozilla כדי לסייע בתיקון הבעיה?";
+"Send a crash report so Mozilla can fix the problem?" = "האם לשלוח דיווח קריסה אל Ecosia כדי לסייע בתיקון הבעיה?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "שליחת משוב";
@@ -1109,7 +1109,7 @@
 "SentTab.NoTabArrivingNotification.body" = "יש לגעת כדי להתחיל";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "הצגה";
@@ -1406,7 +1406,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "בעת פתיחת %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "בעת פתיחת Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "בעת פתיחת Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "הצעה לפתיחת קישורים מועתקים";
@@ -1442,7 +1442,7 @@
 "Settings.SendUsage.Link" = "מידע נוסף.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "הגישה של Mozilla היא לאסוף רק מה שנדרש לצורך שיפור Ecosia לטובת הכלל.";
+"Settings.SendUsage.Message" = "הגישה של Ecosia היא לאסוף רק מה שנדרש לצורך שיפור Ecosia לטובת הכלל.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "שליחת נתוני שימוש";

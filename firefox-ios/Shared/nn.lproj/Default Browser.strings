@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Forbetre den daglege surfinga di";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokkerer i gjenomsnitt over 3000 sporarar per brukar kvar månad. Gjer oss til din standardnettlesar for å ta vare på personvernet.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blokkerer i gjenomsnitt over 3000 sporarar per brukar kvar månad. Gjer oss til din standardnettlesar for å ta vare på personvernet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox tek vare på personvernet ditt";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia tek vare på personvernet ditt";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Endre standard nettlesar";

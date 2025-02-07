@@ -311,7 +311,7 @@
 "FxA.SyncNow" = "Sincronizează acum";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s-a conectat la %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s-a conectat la %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sincronizare conectată";
@@ -362,7 +362,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Autentifică-te pentru a vedea o listă de file de pe celelalte dispozitive.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Istoric";
@@ -605,7 +605,7 @@
 "Open Tabs" = "File deschise";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox nu poate deschide pagina deoarece are o adresă nevalidă.";
+"OpenURL.Error.Message" = "Ecosia nu poate deschide pagina deoarece are o adresă nevalidă.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nu se poate deschide pagina";
@@ -617,7 +617,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aceasta permite salvarea imaginii în rolul camerei.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox solicită acces la dosarul tău de Fotografii";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia solicită acces la dosarul tău de Fotografii";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Închide";
@@ -731,7 +731,7 @@
 "Search.ThirdPartyEngines.OK" = "Ok";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Trimiți un raport de defecțiune astfel încât Mozilla să poată remedia problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Trimiți un raport de defecțiune astfel încât Ecosia să poată remedia problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Trimite feedback";
@@ -785,7 +785,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Atinge pentru a începe";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Vezi";
@@ -842,7 +842,7 @@
 "Settings.DataManagement.Title" = "Gestionarea datelor";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox va opri sincronizarea cu contul tău, dar nu va șterge niciuna dintre datele de navigare de pe acest dispozitiv.";
+"Settings.Disconnect.Body" = "Ecosia va opri sincronizarea cu contul tău, dar nu va șterge niciuna dintre datele de navigare de pe acest dispozitiv.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Deconectează Sync";
@@ -950,7 +950,7 @@
 "Settings.OfferClipboardBar.Status" = "Când se deschide Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Când se deschide Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Când se deschide Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Oferă deschiderea linkurilor copiate";
@@ -974,7 +974,7 @@
 "Settings.SendUsage.Link" = "Află mai multe.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți Ecosia pentru toți.";
+"Settings.SendUsage.Message" = "Ecosia se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți Ecosia pentru toți.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Trimite date privind utilizarea";

@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Unaprijedite svakodnevno pretraživanje";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokira preko 3.000 programa za praćenje po korisniku u prosjeku mjesečno. Učinite nas vašim zadanim pretraživačem za sigurnost privatnosti.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blokira preko 3.000 programa za praćenje po korisniku u prosjeku mjesečno. Učinite nas vašim zadanim pretraživačem za sigurnost privatnosti.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ima zaštitu privatnosti";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia ima zaštitu privatnosti";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Promijenite svoj zadani pretraživač";

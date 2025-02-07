@@ -101,7 +101,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Mecanismo de pesquisa padrão";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Saiba mais sobre o Sugestões Firefox";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Saiba mais sobre o Sugestões Ecosia";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Mecanismos de pesquisa alternativos";
@@ -137,13 +137,13 @@
 "Settings.Search.ShowSuggestions.v121" = "Mostrar sugestões de pesquisa";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Barra de endereços - Sugestões Firefox";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Barra de endereços - Sugestões Ecosia";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Saiba mais sobre o Sugestões Firefox";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Saiba mais sobre o Sugestões Ecosia";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "Mostrar sugestões do Firefox em sessões privativas";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Mostrar sugestões do Ecosia em sessões privativas";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Pesquisar no histórico de navegação";

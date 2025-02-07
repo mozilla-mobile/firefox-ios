@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Жекелік беттерді жабу";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox жарлықтарын үй экранына қосыңыз";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ecosia жарлықтарын үй экранына қосыңыз";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Көшірілген сілтемеге өту";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Ашық беттер жоқ.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox-ты ашу";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia-ты ашу";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Жеке іздеу";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Firefox жарлығын үй экранына қосыңыз. Виджетті қосқаннан кейін, оны түзету үшін тиіп, басулы ұстаңыз және басқа жарлықты таңдаңыз.";
+"TodayWidget.QuickActionGalleryDescription" = "Ecosia жарлығын үй экранына қосыңыз. Виджетті қосқаннан кейін, оны түзету үшін тиіп, басулы ұстаңыз және басқа жарлықты таңдаңыз.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Жылдам әрекеттер";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox жарлықтары";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia жарлықтары";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Ашық беттерге жарлықтарды қосу.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Жылдам қарау";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox ішінен іздеу";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia ішінен іздеу";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Жекелік бетте іздеу";

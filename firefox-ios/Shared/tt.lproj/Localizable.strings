@@ -353,7 +353,7 @@
 "Forward" = "Алга";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Хисабы";
+"FxA.FirefoxAccount" = "Ecosia Хисабы";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Хисап һәм җиһазлар белән идарә итү";
@@ -377,7 +377,7 @@
 "FxA.SyncNow" = "Хәзер синхронлау";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Синхронлау яңа җиһазга тоташтырылды: %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Синхронлау яңа җиһазга тоташтырылды: %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Синхронлау тоташтырылды";
@@ -398,7 +398,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Җиһаз Ecosia синхронлау хезмәтеннән өзелде";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox логотибы, фон рәсемне үзгәртү.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia логотибы, фон рәсемне үзгәртү.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Ярдәм";
@@ -431,7 +431,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Башка җиһазларыгыздагы таблар исемлеген карау өчен керегез.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Тарих";
@@ -614,7 +614,7 @@
 "Logins" = "Логиннар";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Firefox өчен автотутыру функциясен куллану өчен, җиһаз серсүзе кабынган булырга тиеш.";
+"Logins.PasscodeRequirement.Warning" = "Ecosia өчен автотутыру функциясен куллану өчен, җиһаз серсүзе кабынган булырга тиеш.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Серсүзләрегезне үзегез белән алыгыз";
@@ -812,7 +812,7 @@
 "Open Tabs" = "Ачык таблар";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox бу битне ача алмый, чөнки аның адресы яраксыз.";
+"OpenURL.Error.Message" = "Ecosia бу битне ача алмый, чөнки аның адресы яраксыз.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Битне ачып булмый";
@@ -824,7 +824,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Бу Сезгә рәсемне фото-галереягә сакларга мөмкинлек бирә.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox сурәтләрегезгә ирешергә тели";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia сурәтләрегезгә ирешергә тели";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Ябу";
@@ -914,7 +914,7 @@
 "Search or enter address" = "Эзләү яки адрес язу";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox тәкъдиме";
+"Search.SuggestSectionTitle.v102" = "Ecosia тәкъдиме";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Яңа эзләү системасы тиз эзләү юлында күренәчәк.";
@@ -950,7 +950,7 @@
 "Search.ThirdPartyEngines.OK" = "ОК";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozilla проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosia проблеманы хәл итә алсын өчен, ватылу турында хәбәр җибәрелсенме?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Кире элемтә хәбәрен җибәрү";
@@ -1007,7 +1007,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Башлау өчен басыгыз";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Карап чыгу";
@@ -1064,7 +1064,7 @@
 "Settings.DataManagement.Title" = "Мәгълүмат белән идарә итү";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox хисабыгыз белән синхронлауны туктатачак, ләкин бу җиһаздагы гизү мәгълүматларының берсен дә бетермәячәк.";
+"Settings.Disconnect.Body" = "Ecosia хисабыгыз белән синхронлауны туктатачак, ләкин бу җиһаздагы гизү мәгълүматларының берсен дә бетермәячәк.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Синхронлауны өзү";
@@ -1130,7 +1130,7 @@
 "Settings.FxA.Sync.SectionName" = "Синхронлау көйләүләре";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Хисабы";
+"Settings.FxA.Title" = "Ecosia Хисабы";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Гомуми";
@@ -1139,7 +1139,7 @@
 "Settings.Home.Current.Description.v101" = "Баш бит итеп нәрсә күрсәтелүен сайлагыз.";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Firefox-ның баш битенә нәрсәләр керүен сайлагыз.";
+"Settings.Home.Option.Description.v101" = "Ecosia-ның баш битенә нәрсәләр керүен сайлагыз.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Кире кайту";
@@ -1163,7 +1163,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "Баш бит";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Firefox-ка кире кайтканда нәрсә күрәчәгегезне сайлагыз.";
+"Settings.Home.Option.StartAtHome.Description" = "Ecosia-ка кире кайтканда нәрсә күрәчәгегезне сайлагыз.";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "Соңгы таб";
@@ -1178,25 +1178,25 @@
 "Settings.Home.Option.Wallpaper" = "Фон рәсемe";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox фон рәсеме, аметист бизәге.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia фон рәсеме, аметист бизәге.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox фон рәсеме, пляж калкулыклары белән бизәк.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia фон рәсеме, пляж калкулыклары белән бизәк.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox фон рәсеме, зәңгәр күк бизәге.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia фон рәсеме, зәңгәр күк бизәге.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Стандарт ачык фон рәсеме.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox фон рәсеме, таң ату бизәге.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia фон рәсеме, таң ату бизәге.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Баш битнең фон рәсем циклын үзгәртү төймәсе";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox фон рәсеме, эңгер-меңгер вакытында калкулыклар бизәге.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia фон рәсеме, эңгер-меңгер вакытында калкулыклар бизәге.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Классик %@";
@@ -1217,7 +1217,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Чикләнгән тираж";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox баш бит логотибына басып фон рәсемен үзгәртү";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ecosia баш бит логотибына басып фон рәсемен үзгәртү";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "Фон рәсеме";
@@ -1271,7 +1271,7 @@
 "Settings.NewTab.Option.Custom" = "Үзгә";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox баш бит";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia баш бит";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Баш бит";
@@ -1292,10 +1292,10 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Рәсемнәрне блоклау";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox ачылганда";
+"Settings.OfferClipboardBar.Status" = "Ecosia ачылганда";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox ачылганда";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia ачылганда";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Күчереп алынган сылтамаларны ачарга тәкъдим итү";
@@ -1331,7 +1331,7 @@
 "Settings.SendUsage.Link" = "Күбрәк белү.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla, Ecosia'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
+"Settings.SendUsage.Message" = "Ecosia, Ecosia'ны һәркемгә дә тәкъдим итү һәм яхшырту өчен кирәкле мәгълүматларны гына җыярга тырыша.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Куллану мәгълүматларын җибәрү";
@@ -1352,13 +1352,13 @@
 "Settings.Siri.OpenTabShortcut" = "Яңа табны ачу";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Firefox-ны Siri аша тиз ачу өчен Siri ярлыкларын кулланыгыз";
+"Settings.Siri.SectionDescription" = "Ecosia-ны Siri аша тиз ачу өчен Siri ярлыкларын кулланыгыз";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri ярлыклары";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
+"Settings.Studies.Toggle.Message" = "Ecosia ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
 "Settings.Sync.ButtonDescription.v103" = "Табларны, кыстыргычларны, серсүзләрне һәм башкаларны синхронлау өчен сайтка керегез.";
@@ -1472,13 +1472,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Фонда йөкләү";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox-та йөкләнә";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia-та йөкләнә";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox-та ачу";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia-та ачу";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox-та эзләү";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia-та эзләү";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "Күчереп алу";
@@ -1610,7 +1610,7 @@
 "UIMenuItem.PasteGo" = "Ябыштыру һәм күчү";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox белән эзләү";
+"UIMenuItem.SearchWithFirefox" = "Ecosia белән эзләү";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "укылмаган";

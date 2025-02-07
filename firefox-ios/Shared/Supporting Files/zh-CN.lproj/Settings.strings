@@ -101,7 +101,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "默认搜索引擎";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "详细了解 Firefox 建议";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "详细了解 Ecosia 建议";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "备用搜索引擎";
@@ -137,13 +137,13 @@
 "Settings.Search.ShowSuggestions.v121" = "显示搜索建议";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "地址栏 - Firefox 建议";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "地址栏 - Ecosia 建议";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "详细了解 Firefox 建议";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "详细了解 Ecosia 建议";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "在隐私浏览中显示来自 Firefox 建议的结果";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "在隐私浏览中显示来自 Ecosia 建议的结果";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "搜索浏览历史";

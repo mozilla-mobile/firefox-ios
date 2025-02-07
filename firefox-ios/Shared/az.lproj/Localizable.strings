@@ -290,7 +290,7 @@
 "Forward" = "İrəli";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Hesabı";
+"FxA.FirefoxAccount" = "Ecosia Hesabı";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Hesabı və Cihazları idarə et";
@@ -302,7 +302,7 @@
 "FxA.SyncNow" = "İndi Sinxronlaşdır";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync %@ cihazına qoşuldu";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync %@ cihazına qoşuldu";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync Qoşuldu";
@@ -353,7 +353,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Digər cihazlarınızdakı vərəqlərin siyahısını görmək üçün daxil olun.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Tarixçə";
@@ -599,7 +599,7 @@
 "Open Tabs" = "Açıq Vərəqlər";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox səhifəni aça bilmir, çünki ünvanı səhvdir.";
+"OpenURL.Error.Message" = "Ecosia səhifəni aça bilmir, çünki ünvanı səhvdir.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Səhifə Açıla Bilmir";
@@ -611,7 +611,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Bu sizə şəkli Camera Roll-da saxlamağa imkan verir.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox Şəkillərinizə keçid əldə etmək istəyir";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia Şəkillərinizə keçid əldə etmək istəyir";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Qapat";
@@ -722,7 +722,7 @@
 "Search.ThirdPartyEngines.OK" = "Tamam";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozillanın problemi həll etməsi üçün çökmə hesabatı göndərilsin?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosianın problemi həll etməsi üçün çökmə hesabatı göndərilsin?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Əks-əlaqə Göndər";
@@ -755,7 +755,7 @@
 "SendTo.NotSignedIn.Message" = "Lütfən, davam etmək üçün Ecosia-u açın, Tənzimləmələrə gedin və daxil olun.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Firefox Hesabınıza daxil olmamısınız.";
+"SendTo.NotSignedIn.Title" = "Ecosia Hesabınıza daxil olmamısınız.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Göndər";
@@ -776,7 +776,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Başlamaq üçün basın";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Gör";
@@ -833,7 +833,7 @@
 "Settings.DataManagement.Title" = "Məlumat İdarəsi";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox sizin hesabla sinxronlaşdırmanı dayandıracaq, amma bu cihazınızdakı heç bir səyahət məlumatını silməyəcək.";
+"Settings.Disconnect.Body" = "Ecosia sizin hesabla sinxronlaşdırmanı dayandıracaq, amma bu cihazınızdakı heç bir səyahət məlumatını silməyəcək.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Syncdən ayrıl";
@@ -896,7 +896,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync Tənzimləmələri";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Hesabı";
+"Settings.FxA.Title" = "Ecosia Hesabı";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Ümumi";
@@ -920,7 +920,7 @@
 "Settings.NewTab.Option.BlankPage" = "Boş Səhifə";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Ev";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia Ev";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Ana Səhifə";
@@ -938,10 +938,10 @@
 "Settings.NewTab.TopSectionNameFooter" = "Yeni vərəq açdığınızda nəyin yüklənəcəyini seçin";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox səyyahını açarkən";
+"Settings.OfferClipboardBar.Status" = "Ecosia səyyahını açarkən";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox səyyahını açarkən";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia səyyahını açarkən";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Köçürülən keçidləri açmağı təklif et";
@@ -965,7 +965,7 @@
 "Settings.SendUsage.Link" = "Ətraflı öyrən.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ancaq Ecosia-u hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
+"Settings.SendUsage.Message" = "Ecosia ancaq Ecosia-u hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "İstifadə məlumatlarını göndər";
@@ -977,7 +977,7 @@
 "Settings.Siri.OpenTabShortcut" = "Yeni Vərəq Aç";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Firefox səyyahını Siri ilə tez açmaq üçün Siri qısayollarını istifadə edin";
+"Settings.Siri.SectionDescription" = "Ecosia səyyahını Siri ilə tez açmaq üçün Siri qısayollarını istifadə edin";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri Qısayolları";
@@ -1052,13 +1052,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Arxada yüklə";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox-da yüklənir";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia-da yüklənir";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox-da Aç";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia-da Aç";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox-da Axtar";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia-da Axtar";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Axtarış təkliflərini göstər";
@@ -1175,7 +1175,7 @@
 "UIMenuItem.PasteGo" = "Yapışdır və get";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox ilə Axtar";
+"UIMenuItem.SearchWithFirefox" = "Ecosia ilə Axtar";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "oxunmamış";

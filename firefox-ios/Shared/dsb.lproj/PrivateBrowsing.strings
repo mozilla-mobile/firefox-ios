@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "W nowem priwatnem rejtariku wócyniś";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox njebuźo se wašu historiju abo cookieje spomnjeś, ale nowe cytańske znamjenja budu se składowaś.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia njebuźo se wašu historiju abo cookieje spomnjeś, ale nowe cytańske znamjenja budu se składowaś.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Dalšne informacije";

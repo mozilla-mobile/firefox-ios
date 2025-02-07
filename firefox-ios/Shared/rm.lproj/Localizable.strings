@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Sincronisar ussa";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync è connectà cun %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync è connectà cun %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync è connectà";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "T'annunzia per vesair ina glista dals tabs da tes auters apparats.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Cronologia";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Tabs averts";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox na po betg avrir la pagina perquai ch'ella ha ina adressa nunvalida.";
+"OpenURL.Error.Message" = "Ecosia na po betg avrir la pagina perquai ch'ella ha ina adressa nunvalida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impussibel d'avrir la pagina";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Quai ta lubescha da memorisar il maletg en «Camera Roll» (Aufnahmen).";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox dumonda l'access a tias fotografias";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia dumonda l'access a tias fotografias";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Serrar";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Midar al tab";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox propona";
+"Search.SuggestSectionTitle.v102" = "Ecosia propona";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "La nova maschina da tschertgar cumpara en la trav per la tschertga svelta.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Trametter in rapport da collaps per che Mozilla possia schliar il problem?";
+"Send a crash report so Mozilla can fix the problem?" = "Trametter in rapport da collaps per che Ecosia possia schliar il problem?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Trametter in resun";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Smatgar per cumenzar";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Mussar";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Administraziun da datas";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox chala da sincronisar tes conto, ma las datas da navigaziun restan sin quest apparat.";
+"Settings.Disconnect.Body" = "Ecosia chala da sincronisar tes conto, ma las datas da navigaziun restan sin quest apparat.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Deconnectar Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Cun avrir %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Cun avrir Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Cun avrir Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Proponer d'avrir las colliaziuns copiadas";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Ulteriuras infurmaziuns.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla vul mo rimnar las datas necessarias per porscher e meglierar Ecosia per in e scadin.";
+"Settings.SendUsage.Message" = "Ecosia vul mo rimnar las datas necessarias per porscher e meglierar Ecosia per in e scadin.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Trametter datas davart l'utilisaziun";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Ulteriuras infurmaziuns.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox po installar e lantschar studis da temp en temp.";
+"Settings.Studies.Toggle.Message" = "Ecosia po installar e lantschar studis da temp en temp.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studis";

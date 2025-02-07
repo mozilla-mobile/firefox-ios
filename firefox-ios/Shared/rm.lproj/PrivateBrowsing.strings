@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Avrir en in nov tab privat";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox na memorisescha betg la cronologia u cookies, ma novs segnapaginas vegnan memorisads.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia na memorisescha betg la cronologia u cookies, ma novs segnapaginas vegnan memorisads.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Ulteriuras infurmaziuns";

@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prihlásením sa zobrazíte zoznam kariet z vašich ostatných zariadení.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "História";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Toto vám umožní uložiť obrázok v albume Fotoaparát.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox žiada o prístup k vašim fotkám";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia žiada o prístup k vašim fotkám";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Zavrieť";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Odoslať hlásenie o zlyhaní, aby mohla Mozilla opraviť problém?";
+"Send a crash report so Mozilla can fix the problem?" = "Odoslať hlásenie o zlyhaní, aby mohla Ecosia opraviť problém?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Odoslať spätnú väzbu";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Začnite ťuknutím";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Zobraziť";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Správa údajov";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox sa už viac nebude synchronizovať s vašim účtom, ale neodstráni z toho zariadenia žiadne z údajov prehliadania.";
+"Settings.Disconnect.Body" = "Ecosia sa už viac nebude synchronizovať s vašim účtom, ale neodstráni z toho zariadenia žiadne z údajov prehliadania.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Odpojiť Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Pri otváraní aplikácie %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Pri otvorení Firefoxu";
+"Settings.OfferClipboardBar.StatusV2" = "Pri otvorení Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ponúknuť otvorenie skopírovaných odkazov";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Ďalšie informácie.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie Ecosiau pre všetkých.";
+"Settings.SendUsage.Message" = "Ecosia sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie Ecosiau pre všetkých.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Odosielať údaje o používaní";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Ďalšie informácie";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox môže občas inštalovať a spúšťať štúdie.";
+"Settings.Studies.Toggle.Message" = "Ecosia môže občas inštalovať a spúšťať štúdie.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Štúdie";

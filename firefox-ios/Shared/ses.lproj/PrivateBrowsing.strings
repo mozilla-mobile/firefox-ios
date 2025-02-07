@@ -2,7 +2,7 @@
 "Close Private Tabs" = "Sutura kanjey daabu";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ši honga taariki wala aleewa kul, amm'a ga doo-šilbay taagey gaabu.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia ši honga taariki wala aleewa kul, amm'a ga doo-šilbay taagey gaabu.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Bay ka tonton";

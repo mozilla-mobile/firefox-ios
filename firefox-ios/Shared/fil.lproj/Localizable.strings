@@ -350,7 +350,7 @@
 "Forward" = "Sulong";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Ecosia Account";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Pamahalaan ang Account";
@@ -422,7 +422,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Mag-sign in upang tingnan ang isang listahan ng mga tab mula sa iyong iba pang mga device.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Kasaysayan";
@@ -947,7 +947,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Mozilla upang ayusin ang problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Magpadala ng crash report sa Ecosia upang ayusin ang problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Ipadala ang Feedback";
@@ -1001,7 +1001,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tapikin upang magsimula";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Tingnan";
@@ -1121,7 +1121,7 @@
 "Settings.FxA.Sync.SectionName" = "Mga sync setting";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Ecosia Account";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Pangkalahatan";
@@ -1145,7 +1145,7 @@
 "Settings.NewTab.Option.BlankPage" = "Magpakita ng Blank na Pahina";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia Home";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Ipakita ang Iyong Homepage";
@@ -1166,7 +1166,7 @@
 "Settings.OfferClipboardBar.Status" = "Kapag Binubuksan ang Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Kapag Binubuksan ang Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Kapag Binubuksan ang Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Mag-alok sa Buksan ang Mga Nakopya";
@@ -1190,7 +1190,7 @@
 "Settings.SendUsage.Link" = "Matuto ng higit pa.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Nagsusumikap ang Mozilla na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Ecosia para sa lahat.";
+"Settings.SendUsage.Message" = "Nagsusumikap ang Ecosia na kolektahin lamang kung ano ang kailangan naming ibigay at pagbutihin ang Ecosia para sa lahat.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ipadala ang Data ng Paggamit";

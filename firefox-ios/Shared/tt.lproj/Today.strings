@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Ачык таблар юк.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox-ны ачу";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia-ны ачу";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Хосусый эзләү";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Тиз гамәлләр";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ярлыклары";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia ярлыклары";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Ачык табларыгызга ярлыклар өстәгез.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Тиз карау";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox-та\nэзләү";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia-та\nэзләү";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Хосусый\nтабта эзләү";

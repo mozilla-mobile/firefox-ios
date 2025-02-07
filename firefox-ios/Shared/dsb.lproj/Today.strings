@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Žedne wócynjone rejtariki.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox wócyniś";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia wócyniś";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Priwatne pytanje";

@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Ахатә абларҭақәа арктәуп";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Ахатә екран ахь Firefox аҿацәқәа ацҵа.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ахатә екран ахь Ecosia аҿацәқәа ацҵа.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Иқәҭыху азхьарԥш шәацныҟәа";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Аҭаӡҩырақәа аартым.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Иаарттәуп Firefox";
+"TodayWidget.OpenFirefoxLabel" = "Иаарттәуп Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Хаҭалатәи аԥшаара";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Ахатә екран ахь Firefox аҿацә ацҵа. Авиджет ацҵара ашьҭахь, уи аредакциа азутәуп, насгьы даҽа ҿацәк алхтәуп.";
+"TodayWidget.QuickActionGalleryDescription" = "Ахатә екран ахь Ecosia аҿацә ацҵа. Авиджет ацҵара ашьҭахь, уи аредакциа азутәуп, насгьы даҽа ҿацәк алхтәуп.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Ирццаку аусқәа";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox аҿацәқәа";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia аҿацәқәа";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Аҵаҩыра аартразы аҿацәқәа ацҵа.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Ирласны ахәаԥшра";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox аҟны аԥшаара";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia аҟны аԥшаара";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Ахатә абларҭаҿы аԥшаара";

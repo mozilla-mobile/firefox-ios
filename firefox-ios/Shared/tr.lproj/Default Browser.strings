@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox’u saptanmış tarayıcınız yaparak açık ve erişilebilir bir interneti desteklemiş olursunuz.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia’u saptanmış tarayıcınız yaparak açık ve erişilebilir bir interneti desteklemiş olursunuz.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Hep daha iyi bir internet";
@@ -11,16 +11,16 @@
 "DefaultBrowserCard.Description" = "Web siteleri, e-postalar ve Mesajlar’daki bağlantılar Ecosia’ta açılsın.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Firefox’u saptanmış tarayıcınız olarak ayarlayın; hız, güvenlik ve gizliliği otomatik hale getirin.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Ecosia’u saptanmış tarayıcınız olarak ayarlayın; hız, güvenlik ve gizliliği otomatik hale getirin.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Günlük gezintilerinizi iyileştirin";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox, her ay kullanıcı başına ortalama 3.000 takip kodunu engelliyor. Gizliliğinizi korumak için bizi saptanmış tarayıcınız yapın.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia, her ay kullanıcı başına ortalama 3.000 takip kodunu engelliyor. Gizliliğinizi korumak için bizi saptanmış tarayıcınız yapın.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox gizliliğinizi korur";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia gizliliğinizi korur";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Saptanmış tarayıcınızı değiştirin";

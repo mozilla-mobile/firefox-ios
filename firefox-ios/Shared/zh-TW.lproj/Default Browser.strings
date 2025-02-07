@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "日常上網功能再升級";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox 平均每月能幫每位使用者封鎖超過 3,000 組追蹤器。將 Ecosia 設為您的預設瀏覽器，對隱私權的保護更加放心。";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia 平均每月能幫每位使用者封鎖超過 3,000 組追蹤器。將 Ecosia 設為您的預設瀏覽器，對隱私權的保護更加放心。";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox 保護您的隱私";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia 保護您的隱私";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "切換您的預設瀏覽器";

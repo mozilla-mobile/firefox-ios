@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Accedi per visualizzare l’elenco delle schede aperte sugli altri dispositivi connessi.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Cronologia";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Permette di salvare le immagini nel Rullino.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vorrebbe accedere alle foto del dispositivo";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia vorrebbe accedere alle foto del dispositivo";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Chiudi";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Passa alla scheda";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Il nuovo motore di ricerca verrà visualizzato nella barra di ricerca rapida.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Inviare una segnalazione del blocco a Mozilla in modo che possano risolvere il problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Inviare una segnalazione del blocco a Ecosia in modo che possano risolvere il problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Invia feedback";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tocca per iniziare";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Visualizza";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "All’apertura di %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "All’apertura di Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "All’apertura di Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Chiedi se aprire i link copiati";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Ulteriori informazioni.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla si impegna a raccogliere solo i dati necessari a fornire e migliorare Ecosia per tutti gli utenti.";
+"Settings.SendUsage.Message" = "Ecosia si impegna a raccogliere solo i dati necessari a fornire e migliorare Ecosia per tutti gli utenti.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Invia dati sull’uso";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Ulteriori informazioni.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox può installare e condurre degli studi di tanto in tanto.";
+"Settings.Studies.Toggle.Message" = "Ecosia può installare e condurre degli studi di tanto in tanto.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studi";

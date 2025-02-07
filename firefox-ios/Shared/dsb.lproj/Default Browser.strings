@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Wšedne pśeglědowanje – hyšći lěpše";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox w pśerězku wěcej ako 3000 pśeslědowakow na wužywarja kuždy mjasec blokěrujo. Cyńśo jen k swójomu standardnemu wobglědowakoju, aby w pokoju pśeglědował.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia w pśerězku wěcej ako 3000 pśeslědowakow na wužywarja kuždy mjasec blokěrujo. Cyńśo jen k swójomu standardnemu wobglědowakoju, aby w pokoju pśeglědował.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox wašu priwatnosć šćita";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia wašu priwatnosć šćita";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Standardny wobglědowak změniś";

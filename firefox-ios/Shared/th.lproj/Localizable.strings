@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "ซิงค์ตอนนี้";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync ได้เชื่อมต่อกับ %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync ได้เชื่อมต่อกับ %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "เชื่อมต่อ Sync แล้ว";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ลงชื่อเข้าเพื่อดูรายการแท็บจากอุปกรณ์อื่น ๆ ของคุณ";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ประวัติ";
@@ -905,7 +905,7 @@
 "Open Tabs" = "แท็บที่เปิดอยู่";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ไม่สามารถเปิดหน้าได้เนื่องจากที่อยู่ไม่ถูกต้อง";
+"OpenURL.Error.Message" = "Ecosia ไม่สามารถเปิดหน้าได้เนื่องจากที่อยู่ไม่ถูกต้อง";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "ไม่สามารถเปิดหน้า";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "สิ่งนี้อนุญาตให้คุณสามารถบันทึกภาพไปยัง ม้วนฟิล์ม ของคุณ";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ต้องการเข้าถึงรูปถ่ายของคุณ";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia ต้องการเข้าถึงรูปถ่ายของคุณ";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ปิด";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "สลับไปยังแท็บ";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "เครื่องมือค้นหาใหม่จะปรากฏในแถบค้นหาด่วน";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "ตกลง";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "ส่งรายงานข้อขัดข้องเพื่อให้ Mozilla สามารถแก้ไขปัญหา?";
+"Send a crash report so Mozilla can fix the problem?" = "ส่งรายงานข้อขัดข้องเพื่อให้ Ecosia สามารถแก้ไขปัญหา?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "ส่งข้อคิดเห็น";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "แตะเพื่อเริ่มต้น";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ดู";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "การจัดการข้อมูล";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox จะหยุดการซิงค์กับบัญชีของคุณ แต่จะไม่ลบข้อมูลการเรียกดูใด ๆ ของคุณในอุปกรณ์นี้";
+"Settings.Disconnect.Body" = "Ecosia จะหยุดการซิงค์กับบัญชีของคุณ แต่จะไม่ลบข้อมูลการเรียกดูใด ๆ ของคุณในอุปกรณ์นี้";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ตัดการเชื่อมต่อ Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "เมื่อเปิด %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "เมื่อเปิด Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "เมื่อเปิด Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "เสนอให้เปิดลิงก์ที่คัดลอก";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "เรียนรู้เพิ่มเติม";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง Ecosia สำหรับทุกคน";
+"Settings.SendUsage.Message" = "Ecosia มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง Ecosia สำหรับทุกคน";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ส่งข้อมูลการใช้งาน";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "เรียนรู้เพิ่มเติม";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox อาจติดตั้งและเรียกใช้การศึกษาเป็นครั้งคราว";
+"Settings.Studies.Toggle.Message" = "Ecosia อาจติดตั้งและเรียกใช้การศึกษาเป็นครั้งคราว";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "การศึกษา";

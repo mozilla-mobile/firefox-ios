@@ -213,25 +213,16 @@ tx pull -fs
 tx push -s
 ```
 
-### Update Mozilla Strings (only needed after upgrade)
+### Ecosify Mozilla Strings (only needed after upgrade)
 
 We do a rebrand of the Strings from Mozilla. Usually this step is only needed after an upgrade as we keep our changes in version control (as of opposite to Mozilla).
-First we need to import all the strings via the scripts:
 
-```bash
-# clone the repo
-git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
-# run the script in project-dir
-./ios-l10n-scripts/import-locales-firefox.sh --release
-```
-
-After import we rebrand (aka "ecosify")
+Firefox already imports and versions their strings, which means they will have been added to our codebase once we rebase.
+After that, you can use the existing python script to update all strings on the folder containing the project file.
 
 ```bash
 # brand all the files as they contain the term 'Firefox' a lot
-python3 ecosify-strings.py Client
-python3 ecosify-strings.py Extensions
-python3 ecosify-strings.py Shared
+python3 ecosify-strings.py firefox-ios
 ```
 
 ## :rocket: Release

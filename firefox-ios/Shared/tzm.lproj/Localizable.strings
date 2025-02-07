@@ -158,7 +158,7 @@
 "FxA.RemoveAccountAlertTitle" = "ⵙⵉⵜⵜⵢ ⴰⵎⵉⴹⴰⵏ";
 
 /* FxA sign in view qr code instructions */
-"fxa.signin.qr-link-instruction" = "ⴳ ⵓⵎⵙⵙⵓⴷⵙ ⵏⵏⵓⵏ, ⵕⵥⵎⴰⵜ ⴼⴰⵢⵔⴼⵓⴽⵙ, ⵜⴷⴷⵓⵎ ⵖⵔ firefox.com/pair";
+"fxa.signin.qr-link-instruction" = "ⴳ ⵓⵎⵙⵙⵓⴷⵙ ⵏⵏⵓⵏ, ⵕⵥⵎⴰⵜ ⴼⴰⵢⵔⴼⵓⴽⵙ, ⵜⴷⴷⵓⵎ ⵖⵔ Ecosia.com/pair";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ⵜⵉⵡⵉⵙⵉ";

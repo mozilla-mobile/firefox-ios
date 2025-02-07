@@ -377,7 +377,7 @@
 "Forward" = "下一頁";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox 帳號";
+"FxA.FirefoxAccount" = "Ecosia 帳號";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "管理帳號與裝置";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "立刻同步";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox 同步已連結到 %@";
+"FxAPush_DeviceConnected_body" = "Ecosia 同步已連結到 %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "已連線至 Sync";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "有一台裝置已與 Ecosia 取消連線";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox 圖示，點擊此圖示變更背景圖。";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia 圖示，點擊此圖示變更背景圖。";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "說明";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "登入以檢視您其他裝置中的分頁清單。";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "瀏覽紀錄";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "讓您可儲存照片到「照片串流」。";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox 想要存取您的照片";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia 想要存取您的照片";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "關閉";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "切換至該分頁";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox 建議";
+"Search.SuggestSectionTitle.v102" = "Ecosia 建議";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "新的搜尋引擎將顯示於快速搜尋列。";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "確定";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "要傳送錯誤報告，讓 Mozilla 改善這些問題嗎？";
+"Send a crash report so Mozilla can fix the problem?" = "要傳送錯誤報告，讓 Ecosia 改善這些問題嗎？";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "傳送意見回饋";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "點擊以開始";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "檢視";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "資料管理";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox 將會停止與您帳號間的同步，但不會刪除此裝置上的任何瀏覽資料。";
+"Settings.Disconnect.Body" = "Ecosia 將會停止與您帳號間的同步，但不會刪除此裝置上的任何瀏覽資料。";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "取消連線至 Sync";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "同步設定";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox 帳號";
+"Settings.FxA.Title" = "Ecosia 帳號";
 
 /* General settings section title */
 "Settings.General.SectionName" = "一般";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "自訂";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox 首頁";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia 首頁";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "首頁";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "開啟 %@ 時";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "開啟 Firefox 時";
+"Settings.OfferClipboardBar.StatusV2" = "開啟 Ecosia 時";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "詢問是否直接開啟複製的鏈結";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "了解更多。";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla 致力於只收集用來為眾人改善 Ecosia 所需的必要資料。";
+"Settings.SendUsage.Message" = "Ecosia 致力於只收集用來為眾人改善 Ecosia 所需的必要資料。";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "傳送使用資料";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "了解更多。";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox 會不定時安裝並執行使用者研究。";
+"Settings.Studies.Toggle.Message" = "Ecosia 會不定時安裝並執行使用者研究。";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "使用者研究";

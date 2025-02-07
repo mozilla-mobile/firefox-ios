@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Meglierescha la navigaziun quotidiana";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blochescha en media passa 3000 fastizaders per utilisader. Definescha Ecosia sco navigatur da standard e surlascha la protecziun da tias datas al navigatur.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blochescha en media passa 3000 fastizaders per utilisader. Definescha Ecosia sco navigatur da standard e surlascha la protecziun da tias datas al navigatur.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ha integrà la protecziun da datas";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia ha integrà la protecziun da datas";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Mida tes navigatur da standard";

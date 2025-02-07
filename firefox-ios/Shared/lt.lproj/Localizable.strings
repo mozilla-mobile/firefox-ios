@@ -899,7 +899,7 @@
 "Search.ThirdPartyEngines.OK" = "Gerai";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Siųsti strigties pranešimą, kad „Mozilla“ galėtų išspręsti problemą?";
+"Send a crash report so Mozilla can fix the problem?" = "Siųsti strigties pranešimą, kad „Ecosia“ galėtų išspręsti problemą?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Siųsti atsiliepimą";
@@ -953,7 +953,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Bakstelėkite pradėjimui";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Rodyti";
@@ -1169,7 +1169,7 @@
 "Settings.OfferClipboardBar.Status" = "Kai atveriama „Ecosia“";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Kai atveriama „Firefox“";
+"Settings.OfferClipboardBar.StatusV2" = "Kai atveriama „Ecosia“";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Siūlyti atverti nukopijuotus saitus";
@@ -1193,7 +1193,7 @@
 "Settings.SendUsage.Link" = "Sužinoti daugiau.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "„Mozilla“ siekia rinkti tik tai, ko reikia norint pagerinti „Ecosia“ visiems.";
+"Settings.SendUsage.Message" = "„Ecosia“ siekia rinkti tik tai, ko reikia norint pagerinti „Ecosia“ visiems.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Siųsti naudojimo duomenis";

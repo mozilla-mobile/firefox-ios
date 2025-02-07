@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Tingkatkan Penjelajahan Sehari-hari";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox rata-rata memblokir 3.000+ pelacak per pengguna setiap bulannya. Jadikan kami peramban baku Anda untuk privasi dan ketenangan pikiran.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia rata-rata memblokir 3.000+ pelacak per pengguna setiap bulannya. Jadikan kami peramban baku Anda untuk privasi dan ketenangan pikiran.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox Siap Lindungi Privasi";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia Siap Lindungi Privasi";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Alihkan Peramban Baku Anda";

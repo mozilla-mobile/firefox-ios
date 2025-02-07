@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "नवीन खाजगी टॅब मध्ये उघडा";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox आपला इतिहास किंवा कुकीज लक्षात ठेवणार नाही, पण नवीन वाचनखुणा जतन केल्या जातील.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia आपला इतिहास किंवा कुकीज लक्षात ठेवणार नाही, पण नवीन वाचनखुणा जतन केल्या जातील.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "अधिक जाणा";

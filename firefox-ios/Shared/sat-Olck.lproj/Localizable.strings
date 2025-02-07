@@ -377,7 +377,7 @@
 "Forward" = "ᱢᱟᱲᱟᱝ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox ᱠᱷᱟᱛᱟ";
+"FxA.FirefoxAccount" = "Ecosia ᱠᱷᱟᱛᱟ";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ᱠᱷᱟᱛᱟ ᱟᱨ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱵᱮᱵᱚᱥᱛᱟᱭ ᱢᱮ";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "ᱱᱤᱛᱚᱠ ᱛᱚᱞ ᱡᱚᱠᱷᱟᱭ ᱢᱮ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox ᱟᱛᱩᱨ ᱟᱬᱜᱚ %@ ᱥᱟᱞᱟᱜ ᱡᱩᱰᱟᱹᱣ ᱮᱱᱟᱭ";
+"FxAPush_DeviceConnected_body" = "Ecosia ᱟᱛᱩᱨ ᱟᱬᱜᱚ %@ ᱥᱟᱞᱟᱜ ᱡᱩᱰᱟᱹᱣ ᱮᱱᱟᱭ";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱡᱚᱲᱟᱣᱮᱱᱟ";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ᱢᱤᱫᱴᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱵᱟᱰ ᱡᱚᱲᱟᱣᱮᱱᱟ Ecosia ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱠᱷᱚᱱ";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ ᱾";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia ᱪᱤᱱᱦᱟᱹᱯ, ᱠᱟᱸᱛᱷᱥᱟᱦᱴᱟ ᱾";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "ᱜᱚᱲᱚ";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ᱟᱢᱟᱠ ᱮᱴᱟᱠ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱞᱤᱥᱴᱤ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ ᱢᱮ᱾";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox ᱛᱷᱟᱨ ᱦᱚᱪᱚ";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia ᱛᱷᱟᱨ ᱦᱚᱪᱚ";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ᱦᱤᱛᱟᱹᱞ";
@@ -653,13 +653,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Firefox ᱨᱮᱭᱟᱜ AutoFill ᱡᱤᱱᱤᱥ ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱠᱛᱤ ᱜᱮ ᱠᱟᱱᱟ ᱾";
+"Logins.PasscodeRequirement.Warning" = "Ecosia ᱨᱮᱭᱟᱜ AutoFill ᱡᱤᱱᱤᱥ ᱵᱮᱵᱷᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ ᱫᱚ ᱥᱟᱫᱷᱚᱱ ᱫᱟᱱᱟᱝᱠᱳᱰ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱠᱛᱤ ᱜᱮ ᱠᱟᱱᱟ ᱾";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱡᱟᱦᱟᱸ ᱨᱮᱜᱮ ᱤᱫᱤ ᱛᱟᱢ";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Firefox  ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ AutoFill";
+"Logins.WelcomeView.Title2" = "Ecosia  ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ AutoFill";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "AutoFill ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ᱱᱚᱶᱟ ᱟᱢᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱠᱮᱢᱨᱟ ᱨᱚᱞᱞ ᱨᱮ ᱥᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱛᱟᱣᱟ ᱾";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ᱟᱢᱟᱠ ᱪᱤᱛᱚᱨ ᱠᱚ ᱟᱹᱛᱩᱨ ᱥᱟᱱᱟᱭ ᱤ ᱠᱟᱱᱟ";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia ᱟᱢᱟᱠ ᱪᱤᱛᱚᱨ ᱠᱚ ᱟᱹᱛᱩᱨ ᱥᱟᱱᱟᱭ ᱤ ᱠᱟᱱᱟ";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "ᱵᱚᱸᱫᱚᱭ";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "ᱴᱮᱵᱽ ᱨᱮ ᱩᱪᱟᱹᱲᱚᱜ ᱢᱮ";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox ᱵᱟᱛᱟᱣ";
+"Search.SuggestSectionTitle.v102" = "Ecosia ᱵᱟᱛᱟᱣ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "ᱱᱟᱶᱟ ᱯᱟᱱᱛᱮ ᱮᱱᱡᱤᱱ ᱫᱚ ᱞᱚᱜᱚᱱ ᱥᱮᱸᱽᱨᱟ ᱵᱟᱨ ᱨᱮ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱾";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "ᱮᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱛᱮ ᱚᱛᱟᱭ ᱢᱮ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox ᱛᱚᱞ ᱡᱚᱠᱷᱟ";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia ᱛᱚᱞ ᱡᱚᱠᱷᱟ";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ᱧᱮᱞ ᱢᱮ";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "ᱥᱟᱠᱷᱤᱭᱟᱛ ᱵᱮᱵᱚᱥᱛᱟ";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱥᱟᱞᱟᱜ ᱟᱭᱩᱨ ᱢᱤᱫ ᱵᱚᱸᱫᱭ ᱟᱭ, ᱦᱮᱞᱮ ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱪᱮᱫ ᱦᱚᱸ ᱵᱟᱭ ᱢᱮᱴᱟᱣᱟᱭ ᱾";
+"Settings.Disconnect.Body" = "Ecosia ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱥᱟᱞᱟᱜ ᱟᱭᱩᱨ ᱢᱤᱫ ᱵᱚᱸᱫᱭ ᱟᱭ, ᱦᱮᱞᱮ ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱪᱮᱫ ᱦᱚᱸ ᱵᱟᱭ ᱢᱮᱴᱟᱣᱟᱭ ᱾";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱵᱟᱝ ᱡᱚᱲᱟᱣ";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "ᱛᱚᱞ ᱡᱚᱠᱷᱟ ᱥᱟᱡᱟᱣ ᱠᱚ";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox ᱠᱷᱟᱛᱟ";
+"Settings.FxA.Title" = "Ecosia ᱠᱷᱟᱛᱟ";
 
 /* General settings section title */
 "Settings.General.SectionName" = "ᱥᱟᱫᱷᱟᱨᱚᱱ";
@@ -1250,7 +1250,7 @@
 "Settings.Home.Current.Description.v101" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱮᱠᱷᱟᱛᱮ ᱪᱮᱫ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
 
 /* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
-"Settings.Home.Option.Description.v101" = "Firefox ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱮᱠᱷᱟᱛᱮ ᱪᱮᱫ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
+"Settings.Home.Option.Description.v101" = "Ecosia ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱮᱠᱷᱟᱛᱮ ᱪᱮᱫ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "ᱦᱮᱡ ᱨᱩᱣᱟᱹᱲᱚᱜ ᱢᱮ";
@@ -1274,7 +1274,7 @@
 "Settings.Home.Option.StartAtHome.Always" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
 
 /* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
-"Settings.Home.Option.StartAtHome.Description" = "Firefox ᱨᱮ ᱫᱩᱦᱲᱟᱹ ᱦᱟᱹᱡᱩᱜ ᱡᱷᱚᱜ ᱵᱟᱪᱷᱟᱣᱢᱮ ᱪᱮᱫ ᱧᱮᱞ ᱥᱮᱱᱟᱮᱫ ᱢᱮᱭᱟ ᱾";
+"Settings.Home.Option.StartAtHome.Description" = "Ecosia ᱨᱮ ᱫᱩᱦᱲᱟᱹ ᱦᱟᱹᱡᱩᱜ ᱡᱷᱚᱜ ᱵᱟᱪᱷᱟᱣᱢᱮ ᱪᱮᱫ ᱧᱮᱞ ᱥᱮᱱᱟᱮᱫ ᱢᱮᱭᱟ ᱾";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
 "Settings.Home.Option.StartAtHome.Never" = "ᱢᱩᱪᱟᱹᱫ ᱴᱮᱵᱽ";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱞᱤᱞ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱞᱤᱞ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱫᱚᱨᱭᱟ ᱫᱷᱟᱨᱮ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱫᱚᱨᱭᱟ ᱫᱷᱟᱨᱮ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱚᱱᱟᱡᱽ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱚᱱᱟᱡᱽ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "ᱢᱩᱞ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱯᱷᱟᱨᱪᱟᱭ ᱢᱮ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱨᱟᱠᱟᱵ ᱢᱟᱲᱟᱝ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱨᱟᱠᱟᱵ ᱢᱟᱲᱟᱝ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱞᱟᱴᱷᱟᱪᱤᱛᱟᱹᱨ ᱪᱚᱠᱨᱚ ᱩᱪᱟᱹᱲ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱦᱟᱹᱥᱩᱨ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱦᱟᱹᱥᱩᱨ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ᱠᱞᱟᱥᱤᱠ %@";
@@ -1328,7 +1328,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "ᱥᱤᱢᱤᱛ ᱮᱰᱤᱥᱚᱱ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱞᱚᱜᱚ ᱨᱮ ᱴᱤᱯᱟᱹᱣ ᱠᱟᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱢᱮ";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ecosia ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱞᱚᱜᱚ ᱨᱮ ᱴᱤᱯᱟᱹᱣ ᱠᱟᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱢᱮ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "ᱠᱩᱥᱤᱭᱟᱜ";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox ᱚᱲᱟᱜ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia ᱚᱲᱟᱜ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "%@ ᱠᱷᱩᱞᱟᱹ ᱡᱷᱚᱜ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "ᱡᱚᱠᱷᱚᱱ Firefox ᱡᱷᱤᱜ ᱟᱢ";
+"Settings.OfferClipboardBar.StatusV2" = "ᱡᱚᱠᱷᱚᱱ Ecosia ᱡᱷᱤᱜ ᱟᱢ";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ᱱᱚᱠᱚᱞ ᱟᱠᱟᱱ ᱥᱟᱭᱤᱴ ᱠᱷᱩᱞᱟᱹ ᱯᱨᱚᱥᱛᱟᱣ";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "ᱰᱷᱮᱨ ᱥᱮᱲᱟᱭ ᱢᱮ᱾";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ᱡᱟᱦᱟᱸ ᱩᱱ ᱡᱚᱠᱷᱟᱜ ᱡᱟᱣᱨᱟ ᱟᱭ ᱚᱠᱟ ᱡᱷᱚᱜ ᱫᱚᱨᱠᱟᱨᱚᱜᱼᱟ ᱚᱱᱟ ᱦᱚᱸ Ecosia ᱟᱨ ᱡᱷᱚᱛᱚ ᱦᱚᱲ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱥ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱾";
+"Settings.SendUsage.Message" = "Ecosia ᱡᱟᱦᱟᱸ ᱩᱱ ᱡᱚᱠᱷᱟᱜ ᱡᱟᱣᱨᱟ ᱟᱭ ᱚᱠᱟ ᱡᱷᱚᱜ ᱫᱚᱨᱠᱟᱨᱚᱜᱼᱟ ᱚᱱᱟ ᱦᱚᱸ Ecosia ᱟᱨ ᱡᱷᱚᱛᱚ ᱦᱚᱲ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱥ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱾";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "ᱵᱮᱵᱷᱟᱨ ᱥᱟᱠᱷᱤᱭᱟᱛ ᱠᱩᱞ ᱢᱮ";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ ᱾";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox ᱵᱚᱦᱟᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱟᱨ ᱥᱚᱢᱚᱭ ᱠᱷᱚᱱ ᱥᱚᱢᱚᱨ ᱯᱟᱲᱦᱟᱣ ᱠᱚ ᱪᱟᱹᱞᱩᱜᱼᱟ ᱾";
+"Settings.Studies.Toggle.Message" = "Ecosia ᱵᱚᱦᱟᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱟᱨ ᱥᱚᱢᱚᱭ ᱠᱷᱚᱱ ᱥᱚᱢᱚᱨ ᱯᱟᱲᱦᱟᱣ ᱠᱚ ᱪᱟᱹᱞᱩᱜᱼᱟ ᱾";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "ᱯᱟᱲᱦᱟᱣ ᱠᱚ";
@@ -1592,13 +1592,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "ᱩᱯᱨᱩᱢ ᱨᱮ ᱞᱟᱫᱮ ᱢᱮ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox ᱨᱮ ᱞᱟᱫᱮ ᱦᱩᱭᱩ ᱠᱟᱱᱟ";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia ᱨᱮ ᱞᱟᱫᱮ ᱦᱩᱭᱩ ᱠᱟᱱᱟ";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox ᱨᱮ ᱡᱷᱤᱜ ᱢᱮ";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia ᱨᱮ ᱡᱷᱤᱜ ᱢᱮ";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "ᱱᱚᱠᱚᱞ";
@@ -1745,7 +1745,7 @@
 "UIMenuItem.PasteGo" = "ᱞᱟᱴᱷᱟᱭ ᱢᱮ ᱟᱨ ᱪᱦᱟᱞᱟ ᱢᱮ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox ᱥᱟᱣ ᱛᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+"UIMenuItem.SearchWithFirefox" = "Ecosia ᱥᱟᱣ ᱛᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ᱵᱟᱝ ᱯᱟᱲᱦᱟᱣ";

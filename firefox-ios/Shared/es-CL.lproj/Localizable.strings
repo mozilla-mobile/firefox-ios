@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Sincronizar ahora";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync se ha conectado a %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync se ha conectado a %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync conectado";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Conéctate para ver una lista de pestañas de tus otros dispositivos.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historial";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Pestañas abiertas";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox no puede abrir la página porque tiene una dirección inválida.";
+"OpenURL.Error.Message" = "Ecosia no puede abrir la página porque tiene una dirección inválida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "No se puede abrir la página";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Esto te permite guardar la imagen en el carrete.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox desea acceder a tus Fotos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia desea acceder a tus Fotos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Cerrar";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Aceptar";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "¿Enviar un reporte de fallos a Mozilla para que pueda arreglar el problema?";
+"Send a crash report so Mozilla can fix the problem?" = "¿Enviar un reporte de fallos a Ecosia para que pueda arreglar el problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Enviar comentarios";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Toca para empezar";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Ver";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Gestión de datos";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox dejará de sincronizarse con tu cuenta, pero no se borrarán los datos de navegación del dispositivo.";
+"Settings.Disconnect.Body" = "Ecosia dejará de sincronizarse con tu cuenta, pero no se borrarán los datos de navegación del dispositivo.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Desconectarse de Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Al abrir %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Al abrir Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Al abrir Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ofrecer abrir enlaces copiados";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Aprender más.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se esfuerza por recolectar solo lo que necesita para proporcionar y mejorar Ecosia para todos.";
+"Settings.SendUsage.Message" = "Ecosia se esfuerza por recolectar solo lo que necesita para proporcionar y mejorar Ecosia para todos.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Enviar datos de uso";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Aprender más.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox podría instalar y realizar experimentos de vez en cuando.";
+"Settings.Studies.Toggle.Message" = "Ecosia podría instalar y realizar experimentos de vez en cuando.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Estudios";

@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "ຍົກລະດັບການຊອກຫາປະຈໍາວັນ";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ບລັອກ 3,000+ ຕົວຕິດຕາມຕໍ່ຜູ້ໃຊ້ໃນແຕ່ລະເດືອນໂດຍສະເລ່ຍ. ເຮັດໃຫ້ພວກເຮົາເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອຄວາມສະຫງົບດ້ານຄວາມເປັນສ່ວນຕົວຂອງຈິດໃຈ.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ບລັອກ 3,000+ ຕົວຕິດຕາມຕໍ່ຜູ້ໃຊ້ໃນແຕ່ລະເດືອນໂດຍສະເລ່ຍ. ເຮັດໃຫ້ພວກເຮົາເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອຄວາມສະຫງົບດ້ານຄວາມເປັນສ່ວນຕົວຂອງຈິດໃຈ.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ມີການປົກຫຸ້ມຂອງຄວາມເປັນສ່ວນຕົວ";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia ມີການປົກຫຸ້ມຂອງຄວາມເປັນສ່ວນຕົວ";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ປ່ຽນບຣາວເຊີຫລັກຂອງທ່ານ";

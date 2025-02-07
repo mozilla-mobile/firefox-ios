@@ -230,7 +230,7 @@
 "Forward" = "Pārsūtīt";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox konts";
+"FxA.FirefoxAccount" = "Ecosia konts";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Pārvaldīt kontu un ierīces";
@@ -242,7 +242,7 @@
 "FxA.SyncNow" = "Sinhronizēt";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync ir pievienots %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync ir pievienots %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync pievienots";
@@ -290,7 +290,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Pierakstieties, lai redzētu šeit cilnes no šīm ierīcēm.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Vēsture";
@@ -479,7 +479,7 @@
 "Open Tabs" = "Atvērtās cilnes";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox nevar atvērt lapu, jo tai ir nederīga adrese.";
+"OpenURL.Error.Message" = "Ecosia nevar atvērt lapu, jo tai ir nederīga adrese.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Nevar atvērt lapu";
@@ -584,7 +584,7 @@
 "Search.ThirdPartyEngines.OK" = "Labi";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Vai sūtīt avārijas ziņojumu lai Mozilla var salabot problēmu?";
+"Send a crash report so Mozilla can fix the problem?" = "Vai sūtīt avārijas ziņojumu lai Ecosia var salabot problēmu?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Nosūtīt atsauksmi";
@@ -629,7 +629,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Pieskarieties, lai sāktu";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Aplūkot";
@@ -674,7 +674,7 @@
 "Settings.DataManagement.SearchLabel" = "Filtrēt vietnes";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox pārstās sinhronizēt ar jūsu kontu, bet esošie dati no šīs ierīces netiks izdzēsti.";
+"Settings.Disconnect.Body" = "Ecosia pārstās sinhronizēt ar jūsu kontu, bet esošie dati no šīs ierīces netiks izdzēsti.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Atvienoties";
@@ -710,7 +710,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync iestatījumi";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox konts";
+"Settings.FxA.Title" = "Ecosia konts";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Vispārīgi";
@@ -728,7 +728,7 @@
 "Settings.NewTab.Option.BlankPage" = "Tukša lapa";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox sākumlapa";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia sākumlapa";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Mājas lapa";
@@ -749,7 +749,7 @@
 "Settings.OfferClipboardBar.Status" = "Atverot Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Atverot Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Atverot Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Piedāvāt atvērt nokopētās saites";
@@ -770,7 +770,7 @@
 "Settings.SendUsage.Link" = "Uzzināt vairāk.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla cenšas vākt tikai tos datus, kas ir nepieciešami, lai uzlabotu Ecosia ikvienam.";
+"Settings.SendUsage.Message" = "Ecosia cenšas vākt tikai tos datus, kas ir nepieciešami, lai uzlabotu Ecosia ikvienam.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Sūtīt izmantošanas datus";

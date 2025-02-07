@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox убраузер еиԥш алхра иаарту, насгьы зегьы ирзымариоу Интернет азы абжьыҭира ауп.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia убраузер еиԥш алхра иаарту, насгьы зегьы ирзымариоу Интернет азы абжьыҭира ауп.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Еиӷьу аинтернет ахь аиасра";
@@ -8,19 +8,19 @@
 "DefaultBrowserCard.Button.v2" = "Еилышәкаа ишыҟало";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Firefox аҟны асаитқәа, аимеилқәа, Ацҳарақәа рҟынтәи автоматла иаартуа азхьарԥшқәа шьақәыргылатәуп.";
+"DefaultBrowserCard.Description" = "Ecosia аҟны асаитқәа, аимеилқәа, Ацҳарақәа рҟынтәи автоматла иаартуа азхьарԥшқәа шьақәыргылатәуп.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Иалышәх Firefox шәбраузер еиԥш аццакыра, ашәарҭадара, амаӡара рзы.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Иалышәх Ecosia шәбраузер еиԥш аццакыра, ашәарҭадара, амаӡара рзы.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Есыҽнытәи уԥшаара еиӷьтәтәуп";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox есымза ахархәаҩ ибжьаратәла 3,000 тракерк аанкылоит. Умаӡара иазкны угәы ҭынчхарц азы убраузер ҳзыҟаҵа.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia есымза ахархәаҩ ибжьаратәла 3,000 тракерк аанкылоит. Умаӡара иазкны угәы ҭынчхарц азы убраузер ҳзыҟаҵа.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox амаӡара еиқәнаршәоит";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia амаӡара еиқәнаршәоит";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Иԥсахтәуп ишыҟоу еиԥш иҟоу абраузер";
@@ -35,7 +35,7 @@
 "DefaultBrowserOnboarding.Description2" = "2. Иалшәх \"Абраузер апликациа стандарт\"";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Иалшәх Firefox";
+"DefaultBrowserOnboarding.Description3" = "3. Иалшәх Ecosia";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Абраузер апликациа ишыҟоу еиԥш";

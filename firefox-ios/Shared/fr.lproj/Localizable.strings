@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Synchroniser maintenant";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s’est connecté à %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s’est connecté à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync connecté";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Connectez-vous pour afficher la liste des onglets de vos autres appareils.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historique";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Onglets ouverts";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ne parvient pas à ouvrir cette page, car l’adresse est invalide.";
+"OpenURL.Error.Message" = "Ecosia ne parvient pas à ouvrir cette page, car l’adresse est invalide.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impossible d’ouvrir la page";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ceci vous permet d’enregistrer l’image dans Pellicule.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox souhaite accéder à vos photos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia souhaite accéder à vos photos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Fermer";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Aller à l’onglet";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox suggère";
+"Search.SuggestSectionTitle.v102" = "Ecosia suggère";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nouveau moteur de recherche apparaîtra dans la barre de recherche rapide.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Envoyer un rapport de plantage afin que Mozilla puisse corriger le problème ?";
+"Send a crash report so Mozilla can fix the problem?" = "Envoyer un rapport de plantage afin que Ecosia puisse corriger le problème ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Donner mon avis";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Appuyer pour commencer";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Afficher";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Gestion des données";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ne se synchronisera plus avec votre compte, mais ne supprimera aucune donnée de navigation sur cet appareil.";
+"Settings.Disconnect.Body" = "Ecosia ne se synchronisera plus avec votre compte, mais ne supprimera aucune donnée de navigation sur cet appareil.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Déconnecter Sync";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Personnalisé";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Page d’accueil de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Page d’accueil de Ecosia";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Page d’accueil";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Lors de l’ouverture de %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "À l’ouverture de Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "À l’ouverture de Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Proposer d’ouvrir les liens copiés";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "En savoir plus.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer Ecosia pour tout le monde.";
+"Settings.SendUsage.Message" = "Ecosia veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer Ecosia pour tout le monde.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Envoyer des données d’utilisation";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "En savoir plus.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox peut installer et lancer des études de temps en temps.";
+"Settings.Studies.Toggle.Message" = "Ecosia peut installer et lancer des études de temps en temps.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Études";

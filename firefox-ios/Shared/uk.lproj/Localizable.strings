@@ -905,7 +905,7 @@
 "Open Tabs" = "Відкриті вкладки";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox не може відкрити сторінку, тому що її адреса неправильна.";
+"OpenURL.Error.Message" = "Ecosia не може відкрити сторінку, тому що її адреса неправильна.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Не вдалося відкрити сторінку";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Це дозволяє вам зберігати зображення до своєї фотоплівки.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox бажає отримати доступ до ваших фотографій";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia бажає отримати доступ до ваших фотографій";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Закрити";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про збій, щоб Mozilla змогла виправити цю проблему?";
+"Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про збій, щоб Ecosia змогла виправити цю проблему?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Надіслати відгук";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Керування даними";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox припинить синхронізацію з вашим обліковим записом, але не вилучить жодних даних перегляду на цьому пристрої.";
+"Settings.Disconnect.Body" = "Ecosia припинить синхронізацію з вашим обліковим записом, але не вилучить жодних даних перегляду на цьому пристрої.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Від'єднатися";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Під час відкриття %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "При запуску Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "При запуску Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Пропонувати відкриття посилань";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Докладніше.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla намагається збирати лише дані, необхідні для роботи й вдосконалення Ecosia.";
+"Settings.SendUsage.Message" = "Ecosia намагається збирати лише дані, необхідні для роботи й вдосконалення Ecosia.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Надсилати дані про використання";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Докладніше.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox може час від часу встановлювати та виконувати дослідження.";
+"Settings.Studies.Toggle.Message" = "Ecosia може час від часу встановлювати та виконувати дослідження.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Дослідження";

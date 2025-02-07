@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox zure nabigatzaile lehenetsia egitea Internet irekia eta denon eskurakoa bozkatzea da.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia zure nabigatzaile lehenetsia egitea Internet irekia eta denon eskurakoa bozkatzea da.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Lehenetsi Internet hobeago bat";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Goratu eguneroko nabigazioa";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefoxek 3.000 jarraipen-elementu blokeatzen ditu batez bestean erabiltzaileko hilabetero. Egiguzu zure nabigatzaile lehenetsia pribatutasunaren lasaitasunerako.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosiak 3.000 jarraipen-elementu blokeatzen ditu batez bestean erabiltzaileko hilabetero. Egiguzu zure nabigatzaile lehenetsia pribatutasunaren lasaitasunerako.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefoxek pribatutasuna kontrolpean du";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosiak pribatutasuna kontrolpean du";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Aldatu zure nabigatzaile lehenetsia";

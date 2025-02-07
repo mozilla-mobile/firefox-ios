@@ -197,7 +197,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Boshqa qurilmalaringizdagi ichki oynalar bu yerda ko‘rinadi.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox’ni sinxronlash";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia’ni sinxronlash";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Tarix";
@@ -299,7 +299,7 @@
 "LoginsHelper.Update.Button" = "Yangilash";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox’da oldinroq nosozlik ro‘y berganga o‘xshaydi. Ichki oynalarni tiklashni xohlaysizmi?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia’da oldinroq nosozlik ro‘y berganga o‘xshaydi. Ichki oynalarni tiklashni xohlaysizmi?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "O‘qilgan deb belgilash";
@@ -434,7 +434,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mozilla muammolarni bartaraf qilish uchun nosozlik hisobotlari jo‘natilsinmi?";
+"Send a crash report so Mozilla can fix the problem?" = "Ecosia muammolarni bartaraf qilish uchun nosozlik hisobotlari jo‘natilsinmi?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Mulohaza jo‘natish";

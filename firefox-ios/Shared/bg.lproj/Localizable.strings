@@ -263,7 +263,7 @@
 "Forward" = "Напред";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Ecosia Account";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Управление на сметката и устройствата";
@@ -275,7 +275,7 @@
 "FxA.SyncNow" = "Синхронизиране";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync е свързан към %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync е свързан към %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync е свързан";
@@ -536,7 +536,7 @@
 "Open Tabs" = "Отворени раздели";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox не може да отвори страницата, защото съдържа невалидни адреси.";
+"OpenURL.Error.Message" = "Ecosia не може да отвори страницата, защото съдържа невалидни адреси.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Страница не може да бъде отворена";
@@ -641,7 +641,7 @@
 "Search.ThirdPartyEngines.OK" = "ОК";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Mozilla да реши проблема?";
+"Send a crash report so Mozilla can fix the problem?" = "Ше изпратете ли доклад за срива, така че Ecosia да реши проблема?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Изпращане обратна връзка";
@@ -680,7 +680,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Докоснете за начало";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Изглед";
@@ -737,7 +737,7 @@
 "Settings.DataManagement.Title" = "Управление на данните";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ще спре синхронизирането на вашата сметка, но няма да изтрие никакви данни на разглеждането от устройството.";
+"Settings.Disconnect.Body" = "Ecosia ще спре синхронизирането на вашата сметка, но няма да изтрие никакви данни на разглеждането от устройството.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Изключване от Sync";
@@ -779,7 +779,7 @@
 "Settings.FxA.Sync.SectionName" = "Настройки за синхронизиране";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Account";
+"Settings.FxA.Title" = "Ecosia Account";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Основни";
@@ -818,7 +818,7 @@
 "Settings.OfferClipboardBar.Status" = "При отваряне на Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "При отваряне на Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "При отваряне на Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Питане за отваряне на копираните препратки";
@@ -839,7 +839,7 @@
 "Settings.SendUsage.Link" = "Научете повече.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla се старае да събира само нужните данни за подобряване на Ecosia за всички.";
+"Settings.SendUsage.Message" = "Ecosia се старае да събира само нужните данни за подобряване на Ecosia за всички.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Изпращане данни за използването";

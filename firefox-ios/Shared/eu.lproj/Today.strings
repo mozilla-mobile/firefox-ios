@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Ekintza bizkorrak";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefoxen lasterbideak";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia lasterbideak";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Gehitu irekitako zure fitxetarako lasterbideak.";

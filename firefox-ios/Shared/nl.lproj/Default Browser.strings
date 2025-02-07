@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Breng uw dagelijkse surfen naar een hoger niveau";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokkeert gemiddeld meer dan 3.000 trackers per gebruiker per maand. Maak van ons uw standaardbrowser voor gemoedsrust op privacygebied.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blokkeert gemiddeld meer dan 3.000 trackers per gebruiker per maand. Maak van ons uw standaardbrowser voor gemoedsrust op privacygebied.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox denkt aan uw privacy";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia denkt aan uw privacy";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Uw standaardbrowser wisselen";

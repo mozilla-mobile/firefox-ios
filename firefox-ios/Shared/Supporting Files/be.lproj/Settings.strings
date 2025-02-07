@@ -89,7 +89,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Прадвызначаны пашукавік";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Даведайцеся больш пра Firefox Suggest";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Даведайцеся больш пра Ecosia Suggest";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Альтэрнатыўныя пошукавыя сістэмы";
@@ -116,10 +116,10 @@
 "Settings.Search.ShowSuggestions.v121" = "Паказваць прапановы пошуку";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Адрасны радок - Firefox Suggest";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Адрасны радок - Ecosia Suggest";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Даведайцеся больш пра Firefox Suggest";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Даведайцеся больш пра Ecosia Suggest";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Пошук у гісторыі аглядання";

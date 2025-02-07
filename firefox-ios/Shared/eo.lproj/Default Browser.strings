@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Plibonigu vian ĉiutagan retumon";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokas 3,000+ spurilojn per uzanto, mezume, ĉiumonate. Igu nin via norma retumilo por privateca trankvilo.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blokas 3,000+ spurilojn per uzanto, mezume, ĉiumonate. Igu nin via norma retumilo por privateca trankvilo.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox protektas vian privatecon";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia protektas vian privatecon";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Ŝanĝi vian norman retumilon";

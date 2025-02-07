@@ -377,7 +377,7 @@
 "Forward" = "Aurrera";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox kontua";
+"FxA.FirefoxAccount" = "Ecosia kontua";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Kudeatu kontua eta gailuak";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Sinkronizatu orain";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync %@ gailura konektatu da";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync %@ gailura konektatu da";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync konektatuta";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Gailu bat Ecosia Sync-etik deskonektatu da";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox logoa, aldatu horma-papera.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia logoa, aldatu horma-papera.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Laguntza";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Hasi saioa zure beste gailuetako fitxak ikusteko.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historia";
@@ -653,7 +653,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Argibide gehiago";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Firefoxen osatze automatikoa erabiltzeko, gailuaren pasakodea gaituta izan behar duzu.";
+"Logins.PasscodeRequirement.Warning" = "Ecosia osatze automatikoa erabiltzeko, gailuaren pasakodea gaituta izan behar duzu.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Eraman pasahitzak alboan";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Irekitako fitxak";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefoxek ezin du orria ireki helbide baliogabea duelako.";
+"OpenURL.Error.Message" = "Ecosiak ezin du orria ireki helbide baliogabea duelako.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ezin da orria ireki";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Honekin kameraren karretean gorde dezakezu irudia.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefoxek zure argazkietarako sarbidea nahi du";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosiak zure argazkietarako sarbidea nahi du";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Itxi";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Aldatu fitxara";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefoxen iradokizunak";
+"Search.SuggestSectionTitle.v102" = "Ecosia iradokizunak";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Bilaketa-motor berria bilaketa-barran agertuko da.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Ados";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Bidali hutsegite-txostena Mozillari arazoa konpondu ahal izateko?";
+"Send a crash report so Mozilla can fix the problem?" = "Bidali hutsegite-txostena Ecosiari arazoa konpondu ahal izateko?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Bidali iritzia";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Sakatu hasteko";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Ikusi";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Datuen kudeaketa";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefoxek zure kontuarekin sinkronizatzeari utziko dio baina ez du gailu honetako zure nabigatze-daturik ezabatuko.";
+"Settings.Disconnect.Body" = "Ecosiak zure kontuarekin sinkronizatzeari utziko dio baina ez du gailu honetako zure nabigatze-daturik ezabatuko.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Deskonektatu Sync";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Sinkronizazio-ezarpenak";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox kontua";
+"Settings.FxA.Title" = "Ecosia kontua";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Orokorra";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Horma-papera";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox horma-papera, amethyst patroia.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia horma-papera, amethyst patroia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox horma-papera, hondartzako muinoen patroia.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia horma-papera, hondartzako muinoen patroia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox horma-papera, cerulean patroia.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia horma-papera, cerulean patroia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Horma-paper garbi lehenetsia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox horma-papera, sunrise patroia.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia horma-papera, sunrise patroia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Hasiera-orriko horma-papera txandakatzekoa";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox horma-papera, ilunabarreko muinoen patroia.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia horma-papera, ilunabarreko muinoen patroia.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ klasikoa";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Pertsonalizatua";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefoxen hasiera";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia hasiera";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Hasiera-orria";
@@ -1403,13 +1403,13 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "Blokeatu irudiak";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox irekitzean";
+"Settings.OfferClipboardBar.Status" = "Ecosia irekitzean";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "%@ irekitzean";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox irekitzean";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia irekitzean";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Eskaini kopiatutako loturak irekitzea";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Argibide gehiago.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Firefox denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
+"Settings.SendUsage.Message" = "Ecosia denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Ecosia.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Bidali erabilera-datuak";
@@ -1592,7 +1592,7 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Kargatu atzeko planoan";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefoxen kargatzen";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia kargatzen";
 
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Ireki Ecosiaen";

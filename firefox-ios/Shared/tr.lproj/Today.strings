@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Açık sekme yok.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox’u aç";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia’u aç";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Gizli arama";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Hızlı Eylemler";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox Kestirmeleri";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia Kestirmeleri";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Açık sekmelerinize kısayollar ekleyin.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Hızlı Görünüm";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox’ta ara";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia’ta ara";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Gizlide ara";

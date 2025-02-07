@@ -377,7 +377,7 @@
 "Forward" = "Naprej";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Račun";
+"FxA.FirefoxAccount" = "Ecosia Račun";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Upravljanje računa in naprav";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Sinhroniziraj zdaj";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync se je povezal z %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync se je povezal z %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync je povezan";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Prijavite se za ogled seznama zavihkov drugih naprav.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Zgodovina";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Odprte zavihke";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ne more odpreti strani, ker je njen naslov neveljaven.";
+"OpenURL.Error.Message" = "Ecosia ne more odpreti strani, ker je njen naslov neveljaven.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Strani ni mogoče odpreti";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "To vam omogoča, da shranite sliko v Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox želi dostop do vaših slik";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia želi dostop do vaših slik";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Zapri";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Preklopi na zavihek";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefoxovi predlogi";
+"Search.SuggestSectionTitle.v102" = "Ecosiaovi predlogi";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Novi isklanik se bo pojavil v vrstici za hitro iskanje.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "V redu";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Pošljem poročilo, da lahko Mozilla odpravi napako?";
+"Send a crash report so Mozilla can fix the problem?" = "Pošljem poročilo, da lahko Ecosia odpravi napako?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Pošlji povratne informacije";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tapnite za začetek";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Prikaži";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Upravljanje s podatki";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox se bo prenehal sinhronizirati z vašim računom, vendar ne bo izbrisal podatkov o brskanju na tej napravi.";
+"Settings.Disconnect.Body" = "Ecosia se bo prenehal sinhronizirati z vašim računom, vendar ne bo izbrisal podatkov o brskanju na tej napravi.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Prekini povezavo";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Nastavitve Synca";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox Račun";
+"Settings.FxA.Title" = "Ecosia Račun";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Splošno";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Ko odprete %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Ko odprete Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Ko odprete Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ponudi odpiranje kopiranih povezav";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Več o tem.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se trudi, da zbira samo podatke, ki jih potrebuje za razvoj in izboljševanje Ecosiaa.";
+"Settings.SendUsage.Message" = "Ecosia se trudi, da zbira samo podatke, ki jih potrebuje za razvoj in izboljševanje Ecosiaa.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Pošiljaj podatke o uporabi";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Več o tem.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox lahko občasno namesti in zažene raziskave.";
+"Settings.Studies.Toggle.Message" = "Ecosia lahko občasno namesti in zažene raziskave.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Raziskave";

@@ -377,7 +377,7 @@
 "Forward" = "Vorwärts";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox-Konto";
+"FxA.FirefoxAccount" = "Ecosia-Konto";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Konto & Geräte verwalten";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Jetzt synchronisieren";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync ist mit %@ verbunden";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync ist mit %@ verbunden";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync verbunden";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ein Gerät wurde von Ecosia Sync getrennt";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox-Logo, Hintergrundbild ändern.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia-Logo, Hintergrundbild ändern.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Hilfe";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Melden Sie sich an, um eine Liste der Tabs auf Ihren anderen Geräten zu sehen.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Chronik";
@@ -659,7 +659,7 @@
 "Logins.WelcomeView.Tagline" = "Nehmen Sie Ihre Passwörter überall mit";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Firefox-Passwörter automatisch ausfüllen";
+"Logins.WelcomeView.Title2" = "Ecosia-Passwörter automatisch ausfüllen";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Automatisches Ausfüllen aktivieren";
@@ -704,7 +704,7 @@
 "LoginsList.Title" = "GESPEICHERTE ZUGANGSDATEN";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox scheint zuvor abgestürzt zu sein. Sollen Ihre Tabs wiederhergestellt werden?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia scheint zuvor abgestürzt zu sein. Sollen Ihre Tabs wiederhergestellt werden?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Als gelesen markieren";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Offene Tabs";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox kann die Seite nicht öffnen, weil ihre Adresse ungültig ist.";
+"OpenURL.Error.Message" = "Ecosia kann die Seite nicht öffnen, weil ihre Adresse ungültig ist.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Seite kann nicht geöffnet werden";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Hiermit können Sie die Grafik in Ihren Aufnahmen speichern.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox möchte auf Ihre Fotos zugreifen";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia möchte auf Ihre Fotos zugreifen";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Schließen";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Zum Tab wechseln";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox-Vorschläge";
+"Search.SuggestSectionTitle.v102" = "Ecosia-Vorschläge";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Die neue Suchmaschine erscheint in der Schnellsuchleiste.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Einen Absturzbericht senden, damit Mozilla das Problem beheben kann?";
+"Send a crash report so Mozilla can fix the problem?" = "Einen Absturzbericht senden, damit Ecosia das Problem beheben kann?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Feedback senden";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Zum Beginnen berühren";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Ansehen";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Datenverwaltung";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox beendet die Synchronisation mit Ihrem Konto, löscht aber keine Surf-Daten auf diesem Gerät.";
+"Settings.Disconnect.Body" = "Ecosia beendet die Synchronisation mit Ihrem Konto, löscht aber keine Surf-Daten auf diesem Gerät.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sync trennen";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync-Einstellungen";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox-Konto";
+"Settings.FxA.Title" = "Ecosia-Konto";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Allgemein";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Hintergrundbild";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox-Hintergrundbild, Amethystmuster.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia-Hintergrundbild, Amethystmuster.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox-Hintergrundbild, Muster mit Strandhügeln.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia-Hintergrundbild, Muster mit Strandhügeln.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox-Hintergrundbild, himmelblaues Muster.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia-Hintergrundbild, himmelblaues Muster.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Standardmäßiges transparentes Hintergrundbild.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox-Hintergrundbild, Sonnenaufgangsmuster.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia-Hintergrundbild, Sonnenaufgangsmuster.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Umschalter für den Hintergrundbild-Zyklus der Startseite";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox-Hintergrundbild, Muster mit Hügeln in der Dämmerung.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia-Hintergrundbild, Muster mit Hügeln in der Dämmerung.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ klassisch";
@@ -1382,7 +1382,7 @@
 "Settings.NewTab.Option.Custom" = "Benutzerdefiniert";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia Home";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Startseite";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Beim Öffnen von %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Wenn Firefox geöffnet wird";
+"Settings.OfferClipboardBar.StatusV2" = "Wenn Ecosia geöffnet wird";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Anbieten, kopierte Links zu öffnen";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Weitere Informationen.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ist bestrebt, nur die Informationen zu sammeln, mit denen wir Ecosia anbieten und für alle Nutzer verbessern können.";
+"Settings.SendUsage.Message" = "Ecosia ist bestrebt, nur die Informationen zu sammeln, mit denen wir Ecosia anbieten und für alle Nutzer verbessern können.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Nutzungsdaten senden";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Weitere Informationen";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox darf von Zeit zu Zeit Studien installieren und laufen lassen.";
+"Settings.Studies.Toggle.Message" = "Ecosia darf von Zeit zu Zeit Studien installieren und laufen lassen.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studien";

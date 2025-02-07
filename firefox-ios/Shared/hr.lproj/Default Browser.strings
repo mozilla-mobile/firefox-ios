@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Postavljanje Firefoxa kao standardni preglednik je glas za otvoren i pristupačan internet.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Postavljanje Ecosiaa kao standardni preglednik je glas za otvoren i pristupačan internet.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standardni web preglednik za bolji internet";
@@ -11,16 +11,16 @@
 "DefaultBrowserCard.Description" = "Postavi automatsko otvaranje poveznica web lokacija, e-mailova i poruka u Ecosiau.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Firefox kao standardni preglednik za automatsku brzinu, sigurnost i privatnost.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Ecosia kao standardni preglednik za automatsku brzinu, sigurnost i privatnost.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Poboljšaj svakodnevno pregledavanje";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox u prosjeku blokira više od 3000 programa za praćenje po korisniku svaki mjesec. Postavi nas kao standardni preglednik za bezbrižnu privatnost.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia u prosjeku blokira više od 3000 programa za praćenje po korisniku svaki mjesec. Postavi nas kao standardni preglednik za bezbrižnu privatnost.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox pokriva privatnost";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia pokriva privatnost";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Promijeni standardni preglednik";

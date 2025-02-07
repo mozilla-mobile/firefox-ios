@@ -266,7 +266,7 @@
 "Forward" = "આગડ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox ખાતું";
+"FxA.FirefoxAccount" = "Ecosia ખાતું";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "ખાતું અને ઉપકરણો મેનેજ કરો";
@@ -278,7 +278,7 @@
 "FxA.SyncNow" = "હવે સમન્વયિત કરો";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox સમન્વયન %@ થી કનેક્ટ થયેલ છે";
+"FxAPush_DeviceConnected_body" = "Ecosia સમન્વયન %@ થી કનેક્ટ થયેલ છે";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "જોડાયેલ સમન્વય";
@@ -296,7 +296,7 @@
 "FxAPush_DeviceDisconnected_title" = "સમન્વયન છૂટું";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Firefox સમન્વયનથી એક ઉપકરણ ડિસ્કનેક્ટ થયું છે";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Ecosia સમન્વયનથી એક ઉપકરણ ડિસ્કનેક્ટ થયું છે";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "મદદ";
@@ -329,7 +329,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "તમારા અન્ય ઉપકરણોથી ટૅબ્સની સૂચિ જોવા માટે સાઇન ઇન કરો.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox સમન્વયન";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia સમન્વયન";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "ઇતિહાસ";
@@ -566,7 +566,7 @@
 "Open Tabs" = "ટૅબ્સ ખોલો";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox પૃષ્ઠ ખોલી શકતું નથી કારણ કે તેમાં અમાન્ય સરનામું છે.";
+"OpenURL.Error.Message" = "Ecosia પૃષ્ઠ ખોલી શકતું નથી કારણ કે તેમાં અમાન્ય સરનામું છે.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "પૃષ્ઠ ખોલી શકતા નથી";
@@ -686,7 +686,7 @@
 "Search.ThirdPartyEngines.OK" = "ઠીક છે";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "ક્રેશ રિપોર્ટ મોકલો જેથી Mozilla સમસ્યાને ઠીક કરી શકે?";
+"Send a crash report so Mozilla can fix the problem?" = "ક્રેશ રિપોર્ટ મોકલો જેથી Ecosia સમસ્યાને ઠીક કરી શકે?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "પ્રતિસાદ મોકલ";
@@ -740,7 +740,7 @@
 "SentTab.NoTabArrivingNotification.body" = "પ્રારંભ કરવા માટે ટેપ કરો";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox સીંક";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia સીંક";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "જુઓ";
@@ -797,7 +797,7 @@
 "Settings.DataManagement.Title" = "માહિતી વ્યવસ્થાપન";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox તમારા એકાઉન્ટ સાથે સમન્વય કરવાનું બંધ કરશે, પરંતુ આ ઉપકરણ પરના તમારા કોઈપણ બ્રાઉઝિંગ ડેટાને કાઢી નાખશે નહીં.";
+"Settings.Disconnect.Body" = "Ecosia તમારા એકાઉન્ટ સાથે સમન્વય કરવાનું બંધ કરશે, પરંતુ આ ઉપકરણ પરના તમારા કોઈપણ બ્રાઉઝિંગ ડેટાને કાઢી નાખશે નહીં.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "સમન્વયન ડિસ્કનેક્ટ કરો";
@@ -860,7 +860,7 @@
 "Settings.FxA.Sync.SectionName" = "સમન્વયન સેટિંગ્સ";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox ખાતુ";
+"Settings.FxA.Title" = "Ecosia ખાતુ";
 
 /* General settings section title */
 "Settings.General.SectionName" = "સામાન્ય";
@@ -884,7 +884,7 @@
 "Settings.NewTab.Option.BlankPage" = "કોરો કાગળ";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox હોમ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia હોમ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "મુખપૃષ્ઠ";
@@ -902,10 +902,10 @@
 "Settings.NewTab.TopSectionNameFooter" = "નવું ટેબ ખોલતી વખતે શું લોડ કરવું તે પસંદ કરો";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox ખુલતી વખતે";
+"Settings.OfferClipboardBar.Status" = "Ecosia ખુલતી વખતે";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox ખુલતી વખતે";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia ખુલતી વખતે";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "કૉપિ કરેલી લિંક્સ ખોલવાની ઑફર કરો";
@@ -929,7 +929,7 @@
 "Settings.SendUsage.Link" = "વધુ શીખો.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla ફક્ત દરેકને માટે Ecosia આપવા અને સુધારવા માટે જરૂરી છે તે એકત્રિત કરવાનો પ્રયાસ કરે છે.";
+"Settings.SendUsage.Message" = "Ecosia ફક્ત દરેકને માટે Ecosia આપવા અને સુધારવા માટે જરૂરી છે તે એકત્રિત કરવાનો પ્રયાસ કરે છે.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "વપરાશ ડેટા મોકલો";
@@ -998,13 +998,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "પૃષ્ઠભૂમિમાં લોડ કરો";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefoxમાં લોડ કરી રહ્યું છે";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosiaમાં લોડ કરી રહ્યું છે";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefoxમાં ખોલો";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosiaમાં ખોલો";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefoxમાં શોધો";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosiaમાં શોધો";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "શોધ સૂચનો બતાવો";
@@ -1103,7 +1103,7 @@
 "UIMenuItem.PasteGo" = "પેસ્ટ કરો અને જાઓ";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox સાથે શોધો";
+"UIMenuItem.SearchWithFirefox" = "Ecosia સાથે શોધો";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "ન વાંચેલું";

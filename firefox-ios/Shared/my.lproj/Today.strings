@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "ဖွင့်ထားသည့်တပ်ဗ်များ မရှိပါ";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox ကို ဖွင့်ပါ";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia ကို ဖွင့်ပါ";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ကိုယ်ပိုင်ရှာဖွေမှု";
@@ -41,7 +41,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "အမြန်ကြည့်မြင်ကွင်း";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox တွင် ရှာပါ";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia တွင် ရှာပါ";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "သီးသန့်တဗ်တွင် ရှာဖွေပါ";

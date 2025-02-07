@@ -905,7 +905,7 @@
 "Open Tabs" = "Các thẻ đang mở";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox không thể mở trang vì nó có địa chỉ không hợp lệ.";
+"OpenURL.Error.Message" = "Ecosia không thể mở trang vì nó có địa chỉ không hợp lệ.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Không thể mở trang";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Điều này cho phép bạn lưu hình ảnh vào Camera Roll của bạn.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox muốn truy cập Ảnh của bạn";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia muốn truy cập Ảnh của bạn";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Đóng";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Gửi báo cáo lỗi để Mozilla có thể khắc phục sự cố?";
+"Send a crash report so Mozilla can fix the problem?" = "Gửi báo cáo lỗi để Ecosia có thể khắc phục sự cố?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Gửi phản hồi";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Quản lý dữ liệu";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox sẽ ngừng đồng bộ hóa với tài khoản của bạn, nhưng sẽ không xóa mọi dữ liệu duyệt web của bạn trên thiết bị này.";
+"Settings.Disconnect.Body" = "Ecosia sẽ ngừng đồng bộ hóa với tài khoản của bạn, nhưng sẽ không xóa mọi dữ liệu duyệt web của bạn trên thiết bị này.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Ngắt kết nối đồng bộ hóa";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Khi mở %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Khi mở Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Khi mở Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Đề nghị mở các liên kết được sao chép";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Tìm hiểu thêm.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến Ecosia cho tất cả mọi người.";
+"Settings.SendUsage.Message" = "Ecosia chỉ thu thập những gì chúng tôi cần cung cấp và cải tiến Ecosia cho tất cả mọi người.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Gửi dữ liệu sử dụng";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Tìm hiểu thêm.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox có thể cài đặt và chạy các nghiên cứu theo thời gian.";
+"Settings.Studies.Toggle.Message" = "Ecosia có thể cài đặt và chạy các nghiên cứu theo thời gian.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Nghiên cứu";

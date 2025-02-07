@@ -311,7 +311,7 @@
 "Forward" = "आगे बढ़ाएं";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox Account";
+"FxA.FirefoxAccount" = "Ecosia Account";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "खाता एवं उपकरण प्रबंधित करें";
@@ -335,7 +335,7 @@
 "FxA.SyncNow" = "अभी सिंक करें";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox सिंक %@ में जोड़ा गया";
+"FxAPush_DeviceConnected_body" = "Ecosia सिंक %@ में जोड़ा गया";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "सिंक जुड़ गया";
@@ -386,7 +386,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "टैब की सूची देखने के लिए अपने दूसरे उपकरणों से साइन इन करें।";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox सिंक";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia सिंक";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "इतिहास";
@@ -734,7 +734,7 @@
 "Open Tabs" = "टैब खोलें";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox पृष्ठ को नही खोल सकता हैं क्योंकि इसमें एक अमान्य पता है।";
+"OpenURL.Error.Message" = "Ecosia पृष्ठ को नही खोल सकता हैं क्योंकि इसमें एक अमान्य पता है।";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "पृष्ठ नहीं खोला जा सकता है";
@@ -746,7 +746,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "यह आपको अपने कैमरा रोल करने में चित्रों को सहेजने की अनुमति देता है।";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox आपके फ़ोटो को एक्सेस करना चाहेंगे";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia आपके फ़ोटो को एक्सेस करना चाहेंगे";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "बंद करें";
@@ -872,7 +872,7 @@
 "Search.ThirdPartyEngines.OK" = "ठीक";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "खराबी की एक विवरण भेजें, ताकि Mozilla समस्या को ठीक कर सके?";
+"Send a crash report so Mozilla can fix the problem?" = "खराबी की एक विवरण भेजें, ताकि Ecosia समस्या को ठीक कर सके?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "प्रतिक्रिया भेजें";
@@ -926,7 +926,7 @@
 "SentTab.NoTabArrivingNotification.body" = "शुरू करने के लिए टैप करें";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox सिंक";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia सिंक";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "देखें";
@@ -986,7 +986,7 @@
 "Settings.DataManagement.Title" = "डेटा प्रबंधन";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox आपके खाते के साथ सिंक करना बंद कर देगा, लेकिन इस उपकरण पर स्थित आपका कोई भी ब्राउजिंग डाटा नहीं मिटाएगा।";
+"Settings.Disconnect.Body" = "Ecosia आपके खाते के साथ सिंक करना बंद कर देगा, लेकिन इस उपकरण पर स्थित आपका कोई भी ब्राउजिंग डाटा नहीं मिटाएगा।";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "डिस्कनेक्ट करें";
@@ -1049,7 +1049,7 @@
 "Settings.FxA.Sync.SectionName" = "सिंक सेटिंग";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox खाता";
+"Settings.FxA.Title" = "Ecosia खाता";
 
 /* General settings section title */
 "Settings.General.SectionName" = "सामान्य";
@@ -1100,7 +1100,7 @@
 "Settings.NewTab.Option.BlankPage" = "खाली पृष्ठ";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox मुख्य पृष्ठ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia मुख्य पृष्ठ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "मुख्य पृष्ठ";
@@ -1118,10 +1118,10 @@
 "Settings.NewTab.TopSectionNameFooter" = "चयन करें कि नया टैब खोलने पर आप क्या देखेंगे";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox खुलते समय";
+"Settings.OfferClipboardBar.Status" = "Ecosia खुलते समय";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox खुलते समय";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia खुलते समय";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "कॉपी किए लिंक को खोलने का प्रस्ताव दें";
@@ -1145,7 +1145,7 @@
 "Settings.SendUsage.Link" = "अधिक जानें।";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla मात्र उसे एकत्रित करने का प्रयास करता है जिसकी हमें आवश्यकता होती है तथा Ecosia को सभी के लिए बेहतर बनता है।";
+"Settings.SendUsage.Message" = "Ecosia मात्र उसे एकत्रित करने का प्रयास करता है जिसकी हमें आवश्यकता होती है तथा Ecosia को सभी के लिए बेहतर बनता है।";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "उपयोगित डेटा भेजें";
@@ -1244,13 +1244,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "बैकग्राउंड में लोड करें";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox में लोड हो रहा है";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia में लोड हो रहा है";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox में खोलें";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia में खोलें";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox में खोजें";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia में खोजें";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "खोज सुझाव दिखाएं";
@@ -1376,7 +1376,7 @@
 "UIMenuItem.PasteGo" = "पेस्ट करें और आगे बढ़ें";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox के साथ खोजें";
+"UIMenuItem.SearchWithFirefox" = "Ecosia के साथ खोजें";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "अपठित";

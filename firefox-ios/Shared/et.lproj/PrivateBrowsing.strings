@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Ava uuel privaatsel kaardil";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ei mäleta ajalugu või küpsiseid, aga uued järjehoidjad salvestatakse.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia ei mäleta ajalugu või küpsiseid, aga uued järjehoidjad salvestatakse.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Rohkem teavet";

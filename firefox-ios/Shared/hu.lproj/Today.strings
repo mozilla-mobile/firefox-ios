@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Privát lapok bezárása";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefoxos parancsikonok hozzáadása a kezdőképernyőhöz.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ecosiaos parancsikonok hozzáadása a kezdőképernyőhöz.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ugrás a másolt hivatkozáshoz";
@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Nincsenek nyitott lapok.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox megnyitása";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia megnyitása";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Privát keresés";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Gyors műveletek";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-hivatkozások";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia-hivatkozások";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Parancsikonok hozzáadása a nyitott lapokhoz.";

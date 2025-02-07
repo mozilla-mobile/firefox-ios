@@ -143,7 +143,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Oortjies van ander toestelle is hier.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Geskiedenis";
@@ -257,7 +257,7 @@
 "Open Settings" = "Open instellings";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox kan nie die bladsy oopmaak nie want dit het ’n ongeldige adres.";
+"OpenURL.Error.Message" = "Ecosia kan nie die bladsy oopmaak nie want dit het ’n ongeldige adres.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Kan nie bladsy open nie";
@@ -332,7 +332,7 @@
 "Search.ThirdPartyEngines.OK" = "Goed";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Stuur ’n omvalverslag na Mozilla sodat ons die probleem kan oplos?";
+"Send a crash report so Mozilla can fix the problem?" = "Stuur ’n omvalverslag na Ecosia sodat ons die probleem kan oplos?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Stuur terugvoer";

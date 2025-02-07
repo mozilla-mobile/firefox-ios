@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "開いたタブはありません。";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox を開く";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia を開く";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "プライベート検索";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Firefox のショートカットをホーム画面に追加します。ウィジェットを追加したら、長押しして編集し、別のショートカットを選択します。";
+"TodayWidget.QuickActionGalleryDescription" = "Ecosia のショートカットをホーム画面に追加します。ウィジェットを追加したら、長押しして編集し、別のショートカットを選択します。";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "クイックアクション";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ショートカット";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia ショートカット";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "開いているタブへのショートカットを追加します。";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "クイックビュー";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox で検索";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia で検索";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "プライベートタブで検索";

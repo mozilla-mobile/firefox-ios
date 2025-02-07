@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ны төп браузерыгыз итү — ачык, кулланышлы интернетка тавыш бирү.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia-ны төп браузерыгыз итү — ачык, кулланышлы интернетка тавыш бирү.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Яхшырак Интернетка күчегез";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Көндәлек гизүегезне яхшыртыгыз";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox уртача алганда ай саен бер кулланучыга 3000+ трекерны блоклый. Хосусыйлык тынычлыгы өчен безне төп браузерыгыз итегез.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia уртача алганда ай саен бер кулланучыга 3000+ трекерны блоклый. Хосусыйлык тынычлыгы өчен безне төп браузерыгыз итегез.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox хосусыйлыгыгызны саклый";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia хосусыйлыгыгызны саклый";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Башка браузерны төп браузер итү";

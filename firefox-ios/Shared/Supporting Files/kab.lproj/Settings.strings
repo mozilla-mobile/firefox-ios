@@ -101,7 +101,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Amsedday n unadi amezwer";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Issin ugar ɣef Firefox Suggest";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Issin ugar ɣef Ecosia Suggest";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Imseddayen n unadi niḍen";
@@ -137,13 +137,13 @@
 "Settings.Search.ShowSuggestions.v121" = "Sken isumar n unadi";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Afeggag n tansiwin - Firefox isumer";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Afeggag n tansiwin - Ecosia isumer";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Issin ugar ɣef Firefox Suggest";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Issin ugar ɣef Ecosia Suggest";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "Sken isumar seg yisumar n Firefox deg tɣimiyin tusligin";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Sken isumar seg yisumar n Ecosia deg tɣimiyin tusligin";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Nadi deg uzray n tunigin";

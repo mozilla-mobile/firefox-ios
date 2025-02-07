@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Mtawi tura";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox yeqqen ar %@";
+"FxAPush_DeviceConnected_body" = "Ecosia yeqqen ar %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Synch yeqqen";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Qqen akken ad d-tsekneḍ tabdart n waccaren seg yibenkan-ik-nniḍen.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Amazray";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Lddi icarren";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ur yezmir ara ad yeldi asebter acku tansa-nni ur tmeɣtu ara.";
+"OpenURL.Error.Message" = "Ecosia ur yezmir ara ad yeldi asebter acku tansa-nni ur tmeɣtu ara.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Ur yezmir ara ad yeldi asebter";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aya ad isireg asekles n tugna ɣer uzmam n tkamiṛat.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox yebɣa ad yekcem ɣer tewlafin-inek";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia yebɣa ad yekcem ɣer tewlafin-inek";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Mdel";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Uɣal ɣer yiccer";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox isumer-d";
+"Search.SuggestSectionTitle.v102" = "Ecosia isumer-d";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Amsedday n unadi amaynut ad d-iban deg ufeggag n unadi arurad.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Ih";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Azen aneqqis n uɣelluy akken Mozilla ad tefru ugur?";
+"Send a crash report so Mozilla can fix the problem?" = "Azen aneqqis n uɣelluy akken Ecosia ad tefru ugur?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Azen tikti";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Senned akken ad tebḍuḍ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Sken";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Asefrek n isefka";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ad iseḥbes amtawi d umiḍan-inek, acukan ur ittekkes ara isefka-inek n tunigin seg uselkim-a.";
+"Settings.Disconnect.Body" = "Ecosia ad iseḥbes amtawi d umiḍan-inek, acukan ur ittekkes ara isefka-inek n tunigin seg uselkim-a.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Ffeɣ si Sych";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Mi ara yeldi %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Ticki yeldi-d Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Ticki yeldi-d Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Sumer tulya n iseɣwan yettwaneɣlen";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Issin ugar.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla tettennaɣ akken ad telqeḍ kan ayen tesra i usnulfu d usnerni n Ecosia i yal yiwen";
+"Settings.SendUsage.Message" = "Ecosia tettennaɣ akken ad telqeḍ kan ayen tesra i usnulfu d usnerni n Ecosia i yal yiwen";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Azen isefka n useqdec";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Issin ugar.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox yezmer ad isebded yerna ad iseddu leqraya seg wakud ɣer wayeḍ.";
+"Settings.Studies.Toggle.Message" = "Ecosia yezmer ad isebded yerna ad iseddu leqraya seg wakud ɣer wayeḍ.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Leqraya";

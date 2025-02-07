@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "បើក​នៅ​ក្នុង​ផ្ទាំង​ឯកជន​ថ្មី";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox នឹង​មិន​ចងចាំ​ប្រវត្តិ ឬ​ខូគី​ណា​មួយ​ឡើយ ប៉ុន្តែ​​ចំណាំ​ថ្មី​នឹង​ត្រូវ​រក្សាទុក។";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia នឹង​មិន​ចងចាំ​ប្រវត្តិ ឬ​ខូគី​ណា​មួយ​ឡើយ ប៉ុន្តែ​​ចំណាំ​ថ្មី​នឹង​ត្រូវ​រក្សាទុក។";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "ស្វែងយល់​បន្ថែម";

@@ -359,7 +359,7 @@
 "Forward" = "آگے";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox اکاؤنٹ";
+"FxA.FirefoxAccount" = "Ecosia اکاؤنٹ";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "اکاؤنٹ اور آلات کا بندرست کریں";
@@ -383,7 +383,7 @@
 "FxA.SyncNow" = "ابھی ہمہ وقت سازی کریں";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox ہمہ وقت سازی %@ سے جڑِی ہے";
+"FxAPush_DeviceConnected_body" = "Ecosia ہمہ وقت سازی %@ سے جڑِی ہے";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "ہمہ وقت سازی جڑ گئی";
@@ -404,7 +404,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "ایک آلہ Ecosiaہمہ وقت سازی سے منقطع ہوا ہے";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox لوگو، وال پیپر تبدیل کریں۔";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia لوگو، وال پیپر تبدیل کریں۔";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "مدد";
@@ -437,7 +437,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "ٹیبیں کی فہرست دیکھنے کے لئے اپنے دیگر آلات سے سائن ان کریں۔";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "سابقات";
@@ -839,7 +839,7 @@
 "Open Tabs" = "ٹیب کھولیں";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox اس صفحہ کو نہیں کھول سکتا کونکہ اسکا پتہ ناجائز ہے۔";
+"OpenURL.Error.Message" = "Ecosia اس صفحہ کو نہیں کھول سکتا کونکہ اسکا پتہ ناجائز ہے۔";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "صفحہ نہیں کھول سکتا";
@@ -851,7 +851,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "یہ آپ کی تصاویر کو اپنے کیمرے رول پر محفوظ کرنے کی اجازت دیتا ہے۔";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox آپ کو تصاویر تکرسائی حاصل کرنا چاہے گا";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia آپ کو تصاویر تکرسائی حاصل کرنا چاہے گا";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "بند کریں";
@@ -977,7 +977,7 @@
 "Search.ThirdPartyEngines.OK" = "ٹھیک ہے";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "ایک تباہ رپورٹ ارسال کریں تاکہ Mozilla مسلہ کو جل کرسکے؟";
+"Send a crash report so Mozilla can fix the problem?" = "ایک تباہ رپورٹ ارسال کریں تاکہ Ecosia مسلہ کو جل کرسکے؟";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "جواب الجواب ارسال کریں";
@@ -1034,7 +1034,7 @@
 "SentTab.NoTabArrivingNotification.body" = "آغاز کرنے کے لیئے تھبتھبائیں";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "نظارہ";
@@ -1091,7 +1091,7 @@
 "Settings.DataManagement.Title" = "کوائف بندرستگی";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox آپ کے اکائونٹ کے ساتھ ہمہ وقت سازی بند کر دے گا۔ لیکن اس آلہ پر آپ کے کوئی برائوزنگ کوائف حزف نہیں کرے گا۔";
+"Settings.Disconnect.Body" = "Ecosia آپ کے اکائونٹ کے ساتھ ہمہ وقت سازی بند کر دے گا۔ لیکن اس آلہ پر آپ کے کوئی برائوزنگ کوائف حزف نہیں کرے گا۔";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "ہمہ وقت سازی منقطع کریں";
@@ -1157,7 +1157,7 @@
 "Settings.FxA.Sync.SectionName" = "ہمہ وقت ساز سیٹنگیں";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox اکاؤنٹس";
+"Settings.FxA.Title" = "Ecosia اکاؤنٹس";
 
 /* General settings section title */
 "Settings.General.SectionName" = "عمومی";
@@ -1244,7 +1244,7 @@
 "Settings.NewTab.Option.Custom" = "مخصوص";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox ابتدائی صفحہ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia ابتدائی صفحہ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "ابتدائی صفحہ";
@@ -1265,10 +1265,10 @@
 "Settings.NoImageModeBlockImages.Label.v99" = "تصویر مسدود کریں";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox کھولتے وقت";
+"Settings.OfferClipboardBar.Status" = "Ecosia کھولتے وقت";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox کھولتے وقت";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia کھولتے وقت";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "نقل شدہ ربط کھولنے پیشکش";
@@ -1298,7 +1298,7 @@
 "Settings.SendUsage.Link" = "مزید سیکھیں.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla صرف اس کو جمع کرنے کی کوشش کرتا ہے جو ہمیں ہر کسی کے لئے Ecosia فراہم کرنے اور بہتر بنانے کی ضرورت ہے۔";
+"Settings.SendUsage.Message" = "Ecosia صرف اس کو جمع کرنے کی کوشش کرتا ہے جو ہمیں ہر کسی کے لئے Ecosia فراہم کرنے اور بہتر بنانے کی ضرورت ہے۔";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "استعمال شدہ کوائف ارسال کریں";
@@ -1412,13 +1412,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "پس منظر لوڈ ہو گیا";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox میں لوڈ ہو رہا ہے";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia میں لوڈ ہو رہا ہے";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox میں کھولیں";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia میں کھولیں";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox میں تلاش کریں";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia میں تلاش کریں";
 
 /* Button in share sheet to copy the url of the current tab. */
 "ShareSheet.Copy.Title.v108" = "نقل کریں";
@@ -1565,7 +1565,7 @@
 "UIMenuItem.PasteGo" = "چسپاں کریں اور چلیں";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox کے ساتھ تلاش کریں";
+"UIMenuItem.SearchWithFirefox" = "Ecosia کے ساتھ تلاش کریں";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "غير مطالعہ";

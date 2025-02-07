@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "Keine offenen Tabs.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox öffnen";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia öffnen";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Private Suche";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Schnellaktionen";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-Verknüpfungen";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia-Verknüpfungen";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Fügen Sie Verknüpfungen zu Ihren offenen Tabs hinzu.";

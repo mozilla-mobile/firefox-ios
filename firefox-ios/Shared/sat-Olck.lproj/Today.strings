@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱠᱚ ᱵᱚᱸᱫᱚ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱟᱢᱟᱜ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ecosia ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱟᱢᱟᱜ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "ᱱᱚᱠᱚᱞ ᱟᱠᱟᱱ ᱞᱮᱸᱠ ᱛᱮ ᱪᱟᱞᱟᱜᱢᱮ";
@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "ᱴᱮᱵᱽ ᱠᱚ ᱡᱷᱤ ᱵᱚᱱᱩ-ᱟ.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox ᱡᱷᱤᱜ ᱢᱮ";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia ᱡᱷᱤᱜ ᱢᱮ";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ᱱᱤᱡᱮᱨᱟᱠ ᱥᱮᱸᱫᱽᱨᱟ";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "ᱞᱚᱜᱚᱱ ᱛᱮᱭᱟ ᱠᱚᱢᱤ";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ᱥᱚᱴᱠᱚᱴ";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia ᱥᱚᱴᱠᱚᱴ";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "ᱟᱢᱟᱜ ᱠᱷᱩᱞᱟᱹ ᱟᱠᱟᱱ ᱴᱮᱵᱽ ᱠᱚ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱠᱚᱴ ᱠᱚ ᱥᱮᱞᱮᱫ ᱢᱮ ᱾";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "ᱞᱚᱜᱚᱱ ᱛᱮ ᱧᱮᱞ";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";

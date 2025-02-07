@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Geàrr leum gun taba";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nochdaidh an t-einnsean-luirg ùr ann am bàr nan lorg gu luath.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Ceart ma-thà";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Mozilla mun tuisleadh ach an urrainn dhuinn a chàradh?";
+"Send a crash report so Mozilla can fix the problem?" = "A bheil thu deònach aithisg a chur gu Ecosia mun tuisleadh ach an urrainn dhuinn a chàradh?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Cuir thugainn do bheachdan";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Nuair a dh’fhosglas tu %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Nuair a dh’fhosglas mi Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Nuair a dh’fhosglas mi Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "faighnich a bheil mi airson ceangal a rinn mi lethbhreac dheth fhosgladh";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Barrachd fiosrachaidh.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson Ecosia a sholar is a leasachadh dhan a h-uile duine.";
+"Settings.SendUsage.Message" = "Tha Ecosia an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson Ecosia a sholar is a leasachadh dhan a h-uile duine.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Cuir an dàta cleachdaidh";

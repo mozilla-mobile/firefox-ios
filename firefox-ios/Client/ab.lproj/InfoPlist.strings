@@ -5,16 +5,16 @@
 "New Tab" = "Абларҭа ҿыц";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox акамера ахархәоит QR-кодқәа рыҭыхразы, насгьы афотосахьақәеи авидеоқәеи рҭыхразы.";
+"NSCameraUsageDescription" = "Ecosia акамера ахархәоит QR-кодқәа рыҭыхразы, насгьы афотосахьақәеи авидеоқәеи рҭыхразы.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox иаҭахуп Face ID еиқәырханы иҟоу алогинқәеи ишәарҭоу акартақәеи рахь анеиразы.";
+"NSFaceIDUsageDescription" = "Ecosia иаҭахуп Face ID еиқәырханы иҟоу алогинқәеи ишәарҭоу акартақәеи рахь анеиразы.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Уахьнеиуа асаитқәа уахьыҟоу рҳәар рылшоит.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox аудио аҭаҩреи ашьҭыхреи рзы умикрофон ахархәоит.";
+"NSMicrophoneUsageDescription" = "Ecosia аудио аҭаҩреи ашьҭыхреи рзы умикрофон ахархәоит.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Уи шәара ишәылнаршоит афотосахьақәа рыхьчара.";

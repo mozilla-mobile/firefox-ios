@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ის ნაგულისხმევ ბრაუზერად დაყენება არის ღია, ხელმისაწვდომი ინტერნეტის მხარდაჭერა.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia-ის ნაგულისხმევ ბრაუზერად დაყენება არის ღია, ხელმისაწვდომი ინტერნეტის მხარდაჭერა.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "ნაგულისხმევად უკეთესი ინტერნეტი";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "შეუფერხებელი ინტერნეტმოგზაურობა";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ზღუდავს საშუალოდ 3000+ მეთვალყურეს ყოველთვიურად. უზრუნველყოფს ინტერნეტის უსაფრთხო და მშვიდ მოხმარებას.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ზღუდავს საშუალოდ 3000+ მეთვალყურეს ყოველთვიურად. უზრუნველყოფს ინტერნეტის უსაფრთხო და მშვიდ მოხმარებას.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox იცავს პირადულობას";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia იცავს პირადულობას";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "აქციეთ მთავარ ბრაუზერად";

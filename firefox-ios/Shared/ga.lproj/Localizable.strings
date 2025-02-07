@@ -170,7 +170,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Taispeánfar do chuid cluaisíní ó ghléasanna eile anseo.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Stair";
@@ -413,7 +413,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "An bhfuil fonn ort tuairisc tuairteála a sheoladh chuig Mozilla leis an bhfadhb a réiteach?";
+"Send a crash report so Mozilla can fix the problem?" = "An bhfuil fonn ort tuairisc tuairteála a sheoladh chuig Ecosia leis an bhfadhb a réiteach?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Seol Aiseolas";
@@ -449,7 +449,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tapáil le tosú";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Sepia theme setting in Reading View settings */
 "Sepia" = "Donnrua";

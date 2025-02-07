@@ -905,7 +905,7 @@
 "Open Tabs" = "Открытые вкладки";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox не может открыть страницу, так как её адрес некорректен.";
+"OpenURL.Error.Message" = "Ecosia не может открыть страницу, так как её адрес некорректен.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Не удалось открыть страницу";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Это позволит сохранить изображение в вашу «Фотопленку».";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox хотел бы получить доступ к вашим Фото";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia хотел бы получить доступ к вашим Фото";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Закрыть";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Перейти на вкладку";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox Suggest";
+"Search.SuggestSectionTitle.v102" = "Ecosia Suggest";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Новая поисковая система будет отображаться на панели быстрого поиска.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "ОК";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Отправить сообщение о падении, чтобы Mozilla могла устранить эту проблему?";
+"Send a crash report so Mozilla can fix the problem?" = "Отправить сообщение о падении, чтобы Ecosia могла устранить эту проблему?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Отправить отзыв";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Управление данными";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox прекратит синхронизацию с вашим аккаунтом, но не будет удалять ничего из ваших данных веб-сёрфинга на этом устройстве.";
+"Settings.Disconnect.Body" = "Ecosia прекратит синхронизацию с вашим аккаунтом, но не будет удалять ничего из ваших данных веб-сёрфинга на этом устройстве.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Отсоединить";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "При открытии %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "При открытии Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "При открытии Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Запрос открытия скопированных ссылок";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Подробнее.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы Ecosia и его улучшения в будущем.";
+"Settings.SendUsage.Message" = "Ecosia обязуется собирать только ту информацию, которая необходима для работы Ecosia и его улучшения в будущем.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Отправлять данные о работе";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Узнать больше.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox может время от времени устанавливать и проводить исследования.";
+"Settings.Studies.Toggle.Message" = "Ecosia может время от времени устанавливать и проводить исследования.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Исследования";

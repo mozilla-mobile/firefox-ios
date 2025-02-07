@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Ďalšie informácie";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Nastavte si automatické otváranie webových stránok, e‑mailov a správ vo Firefoxe.";
+"DefaultBrowserCard.Description" = "Nastavte si automatické otváranie webových stránok, e‑mailov a správ vo Ecosia.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Vyberte si Ecosia ako svoj predvolený prehliadač, aby sa rýchlosť, bezpečnosť a súkromie stali automatickými.";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Zvýšte úroveň každodenného prehliadania";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox zablokuje každý mesiac v priemere viac ako 3 000 sledovacích prvkov na používateľa. Nastavte si z nás svoj predvolený prehliadač, aby ste mali súkromie pod kontrolou.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia zablokuje každý mesiac v priemere viac ako 3 000 sledovacích prvkov na používateľa. Nastavte si z nás svoj predvolený prehliadač, aby ste mali súkromie pod kontrolou.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox má súkromie pod kontrolou";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia má súkromie pod kontrolou";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Zmeňte svoj predvolený prehliadač";

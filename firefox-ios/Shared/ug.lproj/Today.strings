@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "ئوچۇق بەتكۈچ يوق.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox نى ئاچ";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia نى ئاچ";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "شەخسىي ئىزدە";
@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "تېز مەشغۇلات";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox تېزلەتمىسى";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia تېزلەتمىسى";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "ئوچۇق بەتكۈچكە تېزلەتمە قوشىدۇ.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "تېز كۆرۈش";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox تا\nئىزدە";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia تا\nئىزدە";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "شەخسىي \nبەتكۈچتە ئىزدە";

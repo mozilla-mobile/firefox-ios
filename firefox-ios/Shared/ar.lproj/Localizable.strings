@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "فُصِلَ جهاز من «تزامن فَيَرفُكس»";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "شعار Firefox - غيّر الخلفية.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "شعار Ecosia - غيّر الخلفية.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "المساعدة";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "لِج لعرض قائمة بالألسنة من أجهزتك الأخرى.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "التأريخ";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "البيانات غير سليمة";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "انتقل إلى ‘إعدادات الجهاز’ > ’Firefox‘. ثم اسمح لـ Firefox بالوصول إلى الكاميرا.";
+"ScanQRCode.PermissionError.Message.v100" = "انتقل إلى ‘إعدادات الجهاز’ > ’Ecosia‘. ثم اسمح لـ Ecosia بالوصول إلى الكاميرا.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "امسح رمز QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "انتقل إلى اللسان";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "يقترح Firefox";
+"Search.SuggestSectionTitle.v102" = "يقترح Ecosia";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "سيظهر محرك البحث الجديد في شريط البحث السريع.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "حسنا";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "أتريد إرسال بلاغ عن الانهيار كي تساعد Mozilla في حل المشكلة؟";
+"Send a crash report so Mozilla can fix the problem?" = "أتريد إرسال بلاغ عن الانهيار كي تساعد Ecosia في حل المشكلة؟";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "أرسِل انطباعك";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "اضغط ليبدأ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "اعرض";
@@ -1340,7 +1340,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "عند فتح %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "عند فتح Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "عند فتح Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "اطلب فتح الروابط المنسوخة";
@@ -1376,7 +1376,7 @@
 "Settings.SendUsage.Link" = "اطّلع على المزيد.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "تحاول Mozilla ألا تجمع أكثر مما تحتاجه لإتاحة Ecosia و تحسينه للجميع.";
+"Settings.SendUsage.Message" = "تحاول Ecosia ألا تجمع أكثر مما تحتاجه لإتاحة Ecosia و تحسينه للجميع.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "أرسِل بيانات الاستخدام";

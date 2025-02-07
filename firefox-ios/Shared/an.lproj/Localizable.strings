@@ -308,7 +308,7 @@
 "FxA.SyncNow" = "Sincronizar agora";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s'ha connectau a %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s'ha connectau a %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync connectau";
@@ -359,7 +359,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Dentrar pa veyer una lista de pestanyas d'os atros tuyos dispositivos.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historial";
@@ -482,7 +482,7 @@
 "LoginsList.Title" = "INICIOS DE SESIÓN ALZAUS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox s'ha zarrau inesperadament. Te faría goyo de restaurar las tuyas pestanyas?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia s'ha zarrau inesperadament. Te faría goyo de restaurar las tuyas pestanyas?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcar como leito";
@@ -596,7 +596,7 @@
 "Open Tabs" = "Ubrir las pestanyas";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox no podió trobar la pachina perque l'adreza no ye valida.";
+"OpenURL.Error.Message" = "Ecosia no podió trobar la pachina perque l'adreza no ye valida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "No s'ha puesto ubrir la pachina";
@@ -608,7 +608,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Este te permite alzar la imachen en o tuyo carret de fotos.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox quiere acceder a las tuyas fotos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia quiere acceder a las tuyas fotos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Zarrar";
@@ -719,7 +719,7 @@
 "Search.ThirdPartyEngines.OK" = "Acceptar";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Ninviar un informe d'o fallo pa que Mozilla resuelta lo problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Ninviar un informe d'o fallo pa que Ecosia resuelta lo problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Ninviar comentarios";
@@ -773,7 +773,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Selecciona pa empecipiar";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Veyer";
@@ -830,7 +830,7 @@
 "Settings.DataManagement.Title" = "Chestión d'os datos";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox aturará la sincronización con a tuya cuenta, pero no borrará garra dato de navegación en este dispositivo.";
+"Settings.Disconnect.Body" = "Ecosia aturará la sincronización con a tuya cuenta, pero no borrará garra dato de navegación en este dispositivo.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Desconnectar Sync";
@@ -917,7 +917,7 @@
 "Settings.NewTab.Option.BlankPage" = "Pachina en blanco";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia Home";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Pachina d'inicio";
@@ -938,7 +938,7 @@
 "Settings.OfferClipboardBar.Status" = "En ubrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "En ubrir Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "En ubrir Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Proposar ubrir los vinclos copiaus";
@@ -962,7 +962,7 @@
 "Settings.SendUsage.Link" = "Saber-ne mas.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla s'esfuerza a recopilar nomás lo que fa falta pa poder executar y amillorar Ecosia pa totz.";
+"Settings.SendUsage.Message" = "Ecosia s'esfuerza a recopilar nomás lo que fa falta pa poder executar y amillorar Ecosia pa totz.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ninviar datos d'uso";

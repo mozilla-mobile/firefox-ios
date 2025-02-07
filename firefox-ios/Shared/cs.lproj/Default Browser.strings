@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Zvyšte úroveň každodenního prohlížení";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox průměrně blokuje 3 000 sledovacích prvků měsíčně na uživatele. Udělejte si z nás výchozí webový prohlížeč, abyste měli jistotu soukromí.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia průměrně blokuje 3 000 sledovacích prvků měsíčně na uživatele. Udělejte si z nás výchozí webový prohlížeč, abyste měli jistotu soukromí.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox má soukromí pod kontrolou";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia má soukromí pod kontrolou";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Nastavte si svůj výchozí prohlížeč";

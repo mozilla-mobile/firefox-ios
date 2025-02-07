@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Synchronizovat";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync byl připojen k zařízení %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync byl připojen k zařízení %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Služba Sync připojena";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Pro zobrazení seznamu panelů z vašich ostatních zařízení se prosím přihlaste.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Historie";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Otevřené panely";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox nemůže stránku otevřít, protože má stránka neplatnou adresu.";
+"OpenURL.Error.Message" = "Ecosia nemůže stránku otevřít, protože má stránka neplatnou adresu.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Stránku nelze otevřít";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Toto vám umožní ukládat obrázky do vaší složky Camera Roll.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox žádá o přístup k vašim Fotografiím";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia žádá o přístup k vašim Fotografiím";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Zavřít";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Klepněte pro zahájení";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Zobrazit";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Správa dat";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ukončí synchronizaci s vaším účtem, ale nesmaže z tohoto zařízení žádná vaše data.";
+"Settings.Disconnect.Body" = "Ecosia ukončí synchronizaci s vaším účtem, ale nesmaže z tohoto zařízení žádná vaše data.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Odpojit Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Při otevření %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "při otevření Firefoxu";
+"Settings.OfferClipboardBar.StatusV2" = "při otevření Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Nabízet otevření zkopírovaných adres";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Zjistit více.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla sbírá jenom informace potřené pro vylepšování Ecosiau.";
+"Settings.SendUsage.Message" = "Ecosia sbírá jenom informace potřené pro vylepšování Ecosiau.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Odesílat údaje o používání";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Zjistit více.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox může čas od času instalovat a spouštět studie.";
+"Settings.Studies.Toggle.Message" = "Ecosia může čas od času instalovat a spouštět studie.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studie";

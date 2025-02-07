@@ -290,7 +290,7 @@
 "FxA.SyncNow" = "Sincronizar ara";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s’es connectat a %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s’es connectat a %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync connectat";
@@ -338,7 +338,7 @@
 "HistoryPanel.EmptySyncedTabsNullState.Description" = "Los onglets de vòstres autres periferics s’afichan aquí.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Istoric";
@@ -638,7 +638,7 @@
 "Okay" = "OK";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Firefox a plantat";
+"Oops! Firefox crashed" = "Ecosia a plantat";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Obrir d'articles en mòde lectura en tocant l’icòna del libre quand apareis dins la barra de títol.";
@@ -650,7 +650,7 @@
 "Open Tabs" = "Dobrir los onglets";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox pòt pas dobrir la pagina perque l’adreça es invalida.";
+"OpenURL.Error.Message" = "Ecosia pòt pas dobrir la pagina perque l’adreça es invalida.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Dobertura impossibla de la pagina";
@@ -662,7 +662,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Aquò vos permet d’enregistrar l’imatge dins Pellicula.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vòl accedir a vòstras fòtos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia vòl accedir a vòstras fòtos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Tampar";
@@ -764,7 +764,7 @@
 "Search.ThirdPartyEngines.OK" = "D'acòrd";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Enviar un rapòrt de plantatge que Mozilla pòsca corregir lo problèma ?";
+"Send a crash report so Mozilla can fix the problem?" = "Enviar un rapòrt de plantatge que Ecosia pòsca corregir lo problèma ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Enviar un comentari";
@@ -818,7 +818,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tocatz per començar";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Veire";
@@ -968,7 +968,7 @@
 "Settings.OfferClipboardBar.Status" = "En dobrir Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "En dobrir Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "En dobrir Ecosia";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Aplicacion de corrièr electronic";
@@ -986,7 +986,7 @@
 "Settings.SendUsage.Link" = "Ne saber mai.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla s’esfòrça de reculhir pas que las donadas necessàrias per vos ofrir e melhorar Ecosia.";
+"Settings.SendUsage.Message" = "Ecosia s’esfòrça de reculhir pas que las donadas necessàrias per vos ofrir e melhorar Ecosia.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Mandar de donadas d’utilizacion";

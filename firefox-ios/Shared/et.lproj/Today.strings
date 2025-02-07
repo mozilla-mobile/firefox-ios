@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Kiired tegevused";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefoxi otseteed";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosiai otseteed";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Lisa otsetee oma avatud kaartideni.";

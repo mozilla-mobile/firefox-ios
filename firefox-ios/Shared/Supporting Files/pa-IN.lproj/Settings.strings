@@ -101,7 +101,7 @@
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Firefox ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ecosia ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "ਬਦਲਵੇਂ ਖੋਜ ਇੰਜਣ";
@@ -137,13 +137,13 @@
 "Settings.Search.ShowSuggestions.v121" = "ਖੋਜ ਲਈ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖੋ";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ - Firefox ਸੁਝਾਅ";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "ਸਿਰਨਾਵਾਂ ਪੱਟੀ - Ecosia ਸੁਝਾਅ";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
-"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Firefox ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Ecosia ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨਾਂ ਵਿੱਚ Firefox ਸੁਝਾਅ ਵਲੋਂ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖਾਓ";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨਾਂ ਵਿੱਚ Ecosia ਸੁਝਾਅ ਵਲੋਂ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖਾਓ";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "ਬਰਾਊਜ਼ਿੰਗ ਅਤੀਤ ਖੋਜੋ";

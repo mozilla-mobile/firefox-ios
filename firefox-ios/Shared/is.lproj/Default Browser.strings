@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Lyftu daglegu vafri á annað stig";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox lokar á meira en 3.000 rekjara að meðaltali fyrir hvern notanda á mánuði. Gerðu hann að sjálfgefnum vafra til að styrkja friðhelgi einkalífsins.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia lokar á meira en 3.000 rekjara að meðaltali fyrir hvern notanda á mánuði. Gerðu hann að sjálfgefnum vafra til að styrkja friðhelgi einkalífsins.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox styður friðhelgi einkalífsins";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia styður friðhelgi einkalífsins";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Skiptu um sjálfgefinn vafra";

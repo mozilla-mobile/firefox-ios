@@ -2,7 +2,7 @@
 "Close Private Tabs" = "Maxfiy ichki oynalarni yopish";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox tarix yoki kukilarni xotirada olib qolmaydi, lekin yangi xatcho‘plar saqlanib qoladi.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia tarix yoki kukilarni xotirada olib qolmaydi, lekin yangi xatcho‘plar saqlanib qoladi.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Batafsil ma’lumot";

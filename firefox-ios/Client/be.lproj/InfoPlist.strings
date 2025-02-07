@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Ecosia выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox патрабуе Face ID для доступу да захаваных пароляў і спосабаў аплаты.";
+"NSFaceIDUsageDescription" = "Ecosia патрабуе Face ID для доступу да захаваных пароляў і спосабаў аплаты.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Вэб-сайты, якія вы наведваеце, могуць запытваць ваша месцазнаходжанне.";

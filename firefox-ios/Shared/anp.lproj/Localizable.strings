@@ -293,7 +293,7 @@
 "Forward" = "आगू बढ़ावोॅ";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox खाता";
+"FxA.FirefoxAccount" = "Ecosia खाता";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "खाता आरू उपकरण प्रबंधित करोॅ";
@@ -305,7 +305,7 @@
 "FxA.SyncNow" = "अब सिंक करोॅ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox सिंक %@ में जोड़ देल गेलै.";
+"FxAPush_DeviceConnected_body" = "Ecosia सिंक %@ में जोड़ देल गेलै.";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "सिंक जुड़ गेल";
@@ -353,7 +353,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "आपन दोसरो उपकरणों से टैब की सूची देखै ले साइन इन करो।";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox सिंक";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia सिंक";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "इतिहास";
@@ -602,7 +602,7 @@
 "SendTo.SendAction.Text" = "भेजोॅ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox सिंक";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia सिंक";
 
 /* Title in the settings view controller title bar */
 "Settings" = "सेटिंग्स";
@@ -656,7 +656,7 @@
 "Settings.FxA.DeviceName" = "डिवाइस रो नाम";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox खाता";
+"Settings.FxA.Title" = "Ecosia खाता";
 
 /* General settings section title */
 "Settings.General.SectionName" = "सामान्य";
@@ -674,7 +674,7 @@
 "Settings.NewTab.Option.BlankPage" = "खाली पेज";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox होम";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia होम";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "होमपेज";
@@ -743,13 +743,13 @@
 "ShareExtension.BookmarkThisPageActionDone.Title" = "बुकमार्कड";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox में लोड भे रहलो छै";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia में लोड भे रहलो छै";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox में खोलियै";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia में खोलियै";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox में खोजियै";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia में खोजियै";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "खोज सुझाव दिखाबियै";
@@ -809,7 +809,7 @@
 "UIMenuItem.PasteGo" = "पेस्ट आरु गो";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox सेॅ खोजोॅ";
+"UIMenuItem.SearchWithFirefox" = "Ecosia सेॅ खोजोॅ";
 
 /* Username textbox in Authentication prompt */
 "Username" = "यूजरनाम";

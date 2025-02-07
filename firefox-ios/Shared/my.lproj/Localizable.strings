@@ -284,7 +284,7 @@
 "Forward" = "လွှဲပြောင်းပို့ရန်";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox အကောင့်";
+"FxA.FirefoxAccount" = "Ecosia အကောင့်";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "အကောင့်နှင့် ကိရိယာများကို စီမံရန်";
@@ -308,7 +308,7 @@
 "FxA.SyncNow" = "ယခုပင် တစ်ပြေးညီ ပြုလုပ်ပါ";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync သည် %@ ကို ချိတ်ဆက်ထားပြီးပြီ";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync သည် %@ ကို ချိတ်ဆက်ထားပြီးပြီ";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync ကို ချိတ်ဆက်ထားသည်";
@@ -359,7 +359,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "အခြား ဖွင့်ထားသောကိရိယာများမှ တပ်ဗ်များကိုကြည့်";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "မှတ်တမ်း";
@@ -746,10 +746,10 @@
 "SendTo.NavBar.Title" = "တပ်ဗ်ကို ပို့ရန်";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Firefox Account ကို Sync ရန် သင့်တွင် ချိတ်ဆက်ထားသော အခြား ကိရိယာများ မရှိပါ။";
+"SendTo.NoDevicesFound.Message" = "Ecosia Account ကို Sync ရန် သင့်တွင် ချိတ်ဆက်ထားသော အခြား ကိရိယာများ မရှိပါ။";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Firefox ကို ကျေးဇူးပြု၍ ဖွင့်ပါ၊ အပြင်အဆင်များသို့ သွားပါ၊ ပြီးနောက် ဆက်လက်ဆောင်ရွက်ရန် ဝင်ရောက်ပါ။";
+"SendTo.NotSignedIn.Message" = "Ecosia ကို ကျေးဇူးပြု၍ ဖွင့်ပါ၊ အပြင်အဆင်များသို့ သွားပါ၊ ပြီးနောက် ဆက်လက်ဆောင်ရွက်ရန် ဝင်ရောက်ပါ။";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "သင့် Ecosia Account သို့ ဝင်ရောက်ထားခြင်း မရှိပါ။";
@@ -773,7 +773,7 @@
 "SentTab.NoTabArrivingNotification.body" = "စတင်ရန် တို့ထိပါ";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "ကြည့်ရန်";
@@ -830,7 +830,7 @@
 "Settings.DataManagement.Title" = "အချက်အလက် စီမံခန့်ခွဲမှု";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox သည် အကောင့်နှင့် အချက်အလက်များ ထပ်တူပြုခြင်းကို ရပ်တန့်ပါမည်။ သို့သော် ယခုကိရိယာရှိ သင်၏ မည်သည့်အချက်အလက်ကိုမျှ ဖျက်ပစ်မည် မဟုတ်ပါ။";
+"Settings.Disconnect.Body" = "Ecosia သည် အကောင့်နှင့် အချက်အလက်များ ထပ်တူပြုခြင်းကို ရပ်တန့်ပါမည်။ သို့သော် ယခုကိရိယာရှိ သင်၏ မည်သည့်အချက်အလက်ကိုမျှ ဖျက်ပစ်မည် မဟုတ်ပါ။";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Sync နှင့် ချိတ်ဆက်ဖြုတ်ရန်";
@@ -893,7 +893,7 @@
 "Settings.FxA.Sync.SectionName" = "Sync အပြင်အဆင်များ";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox အကောင့်";
+"Settings.FxA.Title" = "Ecosia အကောင့်";
 
 /* General settings section title */
 "Settings.General.SectionName" = "အထွေထွေ";
@@ -917,7 +917,7 @@
 "Settings.NewTab.Option.BlankPage" = "စာမျက်နှာအလွတ်";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Firefox အဖွင့်စာမျက်နှာ";
+"Settings.NewTab.Option.FirefoxHome" = "Ecosia အဖွင့်စာမျက်နှာ";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "အဖွင့်စာမျက်နှာ";
@@ -935,10 +935,10 @@
 "Settings.NewTab.TopSectionNameFooter" = "တက်ပ်အသစ်ဖွင့်သည့်အခါတက်လာမည့်အရာကိုရွေးချယ်ပါ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.Status" = "Firefox ကို ဖွင့်သည့်အခါ";
+"Settings.OfferClipboardBar.Status" = "Ecosia ကို ဖွင့်သည့်အခါ";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox ကို ဖွင့်သည့်အခါ";
+"Settings.OfferClipboardBar.StatusV2" = "Ecosia ကို ဖွင့်သည့်အခါ";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ကူးယူထားသော လင့်ခ်များကို ဖွင့်ရန် မေးမြန်းပါ";
@@ -962,7 +962,7 @@
 "Settings.SendUsage.Link" = "ပိုမိုလေ့လာရန်။";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla သည် လူတိုင်းအတွက် Ecosia ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
+"Settings.SendUsage.Message" = "Ecosia သည် လူတိုင်းအတွက် Ecosia ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "အသုံးပြုမှုဆိုင်ရာ အချက်အလက်များကို ပေးပို့ရန်";
@@ -1052,13 +1052,13 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "နောက်ကွယ်တွင် ဆောင်ရွက်ပါ";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Firefox တွင် ဆောင်ရွက်နေသည်";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Ecosia တွင် ဆောင်ရွက်နေသည်";
 
 /* Action label on share extension to immediately open page in Firefox. */
-"ShareExtension.OpenInFirefoxAction.Title" = "Firefox နှင့် ဖွင့်ပါ";
+"ShareExtension.OpenInFirefoxAction.Title" = "Ecosia နှင့် ဖွင့်ပါ";
 
 /* Action label on share extension to search for the selected text in Firefox. */
-"ShareExtension.SeachInFirefoxAction.Title" = "Firefox တွင် ရှာပါ";
+"ShareExtension.SeachInFirefoxAction.Title" = "Ecosia တွင် ရှာပါ";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "ရှာဖွေရေး အကြံပြုချက်များကို ပြပါ";
@@ -1166,7 +1166,7 @@
 "UIMenuItem.PasteGo" = "ကူးယူပြီးနောက်သွားမည်";
 
 /* Search in New Tab Text selection menu item */
-"UIMenuItem.SearchWithFirefox" = "Firefox ဖြင့် ရှာပါ";
+"UIMenuItem.SearchWithFirefox" = "Ecosia ဖြင့် ရှာပါ";
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "မဖတ်";

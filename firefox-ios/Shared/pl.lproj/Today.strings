@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zamknij prywatne karty";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodaj skróty Firefoksa do ekranu głównego.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Dodaj skróty Ecosia do ekranu głównego.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Otwórz skopiowany odnośnik";
@@ -23,19 +23,19 @@
 "TodayWidget.NoOpenTabsLabel" = "Brak otwartych kart.";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Otwórz Firefoksa";
+"TodayWidget.OpenFirefoxLabel" = "Otwórz Ecosia";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Wyszukaj prywatnie";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Dodaj skrót Firefoksa do ekranu głównego. Po dodaniu widżetu dotknij i przytrzymaj go, by go zmienić i wybrać inny skrót.";
+"TodayWidget.QuickActionGalleryDescription" = "Dodaj skrót Ecosia do ekranu głównego. Po dodaniu widżetu dotknij i przytrzymaj go, by go zmienić i wybrać inny skrót.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Szybkie działania";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Skróty Firefoksa";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Skróty Ecosia";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Dodaj skróty do otwartych kart.";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "Szybki podgląd";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Wyszukaj w Firefoksie";
+"TodayWidget.SearchInFirefoxV2" = "Wyszukaj w Ecosia";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "Wyszukaj w prywatnej karcie";

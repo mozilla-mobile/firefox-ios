@@ -215,7 +215,7 @@
 "FxA.SyncNow" = "Sync Sekarang";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync telah bersambung %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync telah bersambung %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync Bersambung";
@@ -251,7 +251,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Daftar masuk untuk melihat senarai tab dari peranti anda yang lain.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Sejarah";
@@ -362,7 +362,7 @@
 "LoginsHelper.Update.Button" = "Kemaskini";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox telah ranap sebelum ini. Adakah anda mahu memulihkan tab anda?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Ecosia telah ranap sebelum ini. Adakah anda mahu memulihkan tab anda?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Tandakan sebagai Sudah Dibaca";
@@ -437,7 +437,7 @@
 "Open Tabs" = "Buka Tab";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox tidak dapat membuka halaman ini kerana alamat tidak sah.";
+"OpenURL.Error.Message" = "Ecosia tidak dapat membuka halaman ini kerana alamat tidak sah.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Gagal Membuka Halaman";
@@ -542,7 +542,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Hantar laporan ranap supaya Mozilla boleh menyelesaikan masalah ini?";
+"Send a crash report so Mozilla can fix the problem?" = "Hantar laporan ranap supaya Ecosia boleh menyelesaikan masalah ini?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Hantar Maklum balas";
@@ -578,7 +578,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tap untuk memulakan";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Papar";
@@ -632,7 +632,7 @@
 "Settings.DataManagement.Title" = "Pengurusan Data";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox akan menghentikan sync akaun anda, tetapi tidak akan menghapuskan data pelayaran anda dalam peranti ini.";
+"Settings.Disconnect.Body" = "Ecosia akan menghentikan sync akaun anda, tetapi tidak akan menghapuskan data pelayaran anda dalam peranti ini.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Putuskan Sync";
@@ -704,7 +704,7 @@
 "Settings.OfferClipboardBar.Status" = "Apabila Membuka Ecosia";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Apabila Membuka Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "Apabila Membuka Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Menawarkan untuk Membuka Pautan yang Disalin";
@@ -725,7 +725,7 @@
 "Settings.SendUsage.Link" = "Ketahui Selanjutnya.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla mengumpulkan hanya yang diperlukan untuk menyedia dan meningkatkan Ecosia bagi manfaat semua pengguna.";
+"Settings.SendUsage.Message" = "Ecosia mengumpulkan hanya yang diperlukan untuk menyedia dan meningkatkan Ecosia bagi manfaat semua pengguna.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Hantar Data Penggunaan";

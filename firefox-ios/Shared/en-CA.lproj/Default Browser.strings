@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "Elevate Everyday Browsing";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blocks 3,000+ trackers per user each month on average. Make us your default browser for privacy peace of mind.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia blocks 3,000+ trackers per user each month on average. Make us your default browser for privacy peace of mind.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox Has Privacy Covered";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia Has Privacy Covered";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Switch Your Default Browser";

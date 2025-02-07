@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox نى سۈكۈتتىكى توركۆرگۈچگە تەڭشەپ، ئوچۇق ۋە قولايلىق تور مۇھىتى يارىتىش ئۈچۈن بىر ھەسسە كۈچ قوشۇڭ.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia نى سۈكۈتتىكى توركۆرگۈچگە تەڭشەپ، ئوچۇق ۋە قولايلىق تور مۇھىتى يارىتىش ئۈچۈن بىر ھەسسە كۈچ قوشۇڭ.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "تېخىمۇ گۈزەل ئىنتېرنېت ئۈچۈن كۆڭۈلدىكىگە تەڭشەيدۇ";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "كۈندىلىك زىيارەتنى يۈكسەلتىدۇ";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ھەر ئايدا ئوتتۇرا ھېساب بىلەن ھەر بىر ئىشلەتكۈچىگە 3000 دىن كۆپ ئىز قوغلىغۇچنى توسىدۇ. شەخسىي خاتىرجەملىك ئۈچۈن بىزنى كۆڭۈلدىكى توركۆرگۈڭىزگە ئايلاندۇرۇڭ.";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ھەر ئايدا ئوتتۇرا ھېساب بىلەن ھەر بىر ئىشلەتكۈچىگە 3000 دىن كۆپ ئىز قوغلىغۇچنى توسىدۇ. شەخسىي خاتىرجەملىك ئۈچۈن بىزنى كۆڭۈلدىكى توركۆرگۈڭىزگە ئايلاندۇرۇڭ.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox شەخسىيەتنى قوغدايدۇ";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia شەخسىيەتنى قوغدايدۇ";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "كۆڭۈلدىكى توركۆرگۈڭىزنى ئالماشتۇرۇڭ";

@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Sincrunizà avà";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s'hè cunnessu à %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync s'hè cunnessu à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync cunnessu";
@@ -410,7 +410,7 @@
 "FxAPush_DeviceDisconnected_body" = "%@ hè statu discunnessu bè.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu discunnessu bè da Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu discunnessu bè da Ecosia Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
 "FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync discunnessu";
@@ -419,7 +419,7 @@
 "FxAPush_DeviceDisconnected_title" = "Sync discunnessu";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu discunnessu da Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu discunnessu da Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Ecosia, cambià u sfondu di screnu.";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Cunnittitevi per affissà a lista di l’unghjette di i vostri altri apparechji.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Cronolugia";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Unghjette aperte";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox ùn pò micca apre a pagina perchè hà un indirizzu inaccettevule.";
+"OpenURL.Error.Message" = "Ecosia ùn pò micca apre a pagina perchè hà un indirizzu inaccettevule.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impussibule d’apre a pagina";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Quessu vi permette d’arregistrà a fiura in u vostru Rotulu di filmu.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vole accede à e vostre fotò";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia vole accede à e vostre fotò";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Chjode";
@@ -1004,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "I dati sò inaccetevule";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Andà à « Parametri » > « Firefox » di l’apparechju. Permette à Firefox d’accede à l’apparechju-fotò.";
+"ScanQRCode.PermissionError.Message.v100" = "Andà à « Parametri » > « Ecosia » di l’apparechju. Permette à Ecosia d’accede à l’apparechju-fotò.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Analizà un codice QR";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Passà à l’unghjetta";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox suggerisce";
+"Search.SuggestSectionTitle.v102" = "Ecosia suggerisce";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "U novu mutore di ricerca serà messu in a barra di ricerca rapida.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Vai";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu d’accidente per chì Mozilla possa currege u penseru ?";
+"Send a crash report so Mozilla can fix the problem?" = "Mandà un raportu d’accidente per chì Ecosia possa currege u penseru ?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Dà u mo avisu";
@@ -1088,7 +1088,7 @@
 "SendTo.NoDevicesFound.Message" = "Ùn avete alcunu altru apparechju prontu à esse sincrunizatu è cunnessu à stu contu Ecosia.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Ci vole à apre Firefox, andà in Parametri è identificassi per cuntinuà.";
+"SendTo.NotSignedIn.Message" = "Ci vole à apre Ecosia, andà in Parametri è identificassi per cuntinuà.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Ùn site micca cunnessu à u vostru contu Ecosia.";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Picchichjà per principià";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Affissà";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Ghjestione di i dati";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox ùn si sincruniserà più cù u vostru contu, ma ùn squasserà alcunu datu di navigazione nant’à st’apparechju.";
+"Settings.Disconnect.Body" = "Ecosia ùn si sincruniserà più cù u vostru contu, ma ùn squasserà alcunu datu di navigazione nant’à st’apparechju.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Discunnette Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "À l’apertura di %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "À l’apertura di Firefox";
+"Settings.OfferClipboardBar.StatusV2" = "À l’apertura di Ecosia";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Prupone d’apre i liami cupiati";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Sapene di più.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla face casu à cullettà solu i dati chì sò ghjuvevule per rigalà è bunificà Ecosia per tutti.";
+"Settings.SendUsage.Message" = "Ecosia face casu à cullettà solu i dati chì sò ghjuvevule per rigalà è bunificà Ecosia per tutti.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Mandà i dati d’adopru";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Sapene di più.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox pò installà è lancià studii di quandu in quandu.";
+"Settings.Studies.Toggle.Message" = "Ecosia pò installà è lancià studii di quandu in quandu.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studii";

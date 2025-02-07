@@ -35,7 +35,7 @@
 "TodayWidget.QuickActionsGalleryTitle" = "Pikatoiminnot";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-oikotiet";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ecosia-oikotiet";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryDescriptionV2" = "Lisää oikoteitä avoimiin välilehtiisi.";

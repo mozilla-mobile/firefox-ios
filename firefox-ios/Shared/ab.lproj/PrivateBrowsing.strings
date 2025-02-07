@@ -5,7 +5,7 @@
 "ContextMenu.OpenInNewPrivateTabButtonTitle" = "Иаарттәуп ахатә абларҭа ҿыц аҿы";
 
 /* Description text displayed when there are no open tabs while in private mode */
-"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox уҭоурых ма укукиқәа рҟынтә акгьы игәалашәом, аха аҭыжьымҭа ҿыцқәа еиқәырхахоит.";
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Ecosia уҭоурых ма укукиқәа рҟынтә акгьы игәалашәом, аха аҭыжьымҭа ҿыцқәа еиқәырхахоит.";
 
 /* Text button displayed when there are no tabs open while in private mode */
 "Learn More" = "Еиҳаны аинформациа";

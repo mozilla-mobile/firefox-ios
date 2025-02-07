@@ -377,7 +377,7 @@
 "Forward" = "Áfram";
 
 /* Settings section title for Firefox Account */
-"FxA.FirefoxAccount" = "Firefox reikningur";
+"FxA.FirefoxAccount" = "Ecosia reikningur";
 
 /* Button label to go to Firefox Account settings */
 "FxA.ManageAccount" = "Sýsla með reikning og tæki";
@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Samstilla núna";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox samstillingin er tengd %@";
+"FxAPush_DeviceConnected_body" = "Ecosia samstillingin er tengd %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Samstilling tengd";
@@ -422,7 +422,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Tæki hefur aftengt Ecosia Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Firefox merki - breyta bakgrunni.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Ecosia merki - breyta bakgrunni.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Hjálp";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Skráðu þig inn til að skoða lista af flipum frá öðrum tækjum.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox samstilling";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia samstilling";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Ferill";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Opna flipa";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox getur ekki opnað þessa síðu vegna þess að vistfangið er ógilt.";
+"OpenURL.Error.Message" = "Ecosia getur ekki opnað þessa síðu vegna þess að vistfangið er ógilt.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Geta ekki opnað síðu";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Þú getur vistað myndina í myndasafnið þitt.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vill fá aðgang að myndunum þínum";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia vill fá aðgang að myndunum þínum";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Loka";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Skipta yfir á flipa";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox tillögur";
+"Search.SuggestSectionTitle.v102" = "Ecosia tillögur";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Nýja leitarvélin mun birtast í leitarsvæðinu";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "Í lagi";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Senda hrunaskýrslu svo Mozilla geti lagað vandamálið?";
+"Send a crash report so Mozilla can fix the problem?" = "Senda hrunaskýrslu svo Ecosia geti lagað vandamálið?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Senda endurgjöf";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Ýttu á til að byrja";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox samstilling";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia samstilling";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Skoða";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Gagnastýring";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox mun hætta að samstilla reikninginn þinn en mun ekki eyða neinum vafragögnum á þessu tæki.";
+"Settings.Disconnect.Body" = "Ecosia mun hætta að samstilla reikninginn þinn en mun ekki eyða neinum vafragögnum á þessu tæki.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Aftengja samstillingu";
@@ -1241,7 +1241,7 @@
 "Settings.FxA.Sync.SectionName" = "Stillingar samstillingar";
 
 /* Title displayed in header of the FxA settings panel. */
-"Settings.FxA.Title" = "Firefox reikningur";
+"Settings.FxA.Title" = "Ecosia reikningur";
 
 /* General settings section title */
 "Settings.General.SectionName" = "Almennt";
@@ -1289,25 +1289,25 @@
 "Settings.Home.Option.Wallpaper" = "Bakgrunnur";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox bakgrunnur, ametyst-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Ecosia bakgrunnur, ametyst-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox bakgrunnur, strandhólar-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Ecosia bakgrunnur, strandhólar-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox bakgrunnur, cerulean-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Ecosia bakgrunnur, cerulean-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Sjálfgefinn glær bakgrunnur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox bakgrunnur, sólarupprás-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Ecosia bakgrunnur, sólarupprás-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Víxla af/á að fletta í gegnum bakgrunna";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox bakgrunnur, hæðir-í-rökkri-mynstur.";
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Ecosia bakgrunnur, hæðir-í-rökkri-mynstur.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klassískur %@";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Þegar %@ er opnað";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Þegar Firefox ræsir";
+"Settings.OfferClipboardBar.StatusV2" = "Þegar Ecosia ræsir";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Bjóða uppá að opna afritaða hlekki";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Fræðast meira.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla safnar eingöngu þeim gögnum sem við þurfum til að veita og betrum bæta Ecosia fyrir alla.";
+"Settings.SendUsage.Message" = "Ecosia safnar eingöngu þeim gögnum sem við þurfum til að veita og betrum bæta Ecosia fyrir alla.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Senda notkunarupplýsingar";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Fræðast meira.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox kann að setja upp og keyra rannsóknir af og til.";
+"Settings.Studies.Toggle.Message" = "Ecosia kann að setja upp og keyra rannsóknir af og til.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Kannanir";

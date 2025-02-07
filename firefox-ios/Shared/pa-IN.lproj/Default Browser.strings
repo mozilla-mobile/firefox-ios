@@ -1,5 +1,5 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox ਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਨਾਉਣਾ ਆਜ਼ਾਦ, ਪਹੁੰਚ ਵਿੱਚ ਇੰਟਰਨੈੱਟ ਲਈ ਵੋਟ ਪਾਉਣਾ ਹੈ।";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ecosia ਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਨਾਉਣਾ ਆਜ਼ਾਦ, ਪਹੁੰਚ ਵਿੱਚ ਇੰਟਰਨੈੱਟ ਲਈ ਵੋਟ ਪਾਉਣਾ ਹੈ।";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "ਬੇਹਤਰ ਇੰਟਰਨੈੱਟ ਲਈ ਮੂਲ";
@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "ਹਰ ਰੋਜ਼ ਦੇ ਬਰਾਊਜ਼ ਕਰਨ ਦਾ ਪੱਧਰ ਉੱਚਾ ਕਰੋ";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ਹਰ ਮਹੀਨੇ ਔਸਤ 3,000+ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ। ਪਰਦੇਦਾਰੀ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖਣ ਲਈ ਸਾਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ।";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ਹਰ ਮਹੀਨੇ ਔਸਤ 3,000+ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ। ਪਰਦੇਦਾਰੀ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖਣ ਲਈ ਸਾਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ।";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ਵਿੱਚ ਪਰਦੇਦਾਰੀ ਹੈ";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia ਵਿੱਚ ਪਰਦੇਦਾਰੀ ਹੈ";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ਆਪਣੇ ਮੂਲ ਬਰਾਊਜ਼ਰ ਨੂੰ ਬਦਲੋ";

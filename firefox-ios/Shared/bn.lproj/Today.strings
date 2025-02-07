@@ -23,7 +23,7 @@
 "TodayWidget.NoOpenTabsLabel" = "কোনো খোলা ট্যাব নেই।";
 
 /* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
-"TodayWidget.OpenFirefoxLabel" = "Firefox খুলুন";
+"TodayWidget.OpenFirefoxLabel" = "Ecosia খুলুন";
 
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "ব্যক্তিগত অনুসন্ধান";
@@ -44,7 +44,7 @@
 "TodayWidget.QuickViewGalleryTitle" = "কুইক ভিউ";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox এ\nঅনুসন্ধান করুন";
+"TodayWidget.SearchInFirefoxV2" = "Ecosia এ\nঅনুসন্ধান করুন";
 
 /* Search in private tab */
 "TodayWidget.SearchInPrivateTabLabelV2" = "ব্যক্তিগত ট্যাবে\nঅনুসন্ধান করুন";

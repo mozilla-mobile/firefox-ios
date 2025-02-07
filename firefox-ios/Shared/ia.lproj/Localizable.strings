@@ -401,7 +401,7 @@
 "FxA.SyncNow" = "Synchronisar ora";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync se ha connectite a %@";
+"FxAPush_DeviceConnected_body" = "Ecosia Sync se ha connectite a %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync connectite";
@@ -455,7 +455,7 @@
 "HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Aperi session pro vider le lista de schedas de tu altere apparatos.";
 
 /* Title for the empty synced tabs state in the History Panel */
-"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ecosia Sync";
 
 /* Title for the Back to History button in the History Panel */
 "HistoryPanel.HistoryBackButton.Title" = "Chronologia";
@@ -905,7 +905,7 @@
 "Open Tabs" = "Schedas aperte";
 
 /* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
-"OpenURL.Error.Message" = "Firefox non pote aperir le pagina perque illo ha un adresse invalide.";
+"OpenURL.Error.Message" = "Ecosia non pote aperir le pagina perque illo ha un adresse invalide.";
 
 /* Title of the message shown when the user attempts to navigate to an invalid link. */
 "OpenURL.Error.Title" = "Impossibile aperir le pagina";
@@ -917,7 +917,7 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Isto permitte que tu salva le imagine in tu rolo de camera.";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox desira acceder a tu photos";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Ecosia desira acceder a tu photos";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Clauder";
@@ -1019,7 +1019,7 @@
 "Search.Awesomebar.SwitchToTab" = "Mutar al scheda";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "Firefox suggere";
+"Search.SuggestSectionTitle.v102" = "Ecosia suggere";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Le nove motor de recerca apparera in le barra de recerca rapide.";
@@ -1055,7 +1055,7 @@
 "Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
-"Send a crash report so Mozilla can fix the problem?" = "Inviar un reporto de collapso a fin que Mozilla pote corriger le problema?";
+"Send a crash report so Mozilla can fix the problem?" = "Inviar un reporto de collapso a fin que Ecosia pote corriger le problema?";
 
 /* Menu item in settings used to open input.mozilla.org where people can submit feedback */
 "Send Feedback" = "Inviar tu opinion";
@@ -1112,7 +1112,7 @@
 "SentTab.NoTabArrivingNotification.body" = "Tocca pro comenciar";
 
 /* Title of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+"SentTab.NoTabArrivingNotification.title" = "Ecosia Sync";
 
 /* Label for an action used to view one or more tabs from a notification. */
 "SentTab.ViewAction.title" = "Vider";
@@ -1175,7 +1175,7 @@
 "Settings.DataManagement.Title" = "Gestion de datos";
 
 /* Body of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Body" = "Firefox stoppara le synchronisation con tu conto, ma non delera alcun de tu datos de navigation sur iste apparato.";
+"Settings.Disconnect.Body" = "Ecosia stoppara le synchronisation con tu conto, ma non delera alcun de tu datos de navigation sur iste apparato.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
 "Settings.Disconnect.Button" = "Disconnecter Sync";
@@ -1409,7 +1409,7 @@
 "Settings.OfferClipboardBar.Status.v128" = "Aperiente %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Quando Firefox se aperi";
+"Settings.OfferClipboardBar.StatusV2" = "Quando Ecosia se aperi";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Proponer aperir le ligamines copiate";
@@ -1445,7 +1445,7 @@
 "Settings.SendUsage.Link" = "Saper plus.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla se effortia a colliger solmente le informationes necessari pro fornir e meliorar Ecosia pro totes.";
+"Settings.SendUsage.Message" = "Ecosia se effortia a colliger solmente le informationes necessari pro fornir e meliorar Ecosia pro totes.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Inviar datos de uso";
@@ -1475,7 +1475,7 @@
 "Settings.Studies.Toggle.Link" = "Saper plus.";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Toggle.Message" = "Firefox pote installar e conducer studios de tempore in tempore.";
+"Settings.Studies.Toggle.Message" = "Ecosia pote installar e conducer studios de tempore in tempore.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studios";

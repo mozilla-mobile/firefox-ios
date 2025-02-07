@@ -17,10 +17,10 @@
 "DefaultBrowserCard.NextLevel.Title.v108" = "ยกระดับการเรียกดูในแต่ละวัน";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ปิดกั้นตัวติดตามมากกว่า 3,000 ตัวต่อผู้ใช้ในแต่ละเดือนโดยเฉลี่ย ตั้งค่าให้เราเป็นเบราว์เซอร์เริ่มต้นเพื่อความอุ่นใจในความเป็นส่วนตัว";
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ecosia ปิดกั้นตัวติดตามมากกว่า 3,000 ตัวต่อผู้ใช้ในแต่ละเดือนโดยเฉลี่ย ตั้งค่าให้เราเป็นเบราว์เซอร์เริ่มต้นเพื่อความอุ่นใจในความเป็นส่วนตัว";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox มีความเป็นส่วนตัวครอบคลุม";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Ecosia มีความเป็นส่วนตัวครอบคลุม";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "เปลี่ยนเบราว์เซอร์เริ่มต้นของคุณ";
