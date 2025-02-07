@@ -75,6 +75,7 @@ class MarketingTests: BaseTestCaseL10n {
         waitForNoExistence(app.progressIndicators.firstMatch, timeoutValue: 45)
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.images["icon_settings"])
         waitForExistence(app.images["icon_shortcuts_add"])
         app.images["icon_shortcuts_add"].tap()
     }
