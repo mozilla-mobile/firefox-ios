@@ -43,7 +43,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let baseView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
     }
 
     private let headerView: NavigationHeaderView = .build { header in
