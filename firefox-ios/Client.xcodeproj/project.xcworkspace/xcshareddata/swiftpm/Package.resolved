@@ -1,5 +1,4 @@
 {
-  "originHash" : "5cced7bc44e113a10fc0c4203bee8021d7702d9351f222c0c16e56795bcf3669",
   "pins" : [
     {
       "identity" : "a-star",
@@ -8,6 +7,15 @@
       "state" : {
         "revision" : "036256f9a8d1dda44085a2b92fa58199446a8339",
         "version" : "3.0.0-beta-1"
+      }
+    },
+    {
+      "identity" : "dip",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Dip.git",
+      "state" : {
+        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+        "version" : "7.1.1"
       }
     },
     {
@@ -135,7 +143,25 @@
         "revision" : "21f7878f2b39d46fd8ba2b06459ccb431cdf876c",
         "version" : "3.8.1"
       }
+    },
+    {
+      "identity" : "swiftdraw",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/SwiftDraw",
+      "state" : {
+        "revision" : "a5c680f07b33f4cc9a451491b417b8119de23c6e",
+        "version" : "0.17.0"
+      }
+    },
+    {
+      "identity" : "swiftybeaver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+      "state" : {
+        "revision" : "1080914828ef1c9ca9cd2bad50667b3d847dabff",
+        "version" : "2.0.0"
+      }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
