@@ -24,15 +24,15 @@ class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
     func didReceive(_ response: URLResponse) {
         didReceiveResponseCalled += 1
     }
-    
+
     func didReceive(_ data: Data) {
         didReceiveDataCalled += 1
     }
-    
+
     func didFinish() {
         didFinishCalled += 1
     }
-    
+
     func didFailWithError(_ error: any Error) {
         didFailedWithError = error
         didFailCalled += 1

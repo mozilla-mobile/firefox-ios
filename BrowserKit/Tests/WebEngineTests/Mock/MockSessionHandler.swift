@@ -15,12 +15,12 @@ class MockSessionHandler: SessionHandler {
     func commitURLChange() {
         commitURLChangeCalled += 1
     }
-    
+
     func fetchMetadata(withURL url: URL) {
         savedURL = url
         fetchMetadataCalled += 1
     }
-    
+
     func received(error: NSError, forURL url: URL) {
         savedError = error
         savedURL = url

@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 final class WKInternalSchemeHandlerTests: XCTestCase {
-    func testSchemeStartIsCalledNonPrivilegedURL() {
+    func testSchemeStartIsCalledNonPrivilegedURL() throws {
         let subject = createSubject()
         let webview = WKWebView(frame: .zero)
         let url = URL(string: "www.example.com")!
@@ -17,11 +17,11 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         subject.webView(webview, start: task)
 
         XCTAssertEqual(task.didFailCalled, 1)
-        XCTAssertEqual(task.didFailedWithError as! WKInternalPageSchemeHandlerError,
-                       WKInternalPageSchemeHandlerError.notAuthorized)
+        let error = try XCTUnwrap(task.didFailedWithError as? WKInternalPageSchemeHandlerError)
+        XCTAssertEqual(error, WKInternalPageSchemeHandlerError.notAuthorized)
     }
 
-    func testSchemeStartIsCalledWithPrivilegedURLNoResponder() {
+    func testSchemeStartIsCalledWithPrivilegedURLNoResponder() throws {
         let subject = createSubject()
         let webview = WKWebView(frame: .zero)
         let url = URL(string: "internal://local/about/somethingElse")!
@@ -33,11 +33,11 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         subject.webView(webview, start: task)
 
         XCTAssertEqual(task.didFailCalled, 1)
-        XCTAssertEqual(task.didFailedWithError as! WKInternalPageSchemeHandlerError,
-                       WKInternalPageSchemeHandlerError.noResponder)
+        let error = try XCTUnwrap(task.didFailedWithError as? WKInternalPageSchemeHandlerError)
+        XCTAssertEqual(error, WKInternalPageSchemeHandlerError.noResponder)
     }
 
-    func testSchemeStartIsCalledWithPrivilegedURLWithWrongResponder() {
+    func testSchemeStartIsCalledWithPrivilegedURLWithWrongResponder() throws {
         InternalUtil().setUpInternalHandlers()
         let subject = createSubject()
         let webview = WKWebView(frame: .zero)
@@ -50,11 +50,11 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         subject.webView(webview, start: task)
 
         XCTAssertEqual(task.didFailCalled, 1)
-        XCTAssertEqual(task.didFailedWithError as! WKInternalPageSchemeHandlerError,
-                       WKInternalPageSchemeHandlerError.noResponder)
+        let error = try XCTUnwrap(task.didFailedWithError as? WKInternalPageSchemeHandlerError)
+        XCTAssertEqual(error, WKInternalPageSchemeHandlerError.noResponder)
     }
 
-    func testSchemeStartIsCalledWithPrivilegedURLWithCorrectResponder() {
+    func testSchemeStartIsCalledWithPrivilegedURLWithCorrectResponder() throws {
         setupFakeInternalHandlers()
         let subject = createSubject()
         let webview = WKWebView(frame: .zero)
@@ -67,8 +67,8 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         subject.webView(webview, start: task)
 
         XCTAssertEqual(task.didFailCalled, 1)
-        XCTAssertEqual(task.didFailedWithError as! WKInternalPageSchemeHandlerError,
-                       WKInternalPageSchemeHandlerError.responderUnableToHandle)
+        let error = try XCTUnwrap(task.didFailedWithError as? WKInternalPageSchemeHandlerError)
+        XCTAssertEqual(error, WKInternalPageSchemeHandlerError.responderUnableToHandle)
     }
 
     // MARK: Helper
