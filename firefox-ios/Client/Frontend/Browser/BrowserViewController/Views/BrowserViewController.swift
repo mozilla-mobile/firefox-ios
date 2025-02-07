@@ -2566,16 +2566,9 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-<<<<<<< HEAD
-        if let url = url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
-=======
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
->>>>>>> ee02cd19d (Bugfix FXIOS-11284 - [Toolbar Redesign] Toolbar is still selected when we open a deeplink (#24567))
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
@@ -2585,27 +2578,17 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
-<<<<<<< HEAD
-        if let url = url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
-=======
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
->>>>>>> ee02cd19d (Bugfix FXIOS-11284 - [Toolbar Redesign] Toolbar is still selected when we open a deeplink (#24567))
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
     }
 
     func handleQRCode() {
-<<<<<<< HEAD
-=======
         cancelEditMode()
         openBlankNewTab(focusLocationField: false, isPrivate: false)
->>>>>>> ee02cd19d (Bugfix FXIOS-11284 - [Toolbar Redesign] Toolbar is still selected when we open a deeplink (#24567))
         navigationHandler?.showQRCode(delegate: self)
     }
 
