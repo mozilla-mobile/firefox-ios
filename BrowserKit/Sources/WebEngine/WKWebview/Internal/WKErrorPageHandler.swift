@@ -8,22 +8,6 @@ class WKErrorPageHandler: WKInternalSchemeResponse {
     static let path = WKInternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        guard let url = request.url,
-              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-              let code = components.valueForQuery("code"),
-              let errCode = Int(code) else {
-            return nil
-        }
-
-        /// Used for checking if current error code is for no internet connection
-        let noInternetErrorCode = Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-        )
-
-        return responseForNativeErrorPage(request: request)
-    }
-
-    func responseForNativeErrorPage(request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
         let response = WKInternalSchemeHandler.response(forUrl: url)
         // Blank page with a color matching the background of the panels which

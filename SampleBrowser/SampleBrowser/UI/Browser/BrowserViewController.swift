@@ -9,6 +9,7 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+    func showErrorPage(page: ErrorPageViewController)
 
     func onFindInPage(selected: String)
     func onFindInPage(currentResult: Int)
@@ -24,6 +25,7 @@ class BrowserViewController: UIViewController,
     private var engineSession: EngineSession
     private var engineView: EngineView
     private let urlFormatter: URLFormatter
+    private var errorPage: ErrorPageViewController?
 
     // MARK: - Init
 
@@ -200,13 +202,11 @@ class BrowserViewController: UIViewController,
     }
 
     func onErrorPageRequest(error: NSError) {
+        let errorPage = ErrorPageViewController()
         let message = "Error \(String(error.code)) happened on domain \(error.domain): \(error.localizedDescription)"
-        let alert = UIAlertController(title: "Oh no!",
-                                      message: message,
-                                      preferredStyle: .alert)
+        errorPage.configure(errorMessage: message)
 
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+        navigationDelegate?.showErrorPage(page: errorPage)
     }
 
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
