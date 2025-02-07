@@ -29,7 +29,6 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var loadCalled = 0
     var loadFileURLCalled = 0
     var reloadFromOriginCalled = 0
-    var replaceLocationCalled = 0
     var stopLoadingCalled = 0
     var goBackCalled = 0
     var goForwardCalled = 0
@@ -70,11 +69,6 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     func reloadFromOrigin() -> WKNavigation? {
         reloadFromOriginCalled += 1
         return nil
-    }
-
-    func replaceLocation(with url: URL) {
-        self.url = url
-        replaceLocationCalled += 1
     }
 
     func stopLoading() {

@@ -117,20 +117,48 @@ class WKEngineSession: NSObject,
         logger.log("Stop loading", level: .debug, category: .webview)
     }
 
-    func reload() {
-        // If the current page is an error page load the original URL
+    func reload(bypassCache: Bool = false) {
+        // Manage internal URLs reload
         if let url = sessionData.url,
-           let internalUrl = WKInternalURL(url),
-           let page = internalUrl.originalURLFromErrorPage {
-            webView.replaceLocation(with: page)
-            logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+           let internalUrl = WKInternalURL(url) {
+            // If the current page is an error page load the original URL
+            if let page = internalUrl.originalURLFromErrorPage {
+                let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+                webView.load(request)
+                logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+                return
+            }
+
+            // If the URL is a home page load as privileged
+            if internalUrl.isAboutHomeURL {
+                internalUrl.authorize()
+                webView.load(URLRequest(url: internalUrl.url))
+                logger.log("Reloaded the webview with homepage URL", level: .debug, category: .webview)
+                return
+            }
+        }
+
+        // Reload bypassing the cache
+        if bypassCache, let url = sessionData.url {
+            let reloadRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+
+            webView.load(reloadRequest)
+            logger.log("Reloaded the webview ignoring cache", level: .debug, category: .webview)
             return
         }
 
         // Reloads the current webpage, and performs end-to-end revalidation of the content 
         // using cache-validating conditionals, if possible.
-        webView.reloadFromOrigin()
-        logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+        if webView.reloadFromOrigin() != nil {
+            logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+            return
+        }
+
+        if let lastRequest = sessionData.lastRequest, webView.load(lastRequest) != nil {
+            logger.log("Restoring webView from lastRequest", level: .debug, category: .tabs)
+        } else {
+            logger.log("Could not reload webView", level: .fatal, category: .tabs)
+        }
     }
 
     func goBack() {
