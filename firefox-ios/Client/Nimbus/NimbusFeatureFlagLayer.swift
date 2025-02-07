@@ -27,6 +27,9 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
+        case .darkReader:
+            return checkDarkReaderFeature(from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -359,6 +362,11 @@ final class NimbusFeatureFlagLayer {
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
 
+        return config.status
+    }
+
+    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.darkReaderFeature.value()
         return config.status
     }
 
