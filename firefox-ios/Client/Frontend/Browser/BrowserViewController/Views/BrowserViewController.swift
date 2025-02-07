@@ -4247,7 +4247,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        finishEditionMode()
+        cancelEditingMode()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
@@ -4273,12 +4273,25 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
-    private func finishEditionMode() {
+    private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
+        guard shouldCancelEditing else { return }
+        overlayManager.cancelEditing(shouldCancelLoading: false)
+    }
+
+    private var shouldCancelEditing: Bool {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
-        if newTabChoice != .topSites, newTabChoice != .blankPage {
-            overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
+        guard newTabChoice != .topSites, newTabChoice != .blankPage else { return false }
+
+        guard isToolbarRefactorEnabled else { return true }
+
+        let searchTerm = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.addressToolbar.searchTerm
+
+        return searchTerm == nil
     }
 }
 
