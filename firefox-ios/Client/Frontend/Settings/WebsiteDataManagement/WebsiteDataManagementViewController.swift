@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Common
+import Ecosia
 
 class WebsiteDataManagementViewController: UIViewController,
                                            UITableViewDataSource,
@@ -255,6 +256,8 @@ class WebsiteDataManagementViewController: UIViewController,
             viewModel.showMoreButtonPressed()
             tableView.reloadData()
         case .clearButton:
+            // Ecosia: Track "Clear Private Data" button click
+            Analytics.shared.clearsDataFromSection(.websites)
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
             let alert = viewModel.createAlertToRemove()

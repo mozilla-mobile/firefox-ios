@@ -272,6 +272,13 @@ open class Analytics {
             .label(Label.analytics.rawValue)
             .property(enabled ? Property.enable.rawValue : Property.disable.rawValue))
     }
+
+    public func clearsDataFromSection(_ section: Analytics.Property.SettingsPrivateDataSection) {
+        track(Structured(category: Category.settings.rawValue,
+                         action: Action.click.rawValue)
+            .label(Analytics.Label.clear.rawValue)
+            .property(section.rawValue))
+    }
 }
 
 extension Analytics {

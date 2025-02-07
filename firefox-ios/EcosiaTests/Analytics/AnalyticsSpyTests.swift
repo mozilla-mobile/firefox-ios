@@ -123,6 +123,11 @@ final class AnalyticsSpy: Analytics {
         ntpTopSitePropertyCalled = property
         ntpTopSitePositionCalled = position
     }
+
+    var clearAllPrivateDataSectionCalled: Property.SettingsPrivateDataSection?
+    override func clearsDataFromSection(_ section: Analytics.Property.SettingsPrivateDataSection) {
+        clearAllPrivateDataSectionCalled = section
+    }
 }
 
 // MARK: - AnalyticsSpyTests
@@ -825,6 +830,32 @@ final class AnalyticsSpyTests: XCTestCase {
         if let userContext = userContext {
             XCTAssertEqual(userContext.data["push_notification_state"] as? String, "disabled")
         }
+    }
+
+    // MARK: Analytics Private Data clearance
+
+    func testClearPrivateDataTracksEvent() {
+        // Arrange
+        let vc = ClearPrivateDataTableViewController(profile: profileMock, tabManager: tabManagerMock)
+        vc.loadViewIfNeeded()
+
+        // Act
+        vc.tableView(vc.tableView, didSelectRowAt: IndexPath(row: 0, section: 2))
+
+        // Assert
+        XCTAssertEqual(analyticsSpy.clearAllPrivateDataSectionCalled, .main, "Analytics should track clearAllPrivateDataSectionCalled as .main because we are simulating the click on Clear Private Data")
+    }
+
+    func testClearWebsitesDataTracksEvent() {
+        // Arrange
+        let vc = WebsiteDataManagementViewController()
+        vc.loadViewIfNeeded()
+
+        // Act
+        vc.tableView(vc.tableView, didSelectRowAt: IndexPath(row: 0, section: 2))
+
+        // Assert
+        XCTAssertEqual(analyticsSpy.clearAllPrivateDataSectionCalled, .websites, "Analytics should track clearAllPrivateDataSectionCalled as .websites because we are simulating the click on Clear Websiste Data")
     }
 }
 

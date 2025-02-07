@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 import ComponentLibrary
+import Ecosia
 
 class ClearPrivateDataTableViewController: ThemedTableViewController {
     private var clearButton: UITableViewCell?
@@ -154,6 +155,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             let view = WebsiteDataManagementViewController(windowUUID: windowUUID)
             navigationController?.pushViewController(view, animated: true)
         } else if indexPath.section == sectionButton {
+            // Ecosia: Track "Clear Private Data" button click
+            Analytics.shared.clearsDataFromSection(.main)
             let alert: UIAlertController
             if self.toggles[historyClearableIndex] && profile.hasAccount() {
                 alert = clearSyncedHistoryAlert(okayCallback: clearPrivateData)
