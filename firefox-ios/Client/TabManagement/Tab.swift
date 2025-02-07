@@ -204,11 +204,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var title: String? {
-        if let title = webView?.title, !title.isEmpty {
-            return webView?.title
-        }
-
-        return nil
+        return webView?.title
     }
 
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal
