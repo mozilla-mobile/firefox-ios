@@ -13,13 +13,16 @@ final class TabErrorTelemetryHelper {
     private let telemetryWrapper: TelemetryWrapperProtocol
     private let defaults: UserDefaultsInterface
     private let windowManager: WindowManager
+    private let logger: Logger
 
-    private init(telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+    private init(logger: Logger = DefaultLogger.shared,
+                 telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
                  windowManager: WindowManager = AppContainer.shared.resolve(),
                  defaults: UserDefaultsInterface = UserDefaults.standard) {
         self.telemetryWrapper = telemetryWrapper
         self.defaults = defaults
         self.windowManager = windowManager
+        self.logger = logger
     }
 
     // MARK: - Public API
@@ -55,7 +58,7 @@ final class TabErrorTelemetryHelper {
 
         if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
             // Potential tab loss bug detected. Log a MetricKit error.
-            sendTelemetryTabLossDetectedEvent()
+            sendTelemetryTabLossDetectedEvent(expected: expectedTabCount, actual: currentTabCount)
         }
 
         // After validating the tab count, we make sure to remove the count
@@ -86,7 +89,10 @@ final class TabErrorTelemetryHelper {
         return windowManager.tabManager(for: window).normalTabs.count
     }
 
-    private func sendTelemetryTabLossDetectedEvent() {
+    private func sendTelemetryTabLossDetectedEvent(expected: Int, actual: Int) {
+        logger.log("Tab loss detected. Expected: \(expected). Actual: \(actual). Windows: \(windowManager.windows.count)",
+                   level: .fatal,
+                   category: .tabs)
         telemetryWrapper.recordEvent(category: .information,
                                      method: .error,
                                      object: .app,
