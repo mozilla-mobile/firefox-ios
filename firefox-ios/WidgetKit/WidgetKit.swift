@@ -14,7 +14,7 @@ struct FirefoxWidgets: WidgetBundle {
         OpenTabsWidget()
         TopSitesWidget()
         if #available(iOS 16.1, *) {
-            LiveDownloadWidget()
+            DownloadLiveActivity()
         }
     }
 }

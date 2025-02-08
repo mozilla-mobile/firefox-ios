@@ -6,21 +6,16 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 
-struct LiveDownloadWidgetAttributes: ActivityAttributes {
+struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
-        let placeholder: String
     }
-    let test: Int
 }
 
 @available(iOS 16.1, *)
-struct LiveDownloadWidget: Widget {
+struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: LiveDownloadWidgetAttributes.self) { _ in
-            ZStack {
-                Color.black
-            }
-            .frame(height: 100)
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
+            EmptyView()
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
@@ -44,4 +39,21 @@ struct LiveDownloadWidget: Widget {
             }
         }
    }
+}
+
+func startDownloadLiveActivity() {
+    guard #available(iOS 16.2, *) else { return }
+
+    let attributes = DownloadLiveActivityAttributes()
+    let state = DownloadLiveActivityAttributes.ContentState()
+
+    do {
+        _ = try Activity<DownloadLiveActivityAttributes>.request(
+            attributes: attributes,
+            content: .init(state: state, staleDate: nil),
+            pushType: nil
+        )
+    } catch {
+        print("Failed to start Live Activity: \(error.localizedDescription)")
+    }
 }
