@@ -50,4 +50,35 @@ extension UIColor {
     public var color: Color {
         return Color(self)
     }
+
+    /// Converts a normalized sRGB component to its linear value as defined by the WCAG 2.2 spec for relative luminance.
+    /// See: https://www.w3.org/TR/WCAG22/#dfn-relative-luminance
+    ///
+    /// For values ≤ 0.04045, the component is divided by 12.92;
+    /// otherwise, it is adjusted using an exponent of 2.4.
+    func linearizeChannel(_ channel: CGFloat) -> CGFloat {
+        return channel <= 0.04045
+            ? channel / 12.92
+            : pow((channel + 0.055) / 1.055, 2.4)
+    }
+
+    /// Computes the relative luminance of the color as defined in WCAG 2.2.
+    /// See: https://www.w3.org/TR/WCAG22/#dfn-relative-luminance
+    ///
+    /// The relative luminance is a measure of the perceived brightness of a color,
+    /// normalized to 0 for the darkest black and 1 for the lightest white.
+    ///
+    /// The color's sRGB components are extracted and linearized with the WCAG formula,
+    /// then combined using the coefficients 0.2126 (red), 0.7152 (green), and 0.0722 (blue).
+    private var relativeLuminance: CGFloat {
+        let linearRed = linearizeChannel(self.components.red)
+        let linearGreen = linearizeChannel(self.components.green)
+        let linearBlue = linearizeChannel(self.components.blue)
+
+        return 0.2126 * linearRed + 0.7152 * linearGreen + 0.0722 * linearBlue
+    }
+
+    public var isDark: Bool {
+        return relativeLuminance < 0.5
+    }
 }
