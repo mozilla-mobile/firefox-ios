@@ -169,7 +169,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
             }
 
             if let sites = sites {
-                self?.historySites = sites
+                strongSelf.historySites = sites
             }
             dispatchGroup.leave()
         }
