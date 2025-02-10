@@ -237,15 +237,23 @@ class BaseTestCase: XCTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
             timeout: TIMEOUT
         )
+        app.buttons["Save"].tapIfExists()
         navigator.goto(BrowserTabMenu)
         navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
 
-    func unbookmark() {
-        bookmark()
-        app.buttons["Delete Bookmark"].waitAndTap()
+    func unbookmark(url: String) {
         navigator.nowAt(BrowserTab)
+        navigator.goto(LibraryPanel_Bookmarks)
+        app.buttons["Edit"].waitAndTap()
+        if #available(iOS 17, *) {
+            app.buttons["Remove " + url].waitAndTap()
+        } else {
+            app.buttons["Delete " + url].waitAndTap()
+        }
+        app.buttons["Delete"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
     }
 
     func checkBookmarks() {
@@ -297,8 +305,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func removeContentFromReaderView() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_ReadingList)
+        app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3).waitAndTap()
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
 
