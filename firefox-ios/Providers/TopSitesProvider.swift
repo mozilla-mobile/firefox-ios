@@ -82,20 +82,27 @@ private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         DispatchQueue.global().async { [weak self] in
-            // It's possible that the top sites fetch is the
-            // very first use of places, lets make sure that
-            // our connection is open
-            guard let placesFetcher = self?.placesFetcher else {
+            guard let strongSelf = self else {
                 group.leave()
                 return
             }
-            if !placesFetcher.isOpen {
+            // It's possible that the top sites fetch is the
+            // very first use of places, lets make sure that
+            // our connection is open
+            let placesFetcher = strongSelf.placesFetcher
+            if !strongSelf.placesFetcher.isOpen {
                 _ = placesFetcher.reopenIfClosed()
             }
-            placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems, thresholdOption: FrecencyThresholdOption.none)
+            placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems,
+                                                 thresholdOption: FrecencyThresholdOption.none)
                 .uponQueue(.global()) { [weak self] result in
+                    guard let strongSelf = self else {
+                        group.leave()
+                        return
+                    }
+
                     if let sites = result.successValue {
-                        self?.frecencySites = sites
+                        strongSelf.frecencySites = sites
                     }
 
                     group.leave()
@@ -108,8 +115,13 @@ private extension TopSitesProviderImplementation {
         pinnedSiteFetcher
             .getPinnedTopSites()
             .uponQueue(.global()) { [weak self] result in
+                guard let strongSelf = self else {
+                    group.leave()
+                    return
+                }
+
                 if let sites = result.successValue?.asArray() {
-                    self?.pinnedSites = sites
+                    strongSelf.pinnedSites = sites
                 }
 
                 group.leave()

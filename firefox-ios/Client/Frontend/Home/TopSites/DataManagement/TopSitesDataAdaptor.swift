@@ -113,8 +113,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 
     // Loads the data source of top sites. Internal for convenience of testing
     func loadTopSitesData(dataLoadingCompletion: (() -> Void)? = nil) {
-        loadContiles()
-        loadTopSites()
+        loadContiles(dispatchGroup: dispatchGroup)
+        loadTopSites(dispatchGroup: dispatchGroup)
 
         dispatchGroup.notify(queue: dataQueue) { [weak self] in
             self?.recalculateTopSiteData()
@@ -123,42 +123,55 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         }
     }
 
-    private func loadContiles() {
+    private func loadContiles(dispatchGroup: DispatchGroupInterface) {
         guard shouldLoadSponsoredTiles else { return }
 
         dispatchGroup.enter()
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
             unifiedAdsProvider.fetchTiles { [weak self] result in
-                guard let strongSelf = self else { return }
+                guard let strongSelf = self else {
+                    dispatchGroup.leave()
+                    return
+                }
+
                 if case .success(let unifiedTiles) = result {
                     strongSelf.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
                 } else {
                     strongSelf.contiles = []
                 }
-                strongSelf.dispatchGroup.leave()
+                dispatchGroup.leave()
             }
         } else {
             contileProvider.fetchContiles { [weak self] result in
-                guard let strongSelf = self else { return }
+                guard let strongSelf = self else {
+                    dispatchGroup.leave()
+                    return
+                }
+
                 if case .success(let contiles) = result {
                     strongSelf.contiles = contiles
                 } else {
                     strongSelf.contiles = []
                 }
-                strongSelf.dispatchGroup.leave()
+                dispatchGroup.leave()
             }
         }
     }
 
-    private func loadTopSites() {
+    private func loadTopSites(dispatchGroup: DispatchGroupInterface) {
         dispatchGroup.enter()
 
         topSiteHistoryManager.getTopSites { [weak self] sites in
+            guard let strongSelf = self else {
+                dispatchGroup.leave()
+                return
+            }
+
             if let sites = sites {
                 self?.historySites = sites
             }
-            self?.dispatchGroup.leave()
+            dispatchGroup.leave()
         }
     }
 
