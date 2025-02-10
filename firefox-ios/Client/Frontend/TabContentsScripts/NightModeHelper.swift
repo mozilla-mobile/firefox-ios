@@ -31,10 +31,14 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let webView = message.frameInfo.webView else { return }
-        webView.evaluateJavascriptInCustomContentWorld(
-            NightModeHelper.jsCallbackBuilder(NightModeHelper.isActivated()),
-            in: .world(name: NightModeHelper.name())
-        )
+
+        NightModeHelper.isPageInDarkMode(webView: webView) { isInDarkPage in
+            let enableComputedDarkMode = !isInDarkPage && NightModeHelper.isActivated()
+            webView.evaluateJavascriptInCustomContentWorld(
+                NightModeHelper.jsCallbackBuilder(enableComputedDarkMode, "foo4"),
+                in: .world(name: NightModeHelper.name())
+            )
+        }
     }
 
     static func toggle(
@@ -78,5 +82,37 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         userDefaults.removeObject(forKey: NightModeKeys.DarkThemeEnabled)
+    }
+
+    static func isPageInDarkMode(webView: WKWebView?, completion: @escaping (Bool) -> Void) {
+        takePageSnapshot(for: webView, at: 0.6, width: 300, height: 400) { color in
+            let isPageDark = color?.isDark ?? false
+            completion(isPageDark)
+        }
+    }
+
+    private static func takePageSnapshot(for webView: WKWebView?, at verticalOffset: CGFloat, width: CGFloat, height: CGFloat, completion: @escaping (UIColor?) -> Void) {
+        guard let webView = webView else { return }
+
+        // Ensure width does not exceed the webView’s frame width
+        let snapshotWidth = min(width, webView.frame.width)
+        // Center horizontally
+        let xPosition = (webView.frame.width - snapshotWidth) / 2
+
+        let contentHeight = webView.scrollView.contentSize.height
+        let snapshotHeight = min(height, contentHeight)
+
+        var yPosition = contentHeight * verticalOffset
+        // Shift up if the snapshot overflows the page
+        if yPosition + snapshotHeight > contentHeight {
+            yPosition = contentHeight - snapshotHeight
+        }
+
+        let config = WKSnapshotConfiguration()
+        config.rect = CGRect(x: xPosition, y: yPosition, width: snapshotWidth, height: snapshotHeight)
+
+        webView.takeSnapshot(with: config) { (image: UIImage?, _) in
+            completion(image?.averageColor())
+        }
     }
 }
