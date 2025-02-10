@@ -96,18 +96,21 @@ public class BrowserAddressToolbar: UIView,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
-                          isUnifiedSearchEnabled: Bool) {
+                          isUnifiedSearchEnabled: Bool,
+                          animated: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewConfiguration = config.locationViewConfiguration
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
-        configure(config: config, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        configure(config: config,
+                  isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                  animated: animated)
     }
 
-    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool) {
+    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
         updateBorder(borderPosition: config.borderPosition)
 
-        updateActions(config: config)
+        updateActions(config: config, animated: animated)
         locationView.configure(
             config.locationViewConfiguration,
             delegate: self,
@@ -243,7 +246,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(config: AddressToolbarConfiguration) {
+    internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
 
@@ -254,14 +257,14 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
 
         updateActionSpacing()
-        updateToolbarLayout()
+        updateToolbarLayout(animated: animated)
     }
 
-    private func updateToolbarLayout() {
+    private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
             UIView.animate(withDuration: UX.toolbarAnimationTime) {

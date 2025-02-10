@@ -192,16 +192,19 @@ final class AddressToolbarContainer: UIView,
                 enterOverlayMode(nil, pasted: false, search: true)
             }
             updateProgressBarPosition(toolbarState.toolbarPosition)
+
             compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
             regularToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
