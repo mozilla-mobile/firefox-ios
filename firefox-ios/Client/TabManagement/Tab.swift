@@ -381,13 +381,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var contentBlocker: FirefoxTabContentBlocker?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
-    var lastTitle: String? {
-        didSet {
-            guard let title = lastTitle else { return }
-            print(title)
-            print("hi")
-        }
-    }
+    var lastTitle: String?
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
     var changedUserAgent = false {
