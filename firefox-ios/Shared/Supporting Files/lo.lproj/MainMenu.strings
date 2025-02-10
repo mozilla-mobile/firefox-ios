@@ -193,9 +193,99 @@
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "ຂະຫຍາຍ";
 
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "ຊູມ (%@)";
+
+/* On the main menu, the title for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "ປິດໂຫມດກາງຄືນ";
+
+/* On the main menu, the title for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.NightMode.On.Title.v131" = "ເປີດໂຫມດກາງຄືນ";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "ໂຫມດກາງຄືນ";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "ພິມ";
+
+/* On the main menu, the title for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.Print.Title.v131" = "ພິມ";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "ປິດ Reader View";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "ເປີດ Reader View";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "Reader View";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "ລາຍງານ";
+
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "ລາຍງານເວັບໄຊທີ່ມີບັນຫາ…";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.Share.Subtitle.v131" = "ແບ່ງປັນ";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v131" = "ແບ່ງປັນ";
+
+/* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
+"MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "ຂະຫຍາຍ";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.Zoom.Title.v131" = "ຊູມ (%@)";
+
+/* The accessibility label for the Main Menu. */
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "ເມນູຫຼັກ";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "ແທັບສ່ວນຕົວໃຫມ່";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "ແທັບໃຫມ່";
+
+/* On the main menu, the title for the action that will create a new private tab. */
+"MainMenu.TabsSection.NewPrivateTab.Title.v131" = "ແທັບສ່ວນຕົວໃຫມ່";
+
+/* On the main menu, the title for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.NewTab.Title.v131" = "ແທັບໃຫມ່";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "ຄົ້ນຫາໃນຫນ້ານີ້";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "ບັນທຶກ";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "ບັນທຶກເມນູຍ່ອຍ";
+
+/* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "ສະຫຼັບໄປຫາເວັບໄຊເດັສທັອບ";
+
+/* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "ປ່ຽນໄປຫາເວັບໄຊທ໌ມືຖື";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "ເຄື່ອງມື";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "ເມນູຍ່ອຍເຄື່ອງມື";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPage.Title.v131" = "ຊອກຫາໃນໜ້າ…";
+
+/* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "ບັນທຶກ";
+
+/* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "ສະຫຼັບໄປຫາເວັບໄຊເດັສທັອບ";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "ປ່ຽນເປັນເວັບໄຊທ໌ມືຖື";
+
+/* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "ເຄື່ອງມື";
 
