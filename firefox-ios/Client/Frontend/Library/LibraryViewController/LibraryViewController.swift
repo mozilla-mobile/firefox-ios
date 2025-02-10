@@ -30,6 +30,7 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     var logger: Logger
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private var isTransitioning = false
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -102,7 +103,7 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         viewSetup()
         listenForThemeChange(view)
         setupNotifications(forObserver: self,
-                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged])
+                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged, .LibraryPanelDisappeared])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -299,6 +300,29 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         }
     }
 
+    // MARK: - Toolbar Button Actions
+
+    @objc
+    func topLeftButtonAction() {
+        guard let navController = children.first as? UINavigationController, !isTransitioning else { return }
+
+        isTransitioning = true
+        navController.popViewController(animated: true)
+        let panel = getCurrentPanel()
+        panel?.handleLeftTopButton()
+    }
+
+    @objc
+    func topRightButtonAction() {
+        guard let panel = getCurrentPanel() else { return }
+
+        if panel.shouldDismissOnDone() {
+            dismiss(animated: true, completion: nil)
+        }
+
+        panel.handleRightTopButton()
+    }
+
     private func getCurrentPanelState() -> LibraryPanelMainState {
         if let panelVC = getCurrentPanel() {
             return panelVC.state
@@ -397,6 +421,9 @@ extension LibraryViewController: Notifiable {
             updateSegmentControl()
         case .LibraryPanelBookmarkTitleChanged:
             updateTitle(subpanelTitle: notification.userInfo?["title"] as? String)
+        case .LibraryPanelDisappeared:
+            isTransitioning = false
+            setupButtons()
         default: break
         }
     }

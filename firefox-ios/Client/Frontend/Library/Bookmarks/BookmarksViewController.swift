@@ -138,6 +138,12 @@ class BookmarksViewController: SiteTableViewController,
         setupEmptyStateView()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        notificationCenter.post(name: .LibraryPanelDisappeared, withObject: nil, withUserInfo: nil)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
