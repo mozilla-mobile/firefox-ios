@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/187372107",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/187372107/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/187372107/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.26.3",
-    "id": 187372107,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/198599624",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/198599624/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/198599624/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.27.0",
+    "id": 198599624,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,16 +25,16 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84LKxJL",
-    "tag_name": "v1.26.3",
+    "node_id": "RE_kwDOI1CID84L1mPI",
+    "tag_name": "v1.27.0",
     "target_commitish": "main",
-    "name": "v1.26.3",
+    "name": "v1.27.0",
     "draft": false,
     "prerelease": false,
-    "created_at": "2024-11-25T18:31:35Z",
-    "published_at": "2024-11-25T18:32:13Z",
+    "created_at": "2025-02-05T14:47:06Z",
+    "published_at": "2025-02-05T14:48:14Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.26.3",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.26.3",
-    "body": "# Changelog\r\n## [1.26.3]\r\n### Changed\r\n- PDF\r\n  - crossCircleFillExtraLargeDark.pdf\r\n  - crossCircleFillExtraLargeLight.pdf"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.27.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.27.0",
+    "body": "# Changelog\r\n## [1.27.0]\r\n### Added\r\n- PDF\r\n  - signatureLarge.pdf\r\n\r\n- SVG\r\n  - signature-24.svg\r\n\r\n- XML\r\n  - ic_signature_24.xml"
 }
