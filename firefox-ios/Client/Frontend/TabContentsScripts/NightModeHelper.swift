@@ -42,7 +42,7 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         NightModeHelper.isPageInDarkMode(webView: webView) { isInDarkPage in
             let enableComputedDarkMode = !isInDarkPage && NightModeHelper.isActivated()
             webView.evaluateJavascriptInCustomContentWorld(
-                NightModeHelper.jsCallbackBuilder(enableComputedDarkMode, "foo4"),
+                NightModeHelper.jsCallbackBuilder(enableComputedDarkMode),
                 in: .world(name: NightModeHelper.name())
             )
         }
@@ -100,7 +100,13 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         }
     }
 
-    private static func takePageSnapshot(for webView: WKWebView?, at verticalOffset: CGFloat, width: CGFloat, height: CGFloat, completion: @escaping (UIColor?) -> Void) {
+    private static func takePageSnapshot(
+        for webView: WKWebView?,
+        at verticalOffset: CGFloat,
+        width: CGFloat,
+        height: CGFloat,
+        completion: @escaping (UIColor?) -> Void
+    ) {
         guard let webView = webView else { return }
 
         // Ensure width does not exceed the webView’s frame width

@@ -374,7 +374,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
                 guard let self = self else { return }
                 let enableComputedDarkMode = !isInDarkPage && NightModeHelper.isActivated()
                 webView?.evaluateJavascriptInCustomContentWorld(
-                    NightModeHelper.jsCallbackBuilder(enableComputedDarkMode, "foo3"),
+                    NightModeHelper.jsCallbackBuilder(enableComputedDarkMode),
                     in: .world(name: NightModeHelper.name())
                 )
             }
