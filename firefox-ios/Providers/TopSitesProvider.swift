@@ -82,10 +82,7 @@ private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         DispatchQueue.global().async { [weak self] in
-            guard let strongSelf = self else {
-                group.leave()
-                return
-            }
+            guard let strongSelf = self else { return }
             // It's possible that the top sites fetch is the
             // very first use of places, lets make sure that
             // our connection is open
@@ -96,10 +93,7 @@ private extension TopSitesProviderImplementation {
             placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems,
                                                  thresholdOption: FrecencyThresholdOption.none)
                 .uponQueue(.global()) { [weak self] result in
-                    guard let strongSelf = self else {
-                        group.leave()
-                        return
-                    }
+                    guard let strongSelf = self else { return }
 
                     if let sites = result.successValue {
                         strongSelf.frecencySites = sites
@@ -115,10 +109,7 @@ private extension TopSitesProviderImplementation {
         pinnedSiteFetcher
             .getPinnedTopSites()
             .uponQueue(.global()) { [weak self] result in
-                guard let strongSelf = self else {
-                    group.leave()
-                    return
-                }
+                guard let strongSelf = self else { return }
 
                 if let sites = result.successValue?.asArray() {
                     strongSelf.pinnedSites = sites

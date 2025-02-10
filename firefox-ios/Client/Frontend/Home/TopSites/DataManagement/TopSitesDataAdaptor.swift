@@ -130,10 +130,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
             unifiedAdsProvider.fetchTiles { [weak self] result in
-                guard let strongSelf = self else {
-                    dispatchGroup.leave()
-                    return
-                }
+                guard let strongSelf = self else { return }
 
                 if case .success(let unifiedTiles) = result {
                     strongSelf.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
@@ -144,10 +141,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
             }
         } else {
             contileProvider.fetchContiles { [weak self] result in
-                guard let strongSelf = self else {
-                    dispatchGroup.leave()
-                    return
-                }
+                guard let strongSelf = self else { return }
 
                 if case .success(let contiles) = result {
                     strongSelf.contiles = contiles
@@ -163,10 +157,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         dispatchGroup.enter()
 
         topSiteHistoryManager.getTopSites { [weak self] sites in
-            guard let strongSelf = self else {
-                dispatchGroup.leave()
-                return
-            }
+            guard let strongSelf = self else { return }
 
             if let sites = sites {
                 strongSelf.historySites = sites
