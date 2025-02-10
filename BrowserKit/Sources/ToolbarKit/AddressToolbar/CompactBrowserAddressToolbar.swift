@@ -12,7 +12,8 @@ public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
             navigationActions: config.navigationActions,
             pageActions: config.pageActions,
             browserActions: [],
-            borderPosition: config.borderPosition
+            borderPosition: config.borderPosition,
+            shouldAnimate: config.shouldAnimate
         )
         super.updateActions(config: compactConfig, animated: animated)
     }
