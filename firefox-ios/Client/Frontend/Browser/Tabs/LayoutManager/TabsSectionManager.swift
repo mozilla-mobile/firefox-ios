@@ -26,7 +26,13 @@ class TabsSectionManager {
 
     func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
-        let maxNumberOfCellPerRow = Int(availableWidth / UX.cellEstimatedWidth)
+        let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
+        let minNumberOfCellsPerRow = 2
+
+        var numberOfCellsPerRow = maxNumberOfCellsPerRow
+        if numberOfCellsPerRow < minNumberOfCellsPerRow {
+            numberOfCellsPerRow = minNumberOfCellsPerRow
+        }
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(UX.cellEstimatedWidth),
@@ -40,7 +46,7 @@ class TabsSectionManager {
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
-                                                       count: maxNumberOfCellPerRow)
+                                                       count: numberOfCellsPerRow)
         group.interItemSpacing = .fixed(UX.cardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
