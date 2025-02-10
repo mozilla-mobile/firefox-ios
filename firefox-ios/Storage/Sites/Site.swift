@@ -14,7 +14,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable, CustomStringConv
 
     public var debugDescription: String {
         // See FXIOS-11335 for context before making updates.
-        return "Site \(id) (\(type))"
+        return "Site (\(type))"
     }
 
     public var description: String {
