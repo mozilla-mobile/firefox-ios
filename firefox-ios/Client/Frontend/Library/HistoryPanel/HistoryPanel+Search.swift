@@ -28,11 +28,15 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        logger.log("User cancelled history search", level: .info, category: .history)
+
         bottomStackView.isHidden = true
         searchBar.resignFirstResponder()
     }
 
     func startSearchState() {
+        logger.log("User initiated history search", level: .info, category: .history)
+
         updatePanelState(newState: .history(state: .search))
         bottomStackView.isHidden = false
         searchbar.becomeFirstResponder()
@@ -53,15 +57,20 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func applySearchSnapshot() {
+        logger.log("Create and apply snapshot from user history search", level: .info, category: .history)
+
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
         snapshot.appendItems(self.viewModel.searchResultSites)
+
         self.diffableDataSource?.apply(snapshot, animatingDifferences: false)
         self.updateEmptyPanelState()
     }
 
     private func handleEmptySearch() {
+        logger.log("Apply snapshot from user history empty search", level: .info, category: .history)
+
         viewModel.searchResultSites.removeAll()
         applySnapshot()
         updateEmptyPanelState()

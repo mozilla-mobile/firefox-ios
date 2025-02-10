@@ -40,7 +40,7 @@ class HistoryPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var logger: Logger
+    var logger: Logger
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -523,7 +523,7 @@ class HistoryPanel: UIViewController,
             }
         }
 
-        // Insert your fixed first section and data
+        // Insert your fixed first section and data (e.g. "Recently Closed" cell)
         if let historySection = snapshot.sectionIdentifiers.first, historySection != .additionalHistoryActions {
             snapshot.insertSections([.additionalHistoryActions], beforeSection: historySection)
         } else {
