@@ -244,6 +244,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
+    var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {

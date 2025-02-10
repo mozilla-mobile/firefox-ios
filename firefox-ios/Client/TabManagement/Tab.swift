@@ -971,7 +971,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
         if let temporaryDocument = temporaryDocument as? PDFTemporaryDocument,
            request.url == temporaryDocument.localFileURL {
-//            webView?.removeDocumentLoadingView()
             return false
         }
         return true

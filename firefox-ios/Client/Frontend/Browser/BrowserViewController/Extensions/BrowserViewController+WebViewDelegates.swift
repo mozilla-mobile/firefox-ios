@@ -764,7 +764,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType == MIMEType.PDF, let request {
+            if isPDFRefactorEnabled, response.mimeType == MIMEType.PDF, let request {
                 guard !handlePDFResponse(webView, tab: tab, response: response, request: request) else {
                     decisionHandler(.allow)
                     return
