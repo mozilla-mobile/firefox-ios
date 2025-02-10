@@ -103,7 +103,9 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
         viewSetup()
         listenForThemeChange(view)
         setupNotifications(forObserver: self,
-                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged, .LibraryPanelDisappeared])
+                           observing: [.LibraryPanelStateDidChange,
+                            .LibraryPanelBookmarkTitleChanged,
+                            .LibraryPanelDisappeared])
     }
 
     override func viewWillAppear(_ animated: Bool) {
