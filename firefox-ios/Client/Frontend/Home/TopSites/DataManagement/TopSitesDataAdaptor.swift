@@ -130,21 +130,23 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
             unifiedAdsProvider.fetchTiles { [weak self] result in
+                guard let strongSelf = self else { return }
                 if case .success(let unifiedTiles) = result {
-                    self?.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
+                    strongSelf.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
                 } else {
-                    self?.contiles = []
+                    strongSelf.contiles = []
                 }
-                self?.dispatchGroup.leave()
+                strongSelf.dispatchGroup.leave()
             }
         } else {
             contileProvider.fetchContiles { [weak self] result in
+                guard let strongSelf = self else { return }
                 if case .success(let contiles) = result {
-                    self?.contiles = contiles
+                    strongSelf.contiles = contiles
                 } else {
-                    self?.contiles = []
+                    strongSelf.contiles = []
                 }
-                self?.dispatchGroup.leave()
+                strongSelf.dispatchGroup.leave()
             }
         }
     }
