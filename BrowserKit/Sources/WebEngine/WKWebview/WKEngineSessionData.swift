@@ -10,4 +10,5 @@ struct WKEngineSessionData {
     var lastRequest: URLRequest?
     var title: String?
     var pageMetadata: EnginePageMetadata?
+    var hasOnlySecureContent: Bool?
 }
