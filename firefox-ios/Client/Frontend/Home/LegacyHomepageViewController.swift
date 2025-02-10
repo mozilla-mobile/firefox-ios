@@ -543,7 +543,7 @@ class LegacyHomepageViewController:
             overlayState: overlayManager)
     }
 
-    private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
+    private func prepareSyncedTabContextualHint(onCell cell: LegacySyncedTabCell) {
         guard syncTabContextualHintViewController.shouldPresentHint()
         else {
             syncTabContextualHintViewController.unconfigure()

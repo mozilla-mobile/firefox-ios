@@ -8,9 +8,9 @@ import ToolbarKit
 
 struct AddressBarState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var navigationActions: [ToolbarActionState]
-    var pageActions: [ToolbarActionState]
-    var browserActions: [ToolbarActionState]
+    var navigationActions: [ToolbarActionConfiguration]
+    var pageActions: [ToolbarActionConfiguration]
+    var browserActions: [ToolbarActionConfiguration]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
@@ -27,28 +27,28 @@ struct AddressBarState: StateType, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
-    private static let qrCodeScanAction = ToolbarActionState(
+    private static let qrCodeScanAction = ToolbarActionConfiguration(
         actionType: .qrCode,
         iconName: StandardImageIdentifiers.Large.qrCode,
         isEnabled: true,
         a11yLabel: .QRCode.ToolbarButtonA11yLabel,
         a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
 
-    private static let shareAction = ToolbarActionState(
+    private static let shareAction = ToolbarActionConfiguration(
         actionType: .share,
         iconName: StandardImageIdentifiers.Large.share,
         isEnabled: true,
         a11yLabel: .TabLocationShareAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
 
-    private static let stopLoadingAction = ToolbarActionState(
+    private static let stopLoadingAction = ToolbarActionConfiguration(
         actionType: .stopLoading,
         iconName: StandardImageIdentifiers.Large.cross,
         isEnabled: true,
         a11yLabel: .TabToolbarStopAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
 
-    private static let reloadAction = ToolbarActionState(
+    private static let reloadAction = ToolbarActionConfiguration(
         actionType: .reload,
         iconName: StandardImageIdentifiers.Large.arrowClockwise,
         isEnabled: true,
@@ -56,7 +56,7 @@ struct AddressBarState: StateType, Equatable {
         a11yHint: .TabLocationReloadAccessibilityHint,
         a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
 
-    private static let cancelEditAction = ToolbarActionState(
+    private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
         isFlippedForRTL: true,
@@ -64,14 +64,14 @@ struct AddressBarState: StateType, Equatable {
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
-    private static let newTabAction = ToolbarActionState(
+    private static let newTabAction = ToolbarActionConfiguration(
         actionType: .newTab,
         iconName: StandardImageIdentifiers.Large.plus,
         isEnabled: true,
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
-    private static let dataClearanceAction = ToolbarActionState(
+    private static let dataClearanceAction = ToolbarActionConfiguration(
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
@@ -103,9 +103,9 @@ struct AddressBarState: StateType, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         navigationActions: [ToolbarActionState],
-         pageActions: [ToolbarActionState],
-         browserActions: [ToolbarActionState],
+         navigationActions: [ToolbarActionConfiguration],
+         pageActions: [ToolbarActionConfiguration],
+         browserActions: [ToolbarActionConfiguration],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String?,
@@ -226,7 +226,7 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: [ToolbarActionState](),
+            navigationActions: [ToolbarActionConfiguration](),
             pageActions: [qrCodeScanAction],
             browserActions: [tabsAction(), menuAction()],
             borderPosition: borderPosition,
@@ -832,8 +832,8 @@ struct AddressBarState: StateType, Equatable {
         action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool = false
-    ) -> [ToolbarActionState] {
-        var actions = [ToolbarActionState]()
+    ) -> [ToolbarActionConfiguration] {
+        var actions = [ToolbarActionConfiguration]()
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
@@ -863,8 +863,8 @@ struct AddressBarState: StateType, Equatable {
         addressBarState: AddressBarState,
         isEditing: Bool,
         showQRPageAction: Bool? = nil
-    ) -> [ToolbarActionState] {
-        var actions = [ToolbarActionState]()
+    ) -> [ToolbarActionConfiguration] {
+        var actions = [ToolbarActionConfiguration]()
 
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
@@ -885,7 +885,7 @@ struct AddressBarState: StateType, Equatable {
             StandardImageIdentifiers.Large.readerViewFill :
             StandardImageIdentifiers.Large.readerView
 
-            let readerModeAction = ToolbarActionState(
+            let readerModeAction = ToolbarActionConfiguration(
                 actionType: .readerMode,
                 iconName: iconName,
                 isEnabled: true,
@@ -915,8 +915,8 @@ struct AddressBarState: StateType, Equatable {
     private static func browserActions(
         action: ToolbarAction,
         addressBarState: AddressBarState
-    ) -> [ToolbarActionState] {
-        var actions = [ToolbarActionState]()
+    ) -> [ToolbarActionConfiguration] {
+        var actions = [ToolbarActionConfiguration]()
 
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
@@ -948,8 +948,8 @@ struct AddressBarState: StateType, Equatable {
     private static func tabsAction(
         numberOfTabs: Int = 1,
         isPrivateMode: Bool = false)
-    -> ToolbarActionState {
-        return ToolbarActionState(
+    -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
@@ -960,8 +960,8 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
             badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
@@ -971,8 +971,8 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
-    private static func backAction(enabled: Bool) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .back,
             iconName: StandardImageIdentifiers.Large.back,
             isFlippedForRTL: true,
@@ -982,8 +982,8 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(enabled: Bool) -> ToolbarActionState {
-        return ToolbarActionState(
+    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
             actionType: .forward,
             iconName: StandardImageIdentifiers.Large.forward,
             isFlippedForRTL: true,

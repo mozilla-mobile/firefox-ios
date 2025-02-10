@@ -13,6 +13,8 @@ public class WKEngine: Engine {
 
     init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager()) {
         self.userScriptManager = userScriptManager
+
+        InternalUtil().setUpInternalHandlers()
     }
 
     public func createView() -> EngineView {

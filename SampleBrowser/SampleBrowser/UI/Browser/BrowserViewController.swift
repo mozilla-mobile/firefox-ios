@@ -9,6 +9,7 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+    func showErrorPage(page: ErrorPageViewController)
 
     func onFindInPage(selected: String)
     func onFindInPage(currentResult: Int)
@@ -197,6 +198,14 @@ class BrowserViewController: UIViewController,
     func didLoad(pageMetadata: EnginePageMetadata) {
         // Page metadata can be used to fetch page favicons.
         // We currently do not handle favicons in SampleBrowser, so this is empty.
+    }
+
+    func onErrorPageRequest(error: NSError) {
+        let errorPage = ErrorPageViewController()
+        let message = "Error \(String(error.code)) happened on domain \(error.domain): \(error.localizedDescription)"
+        errorPage.configure(errorMessage: message)
+
+        navigationDelegate?.showErrorPage(page: errorPage)
     }
 
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {

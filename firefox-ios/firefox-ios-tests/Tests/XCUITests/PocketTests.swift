@@ -78,6 +78,7 @@ class PocketTests: BaseTestCase {
         scrollToElement(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel],
                         direction: SwipeDirection.up,
                         maxSwipes: MAX_SWIPE)
+        app.swipeUp()
         scrollToElement(app.cells.staticTexts["Discover more"], direction: .left, maxSwipes: MAX_SWIPE)
 
         app.cells.staticTexts["Discover more"].waitAndTap()

@@ -7,7 +7,7 @@ import ComponentLibrary
 
 class FakespotAdLinkButton: LinkButton {
     private struct UX {
-        static let numberOfLines: Int = 3
+        static let numberOfLines = 3
     }
 
     private var previousFrame: CGRect = .zero

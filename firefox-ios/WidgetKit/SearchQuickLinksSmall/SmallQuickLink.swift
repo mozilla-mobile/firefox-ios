@@ -57,7 +57,7 @@ struct SmallQuickLinkView: View {
 }
 
 struct SmallQuickLinkWidget: Widget {
-    private let kind: String = "Quick Actions - Small"
+    private let kind = "Quick Actions - Small"
 
     public var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: QuickActionIntent.self, provider: IntentProvider()) { entry in

@@ -12,7 +12,7 @@ import Shared
 /// and tiles per row in order to only show a specific amount of the top sites data.
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let topSitesData: [TopSiteState]
+    let topSitesData: [TopSiteConfiguration]
     let numberOfRows: Int
     let shouldShowSection: Bool
 
@@ -32,7 +32,7 @@ struct TopSitesSectionState: StateType, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        topSitesData: [TopSiteState],
+        topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
         shouldShowSection: Bool
     ) {

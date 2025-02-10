@@ -16,6 +16,7 @@ class RatingPromptManagerTests: XCTestCase {
     var prefs: MockProfilePrefs!
     var logger: CrashingMockLogger!
     var userDefaults: MockUserDefaults!
+    var crashTracker: MockCrashTracker!
     var subject: RatingPromptManager!
 
     override func setUp() {
@@ -25,7 +26,11 @@ class RatingPromptManagerTests: XCTestCase {
         logger = CrashingMockLogger()
         urlOpenerSpy = URLOpenerSpy()
         userDefaults = MockUserDefaults()
-        subject = RatingPromptManager(prefs: prefs, logger: logger, userDefaults: userDefaults)
+        crashTracker = MockCrashTracker()
+        subject = RatingPromptManager(prefs: prefs,
+                                      crashTracker: crashTracker,
+                                      logger: logger,
+                                      userDefaults: userDefaults)
     }
 
     override func tearDown() {
@@ -35,6 +40,7 @@ class RatingPromptManagerTests: XCTestCase {
         logger = nil
         urlOpenerSpy = nil
         userDefaults = nil
+        crashTracker = nil
         subject = nil
 
         super.tearDown()
@@ -59,30 +65,11 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_loggerHasCrashedInLastSession_returnsFalse() {
-        logger?.enableCrashOnLastLaunch = true
-        subject.updateData()
+        crashTracker.mockHasCrashed = true
         prefs.setInt(30, forKey: PrefsKeys.Session.Count)
 
         subject.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
-    }
-
-    func testShouldShowPrompt_loggerHasCrashedYesterday_returnsFalse() {
-        logger?.enableCrashOnLastLaunch = true
-        subject.updateData(currentDate: Date().dayBefore)
-        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
-
-        subject.showRatingPromptIfNeeded()
-        XCTAssertEqual(ratingPromptOpenCount, 0)
-    }
-
-    func testShouldShowPrompt_loggerHasCrashedLastWeek_returnsTrue() {
-        logger?.enableCrashOnLastLaunch = true
-        subject.updateData(currentDate: Date().lastWeek)
-        prefs.setInt(30, forKey: PrefsKeys.Session.Count)
-
-        subject.showRatingPromptIfNeeded()
-        XCTAssertEqual(ratingPromptOpenCount, 1)
     }
 
     func testShouldShowPrompt_currentLastRequestDate_returnsFalse() {
@@ -173,12 +160,6 @@ class RatingPromptManagerTests: XCTestCase {
         userDefaults.object(
             forKey: RatingPromptManager.UserDefaultsKey.keyRatingPromptRequestCount.rawValue
         ) as? Int ?? 0
-    }
-
-    var lastCrashDateKey: Date? {
-        userDefaults.object(
-            forKey: RatingPromptManager.UserDefaultsKey.keyLastCrashDateKey.rawValue
-        ) as? Date
     }
 }
 

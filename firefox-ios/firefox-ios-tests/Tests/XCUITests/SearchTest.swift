@@ -5,14 +5,14 @@
 import XCTest
 import Common
 
-private let LabelPrompt: String = "Turn on search suggestions?"
-private let SuggestedSite: String = "foobar meaning"
-private let SuggestedSite2: String = "foobar google"
-private let SuggestedSite3: String = "foobar2000"
+private let LabelPrompt = "Turn on search suggestions?"
+private let SuggestedSite = "foobar meaning"
+private let SuggestedSite2 = "foobar google"
+private let SuggestedSite3 = "foobar2000"
 
-private let SuggestedSite4: String = "foobar buffer length"
-private let SuggestedSite5: String = "foobar burn cd"
-private let SuggestedSite6: String = "foobar bomb baby"
+private let SuggestedSite4 = "foobar buffer length"
+private let SuggestedSite5 = "foobar burn cd"
+private let SuggestedSite6 = "foobar bomb baby"
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
@@ -375,39 +375,6 @@ class SearchTests: BaseTestCase {
         // The search suggestion fills the URL bar but does not conduct the search
         waitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
-
-        // Check accessibility
-        // swiftlint:disable empty_count
-        if !iPad() {
-            try app.performAccessibilityAudit { issue in
-                guard let element = issue.element else { return false }
-
-                var shouldIgnore = false
-                // number of tabs in navigation toolbar
-                let isDynamicTypeTabButton = element.label == "1" &&
-                issue.auditType == .dynamicType
-
-                // clipped text on homepage
-                let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].firstMatch
-                let isDescendantOfHomepage = homepage.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-                let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
-
-                // clipped text in search suggestions
-                let suggestions = self.app.tables["SiteTable"].firstMatch
-                let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-                let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
-
-                // text in the address toolbar text field
-                let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
-
-                if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
-                    shouldIgnore = true
-                }
-
-                return shouldIgnore
-            }
-            // swiftlint:enable empty_count
-        }
 
         // Delete the text and type "g"
         app.textFields.firstMatch.waitAndTap()

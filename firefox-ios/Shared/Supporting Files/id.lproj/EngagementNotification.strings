@@ -7,3 +7,12 @@
 /* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
 "Engagement.Notification.Treatment.A.Body.v114" = "Penjelajahan pribadi di %@ tidak menyimpan info Anda dan memblokir pelacak tersembunyi.";
 
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Menjelajah tanpa meninggalkan jejak";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Menjelajah tanpa kuki atau riwayat tersimpan di %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Coba penjelajahan pribadi";
+

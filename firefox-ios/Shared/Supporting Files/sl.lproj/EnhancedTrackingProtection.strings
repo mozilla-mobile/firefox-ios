@@ -89,7 +89,7 @@
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Ogled digitalnega potrdila";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ je izključena. Priporočamo, da zaščito znova vključite.";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ vas ne varuje. Priporočamo, da zaščito znova vključite.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Zaščito ste izključili";

@@ -44,8 +44,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     weak var delegate: SearchViewDelegate?
     private let isPrivate: Bool
     let isBottomSearchBar: Bool
-    var savedQuery: String = ""
-    var searchQuery: String = "" {
+    var savedQuery = ""
+    var searchQuery = "" {
         didSet {
             querySuggestClient()
         }

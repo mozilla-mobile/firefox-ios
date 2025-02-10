@@ -205,7 +205,7 @@ class UnifiedAdsProviderTests: XCTestCase {
         return "{}"
     }
 
-    let tiles: String = """
+    let tiles = """
 {
     "newtab_mobile_tile_1": [
         {

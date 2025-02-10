@@ -30,7 +30,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
-        let exampleTopSite = TopSiteState(
+        let exampleTopSite = TopSiteConfiguration(
             site: Site.createBasicSite(
                 url: "https://www.example.com",
                 title: "hello",
@@ -136,12 +136,12 @@ final class TopsSitesSectionStateTests: XCTestCase {
         return TopSitesSectionState.defaultState(from: state)
     }
 
-    private func createSites(count: Int = 30) -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
             let site = Site.createBasicSite(url: "www.url\($0).com",
                                             title: "Title \($0)")
-            sites.append(TopSiteState(site: site))
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }

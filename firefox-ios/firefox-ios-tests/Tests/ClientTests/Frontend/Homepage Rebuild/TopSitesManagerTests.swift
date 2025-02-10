@@ -234,7 +234,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
 
         let topSites = subject.recalculateTopSites(
-            otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteState(site: $0) },
+            otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteConfiguration(site: $0) },
             sponsoredSites: createSponsoredSites()
         )
         XCTAssertEqual(topSites.count, 2)
@@ -248,7 +248,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject()
 
         let topSites = subject.recalculateTopSites(
-            otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteState(site: $0) },
+            otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteConfiguration(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
 
@@ -262,7 +262,7 @@ final class TopSitesManagerTests: XCTestCase {
     func test_recalculateTopSites_andNoPinnedSites_returnGoogleAndSponsoredSites() throws {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
         let topSites = subject.recalculateTopSites(
-            otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
+            otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
 
@@ -277,7 +277,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager())
 
         let topSites = subject.recalculateTopSites(
-            otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteState(site: $0) },
+            otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteConfiguration(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
         XCTAssertEqual(topSites.count, 6)
@@ -305,7 +305,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject()
 
         let topSites = subject.recalculateTopSites(
-            otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteState(site: $0) },
+            otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
             sponsoredSites: MockSponsoredProvider.defaultSuccessData.compactMap { Site.createSponsoredSite(fromContile: $0) }
         )
         XCTAssertEqual(topSites.count, 3)
@@ -421,12 +421,12 @@ final class TopSitesManagerTests: XCTestCase {
         return subject
     }
 
-    private func createOtherSites(count: Int = 10) -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    private func createOtherSites(count: Int = 10) -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
             let site = Site.createBasicSite(url: "www.url\($0).com",
                                             title: "Other Sites: Title \($0)")
-            sites.append(TopSiteState(site: site))
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }

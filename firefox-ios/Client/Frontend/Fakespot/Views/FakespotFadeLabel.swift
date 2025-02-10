@@ -6,7 +6,7 @@ import UIKit
 
 /// A label that adds a fade at bottom to indicate more content is available to user
 public class FakespotFadeLabel: UILabel {
-    private let fadePercentage: Double = 0.5
+    private let fadePercentage = 0.5
     private let gradientLayer = CAGradientLayer()
     private let transparentColor = UIColor.clear.cgColor
     private let opaqueColor = UIColor.black.cgColor

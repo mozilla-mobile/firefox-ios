@@ -218,14 +218,11 @@ class BrowserCoordinator: BaseCoordinator,
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
-            webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            webviewController.update(webView: webView)
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(
-                webView: webView,
-                isPrivate: tabManager.selectedTab?.isPrivate ?? false
-            )
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
