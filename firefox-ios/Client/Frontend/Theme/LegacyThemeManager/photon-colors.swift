@@ -10,7 +10,5 @@ import UIKit
 extension UIColor {
     struct Photon {
         static let Blue50 = UIColor(rgb: 0x0060df)
-
-        static let Purple60 = UIColor(rgb: 0x952bb9)
     }
 }
