@@ -6,11 +6,20 @@ import UIKit
 import Shared
 import SiteImageView
 
-public struct Site: Identifiable, Hashable, Equatable, Codable {
+public struct Site: Identifiable, Hashable, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {
     public let id: Int
     public let url: String
     public let title: String
     public let type: SiteType
+
+    public var debugDescription: String {
+        // See FXIOS-11335 for context before making updates.
+        return "Site \(id) (\(type))"
+    }
+
+    public var description: String {
+        return debugDescription
+    }
 
     // MARK: - Other information
     public var faviconResource: SiteResource?
