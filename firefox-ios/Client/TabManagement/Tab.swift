@@ -247,7 +247,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         } else if let url = url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
         }
-        
+
         return displayTitle.isEmpty ? backUpName : displayTitle
     }
 
