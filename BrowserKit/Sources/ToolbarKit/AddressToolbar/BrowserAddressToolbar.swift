@@ -92,11 +92,13 @@ public class BrowserAddressToolbar: UIView,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
-                          isUnifiedSearchEnabled: Bool) {
+                          isUnifiedSearchEnabled: Bool,
+                          animated: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewState = state.locationViewState
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
+<<<<<<< HEAD
         configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
     }
 
@@ -106,6 +108,23 @@ public class BrowserAddressToolbar: UIView,
         updateActions(state: state)
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         droppableUrl = state.locationViewState.droppableUrl
+=======
+        configure(config: config,
+                  isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                  animated: animated)
+    }
+
+    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
+        updateBorder(borderPosition: config.borderPosition)
+
+        updateActions(config: config, animated: animated)
+        locationView.configure(
+            config.locationViewConfiguration,
+            delegate: self,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+        )
+        droppableUrl = config.locationViewConfiguration.droppableUrl
+>>>>>>> 68cacdc07 (Bugfix FXIOS-9857 Normal tabs appear in private top tabs tray briefly during launch (#24667))
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -235,7 +254,11 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
+<<<<<<< HEAD
     internal func updateActions(state: AddressToolbarState) {
+=======
+    internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
+>>>>>>> 68cacdc07 (Bugfix FXIOS-9857 Normal tabs appear in private top tabs tray briefly during launch (#24667))
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
 
@@ -246,14 +269,14 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
-        updateToolbarLayout()
+        updateToolbarLayout(animated: animated)
     }
 
-    private func updateToolbarLayout() {
+    private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
             UIView.animate(withDuration: UX.toolbarAnimationTime) {

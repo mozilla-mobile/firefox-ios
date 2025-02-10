@@ -192,16 +192,28 @@ final class AddressToolbarContainer: UIView,
                 enterOverlayMode(nil, pasted: false, search: true)
             }
             updateProgressBarPosition(toolbarState.toolbarPosition)
+<<<<<<< HEAD
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
                                      isUnifiedSearchEnabled: isUnifiedSearchEnabled)
             regularToolbar.configure(state: newModel.addressToolbarState,
+=======
+
+            compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
+            regularToolbar.configure(config: newModel.addressToolbarConfig,
+>>>>>>> 68cacdc07 (Bugfix FXIOS-9857 Normal tabs appear in private top tabs tray briefly during launch (#24667))
+                                     toolbarDelegate: self,
+                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
+                                     trailingSpace: calculateToolbarTrailingSpace(),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
