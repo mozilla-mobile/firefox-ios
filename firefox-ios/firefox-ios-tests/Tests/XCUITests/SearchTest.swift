@@ -5,14 +5,14 @@
 import XCTest
 import Common
 
-private let LabelPrompt: String = "Turn on search suggestions?"
-private let SuggestedSite: String = "foobar meaning"
-private let SuggestedSite2: String = "foobar google"
-private let SuggestedSite3: String = "foobar2000"
+private let LabelPrompt = "Turn on search suggestions?"
+private let SuggestedSite = "foobar meaning"
+private let SuggestedSite2 = "foobar google"
+private let SuggestedSite3 = "foobar2000"
 
-private let SuggestedSite4: String = "foobar buffer length"
-private let SuggestedSite5: String = "foobar burn cd"
-private let SuggestedSite6: String = "foobar bomb baby"
+private let SuggestedSite4 = "foobar buffer length"
+private let SuggestedSite5 = "foobar burn cd"
+private let SuggestedSite6 = "foobar bomb baby"
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {

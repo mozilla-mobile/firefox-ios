@@ -11,7 +11,7 @@ class TopSitesViewModel {
     struct UX {
         static let cellEstimatedSize = CGSize(width: 85, height: 94)
         static let cardSpacing: CGFloat = 16
-        static let minCards: Int = 4
+        static let minCards = 4
     }
 
     weak var delegate: HomepageDataModelDelegate?
@@ -25,8 +25,8 @@ class TopSitesViewModel {
     private var unfilteredTopSites: [TopSite] = []
     private var topSites: [TopSite] = []
     private let dimensionManager: TopSitesDimension
-    private var numberOfItems: Int = 0
-    private var numberOfRows: Int = 0
+    private var numberOfItems = 0
+    private var numberOfRows = 0
 
     private let topSitesDataAdaptor: TopSitesDataAdaptor
     private let topSiteHistoryManager: TopSiteHistoryManager

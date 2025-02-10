@@ -19,7 +19,7 @@ class FakespotSettingsCardViewModel {
     let recommendedProductsGroupA11yHint: String = .Shopping.SettingsCardGroupedRecommendedProductsAndSwitchAccessibilityHint
     let turnOffButtonTitle: String = .Shopping.SettingsCardTurnOffButton
     let turnOffButtonTitleA11yId: String = a11yIds.turnOffButton
-    let footerTitle: String = ""
+    let footerTitle = ""
     let footerActionTitle = String.localizedStringWithFormat(.Shopping.SettingsCardFooterAction,
                                                              FakespotName.shortName.rawValue,
                                                              MozillaName.shortName.rawValue)

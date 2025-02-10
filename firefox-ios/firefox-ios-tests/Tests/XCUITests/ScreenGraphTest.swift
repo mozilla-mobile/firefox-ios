@@ -105,7 +105,7 @@ class TestUserState: MMUserState {
     var url: String?
     var nightMode = false
     var passcode: String?
-    var newPasscode: String = "111111"
+    var newPasscode = "111111"
 }
 
 let WebPageLoading = "WebPageLoading"

@@ -15,7 +15,7 @@ struct SimpleTab: Hashable, Codable {
     let lastUsedTime: Timestamp? // From Session Data
     var faviconURL: String?
     var isPrivate = false
-    var uuid: String = ""
+    var uuid = ""
     var imageKey: String {
         return url?.baseDomain ?? ""
     }
