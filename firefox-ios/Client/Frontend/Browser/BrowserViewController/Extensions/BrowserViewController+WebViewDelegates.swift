@@ -762,7 +762,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
             if response.mimeType == MIMEType.PDF, let request {
-                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                guard !handlePDFResponse(webView, tab: tab, response: response, request: request) else {
+                    decisionHandler(.allow)
+                    return
+                }
                 decisionHandler(.cancel)
                 return
             }
@@ -783,9 +786,10 @@ extension BrowserViewController: WKNavigationDelegate {
     func handlePDFResponse(_ webView: WKWebView,
                            tab: Tab,
                            response: URLResponse,
-                           request: URLRequest) {
-        guard let webView = webView as? TabWebView else { return }
-        webView.showDocumentLoadingView()
+                           request: URLRequest) -> Bool {
+        guard tab.canLoadDocumentRequest(request) else { return true }
+        (webView as? TabWebView)?.showDocumentLoadingView()
+        (webView as? TabWebView)?.applyTheme(theme: currentTheme())
 
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
@@ -802,6 +806,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
             tab?.enqueueDocument(tempPDF)
         }
+        return false
     }
 
     /// Tells the delegate that an error occurred during navigation.

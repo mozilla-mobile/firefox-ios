@@ -133,7 +133,7 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
     private let loadingView = UIActivityIndicatorView(style: .large)
     private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
     private let filenameLabel = UILabel()
-    private var isAnimating = false
+    private var appearanceAnimator: UIViewPropertyAnimator?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -191,19 +191,20 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
 
         loadingContainerView.addArrangedSubview(loadingView)
         loadingContainerView.addArrangedSubview(filenameLabel)
+    }
 
-        UIView.animate(withDuration: 0.6, delay: 0.0) {
-            self.isAnimating = true
-        } completion: { _ in
-            UIView.animate(withDuration: 0.3) {
-                self.backgroundView.alpha = 1
-                self.filenameLabel.alpha = 1
-                self.loadingView.alpha = 1
-                self.loadingBackgroundView.alpha = 1
-            } completion: { _ in
-                self.isAnimating = false
-            }
+    func animateLoadingAppearanceIfNeeded(_ completion: (() -> Void)? = nil) {
+        appearanceAnimator?.stopAnimation(true)
+        appearanceAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeIn) {
+            self.backgroundView.alpha = 1
+            self.filenameLabel.alpha = 1
+            self.loadingView.alpha = 1
+            self.loadingBackgroundView.alpha = 1
         }
+        appearanceAnimator?.addCompletion { _ in
+            completion?()
+        }
+        appearanceAnimator?.startAnimation()
     }
 
     // MARK: - ThemeApplicable
@@ -345,21 +346,14 @@ class PDFTemporaryDocument: NSObject, TemporaryDocument, URLSessionDownloadDeleg
     func invalidateSession() {
         currentDownloadTask?.cancel()
         currentDownloadTask = nil
-        onDownloadProgressUpdate?(0.0)
         session.invalidateAndCancel()
-    }
-
-    deinit {
-        if let tempFileURL = queryTempFile() {
-            try? FileManager.default.removeItem(at: tempFileURL)
-        }
     }
 
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        currentDownloadTask = nil
         guard let url = storeTempDownloadFile(at: location) else { return }
+        invalidateSession()
         ensureMainThread { [weak self] in
             self?.onDownloadToURL?(url)
         }

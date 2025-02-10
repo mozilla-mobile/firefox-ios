@@ -426,6 +426,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
+    private var downloadedTemporaryDocs = [URL]()
 
     var profile: Profile
 
@@ -460,7 +461,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var isActive: Bool {
         return !isInactive
     }
-    private var observedKeyPathTokens = [NSKeyValueObservation]()
 
     init(profile: Profile,
          isPrivate: Bool = false,
@@ -603,7 +603,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
-        (temporaryDocument as? PDFTemporaryDocument)?.invalidateSession()
+        deleteDownloadedDocuments()
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
@@ -611,7 +611,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         webView?.navigationDelegate = nil
 
         debugTabCount -= 1
-        removeKeyPathObservers()
 #if DEBUG
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
@@ -983,45 +982,46 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
             self.temporaryDocument = nil
-            webView?.removeDocumentLoadingView()
+//            webView?.removeDocumentLoadingView()
             return true
         }
         return false
+    }
+
+    private func deleteDownloadedDocuments() {
+        let docsURL = downloadedTemporaryDocs
+        guard !docsURL.isEmpty else { return }
+        DispatchQueue.global(qos: .background).async {
+            print("FF: deleting downloaded temporary documents")
+            docsURL.forEach { url in
+                try? FileManager.default.removeItem(at: url)
+            }
+        }
+    }
+
+    func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
+        if let temporaryDocument = temporaryDocument as? PDFTemporaryDocument,
+           request.url == temporaryDocument.localFileURL {
+//            webView?.removeDocumentLoadingView()
+            return false
+        }
+        return true
     }
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
         guard let document = document as? PDFTemporaryDocument else { return }
         setupObservers()
+        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.websiteLoadingStateDidChange))
         document.download()
     }
 
     private func setupObservers() {
         guard let temporaryDocument = temporaryDocument as? PDFTemporaryDocument else { return }
-        removeKeyPathObservers()
-        let documentLoadToken = temporaryDocument.observe(\.localFileURL) { [weak temporaryDocument, weak self] _, _ in
-            temporaryDocument?.invalidateSession()
-            self?.webView?.removeDocumentLoadingView {
-                self?.loadDocumentOnWebView()
-            }
-        }
-        observedKeyPathTokens.append(documentLoadToken)
-    }
-
-    private func removeKeyPathObservers() {
-        for token in observedKeyPathTokens {
-            token.invalidate()
-        }
-        observedKeyPathTokens.removeAll()
-    }
-
-    private func loadDocumentOnWebView() {
-        guard let tempDocURL = (temporaryDocument as? PDFTemporaryDocument)?.localFileURL else { return }
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let data = try? Data(contentsOf: tempDocURL) else { return }
-            ensureMainThread {
-                self?.webView?.load(data, mimeType: "application/pdf", characterEncodingName: "", baseURL: tempDocURL)
-            }
+        temporaryDocument.onDownloadToURL = { [weak self] url in
+            self?.webView?.load(URLRequest(url: url))
+            self?.downloadedTemporaryDocs.append(url)
+            self?.webView?.removeDocumentLoadingView()
         }
     }
 }
@@ -1183,7 +1183,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
-    private var documentLoadingView: TemporaryDocumentLoadingView?
+    var documentLoadingView: TemporaryDocumentLoadingView?
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1281,6 +1281,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
+        documentLoadingView?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
@@ -1300,17 +1301,20 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
             documentLoadingView.topAnchor.constraint(equalTo: topAnchor),
             documentLoadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+        documentLoadingView.animateLoadingAppearanceIfNeeded()
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(_ completion: (() -> Void)? = nil) {
-        guard let documentLoadingView else { return }
-        UIView.animate(withDuration: 0.6) {
-            documentLoadingView.alpha = 0
-        } completion: { _ in
-            documentLoadingView.removeFromSuperview()
-            self.documentLoadingView = nil
-            completion?()
+    func removeDocumentLoadingView(_ completion: VoidReturnCallback? = nil) {
+        print("FF: need to remove the document")
+        documentLoadingView?.animateLoadingAppearanceIfNeeded { [weak self] in
+            UIView.animate(withDuration: 0.3) {
+                self?.documentLoadingView?.transform = CGAffineTransform(translationX: -(self?.frame.width ?? 0), y: 0)
+            } completion: { _ in
+                self?.documentLoadingView?.removeFromSuperview()
+                self?.documentLoadingView = nil
+                completion?()
+            }
         }
     }
 }
