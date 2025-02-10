@@ -51,4 +51,47 @@ extension UIImage {
 
         return UIImage.animatedImage(with: frames, duration: Double(frameCount) * frameDuration)
     }
+
+    /// Computes the average color of the image using a CIAreaAverage filter.
+    /// The filter returns a 1x1 pixel image representing the average of all pixel colors.
+    /// This method renders that pixel into a bitmap and converts it into a UIColor.
+    func averageColor() -> UIColor? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+
+        let extentVector = CIVector(
+            x: inputImage.extent.origin.x,
+            y: inputImage.extent.origin.y,
+            z: inputImage.extent.size.width,
+            w: inputImage.extent.size.height
+        )
+
+        // Set up the CIAreaAverage filter with the input image and its extent.
+        // The filter will compute the average color over the specified area.
+        guard let filter = CIFilter(name: "CIAreaAverage") else { return nil }
+        filter.setValue(inputImage, forKey: kCIInputImageKey)
+        filter.setValue(extentVector, forKey: kCIInputExtentKey)
+
+        guard let outputImage = filter.outputImage else { return nil }
+
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext()
+
+        // Render the 1x1 output image into the bitmap.
+        // This extracts the RGBA values of the computed average color.
+        context.render(
+            outputImage,
+            toBitmap: &bitmap,
+            rowBytes: 4,
+            bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
+            format: .RGBA8,
+            colorSpace: CGColorSpaceCreateDeviceRGB()
+        )
+
+        return UIColor(
+            red: CGFloat(bitmap[0]) / 255,
+            green: CGFloat(bitmap[1]) / 255,
+            blue: CGFloat(bitmap[2]) / 255,
+            alpha: CGFloat(bitmap[3]) / 255
+        )
+    }
 }
