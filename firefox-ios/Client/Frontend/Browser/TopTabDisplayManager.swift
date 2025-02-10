@@ -711,7 +711,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
     }
 
     func tabManagerTabDidFinishLoading() {
-        refreshStore(evenIfHidden: true)
+        refreshStore()
     }
 }
 
