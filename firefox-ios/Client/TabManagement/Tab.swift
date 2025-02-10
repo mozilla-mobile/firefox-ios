@@ -989,7 +989,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument.onDownloadToURL = { [weak self] url in
             self?.webView?.load(URLRequest(url: url))
             self?.downloadedTemporaryDocs.append(url)
-            self?.webView?.removeDocumentLoadingView()
         }
     }
 }
@@ -1273,16 +1272,14 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         self.documentLoadingView = documentLoadingView
     }
 
-    func removeDocumentLoadingView(_ completion: VoidReturnCallback? = nil) {
-        print("FF: need to remove the document")
-        documentLoadingView?.animateLoadingAppearanceIfNeeded { [weak self] in
-            UIView.animate(withDuration: 0.3) {
-                self?.documentLoadingView?.transform = CGAffineTransform(translationX: -(self?.frame.width ?? 0), y: 0)
-            } completion: { _ in
-                self?.documentLoadingView?.removeFromSuperview()
-                self?.documentLoadingView = nil
-                completion?()
-            }
+    func removeDocumentLoadingView() {
+        guard let documentLoadingView else { return }
+        UIView.animate(withDuration: 0.3) {
+            documentLoadingView.alpha = 0.0
+            // documentLoadingView.transform = CGAffineTransform(translationX: -self.frame.width, y: 0)
+        } completion: { _ in
+            documentLoadingView.removeFromSuperview()
+            self.documentLoadingView = nil
         }
     }
 }

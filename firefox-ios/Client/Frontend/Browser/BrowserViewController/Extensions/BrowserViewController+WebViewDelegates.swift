@@ -1023,16 +1023,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-        if webView.url?.isFileURL ?? false {
-            let loadingView = webView.subviews.first {
-                $0 is TemporaryDocumentLoadingView
-            }
-            UIView.animate(withDuration: 0.6, animations: {
-                loadingView?.alpha = 0
-            }) { _ in
-                loadingView?.removeFromSuperview()
-            }
-        }
+        (webView as? TabWebView)?.removeDocumentLoadingView()
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)

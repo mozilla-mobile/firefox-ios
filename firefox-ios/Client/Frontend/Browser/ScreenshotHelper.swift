@@ -61,7 +61,7 @@ class ScreenshotHelper {
             let configuration = WKSnapshotConfiguration()
             // This is for a bug in certain iOS 13 versions, snapshots cannot be taken
             // correctly without this boolean being set
-            configuration.afterScreenUpdates = true
+            configuration.afterScreenUpdates = false
             configuration.snapshotWidth = 320
 
             webView.takeSnapshot(with: configuration) { image, error in
