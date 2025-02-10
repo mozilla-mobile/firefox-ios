@@ -3,12 +3,34 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
-struct JumpBackInTabState: Equatable, Hashable {
+struct JumpBackInTabConfiguration: Equatable, Hashable {
     let titleText: String
     let descriptionText: String
     let siteURL: String
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
+    }
+}
+
+struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
+    let titleText: String
+    let descriptionText: String
+    let url: URL
+    var syncedDeviceImage: UIImage? {
+        return UIImage(named: StandardImageIdentifiers.Large.syncTabs)
+    }
+    var accessibilityLabel: String {
+        return "\(cardTitleText): \(titleText), \(descriptionText)"
+    }
+    var cardTitleText: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabTitle
+    }
+    var syncedTabsButtonText: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabShowAllButtonTitle
+    }
+    var syncedTabOpenActionTitle: String {
+        return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
     }
 }

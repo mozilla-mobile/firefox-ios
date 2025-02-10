@@ -18,20 +18,30 @@ final class HomepageDiffableDataSource:
         case messageCard
         case topSites(NumberOfTilesPerRow)
         case jumpBackIn(TextColor?)
-        case bookmarks
+        case bookmarks(TextColor?)
         case pocket(TextColor?)
         case customizeHomepage
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .topSites, .jumpBackIn, .bookmarks, .pocket:
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     enum HomeItem: Hashable {
         case header(HeaderState)
         case messageCard(MessageCardConfiguration)
-        case topSite(TopSiteState, TextColor?)
+        case topSite(TopSiteConfiguration, TextColor?)
         case topSiteEmpty
-        case jumpBackIn(JumpBackInTabState)
-        case bookmark(BookmarkState)
-        case pocket(PocketStoryState)
-        case pocketDiscover(PocketDiscoverState)
+        case jumpBackIn(JumpBackInTabConfiguration)
+        case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
+        case bookmark(BookmarkConfiguration)
+        case pocket(PocketStoryConfiguration)
+        case pocketDiscover(PocketDiscoverConfiguration)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -41,6 +51,7 @@ final class HomepageDiffableDataSource:
                 TopSiteCell.self,
                 EmptyTopSiteCell.self,
                 JumpBackInCell.self,
+                SyncedTabCell.self,
                 BookmarksCell.self,
                 PocketStandardCell.self,
                 PocketDiscoverCell.self,
@@ -73,8 +84,8 @@ final class HomepageDiffableDataSource:
         }
 
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
-            snapshot.appendSections([.bookmarks])
-            snapshot.appendItems(bookmarks, toSection: .bookmarks)
+            snapshot.appendSections([.bookmarks(textColor)])
+            snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
         if let stories = getPocketStories(with: state.pocketState) {
@@ -122,16 +133,20 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
         // TODO: FXIOS-11224 Configure items to display based on device sizes
-        let maxItemsToDisplay = 2
-        return jumpBackInSectionState.jumpBackInTabs
+        let maxItemsToDisplay = 1
+        var tabs: [HomeItem] = jumpBackInSectionState.jumpBackInTabs
             .prefix(maxItemsToDisplay)
             .compactMap { .jumpBackIn($0) }
+        if let mostRecentSyncedTab = jumpBackInSectionState.mostRecentSyncedTab {
+            tabs.append(.jumpBackInSyncedTab(mostRecentSyncedTab))
+        }
+        return tabs
     }
 
     private func getBookmarks(
-        with bookmarksSectionState: BookmarksSectionState
+        with state: BookmarksSectionState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
-        return bookmarksSectionState.bookmarks.compactMap { .bookmark($0) }
+        guard state.shouldShowSection, !state.bookmarks.isEmpty else { return nil }
+        return state.bookmarks.compactMap { .bookmark($0) }
     }
 }

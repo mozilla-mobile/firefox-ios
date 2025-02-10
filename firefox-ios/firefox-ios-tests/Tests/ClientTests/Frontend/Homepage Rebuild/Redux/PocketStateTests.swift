@@ -38,7 +38,7 @@ final class PocketStateTests: XCTestCase {
         ]
 
         let stories = feedStories.compactMap {
-            PocketStoryState(story: PocketStory(pocketFeedStory: $0))
+            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
         }
 
         let newState = reducer(

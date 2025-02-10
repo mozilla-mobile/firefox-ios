@@ -1075,9 +1075,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return false
     }
 
-    func expireSnackbars() {
+    func expireLoginAlerts() {
         for tab in tabs {
-            tab.expireSnackbars()
+            tab.expireLoginAlert()
         }
     }
 

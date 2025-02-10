@@ -502,22 +502,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).waitAndTap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            if #available(iOS 17, *) {
-                if app.buttons["Remove Test Folder"].exists {
-                    app.buttons["Remove Test Folder"].waitAndTap()
-                    app.buttons["Delete"].waitAndTap()
-                } else {
-                    app.buttons["Delete"].waitAndTap()
-                }
-            } else {
-                if app.buttons["Delete Test Folder"].exists {
-                    app.buttons["Delete Test Folder"].waitAndTap()
-                    app.buttons["Delete"].waitAndTap()
-                } else {
-                    app.buttons["Delete"].waitAndTap()
-                }
-            }
+            app.buttons["Delete"].waitAndTap()
         }
+        
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in

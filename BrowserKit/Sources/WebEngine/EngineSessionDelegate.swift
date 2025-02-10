@@ -28,6 +28,10 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Event to indicate that the page metadata was loaded or updated
     func didLoad(pageMetadata: EnginePageMetadata)
 
+    /// Event to indicate the session encountered an error and a corresponding error page should be shown to the user
+    /// - Parameter error: The error the webpage encountered
+    func onErrorPageRequest(error: NSError)
+
     // MARK: Menu items
     /// Relates to adding native `UIMenuController.shared.menuItems` in webview textfields
 

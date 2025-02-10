@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "详细了解";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "我们可借助崩溃报告来诊断和修复浏览器的问题。";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "我们可借助此信息来诊断和修复浏览器的问题。";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

@@ -11,8 +11,8 @@ struct NavigationToolbarContainerModel: Equatable {
     let displayBorder: Bool
     let windowUUID: WindowUUID
 
-    var navigationToolbarState: NavigationToolbarState {
-        return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
+    var navigationToolbarConfiguration: NavigationToolbarConfiguration {
+        return NavigationToolbarConfiguration(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
     init(state: ToolbarState, windowUUID: WindowUUID) {

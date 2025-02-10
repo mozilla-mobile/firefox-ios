@@ -37,6 +37,10 @@ class ContentContainer: UIView {
         return type == .homepage
     }
 
+    var hasAnyHomepage: Bool {
+        return hasLegacyHomepage || hasHomepage || hasPrivateHomepage
+    }
+
     var hasWebView: Bool {
         return type == .webview
     }

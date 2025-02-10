@@ -11,7 +11,7 @@
 "Copy" = "Copia";
 
 /* Label describing when the current login was created with the timestamp as the parameter. */
-"Created %@" = "Creato %@";
+"Created %@" = "Creata %@";
 
 /* Label for the button used to delete the current login. */
 "Delete" = "Elimina";
@@ -50,7 +50,7 @@
 "Logins will be removed from all connected devices." = "Gli accessi verranno rimossi da tutti i dispositivi connessi.";
 
 /* Label describing when the current login was last modified with the timestamp as the parameter. */
-"Modified %@" = "Modificato %@";
+"Modified %@" = "Modificata %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nessun accesso disponibile";

@@ -39,12 +39,10 @@ class DatabaseFixtureTest: BaseTestCase {
 
         do {
             // Take a custom snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
-            // Filter out 'Other' elements and drop the 'Desktop Bookmarks' cell for a true bookmark count.
             let bookmarksListSnapshot = try bookmarksList.snapshot()
             let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-            let filteredBookmarksList = bookmarksListCells.dropFirst()
 
-            XCTAssertEqual(filteredBookmarksList.count, 1000, "There should be 1000 entries in the bookmarks list")
+            XCTAssertEqual(bookmarksListCells.count, 1000, "There should be 1000 entries in the bookmarks list")
         } catch {
             XCTFail("Failed to take snapshot: \(error)")
         }

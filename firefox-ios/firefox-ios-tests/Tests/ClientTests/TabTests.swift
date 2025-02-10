@@ -206,9 +206,9 @@ class TabTests: XCTestCase {
 
 // MARK: - MockLegacyTabDelegate
 class MockLegacyTabDelegate: LegacyTabDelegate {
-    func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {}
+    func tab(_ tab: Tab, didAddLoginAlert alert: SaveLoginAlert) {}
 
-    func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {}
+    func tab(_ tab: Tab, didRemoveLoginAlert alert: SaveLoginAlert) {}
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {}
 

@@ -114,7 +114,7 @@ open class MockProfile: Client.Profile {
     public var syncManager: ClientSyncManager?
     public var firefoxSuggest: RustFirefoxSuggestProtocol?
 
-    fileprivate let name: String = "mockaccount"
+    fileprivate let name = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
