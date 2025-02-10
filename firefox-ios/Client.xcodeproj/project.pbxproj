@@ -70,6 +70,8 @@
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
 		124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		124DAE8A2D3512FA0050104C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
+		1251623C2D59FB30005CB958 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
+		1251623D2D59FB31005CB958 /* Ecosia.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		126509852CD925B40011BA36 /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 126509842CD925B40011BA36 /* BrazeKit */; };
 		126509872CD925B40011BA36 /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 126509862CD925B40011BA36 /* BrazeUI */; };
 		12A536342D3E637800924CB0 /* DownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* DownloadHelper.swift */; };
@@ -322,7 +324,6 @@
 		2CC246692D520EF90098467A /* EcosiaColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465C2D520EF90098467A /* EcosiaColor.swift */; };
 		2CC2466B2D520EF90098467A /* EcosiaDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2465D2D520EF90098467A /* EcosiaDarkTheme.swift */; };
 		2CC24C752D52478E0098467A /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
-		2CFE997B2D45329500B25CE0 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
 		2CFE9FBF2D45348200B25CE0 /* SnowplowTracker in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFE9FBE2D45348200B25CE0 /* SnowplowTracker */; };
 		2CFE9FC02D45348700B25CE0 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		2CFE9FC22D4535FD00B25CE0 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
@@ -2146,6 +2147,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1251623D2D59FB31005CB958 /* Ecosia.framework in Copy Frameworks */,
 				43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
@@ -9654,12 +9656,12 @@
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
+				1251623C2D59FB30005CB958 /* Ecosia.framework in Frameworks */,
 				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
 				126509852CD925B40011BA36 /* BrazeKit in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
-				2CFE997B2D45329500B25CE0 /* Ecosia.framework in Frameworks */,
 				126509872CD925B40011BA36 /* BrazeUI in Frameworks */,
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */,
