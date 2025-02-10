@@ -6,8 +6,11 @@ import Foundation
 import WebKit
 import Shared
 import Common
+import Glean
 
 class NightModeHelper: TabContentScript, FeatureFlaggable {
+    private weak var tab: Tab?
+
     private enum NightModeKeys {
         static let Status = "profile.NightModeStatus"
         static let DarkThemeEnabled = "NightModeEnabledDarkTheme"
@@ -19,6 +22,10 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
 
     func scriptMessageHandlerNames() -> [String]? {
         return ["NightMode"]
+    }
+
+    required init(tab: Tab) {
+        self.tab = tab
     }
 
     static func jsCallbackBuilder(_ enabled: Bool) -> String {
@@ -85,8 +92,10 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
     }
 
     static func isPageInDarkMode(webView: WKWebView?, completion: @escaping (Bool) -> Void) {
+        let timerId = GleanMetrics.DarkReader.websiteDarkThemeDetection.start()
         takePageSnapshot(for: webView, at: 0.6, width: 300, height: 400) { color in
             let isPageDark = color?.isDark ?? false
+            GleanMetrics.DarkReader.websiteDarkThemeDetection.stopAndAccumulate(timerId)
             completion(isPageDark)
         }
     }

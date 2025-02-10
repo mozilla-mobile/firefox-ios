@@ -3591,7 +3591,7 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
-        let nightModeHelper = NightModeHelper()
+        let nightModeHelper = NightModeHelper(tab: tab)
         tab.addContentScriptToCustomWorld(nightModeHelper, name: NightModeHelper.name())
 
         // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily

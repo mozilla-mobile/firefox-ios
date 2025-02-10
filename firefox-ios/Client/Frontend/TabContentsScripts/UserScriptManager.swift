@@ -17,11 +17,6 @@ class UserScriptManager: FeatureFlaggable {
         source: "window.__firefox__.NoImageMode.setEnabled(true)",
         injectionTime: .atDocumentStart,
         forMainFrameOnly: true)
-    private let nightModeUserScript = WKUserScript(
-        source: NightModeHelper.jsCallbackBuilder(true),
-        injectionTime: .atDocumentEnd,
-        forMainFrameOnly: true,
-        in: .world(name: NightModeHelper.name()))
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",
         injectionTime: .atDocumentEnd,
@@ -130,11 +125,7 @@ class UserScriptManager: FeatureFlaggable {
         }
         // Inject the Print Helper. This needs to be in the `page` content world in order to hook `window.print()`.
         webView?.configuration.userContentController.addUserScript(printHelperUserScript)
-        // If Night Mode is enabled, inject a small user script to ensure
-        // that it gets enabled immediately when the DOM loads.
-        if nightMode {
-            webView?.configuration.userContentController.addUserScript(nightModeUserScript)
-        }
+
         // If No Image Mode is enabled, inject a small user script to ensure
         // that it gets enabled immediately when the DOM loads.
         if noImageMode {

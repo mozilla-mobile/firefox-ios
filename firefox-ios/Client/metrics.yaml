@@ -6556,3 +6556,17 @@ nimbus_system:
       - chumphreys@mozilla.com
       - project-nimbus@mozilla.com
     expires: never
+
+dark_reader:
+  website_dark_theme_detection:
+    type: timing_distribution
+    time_unit: millisecond
+    description: >
+      Counts how long it takes for our sampling algorithm to detect the theme of a webpage
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17717
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18012
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

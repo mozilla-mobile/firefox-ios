@@ -370,10 +370,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-            webView?.evaluateJavascriptInCustomContentWorld(
-                NightModeHelper.jsCallbackBuilder(nightMode),
-                in: .world(name: NightModeHelper.name())
-            )
+            NightModeHelper.isPageInDarkMode(webView: webView) { [weak self] isInDarkPage in
+                guard let self = self else { return }
+                let enableComputedDarkMode = !isInDarkPage && NightModeHelper.isActivated()
+                webView?.evaluateJavascriptInCustomContentWorld(
+                    NightModeHelper.jsCallbackBuilder(enableComputedDarkMode, "foo3"),
+                    in: .world(name: NightModeHelper.name())
+                )
+            }
+
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
