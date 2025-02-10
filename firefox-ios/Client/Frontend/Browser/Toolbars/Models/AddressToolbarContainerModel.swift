@@ -27,6 +27,7 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
+    let shouldAnimate: Bool
 
     let windowUUID: UUID
 
@@ -79,7 +80,8 @@ final class AddressToolbarContainerModel: Equatable {
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition)
+            borderPosition: borderPosition,
+            shouldAnimate: shouldAnimate)
     }
 
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
@@ -114,6 +116,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
+        self.shouldAnimate = state.shouldAnimate
     }
 
     func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {

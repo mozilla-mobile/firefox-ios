@@ -121,7 +121,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             showMenuWarningBadge: false,
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
-                            canShowNavigationHint: false)
+                            canShowNavigationHint: false,
+                            shouldAnimate: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -139,6 +140,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                             showMenuWarningBadge: false,
                             isNewTabFeatureEnabled: false,
                             canShowDataClearanceAction: false,
-                            canShowNavigationHint: false)
+                            canShowNavigationHint: false,
+                            shouldAnimate: false)
     }
 }
