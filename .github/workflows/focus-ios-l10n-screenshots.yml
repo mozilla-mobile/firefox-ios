@@ -1,0 +1,44 @@
+name: L10n Focus iOS screenshots
+on:
+    workflow_dispatch:
+        inputs:
+            branch:
+                default: main
+                required: true
+                type: string
+    schedule:
+        - cron: "0 4 * * 0"
+
+jobs:
+    get-screenshots:
+        name: Generate screenshots
+        runs-on: macos-15
+        steps:
+            - name: Clone firefox-ios repo
+              uses: actions/checkout@v4
+              with:
+                ref: ${{ inputs.branch }}
+            - name: Setup Xcode
+              run: |
+                  sudo rm -rf /Applications/Xcode.app
+                  sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+                  xcodebuild -version
+            - name: Run setup scripts for Focus
+              run: |
+                  ./checkout.sh
+            - name: Compile Focus iOS
+              run: |
+                  xcodebuild build-for-testing -scheme FocusSnapshotTests \
+                    -project focus-ios/Blockzilla.xcodeproj \
+                    -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
+                    -derivedDataPath l10n-screenshots-dd
+            - name: Generate screenshots
+              continue-on-error: true
+              run: |
+                  focus-ios/l10n-screenshots.sh --test-without-building ab, af, an, ar, az, be, bg, bn, bo, br, bs, ca, co, cs, cy, da, de, el, en-CA, en-GB, en-US, eo, es, es-AR, es-CL, es-ES, es-MX, et, eu, fa, zh-TW
+            - name: Upload screenshots
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                path: ./l10n-screenshots
+                retention-days: 90
+                name: Screenshots
