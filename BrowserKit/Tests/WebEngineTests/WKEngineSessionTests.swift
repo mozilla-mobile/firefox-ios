@@ -43,9 +43,9 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let url = URL(string: "https://example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
-        let engineURL = EngineURL(browsingContext: context)!
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(engineURL: engineURL)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url, url)
@@ -55,9 +55,9 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let url = URL(string: "about:reader?url=http://example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
-        let engineURL = EngineURL(browsingContext: context)!
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(engineURL: engineURL)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString,
@@ -68,9 +68,9 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let url = URL(string: "file://path/to/abc/dirA/A.html")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
-        let engineURL = EngineURL(browsingContext: context)!
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(engineURL: engineURL)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
@@ -205,8 +205,8 @@ final class WKEngineSessionTests: XCTestCase {
         let errorPageURL = "errorpage"
         let internalURL = URL(string: "internal://local/errorpage?url=\(errorPageURL)")!
         let context = BrowsingContext(type: .internalNavigation, url: internalURL)
-        let engineURL = EngineURL(browsingContext: context)!
-        subject?.load(engineURL: engineURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
@@ -219,8 +219,8 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let internalURL = URL(string: "internal://local/about/home")!
         let context = BrowsingContext(type: .internalNavigation, url: internalURL)
-        let engineURL = EngineURL(browsingContext: context)!
-        subject?.load(engineURL: engineURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
@@ -234,8 +234,8 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let url = URL(string: "https://www.example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
-        let engineURL = EngineURL(browsingContext: context)!
-        subject?.load(engineURL: engineURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload(bypassCache: true)
 
@@ -248,8 +248,8 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let url = URL(string: "https://www.example.com")!
         let context = BrowsingContext(type: .internalNavigation, url: url)
-        let engineURL = EngineURL(browsingContext: context)!
-        subject?.load(engineURL: engineURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
@@ -274,8 +274,8 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
         let restoredState = Data()
         let context = BrowsingContext(type: .internalNavigation, url: URL(string: "https://example.com")!)
-        let engineURL = EngineURL(browsingContext: context)!
-        subject?.load(engineURL: engineURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.restore(state: restoredState)
 

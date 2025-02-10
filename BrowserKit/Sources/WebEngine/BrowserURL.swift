@@ -4,9 +4,9 @@
 
 import Foundation
 
-/// An `EngineURL` is the required URL type to load inside an `EngineSession`.
+/// An `BrowserURL` is the required URL type to load inside an `EngineSession`.
 /// This basically forces anyone trying to load a URL inside the web engine to consider `BrowsingContext`.
-public struct EngineURL {
+public struct BrowserURL {
     let url: URL
 
     public init?(browsingContext: BrowsingContext,

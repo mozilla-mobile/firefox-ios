@@ -77,23 +77,23 @@ class WKEngineSession: NSObject,
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
-    func load(engineURL: EngineURL) {
+    func load(browserURL: BrowserURL) {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-        if let syncedReaderModeURL = engineURL.url.decodeReaderModeURL,
+        if let syncedReaderModeURL = browserURL.url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL
             .encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             sessionData.lastRequest = readerModeRequest
-            sessionData.url = engineURL.url
+            sessionData.url = browserURL.url
 
             webView.load(readerModeRequest)
             logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
         }
 
-        let request = URLRequest(url: engineURL.url)
+        let request = URLRequest(url: browserURL.url)
         sessionData.lastRequest = request
-        sessionData.url = engineURL.url
+        sessionData.url = browserURL.url
 
         if let url = request.url, url.isFileURL {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())

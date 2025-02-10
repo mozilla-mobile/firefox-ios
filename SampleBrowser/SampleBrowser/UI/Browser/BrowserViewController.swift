@@ -154,8 +154,8 @@ class BrowserViewController: UIViewController,
         if let url = urlFormatter.getURL(entry: searchTerm.term) {
             // Search the entered URL
             let context = BrowsingContext(type: .internalNavigation, url: url)
-            if let engineURL = EngineURL(browsingContext: context) {
-                engineSession.load(engineURL: engineURL)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
                 return
             }
         }
@@ -163,8 +163,8 @@ class BrowserViewController: UIViewController,
         if let url = URL(string: searchTerm.urlWithSearchTerm) {
             // Search term with Search Engine Bing
             let context = BrowsingContext(type: .internalNavigation, url: url)
-            if let engineURL = EngineURL(browsingContext: context) {
-                engineSession.load(engineURL: engineURL)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
             }
         }
     }
@@ -226,8 +226,8 @@ class BrowserViewController: UIViewController,
             let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
 
             let context = BrowsingContext(type: .internalNavigation, url: url)
-            if let engineURL = EngineURL(browsingContext: context) {
-                previewVC.engineSession.load(engineURL: engineURL)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                previewVC.engineSession.load(browserURL: browserURL)
             }
 
             return previewVC
@@ -242,8 +242,8 @@ class BrowserViewController: UIViewController,
                 identifier: UIAction.Identifier("linkContextMenu.openLink")
             ) { [weak self] _ in
                 let context = BrowsingContext(type: .internalNavigation, url: url)
-                if let engineURL = EngineURL(browsingContext: context) {
-                    self?.engineSession.load(engineURL: engineURL)
+                if let browserURL = BrowserURL(browsingContext: context) {
+                    self?.engineSession.load(browserURL: browserURL)
                 }
             })
 
