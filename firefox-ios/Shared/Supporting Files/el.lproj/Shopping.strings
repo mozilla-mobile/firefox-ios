@@ -140,7 +140,7 @@
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Όχι τώρα";
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
-"Shopping.OptInCard.SecondParagraph.Description.v120" = "Με την υποστήριξη του %1$@ της %2$@, σας βοηθάμε να αποφύγετε τις μεροληπτικές και ψευδείς κριτικές. Το μοντέλο AI μας βελτιώνεται συνεχώς για να σας προστατεύει όσο κάνετε τις αγορές σας.";
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Με την υποστήριξη του %1$@ της %2$@, σας βοηθάμε να αποφύγετε τις μεροληπτικές και ψευδείς κριτικές. Το μοντέλο τεχνητής νοημοσύνης μας βελτιώνεται συνεχώς για να σας προστατεύει όσο κάνετε τις αγορές σας.";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Όροι χρήσης του %@";
@@ -170,7 +170,7 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Ανάπτυξη κάρτας «Πώς προσδιορίζουμε την ποιότητα των κριτικών»";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "Χρησιμοποιούμε τεχνολογία AI από το %1$@ της %2$@ για να ελέγξουμε την αξιοπιστία των κριτικών προϊόντων. Αυτό θα σας βοηθήσει να αξιολογήσετε μόνο την ποιότητα των κριτικών, όχι την ποιότητα των προϊόντων.";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Χρησιμοποιούμε τεχνολογία τεχνητής νοημοσύνης από το %1$@ της %2$@ για να ελέγξουμε την αξιοπιστία των κριτικών προϊόντων. Αυτό θα σας βοηθήσει να αξιολογήσετε μόνο την ποιότητα των κριτικών, όχι την ποιότητα των προϊόντων.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "Τα *σημαντικά σημεία* προέρχονται από κριτικές για το %@, οι οποίες γράφτηκαν τις τελευταίες 80 ημέρες και πιστεύουμε ότι είναι αξιόπιστες.";

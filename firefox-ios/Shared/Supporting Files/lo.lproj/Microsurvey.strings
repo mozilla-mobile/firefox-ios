@@ -1,3 +1,48 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "ສືບຕໍ່";
+
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
 "Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "ປິດ";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name. */
+"Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@ ໂລໂກ້";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
+"Microsurvey.Prompt.TitleLabel.v127" = "ຊ່ວຍພວກເຮົາເຮັດໃຫ້ %@ ດີຂຶ້ນ. ມັນໃຊ້ເວລາພຽງແຕ່ບໍ່ເທົ່າໃດນາທີ.";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
+"Microsurvey.Survey.Button.v127" = "ສົ່ງ";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
+"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "ປິດ";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "ຂໍ​ຂອບ​ໃຈ​ສໍາ​ລັບ​ຄໍາ​ຄຶດ​ຄໍາ​ເຫັນ​ຂອງ​ທ່ານ​!";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "ສໍາ​ເລັດ​ການ​ສໍາ​ຫຼວດ​";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v129" = "ກະລຸນາເຮັດສໍາຫຼວດ";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
+"Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ ໂລໂກ້";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Dissatisfied.v132" = "ບໍ່ພໍໃຈ";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Neutral.v132" = "ເປັນກາງ";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
+"Microsurvey.Survey.Options.NotApplicable.v132" = "ຂ້ອຍບໍ່ໃຊ້ມັນ";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Satisfied.v132" = "ພໍໃຈ";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VeryDissatisfied.v132" = "ບໍ່ພໍໃຈຫຼາຍ";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VerySatisfied.v132" = "ພໍໃຈຫຼາຍ";
 

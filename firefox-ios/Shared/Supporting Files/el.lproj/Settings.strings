@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "Μάθετε περισσότερα";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Οι αναφορές κατάρρευσης μάς επιτρέπουν να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

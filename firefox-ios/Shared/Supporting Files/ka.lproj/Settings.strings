@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "ვრცლად";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "უეცარი გათიშვის შეტყობინებები გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
