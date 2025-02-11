@@ -492,8 +492,29 @@ class HistoryPanel: UIViewController,
 
         snapshot.sectionIdentifiers.forEach { section in
             if !viewModel.hiddenSections.contains(where: { $0 == section }) {
+                let sectionData = viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1)
+
+                // FXIOS-10996 Temporary in-place check for duplicates to help diagnose history panel crashes
+                var duplicates: [Site: Int] = [:]
+                for element in sectionData where sectionData.filter({ element == $0 }).count > 1 {
+                    duplicates[element] = (duplicates[element] ?? 0) + 1
+                }
+
+                if !duplicates.isEmpty {
+                    logger.log(
+                        "Duplicates (\(duplicates.count)) found in HistoryPanel applySnapshot method in section \(section), with \(duplicates.values.sorted(by: { $0 > $1 }).first ?? 0) being the largest number of duplicates for one Site.",
+                        level: .fatal,
+                        category: .history
+                    )
+
+                    // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
+                    // have stumbled upon one of our rare Sentry crashes that is probably dependent on your unique
+                    // browsing history state.
+                    assertionFailure("FXIOS-10996 We should never have duplicates! Log how you made this crash happen.")
+                }
+
                 snapshot.appendItems(
-                    viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1),
+                    sectionData.uniqued(), // FXIOS-10996 Force unique while we investigate history panel crashes
                     toSection: section
                 )
             }
