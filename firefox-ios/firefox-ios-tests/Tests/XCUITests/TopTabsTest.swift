@@ -259,7 +259,7 @@ class TopTabsTest: BaseTestCase {
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
@@ -308,11 +308,10 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
-            app.tables.cells.otherElements["New Private Tab"].waitAndTap()
+            app.tables.cells.otherElements["Private Browsing Mode"].waitAndTap()
             let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             mozWaitForElementToExist(tabsButton)
             navigator.nowAt(NewTabScreen)
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
     }
