@@ -57,8 +57,6 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func applySearchSnapshot() {
-        logger.log("Create and apply snapshot from user history search", level: .info, category: .history)
-
         // Create search results snapshot and apply
         var snapshot = NSDiffableDataSourceSnapshot<HistoryPanelSections, AnyHashable>()
         snapshot.appendSections([HistoryPanelSections.searchResults])
