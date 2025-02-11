@@ -7,5 +7,6 @@ import Redux
 final class JumpBackInAction: Action { }
 
 enum JumpBackInActionType: ActionType {
+    case fetchLocalTabs
     case fetchRemoteTabs
 }
