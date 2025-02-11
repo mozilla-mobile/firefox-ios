@@ -140,7 +140,7 @@ class RemoteTabsPanelMiddleware {
         profile.getCachedClientsAndTabs(completion: completion)
     }
 
-    /// Retrieves the the most recently used tab from a list of desktop clients tabs.
+    /// Retrieves the most recently used tab from a list of desktop clients tabs.
     ///
     /// This method filters the provided `clientAndTabs` list to include only desktop clients that have at least one tab.
     /// Then, it finds the most recently used tab for each client and then determines the most recent tab across all clients.
