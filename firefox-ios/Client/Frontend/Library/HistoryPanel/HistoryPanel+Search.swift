@@ -28,14 +28,14 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        logger.log("User cancelled history search", level: .info, category: .history)
+        logger.log("User cancelled history search", level: .info, category: .library)
 
         bottomStackView.isHidden = true
         searchBar.resignFirstResponder()
     }
 
     func startSearchState() {
-        logger.log("User initiated history search", level: .info, category: .history)
+        logger.log("User initiated history search", level: .info, category: .library)
 
         updatePanelState(newState: .history(state: .search))
         bottomStackView.isHidden = false
@@ -67,7 +67,7 @@ extension HistoryPanel: UISearchBarDelegate {
     }
 
     private func handleEmptySearch() {
-        logger.log("Apply snapshot from user history empty search", level: .info, category: .history)
+        logger.log("Apply snapshot from user history empty search", level: .info, category: .library)
 
         viewModel.searchResultSites.removeAll()
         applySnapshot()

@@ -826,7 +826,7 @@ extension RustPlaces {
                 self?.logger.log(
                     "RustPlaces sites history returned \(duplicateCount) duplicate Sites",
                     level: .info,
-                    category: .history
+                    category: .library
                 )
             }
 

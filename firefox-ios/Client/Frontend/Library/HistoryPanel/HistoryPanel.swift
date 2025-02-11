@@ -504,7 +504,7 @@ class HistoryPanel: UIViewController,
                     logger.log(
                         "Duplicates (\(duplicates.count)) found in HistoryPanel applySnapshot method in section \(section), with \(duplicates.values.sorted(by: { $0 > $1 }).first ?? 0) being the largest number of duplicates for one Site.",
                         level: .fatal,
-                        category: .history
+                        category: .library
                     )
 
                     // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
@@ -540,7 +540,7 @@ class HistoryPanel: UIViewController,
                     logger.log(
                         "Inserted search terms group in HistoryPanel after Site",
                         level: .fatal,
-                        category: .history
+                        category: .library
                     )
 
                     // In this case, we have Site items AND a group in the section.
@@ -549,7 +549,7 @@ class HistoryPanel: UIViewController,
                     logger.log(
                         "Inserted search terms group in HistoryPanel after ASGroup",
                         level: .fatal,
-                        category: .history
+                        category: .library
                     )
 
                     // Looks like this group's the only item in the section
