@@ -799,6 +799,7 @@ extension BrowserViewController: WKNavigationDelegate {
             let tempPDF = DefaultTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
+                mimeType: MIMEType.PDF,
                 cookies: cookies
             )
             tempPDF.onDownloadProgressUpdate = { progress in

@@ -7,13 +7,29 @@ import Common
 class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
     private struct UX {
         static let loadingBackgroundViewCornerRadius: CGFloat = 12.0
+        static let loadingContainerViewSpacing: CGFloat = 8.0
+        static let loadingContainerViewSidePadding: CGFloat = 20.0
+        static let backgroundColorAlpha: CGFloat = 0.3
     }
 
-    private let loadingBackgroundView = UIView()
-    private let loadingContainerView = UIStackView()
-    private let loadingView = UIActivityIndicatorView(style: .large)
-    private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
-    private let filenameLabel = UILabel()
+    private let loadingBackgroundView: UIView = .build { view in
+        view.layer.cornerRadius = UX.loadingBackgroundViewCornerRadius
+    }
+    private let loadingContainerView: UIStackView = .build { view in
+        view.axis = .vertical
+        view.spacing = UX.loadingContainerViewSpacing
+    }
+    private let loadingView: UIActivityIndicatorView = .build { view in
+        view.style = .medium
+    }
+    private let backgroundView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemThinMaterial)
+    }
+    private let loadingLabel: UILabel = .build { view in
+        view.text = .WebView.DocumentLoadingLabel
+        view.font = FXFontStyles.Regular.footnote.scaledFont()
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
     private var appearanceAnimator: UIViewPropertyAnimator?
 
     override init(frame: CGRect) {
@@ -28,58 +44,37 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
     // MARK: - Layout
 
     private func setup() {
-        backgroundView.alpha = 0.0
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(backgroundView)
+        addSubviews(backgroundView, loadingBackgroundView)
+
+        loadingContainerView.addArrangedSubview(loadingView)
+        loadingContainerView.addArrangedSubview(loadingLabel)
+
+        loadingBackgroundView.addSubview(loadingContainerView)
+
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             backgroundView.topAnchor.constraint(equalTo: topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-        loadingBackgroundView.alpha = 0.0
-        loadingBackgroundView.layer.cornerRadius = UX.loadingBackgroundViewCornerRadius
-        loadingBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(loadingBackgroundView)
-        NSLayoutConstraint.activate([
             loadingBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadingBackgroundView.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
+            loadingBackgroundView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        loadingContainerView.axis = .vertical
-        loadingContainerView.spacing = 8.0
-        loadingContainerView.translatesAutoresizingMaskIntoConstraints = false
-        loadingBackgroundView.addSubview(loadingContainerView)
-        NSLayoutConstraint.activate([
             loadingContainerView.leadingAnchor.constraint(equalTo: loadingBackgroundView.leadingAnchor, constant: 20.0),
             loadingContainerView.trailingAnchor.constraint(equalTo: loadingBackgroundView.trailingAnchor, constant: -20.0),
             loadingContainerView.topAnchor.constraint(equalTo: loadingBackgroundView.topAnchor, constant: 20.0),
             loadingContainerView.bottomAnchor.constraint(equalTo: loadingBackgroundView.bottomAnchor, constant: -20.0)
         ])
 
-        loadingView.alpha = 0.0
-        loadingView.style = .medium
+        backgroundView.alpha = 0.0
+        loadingBackgroundView.alpha = 0.0
         loadingView.startAnimating()
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
-
-        filenameLabel.alpha = 0.0
-        filenameLabel.translatesAutoresizingMaskIntoConstraints = false
-        filenameLabel.text = "PDF Loading"
-        filenameLabel.font = FXFontStyles.Regular.footnote.scaledFont()
-
-        filenameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        loadingContainerView.addArrangedSubview(loadingView)
-        loadingContainerView.addArrangedSubview(filenameLabel)
     }
 
     func animateLoadingAppearanceIfNeeded(_ completion: (() -> Void)? = nil) {
         appearanceAnimator?.stopAnimation(true)
-        appearanceAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeIn) {
+        appearanceAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut) {
             self.backgroundView.alpha = 1
-            self.filenameLabel.alpha = 1
-            self.loadingView.alpha = 1
             self.loadingBackgroundView.alpha = 1
         }
         appearanceAnimator?.addCompletion { _ in
@@ -91,9 +86,9 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: any Theme) {
-        backgroundColor = theme.colors.layerScrim.withAlphaComponent(0.4)
+        backgroundColor = theme.colors.layerScrim.withAlphaComponent(UX.backgroundColorAlpha)
         loadingBackgroundView.backgroundColor = theme.colors.layer2
         loadingView.color = theme.colors.iconPrimary
-        filenameLabel.textColor = theme.colors.textPrimary
+        loadingLabel.textColor = theme.colors.textPrimary
     }
 }

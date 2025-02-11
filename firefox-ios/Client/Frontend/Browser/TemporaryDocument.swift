@@ -185,7 +185,10 @@ class DefaultTemporaryDocument: NSObject,
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let url = storeTempDownloadFile(at: location) else { return }
+        guard let url = storeTempDownloadFile(at: location) else {
+            onDownload?(nil)
+            return
+        }
         invalidateSession()
         ensureMainThread { [weak self] in
             self?.onDownload?(url)

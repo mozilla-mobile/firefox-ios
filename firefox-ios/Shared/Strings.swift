@@ -2707,6 +2707,16 @@ extension String {
             value: "Start Browsing",
             comment: "On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card")
     }
+
+    /// The localizations for the custom implemented content on the WebView
+    public struct WebView {
+        public static let DocumentLoadingLabel = MZLocalizedString(
+            key: "WebView.DocumentLoadingLabel.v137",
+            tableName: nil,
+            value: "Loading ...",
+            comment: "The label shown while loading a document in the web view's custom document loading UI"
+        )
+    }
 }
 
 // MARK: - Strings: unorganized & unchecked for use
