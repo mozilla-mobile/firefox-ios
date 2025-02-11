@@ -507,16 +507,30 @@ class HistoryPanel: UIViewController,
                 else { return }
 
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
+                let sectionData = viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
 
-                if let groupPlacedAfterItem = (
-                    viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
-                ).first(where: { site in
+                let groupPlacedAfterItem = sectionData.first(where: { site in
                     guard let lastVisit = site.latestVisit else { return false }
+
                     return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
-                }) {
+                })
+
+                if let groupPlacedAfterItem {
+                    logger.log(
+                        "Inserted search terms group in HistoryPanel after Site",
+                        level: .fatal,
+                        category: .history
+                    )
+
                     // In this case, we have Site items AND a group in the section.
                     snapshot.insertItems([grouping], beforeItem: groupPlacedAfterItem)
                 } else {
+                    logger.log(
+                        "Inserted search terms group in HistoryPanel after ASGroup",
+                        level: .fatal,
+                        category: .history
+                    )
+
                     // Looks like this group's the only item in the section
                     snapshot.appendItems([grouping], toSection: groupSection)
                 }
