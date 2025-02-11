@@ -501,8 +501,9 @@ class HistoryPanel: UIViewController,
                 }
 
                 if !duplicates.isEmpty {
+                    let largestDuplicateCount = duplicates.values.sorted(by: { $0 > $1 }).first ?? 0
                     logger.log(
-                        "Duplicates (\(duplicates.count)) found in HistoryPanel applySnapshot method in section \(section), with \(duplicates.values.sorted(by: { $0 > $1 }).first ?? 0) being the largest number of duplicates for one Site.",
+                        "Duplicates (\(duplicates.count)) found in HistoryPanel applySnapshot method in section \(section), with \(largestDuplicateCount) being the largest number of duplicates for one Site.",
                         level: .fatal,
                         category: .library
                     )
