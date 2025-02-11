@@ -18,6 +18,7 @@ protocol TemporaryDocument {
 
     func download(_ completion: @escaping (URL?) -> Void)
 
+    /// Invalidates the current download session if any and release all the resources.
     func invalidateSession()
 }
 
