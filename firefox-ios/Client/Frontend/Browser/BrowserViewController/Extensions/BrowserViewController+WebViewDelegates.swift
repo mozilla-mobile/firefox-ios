@@ -1023,7 +1023,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-        (webView as? TabWebView)?.removeDocumentLoadingView()
+        if isPDFRefactorEnabled {
+            (webView as? TabWebView)?.removeDocumentLoadingView()
+        }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
