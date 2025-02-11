@@ -9,15 +9,12 @@ import XCTest
 
 final class ToolbarTelemetryTests: XCTestCase {
     var subject: ToolbarTelemetry?
+    var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to puth them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-        subject = ToolbarTelemetry()
+        gleanWrapper = MockGleanWrapper()
+        subject = ToolbarTelemetry(gleanWrapper: gleanWrapper)
     }
 
     override func tearDown() {
@@ -27,151 +24,343 @@ final class ToolbarTelemetryTests: XCTestCase {
 
     func testRecordToolbarWhenQrCodeTappedThenGleanIsCalled() throws {
         subject?.qrCodeButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.qrScanButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.PrivateBrowsing.DataClearanceIconTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.PrivateBrowsing.dataClearanceIconTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.qrScanButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenClearSearchTappedThenGleanIsCalled() throws {
         subject?.clearSearchButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.clearSearchButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.clearSearchButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.clearSearchButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.clearSearchButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenShareButtonTappedThenGleanIsCalled() throws {
         subject?.shareButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.shareButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.shareButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.shareButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.shareButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.shareButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenRefreshButtonTappedThenGleanIsCalled() throws {
         subject?.refreshButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.refreshButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.refreshButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.refreshButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.refreshButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.refreshButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenReaderModeTappedThenGleanIsCalled() throws {
         subject?.readerModeButtonTapped(isPrivate: true, isEnabled: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.readerModeButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.readerModeButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.readerModeButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.readerModeButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-        XCTAssertEqual(resultValue[0].extra?["enabled"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenSiteInfoTappedThenGleanIsCalled() throws {
         subject?.siteInfoButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.siteInfoButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.siteInfoButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.siteInfoButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.siteInfoButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.siteInfoButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenBackButtonTappedThenGleanIsCalled() throws {
         subject?.backButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.backButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.backButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.backButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.backButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.backButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenForwardButtonTappedThenGleanIsCalled() throws {
         subject?.forwardButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.forwardButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.forwardButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.forwardButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenBackLongPressedThenGleanIsCalled() throws {
         subject?.backButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.backLongPress)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.backLongPressExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.backLongPressExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.backLongPress)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.backLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenForwardLongPressedThenGleanIsCalled() throws {
         subject?.forwardButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardLongPress)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.forwardLongPressExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.forwardLongPressExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.forwardLongPress)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.forwardLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenHomeButtonTappedThenGleanIsCalled() throws {
         subject?.homeButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.homeButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.homeButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.homeButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.homeButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.homeButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenOneTapNewTabTappedThenGleanIsCalled() throws {
         subject?.oneTapNewTabButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.oneTapNewTabButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.oneTapNewTabButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.oneTapNewTabButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenOneTapNewTabLongPressedThenGleanIsCalled() throws {
         subject?.oneTapNewTabButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabLongPress)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.oneTapNewTabLongPressExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.oneTapNewTabLongPressExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.oneTapNewTabLongPress)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.oneTapNewTabLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenSearchTappedThenGleanIsCalled() throws {
         subject?.searchButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.searchButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.searchButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.searchButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.searchButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.searchButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenTabTrayTappedThenGleanIsCalled() throws {
         subject?.tabTrayButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.tabTrayButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.tabTrayButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenTabTrayLongPressedThenGleanIsCalled() throws {
         subject?.tabTrayButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayLongPress)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.tabTrayLongPressExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.tabTrayLongPressExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.tabTrayLongPress)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenMenuTappedThenGleanIsCalled() throws {
         subject?.menuButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.appMenuButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.appMenuButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.appMenuButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.appMenuButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.appMenuButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenDataClearanceTappedThenGleanIsCalled() throws {
         subject?.dataClearanceButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.dataClearanceButtonTapped)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.dataClearanceButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Toolbar.dataClearanceButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.dataClearanceButtonTapped)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.dataClearanceButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 
     func testRecordToolbarWhenLocationDraggedThenGleanIsCalled() throws {
         subject?.dragInteractionStarted()
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.dragLocationBar)
+        
+        let savedEvent = try XCTUnwrap(
+                gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Awesomebar.dragLocationBarExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Awesomebar.dragLocationBarExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Awesomebar.dragLocationBar)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.didConfirm, true)
     }
 }
