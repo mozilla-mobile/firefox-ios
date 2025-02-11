@@ -493,17 +493,13 @@ class HistoryPanel: UIViewController,
         snapshot.sectionIdentifiers.forEach { section in
             if !viewModel.hiddenSections.contains(where: { $0 == section }) {
                 let sectionData = viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1)
+                let sectionDataUniqued = sectionData.uniqued()
 
                 // FXIOS-10996 Temporary in-place check for duplicates to help diagnose history panel crashes
-                var duplicates: [Site: Int] = [:]
-                for element in sectionData where sectionData.filter({ element == $0 }).count > 1 {
-                    duplicates[element] = (duplicates[element] ?? 0) + 1
-                }
-
-                if !duplicates.isEmpty {
-                    let largestDuplicateCount = duplicates.values.sorted(by: { $0 > $1 }).first ?? 0
+                if sectionData.count > sectionDataUniqued.count {
+                    let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
                     logger.log(
-                        "Duplicates (\(duplicates.count)) found in HistoryPanel applySnapshot method in section \(section), with \(largestDuplicateCount) being the largest number of duplicates for one Site.",
+                        "Duplicates (\(numberOfDuplicates)) found in HistoryPanel applySnapshot method in section \(section).",
                         level: .fatal,
                         category: .library
                     )
@@ -515,7 +511,7 @@ class HistoryPanel: UIViewController,
                 }
 
                 snapshot.appendItems(
-                    sectionData.uniqued(), // FXIOS-10996 Force unique while we investigate history panel crashes
+                    sectionDataUniqued, // FXIOS-10996 Force unique while we investigate history panel crashes
                     toSection: section
                 )
             }
