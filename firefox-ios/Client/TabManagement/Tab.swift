@@ -428,6 +428,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     private var webViewLoadingObserver: NSKeyValueObservation?
     private var downloadedTemporaryDocs = [URL]()
 
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
     var profile: Profile
 
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
@@ -656,17 +660,27 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func goBack() {
-        guard !cancelTemporaryDocumentDownload() else { return }
+        if isPDFRefactorEnabled {
+            // if the file was cancelled then return and avoid calling webView.goBack
+            // since the previous page is already there
+            guard !cancelTemporaryDocumentDownload() else { return }
+        }
         _ = webView?.goBack()
     }
 
     func goForward() {
-        guard !cancelTemporaryDocumentDownload() else { return }
+        if isPDFRefactorEnabled {
+            // if the file was cancelled then return and avoid calling webView.goForward
+            // since the previous page is already there
+            guard !cancelTemporaryDocumentDownload() else { return }
+        }
         _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
-        cancelTemporaryDocumentDownload()
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload()
+        }
         _ = webView?.go(to: item)
     }
 
