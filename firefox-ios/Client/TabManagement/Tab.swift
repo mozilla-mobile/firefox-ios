@@ -942,16 +942,18 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    // MARK: - Temporary Document handling
+    // MARK: - Temporary Document handling - PDF Refactor
 
     /// Returns true if the download was cancelled
     @discardableResult
     private func cancelTemporaryDocumentDownload() -> Bool {
-        guard let temporaryDocument = temporaryDocument as? PDFTemporaryDocument else { return false }
+        guard let temporaryDocument else { return false }
+
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
             self.temporaryDocument = nil
-//            webView?.removeDocumentLoadingView()
+
+            webView?.removeDocumentLoadingView()
             return true
         }
         return false
@@ -961,7 +963,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         let docsURL = downloadedTemporaryDocs
         guard !docsURL.isEmpty else { return }
         DispatchQueue.global(qos: .background).async {
-            print("FF: deleting downloaded temporary documents")
             docsURL.forEach { url in
                 try? FileManager.default.removeItem(at: url)
             }
@@ -969,24 +970,13 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
-        if let temporaryDocument = temporaryDocument as? PDFTemporaryDocument,
-           request.url == temporaryDocument.localFileURL {
-            return false
-        }
-        return true
+        return temporaryDocument?.canDownload(request: request) ?? true
     }
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
-        guard let document = document as? PDFTemporaryDocument else { return }
-        setupObservers()
-        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.websiteLoadingStateDidChange))
-        document.download()
-    }
-
-    private func setupObservers() {
-        guard let temporaryDocument = temporaryDocument as? PDFTemporaryDocument else { return }
-        temporaryDocument.onDownloadToURL = { [weak self] url in
+        temporaryDocument?.download { [weak self] url in
+            guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
             self?.downloadedTemporaryDocs.append(url)
         }
@@ -1276,7 +1266,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: 0.3) {
             documentLoadingView.alpha = 0.0
-            // documentLoadingView.transform = CGAffineTransform(translationX: -self.frame.width, y: 0)
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil

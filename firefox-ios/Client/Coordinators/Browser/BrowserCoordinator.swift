@@ -1175,7 +1175,7 @@ class BrowserCoordinator: BaseCoordinator,
             return shareType
         }
 
-        guard let fileURL = await temporaryDocument.getDownloadedURL() else {
+        guard let fileURL = await temporaryDocument.download() else {
             // If no file was downloaded, simply share the tab as usual with a web URL
             return shareType
         }

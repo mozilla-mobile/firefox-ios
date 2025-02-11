@@ -611,12 +611,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .LegacyAppMenu.AppMenuDownloadPDF,
                                      iconString: StandardImageIdentifiers.Large.folder) { _ in
             guard let tab = self.selectedTab, let temporaryDocument = tab.temporaryDocument else { return }
-                temporaryDocument.getURL { fileURL in
-                    DispatchQueue.main.async {
-                        guard let fileURL = fileURL else {return}
-                        self.delegate?.showFilePicker(fileURL: fileURL)
-                    }
+            temporaryDocument.download { fileURL in
+                DispatchQueue.main.async {
+                    guard let fileURL = fileURL else {return}
+                    self.delegate?.showFilePicker(fileURL: fileURL)
                 }
+            }
         }.items
     }
 

@@ -37,6 +37,7 @@
 		0AFF7F682C78989000265214 /* CertificatesHeaderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F672C78989000265214 /* CertificatesHeaderItem.swift */; };
 		0AFF7F6C2C7C7BBA00265214 /* CertificatesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F692C7C7BB800265214 /* CertificatesCell.swift */; };
 		0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */; };
+		0B0ED7292D5B46B6001515CB /* TemporaryDocumentLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0ED7282D5B46B6001515CB /* TemporaryDocumentLoadingView.swift */; };
 		0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF032CB4130F00AD51D5 /* Metrics.swift */; };
 		0B1C58D12CE5019A00F498F0 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */; };
 		0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */; };
@@ -2388,6 +2389,7 @@
 		0AFF7F672C78989000265214 /* CertificatesHeaderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesHeaderItem.swift; sourceTree = "<group>"; };
 		0AFF7F692C7C7BB800265214 /* CertificatesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesCell.swift; sourceTree = "<group>"; };
 		0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesViewController.swift; sourceTree = "<group>"; };
+		0B0ED7282D5B46B6001515CB /* TemporaryDocumentLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryDocumentLoadingView.swift; sourceTree = "<group>"; };
 		0B11AF032CB4130F00AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
@@ -11916,6 +11918,7 @@
 		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
+				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
 				5A9FFB3629C0F99C001793A0 /* Legacy */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
 				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
@@ -13757,7 +13760,6 @@
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
-				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
 				3BCE6D3B1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift */,
 				D04D1B91209790B60074B35F /* Toast.swift */,
 				C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */,
@@ -13991,6 +13993,7 @@
 		E1877A7F286E0EFD00F5BDF2 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
+				0B0ED7282D5B46B6001515CB /* TemporaryDocumentLoadingView.swift */,
 				E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */,
 				8AF99B4C29EF076800108DEC /* WebviewViewController.swift */,
 				0B3A15392CE1FE710049746C /* PullRefreshView.swift */,
@@ -16937,6 +16940,7 @@
 				4331A9BD271D267E005E8080 /* ContextualHintViewProvider.swift in Sources */,
 				8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */,
 				8A093D7F2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift in Sources */,
+				0B0ED7292D5B46B6001515CB /* TemporaryDocumentLoadingView.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,

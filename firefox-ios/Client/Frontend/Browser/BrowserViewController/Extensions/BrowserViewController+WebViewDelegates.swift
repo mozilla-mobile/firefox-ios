@@ -692,10 +692,10 @@ extension BrowserViewController: WKNavigationDelegate {
             var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
-            temporaryDocument.getURL(completionHandler: { docURL in
+            temporaryDocument.download { docURL in
                 url = docURL
                 group.leave()
-            })
+            }
             _ = group.wait(timeout: .distantFuture)
 
             let previewHelper = OpenQLPreviewHelper(presenter: self, withTemporaryDocument: temporaryDocument)
@@ -796,7 +796,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
-            let tempPDF = PDFTemporaryDocument(
+            let tempPDF = DefaultTemporaryDocument(
                 filename: response.suggestedFilename,
                 request: request,
                 cookies: cookies
