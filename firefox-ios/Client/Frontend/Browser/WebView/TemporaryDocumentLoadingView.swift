@@ -10,26 +10,32 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
         static let loadingContainerViewSpacing: CGFloat = 8.0
         static let loadingContainerViewSidePadding: CGFloat = 20.0
         static let backgroundColorAlpha: CGFloat = 0.3
+        static let animationDuration: CGFloat = 0.3
     }
 
     private let loadingBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.loadingBackgroundViewCornerRadius
     }
+
     private let loadingContainerView: UIStackView = .build { view in
         view.axis = .vertical
         view.spacing = UX.loadingContainerViewSpacing
     }
+
     private let loadingView: UIActivityIndicatorView = .build { view in
         view.style = .medium
     }
+
     private let backgroundView: UIVisualEffectView = .build { view in
         view.effect = UIBlurEffect(style: .systemThinMaterial)
     }
+
     private let loadingLabel: UILabel = .build { view in
         view.text = .WebView.DocumentLoadingLabel
         view.font = FXFontStyles.Regular.footnote.scaledFont()
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
+
     private var appearanceAnimator: UIViewPropertyAnimator?
 
     override init(frame: CGRect) {
@@ -77,7 +83,7 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
 
     func animateLoadingAppearanceIfNeeded(_ completion: (() -> Void)? = nil) {
         appearanceAnimator?.stopAnimation(true)
-        appearanceAnimator = UIViewPropertyAnimator(duration: 0.3, curve: .easeOut) {
+        appearanceAnimator = UIViewPropertyAnimator(duration: UX.animationDuration, curve: .easeOut) {
             self.backgroundView.alpha = 1
             self.loadingBackgroundView.alpha = 1
         }

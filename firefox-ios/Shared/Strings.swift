@@ -2712,7 +2712,7 @@ extension String {
     public struct WebView {
         public static let DocumentLoadingLabel = MZLocalizedString(
             key: "WebView.DocumentLoadingLabel.v137",
-            tableName: nil,
+            tableName: "WebView",
             value: "Loading ...",
             comment: "The label shown while loading a document in the web view's custom document loading UI"
         )

@@ -170,7 +170,7 @@ class DefaultTemporaryDocument: NSObject,
     }
 
     private func shouldRetainTempFile() -> Bool {
-        // Retain the PDF so when the tab gets restored has still the pdfs from the previous session
+        // Retain the PDF so when the tab gets restored it still has the PDFs from the previous session
         if isPDFRefactorEnabled {
             return mimeType == MIMEType.PDF
         }

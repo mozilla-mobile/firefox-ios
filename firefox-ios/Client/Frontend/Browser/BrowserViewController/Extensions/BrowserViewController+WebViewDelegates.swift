@@ -791,8 +791,10 @@ extension BrowserViewController: WKNavigationDelegate {
                            tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        (webView as? TabWebView)?.showDocumentLoadingView()
-        (webView as? TabWebView)?.applyTheme(theme: currentTheme())
+        if let webView = webView as? TabWebView {
+            webView.showDocumentLoadingView()
+            webView.applyTheme(theme: currentTheme())
+        }
 
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
@@ -1023,8 +1025,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-        if isPDFRefactorEnabled {
-            (webView as? TabWebView)?.removeDocumentLoadingView()
+        if isPDFRefactorEnabled, let webView = webView as? TabWebView {
+            webView.removeDocumentLoadingView()
         }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {

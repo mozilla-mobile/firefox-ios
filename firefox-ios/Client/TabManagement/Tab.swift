@@ -1150,6 +1150,10 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+    private struct UX {
+        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
+    }
+
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
@@ -1278,7 +1282,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
 
     func removeDocumentLoadingView() {
         guard let documentLoadingView else { return }
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
