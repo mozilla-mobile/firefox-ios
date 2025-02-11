@@ -1192,6 +1192,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     // MARK: - PullRefresh
 
     func addPullRefresh(onReload: @escaping () -> Void) {
+        guard !scrollView.isZooming else { return }
         guard pullRefresh == nil else {
             pullRefresh?.startObservingContentScroll()
             return
