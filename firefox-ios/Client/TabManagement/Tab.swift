@@ -1092,6 +1092,7 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+    private var pullRefresh: PullRefreshView?
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
@@ -1188,11 +1189,42 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
 #endif
     // swiftlint:enable unneeded_override
 
+    // MARK: - PullRefresh
+
+    func addPullRefresh(onReload: @escaping () -> Void) {
+        guard pullRefresh == nil else {
+            pullRefresh?.startObservingContentScroll()
+            return
+        }
+        let refresh = PullRefreshView(parentScrollView: scrollView,
+                                      isPortraitOrientation: UIWindow.isPortrait) {
+            onReload()
+        }
+        scrollView.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height),
+            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        ])
+        refresh.startObservingContentScroll()
+        pullRefresh = refresh
+    }
+
+    func removePullRefresh() {
+        pullRefresh?.stopObservingContentScroll()
+        pullRefresh?.removeFromSuperview()
+        pullRefresh = nil
+    }
+
     // MARK: - ThemeApplicable
 
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
+        pullRefresh?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
