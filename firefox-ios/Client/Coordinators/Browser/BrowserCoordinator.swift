@@ -1039,16 +1039,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+        let errorPageController = self.errorViewController ?? NativeErrorPageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
-        guard browserViewController.embedContent(errorpageController) else {
+        guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
-        self.errorViewController = errorpageController
+        self.errorViewController = errorPageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

@@ -1540,7 +1540,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Native Error Page
 
     func showEmbeddedNativeErrorPage() {
-    // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
@@ -1588,9 +1587,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && isNativeErrorPageEnabled {
-            showEmbeddedNativeErrorPage()
-        } else if isNICErrorCode && isNICErrorPageEnabled {
+        } else if (isErrorURL && isNativeErrorPageEnabled) || (isNICErrorCode && isNICErrorPageEnabled) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
