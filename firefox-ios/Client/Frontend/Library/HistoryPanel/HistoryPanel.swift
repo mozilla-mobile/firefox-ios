@@ -495,7 +495,7 @@ class HistoryPanel: UIViewController,
                 let sectionData = viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1)
                 let sectionDataUniqued = sectionData.uniqued()
 
-                // FXIOS-10996 Temporary in-place check for duplicates to help diagnose history panel crashes
+                // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
                 if sectionData.count > sectionDataUniqued.count {
                     let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
                     logger.log(

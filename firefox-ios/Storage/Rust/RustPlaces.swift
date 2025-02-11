@@ -820,7 +820,7 @@ extension RustPlaces {
 
             let sitesUniqued = sites.uniqued()
 
-            // FXIOS-10996 Temporary in-place check for duplicates to help diagnose history panel crashes
+            // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
             if sites.count != sitesUniqued.count {
                 let duplicateCount = sitesUniqued.count - sites.count
                 self?.logger.log(
