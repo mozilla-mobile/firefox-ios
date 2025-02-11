@@ -140,6 +140,7 @@ struct AddressBarState: StateType, Equatable {
         self.alternativeSearchEngine = alternativeSearchEngine
     }
 
+    // swiftlint:disable:next closure_body_length
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
