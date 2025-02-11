@@ -32,7 +32,7 @@ final class NimbusFeatureFlagLayer {
 
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
-        
+
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
 
@@ -369,7 +369,7 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
     }
-    
+
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
