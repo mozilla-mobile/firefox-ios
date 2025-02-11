@@ -300,9 +300,7 @@ public class RustSyncManager: NSObject, SyncManager {
     public func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
 
-        let engines = self.creditCardAutofillEnabled ?
-            syncManagerAPI.rustTogglableEngines :
-            syncManagerAPI.rustTogglableEngines.filter({ $0 != RustSyncManagerAPI.TogglableEngine.creditcards })
+        let engines = syncManagerAPI.rustTogglableEngines
 
         // We just created the account, the user went through the Choose What to Sync
         // screen on FxA.
