@@ -37,6 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case nightMode
     case passwordGenerator
+    case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
     case pullToRefreshRefactor
     case ratingPromptFeature
@@ -70,6 +71,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
+                .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
@@ -128,6 +130,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .nightMode,
                 .passwordGenerator,
+                .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
                 .pullToRefreshRefactor,
                 .ratingPromptFeature,

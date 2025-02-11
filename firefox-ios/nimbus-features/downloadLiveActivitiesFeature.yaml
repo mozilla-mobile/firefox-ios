@@ -1,0 +1,18 @@
+# The configuration for the downloadLiveActivitiesFeature feature
+features:
+  download-live-activities-feature:
+    description: >
+      Download Live Activities Feature
+    variables:
+      enabled:
+        description: >
+          If true, the download live activities feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+         enabled: false
