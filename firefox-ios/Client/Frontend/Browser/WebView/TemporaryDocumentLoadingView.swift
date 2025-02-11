@@ -60,10 +60,14 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
             loadingBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor),
             loadingBackgroundView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            loadingContainerView.leadingAnchor.constraint(equalTo: loadingBackgroundView.leadingAnchor, constant: 20.0),
-            loadingContainerView.trailingAnchor.constraint(equalTo: loadingBackgroundView.trailingAnchor, constant: -20.0),
-            loadingContainerView.topAnchor.constraint(equalTo: loadingBackgroundView.topAnchor, constant: 20.0),
-            loadingContainerView.bottomAnchor.constraint(equalTo: loadingBackgroundView.bottomAnchor, constant: -20.0)
+            loadingContainerView.leadingAnchor.constraint(equalTo: loadingBackgroundView.leadingAnchor,
+                                                          constant: UX.loadingContainerViewSidePadding),
+            loadingContainerView.trailingAnchor.constraint(equalTo: loadingBackgroundView.trailingAnchor,
+                                                           constant: -UX.loadingContainerViewSidePadding),
+            loadingContainerView.topAnchor.constraint(equalTo: loadingBackgroundView.topAnchor,
+                                                      constant: UX.loadingContainerViewSidePadding),
+            loadingContainerView.bottomAnchor.constraint(equalTo: loadingBackgroundView.bottomAnchor,
+                                                         constant: -UX.loadingContainerViewSidePadding)
         ])
 
         backgroundView.alpha = 0.0
