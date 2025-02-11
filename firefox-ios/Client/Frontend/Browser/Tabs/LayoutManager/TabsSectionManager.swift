@@ -31,7 +31,9 @@ class TabsSectionManager {
 
         // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
         // so here we check we have 2 cells per row at minimum.
-        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow ? minNumberOfCellsPerRow : maxNumberOfCellsPerRow
+        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
+                                  ? minNumberOfCellsPerRow
+                                  : maxNumberOfCellsPerRow
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(UX.cellEstimatedWidth),
