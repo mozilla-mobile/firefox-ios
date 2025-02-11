@@ -88,7 +88,10 @@ final class HomepageViewController: UIViewController,
             .DefaultSearchEngineUpdated,
             .BookmarksUpdated,
             .RustPlacesOpened,
-            .TabDataUpdated
+            .TabDataUpdated,
+            .TabsTrayDidClose,
+            .TabsTrayDidSelectHomeTab,
+            .TopTabsTabClosed
         ])
 
         subscribeToRedux()
@@ -745,7 +748,10 @@ final class HomepageViewController: UIViewController,
             )
         case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
             dispatchActionToFetchTopSites()
-            dispatchActionToFetchRemoteTabs()
+            dispatchActionToFetchTabs()
+
+        case .TabDataUpdated, .TabsTrayDidClose, .TabsTrayDidSelectHomeTab, .TopTabsTabClosed:
+            dispatchActionToFetchTabs()
         default: break
         }
     }
@@ -759,7 +765,13 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchActionToFetchRemoteTabs() {
+    private func dispatchActionToFetchTabs() {
+        store.dispatch(
+            JumpBackInAction(
+                windowUUID: self.windowUUID,
+                actionType: JumpBackInActionType.fetchLocalTabs
+            )
+        )
         store.dispatch(
             JumpBackInAction(
                 windowUUID: self.windowUUID,
