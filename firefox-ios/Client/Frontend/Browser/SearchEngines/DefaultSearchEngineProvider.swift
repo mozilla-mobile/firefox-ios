@@ -10,9 +10,6 @@ protocol SearchEngineProvider {
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            orderedEngineNames: [String]?,
                            completion: @escaping ([OpenSearchEngine]) -> Void)
-    func getUnorderedBundledEnginesFor(locale: Locale,
-                                       possibleLanguageIdentifier: [String],
-                                       completion: @escaping ([OpenSearchEngine]) -> Void)
 }
 
 class DefaultSearchEngineProvider: SearchEngineProvider {
@@ -68,9 +65,9 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
         })
     }
 
-    func getUnorderedBundledEnginesFor(locale: Locale,
-                                       possibleLanguageIdentifier: [String],
-                                       completion: @escaping ([OpenSearchEngine]) -> Void ) {
+    private func getUnorderedBundledEnginesFor(locale: Locale,
+                                               possibleLanguageIdentifier: [String],
+                                               completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let region = locale.regionCode ?? "US"
         let parser = OpenSearchParser(pluginMode: true)
 
