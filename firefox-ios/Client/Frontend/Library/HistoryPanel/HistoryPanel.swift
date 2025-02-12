@@ -40,7 +40,7 @@ class HistoryPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    private var logger: Logger
+    var logger: Logger
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -492,8 +492,26 @@ class HistoryPanel: UIViewController,
 
         snapshot.sectionIdentifiers.forEach { section in
             if !viewModel.hiddenSections.contains(where: { $0 == section }) {
+                let sectionData = viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1)
+                let sectionDataUniqued = sectionData.uniqued()
+
+                // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
+                if sectionData.count > sectionDataUniqued.count {
+                    let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
+                    logger.log(
+                        "Duplicates (\(numberOfDuplicates)) found in HistoryPanel applySnapshot method in section \(section).",
+                        level: .fatal,
+                        category: .library
+                    )
+
+                    // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
+                    // have stumbled upon one of our rare Sentry crashes that is probably dependent on your unique
+                    // browsing history state.
+                    assertionFailure("FXIOS-10996 We should never have duplicates! Log how you made this crash happen.")
+                }
+
                 snapshot.appendItems(
-                    viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1),
+                    sectionDataUniqued, // FXIOS-10996 Force unique while we investigate history panel crashes
                     toSection: section
                 )
             }
@@ -507,23 +525,37 @@ class HistoryPanel: UIViewController,
                 else { return }
 
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
+                let sectionData = viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
 
-                if let groupPlacedAfterItem = (
-                    viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
-                ).first(where: { site in
+                let groupPlacedAfterItem = sectionData.first(where: { site in
                     guard let lastVisit = site.latestVisit else { return false }
+
                     return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
-                }) {
+                })
+
+                if let groupPlacedAfterItem {
+                    logger.log(
+                        "Inserted search terms group in HistoryPanel after Site",
+                        level: .fatal,
+                        category: .library
+                    )
+
                     // In this case, we have Site items AND a group in the section.
                     snapshot.insertItems([grouping], beforeItem: groupPlacedAfterItem)
                 } else {
+                    logger.log(
+                        "Inserted search terms group in HistoryPanel after ASGroup",
+                        level: .fatal,
+                        category: .library
+                    )
+
                     // Looks like this group's the only item in the section
                     snapshot.appendItems([grouping], toSection: groupSection)
                 }
             }
         }
 
-        // Insert your fixed first section and data
+        // Insert your fixed first section and data (e.g. "Recently Closed" cell)
         if let historySection = snapshot.sectionIdentifiers.first, historySection != .additionalHistoryActions {
             snapshot.insertSections([.additionalHistoryActions], beforeSection: historySection)
         } else {
