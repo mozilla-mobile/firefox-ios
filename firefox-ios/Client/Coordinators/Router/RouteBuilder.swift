@@ -6,11 +6,17 @@ import CoreSpotlight
 import Foundation
 import Glean
 import Shared
+import Common
 
 final class RouteBuilder: FeatureFlaggable {
     private var isPrivate = false
     private var prefs: Prefs?
-    private var shouldOpenNewTab = true
+    private var mainQueue: DispatchQueueInterface
+    var shouldOpenNewTab = true
+
+    init(mainQueue: DispatchQueueInterface = DispatchQueue.main) {
+        self.mainQueue = mainQueue
+    }
 
     func configure(isPrivate: Bool,
                    prefs: Prefs) {
@@ -159,7 +165,7 @@ final class RouteBuilder: FeatureFlaggable {
         // By using shouldOpenNewTab we avoid duplicated user activities, from Siri, for new tab.
         if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue && shouldOpenNewTab {
             shouldOpenNewTab = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            mainQueue.asyncAfter(deadline: .now() + 1) { [weak self] in
                 self?.shouldOpenNewTab = true
             }
             return .search(url: nil, isPrivate: false)
