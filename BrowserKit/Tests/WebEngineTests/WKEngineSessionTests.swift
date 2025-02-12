@@ -305,14 +305,15 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testCanGoBackGivenWebviewStateThenCallsNavigationStateChanged() {
+        let canGoBack = true
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
-        webViewProvider.webView.canGoBack = true
+        webViewProvider.webView.canGoBack = canGoBack
         webViewProvider.webView.canGoForward = false
 
         subject?.observeValue(forKeyPath: "canGoBack",
                               of: nil,
-                              change: nil,
+                              change: [NSKeyValueChangeKey.newKey: canGoBack],
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
@@ -320,15 +321,30 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertFalse(engineSessionDelegate.savedCanGoForward!)
     }
 
+    func testCanGoBackGivenNoObserveValueChangeThenCallsNothing() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "canGoBack",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 0)
+        XCTAssertNil(engineSessionDelegate.savedCanGoBack)
+        XCTAssertNil(engineSessionDelegate.savedCanGoForward)
+    }
+
     func testCanGoForwardGivenWebviewStateThenCallsNavigationStateChanged() {
+        let canGoForward = true
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
         webViewProvider.webView.canGoBack = false
-        webViewProvider.webView.canGoForward = true
+        webViewProvider.webView.canGoForward = canGoForward
 
         subject?.observeValue(forKeyPath: "canGoForward",
                               of: nil,
-                              change: nil,
+                              change: [NSKeyValueChangeKey.newKey: canGoForward],
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
@@ -336,9 +352,24 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertTrue(engineSessionDelegate.savedCanGoForward!)
     }
 
+    func testCanGoForwardGivenNoObserveValueChangeThenCallsNothing() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "canGoForward",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 0)
+        XCTAssertNil(engineSessionDelegate.savedCanGoBack)
+        XCTAssertNil(engineSessionDelegate.savedCanGoForward)
+    }
+
     func testEstimatedProgressGivenWebviewStateThenCallsOnProgress() {
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = URL(string: "www.mozilla.com")!
         webViewProvider.webView.estimatedProgress = 70
 
         subject?.observeValue(forKeyPath: "estimatedProgress",
@@ -348,6 +379,18 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onProgressCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedProgressValue, 70)
+    }
+
+    func testEstimatedProgressGivenNoURLThenCallsOnHideProgressBar() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "estimatedProgress",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onHideProgressCalled, 1)
     }
 
     func testLoadingGivenNoChangeThenDoesNotCallOnLoadingStateChange() {
@@ -385,6 +428,36 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 1)
         XCTAssertTrue(engineSessionDelegate.savedLoading!)
+    }
+
+    func testLoadingGivenIsLoadingThenCallsRefreshControlBegin() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let refreshControl = MockUIRefreshControl()
+        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.newKey: true],
+                              context: nil)
+
+        XCTAssertEqual(refreshControl.beginRefreshingCalled, 1)
+        XCTAssertEqual(refreshControl.endRefreshingCalled, 0)
+    }
+
+    func testLoadingGivenIsNotLoadingThenCallsRefreshControlEnd() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let refreshControl = MockUIRefreshControl()
+        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.newKey: false],
+                              context: nil)
+
+        XCTAssertEqual(refreshControl.beginRefreshingCalled, 0)
+        XCTAssertEqual(refreshControl.endRefreshingCalled, 1)
     }
 
     func testTitleChangeGivenEmptyTitleThenDoesntCallDelegate() {
@@ -485,6 +558,37 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.url, loadedURL)
         XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
+    }
+
+    func testURLChangeGivenNotAuthorizedErrorPageThenLoadsAboutBlank() {
+        let internalURL = URL(string: "internal://local/errorpage?url=errorPage")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = internalURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+
+        XCTAssertEqual(subject?.sessionData.url, nil)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.url, URL(string: "about:blank")!)
+    }
+
+    func testHadOnlySecureContentGivenSecureContentThenSavesAndCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.hasOnlySecureContent = true
+
+        subject?.observeValue(forKeyPath: "hasOnlySecureContent",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.hasOnlySecureContent, true)
+        XCTAssertEqual(engineSessionDelegate.onHasOnlySecureContentCalled, 1)
     }
 
     // MARK: Page Zoom

@@ -278,11 +278,11 @@ class WKEngineSession: NSObject,
         // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
-            guard let canGoBack = change?[.newKey] as? Bool else { return }
+            guard let canGoBack = change?[.newKey] as? Bool else { break }
             delegate?.onNavigationStateChange(canGoBack: canGoBack,
                                               canGoForward: webView.canGoForward)
         case .canGoForward:
-            guard let canGoForward = change?[.newKey] as? Bool else { return }
+            guard let canGoForward = change?[.newKey] as? Bool else { break }
             delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
                                               canGoForward: canGoForward)
         case .contentSize:
