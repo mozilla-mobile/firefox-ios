@@ -6,6 +6,7 @@ import Common
 import Shared
 import UIKit
 
+// TODO: Laurie - check bigger font size
 class DownloadToast: Toast {
     struct UX {
         static let buttonSize: CGFloat = 40
@@ -18,7 +19,7 @@ class DownloadToast: Toast {
     private var horizontalStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.spacing = ButtonToast.UX.padding
+        stackView.spacing = ButtonToast.UX.stackViewSpacing
     }
 
     private var imageView: UIImageView = .build { imageView in
@@ -204,11 +205,11 @@ class DownloadToast: Toast {
 
                 horizontalStackView.leadingAnchor.constraint(
                     equalTo: toastView.leadingAnchor,
-                    constant: ButtonToast.UX.padding
+                    constant: ButtonToast.UX.spacing
                 ),
                 horizontalStackView.trailingAnchor.constraint(
                     equalTo: toastView.trailingAnchor,
-                    constant: -ButtonToast.UX.padding
+                    constant: -ButtonToast.UX.spacing
                 ),
                 horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
                 horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),

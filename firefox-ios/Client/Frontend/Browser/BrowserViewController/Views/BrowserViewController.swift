@@ -3496,7 +3496,6 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
-            descriptionText: "",
             buttonText: .GoButtonTittle
         )
 
