@@ -1,0 +1,88 @@
+name: L10n Focus iOS screenshots
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch from firefox-ios repo"
+        required: false
+        type: string
+        default: "main"
+  schedule:
+    - cron: "0 4 * * 1"
+
+jobs:
+  determine-locales:
+    name: Determine lists of locales
+    runs-on: macos-15
+    outputs:
+      group1: ${{ steps.my_locales.outputs.group1 }}
+      group2: ${{ steps.my_locales.outputs.group2 }}
+      group3: ${{ steps.my_locales.outputs.group3 }}
+    steps:
+      - name: Clone firefoxios-l01n repo
+        uses: actions/checkout@v4
+        with:
+          repository: mozilla-l10n/firefoxios-l10n
+      - name: Determine locales needed
+        id: my_locales
+        run: |
+          ls | grep -e "^..$" -e "^..-..$" > locales.txt
+          split -n 3 locales.txt locales-
+          group1=`tr '\n' ' ' < locales-aa`
+          group2=`tr '\n' ' ' < locales-ab`
+          group3=`tr '\n' ' ' < locales-ac`
+          echo "group1=$group1" >> $GITHUB_OUTPUT
+          echo "group2=$group2" >> $GITHUB_OUTPUT
+          echo "group3=$group3" >> $GITHUB_OUTPUT
+  
+  compile:
+    name: Compile Focus for L10n
+    runs-on: macos-15
+    steps:
+      - name: Clone firefox-ios repo
+        uses: actions/checkout@v4
+        with:
+          repository: mozilla-mobile/firefox-ios
+          ref: ${{ inputs.branch }}
+      - name: Setup Xcode
+        run: |
+          sudo rm -rf /Applications/Xcode.app
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          xcodebuild -version
+      - name: Run setup scripts for Focus
+        run: |
+          ./checkout.sh
+      - name: Compile Focus iOS
+        run: |
+          xcodebuild build-for-testing -scheme FocusSnapshotTests \
+            -project focus-ios/Blockzilla.xcodeproj \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.2' \
+            -derivedDataPath l10n-screenshots-dd
+      - name: Targzip Derived Data
+        run: |
+          tar -czvf l10n-screenshots-dd.tar.gz l10n-screenshots-dd/*
+          ls -la *.tar.gz
+      - name: Save Derived Data
+        id: upload-derived-data
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: xcode-l10n-focus-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+          path: l10n-screenshots-dd.tar.gz
+          retention-days: 2   
+      
+  generate-screenshots:
+    name: Generate Screenshots
+    needs: [determine-locales, compile]
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        locales: [ 
+          "${{ needs.determine-locales.outputs.group1 }}", 
+          "${{ needs.determine-locales.outputs.group2 }}",
+          "${{ needs.determine-locales.outputs.group3 }}"]  
+    uses: ./.github/workflows/focus-ios-l10n-locales.yml
+    with:
+      locales: "${{ matrix.locales }}"
+      branch: "${{ inputs.branch }}"
+      derived-data: "xcode-l10n-focus-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}"
