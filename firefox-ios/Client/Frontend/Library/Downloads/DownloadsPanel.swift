@@ -5,8 +5,6 @@
 import UIKit
 import Shared
 import Common
-import ActivityKit
-import WidgetKit
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,

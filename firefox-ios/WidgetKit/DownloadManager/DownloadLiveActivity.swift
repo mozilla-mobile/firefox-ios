@@ -11,7 +11,7 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
     }
 }
 
-@available(iOS 16.1, *)
+@available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
@@ -39,21 +39,4 @@ struct DownloadLiveActivity: Widget {
             }
         }
    }
-}
-
-func startDownloadLiveActivity() {
-    guard #available(iOS 16.2, *) else { return }
-
-    let attributes = DownloadLiveActivityAttributes()
-    let state = DownloadLiveActivityAttributes.ContentState()
-
-    do {
-        _ = try Activity<DownloadLiveActivityAttributes>.request(
-            attributes: attributes,
-            content: .init(state: state, staleDate: nil),
-            pushType: nil
-        )
-    } catch {
-        print("Failed to start Live Activity: \(error.localizedDescription)")
-    }
 }
