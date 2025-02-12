@@ -692,10 +692,10 @@ extension BrowserViewController: WKNavigationDelegate {
             var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
-            temporaryDocument.getURL(completionHandler: { docURL in
+            temporaryDocument.download { docURL in
                 url = docURL
                 group.leave()
-            })
+            }
             _ = group.wait(timeout: .distantFuture)
 
             let previewHelper = OpenQLPreviewHelper(presenter: self, withTemporaryDocument: temporaryDocument)
@@ -764,7 +764,16 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType != MIMEType.HTML, let request = request {
+            if isPDFRefactorEnabled, response.mimeType == MIMEType.PDF, let request {
+                if !tab.canLoadDocumentRequest(request) {
+                    decisionHandler(.allow)
+                    return
+                }
+                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                decisionHandler(.cancel)
+                return
+            }
+            if response.mimeType != MIMEType.HTML, let request {
                 tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             } else {
                 tab.temporaryDocument = nil
@@ -776,6 +785,33 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         decisionHandler(.allow)
+    }
+
+    func handlePDFResponse(_ webView: WKWebView,
+                           tab: Tab,
+                           response: URLResponse,
+                           request: URLRequest) {
+        if let webView = webView as? TabWebView {
+            webView.showDocumentLoadingView()
+            webView.applyTheme(theme: currentTheme())
+        }
+
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
+            let tempPDF = DefaultTemporaryDocument(
+                filename: response.suggestedFilename,
+                request: request,
+                mimeType: MIMEType.PDF,
+                cookies: cookies
+            )
+            tempPDF.onDownloadProgressUpdate = { progress in
+                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                                   of: webView,
+                                   change: [.newKey: progress],
+                                   context: nil)
+            }
+            tab?.enqueueDocument(tempPDF)
+        }
     }
 
     /// Tells the delegate that an error occurred during navigation.
@@ -989,7 +1025,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-
+        if isPDFRefactorEnabled, let webView = webView as? TabWebView {
+            webView.removeDocumentLoadingView()
+        }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)

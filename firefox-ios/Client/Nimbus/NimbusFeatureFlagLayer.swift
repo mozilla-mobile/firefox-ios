@@ -91,6 +91,9 @@ final class NimbusFeatureFlagLayer {
         case .passwordGenerator:
             return checkPasswordGeneratorFeature(from: nimbus)
 
+        case .pdfRefactor:
+            return checkPdfRefactorFeature(from: nimbus)
+
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
@@ -339,6 +342,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.passwordGeneratorFeature.value().enabled
+    }
+
+    private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.pdfRefactorFeature.value().enabled
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
