@@ -911,7 +911,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
 
-                if isNativeErrorPageEnabled || (isNICErrorPageEnabled && (error.code == noInternetErrorCode)) {
+                if isNativeErrorPageEnabled {
+                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
