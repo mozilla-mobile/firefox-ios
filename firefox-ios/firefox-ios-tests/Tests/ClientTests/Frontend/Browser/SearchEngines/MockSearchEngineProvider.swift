@@ -68,10 +68,4 @@ class MockSearchEngineProvider: SearchEngineProvider {
                            completion: @escaping ([OpenSearchEngine]) -> Void) {
         completion(mockEngines)
     }
-
-    func getUnorderedBundledEnginesFor(locale: Locale,
-                                       possibleLanguageIdentifier: [String],
-                                       completion: @escaping ([OpenSearchEngine]) -> Void) {
-        unorderedEngines = completion
-    }
 }
