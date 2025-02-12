@@ -6,7 +6,8 @@ import Foundation
 import WebKit
 
 public struct WKWebviewParameters {
-    /// A boolean value customizable with a user preference indicating whether JavaScript can open windows without user interaction.
+    /// A boolean value customizable with a user preference indicating whether JavaScript can
+    /// open windows without user interaction.
     var blockPopups: Bool
 
     /// A boolean value indicating if we have a persitent webview data store.
