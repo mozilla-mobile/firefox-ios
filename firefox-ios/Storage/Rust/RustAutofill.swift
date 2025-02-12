@@ -453,7 +453,7 @@ public class RustAutofill {
                                              key: key,
                                              completion: completion)
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
-                self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
+                self.handleUnexpectedKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
                 self.handleFirstTimeCallOrClearedKeychain(rustKeys: rustKeys, completion: completion)
             default:
@@ -494,8 +494,8 @@ public class RustAutofill {
         }
     }
 
-    private func handleUnexpectedKey(rustKeys: RustAutofillEncryptionKeys,
-                                     completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleUnexpectedKeyAction(rustKeys: RustAutofillEncryptionKeys,
+                                           completion: @escaping (Result<String, NSError>) -> Void) {
         // The key is present, but we didn't expect it to be there.
         // or
         // We expected the key to be present, but it's gone missing on us
