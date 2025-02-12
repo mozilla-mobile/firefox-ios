@@ -218,6 +218,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             return .LegacyAppMenu.AppMenuOpenHomePageTitleString
         }
 
+        if let url, url.isFileURL {
+            // return the file name
+            return url.lastPathComponent
+        }
+
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
         }
@@ -707,7 +712,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func stop() {
-        webView?.stopLoading()
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload()
+        } else {
+            webView?.stopLoading()
+        }
     }
 
     func reload(bypassCache: Bool = false) {
