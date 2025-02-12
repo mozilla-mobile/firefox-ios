@@ -571,7 +571,6 @@ final class WKEngineSessionTests: XCTestCase {
                               change: nil,
                               context: nil)
 
-
         XCTAssertEqual(subject?.sessionData.url, nil)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url, URL(string: "about:blank")!)
