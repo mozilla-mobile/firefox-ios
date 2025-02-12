@@ -431,7 +431,11 @@ class BaseTestCase: XCTestCase {
     }
 
     func openNewTabAndValidateURLisPaste(url: String) {
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        } else {
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+        }
         if #available(iOS 17, *) {
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         } else {
