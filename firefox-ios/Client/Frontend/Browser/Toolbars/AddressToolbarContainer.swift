@@ -30,7 +30,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
-        static let toolbarIsEditingLeadingPadding: CGFloat = 8
+        static let toolbarIsEditingLeadingPadding: CGFloat = 0
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -82,9 +82,12 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
-        // Provide 0 padding in iPhone landscape due to safe area insets
-        if shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldDisplayCompact {
             return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+        }
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return UX.toolbarHorizontalPadding
         }
         return 0
     }
