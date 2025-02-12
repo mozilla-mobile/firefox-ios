@@ -77,8 +77,14 @@ final class AddressToolbarContainer: UIView,
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
+        if shouldDisplayCompact {
+            return UX.toolbarHorizontalPadding
+        }
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+            return UX.toolbarHorizontalPadding
+        }
         // Provide 0 padding in iPhone landscape due to safe area insets
-        return shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
+        return 0
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
@@ -86,7 +92,7 @@ final class AddressToolbarContainer: UIView,
             return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
         }
         // Provide 0 padding in iPhone landscape due to safe area insets
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
             return UX.toolbarHorizontalPadding
         }
         return 0
