@@ -33,6 +33,9 @@ final class NimbusFeatureFlagLayer {
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
 
+        case .downloadLiveActivities:
+            return checkDownloadLiveActivitiesFeature(from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -372,6 +375,10 @@ final class NimbusFeatureFlagLayer {
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
+    }
+
+    private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {

@@ -4100,7 +4100,11 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
-        if !isToolbarRefactorEnabled { legacyUrlBar?.updateProgressBar(Float(0)) }
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.updateProgressBar(progress: 0)
+        } else {
+            legacyUrlBar?.updateProgressBar(Float(0))
+        }
         updateTabCountUsingTabManager(tabManager)
     }
 

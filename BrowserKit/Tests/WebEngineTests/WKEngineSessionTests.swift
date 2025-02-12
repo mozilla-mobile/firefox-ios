@@ -39,39 +39,25 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Load URL
 
-    func testLoadURLGivenEmptyThenDoesntLoad() {
-        let subject = createSubject()
-        let url = ""
-
-        subject?.load(url: url)
-
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
-    }
-
-    func testLoadURLGivenNotAURLThenDoesntLoad() {
-        let subject = createSubject()
-        let url = "blablablablabla"
-
-        subject?.load(url: url)
-
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
-    }
-
     func testLoadURLGivenNormalURLThenLoad() {
         let subject = createSubject()
-        let url = "https://example.com"
+        let url = URL(string: "https://example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
         let subject = createSubject()
-        let url = "about:reader?url=http://example.com"
+        let url = URL(string: "about:reader?url=http://example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString,
@@ -80,9 +66,11 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testLoadURLGivenFileURLThenLoadFileURL() {
         let subject = createSubject()
-        let url = "file://path/to/abc/dirA/A.html"
+        let url = URL(string: "file://path/to/abc/dirA/A.html")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
@@ -215,8 +203,10 @@ final class WKEngineSessionTests: XCTestCase {
     func testReloadWhenErrorPageThenLoadOriginalErrorPage() {
         let subject = createSubject()
         let errorPageURL = "errorpage"
-        let internalURL = "internal://local/errorpage?url=\(errorPageURL)"
-        subject?.load(url: internalURL)
+        let internalURL = URL(string: "internal://local/errorpage?url=\(errorPageURL)")!
+        let context = BrowsingContext(type: .internalNavigation, url: internalURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
@@ -227,8 +217,10 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testReloadWhenHomepageThenLoadHomepageAsPrivileged() throws {
         let subject = createSubject()
-        let internalURL = "internal://local/about/home"
-        subject?.load(url: internalURL)
+        let internalURL = URL(string: "internal://local/about/home")!
+        let context = BrowsingContext(type: .internalNavigation, url: internalURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
@@ -240,26 +232,30 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testReloadWhenBypassCacheThenReloadBypassingCache() {
         let subject = createSubject()
-        let url = "https://www.example.com"
-        subject?.load(url: url)
+        let url = URL(string: "https://www.example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload(bypassCache: true)
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     func testReloadWhenReloadFromOriginFailsThenRestoreWebviewWithLastRequest() {
         let subject = createSubject()
-        let url = "https://www.example.com"
-        subject?.load(url: url)
+        let url = URL(string: "https://www.example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     // MARK: Restore
@@ -277,7 +273,9 @@ final class WKEngineSessionTests: XCTestCase {
     func testRestoreWhenHasLastRequestThenLoadISCalled() {
         let subject = createSubject()
         let restoredState = Data()
-        subject?.load(url: "https://example.com")
+        let context = BrowsingContext(type: .internalNavigation, url: URL(string: "https://example.com")!)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.restore(state: restoredState)
 
