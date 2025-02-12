@@ -47,7 +47,6 @@ class ButtonToast: Toast {
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
-        // LAURIE - test with RTL
         label.textAlignment = .natural
     }
 
@@ -95,7 +94,6 @@ class ButtonToast: Toast {
 
     private func createView(viewModel: ButtonToastViewModel) -> UIView {
         if let imageName = viewModel.imageName {
-            // TODO: LAURIE - Test as well
             imageView = UIImageView(image: UIImage.templateImageNamed(imageName))
             contentStackView.addArrangedSubview(imageView)
         }
@@ -103,7 +101,6 @@ class ButtonToast: Toast {
         titleLabel.text = viewModel.labelText
         labelStackView.addArrangedSubview(titleLabel)
         if let descriptionText = viewModel.descriptionText {
-            // TODO: LAURIE - needed?
             titleLabel.lineBreakMode = .byClipping
             titleLabel.numberOfLines = 1 // if showing a description we cant wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
