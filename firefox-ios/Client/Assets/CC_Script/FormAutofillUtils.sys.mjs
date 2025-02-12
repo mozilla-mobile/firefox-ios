@@ -101,7 +101,14 @@ const FORM_SUBMISSION_REASON = {
   PAGE_NAVIGATION: "page-navigation",
 };
 
-const ELIGIBLE_INPUT_TYPES = ["text", "email", "tel", "number", "month"];
+const ELIGIBLE_INPUT_TYPES = [
+  "text",
+  "email",
+  "tel",
+  "number",
+  "month",
+  "search",
+];
 
 // The maximum length of data to be saved in a single field for preventing DoS
 // attacks that fill the user's hard drive(s).
