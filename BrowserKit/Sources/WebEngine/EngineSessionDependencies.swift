@@ -6,9 +6,12 @@ import Foundation
 
 /// Dependencies injected during engine session creation.
 public struct EngineSessionDependencies {
+    var webviewParameters: WKWebviewParameters
     var telemetryProxy: EngineTelemetryProxy?
 
-    public init(telemetryProxy: EngineTelemetryProxy? = nil) {
+    public init(webviewParameters: WKWebviewParameters,
+                telemetryProxy: EngineTelemetryProxy? = nil) {
+        self.webviewParameters = webviewParameters
         self.telemetryProxy = telemetryProxy
     }
 }
