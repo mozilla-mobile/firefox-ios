@@ -13,6 +13,10 @@ struct ContextMenuConfiguration: Equatable {
         switch item {
         case .topSite(let state, _):
             return state.site
+        case .jumpBackIn(let config):
+            return Site.createBasicSite(url: config.siteURL, title: config.titleText)
+        case .jumpBackInSyncedTab(let config):
+            return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
         case .bookmark(let state):
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
         case .pocket(let state):
