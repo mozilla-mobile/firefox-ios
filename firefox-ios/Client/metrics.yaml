@@ -475,6 +475,7 @@ bookmarks:
       following:
       * Page Action Menu
       * Share Menu
+      * Activity stream
 
     labels:
       - page-action-menu
@@ -729,6 +730,27 @@ app:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+  last_opened_as_default_browser:
+    type: datetime
+    time_unit: day
+    description: |
+      The date of when the app was last opened as default browser.
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24599
+      - https://bugzilla.mozilla.org/1941035
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/24594
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
     expires: "2025-07-01"
 
 # Usage reporting

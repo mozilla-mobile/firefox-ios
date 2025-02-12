@@ -129,7 +129,7 @@ class SearchTermGroupsUtility {
         outeritemLoop: for item in items {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
                 .contains(where: { metadata in
-                var stringURL: String = ""
+                var stringURL = ""
 
                 if let item = item as? Site {
                     stringURL = item.url

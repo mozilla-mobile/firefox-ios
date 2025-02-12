@@ -30,6 +30,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
+        static let toolbarIsEditingLeadingPadding: CGFloat = 8
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -75,9 +76,17 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
-    private func calculateToolbarSpace() -> CGFloat {
+    private func calculateToolbarTrailingSpace() -> CGFloat {
         // Provide 0 padding in iPhone landscape due to safe area insets
         return shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
+    }
+
+    private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        if shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad {
+            return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+        }
+        return 0
     }
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
@@ -182,18 +191,20 @@ final class AddressToolbarContainer: UIView,
             if newModel.isEditing, !inOverlayMode {
                 enterOverlayMode(nil, pasted: false, search: true)
             }
-
             updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: newModel.addressToolbarState,
+
+            compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(),
-                                     trailingSpace: calculateToolbarSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-            regularToolbar.configure(state: newModel.addressToolbarState,
+                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
+                                     trailingSpace: calculateToolbarTrailingSpace(),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
+            regularToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(),
-                                     trailingSpace: calculateToolbarSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
+                                     trailingSpace: calculateToolbarTrailingSpace(),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes

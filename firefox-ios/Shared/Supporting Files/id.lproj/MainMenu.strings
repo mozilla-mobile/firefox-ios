@@ -1,3 +1,27 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Temukan apa yang Anda butuhkan dengan lebih cepat, mulai dari penjelajahan pribadi hingga menyimpan tindakan.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "Baru: menu yang dirampingkan";
+
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Diredupkan";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Mundur";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Tutup";
+
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "Masuk";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
+"MainMenu.Account.SyncError.Description.v131" = "Sinkronisasi dijeda";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "Masuk kembali untuk menyinkronkan";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Markah";
 
@@ -22,6 +46,9 @@
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Sandi";
 
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Sesuaikan Beranda";
+
 /* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
 "MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Dapatkan Bantuan";
 
@@ -30,6 +57,9 @@
 
 /* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
 "MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Baru di %@";
+
+/* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Sesuaikan Beranda";
 
 /* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
 "MainMenu.SettingsSection.GetHelp.Title.v131" = "Dapatkan Bantuan";
@@ -69,6 +99,78 @@
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Simpan sebagai PDF";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Daftar Baca";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Simpan ke Daftar Baca";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Beranda";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Tambahkan ke Layar Beranda";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Pintasan";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Tambahkan ke Pintasan";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Tambah Markah";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Markahi Laman ini";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Edit Markah";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Hapus dari Daftar Baca";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Hapus dari Pintasan";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Title.v131" = "Simpan sebagai PDF";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.SaveToReadingList.Subtitle.v131" = "Daftar Bacaan";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Simpan ke Daftar Bacaan";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Nonaktifkan Mode Malam";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Aktifkan Mode Malam";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Mode Malam";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Cetak";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Cetak";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Matikan Tampilan Pembaca";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Aktifkan Tampilan Pembaca";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Tampilan Pembaca";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool and is indicating that under the Tools submenu, a Report (Report Broken Site) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "Laporkan";
@@ -114,6 +216,9 @@
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Laporkan";
+
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Laporkan Situs Rusak…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Bagikan";

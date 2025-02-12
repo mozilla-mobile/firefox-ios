@@ -45,25 +45,39 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 6)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
-                                                           .FirefoxAccountChanged,
-                                                           .PrivateDataClearedHistory,
-                                                           .ProfileDidFinishSyncing,
-                                                           .TopSitesUpdated,
-                                                           .DefaultSearchEngineUpdated])
-
-        sut.loadViewIfNeeded()
-
-        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 7)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 12)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
                                                            .ProfileDidFinishSyncing,
                                                            .TopSitesUpdated,
                                                            .DefaultSearchEngineUpdated,
-                                                           .ThemeDidChange])
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened,
+                                                           .TabDataUpdated,
+                                                           .TabsTrayDidClose,
+                                                           .TabsTrayDidSelectHomeTab,
+                                                           .TopTabsTabClosed
+        ])
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 13)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated,
+                                                           .BookmarksUpdated,
+                                                           .RustPlacesOpened,
+                                                           .TabDataUpdated,
+                                                           .TabsTrayDidClose,
+                                                           .TabsTrayDidSelectHomeTab,
+                                                           .TopTabsTabClosed,
+                                                           .ThemeDidChange
+        ])
     }
 
     // MARK: - Deinit State

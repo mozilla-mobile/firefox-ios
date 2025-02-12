@@ -108,5 +108,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var borderToolbarDivider: UIColor = FXColors.LightGrey10
 
     // MARK: - Shadow
+    var shadowSubtle: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.10)
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.12)
+    var shadowStrong: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
 }

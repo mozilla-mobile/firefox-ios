@@ -797,7 +797,7 @@ extension RustPlaces {
     ) -> Deferred<Maybe<Cursor<Site>>> {
         let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
         let result = Deferred<Maybe<Cursor<Site>>>()
-        deferred.upon { visitInfos in
+        deferred.upon { [weak self] visitInfos in
             guard let visitInfos = visitInfos.successValue else {
                 result.fill(Maybe(failure: visitInfos.failureValue ?? "Unknown Error"))
                 return
@@ -816,7 +816,20 @@ extension RustPlaces {
                 var site = Site.createBasicSite(id: hashValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
-            }.uniqued()
+            }
+
+            let sitesUniqued = sites.uniqued()
+
+            // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
+            if sites.count != sitesUniqued.count {
+                let duplicateCount = sitesUniqued.count - sites.count
+                self?.logger.log(
+                    "RustPlaces sites history returned \(duplicateCount) duplicate Sites",
+                    level: .info,
+                    category: .library
+                )
+            }
+
             result.fill(Maybe(success: ArrayCursor(data: sites)))
         }
         return result

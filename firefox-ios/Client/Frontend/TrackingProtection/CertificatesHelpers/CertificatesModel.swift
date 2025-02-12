@@ -10,7 +10,7 @@ final class CertificatesModel {
     let title: String
     let URL: String
     var certificates = [Certificate]()
-    var selectedCertificateIndex: Int = 0
+    var selectedCertificateIndex = 0
 
     init(topLevelDomain: String,
          title: String,

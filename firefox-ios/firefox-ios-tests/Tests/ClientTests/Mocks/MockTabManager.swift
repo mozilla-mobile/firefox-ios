@@ -28,7 +28,7 @@ class MockTabManager: TabManager {
     var lastSelectedPreviousTabs = [Tab]()
 
     var delaySelectingNewPopupTab: TimeInterval = 0
-    var count: Int = 0
+    var count = 0
     var normalTabs = [Tab]()
     var normalActiveTabs = [Tab]()
     var inactiveTabs = [Tab]()
@@ -101,10 +101,6 @@ class MockTabManager: TabManager {
 
     func undoCloseTab() {}
 
-    func getTabFor(_ url: URL) -> Tab? {
-        return nil
-    }
-
     func clearAllTabsHistory() {}
 
     func willSwitchTabMode(leavingPBM: Bool) {}
@@ -129,7 +125,7 @@ class MockTabManager: TabManager {
         return nil
     }
 
-    func expireSnackbars() {}
+    func expireLoginAlerts() {}
 
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         return .createdNewTab

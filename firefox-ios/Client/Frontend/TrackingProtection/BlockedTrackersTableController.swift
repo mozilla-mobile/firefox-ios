@@ -26,6 +26,7 @@ class BlockedTrackersTableViewController: UIViewController,
 
     private lazy var trackersTable: BlockedTrackersTableView = .build { tableView in
         tableView.delegate = self
+        tableView.isScrollEnabled = true
     }
 
     // MARK: Navigation View

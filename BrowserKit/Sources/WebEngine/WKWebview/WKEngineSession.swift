@@ -9,6 +9,7 @@ import Foundation
 protocol SessionHandler: AnyObject {
     func commitURLChange()
     func fetchMetadata(withURL url: URL)
+    func received(error: NSError, forURL url: URL)
 }
 
 class WKEngineSession: NSObject,
@@ -32,7 +33,6 @@ class WKEngineSession: NSObject,
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
-    private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
     private let navigationHandler: WKNavigationHandler
@@ -45,7 +45,6 @@ class WKEngineSession: NSObject,
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
-          securityManager: SecurityManager = DefaultSecurityManager(),
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
@@ -60,7 +59,6 @@ class WKEngineSession: NSObject,
         self.logger = logger
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
-        self.securityManager = securityManager
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
@@ -79,29 +77,23 @@ class WKEngineSession: NSObject,
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
-    func load(url: String) {
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
-        guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return }
-
+    func load(browserURL: BrowserURL) {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-        if let url = URL(string: url),
-           let syncedReaderModeURL = url.decodeReaderModeURL,
+        if let syncedReaderModeURL = browserURL.url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL
             .encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             sessionData.lastRequest = readerModeRequest
-            sessionData.url = url
+            sessionData.url = browserURL.url
 
             webView.load(readerModeRequest)
             logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
         }
 
-        guard let url = URL(string: url) else { return }
-        let request = URLRequest(url: url)
-
+        let request = URLRequest(url: browserURL.url)
         sessionData.lastRequest = request
-        sessionData.url = url
+        sessionData.url = browserURL.url
 
         if let url = request.url, url.isFileURL {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
@@ -117,20 +109,48 @@ class WKEngineSession: NSObject,
         logger.log("Stop loading", level: .debug, category: .webview)
     }
 
-    func reload() {
-        // If the current page is an error page load the original URL
+    func reload(bypassCache: Bool = false) {
+        // Manage internal URLs reload
         if let url = sessionData.url,
-           let internalUrl = WKInternalURL(url),
-           let page = internalUrl.originalURLFromErrorPage {
-            webView.replaceLocation(with: page)
-            logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+           let internalUrl = WKInternalURL(url) {
+            // If the current page is an error page load the original URL
+            if let page = internalUrl.originalURLFromErrorPage {
+                let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+                webView.load(request)
+                logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+                return
+            }
+
+            // If the URL is a home page load as privileged
+            if internalUrl.isAboutHomeURL {
+                internalUrl.authorize()
+                webView.load(URLRequest(url: internalUrl.url))
+                logger.log("Reloaded the webview with homepage URL", level: .debug, category: .webview)
+                return
+            }
+        }
+
+        // Reload bypassing the cache
+        if bypassCache, let url = sessionData.url {
+            let reloadRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+
+            webView.load(reloadRequest)
+            logger.log("Reloaded the webview ignoring cache", level: .debug, category: .webview)
             return
         }
 
         // Reloads the current webpage, and performs end-to-end revalidation of the content 
         // using cache-validating conditionals, if possible.
-        webView.reloadFromOrigin()
-        logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+        if webView.reloadFromOrigin() != nil {
+            logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+            return
+        }
+
+        if let lastRequest = sessionData.lastRequest, webView.load(lastRequest) != nil {
+            logger.log("Restoring webView from lastRequest", level: .debug, category: .tabs)
+        } else {
+            logger.log("Could not reload webView", level: .fatal, category: .tabs)
+        }
     }
 
     func goBack() {
@@ -323,6 +343,11 @@ class WKEngineSession: NSObject,
 
     func fetchMetadata(withURL url: URL) {
         metadataFetcher.fetch(fromSession: self, url: url)
+    }
+
+    func received(error: NSError, forURL url: URL) {
+        telemetryProxy?.handleTelemetry(event: .showErrorPage(errorCode: error.code))
+        delegate?.onErrorPageRequest(error: error)
     }
 
     // MARK: - Content scripts

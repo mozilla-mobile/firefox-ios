@@ -25,6 +25,9 @@
 /* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
 "Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "Negara atau Wilayah";
 
+/* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
+"Addresses.EditAddress.AutofillAddressCounty.v129" = "Kabupaten";
+
 /* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
 "Addresses.EditAddress.AutofillAddressDepartment.v129" = "Departemen";
 

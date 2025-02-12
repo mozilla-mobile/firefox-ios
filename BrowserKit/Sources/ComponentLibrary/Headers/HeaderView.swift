@@ -8,7 +8,7 @@ import SiteImageView
 
 public final class HeaderView: UIView, ThemeApplicable {
     private struct UX {
-        static let headerLinesLimit: Int = 2
+        static let headerLinesLimit = 2
         static let siteDomainLabelsVerticalSpacing: CGFloat = 13
         static let siteDomainLabelsHorizontalSpacing: CGFloat = 12
         static let largeFaviconImageSize: CGFloat = 48

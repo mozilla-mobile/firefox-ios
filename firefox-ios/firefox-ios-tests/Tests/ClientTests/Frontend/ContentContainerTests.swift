@@ -108,7 +108,7 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.canAdd(content: webview))
     }
 
-    // MARK: - hashasLegacyHomepage
+    // MARK: - hasLegacyHomepage
 
     func testHasHomepage_trueWhenHomepage() {
         let subject = ContentContainer(frame: .zero)
@@ -182,6 +182,44 @@ final class ContentContainerTests: XCTestCase {
         subject.add(content: webview)
 
         XCTAssertFalse(subject.hasPrivateHomepage)
+    }
+
+    // MARK: - hasAnyHomepage
+
+    func testHasHomepage_trueWhenAddedLegacyHomepage() {
+        let subject = ContentContainer(frame: .zero)
+        let homepage = createHomepage()
+        subject.add(content: homepage)
+
+        XCTAssertTrue(subject.hasAnyHomepage)
+    }
+
+    func testHasAnyHomepage_returnsTrueWhenAddedNewHomepage() {
+        let subject = ContentContainer(frame: .zero)
+        let homepage = HomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager,
+            toastContainer: UIView()
+        )
+        subject.add(content: homepage)
+
+        XCTAssertTrue(subject.hasAnyHomepage)
+    }
+
+    func testHasAnyHomepage_returnsTrueWhenAddedPrivate() {
+        let subject = ContentContainer(frame: .zero)
+        let privateHomepage = PrivateHomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager
+        )
+        subject.add(content: privateHomepage)
+
+        XCTAssertTrue(subject.hasAnyHomepage)
+    }
+
+    func testHasAnyHomepage_returnsFalseWhenNil() {
+        let subject = ContentContainer(frame: .zero)
+        XCTAssertFalse(subject.hasAnyHomepage)
     }
 
     // MARK: - contentView

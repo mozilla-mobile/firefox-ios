@@ -81,6 +81,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .feltPrivacyFeltDeletion,
+                    titleText: format(string: "Enable Felt Privacy Deletion"),
+                    statusText: format(string: "Toggle to felt privacy deletion")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacySimplifiedUI,
+                    titleText: format(string: "Enable Felt Privacy UI"),
+                    statusText: format(string: "Toggle to felt privacy UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .toolbarRefactor,
                     titleText: format(string: "Toolbar Redesign"),
                     statusText: format(string: "Toggle to enable the toolbar redesign")
@@ -105,6 +119,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .passwordGenerator,
                     titleText: format(string: "Enable Password Generator"),
                     statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .downloadLiveActivities,
+                    titleText: format(string: "Enable Download Live Activities"),
+                    statusText: format(string: "Toggle to enable download live activities")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

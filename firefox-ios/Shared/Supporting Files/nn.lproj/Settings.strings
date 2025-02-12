@@ -73,11 +73,17 @@
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Les meir";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "Dette hjelper oss med å diagnostisere og fikse problem med nettlesaren.";
+
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v135" = "Les meir.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Les meir";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Ping for dagleg bruk";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Konto";

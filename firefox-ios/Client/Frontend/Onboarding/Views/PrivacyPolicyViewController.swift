@@ -22,7 +22,6 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             }
         }
     }
-    private var webView: WKWebView?
     private var url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -30,6 +29,14 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+
+    var isNativeErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+    }
+
+    var isNICErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+    }
 
     init(
         url: URL,
@@ -80,10 +87,12 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
                            width: view.frame.width * UX.contentScalePhone,
                            height: view.frame.height - UX.topPaddingPhone)
         }
-        let webView = WKWebView(frame: frame)
+
+        let config = WKWebViewConfiguration()
+        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
+        let webView = WKWebView(frame: frame, configuration: config)
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
-        self.webView = webView
 
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
@@ -97,6 +106,17 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 }
 
 extension PrivacyPolicyViewController: WKNavigationDelegate {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation?,
+        withError error: any Error
+    ) {
+        let error = error as NSError
+        if error.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
+            ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
+        }
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         let contentSize = webView.scrollView.contentSize
         let viewSize = self.view.bounds.size

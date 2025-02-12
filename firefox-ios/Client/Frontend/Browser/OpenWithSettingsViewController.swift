@@ -16,7 +16,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     var mailProviderSource = [MailtoProviderEntry]()
 
     fileprivate let prefs: Prefs
-    fileprivate var currentChoice: String = "mailto"
+    fileprivate var currentChoice = "mailto"
 
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs

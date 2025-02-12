@@ -46,7 +46,7 @@ final class PasswordManagerViewModel {
     var hasLoadedBreaches = false
     var theme: Theme
 
-    init(profile: Profile, searchController: UISearchController, theme: Theme, loginProvider: LoginProvider) {
+    init(profile: Profile, searchController: UISearchController?, theme: Theme, loginProvider: LoginProvider) {
         self.profile = profile
         self.searchController = searchController
         self.theme = theme

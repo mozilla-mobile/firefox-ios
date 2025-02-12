@@ -5,7 +5,7 @@
 import Foundation
 
 protocol PocketManagerProvider {
-    func getPocketItems() async -> [PocketStoryState]
+    func getPocketItems() async -> [PocketStoryConfiguration]
 }
 
 final class PocketManager: PocketManagerProvider {
@@ -15,8 +15,8 @@ final class PocketManager: PocketManagerProvider {
         self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
     }
 
-    func getPocketItems() async -> [PocketStoryState] {
+    func getPocketItems() async -> [PocketStoryConfiguration] {
         let stories = await storyProvider.fetchPocketStories()
-        return stories.compactMap { PocketStoryState(story: $0) }
+        return stories.compactMap { PocketStoryConfiguration(story: $0) }
     }
 }

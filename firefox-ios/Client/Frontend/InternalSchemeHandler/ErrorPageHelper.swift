@@ -161,7 +161,7 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
+    func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
         guard let url = request.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let code = components.valueForQuery("code"),
@@ -174,9 +174,9 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        if isNativeErrorPageEnabled {
+        if isNativeErrorPageEnabled && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
-        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) {
+        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

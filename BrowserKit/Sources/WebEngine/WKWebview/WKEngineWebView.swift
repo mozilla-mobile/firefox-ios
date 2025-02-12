@@ -65,10 +65,6 @@ protocol WKEngineWebView: UIView {
 
     // MARK: Custom WKEngineView functions
 
-    /// Use JS to redirect the page without adding a history entry
-    /// - Parameter url: The URL to replace the location with
-    func replaceLocation(with url: URL)
-
     func addObserver(
         _ observer: NSObject,
         forKeyPath keyPath: String,
@@ -118,14 +114,6 @@ extension WKEngineWebView {
                 completion(nil, error)
             }
         }
-    }
-
-    func replaceLocation(with url: URL) {
-        let charactersToReplace = CharacterSet(charactersIn: "'")
-        guard let safeUrl = url.absoluteString
-            .addingPercentEncoding(withAllowedCharacters: charactersToReplace.inverted) else { return }
-
-        evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }
 

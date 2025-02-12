@@ -12,7 +12,8 @@ struct BookmarksTelemetry {
         case bookmarksPanel = "bookmarks-panel"
         case topSites = "top-sites"
         case activityStream = "activity-stream"
-        case contextMenu = "page-action-menu"
+        case pageActionMenu = "page-action-menu"
+        case addBookmarkToast = "add-bookmark-toast"
     }
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {

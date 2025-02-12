@@ -33,6 +33,9 @@ final class NimbusFeatureFlagLayer {
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
 
+        case .downloadLiveActivities:
+            return checkDownloadLiveActivitiesFeature(from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -93,6 +96,9 @@ final class NimbusFeatureFlagLayer {
 
         case .pullToRefreshRefactor:
             return checkPullToRefreshFeature(from: nimbus)
+
+        case .ratingPromptFeature:
+            return checkRatingPromptFeature(from: nimbus)
 
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
@@ -349,6 +355,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.pullToRefreshRefactorFeature.value().enabled
     }
 
+    private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.ratingPromptFeature.value().enabled
+    }
+
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
 
@@ -358,6 +368,10 @@ final class NimbusFeatureFlagLayer {
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
+    }
+
+    private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {

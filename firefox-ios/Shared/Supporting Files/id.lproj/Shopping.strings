@@ -1,0 +1,72 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature. */
+"ContextualHints.Shopping.NotOptedIn.v120" = "Cari tahu apakah Anda dapat mempercayai ulasan produk ini — sebelum Anda membeli.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Coba Pemeriksa Tinjauan";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
+"ContextualHints.Shopping.OptedInAction.v120" = "Buka Pemeriksa Tinjauan";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
+"ContextualHints.Shopping.OptedInBody.v120" = "Apakah ulasan ini dapat diandalkan? Periksa sekarang untuk melihat peringkat yang disesuaikan.";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "Pengemasan";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "Harga";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "Kualitas";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "Pengiriman";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Sorotan dari ulasan terbaru";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Sayangnya, kami tidak bisa memeriksa kualitas ulasan untuk jenis produk tertentu. Misalnya, kartu hadiah, video streaming, musik, dan permainan.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Tidak Bisa Memeriksa Tinjauan Ini";
+
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Kami akan memiliki info tentang ulasan produk ini dalam waktu 24 jam. Silakan periksa kembali.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Info Segera Hadir";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Periksa Sekarang";
+
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "Info Baru Untuk Diperiksa";
+
+/* Description for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Description.v120" = "Kami sedang bekerja untuk mengatasi masalah ini. Silakan periksa kembali nanti.";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "Tidak Ada Info Tersedia Saat Ini";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "Ketika produk ini memiliki lebih banyak ulasan, kami akan dapat memeriksa kualitasnya.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Belum Ada Cukup Ulasan";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Jika Anda melihat produk ini tersedia kembali, laporkan dan kami akan bekerja untuk memeriksa ulasannya.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Laporkan Produk yang Tersedia Kembali";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "Produk Tidak Tersedia";
+
+/* Description for info card when the product is in analysis mode */
+"Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Ini bisa memakan waktu sekitar 60 detik.";
+
+/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+"Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Memeriksa kualitas tinjauan (%@)";
+
