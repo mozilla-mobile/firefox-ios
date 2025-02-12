@@ -426,6 +426,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
+    private var downloadedTemporaryDocs = [URL]()
+
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
 
     var profile: Profile
 
@@ -602,6 +607,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
+        deleteDownloadedDocuments()
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
@@ -609,7 +615,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         webView?.navigationDelegate = nil
 
         debugTabCount -= 1
-
 #if DEBUG
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
@@ -655,14 +660,27 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func goBack() {
+        if isPDFRefactorEnabled {
+            // if the file was cancelled then return and avoid calling webView.goBack
+            // since the previous page is already there
+            guard !cancelTemporaryDocumentDownload() else { return }
+        }
         _ = webView?.goBack()
     }
 
     func goForward() {
+        if isPDFRefactorEnabled {
+            // if the file was cancelled then return and avoid calling webView.goForward
+            // since the previous page is already there
+            guard !cancelTemporaryDocumentDownload() else { return }
+        }
         _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload()
+        }
         _ = webView?.go(to: item)
     }
 
@@ -937,6 +955,46 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             return false
         }
     }
+
+    // MARK: - Temporary Document handling - PDF Refactor
+
+    /// Returns true if the download was cancelled
+    @discardableResult
+    private func cancelTemporaryDocumentDownload() -> Bool {
+        guard let temporaryDocument else { return false }
+
+        if temporaryDocument.isDownloading {
+            temporaryDocument.invalidateSession()
+            self.temporaryDocument = nil
+
+            webView?.removeDocumentLoadingView()
+            return true
+        }
+        return false
+    }
+
+    private func deleteDownloadedDocuments() {
+        let docsURL = downloadedTemporaryDocs
+        guard !docsURL.isEmpty else { return }
+        DispatchQueue.global(qos: .background).async {
+            docsURL.forEach { url in
+                try? FileManager.default.removeItem(at: url)
+            }
+        }
+    }
+
+    func canLoadDocumentRequest(_ request: URLRequest) -> Bool {
+        return temporaryDocument?.canDownload(request: request) ?? true
+    }
+
+    func enqueueDocument(_ document: TemporaryDocument) {
+        temporaryDocument = document
+        temporaryDocument?.download { [weak self] url in
+            guard let url else { return }
+            self?.webView?.load(URLRequest(url: url))
+            self?.downloadedTemporaryDocs.append(url)
+        }
+    }
 }
 
 extension Tab: UIGestureRecognizerDelegate {
@@ -1092,11 +1150,16 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
-    private var pullRefresh: PullRefreshView?
+    private struct UX {
+        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
+    }
+
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
+    private var pullRefresh: PullRefreshView?
+    private var documentLoadingView: TemporaryDocumentLoadingView?
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1226,9 +1289,37 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
         pullRefresh?.applyTheme(theme: theme)
+        documentLoadingView?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+        }
+    }
+
+    // MARK: - Document loading handling
+
+    func showDocumentLoadingView() {
+        guard documentLoadingView == nil else { return }
+        let documentLoadingView = TemporaryDocumentLoadingView(frame: bounds)
+        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(documentLoadingView)
+        NSLayoutConstraint.activate([
+            documentLoadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            documentLoadingView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            documentLoadingView.topAnchor.constraint(equalTo: topAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        documentLoadingView.animateLoadingAppearanceIfNeeded()
+        self.documentLoadingView = documentLoadingView
+    }
+
+    func removeDocumentLoadingView() {
+        guard let documentLoadingView else { return }
+        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
+            documentLoadingView.alpha = 0.0
+        } completion: { _ in
+            documentLoadingView.removeFromSuperview()
+            self.documentLoadingView = nil
         }
     }
 }

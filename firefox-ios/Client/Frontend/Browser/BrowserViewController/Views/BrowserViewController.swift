@@ -244,6 +244,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
+    var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1908,10 +1912,15 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
-                if isToolbarRefactorEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+                let progress = if let progress = change?[.newKey] as? Double {
+                    progress
                 } else {
-                    legacyUrlBar?.updateProgressBar(Float(webView.estimatedProgress))
+                    webView.estimatedProgress
+                }
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: progress)
+                } else {
+                    legacyUrlBar?.updateProgressBar(Float(progress))
                 }
                 setupMiddleButtonStatus(isLoading: true)
             } else {
@@ -4091,7 +4100,11 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
-        if !isToolbarRefactorEnabled { legacyUrlBar?.updateProgressBar(Float(0)) }
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.updateProgressBar(progress: 0)
+        } else {
+            legacyUrlBar?.updateProgressBar(Float(0))
+        }
         updateTabCountUsingTabManager(tabManager)
     }
 
