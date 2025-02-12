@@ -1182,6 +1182,8 @@
 		8CFD56882AAF057D003157A6 /* SwitchFakespotProduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD56872AAF057D003157A6 /* SwitchFakespotProduction.swift */; };
 		8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
+		94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
+		94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
 		9614BF4428AD1C6700D3F7EA /* AccountSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */; };
@@ -8198,6 +8200,7 @@
 		94864BC4BB4F13CC9829209D /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Intro.strings; sourceTree = "<group>"; };
 		948A4953ADF53D3D73AF65D5 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Storage.strings; sourceTree = "<group>"; };
 		94934A829907CBCA05DDA7F5 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Storage.strings; sourceTree = "<group>"; };
+		94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadLiveActivity.swift; sourceTree = "<group>"; };
 		94F04D91AA32EB14FFD03B5D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = "nl.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		953344E797099BD27091B317 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		95354D6886DC411FA14B8103 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -10258,6 +10261,7 @@
 		047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */ = {
 			isa = PBXGroup;
 			children = (
+				94D3DD1D2D56D6E200D368B8 /* DownloadManager */,
 				047F9B2D24E1FE1F00CD7DF7 /* Assets.xcassets */,
 				DA9FD88524E213CC00168D1E /* Helpers.swift */,
 				047F9B3C24E1FF4000CD7DF7 /* ImageButtonWithLabel.swift */,
@@ -12707,6 +12711,14 @@
 				ABE4393D2AC432040074FFE1 /* PartnerWebsites.swift */,
 			);
 			path = Client;
+			sourceTree = "<group>";
+		};
+		94D3DD1D2D56D6E200D368B8 /* DownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				94D3DD152D545B6A00D368B8 /* DownloadLiveActivity.swift */,
+			);
+			path = DownloadManager;
 			sourceTree = "<group>";
 		};
 		9614BF3F28A53F2000D3F7EA /* ContextualHints */ = {
@@ -16222,6 +16234,7 @@
 				D59431EE25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
+				94D3DD162D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
 			);
@@ -16859,6 +16872,7 @@
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
 				8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
+				94D3DD172D545B6A00D368B8 /* DownloadLiveActivity.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				DF5D47522A9381C700D6AE74 /* FakespotSettingsCardView.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
