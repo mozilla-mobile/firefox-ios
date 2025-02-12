@@ -21,6 +21,7 @@ protocol NavigationDelegate: AnyObject {
 class BrowserViewController: UIViewController,
                              EngineSessionDelegate,
                              FindInPageHelperDelegate {
+
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession
@@ -198,6 +199,10 @@ class BrowserViewController: UIViewController,
 
     func onProgress(progress: Double) {
         progressView.setProgress(Float(progress), animated: true)
+    }
+
+    func onHideProgressBar() {
+        progressView.isHidden = true
     }
 
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
