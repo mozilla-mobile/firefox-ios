@@ -299,18 +299,17 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
+
+        let engines = syncManagerAPI.rustTogglableEngines
+
         // We just created the account, the user went through the Choose What to Sync
         // screen on FxA.
         if let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines) {
-            declined.forEach { engineEnablements[$0] = false }
+            engines.forEach { engineEnablements[$0.rawValue] = !declined.contains($0.rawValue) }
             UserDefaults.standard.removeObject(forKey: fxaDeclinedEngines)
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
-            let engines = self.creditCardAutofillEnabled ?
-                syncManagerAPI.rustTogglableEngines :
-                syncManagerAPI.rustTogglableEngines.filter({ $0 != RustSyncManagerAPI.TogglableEngine.creditcards })
-
             engines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
