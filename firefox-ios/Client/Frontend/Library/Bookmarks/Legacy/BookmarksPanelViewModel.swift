@@ -124,8 +124,9 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
                 // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
                 // subfolders
                 self.bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
-                    switch result {
-                    case .success(let bookmarkCount):
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let bookmarkCount):
                             if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
                                 self.hasDesktopFolders = true
                                 let desktopFolder = LocalDesktopFolder()
@@ -133,10 +134,11 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
                             } else {
                                 self.hasDesktopFolders = false
                             }
-                    case .failure(let error):
+                        case .failure(let error):
                             self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
+                        }
+                        completion()
                     }
-                    completion()
                 }
             }
     }
