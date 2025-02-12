@@ -1118,11 +1118,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
-<<<<<<< HEAD
-=======
     private var pullRefresh: PullRefreshView?
-    private var documentLoadingView: TemporaryDocumentLoadingView?
->>>>>>> b15786f29 (Bugfix [Pull Refresh] FXIOS-11344 Attempt fix pull refresh  (#24694))
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1251,11 +1247,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
-<<<<<<< HEAD
-=======
         pullRefresh?.applyTheme(theme: theme)
-        documentLoadingView?.applyTheme(theme: theme)
->>>>>>> b15786f29 (Bugfix [Pull Refresh] FXIOS-11344 Attempt fix pull refresh  (#24694))
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
