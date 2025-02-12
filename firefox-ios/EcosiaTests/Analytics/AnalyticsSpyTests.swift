@@ -848,7 +848,7 @@ final class AnalyticsSpyTests: XCTestCase {
 
     func testClearWebsitesDataTracksEvent() {
         // Arrange
-        let vc = WebsiteDataManagementViewController()
+        let vc = WebsiteDataManagementViewController(windowUUID: .XCTestDefaultUUID)
         vc.loadViewIfNeeded()
 
         // Act
