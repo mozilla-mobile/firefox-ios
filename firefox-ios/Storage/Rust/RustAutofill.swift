@@ -448,10 +448,10 @@ public class RustAutofill {
         getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
             switch (key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
-                self.handleExpectedKey(rustKeys: rustKeys,
-                                       encryptedCanaryPhrase: encryptedCanaryPhrase,
-                                       key: key,
-                                       completion: completion)
+                self.handleExpectedKeyAction(rustKeys: rustKeys,
+                                             encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                             key: key,
+                                             completion: completion)
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
                 self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
@@ -464,10 +464,10 @@ public class RustAutofill {
         }
     }
 
-    private func handleExpectedKey(rustKeys: RustAutofillEncryptionKeys,
-                                   encryptedCanaryPhrase: String?,
-                                   key: String?,
-                                   completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleExpectedKeyAction(rustKeys: RustAutofillEncryptionKeys,
+                                         encryptedCanaryPhrase: String?,
+                                         key: String?,
+                                         completion: @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, and it is.
         var canaryIsValid = false
         do {
