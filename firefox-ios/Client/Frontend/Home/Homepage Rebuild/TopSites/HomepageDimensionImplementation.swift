@@ -58,8 +58,8 @@ struct HomepageDimensionCalculator {
     /// based on the given traits, device type, and orientation.
     /// - Parameters:
     ///   - traitCollection: The trait collection of the current user interface, used to determine layout properties.
-    ///   - device: The user interface idiom of the device (e.g., `.phone` or `.pad`). Defaults to the current device's UI idiom.
-    ///   - isLandscape: A Boolean indicating whether the device is in landscape orientation. Defaults to the current window's landscape status.
+    ///   - device: The user interface idiom of the device (e.g., `.phone` or `.pad`).
+    ///   - isLandscape: A Boolean indicating whether the device is in landscape orientation.
     /// - Returns: A `JumpBackInSectionLayoutConfiguration` instance defining the number of tabs and layout type.
     static func retrieveJumpBackInDisplayInfo(
         traitCollection: UITraitCollection,
