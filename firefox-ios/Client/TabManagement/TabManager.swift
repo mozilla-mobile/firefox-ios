@@ -36,7 +36,7 @@ protocol TabManager: AnyObject {
     func addDelegate(_ delegate: TabManagerDelegate)
     func addNavigationDelegate(_ delegate: WKNavigationDelegate)
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
-    func expireLoginAlerts()
+
     // MARK: - Select Tab
     func selectTab(_ tab: Tab?, previous: Tab?)
 
@@ -98,7 +98,7 @@ protocol TabManager: AnyObject {
     func preserveTabs()
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
-    func expireSnackbars()
+    func expireLoginAlerts()
     @discardableResult
     func switchPrivacyMode() -> SwitchPrivacyModeResult
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
