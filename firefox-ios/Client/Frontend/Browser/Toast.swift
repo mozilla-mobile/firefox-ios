@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 import Shared
 
-class Toast: UIView, ThemeApplicable {
+class Toast: UIView, ThemeApplicable, Notifiable {
     struct UX {
         static let toastHeightWithoutShadow: CGFloat = 56
         static let toastHeightWithShadow: CGFloat = 68
@@ -26,6 +26,7 @@ class Toast: UIView, ThemeApplicable {
         static let shadowVerticalSpacing: CGFloat = 8
     }
 
+    public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
 
@@ -40,6 +41,16 @@ class Toast: UIView, ThemeApplicable {
     }()
 
     lazy var toastView: UIView = .build { _ in }
+
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        adjustLayoutForA11ySizeCategory()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -121,5 +132,18 @@ class Toast: UIView, ThemeApplicable {
         toastView.layer.shadowOffset = UX.shadowOffset
         toastView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         toastView.layer.shadowOpacity = UX.shadowOpacity
+    }
+
+    open func adjustLayoutForA11ySizeCategory() {
+        // To override depending on the subclass
+    }
+
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustLayoutForA11ySizeCategory()
+        default: break
+        }
     }
 }
