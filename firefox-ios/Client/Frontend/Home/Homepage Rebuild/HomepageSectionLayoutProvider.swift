@@ -63,6 +63,26 @@ final class HomepageSectionLayoutProvider {
 
         struct JumpBackInConstants {
             static let itemHeight: CGFloat = 112
+            static let syncedItemHeight: CGFloat = 232
+            static let syncedItemCompactHeight: CGFloat = 182
+            static let maxItemsPerGroup = 2
+
+            static func getWidthDimension(
+                for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                layoutType: JumpBackInSectionLayoutConfiguration.LayoutType
+            ) -> NSCollectionLayoutDimension {
+                if layoutType == .compact {
+                    return .fractionalWidth(0.95)
+                } else if layoutType == .medium {
+                    // Cards need to be less than 1/2 (8/16) wide to account for spacing.
+                    // On iPhone they need to be slightly wider to match the spacing of the rest of the UI.
+                    return device == .pad ?
+                        .fractionalWidth(7.66/16) : .fractionalWidth(7.8/16) // iPad or iPhone in landscape
+                } else {
+                    // Cards need to be less than 1/3 (8/24) wide to account for spacing.
+                    return .fractionalWidth(7.66/24)
+                }
+            }
         }
 
         struct BookmarksConstants {
@@ -101,8 +121,11 @@ final class HomepageSectionLayoutProvider {
                 for: traitCollection,
                 numberOfTilesPerRow: numberOfTilesPerRow
             )
-        case .jumpBackIn:
-            return createJumpBackInSectionLayout(for: traitCollection)
+        case .jumpBackIn(_, let configuration):
+            return createJumpBackInSectionLayout(
+                for: traitCollection,
+                config: configuration
+            )
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
@@ -221,23 +244,106 @@ final class HomepageSectionLayoutProvider {
         return section
     }
 
-    private func createJumpBackInSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
-        // TODO: FXIOS-11224 Update section layout for jump back in
+    private func createCompactJumpBackInSectionLayout(
+        widthDimension: NSCollectionLayoutDimension
+    ) -> NSCollectionLayoutSection {
+        let syncedTabItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemCompactHeight)
+        )
+
+        let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
+
+        let jumpBackInItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+        )
+
+        let jumpBackInItem = NSCollectionLayoutItem(layoutSize: jumpBackInItemSize)
+
+        let groupHeight: CGFloat = UX.JumpBackInConstants.syncedItemCompactHeight
+        + UX.JumpBackInConstants.itemHeight
+        + UX.interGroupSpacing
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: widthDimension,
+            heightDimension: .estimated(groupHeight)
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [jumpBackInItem, syncedTabItem]
+        )
+        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interGroupSpacing)
+
+        return NSCollectionLayoutSection(group: group)
+    }
+
+    private func createLargeJumpBackInSectionLayout(
+        widthDimension: NSCollectionLayoutDimension,
+        numberOfItems: Int,
+        hasSyncedTab: Bool
+    ) -> NSCollectionLayoutSection {
+        let syncedTabItemSize = NSCollectionLayoutSize(
+            widthDimension: widthDimension,
+            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
+        )
+        let syncedTabItem = NSCollectionLayoutItem(layoutSize: syncedTabItemSize)
+
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
         )
+
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.JumpBackInConstants.itemHeight)
+        // Nested Group (Jump Back In)
+        let nestedGroupSize = NSCollectionLayoutSize(
+            widthDimension: widthDimension,
+            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitem: item,
-                                                       count: 1)
+        let nestedGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: nestedGroupSize,
+            subitems: [item, item]
+        )
+        nestedGroup.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interGroupSpacing)
 
-        let section = NSCollectionLayoutSection(group: group)
+        // Main Group
+        let mainGroupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.JumpBackInConstants.syncedItemHeight)
+        )
+
+        let numberOfGroups = ceil(Double(numberOfItems) / Double(UX.JumpBackInConstants.maxItemsPerGroup))
+        var subItems: [NSCollectionLayoutItem] = Array(repeating: nestedGroup, count: Int(numberOfGroups))
+
+        if hasSyncedTab {
+            subItems.insert(syncedTabItem, at: 0)
+        }
+
+        let mainGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: mainGroupSize,
+            subitems: subItems
+        )
+        mainGroup.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interGroupSpacing)
+
+        return NSCollectionLayoutSection(group: mainGroup)
+    }
+
+    private func createJumpBackInSectionLayout(
+        for traitCollection: UITraitCollection,
+        config: JumpBackInSectionLayoutConfiguration
+    ) -> NSCollectionLayoutSection {
+        var section: NSCollectionLayoutSection
+        let widthDimension = UX.JumpBackInConstants.getWidthDimension(layoutType: config.layoutType)
+        if config.layoutType == .compact {
+            section = createCompactJumpBackInSectionLayout(widthDimension: widthDimension)
+        } else {
+            section = createLargeJumpBackInSectionLayout(
+                widthDimension: widthDimension,
+                numberOfItems: config.getMaxNumberOfLocalTabsLayout,
+                hasSyncedTab: config.hasSyncedTab ?? false
+            )
+        }
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),

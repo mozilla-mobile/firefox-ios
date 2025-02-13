@@ -70,6 +70,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                 let itemURL = tab.lastKnownUrl?.absoluteString ?? ""
                 let site = Site.createBasicSite(url: itemURL, title: tab.displayTitle)
                 return JumpBackInTabConfiguration(
+                    tabUUID: tab.tabUUID,
                     titleText: site.title,
                     descriptionText: site.tileURL.shortDisplayString.capitalized,
                     siteURL: itemURL
