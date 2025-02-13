@@ -211,7 +211,7 @@ final class LocationView: UIView,
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
+        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing && lockIconImageName != nil
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         // hide the leading "..." by moving them behind the lock icon
