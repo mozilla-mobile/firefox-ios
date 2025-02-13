@@ -104,6 +104,8 @@
 	<string>Firefox uses your microphone to record and upload audio.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This lets you save photos.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>QuickActionIntent</string>

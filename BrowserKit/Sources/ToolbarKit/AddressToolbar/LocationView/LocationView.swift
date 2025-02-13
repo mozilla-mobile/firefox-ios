@@ -17,8 +17,8 @@ final class LocationView: UIView,
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
-        static let iconAnimationTime: CGFloat = 0.15
-        static let iconAnimationDelay: CGFloat = 0.25
+        static let iconAnimationTime: CGFloat = 0.1
+        static let iconAnimationDelay: CGFloat = 0.03
     }
 
     private var urlAbsolutePath: String?
