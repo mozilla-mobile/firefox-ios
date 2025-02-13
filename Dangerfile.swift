@@ -14,6 +14,7 @@ checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
 checkForPRDescription()
+checkForWebEngineFileChange()
 checkForCodeUsage()
 changedFiles()
 
@@ -58,6 +59,22 @@ func checkForPRDescription() {
     }
 }
 
+// Detect and warn about some changes related to Webview management to ensure we port changes to the WebEngine project
+func checkForWebEngineFileChange() {
+    let webEngineFiles = ["Tab.swift", "BrowserViewController+WebViewDelegates.swift"]
+    let modifiedFiles = danger.git.modifiedFiles
+    let affectedFiles = modifiedFiles.filter { file in
+        webEngineFiles.contains { webFile in file.hasSuffix(webFile) }
+    }
+
+    if !affectedFiles.isEmpty {
+        let message = "Ensure that necessary updates are also ported to the WebEngine project if required"
+        let contact = "(cc @lmarceau)."
+        warn("Changes detected in files: \(affectedFiles.joined(separator: ", ")). \(message) \(contact)")
+    }
+}
+
+// MARK: Detect code usage
 enum CodeUsageToDetect: CaseIterable {
     static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
@@ -174,6 +191,7 @@ extension String {
     }
 }
 
+// MARK: - Acorn Alphabetical order
 func checkAlphabeticalOrder(inFile filePath: String) {
     do {
         let fileContent = try String(contentsOfFile: filePath, encoding: .utf8)
