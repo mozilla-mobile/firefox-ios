@@ -238,7 +238,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         )
     }
 
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)? = nil) {
+    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
         let tab = tabs[index]
 
@@ -1017,7 +1017,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
-        removeTabWithCompletion(selectedTab.tabUUID)
+        removeTabWithCompletion(selectedTab.tabUUID, completion: nil)
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
