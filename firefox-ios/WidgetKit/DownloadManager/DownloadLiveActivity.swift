@@ -15,7 +15,11 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
-            EmptyView()
+            // Using Rectangle instead of EmptyView because the hitbox
+            // of the empty view is too small (likely non existent),
+            // meaning we'd never be redirected to the downloads panel
+            Rectangle()
+                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
@@ -36,7 +40,7 @@ struct DownloadLiveActivity: Widget {
                 EmptyView()
             } minimal: {
                 EmptyView()
-            }
+            }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
-   }
+    }
 }
