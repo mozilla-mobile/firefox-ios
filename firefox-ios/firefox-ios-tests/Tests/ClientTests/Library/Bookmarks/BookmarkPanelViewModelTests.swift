@@ -121,6 +121,30 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         waitForExpectations(timeout: 1)
     }
 
+    func testReloadData_createsDesktopBookmarksFolder_whenBookmarksRefactor() {
+        let bookmarksHandler = BookmarksHandlerMock()
+        bookmarksHandler.bookmarksInTreeValue = 1
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testReloadData_doesntCreateDesktopBookmarksFolder_whenBookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Mobile folder does not contain the local desktop folder")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
     // MARK: - Move row at index
 
     func testMoveRowAtGetNewIndex_NotMobileGuid_atZero() {
@@ -201,9 +225,9 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 extension BookmarksPanelViewModelTests {
-    func createSubject(guid: GUID) -> BookmarksPanelViewModel {
+    func createSubject(guid: GUID, bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarksHandler: BookmarksHandlerMock(),
+                                                bookmarksHandler: bookmarksHandler,
                                                 bookmarkFolderGUID: guid,
                                                 mainQueue: MockDispatchQueue())
         trackForMemoryLeaks(viewModel)
