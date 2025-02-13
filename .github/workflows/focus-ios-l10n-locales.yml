@@ -51,4 +51,4 @@ jobs:
         with:
           path: ./l10n-screenshots
           retention-days: 90
-          name: Screenshots
+          name: Screenshots-${{ job.container.id }}
