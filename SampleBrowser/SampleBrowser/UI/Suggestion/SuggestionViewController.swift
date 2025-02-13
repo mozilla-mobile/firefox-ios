@@ -13,9 +13,6 @@ class SuggestionViewController: UIViewController, UITableViewDelegate {
     private var dataSource: SuggestionDataSource?
     private weak var delegate: SuggestionViewControllerDelegate?
 
-    private var gradientLayer: CAGradientLayer?
-    private var topIconConstraint: NSLayoutConstraint?
-
     init() {
         self.tableView = UITableView(frame: .zero, style: .grouped)
         super.init(nibName: nil, bundle: nil)
@@ -34,30 +31,6 @@ class SuggestionViewController: UIViewController, UITableViewDelegate {
 
         // Showing app logo when no search is visible
         tableView.isHidden = true
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setGradientBackground()
-        setTopConstraint()
-    }
-
-    private func setTopConstraint() {
-        let height = view.frame.height / 5
-        topIconConstraint?.constant = height
-    }
-
-    private func setGradientBackground() {
-        self.gradientLayer?.removeFromSuperlayer()
-        let colorTop =  UIColor.orange.cgColor
-        let colorBottom = UIColor.purple.cgColor
-
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [colorTop, colorBottom]
-        gradientLayer.locations = [0.0, 0.6]
-        gradientLayer.frame = self.view.bounds
-        self.gradientLayer = gradientLayer
-        view.layer.insertSublayer(gradientLayer, at: 0)
     }
 
     private func configureTableView() {

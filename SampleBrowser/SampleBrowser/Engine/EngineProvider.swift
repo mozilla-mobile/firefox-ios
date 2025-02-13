@@ -11,7 +11,7 @@ struct EngineProvider {
     let view: EngineView
 
     init?(engine: Engine = WKEngine.factory(),
-          sessionDependencies: EngineSessionDependencies? = nil) {
+          sessionDependencies: EngineSessionDependencies) {
         do {
             session = try engine.createSession(dependencies: sessionDependencies)
         } catch {
