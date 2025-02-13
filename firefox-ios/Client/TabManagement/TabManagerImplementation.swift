@@ -1017,8 +1017,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
+        removeTabWithCompletion(selectedTab.tabUUID)
         Task {
-            await removeTab(selectedTab.tabUUID)
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
     }
