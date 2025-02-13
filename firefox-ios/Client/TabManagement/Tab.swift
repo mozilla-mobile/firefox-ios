@@ -977,6 +977,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             self.temporaryDocument = nil
 
             webView?.removeDocumentLoadingView()
+            reload()
             return true
         }
         return false
@@ -998,9 +999,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
+
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
+            self?.webView?.addSnapshotOverlay()
             self?.downloadedTemporaryDocs.append(url)
         }
     }
@@ -1030,7 +1033,10 @@ extension Tab: UIGestureRecognizerDelegate {
     @objc
     func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
-
+        webView.snapshot?.alpha = 1
+        if sender.state == .ended {
+            webView.removeSnapshot()
+        }
         if sender.state == .ended, sender.velocity(in: webView).x > 150 {
             TelemetryWrapper.recordEvent(
                 category: .action,
@@ -1158,7 +1164,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
     private struct UX {
         static let documentLoadingViewAnimationDuration: CGFloat = 0.3
     }
@@ -1169,6 +1175,14 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
     private var documentLoadingView: TemporaryDocumentLoadingView?
+    private lazy var isPDFRefactorEnabled = featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+
+    override var isLoading: Bool {
+        if isPDFRefactorEnabled {
+            return documentLoadingView != nil || super.isLoading
+        }
+        return super.isLoading
+    }
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1320,6 +1334,26 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         ])
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         self.documentLoadingView = documentLoadingView
+    }
+
+    var snapshot: UIView?
+
+    func addSnapshotOverlay() {
+        if let snapshot {
+            scrollView.bringSubviewToFront(snapshot)
+        }
+        guard snapshot == nil else { return }
+        // Remove any existing snapshot
+        snapshot = snapshotView(afterScreenUpdates: false) // Capture current content
+        snapshot?.frame = bounds
+        guard let snapshot else { return }
+        scrollView.addSubview(snapshot)
+        snapshot.alpha = 1
+    }
+
+    func removeSnapshot() {
+        snapshot?.removeFromSuperview()
+        snapshot = nil
     }
 
     func removeDocumentLoadingView() {

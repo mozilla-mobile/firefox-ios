@@ -769,8 +769,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.allow)
                     return
                 }
-                handlePDFResponse(webView, tab: tab, response: response, request: request)
                 decisionHandler(.cancel)
+                handlePDFResponse(webView, tab: tab, response: response, request: request)
                 return
             }
             if response.mimeType != MIMEType.HTML, let request {
@@ -794,6 +794,10 @@ extension BrowserViewController: WKNavigationDelegate {
         if let webView = webView as? TabWebView {
             webView.showDocumentLoadingView()
             webView.applyTheme(theme: currentTheme())
+            observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                         of: webView,
+                         change: [.newKey: true],
+                         context: nil)
         }
 
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
@@ -1026,6 +1030,14 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
         if isPDFRefactorEnabled, let webView = webView as? TabWebView {
+            if webView.isLoading {
+                let action = ToolbarAction(
+                    isLoading: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.websiteLoadingStateDidChange
+                )
+                store.dispatch(action)
+            }
             webView.removeDocumentLoadingView()
         }
         if let tab = tabManager[webView],
