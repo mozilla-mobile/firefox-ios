@@ -300,10 +300,7 @@ class HomePageSettingsUITests: BaseTestCase {
             .staticTexts[urlExampleLabel].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        unbookmark()
-        if !iPad() {
-            navigator.performAction(Action.CloseTab)
-        }
+        unbookmark(url: urlLabelExample_3)
         removeContentFromReaderView()
         navigator.nowAt(LibraryPanel_ReadingList)
         navigator.performAction(Action.CloseReadingListPanel)

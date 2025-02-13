@@ -8,6 +8,7 @@ class BaseTestCaseL10n: XCTestCase {
     let app = XCUIApplication()
     let testRunningFirstRun = ["test01FirstRunScreens"]
 
+    @MainActor
     override func setUp() {
         super.setUp()
         continueAfterFailure = false

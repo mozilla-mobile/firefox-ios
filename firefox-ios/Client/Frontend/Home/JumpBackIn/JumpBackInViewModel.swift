@@ -13,8 +13,8 @@ class JumpBackInViewModel: FeatureFlaggable {
         static let jumpBackInCellHeight: CGFloat = 112
         static let syncedTabCellPortraitCompactHeight: CGFloat = 182
         static let syncedTabCellHeight: CGFloat = 232
-        static let maxDisplayedSyncedTabs: Int = 1
-        static let maxJumpBackInItemsPerGroup: Int = 2
+        static let maxDisplayedSyncedTabs = 1
+        static let maxJumpBackInItemsPerGroup = 2
     }
 
     // MARK: - Properties
@@ -22,7 +22,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
-    var prepareContextualHint: ((SyncedTabCell) -> Void)?
+    var prepareContextualHint: ((LegacySyncedTabCell) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -196,7 +196,7 @@ private extension JumpBackInViewModel {
         cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
-    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
+    func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: LegacySyncedTabCell, indexPath: IndexPath) {
         let itemURL = item.tab.URL.absoluteString
         let site = Site.createBasicSite(url: itemURL, title: item.tab.title)
         let descriptionText = item.client.name
@@ -396,9 +396,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             return jumpBackInCell
         } else if hasSyncedTab {
             // SyncedTab cell
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacySyncedTabCell.cellIdentifier,
                                                           for: indexPath)
-            guard let syncedTabCell = cell as? SyncedTabCell,
+            guard let syncedTabCell = cell as? LegacySyncedTabCell,
                   let mostRecentSyncedTab = mostRecentSyncedTab,
                   let prepareContextualHint = prepareContextualHint
             else { return UICollectionViewCell() }

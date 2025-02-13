@@ -79,12 +79,21 @@ final class HomepageViewController: UIViewController,
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          .FirefoxAccountChanged,
-                                                          .PrivateDataClearedHistory,
-                                                          .ProfileDidFinishSyncing,
-                                                          .TopSitesUpdated,
-                                                          .DefaultSearchEngineUpdated])
+        setupNotifications(forObserver: self, observing: [
+            UIApplication.didBecomeActiveNotification,
+            .FirefoxAccountChanged,
+            .PrivateDataClearedHistory,
+            .ProfileDidFinishSyncing,
+            .TopSitesUpdated,
+            .DefaultSearchEngineUpdated,
+            .BookmarksUpdated,
+            .RustPlacesOpened,
+            .TabDataUpdated,
+            .TabsTrayDidClose,
+            .TabsTrayDidSelectHomeTab,
+            .TopTabsTabClosed
+        ])
+
         subscribeToRedux()
     }
 
@@ -387,24 +396,43 @@ final class HomepageViewController: UIViewController,
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
-        case .jumpBackIn(let state):
+        case .jumpBackIn(let tab):
             guard let jumpBackInCell = collectionView?.dequeueReusableCell(
                 cellType: JumpBackInCell.self,
                 for: indexPath
             ) else {
                 return UICollectionViewCell()
             }
-            jumpBackInCell.configure(state: state, theme: currentTheme)
+            jumpBackInCell.configure(config: tab, theme: currentTheme)
             return jumpBackInCell
 
-        case .bookmark(let state):
+        case .jumpBackInSyncedTab(let config):
+            guard let syncedTabCell = collectionView?.dequeueReusableCell(
+                cellType: SyncedTabCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+            syncedTabCell.configure(
+                configuration: config,
+                theme: currentTheme,
+                onTapShowAllAction: {
+                    // TODO: FXIOS-11229 - Handle actions
+                },
+                onOpenSyncedTabAction: { _ in
+                    // TODO: FXIOS-11229 - Handle actions
+                }
+            )
+            return syncedTabCell
+
+        case .bookmark(let item):
             guard let bookmarksCell = collectionView?.dequeueReusableCell(
                 cellType: BookmarksCell.self,
                 for: indexPath
             ) else {
                 return UICollectionViewCell()
             }
-            bookmarksCell.configure(state: state, theme: currentTheme)
+            bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
@@ -487,6 +515,26 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
+        case .jumpBackIn(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.jumpBackInState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToTabTray()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
+        case .bookmarks(let textColor):
+            sectionLabelCell.configure(
+                state: homepageState.bookmarkState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToBookmarksPanel()
+                },
+                textColor: textColor,
+                theme: currentTheme
+            )
+            return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
@@ -539,13 +587,15 @@ final class HomepageViewController: UIViewController,
               let sourceView = collectionView?.cellForItem(at: indexPath)
         else {
             self.logger.log(
-                "Item selected at \(point) but does not navigate to context menu",
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
                 category: .homepage
             )
             return
         }
-        navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        if section.canHandleLongPress {
+            navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+        }
     }
 
     // MARK: Dispatch Actions
@@ -594,6 +644,36 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func navigateToTabTray() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.tabTray),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
+            )
+        )
+    }
+
+    private func navigateToBookmarksPanel() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.bookmarksPanel),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
+            )
+        )
+    }
+
+    private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -606,17 +686,21 @@ final class HomepageViewController: UIViewController,
         }
         switch item {
         case .topSite(let state, _):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: state.site.url.asURL,
-                        isGoogleTopSite: state.isGoogleURL
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: state.site.url.asURL,
+                isGoogleTopSite: state.isGoogleURL,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .bookmark(let config):
+            let destination = NavigationDestination(
+                .link,
+                url: URIFixup.getURL(config.site.url),
+                isGoogleTopSite: false,
+                visitType: .bookmark
+            )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
@@ -651,18 +735,48 @@ final class HomepageViewController: UIViewController,
                     actionType: PocketActionType.enteredForeground
                 )
             )
-        case .ProfileDidFinishSyncing,
-                .PrivateDataClearedHistory,
-                .FirefoxAccountChanged,
+        case .PrivateDataClearedHistory,
                 .TopSitesUpdated,
                 .DefaultSearchEngineUpdated:
+            dispatchActionToFetchTopSites()
+        case .BookmarksUpdated, .RustPlacesOpened:
             store.dispatch(
-                TopSitesAction(
+                BookmarksAction(
                     windowUUID: self.windowUUID,
-                    actionType: TopSitesActionType.fetchTopSites
+                    actionType: BookmarksActionType.fetchBookmarks
                 )
             )
+        case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+            dispatchActionToFetchTopSites()
+            dispatchActionToFetchTabs()
+
+        case .TabDataUpdated, .TabsTrayDidClose, .TabsTrayDidSelectHomeTab, .TopTabsTabClosed:
+            dispatchActionToFetchTabs()
         default: break
         }
+    }
+
+    private func dispatchActionToFetchTopSites() {
+        store.dispatch(
+            TopSitesAction(
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.fetchTopSites
+            )
+        )
+    }
+
+    private func dispatchActionToFetchTabs() {
+        store.dispatch(
+            JumpBackInAction(
+                windowUUID: self.windowUUID,
+                actionType: JumpBackInActionType.fetchLocalTabs
+            )
+        )
+        store.dispatch(
+            JumpBackInAction(
+                windowUUID: self.windowUUID,
+                actionType: JumpBackInActionType.fetchRemoteTabs
+            )
+        )
     }
 }

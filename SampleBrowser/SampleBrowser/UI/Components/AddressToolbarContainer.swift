@@ -26,14 +26,14 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
     func configure(_ model: AddressToolbarContainerModel,
                    toolbarDelegate: AddressToolbarDelegate) {
         compactToolbar.configure(
-            state: model.state,
+            config: model.state,
             toolbarDelegate: toolbarDelegate,
             leadingSpace: 0,
             trailingSpace: 0,
             isUnifiedSearchEnabled: false
         )
         regularToolbar.configure(
-            state: model.state,
+            config: model.state,
             toolbarDelegate: toolbarDelegate,
             leadingSpace: 0,
             trailingSpace: 0,

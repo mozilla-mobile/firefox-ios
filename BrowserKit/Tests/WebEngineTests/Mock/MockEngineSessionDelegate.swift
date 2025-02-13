@@ -14,6 +14,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var onLocationChangedCalled = 0
     var onHasOnlySecureContentCalled = 0
     var didLoadPagemetaDataCalled = 0
+    var onErrorPageCalled = 0
     var findInPageCalled = 0
     var searchCalled = 0
     var onProvideContextualMenuCalled = 0
@@ -27,6 +28,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedCanGoForward: Bool?
     var savedLoading: Bool?
     var savedPagemetaData: EnginePageMetadata?
+    var savedError: NSError?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
 
@@ -64,6 +66,11 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func didLoad(pageMetadata: EnginePageMetadata) {
         didLoadPagemetaDataCalled += 1
         savedPagemetaData = pageMetadata
+    }
+
+    func onErrorPageRequest(error: NSError) {
+        savedError = error
+        onErrorPageCalled += 1
     }
 
     func findInPage(with selection: String) {

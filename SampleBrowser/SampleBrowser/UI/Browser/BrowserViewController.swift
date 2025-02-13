@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import WebEngine
 
@@ -9,6 +10,7 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+    func showErrorPage(page: ErrorPageViewController)
 
     func onFindInPage(selected: String)
     func onFindInPage(currentResult: Int)
@@ -27,7 +29,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Init
 
-    init(engineProvider: EngineProvider,
+    init(engineProvider: EngineProvider = AppContainer.shared.resolve(),
          urlFormatter: URLFormatter = DefaultURLFormatter()) {
         self.engineSession = engineProvider.session
         self.engineView = engineProvider.view
@@ -151,10 +153,19 @@ class BrowserViewController: UIViewController,
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
         if let url = urlFormatter.getURL(entry: searchTerm.term) {
             // Search the entered URL
-            engineSession.load(url: url.absoluteString)
-        } else {
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
+                return
+            }
+        }
+
+        if let url = URL(string: searchTerm.urlWithSearchTerm) {
             // Search term with Search Engine Bing
-            engineSession.load(url: searchTerm.urlWithSearchTerm)
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
+            }
         }
     }
 
@@ -199,13 +210,26 @@ class BrowserViewController: UIViewController,
         // We currently do not handle favicons in SampleBrowser, so this is empty.
     }
 
+    func onErrorPageRequest(error: NSError) {
+        let errorPage = ErrorPageViewController()
+        let message = "Error \(String(error.code)) happened on domain \(error.domain): \(error.localizedDescription)"
+        errorPage.configure(errorMessage: message)
+
+        navigationDelegate?.showErrorPage(page: errorPage)
+    }
+
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
         guard let url = linkURL else { return nil }
 
         let previewProvider: UIContextMenuContentPreviewProvider = {
-            guard let previewEngineProvider = EngineProvider() else { return nil }
+            let previewEngineProvider: EngineProvider = AppContainer.shared.resolve()
             let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
-            previewVC.engineSession.load(url: url.absoluteString)
+
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                previewVC.engineSession.load(browserURL: browserURL)
+            }
+
             return previewVC
         }
 
@@ -217,7 +241,10 @@ class BrowserViewController: UIViewController,
                 image: nil,
                 identifier: UIAction.Identifier("linkContextMenu.openLink")
             ) { [weak self] _ in
-                self?.engineSession.load(url: url.absoluteString)
+                let context = BrowsingContext(type: .internalNavigation, url: url)
+                if let browserURL = BrowserURL(browsingContext: context) {
+                    self?.engineSession.load(browserURL: browserURL)
+                }
             })
 
             return UIMenu(title: url.absoluteString, children: actions)

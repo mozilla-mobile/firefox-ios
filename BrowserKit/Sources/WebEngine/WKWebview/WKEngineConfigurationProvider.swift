@@ -13,9 +13,21 @@ protocol WKEngineConfigurationProvider {
 struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     func createConfiguration() -> WKEngineConfiguration {
         let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        // TODO: FXIOS-11324 Configure KeyBlockPopups
+//        let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
+//        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
+        // TODO: FXIOS-11324 Configure isPrivate
+//        if isPrivate {
+//            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+//        } else {
+//            configuration.websiteDataStore = WKWebsiteDataStore.default()
+//        }
 
+        configuration.setURLSchemeHandler(WKInternalSchemeHandler(),
+                                          forURLScheme: WKInternalSchemeHandler.scheme)
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
 }

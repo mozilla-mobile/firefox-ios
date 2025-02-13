@@ -96,5 +96,7 @@ public protocol ThemeColourPalette {
     var borderToolbarDivider: UIColor { get }
 
     // MARK: - Shadow
+    var shadowSubtle: UIColor { get }
     var shadowDefault: UIColor { get }
+    var shadowStrong: UIColor { get }
 }

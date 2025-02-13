@@ -100,4 +100,27 @@ final class WKInternalURLTests: XCTestCase {
         let subject = WKInternalURL(url)
         XCTAssertNil(subject?.originalURLFromErrorPage)
     }
+
+    // MARK: About home URL
+
+    func testIsAboutHomeURLWhenBasicURLThenNotHomepage() {
+        let url = URL(string: "www.example.com")!
+
+        let subject = WKInternalURL(url)
+        XCTAssertNil(subject?.isAboutHomeURL)
+    }
+
+    func testIsAboutHomeURLWhenAboutLicensePageThenNotHomepage() {
+        let url = URL(string: "internal://local/about/license")!
+
+        let subject = WKInternalURL(url)!
+        XCTAssertFalse(subject.isAboutHomeURL)
+    }
+
+    func testIsAboutHomeURLWhenAboutHomeThenIsHomepage() {
+        let url = URL(string: "internal://local/about/home")!
+
+        let subject = WKInternalURL(url)!
+        XCTAssertTrue(subject.isAboutHomeURL)
+    }
 }

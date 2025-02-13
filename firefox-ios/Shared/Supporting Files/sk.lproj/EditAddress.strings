@@ -41,7 +41,7 @@
 "Addresses.EditAddress.AutofillAddressEircode.v129" = "Eircode";
 
 /* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
-"Addresses.EditAddress.AutofillAddressEmail.v129" = "E-mail";
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "E‑mail";
 
 /* Label for the emirate field, essential for addresses in the United Arab Emirates. Including emirate details ensures the autofill feature accurately represents user addresses. */
 "Addresses.EditAddress.AutofillAddressEmirate.v129" = "Emirát";

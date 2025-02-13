@@ -1,0 +1,54 @@
+name: L10n Focus iOS screenshots (one set of locales only)
+on:
+  workflow_call:
+    inputs:
+      locales:
+        required: true
+        type: string
+      branch:
+        required: false
+        type: string
+        default: "main"
+      derived-data:
+        required: true
+        type: string
+        default: ""
+
+jobs:
+  get-screenshots:
+    name: Generate screenshots
+    runs-on: macos-15
+    steps:
+      - name: Clone firefox-ios repo
+        uses: actions/checkout@v4
+        with:
+          repository: mozilla-mobile/firefox-ios
+          ref: ${{ inputs.branch }}
+      - name: Setup Xcode
+        run: |
+          sudo rm -rf /Applications/Xcode.app
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          xcodebuild -version
+      - name: Run setup scripts for Focus
+        run: |
+          ./checkout.sh
+      - name: Fetch derived data
+        id: download-derived-data
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.derived-data }}
+      - name: Extract derived data
+        run: |
+          ls -la *.tar.gz
+          gunzip l10n-screenshots-dd.tar.gz
+          tar -xvf l10n-screenshots-dd.tar
+      - name: Generate screenshots
+        continue-on-error: true
+        run: |
+          focus-ios/l10n-screenshots.sh --test-without-building ${{ inputs.locales }}
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          path: ./l10n-screenshots
+          retention-days: 90
+          name: Screenshots-${{ job.container.id }}

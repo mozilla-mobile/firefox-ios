@@ -140,8 +140,22 @@ class AddressesTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["AL"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2618643
+    func testAddNewAddressCountry() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        reachAddNewAddressScreen()
+        // Enter a valid date for Country and press save
+        selectCountry(country: "United Kingdom")
+        tapSave()
+        // The "Address saved" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The address is saved
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2618654
-    // Smoketest
     func testUpdateAllAddressFields() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -153,6 +167,87 @@ class AddressesTests: BaseTestCase {
         updateFieldsWithWithoutState(updateCountry: true, isPostalCode: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2618646
+    func testUpdateAddressFieldName() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "Name", newValue: "Test2", isInfoDisplayed: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618647
+    func testUpdateAddressFieldOrganization() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "Organization", newValue: "organization test2")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618648
+    func testUpdateAddressFieldStreet() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "Street Address", newValue: "test address2", isInfoDisplayed: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618649
+    func testUpdateAddressFieldCity() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "City", newValue: "test city2", isInfoDisplayed: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618650
+    func testUpdateAddressFieldZIP() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "ZIP Code", newValue: "345678", isInfoDisplayed: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618652
+    func testUpdateAddressFieldPhone() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "Phone", newValue: "34567890", isPhoneField: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618653
+    func testUpdateAddressFieldEmail() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        updateFieldAndValidate(field: "Email", newValue: "test2@mozilla.com")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618651
+    func testUpdateAddressFieldCountry() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        // Choose to update an address
+        if iPad() {
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
+        } else {
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
+        }
+        // Update field
+        tapEdit()
+        // Enter a valid date for Country and press save
+        selectCountry(country: "United Kingdom")
+        tapSave()
+        // The "Address saved" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The address is saved
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2618655
     // Smoketest
     func testDeleteAddress() throws {
@@ -162,6 +257,34 @@ class AddressesTests: BaseTestCase {
         reachAddNewAddressScreen()
         addNewAddress()
         tapSave()
+        reachEditAndRemoveAddress()
+        let addressInfo = ["Test2", "test address2", "city test2, AL, 100000"]
+        for i in addressInfo {
+            mozWaitForElementToNotExist(app.staticTexts[i])
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2618656
+    func testDeleteAllAddresses() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
+        app.buttons[addresses.addAddress].waitAndTap()
+        addNewAddress()
+        tapSave()
+        reachEditAndRemoveAddress()
+        reachEditAndRemoveAddress()
+        let addressInfo = ["Test2", "test address2", "city test2, AL, 100000"]
+        for i in addressInfo {
+            mozWaitForElementToNotExist(app.staticTexts[i])
+        }
+    }
+
+    private func reachEditAndRemoveAddress() {
         if iPad() {
             app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
         } else {
@@ -173,10 +296,6 @@ class AddressesTests: BaseTestCase {
         removeAddress()
         // The "Address Removed" toast message is displayed
         mozWaitForElementToExist(app.staticTexts[removedAddressTxt])
-        let addressInfo = ["Test2", "test address2", "city test2, AL, 100000"]
-        for i in addressInfo {
-            mozWaitForElementToNotExist(app.staticTexts[i])
-        }
     }
 
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
@@ -243,6 +362,71 @@ class AddressesTests: BaseTestCase {
         typeZIP(zip: "100000", updateText: true, isPostalCode: isPostalCode)
         typePhone(phone: "1111111", updateText: true)
         typeEmail(email: "test2@mozilla.com", updateText: true)
+    }
+
+    private func updateFieldAndValidate(field: String, newValue: String, isInfoDisplayed: Bool = false,
+                                        isPhoneField: Bool = false) {
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        // Choose to update an address
+        if iPad() {
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
+        } else {
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
+        }
+        // Update field
+        tapEdit()
+        app.staticTexts[field].waitAndTap()
+        if isPhoneField {
+            clearText(isPhoneNumber: true)
+        } else {
+            clearText()
+        }
+        app.typeText(newValue)
+        tapSave()
+        // The "Address saved" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The address is saved
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+        if isInfoDisplayed {
+            XCTAssertTrue(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is not displayed")
+        }
+        if iPad() {
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
+        } else {
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
+        }
+        // Update field
+        tapEdit()
+        app.staticTexts[field].waitAndTap()
+        if isPhoneField {
+            clearText(isPhoneNumber: true)
+        } else {
+            clearText()
+        }
+        tapSave()
+        // The "Address saved" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The address is saved
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+        XCTAssertFalse(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is displayed")
+        if iPad() {
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
+        } else {
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
+        }
+        tapEdit()
+        app.staticTexts[field].waitAndTap()
+        app.typeText(newValue)
+        tapSave()
+        // The "Address saved" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The address is saved
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+        if isInfoDisplayed {
+            XCTAssertTrue(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is not displayed")
+        }
     }
 
     private func typeName(name: String, updateText: Bool = false) {

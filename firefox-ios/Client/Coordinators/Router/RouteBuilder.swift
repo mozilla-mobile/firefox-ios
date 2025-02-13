@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import CoreSpotlight
+import Foundation
+import Glean
 import Shared
 
 final class RouteBuilder: FeatureFlaggable {
@@ -142,6 +143,8 @@ final class RouteBuilder: FeatureFlaggable {
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+            prefs?.setTimestamp(Date.now(), forKey: PrefsKeys.LastOpenedAsDefaultBrowser)
+            GleanMetrics.App.lastOpenedAsDefaultBrowser.set(Date())
             DefaultBrowserUtil.isBrowserDefault = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])

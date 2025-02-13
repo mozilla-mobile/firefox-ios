@@ -155,7 +155,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
         guard let selectedTab = tabManager.selectedTab else { return }
-        if !contentContainer.hasLegacyHomepage {
+        if !contentContainer.hasAnyHomepage {
             // Only scroll to top if we are not showing the home view controller
             selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
@@ -206,7 +206,7 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.Search
             .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()
-        searchTelemetry?.shouldSetUrlTypeSearch = true
+        searchTelemetry.shouldSetUrlTypeSearch = true
 
         let searchData = LegacyTabGroupData(searchTerm: text,
                                             searchUrl: searchURL.absoluteString,

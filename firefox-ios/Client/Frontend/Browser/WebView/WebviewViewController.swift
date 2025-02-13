@@ -10,7 +10,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     private var webView: WKWebView
     var contentType: ContentType = .webview
 
-    init(webView: WKWebView, isPrivate: Bool = false) {
+    init(webView: WKWebView) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,7 +35,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         ])
     }
 
-    func update(webView: WKWebView, isPrivate: Bool = false) {
+    func update(webView: WKWebView) {
         self.webView = webView
         setupWebView()
     }

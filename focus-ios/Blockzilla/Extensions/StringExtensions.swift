@@ -9,7 +9,7 @@ fileprivate extension Int {
     static let tMin = 1
     static let tMax = 26
     static let initialBias = 72
-    static let initialN: Int = 128 // 0x80
+    static let initialN = 128 // 0x80
 }
 
 fileprivate extension Character {
@@ -60,7 +60,7 @@ extension String {
 
     fileprivate func encode(_ input: String) -> String {
         var output = ""
-        var d: Int = 0
+        var d = 0
         var extendedChars = [Int]()
         for c in input.unicodeScalars {
             if Int(c.value) < Int.initialN {
@@ -80,8 +80,8 @@ extension String {
         var n = Int.initialN
         var delta = 0
         var bias = Int.initialBias
-        var h: Int = 0
-        var b: Int = 0
+        var h = 0
+        var b = 0
 
         if d > 0 {
             h = output.unicodeScalars.count - 1

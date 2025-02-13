@@ -151,7 +151,7 @@ class DomainCompletion: AutocompleteTextFieldCompletionSource {
     }
 
     private func completion(forDomain domain: String, withText text: String) -> String? {
-        let domainWithDotPrefix: String = ".www.\(domain)"
+        let domainWithDotPrefix = ".www.\(domain)"
         if let range = domainWithDotPrefix.range(of: ".\(text)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".

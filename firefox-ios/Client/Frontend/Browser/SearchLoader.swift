@@ -80,7 +80,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
-    var query: String = "" {
+    var query = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
             guard profile is BrowserProfile else {
@@ -207,7 +207,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
     }
 
     fileprivate func completionForDomain(_ domain: String) -> String? {
-        let domainWithDotPrefix: String = ".\(domain)"
+        let domainWithDotPrefix = ".\(domain)"
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".
