@@ -257,10 +257,10 @@ class DownloadToast: Toast {
             // Description label changes with progress and if this isn't clipped the height of the
             // toast changes continually while loading
             descriptionLabel.numberOfLines = 1
-            descriptionLabel.lineBreakMode = .byClipping
+            descriptionLabel.lineBreakMode = .byTruncatingTail
         } else {
             descriptionLabel.numberOfLines = 0
-            descriptionLabel.adjustsFontSizeToFitWidth = false
+            descriptionLabel.lineBreakMode = .byWordWrapping
         }
 
         setNeedsLayout()

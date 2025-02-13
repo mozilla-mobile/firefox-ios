@@ -41,13 +41,11 @@ class ButtonToast: Toast {
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .natural
     }
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .natural
     }
 
     private var roundedButton: UIButton = .build { button in
