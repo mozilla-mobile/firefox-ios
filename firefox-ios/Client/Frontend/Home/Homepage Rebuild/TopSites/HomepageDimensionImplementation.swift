@@ -71,20 +71,20 @@ struct HomepageDimensionCalculator {
 
         if isCompactLayout {
             return JumpBackInSectionLayoutConfiguration(
-                numberOfTabsWithRemoteTab: 1,
-                numberOfTabsWithoutRemoteTab: 2,
+                maxLocalTabsWhenSyncedTabExists: 1,
+                maxLocalTabsWhenNoSyncedTab: 2,
                 layoutType: .compact
             )
         } else if isMediumLayout {
             return JumpBackInSectionLayoutConfiguration(
-                numberOfTabsWithRemoteTab: 2,
-                numberOfTabsWithoutRemoteTab: 4,
+                maxLocalTabsWhenSyncedTabExists: 2,
+                maxLocalTabsWhenNoSyncedTab: 4,
                 layoutType: .medium
             )
         } else {
             return JumpBackInSectionLayoutConfiguration(
-                numberOfTabsWithRemoteTab: 4,
-                numberOfTabsWithoutRemoteTab: 6,
+                maxLocalTabsWhenSyncedTabExists: 4,
+                maxLocalTabsWhenNoSyncedTab: 6,
                 layoutType: .regular
             )
         }

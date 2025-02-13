@@ -36,10 +36,17 @@ struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
     }
 }
 
+/// Configuration for the "Jump Back In" section layout.
+/// Determines the maximum number of local tabs to display based on whether a synced (remote) tab is present.
 struct JumpBackInSectionLayoutConfiguration: Equatable, Hashable {
-    let numberOfTabsWithRemoteTab: Int
-    let numberOfTabsWithoutRemoteTab: Int
+    /// Maximum number of local tabs to display when a synced (remote) tab is present.
+    let maxLocalTabsWhenSyncedTabExists: Int
+
+    /// Maximum number of local tabs to display when no synced (remote) tab is present.
+    let maxLocalTabsWhenNoSyncedTab: Int
+
     let layoutType: LayoutType
+
     var hasSyncedTab: Bool?
 
     enum LayoutType: Equatable, Hashable {
@@ -48,7 +55,8 @@ struct JumpBackInSectionLayoutConfiguration: Equatable, Hashable {
         case regular
     }
 
+    /// Computes the maximum number of local tabs to display based on the presence of a synced tab.
     var getMaxNumberOfLocalTabsLayout: Int {
-        return hasSyncedTab ?? false ? numberOfTabsWithRemoteTab : numberOfTabsWithoutRemoteTab
+        return hasSyncedTab ?? false ? maxLocalTabsWhenSyncedTabExists : maxLocalTabsWhenNoSyncedTab
     }
 }
