@@ -25,8 +25,8 @@ class HomepageDimensionCalculatorTests: XCTestCase {
             and: false
         )
 
-        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 1)
-        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 2)
+        XCTAssertEqual(configuration.maxLocalTabsWhenSyncedTabExists, 1)
+        XCTAssertEqual(configuration.maxLocalTabsWhenNoSyncedTab, 2)
         XCTAssertEqual(configuration.layoutType, .compact)
     }
 
@@ -39,8 +39,8 @@ class HomepageDimensionCalculatorTests: XCTestCase {
             and: true
         )
 
-        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 2)
-        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 4)
+        XCTAssertEqual(configuration.maxLocalTabsWhenSyncedTabExists, 2)
+        XCTAssertEqual(configuration.maxLocalTabsWhenNoSyncedTab, 4)
         XCTAssertEqual(configuration.layoutType, .medium)
     }
 
@@ -53,8 +53,8 @@ class HomepageDimensionCalculatorTests: XCTestCase {
             and: false
         )
 
-        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 2)
-        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 4)
+        XCTAssertEqual(configuration.maxLocalTabsWhenSyncedTabExists, 2)
+        XCTAssertEqual(configuration.maxLocalTabsWhenNoSyncedTab, 4)
         XCTAssertEqual(configuration.layoutType, .medium)
     }
 
@@ -66,8 +66,8 @@ class HomepageDimensionCalculatorTests: XCTestCase {
             for: .pad,
             and: true
         )
-        XCTAssertEqual(configuration.numberOfTabsWithRemoteTab, 4)
-        XCTAssertEqual(configuration.numberOfTabsWithoutRemoteTab, 6)
+        XCTAssertEqual(configuration.maxLocalTabsWhenSyncedTabExists, 4)
+        XCTAssertEqual(configuration.maxLocalTabsWhenNoSyncedTab, 6)
         XCTAssertEqual(configuration.layoutType, .regular)
     }
 

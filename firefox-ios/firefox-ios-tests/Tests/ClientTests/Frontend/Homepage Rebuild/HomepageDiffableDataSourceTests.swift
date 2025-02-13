@@ -240,8 +240,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     private var mockSectionConfig: JumpBackInSectionLayoutConfiguration {
         return JumpBackInSectionLayoutConfiguration(
-            numberOfTabsWithRemoteTab: 1,
-            numberOfTabsWithoutRemoteTab: 2,
+            maxLocalTabsWhenSyncedTabExists: 1,
+            maxLocalTabsWhenNoSyncedTab: 2,
             layoutType: .compact,
             hasSyncedTab: false
         )
