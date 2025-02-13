@@ -204,7 +204,8 @@ extension BookmarksPanelViewModelTests {
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: BookmarksHandlerMock(),
-                                                bookmarkFolderGUID: guid)
+                                                bookmarkFolderGUID: guid,
+                                                mainQueue: MockDispatchQueue())
         trackForMemoryLeaks(viewModel)
         return viewModel
     }

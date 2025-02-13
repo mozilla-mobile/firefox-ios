@@ -26,16 +26,19 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     private var hasDesktopFolders = false
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
+    private var mainQueue: DispatchQueueInterface
     private var logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
+        self.mainQueue = mainQueue
         self.logger = logger
     }
 
@@ -121,25 +124,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
                 self.bookmarkFolder = mobileFolder
                 self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
-                // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
-                // subfolders
-                self.bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let bookmarkCount):
-                            if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
-                                self.hasDesktopFolders = true
-                                let desktopFolder = LocalDesktopFolder()
-                                self.bookmarkNodes.insert(desktopFolder, at: 0)
-                            } else {
-                                self.hasDesktopFolders = false
-                            }
-                        case .failure(let error):
-                            self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
-                        }
-                        completion()
-                    }
-                }
+                self.createDesktopBookmarksFolder(completion: completion)
             }
     }
 
@@ -179,5 +164,27 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     private func setErrorCase() {
         self.bookmarkFolder = nil
         self.bookmarkNodes = []
+    }
+
+    // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
+    // subfolders
+    private func createDesktopBookmarksFolder(completion: @escaping () -> Void) {
+        self.bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
+            switch result {
+            case .success(let bookmarkCount):
+                if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
+                    self.hasDesktopFolders = true
+                    let desktopFolder = LocalDesktopFolder()
+                    self.mainQueue.async {
+                        self.bookmarkNodes.insert(desktopFolder, at: 0)
+                    }
+                } else {
+                    self.hasDesktopFolders = false
+                }
+            case .failure(let error):
+                self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
+            }
+            completion()
+        }
     }
 }
