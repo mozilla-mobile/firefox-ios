@@ -291,16 +291,8 @@ final class AddressToolbarContainer: UIView,
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
 
-        let isPrivateMode = model?.isPrivateMode ?? false
-        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
-        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
-
-        progressBar.setGradientColors(
-            startColor: gradientStartColor,
-            middleColor: gradientMiddleColor,
-            endColor: gradientEndColor
-        )
+        applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false,
+                              theme: theme)
     }
 
     // MARK: - AddressToolbarDelegate
@@ -425,5 +417,23 @@ final class AddressToolbarContainer: UIView,
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
             store.dispatch(action)
         }
+    }
+
+    private func applyProgressBarTheme(isPrivateMode: Bool, theme: Theme) {
+        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
+        progressBar.setGradientColors(
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
+        )
+    }
+}
+
+extension AddressToolbarContainer: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
+        applyProgressBarTheme(isPrivateMode: isPrivate, theme: theme)
     }
 }

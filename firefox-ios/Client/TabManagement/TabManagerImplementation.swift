@@ -858,7 +858,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             isPrivate = tab.isPrivate
         }
-
         let action = PrivateModeAction(isPrivate: isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
