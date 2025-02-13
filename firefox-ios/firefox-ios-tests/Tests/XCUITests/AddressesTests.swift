@@ -284,6 +284,73 @@ class AddressesTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2548204
+    func testAutofillAddressesByTapingOrganizationField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 1)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549847
+    func testAutofillAddressesByTapingStateField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 4)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549849
+    func testAutofillAddressesByTapingCountryField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 6)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549850
+    func testAutofillAddressesByTapingEmailField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 7)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549852
+    func testAutofillAddressesByTapingPhoneField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 8)
+    }
+
+    private func addAddressAndReachAutofillForm(indexField: Int) {
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
+        // Using indexes to tap on text fields to comodate with iOS 16 OS
+        app.webViews.textFields.element(boundBy: indexField).waitAndTap()
+        // The option to open saved Addresses is available
+        let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
+        mozWaitForElementToExist(app.buttons[addressAutofillButton])
+        app.buttons[addressAutofillButton].waitAndTap()
+        // Choose the address added
+        app.otherElements.buttons.elementContainingText("Address").waitAndTap()
+        // All fields are correctly autofilled
+        validateAutofillAddressInfo()
+    }
+
+    private func validateAutofillAddressInfo() {
+        // Using indexes on text fields to comodate with iOS 16 OS
+        let addressInfo = ["Test", "organization test", "test address", "city test", "AL",
+                           "123456", "US", "test@mozilla.com", "01234567"]
+        for index in 0...addressInfo.count - 1 {
+            XCTAssertEqual(app.webViews.textFields.element(boundBy: index).value! as? String, addressInfo[index])
+        }
+    }
+
     private func reachEditAndRemoveAddress() {
         if iPad() {
             app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
