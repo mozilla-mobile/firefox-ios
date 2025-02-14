@@ -22,7 +22,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var hasOnlySecureContent = false
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
-    var isFindInteractionEnabled: Bool = false
+    var isFindInteractionEnabled = false
     var findInteraction: UIFindInteraction?
     var isInspectable = true
 
