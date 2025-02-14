@@ -755,6 +755,9 @@
 		8A13FA8B2AD82E6D007527AB /* ApplicationStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */; };
 		8A13FA8D2AD834FA007527AB /* BackgroundTabLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */; };
 		8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA8E2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift */; };
+		8A15AB712D5FDA33008BB03C /* AutoplayAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A15AB702D5FDA33008BB03C /* AutoplayAccessors.swift */; };
+		8A15AB732D5FDB24008BB03C /* AutoplaySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A15AB722D5FDB24008BB03C /* AutoplaySetting.swift */; };
+		8A15AB752D5FDB80008BB03C /* AutoplaySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A15AB742D5FDB80008BB03C /* AutoplaySettingsViewController.swift */; };
 		8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */; };
 		8A19ACAB2A32895E001C2147 /* BrowserNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */; };
 		8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */; };
@@ -7707,6 +7710,9 @@
 		8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStateProvider.swift; sourceTree = "<group>"; };
 		8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTabLoader.swift; sourceTree = "<group>"; };
 		8A13FA8E2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBackgroundTabLoaderTests.swift; sourceTree = "<group>"; };
+		8A15AB702D5FDA33008BB03C /* AutoplayAccessors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplayAccessors.swift; sourceTree = "<group>"; };
+		8A15AB722D5FDB24008BB03C /* AutoplaySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySetting.swift; sourceTree = "<group>"; };
+		8A15AB742D5FDB80008BB03C /* AutoplaySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingsViewController.swift; sourceTree = "<group>"; };
 		8A161410282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeHomepageSectionViewModel.swift; sourceTree = "<group>"; };
 		8A19ACAA2A32895E001C2147 /* BrowserNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationHandler.swift; sourceTree = "<group>"; };
 		8A19ACAD2A329058001C2147 /* PasswordManagerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSetting.swift; sourceTree = "<group>"; };
@@ -10773,6 +10779,7 @@
 			isa = PBXGroup;
 			children = (
 				8ADED55B2D6679B200345293 /* BrowsingSettingsViewController.swift */,
+				8A15AB742D5FDB80008BB03C /* AutoplaySettingsViewController.swift */,
 				216A0D772A40E83F008077BA /* ThemeSettings */,
 				8A3EF7ED2A2FCEC900796E3A /* Main */,
 				EBB895322193FFF400EB91A0 /* ContentBlockerSettingViewController.swift */,
@@ -10926,6 +10933,7 @@
 		392ED7D51D0AEEEE009D9B62 /* Accessors */ = {
 			isa = PBXGroup;
 			children = (
+				8A15AB702D5FDA33008BB03C /* AutoplayAccessors.swift */,
 				392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */,
 				392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */,
 			);
@@ -11982,6 +11990,7 @@
 			isa = PBXGroup;
 			children = (
 				8ADED55D2D667A7700345293 /* BrowsingSetting.swift */,
+				8A15AB722D5FDB24008BB03C /* AutoplaySetting.swift */,
 				8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */,
 				8A5D1CA72A30D6D3005AD35C /* HomeSetting.swift */,
 				8A5D1CA52A30D6BD005AD35C /* NewTabPageSetting.swift */,
@@ -16835,6 +16844,7 @@
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
+				8A15AB732D5FDB24008BB03C /* AutoplaySetting.swift in Sources */,
 				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
 				962F394A2672D57A006BDA2A /* BookmarkItemsHelper.swift in Sources */,
 				B2DFB7DF2B619DB80004CEA5 /* AddressListViewModel.swift in Sources */,
@@ -17258,6 +17268,7 @@
 				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
+				8A15AB752D5FDB80008BB03C /* AutoplaySettingsViewController.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,
 				8A1E93EA2A3CDC6100DD540A /* BaseCoordinator.swift in Sources */,
 				E1442FD6294782D9003680B0 /* UIView+Extension.swift in Sources */,
@@ -17413,6 +17424,7 @@
 				8A8158CB2C2C77B000281F72 /* MicrosurveyTelemetry.swift in Sources */,
 				8AE9381D2CD920310020E6CF /* TopSiteCell.swift in Sources */,
 				D5D052D92645ABF400759F85 /* ExperimentsSettingsView.swift in Sources */,
+				8A15AB712D5FDA33008BB03C /* AutoplayAccessors.swift in Sources */,
 				E134D5802B31FF3100C6B17B /* FakespotAdLinkButton.swift in Sources */,
 				8AE0BF4F2819B10E00F33EC4 /* TopSitesSettingsViewController.swift in Sources */,
 				ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */,
