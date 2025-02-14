@@ -32,6 +32,10 @@ protocol WKEngineWebView: UIView {
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
 
+    @available(iOS 16.0, *)
+    var isFindInteractionEnabled: Bool { get set }
+    @available(iOS 16.0, *)
+    var findInteraction: UIFindInteraction? { get }
     @available(iOS 16.4, *)
     var isInspectable: Bool { get set }
 
