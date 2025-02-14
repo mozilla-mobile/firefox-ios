@@ -247,7 +247,7 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
 }
 
-// MARK: - MockWKWebView
+// MARK: - MockTabWebView
 class MockTabWebView: TabWebView {
     var mockTitle: String?
 
