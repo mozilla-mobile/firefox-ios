@@ -1003,7 +1003,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
-            self?.webView?.addSnapshotOverlay()
             self?.downloadedTemporaryDocs.append(url)
         }
     }
@@ -1033,8 +1032,22 @@ extension Tab: UIGestureRecognizerDelegate {
     @objc
     func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
-        webView.snapshot?.alpha = 1
+        let subviews = webView.subviews
+        if sender.state == .began {
+//            let background = UIVisualEffectView(frame: webView.bounds)
+//            background.effect = UIBlurEffect(style: .systemThinMaterialDark)
+//            background.backgroundColor = .black.withAlphaComponent(0.2)
+//            subviews.first?.subviews[0].addSubview(background)
+            subviews.first?.subviews[0].removeFromSuperview()
+
+        }
+        // subviews.first?.subviews[0].alpha = 0
+
+//        webView.snapshot?.alpha = 1
         if sender.state == .ended {
+            UIView.animate(withDuration: 0.3, delay: 1.0) {
+                subviews.first?.alpha = 0.0
+            }
             webView.removeSnapshot()
         }
         if sender.state == .ended, sender.velocity(in: webView).x > 150 {
@@ -1339,21 +1352,21 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     var snapshot: UIView?
 
     func addSnapshotOverlay() {
-        if let snapshot {
-            scrollView.bringSubviewToFront(snapshot)
-        }
-        guard snapshot == nil else { return }
-        // Remove any existing snapshot
-        snapshot = snapshotView(afterScreenUpdates: false) // Capture current content
-        snapshot?.frame = bounds
-        guard let snapshot else { return }
-        scrollView.addSubview(snapshot)
-        snapshot.alpha = 1
+//        if let snapshot {
+//            scrollView.bringSubviewToFront(snapshot)
+//        }
+//        guard snapshot == nil else { return }
+//        // Remove any existing snapshot
+//        snapshot = snapshotView(afterScreenUpdates: false) // Capture current content
+//        snapshot?.frame = bounds
+//        guard let snapshot else { return }
+//        scrollView.addSubview(snapshot)
+//        snapshot.alpha = 1
     }
 
     func removeSnapshot() {
-        snapshot?.removeFromSuperview()
-        snapshot = nil
+//        snapshot?.removeFromSuperview()
+//        snapshot = nil
     }
 
     func removeDocumentLoadingView() {

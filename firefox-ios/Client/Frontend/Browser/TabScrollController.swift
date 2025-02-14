@@ -310,6 +310,13 @@ class TabScrollingController: NSObject,
         self.lastZoomedScale = 0
     }
 
+    func configureNewRefreshControl() {
+        tab?.webView?.addPullRefresh { [weak self] in
+            self?.reload()
+        }
+        applyTheme()
+    }
+
     // MARK: - Themeable
 
     func applyTheme() {
@@ -326,13 +333,6 @@ private extension TabScrollingController {
             scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
             scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
         }
-    }
-
-    private func configureNewRefreshControl() {
-        tab?.webView?.addPullRefresh { [weak self] in
-            self?.reload()
-        }
-        applyTheme()
     }
 
     @objc

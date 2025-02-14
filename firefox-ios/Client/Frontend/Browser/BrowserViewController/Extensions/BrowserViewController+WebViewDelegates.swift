@@ -474,6 +474,7 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+//        screenshotHelper?.takeScreenshot(tab)
         updateZoomPageBarVisibility(visible: false)
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
@@ -1038,6 +1039,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
                 store.dispatch(action)
             }
+            scrollController.configureNewRefreshControl()
             webView.removeDocumentLoadingView()
         }
         if let tab = tabManager[webView],
