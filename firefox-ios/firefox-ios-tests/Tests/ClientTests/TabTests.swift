@@ -11,13 +11,13 @@ import Shared
 class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
-    var mockWebView: MockWebView!
+    var mockTabWebView: MockTabWebView!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
-        mockWebView = MockWebView()
+        mockTabWebView = MockTabWebView()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
@@ -27,7 +27,7 @@ class TabTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         tabDelegate = nil
-        mockWebView = nil
+        mockTabWebView = nil
         mockProfile = nil
     }
 
@@ -54,7 +54,7 @@ class TabTests: XCTestCase {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         tab.webView = mockWebView
         mockWebView.simulateObserverSetup(target: tab)
-        mockWebView.mockTitle = nil
+        mockTabWebView.mockTitle = nil
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is nil")
     }
 
@@ -62,7 +62,7 @@ class TabTests: XCTestCase {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         tab.webView = mockWebView
         mockWebView.simulateObserverSetup(target: tab)
-        mockWebView.mockTitle = ""
+        mockTabWebView.mockTitle = ""
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is empty")
     }
 
@@ -70,7 +70,7 @@ class TabTests: XCTestCase {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         tab.webView = mockWebView
         mockWebView.simulateObserverSetup(target: tab)
-        mockWebView.mockTitle = "Test Page Title"
+        mockTabWebView.mockTitle = "Test Page Title"
         XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
@@ -248,7 +248,7 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
 }
 
 // MARK: - MockWKWebView
-class MockWebView: TabWebView {
+class MockTabWebView: TabWebView {
     var mockTitle: String?
 
     override var title: String? {
