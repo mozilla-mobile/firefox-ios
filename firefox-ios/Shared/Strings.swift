@@ -2486,6 +2486,11 @@ extension String {
                 tableName: "Settings",
                 value: "Block Audio and Video",
                 comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
+            public static let Footer = MZLocalizedString(
+                key: "Settings.Autoplay.Footer.v137",
+                tableName: "Settings",
+                value: "Autoplay settings will only apply to newly opened tabs. Changes cannot be applied to existing tabs unless the application is restarted.",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
         }
 
         public struct Toggle {

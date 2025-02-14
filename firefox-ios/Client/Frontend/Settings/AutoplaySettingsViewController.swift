@@ -67,6 +67,7 @@ class AutoplaySettingsViewController: SettingsTableViewController {
 
         let section = SettingSection(
             title: NSAttributedString(string: .Settings.Autoplay.Autoplay),
+            footerTitle: NSAttributedString(string: .Settings.Autoplay.Footer),
             children: [allowAudioAndVideo, blockAudio, blockAudioAndVideo])
 
         return [section]
