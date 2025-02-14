@@ -79,7 +79,7 @@ struct HomepageState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransitionCalled:
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
