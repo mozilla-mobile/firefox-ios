@@ -29,7 +29,6 @@ class TabTests: XCTestCase {
         tabDelegate = nil
         mockWebView = nil
         mockProfile = nil
-       // AppContainer.shared.reset()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
