@@ -126,7 +126,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         shouldShowBrowsingHistorySuggestions
     }
 
-    private var hasHistoryAndBookmarksSuggestions: Bool {
+    var hasHistoryAndBookmarksSuggestions: Bool {
         let dataCount = delegate?.searchData.count
         return dataCount != 0 &&
         hasBookmarksSuggestions &&
