@@ -1170,7 +1170,7 @@ class BrowserViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
+        dispatchViewAction(for: size)
         dismissVisibleMenus()
 
         var fakespotNeedsUpdate = false
@@ -1207,6 +1207,16 @@ class BrowserViewController: UIViewController,
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
+    }
+
+    private func dispatchViewAction(for size: CGSize) {
+        store.dispatch(
+            ViewLifecycleAction(
+                size: size,
+                windowUUID: windowUUID,
+                actionType: ViewLifecycleActionType.viewWillTransition
+            )
+        )
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

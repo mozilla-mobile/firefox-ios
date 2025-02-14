@@ -16,6 +16,7 @@ struct HomepageState: ScreenState, Equatable {
     let bookmarkState: BookmarksSectionState
     let pocketState: PocketState
     let wallpaperState: WallpaperState
+    let availableWidth: CGFloat?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -35,7 +36,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: homepageState.jumpBackInState,
             bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
-            wallpaperState: homepageState.wallpaperState
+            wallpaperState: homepageState.wallpaperState,
+            availableWidth: homepageState.availableWidth
         )
     }
 
@@ -48,7 +50,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
-            wallpaperState: WallpaperState(windowUUID: windowUUID)
+            wallpaperState: WallpaperState(windowUUID: windowUUID),
+            availableWidth: nil
         )
     }
 
@@ -60,7 +63,8 @@ struct HomepageState: ScreenState, Equatable {
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
-        wallpaperState: WallpaperState
+        wallpaperState: WallpaperState,
+        availableWidth: CGFloat? = nil
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -70,6 +74,7 @@ struct HomepageState: ScreenState, Equatable {
         self.bookmarkState = bookmarkState
         self.pocketState = pocketState
         self.wallpaperState = wallpaperState
+        self.availableWidth = availableWidth
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -79,7 +84,17 @@ struct HomepageState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransitionCalled:
+        case HomepageActionType.initialize, ViewLifecycleActionType.viewWillTransition:
+
+            var width: CGFloat?
+            if let homepageAction = action as? HomepageAction {
+                width = homepageAction.availableWidth
+            } else if let viewAction = action as? ViewLifecycleAction {
+                width = viewAction.size?.width
+            }
+
+            guard let width else { return defaultState(from: state) }
+
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
@@ -88,7 +103,8 @@ struct HomepageState: ScreenState, Equatable {
                 jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
                 bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
-                wallpaperState: WallpaperState.reducer(state.wallpaperState, action)
+                wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+                availableWidth: width
             )
         default:
             return defaultState(from: state, action: action)
@@ -122,7 +138,8 @@ struct HomepageState: ScreenState, Equatable {
             jumpBackInState: jumpBackInState,
             bookmarkState: bookmarkState,
             pocketState: pocketState,
-            wallpaperState: wallpaperState
+            wallpaperState: wallpaperState,
+            availableWidth: state.availableWidth
         )
     }
 

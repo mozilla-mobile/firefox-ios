@@ -6,9 +6,11 @@ import Common
 import Redux
 
 final class HomepageAction: Action {
-    var showiPadSetup: Bool?
+    let availableWidth: CGFloat?
+    let showiPadSetup: Bool?
 
-    init(showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+    init(availableWidth: CGFloat? = nil, showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.availableWidth = availableWidth
         self.showiPadSetup = showiPadSetup
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
