@@ -34,8 +34,9 @@ public protocol EngineSession {
 
     /// Show the web view's built-in find interaction.
     /// The find interactions close themselves.
+    /// - Parameter searchText: The optional text to search with in the find in page bar.
     @available(iOS 16.0, *)
-    func showFindInPage()
+    func showFindInPage(withSearchText searchText: String?)
 
     /// Navigates to the specified index in the history of this session. The current index of
     /// this session's history  will be updated but the items within it will be unchanged.
@@ -70,5 +71,10 @@ public protocol EngineSession {
 public extension EngineSession {
     func reload(bypassCache: Bool = false) {
         reload(bypassCache: bypassCache)
+    }
+
+    @available(iOS 16.0, *)
+    func showFindInPage(withSearchText searchText: String? = nil) {
+        showFindInPage(withSearchText: searchText)
     }
 }
