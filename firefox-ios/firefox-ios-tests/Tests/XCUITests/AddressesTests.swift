@@ -9,6 +9,20 @@ class AddressesTests: BaseTestCase {
     let savedAddressesTxt = "SAVED ADDRESSES"
     let removedAddressTxt = "Address Removed"
 
+    override func setUp() {
+        super.setUp()
+        if #available(iOS 16, *) {
+            navigator.nowAt(NewTabScreen)
+            waitForTabsButton()
+            navigator.goto(AddressesSettings)
+            // Making sure "Save and Fill Addresses" toggle is on
+            if (app.switches.element(boundBy: 1).value as? String) == "0" {
+                app.switches.element(boundBy: 1).waitAndTap()
+            }
+            navigator.goto(NewTabScreen)
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2618637
     // Smoketest
     func testAddNewAddressAllFieldsFilled() throws {
@@ -322,6 +336,30 @@ class AddressesTests: BaseTestCase {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
         addAddressAndReachAutofillForm(indexField: 8)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2546298
+    func testToggleAddressOnOff() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        let toggleLabel = "Save and Fill Addresses, Includes phone numbers and email addresses"
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(AddressesSettings)
+        // Switch the "Save and Fill Addresses" toggle OFF
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.switches[toggleLabel])
+        } else {
+            mozWaitForElementToExist(app.staticTexts["Save and Fill Addresses"])
+        }
+        app.switches.element(boundBy: 1).waitAndTap()
+        // The toggle successfully turns OFF
+        XCTAssertEqual(app.switches.element(boundBy: 1).value! as? String, "0")
+        // Switch the "Save and Fill Addresses" toggle ON
+        app.switches.element(boundBy: 1).waitAndTap()
+        // The toggle successfully turns ON
+        XCTAssertEqual(app.switches.element(boundBy: 1).value! as? String, "1")
     }
 
     private func addAddressAndReachAutofillForm(indexField: Int) {
