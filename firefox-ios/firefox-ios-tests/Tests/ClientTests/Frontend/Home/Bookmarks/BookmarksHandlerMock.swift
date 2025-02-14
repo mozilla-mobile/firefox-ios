@@ -23,6 +23,7 @@ final class BookmarksHandlerMock: BookmarksHandler {
 
     var getRecentBookmarksCallCount = 0
     var getRecentBookmarksCompletion: (([BookmarkItemData]) -> Void)?
+    var bookmarksInTreeValue = 0
 
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
         getRecentBookmarksCallCount += 1
@@ -67,6 +68,6 @@ final class BookmarksHandlerMock: BookmarksHandler {
     }
 
     func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
-        completion(.success(0))
+        completion(.success(bookmarksInTreeValue))
     }
 }
