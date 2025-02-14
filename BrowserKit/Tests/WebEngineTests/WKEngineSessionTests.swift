@@ -129,6 +129,20 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertNil(webViewProvider.webView.findInteraction)
     }
 
+    func testShowFindInPageGivenSearchTextThenPresentNavigatorCalled() {
+        let searchText = "SearchTerm"
+        let findInteraction = MockUIFindInteraction()
+        let subject = createSubject()
+        webViewProvider.webView.findInteraction = findInteraction
+
+        subject?.showFindInPage(withSearchText: searchText)
+
+        XCTAssertTrue(webViewProvider.webView.isFindInteractionEnabled)
+        XCTAssertNotNil(webViewProvider.webView.findInteraction)
+        XCTAssertEqual(findInteraction.presentFindNavigatorCalled, 1)
+        XCTAssertEqual(findInteraction.searchText, searchText)
+    }
+
     // MARK: Reload
 
     func testReloadThenCallsReloadFromOrigin() {
@@ -621,8 +635,8 @@ final class WKEngineSessionTests: XCTestCase {
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
         _ = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
     }
 
