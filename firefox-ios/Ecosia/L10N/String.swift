@@ -10,11 +10,11 @@ extension String {
     }
 
     public static func localized(_ string: String) -> String {
-        NSLocalizedString(string, tableName: "Ecosia", comment: "")
+        Bundle.ecosia.localizedString(forKey: string, value: "", table: "Ecosia")
     }
 
     public static func localizedPlural(_ key: Key, num: Int) -> String {
-        String(format: NSLocalizedString(key.rawValue, tableName: "Plurals", comment: ""), num)
+        String(format: Bundle.ecosia.localizedString(forKey: key.rawValue, value: "", table: "Plurals"), num)
     }
 
     public enum Key: String {
