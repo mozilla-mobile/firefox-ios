@@ -181,6 +181,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
+        configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
+            .getMediaTypesRequiringUserActionForPlayback(prefs)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -600,6 +602,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         // The default tab configurations also need to change.
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+
+        // TODO: Would need its own notification - not under blockPopUpDidChange()
+        self.configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
+            .getMediaTypesRequiringUserActionForPlayback(
+                profile.prefs
+            )
     }
 
     private func buildTabRestore(window: WindowData?) async {

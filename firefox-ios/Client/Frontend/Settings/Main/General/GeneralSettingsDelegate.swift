@@ -14,4 +14,5 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedToolbar()
     func pressedTabs()
     func pressedTheme()
+    func pressedAutoPlay()
 }

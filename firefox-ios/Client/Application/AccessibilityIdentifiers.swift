@@ -798,6 +798,12 @@ struct AccessibilityIdentifiers {
             static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
             static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
         }
+
+        struct Autoplay {
+            static let allowAudioAndVideo = "AllowAudioAndVideo"
+            static let blockAudio = "BlockAudio"
+            static let blockAudioAndVideo = "BlockAudioAndVideo"
+        }
     }
 
     struct ShareTo {

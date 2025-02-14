@@ -366,6 +366,12 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(ThemeSettingsController(windowUUID: windowUUID))
     }
 
+    func pressedAutoPlay() {
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        viewController.profile = profile
+        router.push(viewController)
+    }
+
     // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {
