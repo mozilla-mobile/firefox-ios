@@ -52,24 +52,24 @@ class TabTests: XCTestCase {
 
     func testTitle_WhenWebViewTitleIsNil_ShouldReturnNil() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        tab.webView = mockWebView
-        mockWebView.simulateObserverSetup(target: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.simulateObserverSetup(target: tab)
         mockTabWebView.mockTitle = nil
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is nil")
     }
 
     func testTitle_WhenWebViewTitleIsEmpty_ShouldReturnNil() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        tab.webView = mockWebView
-        mockWebView.simulateObserverSetup(target: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.simulateObserverSetup(target: tab)
         mockTabWebView.mockTitle = ""
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is empty")
     }
 
     func testTitle_WhenWebViewTitleIsValid_ShouldReturnTitle() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
-        tab.webView = mockWebView
-        mockWebView.simulateObserverSetup(target: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.simulateObserverSetup(target: tab)
         mockTabWebView.mockTitle = "Test Page Title"
         XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
@@ -216,19 +216,19 @@ class TabTests: XCTestCase {
     func testIsSameTypeAs_trueForTwoNormalTabs_bothInactive() {
         let lastMonthDate = Date().lastMonth
 
-        let normalInctiveTab1 = Tab(
+        let normalInactiveTab1 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
-        let normalInctiveTab2 = Tab(
+        let normalInactiveTab2 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        XCTAssertTrue(normalInctiveTab1.isSameTypeAs(normalInctiveTab2))
-        XCTAssertTrue(normalInctiveTab2.isSameTypeAs(normalInctiveTab1))
+        XCTAssertTrue(normalInactiveTab1.isSameTypeAs(normalInactiveTab2))
+        XCTAssertTrue(normalInactiveTab2.isSameTypeAs(normalInactiveTab1))
     }
 }
 
