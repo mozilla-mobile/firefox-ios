@@ -55,6 +55,9 @@ final class HomepageViewController: UIViewController,
         return view.frame.size.width
     }
 
+    /// Holds the number of tiles to be shown for top sites section
+    private var currentNumberOfTilesPerRow: Int = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
+
     // MARK: - Private constants
     private let overlayManager: OverlayModeManager
     private let logger: Logger
@@ -78,6 +81,8 @@ final class HomepageViewController: UIViewController,
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        currentNumberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
 
         setupNotifications(forObserver: self, observing: [
             UIApplication.didBecomeActiveNotification,
@@ -129,6 +134,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        recalculateTopSitesDisplay(with: size.width)
         wallpaperView.updateImageForOrientationChange()
         store.dispatch(
             HomepageAction(
@@ -615,6 +621,16 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: Dispatch Actions
+    private func recalculateTopSitesDisplay(with width: CGFloat) {
+        currentNumberOfTilesPerRow = numberOfTilesPerRow(for: width)
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillTransitionCalled
+            )
+        )
+    }
+
     private func toggleHomepageMode() {
         store.dispatch(
             HeaderAction(
