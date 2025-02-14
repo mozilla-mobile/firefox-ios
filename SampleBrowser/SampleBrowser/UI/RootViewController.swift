@@ -200,8 +200,8 @@ class RootViewController: UIViewController,
         updateAddressToolbar(url: URL(string: url))
     }
 
-    func onFindInPage(selected: String) {
-        showFindInPage()
+    func showFindInPage() {
+        browserVC.showFindInPage()
     }
 
     // MARK: - AddressToolbarDelegate
@@ -312,10 +312,6 @@ class RootViewController: UIViewController,
         errorPage.view.removeFromSuperview()
         errorPage.removeFromParent()
         self.errorPage = nil
-    }
-
-    func showFindInPage() {
-        browserVC.findInPage(with: "")
     }
 
     // MARK: - AddressToolbarContainerDelegate
