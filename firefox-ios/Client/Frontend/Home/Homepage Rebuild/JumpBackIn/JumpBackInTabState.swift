@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 struct JumpBackInTabConfiguration: Equatable, Hashable {
-    let tabUUID: String
+    let tab: Tab
     let titleText: String
     let descriptionText: String
     let siteURL: String

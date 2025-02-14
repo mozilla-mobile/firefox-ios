@@ -2183,10 +2183,10 @@ class BrowserViewController: UIViewController,
         case .contextMenu:
             guard let configuration = type.contextMenuConfiguration else {
                 logger.log(
-                        "configuration should not be nil when navigating for a context menu type",
-                        level: .warning,
-                        category: .coordinator
-                    )
+                    "configuration should not be nil when navigating for a context menu type",
+                    level: .warning,
+                    category: .coordinator
+                )
                 return
             }
             navigationHandler?.showContextMenu(for: configuration)
@@ -2223,8 +2223,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
-        case .tabTray:
-            navigationHandler?.showTabTray(selectedPanel: .tabs)
+        case .tabTray(let panelType):
+            navigationHandler?.showTabTray(selectedPanel: panelType)
         }
     }
 
