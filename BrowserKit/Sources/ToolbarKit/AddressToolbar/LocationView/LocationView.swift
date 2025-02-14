@@ -211,16 +211,25 @@ final class LocationView: UIView,
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing && lockIconImageName != nil
+        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
-        // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
-            updateURLTextFieldLeadingConstraint(constant: -dotWidth)
+            handleOverflowAdjustment()
         } else if shouldAdjustForNonEmpty {
             updateURLTextFieldLeadingConstraint()
         } else {
             updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
+        }
+    }
+
+    private func handleOverflowAdjustment() {
+        // Hide the leading "..." by moving them behind the lock icon.
+        updateURLTextFieldLeadingConstraint(constant: -dotWidth)
+        if lockIconImageName == nil {
+            // This is the case when we are in reader mode and the lock icon is not visible.
+            updateWidthForLockIcon(dotWidth)
+            iconContainerStackViewLeadingConstraint?.constant = 0
         }
     }
 
@@ -255,6 +264,8 @@ final class LocationView: UIView,
             lockIconButton.alpha = 0
             shouldShowLockIcon = false
         } else if isURLTextFieldEmpty {
+            shouldShowLockIcon = false
+        } else if doesURLTextFieldExceedViewWidth, lockIconImageName == nil {
             shouldShowLockIcon = false
         } else {
             shouldShowLockIcon = true
