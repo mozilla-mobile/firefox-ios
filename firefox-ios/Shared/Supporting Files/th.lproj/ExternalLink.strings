@@ -1,0 +1,9 @@
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "เปิดอีเมลในแอปพลิเคชันเมลเริ่มต้น?";
+
+/* The call to action button for a user to open an external link. */
+"ExternalLink.ExternalOpenMessage.v136" = "เปิด";
+
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "เปิด SMS ในแอปพลิเคชันภายนอก?";
+

@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "Læs mere";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Rapporter om nedbrud hjælper os med at diagnosticere og løse problemer med browseren.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Dette hjælper os med at diagnosticere og løse problemer med browseren.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

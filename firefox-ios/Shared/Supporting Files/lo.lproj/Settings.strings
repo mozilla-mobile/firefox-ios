@@ -13,6 +13,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "ບັນຊີ";
 
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ບັນຊີ";
 
