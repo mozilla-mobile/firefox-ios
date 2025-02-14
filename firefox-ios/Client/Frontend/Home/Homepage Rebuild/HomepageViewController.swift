@@ -116,6 +116,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                availableWidth: availableWidth,
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -133,7 +134,7 @@ final class HomepageViewController: UIViewController,
         store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
-                actionType: HomepageActionType.viewWillTransition
+                actionType: HomepageActionType.viewWillTransitionCalled
             )
         )
     }
@@ -232,7 +233,7 @@ final class HomepageViewController: UIViewController,
         wallpaperView.wallpaperState = state.wallpaperState
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth),
+            numberOfCellsPerRow: numberOfTilesPerRow(for: state.availableWidth ?? availableWidth),
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
@@ -574,7 +575,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // MARK: Tap Geasutre Recognizer
+    // MARK: Tap Gesture Recognizer
     private func addTapGestureRecognizerToDismissKeyboard() {
         // We want any interaction with the homepage to dismiss the keyboard, including taps
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
