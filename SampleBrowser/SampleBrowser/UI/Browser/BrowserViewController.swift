@@ -40,6 +40,10 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Life cycle
 
+    override func loadView() {
+        view = engineView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -67,17 +71,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupBrowserView(_ engineView: EngineView) {
-        guard engineView.superview == nil else { return }
-        engineView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(engineView)
-
-        NSLayoutConstraint.activate([
-            engineView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
-            engineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            engineView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            engineView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-
         engineView.render(session: engineSession)
     }
 

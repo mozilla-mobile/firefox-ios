@@ -161,9 +161,11 @@ class WKEngineSession: NSObject,
 
     @available(iOS 16.0, *)
     func showFindInPage(withSearchText searchText: String?) {
-        webView.isFindInteractionEnabled = true
-        webView.findInteraction?.searchText = searchText ?? ""
-        webView.findInteraction?.presentFindNavigator(showingReplace: false)
+        if let findInteraction = webView.findInteraction {
+            logger.log("Will show find in page", level: .debug, category: .webview)
+            findInteraction.searchText = searchText ?? ""
+            findInteraction.presentFindNavigator(showingReplace: false)
+        }
     }
 
     func goToHistory(index: Int) {
