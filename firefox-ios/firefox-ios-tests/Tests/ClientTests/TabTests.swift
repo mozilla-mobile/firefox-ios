@@ -11,11 +11,13 @@ import Shared
 class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
+    var mockWebView: MockWebView!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
+        mockWebView = MockWebView()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
@@ -25,6 +27,9 @@ class TabTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         tabDelegate = nil
+        mockWebView = nil
+        mockProfile = nil
+       // AppContainer.shared.reset()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
@@ -44,6 +49,30 @@ class TabTests: XCTestCase {
         tab.url = url
         let expectedDisplayTitle = String.LegacyAppMenu.AppMenuOpenHomePageTitleString
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
+    }
+
+    func testTitle_WhenWebViewTitleIsNil_ShouldReturnNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        tab.webView = mockWebView
+        mockWebView.simulateObserverSetup(target: tab)
+        mockWebView.mockTitle = nil
+        XCTAssertNil(tab.title, "Expected title to be nil when webView.title is nil")
+    }
+
+    func testTitle_WhenWebViewTitleIsEmpty_ShouldReturnNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        tab.webView = mockWebView
+        mockWebView.simulateObserverSetup(target: tab)
+        mockWebView.mockTitle = ""
+        XCTAssertNil(tab.title, "Expected title to be nil when webView.title is empty")
+    }
+
+    func testTitle_WhenWebViewTitleIsValid_ShouldReturnTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        tab.webView = mockWebView
+        mockWebView.simulateObserverSetup(target: tab)
+        mockWebView.mockTitle = "Test Page Title"
+        XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
     func testTabDoesntLeak() {
@@ -217,4 +246,26 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {}
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
+}
+
+// MARK: - MockWKWebView
+class MockWebView: TabWebView {
+    var mockTitle: String?
+
+    override var title: String? {
+        return mockTitle
+    }
+    init() {
+        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func simulateObserverSetup(target: NSObject) {
+        self.addObserver(target, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+        self.addObserver(target, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
+        self.addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
+    }
 }
