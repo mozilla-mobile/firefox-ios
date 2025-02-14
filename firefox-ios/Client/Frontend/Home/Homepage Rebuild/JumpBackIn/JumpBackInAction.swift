@@ -6,7 +6,7 @@ import Common
 import Redux
 
 final class JumpBackInAction: Action {
-    var tab: Tab?
+    let tab: Tab?
 
     init(
         tab: Tab? = nil,

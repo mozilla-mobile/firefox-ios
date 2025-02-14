@@ -16,11 +16,7 @@ class MockTabManager: TabManager {
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
-    var nextRecentlyAccessedNormalTabs = [Tab]()
-
-    var recentlyAccessedNormalTabs: [Tab] {
-        return nextRecentlyAccessedNormalTabs
-    }
+    var recentlyAccessedNormalTabs: [Tab]
 
     var tabs = [Tab]()
 
@@ -39,8 +35,12 @@ class MockTabManager: TabManager {
 
     var removeTabsByURLCalled = 0
 
-    init(windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID) {
+    init(
+        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
+        recentlyAccessedNormalTabs: [Tab] = [Tab]()
+    ) {
         self.windowUUID = windowUUID
+        self.recentlyAccessedNormalTabs = recentlyAccessedNormalTabs
     }
 
     subscript(index: Int) -> Tab? {
@@ -54,6 +54,7 @@ class MockTabManager: TabManager {
     func selectTab(_ tab: Tab?, previous: Tab?) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
+            selectedTab = tab
         }
 
         if let previous = previous {
