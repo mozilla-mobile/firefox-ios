@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
+@available(iOS 16.0, *)
 class MockWKEngineSession: WKEngineSession {
     let webviewProvider = MockWKWebViewProvider()
 

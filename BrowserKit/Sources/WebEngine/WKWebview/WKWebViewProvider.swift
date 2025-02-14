@@ -33,6 +33,10 @@ struct DefaultWKWebViewProvider: WKWebViewProvider {
         webView.allowsBackForwardNavigationGestures = true
         webView.allowsLinkPreview = true
 
+        if #available(iOS 16.0, *) {
+            webView.isFindInteractionEnabled = true
+        }
+
         // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
         if #available(iOS 16.4, *) {
             webView.isInspectable = true
