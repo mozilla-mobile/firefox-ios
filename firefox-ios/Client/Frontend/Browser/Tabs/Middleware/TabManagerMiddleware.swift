@@ -889,6 +889,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                     actionType: TabManagerMiddlewareActionType.fetchRecentTabs
                 )
             )
+        case JumpBackInActionType.tapOnCell:
+            guard let jumpBackInAction = action as? JumpBackInAction,
+                  let tab = jumpBackInAction.tab else { return }
+            tabManager(for: action.windowUUID).selectTab(tab)
         default:
             break
         }

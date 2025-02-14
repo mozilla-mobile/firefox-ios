@@ -432,11 +432,11 @@ final class HomepageViewController: UIViewController,
             syncedTabCell.configure(
                 configuration: config,
                 theme: currentTheme,
-                onTapShowAllAction: {
-                    // TODO: FXIOS-11229 - Handle actions
+                onTapShowAllAction: { [weak self] in
+                    self?.navigateToTabTray(with: .syncedTabs)
                 },
-                onOpenSyncedTabAction: { _ in
-                    // TODO: FXIOS-11229 - Handle actions
+                onOpenSyncedTabAction: { [weak self] url in
+                    self?.navigateToNewTab(with: url)
                 }
             )
             return syncedTabCell
@@ -535,7 +535,7 @@ final class HomepageViewController: UIViewController,
             sectionLabelCell.configure(
                 state: homepageState.jumpBackInState.sectionHeaderState,
                 moreButtonAction: { [weak self] _ in
-                    self?.navigateToTabTray()
+                    self?.navigateToTabTray(with: .tabs)
                 },
                 textColor: textColor,
                 theme: currentTheme
@@ -660,14 +660,21 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func navigateToTabTray() {
-        store.dispatch(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.tabTray),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
-            )
+    private func navigateToTabTray(with type: TabTrayPanelType) {
+        dispatchNavigationBrowserAction(
+            with: NavigationDestination(.tabTray(type)),
+            actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
         )
+    }
+
+    private func navigateToNewTab(with url: URL) {
+        let destination = NavigationDestination(
+            .newTab,
+            url: url,
+            isPrivate: false,
+            selectNewTab: true
+        )
+        self.dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
     }
 
     private func navigateToBookmarksPanel() {
@@ -709,6 +716,14 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .jumpBackIn(let config):
+            store.dispatch(
+                JumpBackInAction(
+                    tab: config.tab,
+                    windowUUID: self.windowUUID,
+                    actionType: JumpBackInActionType.tapOnCell
+                )
+            )
         case .bookmark(let config):
             let destination = NavigationDestination(
                 .link,

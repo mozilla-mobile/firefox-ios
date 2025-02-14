@@ -11,7 +11,7 @@ enum BrowserNavigationDestination: Equatable {
     case contextMenu
     case settings(Route.SettingsSection)
     case trackingProtectionSettings
-    case tabTray
+    case tabTray(TabTrayPanelType)
     case bookmarksPanel
 
     // Webpage views
