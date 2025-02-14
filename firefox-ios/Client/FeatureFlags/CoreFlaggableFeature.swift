@@ -37,7 +37,7 @@ struct CoreFlaggableFeature {
             return buildChannels.contains(.release)
         #elseif MOZ_CHANNEL_BETA
             return buildChannels.contains(.beta)
-        #elseif MOZ_CHANNEL_FENNEC
+        #elseif MOZ_CHANNEL_DEVELOPER
             return buildChannels.contains(.developer)
         #else
             return buildChannels.contains(.other)

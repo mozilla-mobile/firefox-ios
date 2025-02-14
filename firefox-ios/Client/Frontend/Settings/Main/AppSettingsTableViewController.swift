@@ -501,7 +501,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
 
-        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_DEVELOPER
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 
