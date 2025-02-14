@@ -133,25 +133,39 @@ open class DefaultSuggestedSites {
         ]
     ]
      */
-
+    private static let financialReportsURL = Ecosia.Environment.current.urlProvider.financialReports
+    private static let privacyURL = Ecosia.Environment.current.urlProvider.privacy
+    private static let treesURL = Ecosia.Environment.current.urlProvider.trees
     public static let sites = [
             SuggestedSite(
-                url: Ecosia.Environment.current.urlProvider.financialReports.absoluteString,
-                title: NSLocalizedString("Financial reports", tableName: "Ecosia", comment: ""),
+                url: financialReportsURL.absoluteString,
+                title: Bundle.ecosia.localizedString(forKey: "Financial reports",
+                                                     value: "",
+                                                     table: "Ecosia"),
                 trackingId: 901,
-                faviconResource: .bundleAsset(name: "financialReports", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+                faviconResource: .bundleAsset(
+                    name: "financialReports",
+                    forRemoteResource: financialReportsURL)
             ),
             SuggestedSite(
-                url: Ecosia.Environment.current.urlProvider.privacy.absoluteString,
-                title: NSLocalizedString("Privacy", tableName: "Ecosia", comment: ""),
+                url: privacyURL.absoluteString,
+                title: Bundle.ecosia.localizedString(forKey: "Privacy",
+                                                     value: "",
+                                                     table: "Ecosia"),
                 trackingId: 902,
-                faviconResource: .bundleAsset(name: "privacy", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+                faviconResource: .bundleAsset(
+                    name: "privacy",
+                    forRemoteResource: privacyURL)
             ),
             SuggestedSite(
-                url: Ecosia.Environment.current.urlProvider.trees.absoluteString,
-                title: NSLocalizedString("Trees update", tableName: "Ecosia", comment: ""),
+                url: treesURL.absoluteString,
+                title: Bundle.ecosia.localizedString(forKey: "Trees update",
+                                                     value: "",
+                                                     table: "Ecosia"),
                 trackingId: 903,
-                faviconResource: .bundleAsset(name: "treesUpdate", forRemoteResource: URL(string: "asset://defaultEcosiaFavicon")!)
+                faviconResource: .bundleAsset(
+                    name: "treesUpdate",
+                    forRemoteResource: treesURL)
             )
     ]
 

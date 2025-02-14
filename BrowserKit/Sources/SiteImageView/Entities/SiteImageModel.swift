@@ -55,6 +55,23 @@ public struct SiteImageModel {
             // Always use the full site URL as the cache key for hero images
             return siteURL.absoluteString
         case .favicon:
+
+            // Ecosia: Handle Ecosia edge use case:
+            // 1: Different favicon for specific blog paths
+            // 2: Different favicon for privacy path
+            // TODO: Refactor to read from Environment
+            // (We can't do that now because importing Ecosia creates a circular dependency)
+            if let host = siteURL.host, host.contains("ecosia") {
+                if host.contains("blog") {
+                    if siteURL.pathComponents.contains("tag") {
+                        return "treeUpdatesFaviconCacheKey"
+                    }
+                    return "financialReportsFaviconCacheKey"
+                } else if siteURL.pathComponents.contains("privacy") {
+                    return "privacyFaviconCacheKey"
+                }
+            }
+
             // Use the domain as the key to avoid caching and fetching unnecessary duplicates
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }
