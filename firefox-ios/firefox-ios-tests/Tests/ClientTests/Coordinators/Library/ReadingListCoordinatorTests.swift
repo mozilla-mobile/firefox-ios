@@ -21,10 +21,10 @@ final class ReadingListCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         router = nil
         parentCoordinator = nil
         navigationHandler = nil
+        super.tearDown()
     }
 
     func testOpenUrl() {

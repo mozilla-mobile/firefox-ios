@@ -19,9 +19,9 @@ class HomepageMessageCardViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         adaptor = nil
         messageManager = nil
+        super.tearDown()
     }
 
     func testNilMessage() {

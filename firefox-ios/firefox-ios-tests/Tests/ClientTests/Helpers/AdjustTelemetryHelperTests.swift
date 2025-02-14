@@ -19,10 +19,9 @@
 //    }
 //
 //    override func tearDown() {
-//        super.tearDown()
-//
 //        telemetryWrapper = nil
 //        gleanWrapper = nil
+//        super.tearDown()
 //    }
 //
 //    func testFailSetAttribution_WithAllNilData() {

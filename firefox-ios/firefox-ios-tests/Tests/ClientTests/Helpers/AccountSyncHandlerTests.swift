@@ -22,10 +22,10 @@ class AccountSyncHandlerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.syncManager = nil
         self.profile = nil
         self.queue = nil
+        super.tearDown()
     }
 
     func testTabDidGainFocus_doesntSyncWithoutAccount() {

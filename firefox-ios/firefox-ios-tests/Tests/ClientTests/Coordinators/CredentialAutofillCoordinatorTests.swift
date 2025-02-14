@@ -24,11 +24,11 @@
 //    }
 //
 //    override func tearDown() {
-//        super.tearDown()
 //        profile = nil
 //        router = nil
 //        parentCoordinator = nil
 //        DependencyHelperMock().reset()
+//        super.tearDown()
 //    }
 //
 //    func testShowPassCodeController() {

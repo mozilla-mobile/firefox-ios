@@ -23,8 +23,8 @@ class TabTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         tabDelegate = nil
+        super.tearDown()
     }
 
     func testShareURL_RemovingReaderModeComponents() {

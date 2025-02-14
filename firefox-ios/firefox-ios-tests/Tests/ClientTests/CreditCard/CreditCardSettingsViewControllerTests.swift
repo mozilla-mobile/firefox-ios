@@ -19,10 +19,10 @@ final class CreditCardSettingsViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         profile = nil
         viewModel = nil
+        super.tearDown()
     }
 
     func testInputViewFormValuesClearedOnDismiss() {

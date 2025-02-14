@@ -16,8 +16,8 @@ class ContileProviderTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         networking = nil
+        super.tearDown()
     }
 
     func testErrorResponse_failsWithError() {

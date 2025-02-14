@@ -43,8 +43,8 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
