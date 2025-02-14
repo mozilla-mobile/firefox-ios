@@ -55,6 +55,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         let label = createLabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.setContentHuggingPriority(.required, for: .vertical)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.font = FXFontStyles.Regular.title3.scaledFont()
         return label
@@ -64,6 +66,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         let label = createLabel()
         label.numberOfLines = 0
         label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontSizeToFitWidth = true
+        label.setContentHuggingPriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
 
@@ -237,18 +242,19 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     func applyTheme(theme: Theme) {
-        tintColor = theme.colors.textPrimary
-        titleLabel.textColor = theme.colors.textPrimary
-        subtitleLabel.textColor = theme.colors.textPrimary
-        tabsLabel.textColor = theme.colors.textPrimary
+        let colors = theme.colors
+        tintColor = colors.textPrimary
+        titleLabel.textColor = colors.textPrimary
+        subtitleLabel.textColor = colors.textPrimary
+        tabsLabel.textColor = colors.textPrimary
 
-        verticalBorder.backgroundColor = theme.colors.layer4
-        bottomBorder.backgroundColor = theme.colors.layer4
+        verticalBorder.backgroundColor = colors.layer4
+        bottomBorder.backgroundColor = colors.layer4
 
-        badgeOverlay?.badge.tintBackground(color: theme.colors.layer1)
-        disclosureIndicator.tintColor = theme.colors.iconSecondary
+        badgeOverlay?.badge.tintBackground(color: colors.layer1)
+        disclosureIndicator.tintColor = colors.iconSecondary
 
-        let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? theme.colors.iconAccentYellow : tintColor
+        let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? colors.iconAccentYellow : tintColor
         statusIcon.tintColor = iconTint
     }
 
