@@ -16,7 +16,6 @@ protocol NavigationDelegate: AnyObject {
 // Holds different type of browser views, communicating through protocols with them
 class BrowserViewController: UIViewController,
                              EngineSessionDelegate {
-
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession

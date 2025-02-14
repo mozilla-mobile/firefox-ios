@@ -15,7 +15,6 @@ class RootViewController: UIViewController,
                           SearchSuggestionDelegate,
                           SettingsDelegate,
                           Themeable {
-
     var currentWindowUUID: UUID?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
