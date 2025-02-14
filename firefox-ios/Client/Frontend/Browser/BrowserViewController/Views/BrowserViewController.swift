@@ -1206,7 +1206,7 @@ class BrowserViewController: UIViewController,
     private func dispatchViewAction(for size: CGSize) {
         store.dispatch(
             ViewLifecycleAction(
-                size: size,
+                viewConfiguration: ViewLifecycleConfiguration(size: size),
                 windowUUID: windowUUID,
                 actionType: ViewLifecycleActionType.viewWillTransition
             )

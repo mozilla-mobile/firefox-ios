@@ -116,7 +116,6 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
-                availableWidth: availableWidth,
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -131,12 +130,6 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
-        store.dispatch(
-            HomepageAction(
-                windowUUID: windowUUID,
-                actionType: HomepageActionType.viewWillTransitionCalled
-            )
-        )
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -231,9 +224,15 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
+
+        let bvcState = store.state.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: windowUUID
+        )
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfTilesPerRow(for: state.availableWidth ?? availableWidth),
+            numberOfCellsPerRow: numberOfTilesPerRow(for: bvcState?.viewConfiguration?.size.width ?? availableWidth),
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }

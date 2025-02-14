@@ -50,6 +50,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var frame: WKFrameInfo?
     var microsurveyState: MicrosurveyPromptState
     var navigationDestination: NavigationDestination?
+    var viewConfiguration: ViewLifecycleConfiguration?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -74,7 +75,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   buttonTapped: bvcState.buttonTapped,
                   frame: bvcState.frame,
                   microsurveyState: bvcState.microsurveyState,
-                  navigationDestination: bvcState.navigationDestination)
+                  navigationDestination: bvcState.navigationDestination,
+                  viewConfiguration: bvcState.viewConfiguration)
     }
 
     init(windowUUID: WindowUUID) {
@@ -90,7 +92,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             displayView: nil,
             buttonTapped: nil,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID),
-            navigationDestination: nil)
+            navigationDestination: nil,
+            viewConfiguration: nil)
     }
 
     init(
@@ -107,7 +110,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         buttonTapped: UIButton? = nil,
         frame: WKFrameInfo? = nil,
         microsurveyState: MicrosurveyPromptState,
-        navigationDestination: NavigationDestination? = nil
+        navigationDestination: NavigationDestination? = nil,
+        viewConfiguration: ViewLifecycleConfiguration? = nil
     ) {
         self.searchScreenState = searchScreenState
         self.showDataClearanceFlow = showDataClearanceFlow
@@ -123,6 +127,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.frame = frame
         self.microsurveyState = microsurveyState
         self.navigationDestination = navigationDestination
+        self.viewConfiguration = viewConfiguration
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -136,7 +141,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         } else if let action = action as? GeneralBrowserAction {
             return reduceStateForGeneralBrowserAction(action: action, state: state)
         } else if let action = action as? NavigationBrowserAction {
-                return reduceStateForNavigationBrowserAction(action: action, state: state)
+            return reduceStateForNavigationBrowserAction(action: action, state: state)
+        } else if let action = action as? ViewLifecycleAction {
+            return reduceStateForViewLifecycleAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -174,6 +181,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: action.navigationDestination
+            )
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    static func reduceStateForViewLifecycleAction(
+        action: ViewLifecycleAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ViewLifecycleActionType.viewWillTransition:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: state.navigationDestination,
+                viewConfiguration: action.viewConfiguration
             )
         default:
             return defaultState(from: state, action: action)

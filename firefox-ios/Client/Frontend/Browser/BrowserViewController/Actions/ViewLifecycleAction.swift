@@ -7,15 +7,12 @@ import Redux
 
 /// Actions that are related to view updates (i.e. orientation change)
 class ViewLifecycleAction: Action {
-    let size: CGSize?
-    let traitCollection: UITraitCollection?
+    let viewConfiguration: ViewLifecycleConfiguration?
 
-    init(size: CGSize? = nil,
-         traitCollection: UITraitCollection? = nil,
+    init(viewConfiguration: ViewLifecycleConfiguration? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.size = size
-        self.traitCollection = traitCollection
+        self.viewConfiguration = viewConfiguration
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }

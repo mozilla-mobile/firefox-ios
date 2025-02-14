@@ -6,11 +6,9 @@ import Common
 import Redux
 
 final class HomepageAction: Action {
-    let availableWidth: CGFloat?
     let showiPadSetup: Bool?
 
-    init(availableWidth: CGFloat? = nil, showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
-        self.availableWidth = availableWidth
+    init(showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
         self.showiPadSetup = showiPadSetup
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -19,5 +17,4 @@ final class HomepageAction: Action {
 enum HomepageActionType: ActionType {
     case initialize
     case traitCollectionDidChange
-    case viewWillTransitionCalled
 }
