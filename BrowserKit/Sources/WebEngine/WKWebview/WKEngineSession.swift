@@ -19,14 +19,6 @@ class WKEngineSession: NSObject,
                        AdsTelemetryScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate?
-    weak var findInPageDelegate: FindInPageHelperDelegate? {
-        didSet {
-            let script = contentScriptManager.scripts[FindInPageContentScript.name()]
-            guard let findInPage = script as? FindInPageContentScript else { return }
-            findInPage.delegate = findInPageDelegate
-        }
-    }
-
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
@@ -167,13 +159,10 @@ class WKEngineSession: NSObject,
         webView.engineScrollView?.setContentOffset(CGPoint.zero, animated: true)
     }
 
-    func findInPage(text: String, function: FindInPageFunction) {
-        let sanitizedInput = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(sanitizedInput)\")")
-    }
-
-    func findInPageDone() {
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
+    @available(iOS 16.0, *)
+    func showFindInPage() {
+        webView.isFindInteractionEnabled = true
+        webView.findInteraction?.presentFindNavigator(showingReplace: false)
     }
 
     func goToHistory(index: Int) {
@@ -375,9 +364,6 @@ class WKEngineSession: NSObject,
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(FindInPageContentScript(),
-                                              name: FindInPageContentScript.name(),
-                                              forSession: self)
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)

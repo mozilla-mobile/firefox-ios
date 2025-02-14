@@ -6,13 +6,13 @@ import XCTest
 @testable import WebEngine
 import WebKit
 
+@available(iOS 16.0, *)
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
     private var webViewProvider: MockWKWebViewProvider!
     private var contentScriptManager: MockWKContentScriptManager!
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
-    private var findInPageDelegate: MockFindInPageHelperDelegate!
     private var metadataFetcher: MockMetadataFetcherHelper!
 
     override func setUp() {
@@ -22,7 +22,6 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = MockWKContentScriptManager()
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
-        findInPageDelegate = MockFindInPageHelperDelegate()
         metadataFetcher = MockMetadataFetcherHelper()
     }
 
@@ -33,7 +32,6 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = nil
         userScriptManager = nil
         engineSessionDelegate = nil
-        findInPageDelegate = nil
         metadataFetcher = nil
     }
 
@@ -122,72 +120,13 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Find in page
 
-    func testFindInPageTextGivenFindAllThenJavascriptCalled() {
+    func testShowFindInPageThenPresentNavigatorCalled() {
         let subject = createSubject()
 
-        subject?.findInPage(text: "Banana", function: .find)
+        subject?.showFindInPage()
 
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"Banana\")")
-    }
-
-    func testFindInPageTextGivenFindNextThenJavascriptCalled() {
-        let subject = createSubject()
-
-        subject?.findInPage(text: "Banana", function: .findNext)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findNext(\"Banana\")")
-    }
-
-    func testFindInPageTextGivenFindPreviousThenJavascriptCalled() {
-        let subject = createSubject()
-
-        subject?.findInPage(text: "Banana", function: .findPrevious)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findPrevious(\"Banana\")")
-    }
-
-    func testFindInPageTextGivenMaliciousAlertCodeThenIsSanitized() {
-        let subject = createSubject()
-        let maliciousTextWithAlert = "'; alert('Malicious code injected!'); '"
-        subject?.findInPage(text: maliciousTextWithAlert, function: .find)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        let result = "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")"
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, result)
-    }
-
-    func testFindInPageTextGivenMaliciousBrokenJsStringCodeThenIsSanitized() {
-        let subject = createSubject()
-        let maliciousText = "; maliciousFunction(); "
-        subject?.findInPage(text: maliciousText, function: .find)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"; maliciousFunction(); \")")
-    }
-
-    func testFindInPageDoneThenJavascriptCalled() {
-        let subject = createSubject()
-
-        subject?.findInPageDone()
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findDone()")
-    }
-
-    func testFindInPageDelegateIsSetProperly() {
-        let subject = createSubject()
-
-        subject?.findInPageDelegate = findInPageDelegate
-        guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else {
-            XCTFail("Failed to cast script to FindInPageContentScript in testFindInPageDelegateIsSetProperly")
-            return
-        }
-        script.userContentController(didReceiveMessage: ["currentResult": 10])
-
-        XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
+        XCTAssertTrue(webViewProvider.webView.isFindInteractionEnabled)
+        XCTAssertNil(webViewProvider.webView.findInteraction)
     }
 
     // MARK: Reload
@@ -684,8 +623,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], FindInPageContentScript.name())
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], AdsTelemetryContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
