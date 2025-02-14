@@ -19,6 +19,9 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Event to indicate the loading progress has been updated.
     func onProgress(progress: Double)
 
+    /// Event to indicate we should hide the progress bar since we don't want to animate it for example on localhost
+    func onHideProgressBar()
+
     /// Event to indicate there has been a navigation change.
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
 

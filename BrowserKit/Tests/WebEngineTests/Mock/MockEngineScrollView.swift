@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 @testable import WebEngine
 
 class MockEngineScrollView: WKScrollView {
+    var refreshControl: UIRefreshControl?
     var setContentOffsetCalled = 0
     var savedContentOffset: CGPoint?
 

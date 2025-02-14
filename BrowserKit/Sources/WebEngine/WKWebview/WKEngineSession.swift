@@ -278,18 +278,25 @@ class WKEngineSession: NSObject,
         // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
+            guard let canGoBack = change?[.newKey] as? Bool else { break }
+            delegate?.onNavigationStateChange(canGoBack: canGoBack,
                                               canGoForward: webView.canGoForward)
         case .canGoForward:
+            guard let canGoForward = change?[.newKey] as? Bool else { break }
             delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
-                                              canGoForward: webView.canGoForward)
+                                              canGoForward: canGoForward)
         case .contentSize:
             // TODO: FXIOS-8086 - Handle view port in WebEngine
             break
         case .estimatedProgress:
-            delegate?.onProgress(progress: webView.estimatedProgress)
+            if let url = webView.url, !WKInternalURL.isValid(url: url) {
+                delegate?.onProgress(progress: webView.estimatedProgress)
+            } else {
+                delegate?.onHideProgressBar()
+            }
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
+            setupLoadingSpinnerFor(webView, isLoading: loading)
             delegate?.onLoadingStateChange(loading: loading)
         case .title:
             guard let title = webView.title else { break }
@@ -302,24 +309,39 @@ class WKEngineSession: NSObject,
     }
 
     private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        sessionData.hasOnlySecureContent = value
         delegate?.onHasOnlySecureContentChanged(secure: value)
     }
 
     private func handleTitleChange(title: String) {
         // Ensure that the title actually changed to prevent repeated calls to onTitleChange
-        if !title.isEmpty {
+        if !title.isEmpty, title != sessionData.title {
             sessionData.title = title
             delegate?.onTitleChange(title: title)
         }
+    }
 
-        // TODO: FXIOS-8273 - Add telemetry integration in WebEngine and first telemetry call
-        // TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+    private func setupLoadingSpinnerFor(_ webView: WKEngineWebView, isLoading: Bool) {
+        if isLoading {
+            webView.engineScrollView?.refreshControl?.beginRefreshing()
+        } else {
+            webView.engineScrollView?.refreshControl?.endRefreshing()
+        }
     }
 
     private func handleURLChange() {
         // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
         if sessionData.url?.absoluteString == EngineConstants.aboutBlank
             && webView.url == nil { return }
+
+        // Ensure we do have a URL from that observer
+        guard let url = webView.url else { return }
+
+        // Security safety check (Bugzilla #1933079)
+        if let internalURL = WKInternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+            webView.load(URLRequest(url: URL(string: EngineConstants.aboutBlank)!))
+            return
+        }
 
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, do nothing and wait for

@@ -97,7 +97,7 @@ final class WKInternalURL: InternalURL {
         return nil
     }
 
-    private var isErrorPage: Bool {
+    var isErrorPage: Bool {
         return WKInternalURL.Path.errorpage.matches(url.path)
     }
 
