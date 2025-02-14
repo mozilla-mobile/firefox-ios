@@ -7,6 +7,9 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Body.v135" = "탐색하는 동안 사이트를 저장하세요. 또한 다른 동기화된 기기에서 북마크를 가져옵니다.";
 
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "탐색하는 동안 사이트를 저장하세요. 다른 동기화된 기기에서 북마크를 가져오려면 로그인하세요.";
+
 /* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
 "Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Sync에 로그인";
 

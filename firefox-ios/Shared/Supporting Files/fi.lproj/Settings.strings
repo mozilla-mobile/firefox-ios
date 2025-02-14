@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "Lue lisää";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Kaatumisilmoitusten avulla voimme diagnosoida ja korjata selaimen ongelmia.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Tämä auttaa meitä diagnosoimaan ja korjaamaan selaimen ongelmia.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

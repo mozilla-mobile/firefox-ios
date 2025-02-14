@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "Saznaj više";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Izvještaji o prekidima programa nam omogućuju dijagnosticirati i popraviti probleme s preglednikom.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Ovo nam pomaže dijagnosticirati i popraviti probleme s preglednikom.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

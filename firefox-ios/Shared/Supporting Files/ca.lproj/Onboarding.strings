@@ -134,7 +134,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Envia automàticament informes de fallada";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Les dades sobre el vostre dispositiu, la configuració del maquinari i sobre com feu servir el %1$@ ajuden a millorar les funcions, el rendiment i l’estabilitat per a tots els usuaris. %2$@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Les dades sobre el vostre dispositiu, la configuració del maquinari i sobre com feu servir el %1$@ ajuden a millorar les funcions, el rendiment i l’estabilitat per a tothom. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Envia dades tècniques i d’interacció a %@";

@@ -1,0 +1,9 @@
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "Բացե՞լ էլփոստը կանխադրված փոստային հավելվածում:";
+
+/* The call to action button for a user to open an external link. */
+"ExternalLink.ExternalOpenMessage.v136" = "Բացել";
+
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "Բացե՞լ sms-ը արտաքին հավելվածում:";
+

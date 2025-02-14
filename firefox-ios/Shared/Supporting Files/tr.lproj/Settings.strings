@@ -74,6 +74,9 @@
 "Settings.CrashReports.Link.v136" = "Daha fazla bilgi alın";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "Çökme raporları tarayıcıyla ilgili sorunları teşhis etmemize ve düzeltmemize olanak tanır.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Bu, tarayıcıyla ilgili sorunları teşhis edip düzeltmemize yardımcı olur.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
