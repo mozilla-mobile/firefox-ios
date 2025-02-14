@@ -55,6 +55,14 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         let nimbusSetting = getNimbusOrDebugSetting(with: feature)
         let userSetting = feature.isUserEnabled(using: nimbusFlags)
 
+        // Ecosia: Turn off specific feature flags
+        switch featureID {
+        case .splashScreen, .feltPrivacySimplifiedUI, .microsurvey:
+            return false
+        default:
+            break
+        }
+
         switch channelsToCheck {
         case .buildOnly:
             return nimbusSetting

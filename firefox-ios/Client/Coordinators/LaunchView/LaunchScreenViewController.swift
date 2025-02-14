@@ -17,11 +17,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
     private var shouldTriggerSplashScreenExperiment: Bool {
-        /* Ecosia: Hide experiment
         return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
         && !viewModel.getSplashScreenExperimentHasShown()
-         */
-        return false
     }
 
     init(windowUUID: WindowUUID,
