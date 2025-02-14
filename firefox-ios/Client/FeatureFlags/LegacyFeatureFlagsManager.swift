@@ -69,7 +69,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// Allows us to override nimbus feature flags for a specific build using the debug menu
     private func getNimbusOrDebugSetting(with feature: NimbusFlaggableFeature) -> Bool {
-        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         return feature.isDebugEnabled(using: nimbusFlags)
         #else
         return feature.isNimbusEnabled(using: nimbusFlags)
@@ -108,7 +108,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         guard let profile else { return }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         if isDebug {
             feature.setDebugPreference(to: desiredState)
         } else {
