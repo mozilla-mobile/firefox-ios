@@ -270,7 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private func fixSimulatorDevBuild(_ application: UIApplication) {
         // Corrects an issue for development when running Fennec target in
         // the simulator after having run unit tests locally.
-        #if targetEnvironment(simulator) && MOZ_CHANNEL_DEVELOPER
+        #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         let key = "_FennecLaunchedUnitTestDelegate"
         guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool, flagSet else { return }
         // Private API. This code is not present in release builds.

@@ -33,11 +33,11 @@ struct CoreFlaggableFeature {
 
     /// Returns whether or not the feature is active for the build.
     public func isActiveForBuild() -> Bool {
-        #if MOZ_CHANNEL_RELEASE
+        #if MOZ_CHANNEL_release
             return buildChannels.contains(.release)
-        #elseif MOZ_CHANNEL_BETA
+        #elseif MOZ_CHANNEL_beta
             return buildChannels.contains(.beta)
-        #elseif MOZ_CHANNEL_DEVELOPER
+        #elseif MOZ_CHANNEL_developer
             return buildChannels.contains(.developer)
         #else
             return buildChannels.contains(.other)
