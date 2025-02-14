@@ -603,7 +603,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
 
-        // TODO: Would need its own notification - not under blockPopUpDidChange()
+        // TODO: Laurie - Would need its own notification - not under blockPopUpDidChange()
         self.configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
             .getMediaTypesRequiringUserActionForPlayback(
                 profile.prefs

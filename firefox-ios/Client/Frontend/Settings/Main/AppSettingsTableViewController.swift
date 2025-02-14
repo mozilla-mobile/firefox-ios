@@ -315,7 +315,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
-            AutoplaySetting(settings: self), // TODO: Coordinator
+            AutoplaySetting(settings: self, settingsDelegate: parentCoordinator),
         ]
 
         if isSearchBarLocationFeatureEnabled, let profile {

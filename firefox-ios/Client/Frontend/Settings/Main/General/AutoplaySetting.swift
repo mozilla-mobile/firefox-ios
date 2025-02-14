@@ -13,6 +13,7 @@ class AutoplaySetting: Setting {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
+    // TODO: Laurie - a11y identifier
     override var accessibilityIdentifier: String? { return "AutoplaySettings" }
 
     override var status: NSAttributedString? {
@@ -22,8 +23,9 @@ class AutoplaySetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController, settingsDelegate: GeneralSettingsDelegate?) {
         self.prefs = settings.profile?.prefs
+        self.settingsDelegate = settingsDelegate
         let color = settings.themeManager.getCurrentTheme(for: settings.windowUUID).colors.textPrimary
         let attributes = [NSAttributedString.Key.foregroundColor: color]
         super.init(title: NSAttributedString(string: .Settings.Autoplay.Autoplay, attributes: attributes))
