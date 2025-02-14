@@ -302,7 +302,8 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     // MARK: - Toolbar Button Actions
     @objc
     func topLeftButtonAction() {
-        guard let navController = children.first as? UINavigationController, getCurrentPanelState() != .bookmarks(state: .transitioning) else { return }
+        guard let navController = children.first as? UINavigationController,
+                                  getCurrentPanelState() != .bookmarks(state: .transitioning) else { return }
 
         navController.popViewController(animated: true)
         let panel = getCurrentPanel()
