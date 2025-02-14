@@ -436,12 +436,7 @@ class BaseTestCase: XCTestCase {
         } else {
             app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
         }
-        if #available(iOS 17, *) {
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
-        } else {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
-        }
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
