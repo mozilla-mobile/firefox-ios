@@ -48,32 +48,6 @@ final class SearchViewModelTests: XCTestCase {
         profile = nil
     }
 
-    func testHasHistoryAndBookmarksSuggestionsWhenNoDataIsFalse() {
-        let subject = createSubject()
-        let data = ArrayCursor<Site>(data: [
-            Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
-            Site.createBasicSite(url: "https://example.com", title: "Test2"),
-            Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3")
-        ])
-        subject.loader(dataLoaded: data)
-        searchEnginesManager.shouldShowBookmarksSuggestions = false
-        searchEnginesManager.shouldShowBrowsingHistorySuggestions = false
-        XCTAssertFalse(subject.hasHistoryAndBookmarksSuggestions)
-    }
-
-    func testHasHistoryAndBookmarksSuggestionsWhenDataExistsAndConditionsMetIsTrue() {
-        let subject = createSubject()
-        let data = ArrayCursor<Site>(data: [
-            Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1", isBookmarked: true),
-            Site.createBasicSite(url: "https://example.com", title: "Test2", isBookmarked: true),
-            Site.createBasicSite(url: "https://example.com?a=b&c=d", title: "Test3", isBookmarked: false)
-        ])
-        subject.loader(dataLoaded: data)
-        searchEnginesManager.shouldShowBookmarksSuggestions = true
-        searchEnginesManager.shouldShowBrowsingHistorySuggestions = true
-        XCTAssertTrue(subject.hasHistoryAndBookmarksSuggestions)
-    }
-
     func testHasFirefoxSuggestionsWhenAllConditionsAreFalse() {
         let subject = createSubject()
         searchEnginesManager.shouldShowBookmarksSuggestions = false
