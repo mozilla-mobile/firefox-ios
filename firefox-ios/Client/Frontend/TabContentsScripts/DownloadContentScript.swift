@@ -71,20 +71,12 @@ class DownloadContentScript: TabContentScript {
             DownloadContentScript.blobUrlForDownload = nil
         }
 
-        guard let requestedUrl = DownloadContentScript.blobUrlForDownload else {
-            return
-        }
-
-        guard requestedUrl == url else {
-            return
-        }
-
         // Note: url.lastPathComponent fails on blob: URLs (shrug).
-        var filename = url.absoluteString.components(separatedBy: "/").last ?? "data"
+
+        var filename = dictionary["fileName"] as? String ?? url.absoluteString.components(separatedBy: "/").last ?? "data"
         if filename.isEmpty {
             filename = "data"
         }
-
         if !filename.contains(".") {
             if let fileExtension = MIMEType.fileExtensionFromMIMEType(mimeType) {
                 filename += ".\(fileExtension)"
