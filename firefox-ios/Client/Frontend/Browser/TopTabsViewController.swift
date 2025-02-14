@@ -147,7 +147,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     }
 
     deinit {
-        tabManager.removeDelegate(self.topTabDisplayManager)
+        tabManager.removeDelegate(self.topTabDisplayManager, completion: nil)
     }
 
     override func viewDidLoad() {
