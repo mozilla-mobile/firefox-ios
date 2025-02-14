@@ -59,7 +59,7 @@ func checkForPRDescription() {
     }
 }
 
-// Detect and warn about some changes related to Webview management to ensure we port changes to the WebEngine project
+// Detect and warn about some changes related to WebView management to ensure we port changes to the WebEngine project
 func checkForWebEngineFileChange() {
     let webEngineFiles = ["Tab.swift", "BrowserViewController+WebViewDelegates.swift"]
     let modifiedFiles = danger.git.modifiedFiles
