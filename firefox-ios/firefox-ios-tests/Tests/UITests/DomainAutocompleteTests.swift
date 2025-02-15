@@ -113,10 +113,10 @@ class DomainAutocompleteTests: KIFTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         BrowserUtils.resetToAboutHomeKIF(tester())
         tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
+        super.tearDown()
     }
 }

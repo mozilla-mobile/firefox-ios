@@ -28,11 +28,10 @@ class SearchEnginesManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile = nil
         mockSearchEngineProvider = nil
         searchEnginesManager = nil
+        super.tearDown()
     }
 
     func testIncludesExpectedEngines() {

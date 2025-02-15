@@ -22,9 +22,9 @@ class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         searchEnginesManager = nil
+        super.tearDown()
     }
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {

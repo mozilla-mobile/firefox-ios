@@ -25,10 +25,10 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     override func tearDown() {
-        super.tearDown()
         navigationDelegate = nil
         tabWebViewDelegate = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testBasicTabWebView_doesntLeak() async throws {

@@ -18,9 +18,9 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
         themeManager = nil
+        super.tearDown()
     }
 
     func test_initWithProperties_succeeds() {

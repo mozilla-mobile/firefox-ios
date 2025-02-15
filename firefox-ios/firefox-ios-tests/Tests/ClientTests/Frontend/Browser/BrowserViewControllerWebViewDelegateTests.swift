@@ -26,12 +26,12 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
         profile = nil
         tabManager = nil
         subject = nil
         tabManagerDelegate = nil
+        super.tearDown()
     }
 
     func testWebViewDidReceiveChallenge_MethodServerTrust() {

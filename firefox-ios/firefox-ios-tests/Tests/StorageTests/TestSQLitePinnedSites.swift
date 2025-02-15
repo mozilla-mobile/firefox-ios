@@ -18,8 +18,8 @@ class TestSQLitePinnedSites: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.deleteDatabases()
+        super.tearDown()
     }
 
     override func setUp() {

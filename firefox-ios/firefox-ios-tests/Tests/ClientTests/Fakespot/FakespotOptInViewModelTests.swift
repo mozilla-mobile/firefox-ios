@@ -20,9 +20,9 @@ final class FakespotOptInCardViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         viewModel = nil
         mockProfile = nil
+        super.tearDown()
     }
 
     func testGetWebsites() {
