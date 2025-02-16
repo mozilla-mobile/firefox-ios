@@ -19,7 +19,7 @@ jobs:
       group2: ${{ steps.my_locales.outputs.group2 }}
       group3: ${{ steps.my_locales.outputs.group3 }}
     steps:
-      - name: Clone firefoxios-l01n repo
+      - name: Clone firefoxios-l10n repo
         uses: actions/checkout@v4
         with:
           repository: mozilla-l10n/firefoxios-l10n
