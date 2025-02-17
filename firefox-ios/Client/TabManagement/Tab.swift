@@ -293,7 +293,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             )
         }
     }
-    private let background = UIVisualEffectView()
     fileprivate var lastRequest: URLRequest?
     var pendingScreenshot = false
     var url: URL? {

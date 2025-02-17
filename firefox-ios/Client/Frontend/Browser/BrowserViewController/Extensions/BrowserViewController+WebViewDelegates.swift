@@ -769,8 +769,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.allow)
                     return
                 }
-                decisionHandler(.cancel)
                 handlePDFResponse(webView, tab: tab, response: response, request: request)
+                decisionHandler(.cancel)
                 return
             }
             if response.mimeType != MIMEType.HTML, let request {
