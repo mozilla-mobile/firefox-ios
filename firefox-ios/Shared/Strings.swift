@@ -7581,7 +7581,7 @@ extension String {
             key: "LiveActivity.DownloadingFile.v135",
             tableName: "LiveActivity",
             value: "Downloading %@",
-            comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents either the filename of the file being downloaded (e.g. \"MyFile.pdf\") or a count of multiple files (e.g. \"Downloading 2 files\").")
+            comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents either the filename of the file being downloaded surrounded by double quotes (e.g. Downloading \"MyFile.pdf\") or a count of multiple files (e.g. Downloading 2 files).")
         public static let DownloadingProgress = MZLocalizedString(
             key: "LiveActivity.DownloadingProgress.v135",
             tableName: "LiveActivity",
