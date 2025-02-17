@@ -42,7 +42,10 @@ struct SearchQuickLinksEntryView: View {
             }
         }
         .padding(10.0)
+        /* Ecosia: Update color
         .widgetBackground(Color("backgroundColor"))
+         */
+        .widgetBackground(Color.ecosiaBundledColorWithName("PrimaryBackground"))
     }
 }
 

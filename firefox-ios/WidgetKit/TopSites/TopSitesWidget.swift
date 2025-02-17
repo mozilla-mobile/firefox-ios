@@ -5,12 +5,11 @@
 import SwiftUI
 import WidgetKit
 import Combine
+import Ecosia
 
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
 
-    // TODO Ecosia Upgrade: Do we want this widget? We had changed to point to tabs in the past [MOB-3170]
-    // https://github.com/ecosia/ios-browser/commit/d2f1d6e69f60e816fb940ad3ea472b4980655900
      var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TopSitesProvider()) { entry in
             TopSitesView(entry: entry)
@@ -49,8 +48,14 @@ struct TopSitesView: View {
                             topSitesItem(site, iconSize: itemSize)
                                 .frame(height: rowSize)
                         } else {
+                            /* Ecosia: Update rectangle
                             Rectangle()
+                             */
+                            RoundedRectangle(cornerRadius: UX.itemCornerRadius)
+                                /* Ecosia: Update color
                                 .fill(Color.clear)
+                                 */
+                                .fill(Color.ecosiaBundledColorWithName("TertiaryBackground"))
                                 .frame(height: rowSize)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: UX.itemCornerRadius)
@@ -64,7 +69,10 @@ struct TopSitesView: View {
             .padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        /* Ecosia: Update color
         .widgetBackground(UX.widgetBackgroundColor)
+         */
+        .widgetBackground(Color.ecosiaBundledColorWithName("PrimaryBackground"))
     }
 
     @ViewBuilder

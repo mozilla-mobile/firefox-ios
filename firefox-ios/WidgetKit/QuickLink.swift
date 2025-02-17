@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import Ecosia
 
 /// Enum file that holds the different cases for the Quick Actions small widget with their
 /// configurations (string, backgrounds, images) as selected by the user in edit mode.
@@ -89,6 +90,7 @@ enum QuickLink: Int {
      */
 
     public var backgroundColors: [Color] {
+        /* Ecosia: Update colors
         switch self {
         case .search:
             return [Color("PrimaryBrand")]
@@ -99,23 +101,46 @@ enum QuickLink: Int {
         case .closePrivateTabs:
             return [Color("TertiaryBackground")]
         }
+         */
+        switch self {
+        case .search:
+            return [.ecosiaBundledColorWithName("PrimaryBrand")]
+        default:
+            return [.ecosiaBundledColorWithName("TertiaryBackground")]
+        }
     }
 
     public var textColor: Color {
+        /* Ecosia: Update colors
         switch self {
         case .search:
             return .init("PrimaryBackground")
         default:
             return .init("PrimaryText")
         }
+         */
+        switch self {
+        case .search:
+            return .ecosiaBundledColorWithName("PrimaryBackground")
+        default:
+            return .ecosiaBundledColorWithName("PrimaryText")
+        }
     }
 
     public var iconColor: Color {
+        /* Ecosia: Update colors
         switch self {
         case .search:
             return .init("PrimaryBackground")
         default:
             return .init("SecondaryIcon")
+        }
+         */
+        switch self {
+        case .search:
+            return .ecosiaBundledColorWithName("PrimaryBackground")
+        default:
+            return .ecosiaBundledColorWithName("PrimaryText")
         }
     }
 }

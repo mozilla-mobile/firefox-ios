@@ -7,6 +7,7 @@ import WidgetKit
 import UIKit
 import Combine
 import Common
+import Ecosia
 
 struct OpenTabsWidget: Widget {
     private let kind: String = "Quick View"
@@ -25,7 +26,10 @@ struct OpenTabsWidget: Widget {
 struct OpenTabsView: View {
     let entry: OpenTabsEntry
 
+    /* Ecosia: Update Environment state definition
     @Environment(\.widgetFamily)
+     */
+    @SwiftUI.Environment(\.widgetFamily)
     var widgetFamily
 
     @ViewBuilder
@@ -41,14 +45,14 @@ struct OpenTabsView: View {
                             /* Ecosia: update color
                             .foregroundColor(Color.white)
                             */
-                            .foregroundColor(.init("PrimaryText"))
+                            .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
                             .frame(width: 16, height: 16)
                     }
 
                     Text(tab.title!)
                         // Ecosia: update color
                         // .foregroundColor(Color.white)
-                        .foregroundColor(.init("PrimaryText"))
+                        .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -58,7 +62,7 @@ struct OpenTabsView: View {
             Rectangle()
                 // Ecosia: update color
                 // .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
-                .fill(Color("Border"))
+                .fill(Color.ecosiaBundledColorWithName("Border"))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
         }
@@ -69,13 +73,13 @@ struct OpenTabsView: View {
             /* Ecosia: Update image and color
             Image(decorative: StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white)
             */
-            Image(decorative: "openEcosia")
-                .foregroundColor(.init("PrimaryText"))
-            Text("Open Firefox") // TODO Ecosia Upgrade: Don't we need to update this text? (was already Firefox, prbably should use `String.OpenFirefoxLabel`) [MOB-3170]
+            Image(decorative: "openEcosia", bundle: .ecosia)
+                .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
+            Text("Open Firefox") // Ecosia: Leave "Open Firefox" as within the WidgetKit Strings the key matches.
                 /* Ecosia: update color
                 .foregroundColor(Color.white).lineLimit(1)
                 */
-                .foregroundColor(.init("PrimaryText")).lineLimit(1)
+                .foregroundColor(.ecosiaBundledColorWithName("PrimaryText")).lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
         }.padding([.horizontal])
@@ -99,19 +103,19 @@ struct OpenTabsView: View {
                         /* Ecosia: Update image
                         Image(decorative: StandardImageIdentifiers.Small.externalLink)
                         */
-                        Image(decorative: "openEcosia")
+                        Image(decorative: "openEcosia", bundle: .ecosia)
                         Text(String.OpenFirefoxLabel)
                             /* Ecosia: Update color
                             .foregroundColor(Color.white).lineLimit(1)
                             */
-                            .foregroundColor(.init("PrimaryText")).lineLimit(1)
+                            .foregroundColor(.ecosiaBundledColorWithName("PrimaryText")).lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
                     }.padding(10)
                 }
                 // Ecosia: update color
                 // .foregroundColor(Color.white)
-                .foregroundColor(.init("PrimaryText"))
+                .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
@@ -124,8 +128,8 @@ struct OpenTabsView: View {
                             Image(decorative: StandardImageIdentifiers.Small.externalLink)
                                 .foregroundColor(Color.white)
                             */
-                            Image(decorative: "openEcosia")
-                                .foregroundColor(.init("PrimaryText"))
+                            Image(decorative: "openEcosia", bundle: .ecosia)
+                                .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
                                 .frame(width: 16, height: 16)
                             Text(
                                 String.localizedStringWithFormat(
@@ -136,7 +140,7 @@ struct OpenTabsView: View {
                             /* Ecosia: Update color
                             .foregroundColor(Color.white)
                             */
-                            .foregroundColor(.init("PrimaryText"))
+                            .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
                             .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                             Spacer()
@@ -153,7 +157,7 @@ struct OpenTabsView: View {
         /* Ecosia: update color
         .widgetBackground(Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00)))
         */
-        .background((Color("PrimaryBackground")))
+        .background((Color.ecosiaBundledColorWithName("PrimaryBackground")))
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

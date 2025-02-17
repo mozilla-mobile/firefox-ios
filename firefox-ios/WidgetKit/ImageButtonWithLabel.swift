@@ -5,6 +5,7 @@
 #if canImport(WidgetKit)
 import SwiftUI
 import Common
+import Ecosia
 
 // View for Quick Action Widget Buttons (Small & Medium)
 // +-------------------------------------------------------+
@@ -94,35 +95,41 @@ struct ImageButtonWithLabel: View {
                             }
                         }
                         Spacer()
+                        /* Ecosia: Update image
                         if link == .search && isSmall {
                             Image(decorative: StandardImageIdentifiers.Large.search)
                                 .scaledToFit()
                                 .frame(height: 24.0)
-                                // Ecosia: add color
-                                .foregroundColor(link.iconColor)
                         } else {
                             Image(decorative: link.imageName)
                                 .scaledToFit()
                                 .frame(height: 24.0)
-                                // Ecosia: add color
-                                .foregroundColor(link.iconColor)
                         }
+                         */
+                        Image(decorative: link.imageName, bundle: .ecosia)
+                            .scaledToFit()
+                            .frame(height: 24.0)
+                            .foregroundColor(link.iconColor)
                     }
                     if isSmall {
                         HStack(alignment: .bottom) {
                             Spacer()
                             /* Ecosia: Update image
                             Image(decorative: "faviconFox")
+                             .scaledToFit()
+                             .frame(height: 24.0)
                             */
-                            Image(decorative: "searchLogo")
+                            Image(decorative: "searchLogo", bundle: .ecosia)
                                 .scaledToFit()
                                 .frame(height: 24.0)
-                                // Ecosia: add color
                                 .foregroundColor(link.iconColor)
                         }
                     }
                 }
+                /* Ecosia: Update color
                 .foregroundColor(Color("widgetLabelColors"))
+                 */
+                .foregroundColor(Color.ecosiaBundledColorWithName("widgetLabelColors"))
                 .padding([.horizontal, .vertical], paddingValue)
             }
         }
