@@ -487,9 +487,9 @@ public class RustAutofill {
         if canaryIsValid {
             completion(.success(key!))
         } else {
-            self.logger.log("Autofill key was corrupted, new one generated",
-                            level: .warning,
-                            category: .storage)
+            logger.log("Autofill key was corrupted, new one generated",
+                       level: .warning,
+                       category: .storage)
             self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
         }
     }
