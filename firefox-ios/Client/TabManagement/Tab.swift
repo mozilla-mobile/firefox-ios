@@ -293,6 +293,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             )
         }
     }
+    private let background = UIVisualEffectView()
     fileprivate var lastRequest: URLRequest?
     var pendingScreenshot = false
     var url: URL? {
@@ -712,14 +713,18 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func stop() {
+        webView?.stopLoading()
         if isPDFRefactorEnabled {
             cancelTemporaryDocumentDownload()
-        } else {
-            webView?.stopLoading()
         }
     }
 
     func reload(bypassCache: Bool = false) {
+        if isPDFRefactorEnabled {
+            if cancelTemporaryDocumentDownload() {
+                return
+            }
+        }
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
             let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
@@ -975,8 +980,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
             self.temporaryDocument = nil
-
-            webView?.removeDocumentLoadingView()
             reload()
             return true
         }
@@ -1032,24 +1035,6 @@ extension Tab: UIGestureRecognizerDelegate {
     @objc
     func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
-        let subviews = webView.subviews
-        if sender.state == .began {
-//            let background = UIVisualEffectView(frame: webView.bounds)
-//            background.effect = UIBlurEffect(style: .systemThinMaterialDark)
-//            background.backgroundColor = .black.withAlphaComponent(0.2)
-//            subviews.first?.subviews[0].addSubview(background)
-            subviews.first?.subviews[0].removeFromSuperview()
-
-        }
-        // subviews.first?.subviews[0].alpha = 0
-
-//        webView.snapshot?.alpha = 1
-        if sender.state == .ended {
-            UIView.animate(withDuration: 0.3, delay: 1.0) {
-                subviews.first?.alpha = 0.0
-            }
-            webView.removeSnapshot()
-        }
         if sender.state == .ended, sender.velocity(in: webView).x > 150 {
             TelemetryWrapper.recordEvent(
                 category: .action,
@@ -1178,24 +1163,11 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
-    private struct UX {
-        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
-    }
-
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
-    private var documentLoadingView: TemporaryDocumentLoadingView?
-    private lazy var isPDFRefactorEnabled = featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-
-    override var isLoading: Bool {
-        if isPDFRefactorEnabled {
-            return documentLoadingView != nil || super.isLoading
-        }
-        return super.isLoading
-    }
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1325,57 +1297,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
         pullRefresh?.applyTheme(theme: theme)
-        documentLoadingView?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
-        }
-    }
-
-    // MARK: - Document loading handling
-
-    func showDocumentLoadingView() {
-        guard documentLoadingView == nil else { return }
-        let documentLoadingView = TemporaryDocumentLoadingView(frame: bounds)
-        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(documentLoadingView)
-        NSLayoutConstraint.activate([
-            documentLoadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            documentLoadingView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            documentLoadingView.topAnchor.constraint(equalTo: topAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        documentLoadingView.animateLoadingAppearanceIfNeeded()
-        self.documentLoadingView = documentLoadingView
-    }
-
-    var snapshot: UIView?
-
-    func addSnapshotOverlay() {
-//        if let snapshot {
-//            scrollView.bringSubviewToFront(snapshot)
-//        }
-//        guard snapshot == nil else { return }
-//        // Remove any existing snapshot
-//        snapshot = snapshotView(afterScreenUpdates: false) // Capture current content
-//        snapshot?.frame = bounds
-//        guard let snapshot else { return }
-//        scrollView.addSubview(snapshot)
-//        snapshot.alpha = 1
-    }
-
-    func removeSnapshot() {
-//        snapshot?.removeFromSuperview()
-//        snapshot = nil
-    }
-
-    func removeDocumentLoadingView() {
-        guard let documentLoadingView else { return }
-        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
-            documentLoadingView.alpha = 0.0
-        } completion: { _ in
-            documentLoadingView.removeFromSuperview()
-            self.documentLoadingView = nil
         }
     }
 }

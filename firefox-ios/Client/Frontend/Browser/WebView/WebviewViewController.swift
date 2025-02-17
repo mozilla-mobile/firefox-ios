@@ -5,13 +5,35 @@
 import Foundation
 import Shared
 import WebKit
+import Common
 
-class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
+class WebviewViewController: UIViewController,
+                             ContentContainable,
+                             ScreenshotableView,
+                             Themeable,
+                             InjectedThemeUUIDIdentifiable {
+    private struct UX {
+        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
+    }
+    private var documentLoadingView: TemporaryDocumentLoadingView?
     private var webView: WKWebView
     var contentType: ContentType = .webview
+    var themeManager: any ThemeManager
+    var notificationCenter: any NotificationProtocol
+    var themeObserver: (any NSObjectProtocol)?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: WindowUUID? {
+        return windowUUID
+    }
 
-    init(webView: WKWebView) {
+    init(webView: WKWebView,
+         windowUUID: WindowUUID,
+         themeManager: any ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: any NotificationProtocol = NotificationCenter.default) {
         self.webView = webView
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -22,6 +44,7 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
+        listenForThemeChange(view)
     }
 
     private func setupWebView() {
@@ -38,6 +61,42 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
     func update(webView: WKWebView) {
         self.webView = webView
         setupWebView()
+        guard let documentLoadingView else { return }
+        view.bringSubviewToFront(documentLoadingView)
+    }
+
+    func showDocumentLoadingView() {
+        guard documentLoadingView == nil else { return }
+        let documentLoadingView = TemporaryDocumentLoadingView(frame: view.bounds)
+        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(documentLoadingView)
+        NSLayoutConstraint.activate([
+            documentLoadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            documentLoadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            documentLoadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        documentLoadingView.animateLoadingAppearanceIfNeeded()
+        self.documentLoadingView = documentLoadingView
+        applyTheme()
+    }
+
+    func removeDocumentLoadingView() {
+        guard let documentLoadingView else { return }
+        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
+            documentLoadingView.alpha = 0.0
+        } completion: { _ in
+            documentLoadingView.removeFromSuperview()
+            self.documentLoadingView = nil
+        }
+    }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        documentLoadingView?.applyTheme(theme: theme)
     }
 
     // MARK: - ScreenshotableView

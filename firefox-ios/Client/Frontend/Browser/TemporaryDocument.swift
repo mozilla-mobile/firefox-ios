@@ -38,6 +38,7 @@ class DefaultTemporaryDocument: NSObject,
 
     private var onDownload: ((URL?) -> Void)?
     var onDownloadProgressUpdate: ((Double) -> Void)?
+    var onDownloadStarted: (() -> Void)?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
@@ -212,6 +213,8 @@ class DefaultTemporaryDocument: NSObject,
         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
         ensureMainThread { [weak self] in
             self?.onDownloadProgressUpdate?(progress)
+            self?.onDownloadStarted?()
+            self?.onDownloadStarted = nil
         }
     }
 }

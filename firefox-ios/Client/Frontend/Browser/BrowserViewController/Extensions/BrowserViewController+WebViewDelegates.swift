@@ -792,15 +792,7 @@ extension BrowserViewController: WKNavigationDelegate {
                            tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        if let webView = webView as? TabWebView {
-            webView.showDocumentLoadingView()
-            webView.applyTheme(theme: currentTheme())
-            observeValue(forKeyPath: KVOConstants.loading.rawValue,
-                         of: webView,
-                         change: [.newKey: true],
-                         context: nil)
-        }
-
+        navigationHandler?.showDocumentLoading()
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -813,6 +805,12 @@ extension BrowserViewController: WKNavigationDelegate {
                 self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
                                    of: webView,
                                    change: [.newKey: progress],
+                                   context: nil)
+            }
+            tempPDF.onDownloadStarted = {
+                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                                   of: webView,
+                                   change: [.newKey: true],
                                    context: nil)
             }
             tab?.enqueueDocument(tempPDF)
@@ -1034,7 +1032,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 store.dispatch(action)
             }
             scrollController.configureNewRefreshControl()
-            webView.removeDocumentLoadingView()
+            navigationHandler?.removeDocumentLoading()
         }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
