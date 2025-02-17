@@ -19,7 +19,7 @@ func path(forTestPage page: String) -> String {
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 20
 let TIMEOUT_LONG: TimeInterval = 45
-let MAX_SWIPE: Int = 5
+let MAX_SWIPE = 5
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
@@ -237,15 +237,23 @@ class BaseTestCase: XCTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
             timeout: TIMEOUT
         )
+        app.buttons["Save"].tapIfExists()
         navigator.goto(BrowserTabMenu)
         navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
 
-    func unbookmark() {
-        bookmark()
-        app.buttons["Delete Bookmark"].waitAndTap()
+    func unbookmark(url: String) {
         navigator.nowAt(BrowserTab)
+        navigator.goto(LibraryPanel_Bookmarks)
+        app.buttons["Edit"].waitAndTap()
+        if #available(iOS 17, *) {
+            app.buttons["Remove " + url].waitAndTap()
+        } else {
+            app.buttons["Delete " + url].waitAndTap()
+        }
+        app.buttons["Delete"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
     }
 
     func checkBookmarks() {
@@ -297,8 +305,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func removeContentFromReaderView() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_ReadingList)
+        app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3).waitAndTap()
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
 
@@ -424,13 +431,12 @@ class BaseTestCase: XCTestCase {
     }
 
     func openNewTabAndValidateURLisPaste(url: String) {
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        if #available(iOS 17, *) {
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         } else {
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
         }
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.5)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]

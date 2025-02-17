@@ -240,7 +240,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
             isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
-            canShowNavigationHint: toolbarState.canShowNavigationHint)
+            canShowNavigationHint: toolbarState.canShowNavigationHint,
+            shouldAnimate: toolbarState.shouldAnimate)
     }
 
     // MARK: StoreTestUtility

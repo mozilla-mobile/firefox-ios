@@ -34,4 +34,5 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnCell
     case longPressOnCell
     case tapOnJumpBackInShowAllButton
+    case tapOnBookmarksShowMoreButton
 }

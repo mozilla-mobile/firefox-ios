@@ -40,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -218,21 +217,17 @@ class BrowserCoordinator: BaseCoordinator,
     func show(webView: WKWebView) {
         // Keep the webviewController in memory, update to newest webview when needed
         if let webviewController = webviewController {
-            webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            webviewController.update(webView: webView)
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(
-                webView: webView,
-                isPrivate: tabManager.selectedTab?.isPrivate ?? false
-            )
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
 
         screenshotService.screenshotableView = webviewController
-        self.errorViewController = nil
     }
 
     func browserHasLoaded() {
@@ -1042,16 +1037,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+        let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
-        guard browserViewController.embedContent(errorpageController) else {
+
+        guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
-        self.errorViewController = errorpageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {
@@ -1178,7 +1172,7 @@ class BrowserCoordinator: BaseCoordinator,
             return shareType
         }
 
-        guard let fileURL = await temporaryDocument.getDownloadedURL() else {
+        guard let fileURL = await temporaryDocument.download() else {
             // If no file was downloaded, simply share the tab as usual with a web URL
             return shareType
         }

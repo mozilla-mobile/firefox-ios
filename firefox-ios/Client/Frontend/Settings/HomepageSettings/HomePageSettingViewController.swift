@@ -156,7 +156,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
-            )
+            ) { value in
+                store.dispatch(
+                    BookmarksAction(
+                        isEnabled: value,
+                        windowUUID: self.windowUUID,
+                        actionType: BookmarksActionType.toggleShowSectionSetting
+                    )
+                )
+            }
             sectionItems.append(bookmarksSetting)
         }
 

@@ -206,6 +206,9 @@ public struct PrefsKeys {
     // Used in the share extension
     public static let IsBookmarksRefactorEnabled = "IsBookmarksRefactorEnabled"
 
+    // The timestamp where the app was last opened as default browser
+    public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
+
     public struct Usage {
         public static let profileId = "profileId"
     }

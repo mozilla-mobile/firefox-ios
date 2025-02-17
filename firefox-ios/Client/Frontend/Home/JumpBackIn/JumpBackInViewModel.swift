@@ -13,8 +13,8 @@ class JumpBackInViewModel: FeatureFlaggable {
         static let jumpBackInCellHeight: CGFloat = 112
         static let syncedTabCellPortraitCompactHeight: CGFloat = 182
         static let syncedTabCellHeight: CGFloat = 232
-        static let maxDisplayedSyncedTabs: Int = 1
-        static let maxJumpBackInItemsPerGroup: Int = 2
+        static let maxDisplayedSyncedTabs = 1
+        static let maxJumpBackInItemsPerGroup = 2
     }
 
     // MARK: - Properties

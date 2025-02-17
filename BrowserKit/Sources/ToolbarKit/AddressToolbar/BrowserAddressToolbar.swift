@@ -27,11 +27,12 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
-        static let toolbarAnimationTime: CGFloat = 0.25
-        static let iconsAnimationTime: CGFloat = 0.15
+        static let toolbarAnimationTime: CGFloat = 0.15
+        static let iconsAnimationTime: CGFloat = 0.1
+        static let iconsAnimationDelay: CGFloat = 0.075
     }
 
-    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
+    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
@@ -67,12 +68,16 @@ public class BrowserAddressToolbar: UIView,
     private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
-    private var previousLocationViewState: LocationViewState?
+    private var previousLocationViewConfiguration: LocationViewConfiguration?
     public var isUnifiedSearchEnabled = false {
         didSet {
-            guard let previousLocationViewState, oldValue != isUnifiedSearchEnabled else { return }
+            guard let previousLocationViewConfiguration, oldValue != isUnifiedSearchEnabled else { return }
 
-            locationView.configure(previousLocationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+            locationView.configure(
+                previousLocationViewConfiguration,
+                delegate: self,
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            )
         }
     }
 
@@ -88,24 +93,31 @@ public class BrowserAddressToolbar: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState,
+    public func configure(config: AddressToolbarConfiguration,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
-                          isUnifiedSearchEnabled: Bool) {
+                          isUnifiedSearchEnabled: Bool,
+                          animated: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        self.previousLocationViewState = state.locationViewState
+        self.previousLocationViewConfiguration = config.locationViewConfiguration
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
-        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        configure(config: config,
+                  isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                  animated: animated)
     }
 
-    public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
-        updateBorder(borderPosition: state.borderPosition)
+    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
+        updateBorder(borderPosition: config.borderPosition)
 
-        updateActions(state: state)
-        locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-        droppableUrl = state.locationViewState.droppableUrl
+        updateActions(config: config, animated: animated)
+        locationView.configure(
+            config.locationViewConfiguration,
+            delegate: self,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+        )
+        droppableUrl = config.locationViewConfiguration.droppableUrl
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -235,34 +247,33 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(state: AddressToolbarState) {
+    internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
-        updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
+        updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
 
         // Navigation actions
-        updateActionStack(stackView: navigationActionStack, toolbarElements: state.navigationActions)
+        updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
 
         // Page actions
-        updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
+        updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
 
         updateActionSpacing()
-        updateToolbarLayout()
+        updateToolbarLayout(animated: animated)
     }
 
-    private func updateToolbarLayout() {
+    private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
-            UIView.animate(withDuration: UX.toolbarAnimationTime) {
+            UIView.animate(withDuration: UX.toolbarAnimationTime, delay: 0.0, options: .curveEaseOut) {
                 self.layoutIfNeeded()
-            } completion: { _ in
-                UIView.animate(withDuration: UX.iconsAnimationTime) {
-                    stacks.forEach {
-                        $0.alpha = 1.0
-                    }
+            }
+            UIView.animate(withDuration: UX.iconsAnimationTime, delay: UX.iconsAnimationDelay, options: .curveEaseOut) {
+                stacks.forEach {
+                    $0.alpha = 1.0
                 }
             }
         } else {

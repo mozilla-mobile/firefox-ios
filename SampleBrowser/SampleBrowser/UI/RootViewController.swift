@@ -30,11 +30,12 @@ class RootViewController: UIViewController,
     private var browserVC: BrowserViewController
     private var searchVC: SearchViewController
     private var findInPageBar: FindInPageBar?
+    private var errorPage: ErrorPageViewController?
 
     private var model = RootViewControllerModel()
 
     // MARK: - Init
-    init(engineProvider: EngineProvider,
+    init(engineProvider: EngineProvider = AppContainer.shared.resolve(),
          windowUUID: UUID?,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
@@ -185,6 +186,8 @@ class RootViewController: UIViewController,
     // MARK: - NavigationDelegate
 
     func onLoadingStateChange(loading: Bool) {
+        removeErrorPage()
+
         model.updateReloadStopButton(loading: loading)
         updateNavigationToolbar()
     }
@@ -293,6 +296,31 @@ class RootViewController: UIViewController,
 
     func scrollToTop() {
         browserVC.scrollToTop()
+    }
+
+    func showErrorPage(page: ErrorPageViewController) {
+        self.errorPage = page
+        addChild(page)
+        page.view.frame = view.bounds
+        page.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(page.view)
+
+        NSLayoutConstraint.activate([
+            page.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
+            page.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            page.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            page.view.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor)
+        ])
+
+        page.didMove(toParent: self)
+    }
+
+    private func removeErrorPage() {
+        guard let errorPage else { return }
+        errorPage.willMove(toParent: nil)
+        errorPage.view.removeFromSuperview()
+        errorPage.removeFromParent()
+        self.errorPage = nil
     }
 
     func showFindInPage() {

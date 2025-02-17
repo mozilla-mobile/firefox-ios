@@ -1,0 +1,12 @@
+/* A statement shown to user when tapping an external link and the link doesn't work. */
+"ExternalLink.ExternalInvalidLinkMessage.v136" = "ਉਸ ਲਿੰਕ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਚਾਹੀਦੀ ਐਪਲੀਕੇਸ਼ਨ ਲੱਭੀ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ।";
+
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "ਈਮੇਲ ਨੂੰ ਮੂਲ ਮੇਲ ਐਪਲੀਕੇਸ਼ਨ ਨਾਲ ਖੋਲ੍ਹਣਾ ਹੈ?";
+
+/* The call to action button for a user to open an external link. */
+"ExternalLink.ExternalOpenMessage.v136" = "ਖੋਲ੍ਹੋ";
+
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "sms ਨੂੰ ਬਾਹਰੀ ਐਪਲੀਕੇਸ਼ਨ ਵਿੱਚ ਖੋਲ੍ਹਣਾ ਹੈ?";
+

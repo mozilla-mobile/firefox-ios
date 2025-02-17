@@ -17,7 +17,6 @@ extension BrowserViewController: ReaderModeDelegate {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
         if tabManager.selectedTab === tab {
             self.showReaderModeBar(animated: true)
-            tab.showContent(true)
         }
     }
 

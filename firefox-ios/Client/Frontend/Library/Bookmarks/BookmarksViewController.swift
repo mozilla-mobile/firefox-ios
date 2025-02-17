@@ -253,8 +253,7 @@ class BookmarksViewController: SiteTableViewController,
 
             let toastVM = ButtonToastViewModel(
                 labelText: String(format: .Bookmarks.Menu.DeletedBookmark, bookmarkNode.title),
-                buttonText: .UndoString,
-                textAlignment: .left)
+                buttonText: .UndoString)
             let toast = ButtonToast(viewModel: toastVM,
                                     theme: self.currentTheme(),
                                     completion: { buttonPressed in

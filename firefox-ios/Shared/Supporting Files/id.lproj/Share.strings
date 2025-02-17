@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Anda tidak memiliki perangkat lain yang terhubung ke akun ini yang tersedia untuk disinkronkan.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Anda belum masuk ke akun Anda.";
+

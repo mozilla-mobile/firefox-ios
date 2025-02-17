@@ -881,7 +881,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
-        case HomepageActionType.initialize:
+        case HomepageActionType.initialize, JumpBackInActionType.fetchLocalTabs:
             store.dispatch(
                 TabManagerAction(
                     recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,

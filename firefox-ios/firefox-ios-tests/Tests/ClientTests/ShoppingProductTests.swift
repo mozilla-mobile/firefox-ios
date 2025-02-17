@@ -421,8 +421,8 @@ final class NimbusFakespotFeatureLayerMock: NimbusFakespotFeatureLayerProtocol {
 }
 
 final class TestFakespotClient: FakespotClientType {
-    var productId: String = ""
-    var website: String = ""
+    var productId = ""
+    var website = ""
     var fetchProductAnalysisDataCalled = false
     var fetchProductAdsDataCalled = false
     var fetchProductAnalysisDataCallCount = 0

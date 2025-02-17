@@ -30,7 +30,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
-        static let toolbarIsEditingLeadingPadding: CGFloat = 8
+        static let toolbarIsEditingLeadingPadding: CGFloat = 0
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -77,14 +77,23 @@ final class AddressToolbarContainer: UIView,
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
+        if shouldDisplayCompact {
+            return UX.toolbarHorizontalPadding
+        }
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+            return UX.toolbarHorizontalPadding
+        }
         // Provide 0 padding in iPhone landscape due to safe area insets
-        return shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
+        return 0
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
-        // Provide 0 padding in iPhone landscape due to safe area insets
-        if shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad {
+        if shouldDisplayCompact {
             return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+        }
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+            return UX.toolbarHorizontalPadding
         }
         return 0
     }
@@ -192,16 +201,19 @@ final class AddressToolbarContainer: UIView,
                 enterOverlayMode(nil, pasted: false, search: true)
             }
             updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: newModel.addressToolbarState,
+
+            compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-            regularToolbar.configure(state: newModel.addressToolbarState,
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
+            regularToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
                                      trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes

@@ -5,16 +5,16 @@
 import Foundation
 
 public struct UnencryptedAddressFields {
-    public var addressLevel1: String = ""
-    public var organization: String = ""
-    public var country: String = ""
-    public var addressLevel2: String = ""
-    public var addressLevel3: String = ""
-    public var email: String = ""
-    public var streetAddress: String = ""
-    public var name: String = ""
-    public var postalCode: String = ""
-    public var tel: String = ""
+    public var addressLevel1 = ""
+    public var organization = ""
+    public var country = ""
+    public var addressLevel2 = ""
+    public var addressLevel3 = ""
+    public var email = ""
+    public var streetAddress = ""
+    public var name = ""
+    public var postalCode = ""
+    public var tel = ""
 
     public init() { }
 

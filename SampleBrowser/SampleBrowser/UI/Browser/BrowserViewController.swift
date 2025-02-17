@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import WebEngine
 
@@ -9,6 +10,7 @@ protocol NavigationDelegate: AnyObject {
     func onURLChange(url: String)
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
+    func showErrorPage(page: ErrorPageViewController)
 
     func onFindInPage(selected: String)
     func onFindInPage(currentResult: Int)
@@ -24,10 +26,11 @@ class BrowserViewController: UIViewController,
     private var engineSession: EngineSession
     private var engineView: EngineView
     private let urlFormatter: URLFormatter
+    private var gradientLayer: CAGradientLayer?
 
     // MARK: - Init
 
-    init(engineProvider: EngineProvider,
+    init(engineProvider: EngineProvider = AppContainer.shared.resolve(),
          urlFormatter: URLFormatter = DefaultURLFormatter()) {
         self.engineSession = engineProvider.session
         self.engineView = engineProvider.view
@@ -48,12 +51,29 @@ class BrowserViewController: UIViewController,
 
         view.backgroundColor = .clear
         setupProgressBar()
-
-        setupBrowserView(engineView)
         engineSession.delegate = self
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setGradientBackground()
+    }
+
+    private func setGradientBackground() {
+        self.gradientLayer?.removeFromSuperlayer()
+        let colorTop =  UIColor.orange.cgColor
+        let colorBottom = UIColor.purple.cgColor
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 0.6]
+        gradientLayer.frame = self.view.bounds
+        self.gradientLayer = gradientLayer
+        view.layer.insertSublayer(gradientLayer, at: 0)
+    }
+
     private func setupBrowserView(_ engineView: EngineView) {
+        guard engineView.superview == nil else { return }
         engineView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(engineView)
 
@@ -149,12 +169,23 @@ class BrowserViewController: UIViewController,
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
+        setupBrowserView(engineView)
+
         if let url = urlFormatter.getURL(entry: searchTerm.term) {
             // Search the entered URL
-            engineSession.load(url: url.absoluteString)
-        } else {
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
+                return
+            }
+        }
+
+        if let url = URL(string: searchTerm.urlWithSearchTerm) {
             // Search term with Search Engine Bing
-            engineSession.load(url: searchTerm.urlWithSearchTerm)
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                engineSession.load(browserURL: browserURL)
+            }
         }
     }
 
@@ -199,13 +230,26 @@ class BrowserViewController: UIViewController,
         // We currently do not handle favicons in SampleBrowser, so this is empty.
     }
 
+    func onErrorPageRequest(error: NSError) {
+        let errorPage = ErrorPageViewController()
+        let message = "Error \(String(error.code)) happened on domain \(error.domain): \(error.localizedDescription)"
+        errorPage.configure(errorMessage: message)
+
+        navigationDelegate?.showErrorPage(page: errorPage)
+    }
+
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
         guard let url = linkURL else { return nil }
 
         let previewProvider: UIContextMenuContentPreviewProvider = {
-            guard let previewEngineProvider = EngineProvider() else { return nil }
+            let previewEngineProvider: EngineProvider = AppContainer.shared.resolve()
             let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
-            previewVC.engineSession.load(url: url.absoluteString)
+
+            let context = BrowsingContext(type: .internalNavigation, url: url)
+            if let browserURL = BrowserURL(browsingContext: context) {
+                previewVC.engineSession.load(browserURL: browserURL)
+            }
+
             return previewVC
         }
 
@@ -217,7 +261,10 @@ class BrowserViewController: UIViewController,
                 image: nil,
                 identifier: UIAction.Identifier("linkContextMenu.openLink")
             ) { [weak self] _ in
-                self?.engineSession.load(url: url.absoluteString)
+                let context = BrowsingContext(type: .internalNavigation, url: url)
+                if let browserURL = BrowserURL(browsingContext: context) {
+                    self?.engineSession.load(browserURL: browserURL)
+                }
             })
 
             return UIMenu(title: url.absoluteString, children: actions)

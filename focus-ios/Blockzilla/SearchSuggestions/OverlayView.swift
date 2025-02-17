@@ -18,7 +18,7 @@ protocol OverlayViewDelegate: AnyObject {
 }
 
 class IndexedInsetButton: InsetButton {
-    private var index: Int = 0
+    private var index = 0
     func setIndex(_ i: Int) {
         index = i
     }

@@ -46,14 +46,14 @@ class PullRefreshView: UIView,
     }
 
     init(parentScrollView: UIScrollView?,
-         isPotraitOrientation: Bool,
+         isPortraitOrientation: Bool,
          onRefreshCallback: @escaping VoidReturnCallback) {
         self.scrollView = parentScrollView
         self.onRefreshCallback = onRefreshCallback
         super.init(frame: .zero)
         // This is needed otherwise the final pull refresh flash would go out of bounds
         clipsToBounds = true
-        setupEasterEgg(isPotrait: isPotraitOrientation)
+        setupEasterEgg(isPortrait: isPortraitOrientation)
         setupSubviews()
         startObservingContentScroll()
     }
@@ -62,13 +62,13 @@ class PullRefreshView: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupEasterEgg(isPotrait: Bool) {
+    private func setupEasterEgg(isPortrait: Bool) {
         guard let easterEggGif else { return }
         addSubview(easterEggGif)
         let shrinkFactor = computeShrinkingFactor()
         let easterEggSize = UX.easterEggSize.applying(CGAffineTransform(scaleX: shrinkFactor, y: shrinkFactor))
         let layoutBuilder = EasterEggViewLayoutBuilder(easterEggSize: easterEggSize)
-        layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPortrait: isPotrait, isIpad: isIpad)
+        layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPortrait: isPortrait, isIpad: isIpad)
     }
 
     private func setupSubviews() {

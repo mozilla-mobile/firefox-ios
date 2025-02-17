@@ -4,6 +4,7 @@
 
 import XCTest
 import Storage
+import MozillaAppServices
 
 @testable import Client
 
@@ -35,12 +36,20 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID), numberOfCellsPerRow: 4)
+        dataSource.updateSnapshot(
+            state: HomepageState(windowUUID: .XCTestDefaultUUID),
+            numberOfCellsPerRow: 4,
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .jumpBackIn(nil), .bookmarks, .customizeHomepage])
-
+        XCTAssertEqual(snapshot.numberOfSections, 3)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .jumpBackIn(nil, mockSectionConfig),
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
@@ -73,7 +82,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
+        dataSource.updateSnapshot(
+            state: updatedState,
+            numberOfCellsPerRow: 4,
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 21)
@@ -100,15 +113,14 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4)
+        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
         let expectedSections: [HomepageSection] = [
             .header,
             .topSites(4),
-            .jumpBackIn(nil),
-            .bookmarks,
+            .jumpBackIn(nil, mockSectionConfig),
             .customizeHomepage
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -126,14 +138,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
         let expectedSections: [HomepageSection] = [
             .header,
-            .jumpBackIn(nil),
-            .bookmarks,
+            .jumpBackIn(nil, mockSectionConfig),
             .pocket(nil),
             .customizeHomepage
         ]
@@ -157,28 +168,64 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4)
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
-        let expectedSections: [HomepageSection] = [.header, .messageCard, .jumpBackIn(nil), .bookmarks, .customizeHomepage]
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .messageCard,
+            .jumpBackIn(nil, mockSectionConfig),
+            .customizeHomepage
+        ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    private func createSites(count: Int = 30) -> [TopSiteState] {
-        var sites = [TopSiteState]()
+    func test_updateSnapshot_withValidState_returnBookmarks() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            BookmarksAction(
+                bookmarks: [BookmarkConfiguration(
+                    site: Site.createBasicSite(
+                        url: "www.mozilla.org",
+                        title: "Title 1",
+                        isBookmarked: true
+                    )
+                )],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: BookmarksMiddlewareActionType.initialize
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .jumpBackIn(nil, mockSectionConfig),
+            .bookmarks(nil),
+            .customizeHomepage
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    private func createSites(count: Int = 30) -> [TopSiteConfiguration] {
+        var sites = [TopSiteConfiguration]()
         (0..<count).forEach {
             let site = Site.createBasicSite(
                 url: "www.url\($0).com",
                 title: "Title \($0)"
             )
-            sites.append(TopSiteState(site: site))
+            sites.append(TopSiteConfiguration(site: site))
         }
         return sites
     }
 
-    private func createStories(count: Int = 20) -> [PocketStoryState] {
+    private func createStories(count: Int = 20) -> [PocketStoryConfiguration] {
         var feedStories = [PocketFeedStory]()
         (0..<count).forEach {
             let story: PocketFeedStory = .make(title: "feed \($0)")
@@ -186,8 +233,17 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         }
 
         let stories = feedStories.compactMap {
-            PocketStoryState(story: PocketStory(pocketFeedStory: $0))
+            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
         }
         return stories
+    }
+
+    private var mockSectionConfig: JumpBackInSectionLayoutConfiguration {
+        return JumpBackInSectionLayoutConfiguration(
+            maxLocalTabsWhenSyncedTabExists: 1,
+            maxLocalTabsWhenNoSyncedTab: 2,
+            layoutType: .compact,
+            hasSyncedTab: false
+        )
     }
 }

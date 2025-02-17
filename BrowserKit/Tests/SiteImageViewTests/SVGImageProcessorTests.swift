@@ -72,16 +72,69 @@ class SVGImageProcessorTests: XCTestCase {
 
         await fulfillment(of: [exp], timeout: 2.0)
     }
+
+    func testDownloadingGarbageData_withKingfisherProcessor() async {
+        guard let garbageData = try? dataFor(type: .badType) else {
+            XCTFail("Could not load test asset")
+            return
+        }
+
+        guard let mockedURL = try? await startMockImageServer(imageData: garbageData, forAssetType: .badType) else {
+            XCTFail("Check bundle setup for mock server response data")
+            return
+        }
+
+        let exp = expectation(description: "Image download and parse")
+
+        let siteDownloader = DefaultSiteImageDownloader()
+        siteDownloader.downloadImage(with: mockedURL, options: [.processor(SVGImageProcessor())]) { result in
+            switch result {
+            case .success:
+                XCTFail("We shouldn't get an image for bad data")
+                exp.fulfill()
+            case .failure:
+                exp.fulfill()
+            }
+        }
+
+        await fulfillment(of: [exp], timeout: 2.0)
+    }
+
+    func testDownloadingEmptyImage_withKingfisherProcessor() async {
+        let emptyData = Data()
+
+        guard let mockedURL = try? await startMockImageServer(imageData: emptyData, forAssetType: .ico) else {
+            XCTFail("Check bundle setup for mock server response data")
+            return
+        }
+
+        let exp = expectation(description: "Image download and parse")
+
+        let siteDownloader = DefaultSiteImageDownloader()
+        siteDownloader.downloadImage(with: mockedURL, options: [.processor(SVGImageProcessor())]) { result in
+            switch result {
+            case .success:
+                XCTFail("We shouldn't get an image for empty data")
+                exp.fulfill()
+            case .failure:
+                exp.fulfill()
+            }
+        }
+
+        await fulfillment(of: [exp], timeout: 2.0)
+    }
 }
 
 extension SVGImageProcessorTests {
     enum MockImageServerError: Error {
         case noAssetData
+        case badData
     }
 
     enum AssetType {
         case ico
         case svg
+        case badType
 
         var contentType: String {
             switch self {
@@ -89,6 +142,8 @@ extension SVGImageProcessorTests {
                 return "image/x-icon"
             case .svg:
                 return "image/svg+xml"
+            case .badType:
+                return "garbage asset type $23%12@!!!//asd"
             }
         }
     }
@@ -101,6 +156,11 @@ extension SVGImageProcessorTests {
             fileURL = Bundle.module.url(forResource: "mozilla", withExtension: "ico")
         case .svg:
             fileURL = Bundle.module.url(forResource: "hackernews", withExtension: "svg")
+        case .badType:
+            guard let badData = "some non-image data".data(using: .utf8) else {
+                throw MockImageServerError.badData
+            }
+            return badData
         }
 
         if let fileURL {

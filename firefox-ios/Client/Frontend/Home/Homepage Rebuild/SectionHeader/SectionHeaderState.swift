@@ -8,7 +8,7 @@ import Redux
 struct SectionHeaderState: Equatable, Hashable {
     let title: String
     let a11yIdentifier: String
-    var isButtonHidden: Bool = true
+    var isButtonHidden = true
     var buttonA11yIdentifier: String?
     var buttonTitle: String?
 }

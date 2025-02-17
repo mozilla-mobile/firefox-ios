@@ -13,15 +13,19 @@ public class WKEngine: Engine {
 
     init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager()) {
         self.userScriptManager = userScriptManager
+
+        InternalUtil().setUpInternalHandlers()
     }
 
     public func createView() -> EngineView {
         return WKEngineView(frame: .zero)
     }
 
-    public func createSession(dependencies: EngineSessionDependencies?) throws -> EngineSession {
+    public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
+        let configProvider = DefaultWKEngineConfigurationProvider(parameters: dependencies.webviewParameters)
         guard let session = WKEngineSession(userScriptManager: userScriptManager,
-                                            telemetryProxy: dependencies?.telemetryProxy) else {
+                                            telemetryProxy: dependencies.telemetryProxy,
+                                            configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated
         }
 

@@ -44,6 +44,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(initialState.isNewTabFeatureEnabled)
         XCTAssertFalse(initialState.canShowDataClearanceAction)
         XCTAssertFalse(initialState.canShowNavigationHint)
+        XCTAssertFalse(initialState.shouldAnimate)
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
@@ -466,6 +467,24 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_urlDidChangeStateAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canGoBack: true,
+                canGoForward: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.backForwardButtonStateChanged
+            )
+        )
+
+        XCTAssertTrue(newState.shouldAnimate)
     }
 
     func test_didClearAlternativeSearchEngineAction_returnsExpectedState() {

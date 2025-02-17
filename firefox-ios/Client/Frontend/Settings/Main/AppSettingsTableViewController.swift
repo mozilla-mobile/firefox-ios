@@ -46,7 +46,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                                       SharedSettingsDelegate {
     // MARK: - Properties
     private var showDebugSettings = false
-    private var debugSettingsClickCount: Int = 0
+    private var debugSettingsClickCount = 0
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
@@ -261,6 +261,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - Generate Settings
 
     override func generateSettings() -> [SettingSection] {
+        setupDataSettings()
         var settings = [SettingSection]()
         settings += getDefaultBrowserSetting()
         settings += getAccountSetting()

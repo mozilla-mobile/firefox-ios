@@ -93,7 +93,12 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         // Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        var homePageMenuItem: XCUIElement
+        if iPad() {
+            homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        } else {
+            homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
+        }
         homePageMenuItem.waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
@@ -273,7 +278,6 @@ class HomePageSettingsUITests: BaseTestCase {
             navigator.performAction(Action.GoToHomePage)
         }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.performAction(Action.ToggleRecentlySaved)
         if !iPad() {
             navigator.performAction(Action.ClickSearchButton)
@@ -300,10 +304,7 @@ class HomePageSettingsUITests: BaseTestCase {
             .staticTexts[urlExampleLabel].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        unbookmark()
-        if !iPad() {
-            navigator.performAction(Action.CloseTab)
-        }
+        unbookmark(url: urlLabelExample_3)
         removeContentFromReaderView()
         navigator.nowAt(LibraryPanel_ReadingList)
         navigator.performAction(Action.CloseReadingListPanel)

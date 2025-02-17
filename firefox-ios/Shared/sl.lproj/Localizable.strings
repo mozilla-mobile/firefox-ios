@@ -290,7 +290,7 @@
 "DownloadsPanel.Delete.Title" = "Izbriši";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Prenesene datoteke bodo prikazane tukaj.";
+"DownloadsPanel.EmptyState.Title" = "Tukaj bodo prikazane prenesene datoteke.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Deli";
@@ -392,7 +392,7 @@
 "fxa.signin.ready-to-scan" = "Pripravljeno za skeniranje";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Namesto tega uporabite e-pošto";
+"fxa.signin.use-email-instead" = "Namesto tega uporabi e-pošto";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Sinhroniziraj zdaj";
@@ -1373,13 +1373,13 @@
 "Settings.NewTab.CustomURL" = "URL po meri";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Prazna stran";
+"Settings.NewTab.Option.BlankPage" = "Prazno stran";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.Custom" = "Po meri";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "Domača stran Firefoxa";
+"Settings.NewTab.Option.FirefoxHome" = "Domačo stran Firefoxa";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Domača stran";
