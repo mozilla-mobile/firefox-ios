@@ -502,7 +502,7 @@ public class RustAutofill {
         logger.log("Autofill key lost, new one generated",
                    level: .warning,
                    category: .storage)
-        self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+        resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
     }
 
     private func handleFirstTimeCallOrClearedKeychainAction(rustKeys: RustAutofillEncryptionKeys,
