@@ -219,7 +219,7 @@ final class LocationView: UIView,
             updateURLTextFieldLeadingConstraint(constant: -dotWidth)
             if lockIconImageName == nil {
                 // This is the case when we are in reader mode and the lock icon is not visible.
-                updateWidthForLockIcon(dotWidth)
+                updateWidthForLockIcon(UX.lockIconImageViewSize.width)
                 iconContainerStackViewLeadingConstraint?.constant = 0
             }
         }
