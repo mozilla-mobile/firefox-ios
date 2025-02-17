@@ -38,7 +38,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    // GeneralBrowserMiddlewareAction
+    // MARK: GeneralBrowserMiddlewareAction
     func testBrowserDidLoad_dispatchesDidLoadToolbars() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = GeneralBrowserMiddlewareAction(
@@ -107,10 +107,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
     }
 
-    // MicrosurveyPromptMiddlewareAction
-    // MicrosurveyPromptAction
+    // MARK: - MicrosurveyPromptMiddlewareAction
 
-    // ToolbarMiddlewareAction
+    // MARK: - MicrosurveyPromptAction
+
+    // MARK: - ToolbarMiddlewareAction
     func testCustomA11yAction_dispatchesAddToReadingListLongPressAction() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
@@ -320,7 +321,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
     }
 
-    // ToolbarAction
+    // MARK: - ToolbarAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarAction(
@@ -341,7 +342,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         return ToolbarMiddleware(manager: manager)
     }
 
-    private func didTapButton(buttonType: ToolbarActionState.ActionType,
+    private func didTapButton(buttonType: ToolbarActionConfiguration.ActionType,
                               expectedActionType: GeneralBrowserActionType) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
