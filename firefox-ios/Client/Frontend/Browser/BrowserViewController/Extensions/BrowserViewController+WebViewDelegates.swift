@@ -474,7 +474,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-//        screenshotHelper?.takeScreenshot(tab)
         updateZoomPageBarVisibility(visible: false)
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
@@ -1022,15 +1021,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-        if isPDFRefactorEnabled, let webView = webView as? TabWebView {
-            if webView.isLoading {
-                let action = ToolbarAction(
-                    isLoading: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.websiteLoadingStateDidChange
-                )
-                store.dispatch(action)
-            }
+        if isPDFRefactorEnabled {
             scrollController.configureNewRefreshControl()
             navigationHandler?.removeDocumentLoading()
         }

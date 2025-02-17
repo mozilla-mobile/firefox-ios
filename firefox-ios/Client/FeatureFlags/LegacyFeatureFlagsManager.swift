@@ -51,6 +51,9 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
+        if featureID == .pdfRefactor {
+            return true
+        }
         guard let profile else { return false }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
