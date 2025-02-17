@@ -26,8 +26,6 @@ public final class NavigationHeaderView: UIView {
         label.lineBreakMode = .byTruncatingTail
         label.accessibilityTraits.insert(.header)
         label.isAccessibilityElement = false
-        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -40,8 +38,7 @@ public final class NavigationHeaderView: UIView {
                         for: .normal)
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
-        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        button.contentHorizontalAlignment = .left
     }
 
     private let horizontalLine: UIView = .build()
@@ -69,10 +66,8 @@ public final class NavigationHeaderView: UIView {
         viewConstraints.append(contentsOf: [
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.imageMargins),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backButton.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.leadingAnchor,
-                                                 constant: -UX.horizontalMargin),
 
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: backButton.trailingAnchor,
+            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor,
                                                 constant: UX.horizontalMargin),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
                                                  constant: -UX.horizontalMargin),
