@@ -33,43 +33,11 @@ final class ToolbarTelemetryTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
     }
 
-    func testRecordToolbarWhenBackLongPressedThenGleanIsCalled() throws {
-        subject?.backButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.backLongPress)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.backLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
-    func testRecordToolbarWhenForwardLongPressedThenGleanIsCalled() throws {
-        subject?.forwardButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardLongPress)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.forwardLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
-    func testRecordToolbarWhenOneTapNewTabLongPressedThenGleanIsCalled() throws {
-        subject?.oneTapNewTabButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabLongPress)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.oneTapNewTabLongPress.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
     func testRecordToolbarWhenTabTrayTappedThenGleanIsCalled() throws {
         subject?.tabTrayButtonTapped(isPrivate: true)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayButtonTapped)
 
         let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
-    func testRecordToolbarWhenTabTrayLongPressedThenGleanIsCalled() throws {
-        subject?.tabTrayButtonLongPressed(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayLongPress)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayLongPress.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
     }
 

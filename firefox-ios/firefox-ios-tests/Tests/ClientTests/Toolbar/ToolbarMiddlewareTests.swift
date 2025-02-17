@@ -321,6 +321,67 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
     }
 
+    func testDidTapButton_longPressOnBackButton_dispatchesShowBackForwardList() throws {
+        try didLongPressButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.showBackForwardList)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.backLongPress)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.backLongPress.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_longPressOnForwardButton_dispatchesShowBackForwardList() throws {
+        try didLongPressButton(buttonType: .forward, expectedActionType: GeneralBrowserActionType.showBackForwardList)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardLongPress)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.forwardLongPress.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_longPressOnTabsButton_dispatchesShowTabsLongPressActions() throws {
+        try didLongPressButton(buttonType: .tabs, expectedActionType: GeneralBrowserActionType.showTabsLongPressActions)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayLongPress)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayLongPress.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_longPressOnLocationView_dispatchesShowLocationViewLongPressActionSheet() throws {
+        try didLongPressButton(buttonType: .locationView,
+                               expectedActionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
+    }
+
+    func testDidTapButton_longPressOnReloadButton_dispatchesShowReloadLongPressAction() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: .reload,
+            buttonTapped: UIButton(),
+            gestureType: .longPress,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showReloadLongPressAction)
+    }
+
+    func testDidTapButton_longPressOnNewTabButton_dispatchesShowNewTabLongPressActions() throws {
+        try didLongPressButton(buttonType: .newTab,
+                               expectedActionType: GeneralBrowserActionType.showNewTabLongPressActions)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabLongPress)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.oneTapNewTabLongPress.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidTapButton_longPressOnReaderMode_dispatchesAddToReadingListLongPressAction() throws {
+        try didLongPressButton(buttonType: .readerMode,
+                               expectedActionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+    }
+
     // MARK: - ToolbarAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
         let subject = createSubject(manager: toolbarManager)
@@ -348,6 +409,24 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
             gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, expectedActionType)
+    }
+
+    private func didLongPressButton(buttonType: ToolbarActionConfiguration.ActionType,
+                                    expectedActionType: GeneralBrowserActionType) throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: buttonType,
+            gestureType: .longPress,
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton)
 
