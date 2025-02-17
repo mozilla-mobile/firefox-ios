@@ -22,7 +22,8 @@ struct AddressToolbarContainerModel {
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition)
+            borderPosition: borderPosition,
+            shouldAnimate: false)
     }
 
     private var borderPosition: AddressToolbarBorderPosition? {

@@ -40,7 +40,7 @@ class WKEngineSession: NSObject,
 
     init?(userScriptManager: WKUserScriptManager,
           telemetryProxy: EngineTelemetryProxy? = nil,
-          configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
+          configurationProvider: WKEngineConfigurationProvider,
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),

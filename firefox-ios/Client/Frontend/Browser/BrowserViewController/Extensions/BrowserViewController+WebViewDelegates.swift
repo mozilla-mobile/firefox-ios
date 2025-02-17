@@ -917,13 +917,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
 
                 if isNativeErrorPageEnabled {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
+                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError

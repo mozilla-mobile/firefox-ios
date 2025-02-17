@@ -44,11 +44,14 @@ jobs:
           tar -xvf l10n-screenshots-dd.tar
       - name: Generate screenshots
         continue-on-error: true
+        id: screenshots
         run: |
           focus-ios/l10n-screenshots.sh --test-without-building ${{ inputs.locales }}
+          hash=`echo "${{ inputs.locales }}" | shasum | awk '{print $1}'`
+          echo "hash=$hash" >> $GITHUB_OUTPUT
       - name: Upload screenshots
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4.6.0
         with:
           path: ./l10n-screenshots
           retention-days: 90
-          name: Screenshots-${{ job.container.id }}
+          name: Screenshots-${{ steps.screenshots.outputs.hash }}

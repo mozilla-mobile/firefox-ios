@@ -1540,7 +1540,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Native Error Page
 
     func showEmbeddedNativeErrorPage() {
-    // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
@@ -1585,12 +1584,12 @@ class BrowserViewController: UIViewController,
         /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url?.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
+        let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
+        let genericErrorPageEnabled = isErrorURL && isNativeErrorPageEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && isNativeErrorPageEnabled {
-            showEmbeddedNativeErrorPage()
-        } else if isNICErrorCode && isNICErrorPageEnabled {
+        } else if genericErrorPageEnabled && noInternetConnectionEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -3496,7 +3495,6 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
-            descriptionText: "",
             buttonText: .GoButtonTittle
         )
 

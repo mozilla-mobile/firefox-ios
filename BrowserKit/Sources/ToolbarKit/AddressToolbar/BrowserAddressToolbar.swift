@@ -32,7 +32,7 @@ public class BrowserAddressToolbar: UIView,
         static let iconsAnimationDelay: CGFloat = 0.075
     }
 
-    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
+    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?

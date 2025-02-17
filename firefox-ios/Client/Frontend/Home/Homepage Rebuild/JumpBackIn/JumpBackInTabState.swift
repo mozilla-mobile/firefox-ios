@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 struct JumpBackInTabConfiguration: Equatable, Hashable {
+    let tabUUID: String
     let titleText: String
     let descriptionText: String
     let siteURL: String
@@ -32,5 +33,30 @@ struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
     }
     var syncedTabOpenActionTitle: String {
         return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
+    }
+}
+
+/// Configuration for the "Jump Back In" section layout.
+/// Determines the maximum number of local tabs to display based on whether a synced (remote) tab is present.
+struct JumpBackInSectionLayoutConfiguration: Equatable, Hashable {
+    /// Maximum number of local tabs to display when a synced (remote) tab is present.
+    let maxLocalTabsWhenSyncedTabExists: Int
+
+    /// Maximum number of local tabs to display when no synced (remote) tab is present.
+    let maxLocalTabsWhenNoSyncedTab: Int
+
+    let layoutType: LayoutType
+
+    var hasSyncedTab: Bool?
+
+    enum LayoutType: Equatable, Hashable {
+        case compact
+        case medium
+        case regular
+    }
+
+    /// Computes the maximum number of local tabs to display based on the presence of a synced tab.
+    var getMaxNumberOfLocalTabsLayout: Int {
+        return hasSyncedTab ?? false ? maxLocalTabsWhenSyncedTabExists : maxLocalTabsWhenNoSyncedTab
     }
 }

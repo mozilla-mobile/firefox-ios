@@ -19,6 +19,7 @@ protocol TabManagerDelegate: AnyObject {
     func tabManagerDidAddTabs(_ tabManager: TabManager)
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
     func tabManagerUpdateCount()
+    func tabManagerTabDidFinishLoading()
 }
 
 extension TabManagerDelegate {
@@ -30,6 +31,7 @@ extension TabManagerDelegate {
     func tabManagerDidAddTabs(_ tabManager: TabManager) {}
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {}
     func tabManagerUpdateCount() {}
+    func tabManagerTabDidFinishLoading() {}
 }
 
 // MARK: - WeakTabManagerDelegate

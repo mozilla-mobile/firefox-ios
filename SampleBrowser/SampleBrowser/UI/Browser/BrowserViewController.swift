@@ -26,6 +26,7 @@ class BrowserViewController: UIViewController,
     private var engineSession: EngineSession
     private var engineView: EngineView
     private let urlFormatter: URLFormatter
+    private var gradientLayer: CAGradientLayer?
 
     // MARK: - Init
 
@@ -50,12 +51,29 @@ class BrowserViewController: UIViewController,
 
         view.backgroundColor = .clear
         setupProgressBar()
-
-        setupBrowserView(engineView)
         engineSession.delegate = self
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setGradientBackground()
+    }
+
+    private func setGradientBackground() {
+        self.gradientLayer?.removeFromSuperlayer()
+        let colorTop =  UIColor.orange.cgColor
+        let colorBottom = UIColor.purple.cgColor
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 0.6]
+        gradientLayer.frame = self.view.bounds
+        self.gradientLayer = gradientLayer
+        view.layer.insertSublayer(gradientLayer, at: 0)
+    }
+
     private func setupBrowserView(_ engineView: EngineView) {
+        guard engineView.superview == nil else { return }
         engineView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(engineView)
 
@@ -151,6 +169,8 @@ class BrowserViewController: UIViewController,
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
+        setupBrowserView(engineView)
+
         if let url = urlFormatter.getURL(entry: searchTerm.term) {
             // Search the entered URL
             let context = BrowsingContext(type: .internalNavigation, url: url)

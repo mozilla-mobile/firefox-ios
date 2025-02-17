@@ -51,7 +51,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.1.3"),
+            exact: "8.2.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -66,7 +66,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/swhitty/SwiftDraw",
-            exact: "0.17.0"),
+            exact: "0.18.3"),
     ],
     targets: [
         .target(name: "Shared",
