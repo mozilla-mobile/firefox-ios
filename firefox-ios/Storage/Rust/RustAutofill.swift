@@ -509,7 +509,7 @@ public class RustAutofill {
                                                             completion: @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
-        self.hasCreditCards { result in
+        hasCreditCards { result in
             switch result {
             case .success(let hasCreditCards):
                 if hasCreditCards {
