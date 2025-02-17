@@ -939,7 +939,7 @@ class BrowserViewController: UIViewController,
 
             createLegacyUrlBar()
 
-            legacyUrlBar?.snp.makeConstraints { make in
+            legacyUrlBar?.snp.remakeConstraints { make in
                 legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             }
         }
@@ -1264,8 +1264,6 @@ class BrowserViewController: UIViewController,
     }
 
     override func updateViewConstraints() {
-        super.updateViewConstraints()
-
         NSLayoutConstraint.activate([
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1308,6 +1306,8 @@ class BrowserViewController: UIViewController,
         } else {
             adjustBottomSearchBarForKeyboard()
         }
+
+        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
