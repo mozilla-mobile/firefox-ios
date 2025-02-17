@@ -7564,6 +7564,22 @@ extension String {
     }
 }
 
+// MARK: - Live Activity
+extension String {
+    public struct LiveActivity {
+        public static let DownloadingFile = MZLocalizedString(
+            key: "LiveActivity.DownloadingFile.v135",
+            tableName: "LiveActivity",
+            value: "Downloading %@",
+            comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents either the filename of the file being downloaded (e.g. \"MyFile.pdf\") or a count of multiple files (e.g. \"Downloading 2 files\").")
+        public static let DownloadingProgress = MZLocalizedString(
+            key: "LiveActivity.DownloadingProgress.v135",
+            tableName: "LiveActivity",
+            value: "%@ of %@",
+            comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ and %@ placeholders represent the current download progress (e.g. \"10 MB of 200 MB\").")
+    }
+}
+
 // MARK: - v35 Strings
 extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString(
