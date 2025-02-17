@@ -382,6 +382,56 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
                                expectedActionType: GeneralBrowserActionType.addToReadingListLongPressAction)
     }
 
+    func testUrlDidChange_dispatchesBorderPositionChanged() throws {
+        let scrollOffset = CGPoint(x: 0, y: 100)
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            scrollOffset: scrollOffset,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.urlDidChange)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top,
+                                                                     isPrivate: false,
+                                                                     scrollY: scrollOffset.y)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
+    }
+
+    func testDidClearSearch_dispatchesClearSearch() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didClearSearch)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.clearSearch)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchButtonTapped)
+        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.clearSearchButtonTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["is_private"], "false")
+    }
+
+    func testDidStartDragInteraction_recordsTelemetry() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
+        subject.toolbarProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.dragLocationBar)
+    }
+
     // MARK: - ToolbarAction
     func testCancelEdit_dispatchesDidClearAlternativeSearchEngine() throws {
         let subject = createSubject(manager: toolbarManager)

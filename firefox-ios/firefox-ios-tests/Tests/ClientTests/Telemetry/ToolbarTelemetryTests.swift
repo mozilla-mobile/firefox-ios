@@ -25,24 +25,11 @@ final class ToolbarTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
-    func testRecordToolbarWhenClearSearchTappedThenGleanIsCalled() throws {
-        subject?.clearSearchButtonTapped(isPrivate: true)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchButtonTapped)
-
-        let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.clearSearchButtonTapped.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
     func testRecordToolbarWhenTabTrayTappedThenGleanIsCalled() throws {
         subject?.tabTrayButtonTapped(isPrivate: true)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.tabTrayButtonTapped)
 
         let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.tabTrayButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
-    }
-
-    func testRecordToolbarWhenLocationDraggedThenGleanIsCalled() throws {
-        subject?.dragInteractionStarted()
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.dragLocationBar)
     }
 }
