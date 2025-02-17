@@ -477,10 +477,10 @@ public class RustAutofill {
                 key: key!
             )
         } catch let error as NSError {
-            self.logger.log("Error validating autofill encryption key",
-                            level: .warning,
-                            category: .storage,
-                            description: error.localizedDescription)
+            logger.log("Error validating autofill encryption key",
+                       level: .warning,
+                       category: .storage,
+                       description: error.localizedDescription)
             completion(.failure(error))
             return
         }
