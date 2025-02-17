@@ -108,8 +108,74 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - MicrosurveyPromptMiddlewareAction
+    func testMicrosurveyPromptInitialize_withTopToolbar_dispatchesToolbarPositionChanged() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.displayNavBorder, false)
+    }
+
+    func testMicrosurveyPromptInitialize_withBottomToolbar_dispatchesToolbarPositionChanged() throws {
+        mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.none)
+        XCTAssertEqual(actionCalled.displayNavBorder, false)
+    }
 
     // MARK: - MicrosurveyPromptAction
+    func testMicrosurveyPromptClosePrompt_withTopToolbar_dispatchesToolbarPositionChanged() throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptActionType.closePrompt)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.displayNavBorder, true)
+    }
+
+    func testMicrosurveyPromptClosePrompt_withBottomToolbar_dispatchesToolbarPositionChanged() throws {
+        mockStore = MockStoreForMiddleware(state: setupToolbarBottomPositionAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptActionType.closePrompt)
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.borderPositionChanged)
+        XCTAssertEqual(actionCalled.addressBorderPosition, AddressToolbarBorderPosition.top)
+        XCTAssertEqual(actionCalled.displayNavBorder, false)
+    }
 
     // MARK: - ToolbarMiddlewareAction
     func testCustomA11yAction_dispatchesAddToReadingListLongPressAction() throws {
@@ -505,6 +571,24 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         addressBarState.isEditing = true
         var toolbarState = ToolbarState(windowUUID: windowUUID)
         toolbarState.addressToolbar = addressBarState
+
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
+    func setupToolbarBottomPositionAppState() -> AppState {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.toolbarPosition = .bottom
 
         return AppState(
             activeScreens: ActiveScreensState(
