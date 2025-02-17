@@ -352,8 +352,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         switch toastAction {
         case .bookmarkPage:
             let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .BookmarksEdit,
-                                                 textAlignment: .left)
+                                                 buttonText: .BookmarksEdit)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { isButtonTapped in
                 isButtonTapped ? self.openBookmarkEditPanel() : nil
@@ -365,8 +364,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
             }
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString,
-                                                 textAlignment: .left)
+                                                 buttonText: .UndoString)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { [weak self] isButtonTapped in
                 guard let self, let currentTab = tabManager.selectedTab else { return }
@@ -378,8 +376,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
             show(toast: toast)
         case .closeTab:
             let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString,
-                                                 textAlignment: .left)
+                                                 buttonText: .UndoString)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { [weak self] isButtonTapped in
                 guard let self,

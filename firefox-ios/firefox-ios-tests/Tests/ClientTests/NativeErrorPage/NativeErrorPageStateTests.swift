@@ -8,16 +8,6 @@ import XCTest
 @testable import Client
 
 final class NativeErrorPageStateTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
-    }
-
-    override func tearDown() {
-        DependencyHelperMock().reset()
-        super.tearDown()
-    }
-
     func testInitialState() {
         let initialState = createSubject()
 

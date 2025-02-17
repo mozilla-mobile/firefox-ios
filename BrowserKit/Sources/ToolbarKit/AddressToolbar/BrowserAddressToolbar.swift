@@ -27,11 +27,12 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
-        static let toolbarAnimationTime: CGFloat = 0.25
-        static let iconsAnimationTime: CGFloat = 0.15
+        static let toolbarAnimationTime: CGFloat = 0.15
+        static let iconsAnimationTime: CGFloat = 0.1
+        static let iconsAnimationDelay: CGFloat = 0.075
     }
 
-    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
+    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
@@ -96,18 +97,21 @@ public class BrowserAddressToolbar: UIView,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat,
                           trailingSpace: CGFloat,
-                          isUnifiedSearchEnabled: Bool) {
+                          isUnifiedSearchEnabled: Bool,
+                          animated: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         self.previousLocationViewConfiguration = config.locationViewConfiguration
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
-        configure(config: config, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        configure(config: config,
+                  isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                  animated: animated)
     }
 
-    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool) {
+    public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
         updateBorder(borderPosition: config.borderPosition)
 
-        updateActions(config: config)
+        updateActions(config: config, animated: animated)
         locationView.configure(
             config.locationViewConfiguration,
             delegate: self,
@@ -243,7 +247,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Toolbar Actions and Layout Updates
-    internal func updateActions(config: AddressToolbarConfiguration) {
+    internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
 
@@ -254,23 +258,22 @@ public class BrowserAddressToolbar: UIView,
         updateActionStack(stackView: pageActionStack, toolbarElements: config.pageActions)
 
         updateActionSpacing()
-        updateToolbarLayout()
+        updateToolbarLayout(animated: animated)
     }
 
-    private func updateToolbarLayout() {
+    private func updateToolbarLayout(animated: Bool) {
         let stacks = browserActionStack.arrangedSubviews +
                      navigationActionStack.arrangedSubviews +
                      pageActionStack.arrangedSubviews
-        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
-            UIView.animate(withDuration: UX.toolbarAnimationTime) {
+            UIView.animate(withDuration: UX.toolbarAnimationTime, delay: 0.0, options: .curveEaseOut) {
                 self.layoutIfNeeded()
-            } completion: { _ in
-                UIView.animate(withDuration: UX.iconsAnimationTime) {
-                    stacks.forEach {
-                        $0.alpha = 1.0
-                    }
+            }
+            UIView.animate(withDuration: UX.iconsAnimationTime, delay: UX.iconsAnimationDelay, options: .curveEaseOut) {
+                stacks.forEach {
+                    $0.alpha = 1.0
                 }
             }
         } else {

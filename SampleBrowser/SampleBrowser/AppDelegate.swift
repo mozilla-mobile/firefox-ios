@@ -13,7 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
 
     lazy var engineProvider: EngineProvider = {
-        let dependencies = EngineSessionDependencies(telemetryProxy: TelemetryHandler())
+        let parameters = WKWebviewParameters(blockPopups: false, isPrivate: false)
+        let dependencies = EngineSessionDependencies(webviewParameters: parameters,
+                                                     telemetryProxy: TelemetryHandler())
         return EngineProvider(sessionDependencies: dependencies)!
     }()
 

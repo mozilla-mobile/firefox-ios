@@ -410,9 +410,13 @@ class BookmarksTests: BaseTestCase {
     private func validateLongTapOptionsFromBookmarkLink() {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
-        waitForTabsButton()
+        waitUntilPageLoad()
         bookmark()
-        navigator.performAction(Action.GoToHomePage)
+        if XCUIDevice.shared.orientation == .landscapeLeft {
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
         longPressBookmarkCell()
         // The context menu opens, having the correct options
         let contextMenuTable = app.tables["Context Menu"]
@@ -428,10 +432,21 @@ class BookmarksTests: BaseTestCase {
         // Tap to "Open in New Tab"
         contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()
         // The webpage opens in a new tab
-        switchToTabAndValidate(nrOfTabs: "3")
+        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
+            switchToTabAndValidate(nrOfTabs: "3")
+        } else {
+            switchToTabAndValidate(nrOfTabs: "2")
+        }
 
         // Tap to "Open in Private Tab"
-        navigator.performAction(Action.GoToHomePage)
+        if XCUIDevice.shared.orientation == .landscapeLeft || iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         longPressBookmarkCell()
         contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         // The webpage opens in a new private tab
@@ -446,10 +461,14 @@ class BookmarksTests: BaseTestCase {
         // Tap to "Remove bookmark"
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         longPressBookmarkCell()
         contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
         // The bookmark is removed
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
         navigator.goto(LibraryPanel_Bookmarks)
         checkEmptyBookmarkList()
     }
@@ -462,7 +481,6 @@ class BookmarksTests: BaseTestCase {
 
     private func longPressBookmarkCell() {
         let bookMarkCell = app.cells["BookmarksCell"]
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         scrollToElement(bookMarkCell)
         bookMarkCell.press(forDuration: 1.5)
     }

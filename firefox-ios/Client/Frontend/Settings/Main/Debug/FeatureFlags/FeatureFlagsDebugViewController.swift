@@ -123,6 +123,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .pdfRefactor,
+                    titleText: format(string: "Enable PDF Refactor"),
+                    statusText: format(string: "Toggle to enable PDF Refactor feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .downloadLiveActivities,
+                    titleText: format(string: "Enable Download Live Activities"),
+                    statusText: format(string: "Toggle to enable download live activities")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .sentFromFirefox,
                     titleText: format(string: "Enable Sent from Firefox"),
                     statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")

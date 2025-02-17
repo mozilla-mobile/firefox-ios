@@ -15,10 +15,11 @@ class DownloadToast: Toast {
         view.layer.cornerRadius = Toast.UX.toastCornerRadius
     }
 
-    private var horizontalStackView: UIStackView = .build { stackView in
+    private var contentStackView: UIStackView = .build { stackView in
+        stackView.spacing = ButtonToast.UX.stackViewSpacing
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.spacing = ButtonToast.UX.padding
+        stackView.distribution = .fill
     }
 
     private var imageView: UIImageView = .build { imageView in
@@ -139,10 +140,10 @@ class DownloadToast: Toast {
             toastView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Toast.UX.shadowVerticalSpacing),
             toastView.heightAnchor.constraint(equalTo: heightAnchor, constant: -Toast.UX.shadowHorizontalSpacing),
 
-            heightAnchor.constraint(equalToConstant: Toast.UX.toastHeightWithShadow)
+            heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeightWithShadow)
         ])
 
-        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor,
+        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
                                                              constant: Toast.UX.toastHeightWithShadow)
         animationConstraint?.isActive = true
         applyTheme(theme: theme)
@@ -182,7 +183,7 @@ class DownloadToast: Toast {
     }
 
     func createView(_ labelText: String, descriptionText: String) -> UIView {
-        horizontalStackView.addArrangedSubview(imageView)
+        contentStackView.addArrangedSubview(imageView)
 
         titleLabel.text = labelText
         descriptionLabel.text = descriptionText
@@ -190,11 +191,11 @@ class DownloadToast: Toast {
         labelStackView.addArrangedSubview(titleLabel)
         labelStackView.addArrangedSubview(descriptionLabel)
 
-        horizontalStackView.addArrangedSubview(labelStackView)
-        horizontalStackView.addArrangedSubview(closeButton)
+        contentStackView.addArrangedSubview(labelStackView)
+        contentStackView.addArrangedSubview(closeButton)
 
         toastView.addSubview(progressView)
-        toastView.addSubview(horizontalStackView)
+        toastView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate(
             [
@@ -202,16 +203,14 @@ class DownloadToast: Toast {
                 progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
                 progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
 
-                horizontalStackView.leadingAnchor.constraint(
-                    equalTo: toastView.leadingAnchor,
-                    constant: ButtonToast.UX.padding
-                ),
-                horizontalStackView.trailingAnchor.constraint(
-                    equalTo: toastView.trailingAnchor,
-                    constant: -ButtonToast.UX.padding
-                ),
-                horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
-                horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
+                contentStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor,
+                                                          constant: ButtonToast.UX.spacing),
+                contentStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor,
+                                                           constant: -ButtonToast.UX.spacing),
+                contentStackView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor,
+                                                         constant: -ButtonToast.UX.spacing),
+                contentStackView.topAnchor.constraint(equalTo: toastView.topAnchor,
+                                                      constant: ButtonToast.UX.spacing),
 
                 closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
                 closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
@@ -250,6 +249,21 @@ class DownloadToast: Toast {
         imageView.tintColor = theme.colors.textInverted
         closeButton.tintColor = theme.colors.textInverted
         progressView.backgroundColor = theme.colors.actionPrimaryHover
+    }
+
+    override func adjustLayoutForA11ySizeCategory() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        if contentSizeCategory.isAccessibilityCategory {
+            // Description label changes with progress and if this isn't clipped the height of the
+            // toast changes continually while loading
+            descriptionLabel.numberOfLines = 1
+            descriptionLabel.lineBreakMode = .byTruncatingTail
+        } else {
+            descriptionLabel.numberOfLines = 0
+            descriptionLabel.lineBreakMode = .byWordWrapping
+        }
+
+        setNeedsLayout()
     }
 
     override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {

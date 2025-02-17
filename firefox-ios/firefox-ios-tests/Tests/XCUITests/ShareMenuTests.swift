@@ -166,7 +166,7 @@ class ShareMenuTests: BaseTestCase {
     private func reachShareMenuLayoutAndSelectOption(option: String, url: String = url_3) {
         // Open a website in the browser
         navigator.openURL(url)
-        waitForTabsButton()
+        waitUntilPageLoad()
         navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)

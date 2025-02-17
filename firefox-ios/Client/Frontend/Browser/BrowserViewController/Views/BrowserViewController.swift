@@ -244,6 +244,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
     }
 
+    var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1536,7 +1540,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Native Error Page
 
     func showEmbeddedNativeErrorPage() {
-    // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
@@ -1581,12 +1584,12 @@ class BrowserViewController: UIViewController,
         /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url?.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
+        let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
+        let genericErrorPageEnabled = isErrorURL && isNativeErrorPageEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && isNativeErrorPageEnabled {
-            showEmbeddedNativeErrorPage()
-        } else if isNICErrorCode && isNICErrorPageEnabled {
+        } else if genericErrorPageEnabled && noInternetConnectionEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -1908,10 +1911,15 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
-                if isToolbarRefactorEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+                let progress = if let progress = change?[.newKey] as? Double {
+                    progress
                 } else {
-                    legacyUrlBar?.updateProgressBar(Float(webView.estimatedProgress))
+                    webView.estimatedProgress
+                }
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: progress)
+                } else {
+                    legacyUrlBar?.updateProgressBar(Float(progress))
                 }
                 setupMiddleButtonStatus(isLoading: true)
             } else {
@@ -1952,18 +1960,24 @@ class BrowserViewController: UIViewController,
             }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
-            // the same origin as the current URL. Otherwise, do nothing and wait for
-            // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == url.origin {
-                tab.url = url
-
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
+            // the same origin as the current URL. Otherwise, if the origins are different
+            // or either origin is nil, set the tab URL to the URL's origin and return.
+            guard let tabURLOrigin = tab.url?.origin,
+                  let urlOrigin = url.origin,
+                  tabURLOrigin == urlOrigin else {
+                if let urlOrigin = url.origin {
+                    tab.url = URL(string: urlOrigin)!
                 }
-                // Catch history pushState navigation, but ONLY for same origin navigation,
-                // for reasons above about URL spoofing risk.
-                navigateInTab(tab: tab, webViewStatus: .url)
+                return
             }
+            tab.url = url
+
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
+            }
+            // Catch history pushState navigation, but ONLY for same origin navigation,
+            // for reasons above about URL spoofing risk.
+            navigateInTab(tab: tab, webViewStatus: .url)
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:) except when ReaderModeState is active
@@ -3487,7 +3501,6 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
-            descriptionText: "",
             buttonText: .GoButtonTittle
         )
 
@@ -4091,7 +4104,11 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
-        if !isToolbarRefactorEnabled { legacyUrlBar?.updateProgressBar(Float(0)) }
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.updateProgressBar(progress: 0)
+        } else {
+            legacyUrlBar?.updateProgressBar(Float(0))
+        }
         updateTabCountUsingTabManager(tabManager)
     }
 

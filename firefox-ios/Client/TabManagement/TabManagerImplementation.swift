@@ -901,6 +901,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
+        privateConfiguration = TabManagerImplementation.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         tabs = normalTabs
     }
 
@@ -1307,6 +1308,7 @@ extension TabManagerImplementation: WKNavigationDelegate {
 
             if let title = webView.title, selectedTab?.webView == webView {
                 selectedTab?.lastTitle = title
+                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
             }
 
             storeChanges()

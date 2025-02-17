@@ -13,14 +13,20 @@ class HomeButtonTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
     func testGoHome() throws {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        waitUntilPageLoad()
+        navigator.performAction(Action.GoToHomePage)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         if !iPad() {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        waitUntilPageLoad()
+        if iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        }
 
         XCUIDevice.shared.orientation = .landscapeRight
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
@@ -34,9 +40,13 @@ class HomeButtonTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        navigator.performAction(Action.GoToHomePage)
 
-        validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
+        if iPad() {
+            validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
+        } else {
+            validateHomePageAndKeyboardRaisedUp(showKeyboard: false)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306881

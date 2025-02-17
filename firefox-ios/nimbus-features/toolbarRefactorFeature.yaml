@@ -36,6 +36,6 @@ features:
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: true
+          one_tap_new_tab: false
           navigation_hint: true
 

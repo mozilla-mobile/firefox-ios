@@ -8,20 +8,29 @@ import Foundation
 
 class MockTemporaryDocument: TemporaryDocument {
     var fileURL: URL
-    var getURLCalled = 0
-    var getDownloadedURLCalled = 0
+    var filename = ""
+    var isDownloading = false
+    var downloadCalled = 0
+    var downloadAsyncCalled = 0
 
     init(withFileURL fileURL: URL) {
         self.fileURL = fileURL
     }
 
-    func getURL(completionHandler: @escaping ((URL?) -> Void)) {
-        getURLCalled += 1
-        completionHandler(fileURL)
+    func canDownload(request: URLRequest) -> Bool {
+        return true
     }
 
-    func getDownloadedURL() async -> URL? {
-        getDownloadedURLCalled += 1
+    func download(_ completion: @escaping (URL?) -> Void) {
+        downloadCalled += 1
+        completion(fileURL)
+    }
+
+    func download() async -> URL? {
+        downloadAsyncCalled += 1
         return fileURL
     }
+
+    /// Invalidates the current download session if any and release all the resources.
+    func invalidateSession() {}
 }

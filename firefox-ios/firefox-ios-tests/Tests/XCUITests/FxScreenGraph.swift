@@ -904,7 +904,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.privateMode],
+                app.tables.cells.otherElements[StandardImageIdentifiers.Large.tab],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
@@ -952,11 +952,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: TrackingProtectionContextMenuDetails
         )
 
+        if isTablet {
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton],
-            forAction: Action.GoToHomePage
-        ) { userState in
-        }
+            forAction: Action.GoToHomePage)
+            } else {
+                screenState.tap(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
+                forAction: Action.GoToHomePage)
+            }
 
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],

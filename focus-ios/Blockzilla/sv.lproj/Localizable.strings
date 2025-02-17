@@ -425,7 +425,7 @@
 "Settings.trackingProtectionOn" = "På";
 
 /* Value for theme toggle in settings menu */
-"Settings.useSystemTheme" = "Använd systemets ljust/mörkt läge";
+"Settings.useSystemTheme" = "Använd systemets ljusa/mörka läge";
 
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "SIRI GENVÄGAR";

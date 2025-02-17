@@ -5,15 +5,16 @@
 import UIKit
 
 public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
-    override internal func updateActions(config: AddressToolbarConfiguration) {
+    override internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // In compact mode no browser actions will be displayed
         let compactConfig = AddressToolbarConfiguration(
             locationViewConfiguration: config.locationViewConfiguration,
             navigationActions: config.navigationActions,
             pageActions: config.pageActions,
             browserActions: [],
-            borderPosition: config.borderPosition
+            borderPosition: config.borderPosition,
+            shouldAnimate: config.shouldAnimate
         )
-        super.updateActions(config: compactConfig)
+        super.updateActions(config: compactConfig, animated: animated)
     }
 }
