@@ -1,3 +1,6 @@
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "ທີ່ຢູ່ທີ່ບັນທຶກໄວ້";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "ບັນທຶກຂໍ້ມູນບັດຂອງທ່ານໄວ້ຢ່າງປອດໄພເພື່ອຈ່າຍເງິນໄດ້ໄວຂຶ້ນໃນຄັ້ງຕໍ່ໄປ.";
 
@@ -12,6 +15,9 @@
 
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "ບັນຊີ";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ບັນຊີ";
