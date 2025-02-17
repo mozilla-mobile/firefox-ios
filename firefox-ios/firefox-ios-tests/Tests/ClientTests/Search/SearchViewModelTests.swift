@@ -48,6 +48,39 @@ final class SearchViewModelTests: XCTestCase {
         profile = nil
     }
 
+    func testHasFirefoxSuggestionsWhenAllConditionsAreFalse() {
+        let subject = createSubject()
+        searchEnginesManager.shouldShowBookmarksSuggestions = false
+        searchEnginesManager.shouldShowBrowsingHistorySuggestions = false
+        subject.filteredOpenedTabs = []
+        subject.filteredRemoteClientTabs = []
+        searchEnginesManager.shouldShowSyncedTabsSuggestions = false
+        subject.searchHighlights = []
+        subject.firefoxSuggestions = []
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
+        XCTAssertFalse(subject.hasFirefoxSuggestions)
+    }
+
+    func testHasFirefoxSuggestionsWhenFirefoxSuggestionsExistButShouldNotShowIsFalse() {
+        let subject = createSubject()
+        subject.firefoxSuggestions = [
+            RustFirefoxSuggestion(title: "Test", url: URL(string: "https://google.com")!, isSponsored: true, iconImage: nil)
+        ]
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
+        XCTAssertFalse(subject.hasFirefoxSuggestions)
+    }
+
+    func testHasFirefoxSuggestionsWhenFirefoxSuggestionsExistAndShouldShowIsTrue() {
+        let subject = createSubject()
+        subject.firefoxSuggestions = [
+            RustFirefoxSuggestion(title: "Test", url: URL(string: "https://google.com")!, isSponsored: true, iconImage: nil)
+        ]
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        XCTAssertTrue(subject.hasFirefoxSuggestions)
+    }
+
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
