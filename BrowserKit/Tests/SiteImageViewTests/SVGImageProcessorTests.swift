@@ -9,8 +9,42 @@ import Kingfisher
 import GCDWebServers
 
 class SVGImageProcessorTests: XCTestCase {
-    func testDownloadingSVGImage_withKingfisherProcessor() async {
-        let assetType: AssetType = .svg
+    func testDownloadingSVGImage_withKingfisherProcessor_forStandardSVGCase() async {
+        let assetType: AssetType = .svgCase1
+        let expectedRasterSize = CGSize(width: 360, height: 360)
+
+        guard let imageData = try? dataFor(type: assetType) else {
+            XCTFail("Could not load test asset")
+            return
+        }
+
+        guard let mockedURL = try? await startMockImageServer(imageData: imageData, forAssetType: assetType) else {
+            XCTFail("Check bundle setup for mock server response data")
+            return
+        }
+
+        let exp = expectation(description: "Image download and parse")
+
+        let siteDownloader = DefaultSiteImageDownloader()
+        siteDownloader.downloadImage(with: mockedURL, options: [.processor(SVGImageProcessor())]) { result in
+            switch result {
+            case .success(let result):
+                XCTAssertEqual(result.originalData, imageData)
+                XCTAssertEqual(result.url, mockedURL)
+                XCTAssertEqual(result.image.size, expectedRasterSize)
+                exp.fulfill()
+            case .failure(let error):
+                XCTFail("Should not have an error: \(error) \(error.errorDescription ?? "")")
+                exp.fulfill()
+            }
+        }
+
+        await fulfillment(of: [exp], timeout: 2.0)
+    }
+
+    /// FXIOS-11361: Tests a special SVG which previously caused crashes in older versions of SwiftDraw.
+    func testDownloadingSVGImage_withKingfisherProcessor_forSpecialSVGCase() async {
+        let assetType: AssetType = .svgCase2
         let expectedRasterSize = CGSize(width: 360, height: 360)
 
         guard let imageData = try? dataFor(type: assetType) else {
@@ -133,14 +167,15 @@ extension SVGImageProcessorTests {
 
     enum AssetType {
         case ico
-        case svg
+        case svgCase1
+        case svgCase2
         case badType
 
         var contentType: String {
             switch self {
             case .ico:
                 return "image/x-icon"
-            case .svg:
+            case .svgCase1, .svgCase2:
                 return "image/svg+xml"
             case .badType:
                 return "garbage asset type $23%12@!!!//asd"
@@ -154,8 +189,10 @@ extension SVGImageProcessorTests {
         switch type {
         case .ico:
             fileURL = Bundle.module.url(forResource: "mozilla", withExtension: "ico")
-        case .svg:
+        case .svgCase1:
             fileURL = Bundle.module.url(forResource: "hackernews", withExtension: "svg")
+        case .svgCase2:
+            fileURL = Bundle.module.url(forResource: "inf-nan", withExtension: "svg")
         case .badType:
             guard let badData = "some non-image data".data(using: .utf8) else {
                 throw MockImageServerError.badData
