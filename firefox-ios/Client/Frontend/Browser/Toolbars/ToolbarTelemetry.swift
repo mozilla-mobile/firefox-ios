@@ -7,11 +7,11 @@ import Glean
 
 struct ToolbarTelemetry {
     private let gleanWrapper: GleanWrapper
-    
+
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
-    
+
     func qrCodeButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.QrScanButtonTappedExtra(isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.qrScanButtonTapped, extras: isPrivateExtra)
