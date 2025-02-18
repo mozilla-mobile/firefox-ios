@@ -303,6 +303,7 @@ class TabTrayViewController: UIViewController,
 
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
+            tabTrayState.showCloseConfirmation = false
         }
 
         if let toastType = tabTrayState.toastType {
