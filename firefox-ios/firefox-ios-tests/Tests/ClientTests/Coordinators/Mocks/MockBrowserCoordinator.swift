@@ -38,6 +38,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showContextMenuCalled = 0
     var showEditBookmarkCalled = 0
     var openInNewTabCalled = 0
+    var showDocumentLoadingCalled = 0
+    var removeDocumentLoadingCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -159,5 +161,13 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
         openInNewTabCalled += 1
+    }
+
+    func showDocumentLoading() {
+        showDocumentLoadingCalled += 1
+    }
+
+    func removeDocumentLoading() {
+        removeDocumentLoadingCalled += 1
     }
 }
