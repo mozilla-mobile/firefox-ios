@@ -691,6 +691,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     @discardableResult
     func loadRequest(_ request: URLRequest) -> WKNavigation? {
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload(forceReload: false)
+        }
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -973,13 +976,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Returns true if the download was cancelled
     @discardableResult
-    private func cancelTemporaryDocumentDownload() -> Bool {
+    private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
 
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
             self.temporaryDocument = nil
-            reload()
+            if forceReload {
+                reload()
+            }
             return true
         }
         return false
