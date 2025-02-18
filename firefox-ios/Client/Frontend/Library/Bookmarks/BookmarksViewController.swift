@@ -149,7 +149,9 @@ class BookmarksViewController: SiteTableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if viewModel.isRootNode {
+        if tableView.isEditing {
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        } else if viewModel.isRootNode {
             updatePanelState(newState: .bookmarks(state: .mainView))
         } else {
             updatePanelState(newState: .bookmarks(state: .inFolder))
