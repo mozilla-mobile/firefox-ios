@@ -5,63 +5,6 @@
 import XCTest
 @testable import Client
 
-class MockURLProtocol: URLProtocol {
-    static var response: ((HTTPURLResponse, URLRequest) -> Void)?
-    static var data: Data?
-
-    override class func canInit(with request: URLRequest) -> Bool {
-        return true
-    }
-
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
-    }
-
-    override func startLoading() {
-        let response = HTTPURLResponse(
-            url: request.url!,
-            statusCode: 200,
-            httpVersion: nil,
-            headerFields: nil
-        )!
-        Self.response?(
-            response,
-            request
-        )
-        if let data = Self.data {
-            client?.urlProtocol(self, didLoad: data)
-        }
-
-        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        client?.urlProtocolDidFinishLoading(self)
-    }
-
-    override func stopLoading() {
-    }
-}
-
-class MockURLResponse: URLResponse, @unchecked Sendable {
-    let filename: String
-
-    override var suggestedFilename: String? {
-        return filename
-    }
-
-    init(filename: String, url: URL) {
-        self.filename = filename
-        super.init(
-            url: url,
-            mimeType: nil,
-            expectedContentLength: 0,
-            textEncodingName: nil
-        )
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
     private let filename = "TempPDF.pdf"
     private let request = URLRequest(url: URL(string: "https://example.com")!)

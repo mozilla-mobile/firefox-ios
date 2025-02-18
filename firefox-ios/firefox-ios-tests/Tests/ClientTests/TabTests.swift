@@ -8,40 +8,6 @@ import Common
 import Shared
 @testable import Client
 
-class MockTabWebView: TabWebView {
-    var loadCalled = 0
-    var loadedRequest: URLRequest?
-    var goBackCalled = 0
-    var goForwardCalled = 0
-    var reloadFromOriginCalled = 0
-    var loadedURL: URL?
-    override var url: URL? {
-        return loadedURL
-    }
-
-    override func load(_ request: URLRequest) -> WKNavigation? {
-        loadCalled += 1
-        loadedRequest = request
-        loadedURL = request.url
-        return nil
-    }
-
-    override func reloadFromOrigin() -> WKNavigation? {
-        reloadFromOriginCalled += 1
-        return nil
-    }
-
-    override func goBack() -> WKNavigation? {
-        goBackCalled += 1
-        return nil
-    }
-
-    override func goForward() -> WKNavigation? {
-        goForwardCalled += 1
-        return nil
-    }
-}
-
 class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
@@ -341,6 +307,23 @@ class TabTests: XCTestCase {
         // once for enqueuing doc and for loadRequest
         XCTAssertEqual(mockTabWebView.loadCalled, 2)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 0)
+    }
+
+    func testStop_whenDocumentIsDownloading_cancelDownload() {
+        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        subject.webView = mockTabWebView
+        document.isDownloading = true
+
+        subject.enqueueDocument(document)
+        subject.stop()
+        subject.webView = nil
+
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.stopLoadingCalled, 1)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
 
     private func setIsPDFRefactorFeature(isEnabled: Bool) {
