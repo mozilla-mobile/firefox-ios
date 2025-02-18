@@ -499,7 +499,7 @@ class HistoryPanel: UIViewController,
                 if sectionData.count > sectionDataUniqued.count {
                     let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
                     logger.log(
-                        "Duplicates (\(numberOfDuplicates)) found in HistoryPanel applySnapshot method in section \(section).",
+                        "Duplicates found in HistoryPanel applySnapshot method in section \(section): \(numberOfDuplicates)",
                         level: .fatal,
                         category: .library
                     )
@@ -514,44 +514,6 @@ class HistoryPanel: UIViewController,
                     sectionDataUniqued, // FXIOS-10996 Force unique while we investigate history panel crashes
                     toSection: section
                 )
-            }
-        }
-
-        // Insert the ASGroup at the correct spot!
-        viewModel.searchTermGroups.forEach { grouping in
-            if let groupSection = viewModel.shouldAddGroupToSections(group: grouping) {
-                guard let individualItem = grouping.groupedItems.last,
-                      let lastVisit = individualItem.latestVisit
-                else { return }
-
-                let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
-                let sectionData = viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
-
-                let groupPlacedAfterItem = sectionData.first(where: { site in
-                    guard let lastVisit = site.latestVisit else { return false }
-
-                    return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
-                })
-
-                if let groupPlacedAfterItem {
-                    logger.log(
-                        "Inserted search terms group in HistoryPanel after Site",
-                        level: .fatal,
-                        category: .library
-                    )
-
-                    // In this case, we have Site items AND a group in the section.
-                    snapshot.insertItems([grouping], beforeItem: groupPlacedAfterItem)
-                } else {
-                    logger.log(
-                        "Inserted search terms group in HistoryPanel after ASGroup",
-                        level: .fatal,
-                        category: .library
-                    )
-
-                    // Looks like this group's the only item in the section
-                    snapshot.appendItems([grouping], toSection: groupSection)
-                }
             }
         }
 
