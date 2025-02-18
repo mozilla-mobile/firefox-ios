@@ -120,13 +120,24 @@ final class WKEngineSessionTests: XCTestCase {
 
     // MARK: Find in page
 
-    func testShowFindInPageThenPresentNavigatorCalled() {
+    func testShowFindInPageGivenNoFindInteractionThenNothingHappens() {
         let subject = createSubject()
 
         subject?.showFindInPage()
 
-        XCTAssertTrue(webViewProvider.webView.isFindInteractionEnabled)
         XCTAssertNil(webViewProvider.webView.findInteraction)
+    }
+
+    func testShowFindInPageGivenFindInteractionThenPresentNavigatorCalledWithEmptySearchText() {
+        let findInteraction = MockUIFindInteraction()
+        let subject = createSubject()
+        webViewProvider.webView.findInteraction = findInteraction
+
+        subject?.showFindInPage()
+
+        XCTAssertNotNil(webViewProvider.webView.findInteraction)
+        XCTAssertEqual(findInteraction.presentFindNavigatorCalled, 1)
+        XCTAssertEqual(findInteraction.searchText, "")
     }
 
     func testShowFindInPageGivenSearchTextThenPresentNavigatorCalled() {
@@ -137,7 +148,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.showFindInPage(withSearchText: searchText)
 
-        XCTAssertTrue(webViewProvider.webView.isFindInteractionEnabled)
         XCTAssertNotNil(webViewProvider.webView.findInteraction)
         XCTAssertEqual(findInteraction.presentFindNavigatorCalled, 1)
         XCTAssertEqual(findInteraction.searchText, searchText)
