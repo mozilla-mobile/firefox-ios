@@ -11,16 +11,11 @@ protocol NavigationDelegate: AnyObject {
     func onLoadingStateChange(loading: Bool)
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool)
     func showErrorPage(page: ErrorPageViewController)
-
-    func onFindInPage(selected: String)
-    func onFindInPage(currentResult: Int)
-    func onFindInPage(totalResults: Int)
 }
 
 // Holds different type of browser views, communicating through protocols with them
 class BrowserViewController: UIViewController,
-                             EngineSessionDelegate,
-                             FindInPageHelperDelegate {
+                             EngineSessionDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession
@@ -36,8 +31,6 @@ class BrowserViewController: UIViewController,
         self.engineView = engineProvider.view
         self.urlFormatter = urlFormatter
         super.init(nibName: nil, bundle: nil)
-
-        engineSession.findInPageDelegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -45,6 +38,10 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Life cycle
+
+    override func loadView() {
+        view = engineView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,17 +70,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupBrowserView(_ engineView: EngineView) {
-        guard engineView.superview == nil else { return }
-        engineView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(engineView)
-
-        NSLayoutConstraint.activate([
-            engineView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
-            engineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            engineView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            engineView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-
         engineView.render(session: engineSession)
     }
 
@@ -126,14 +112,6 @@ class BrowserViewController: UIViewController,
         engineSession.scrollToTop()
     }
 
-    func findInPage(text: String, function: FindInPageFunction) {
-        engineSession.findInPage(text: text, function: function)
-    }
-
-    func findInPageDone() {
-        engineSession.findInPageDone()
-    }
-
     func switchToStandardTrackingProtection() {
         engineSession.switchToStandardTrackingProtection()
     }
@@ -164,6 +142,10 @@ class BrowserViewController: UIViewController,
 
     func resetZoom() {
         engineSession.updatePageZoom(.reset)
+    }
+
+    func showFindInPage() {
+        engineSession.showFindInPage()
     }
 
     // MARK: - Search
@@ -292,20 +274,10 @@ class BrowserViewController: UIViewController,
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {
-        navigationDelegate?.onFindInPage(selected: selection)
+        engineSession.showFindInPage(withSearchText: selection)
     }
 
     func search(with selection: String) {
         loadUrlOrSearch(SearchTerm(term: selection))
-    }
-
-    // MARK: - FindInPageHelperDelegate
-
-    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
-        navigationDelegate?.onFindInPage(currentResult: currentResult)
-    }
-
-    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
-        navigationDelegate?.onFindInPage(totalResults: totalResults)
     }
 }
