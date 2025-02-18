@@ -303,7 +303,9 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     @objc
     func topLeftButtonAction() {
         guard let navController = children.first as? UINavigationController,
-                                  getCurrentPanelState() != .bookmarks(state: .transitioning) else { return }
+              getCurrentPanelState() != .bookmarks(state: .transitioning) else {
+            return
+        }
 
         navController.popViewController(animated: true)
         let panel = getCurrentPanel()
