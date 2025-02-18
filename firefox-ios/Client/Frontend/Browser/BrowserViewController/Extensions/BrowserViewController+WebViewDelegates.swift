@@ -735,25 +735,10 @@ extension BrowserViewController: WKNavigationDelegate {
             present(alert, animated: true)
         }
 
-        // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request,
-                                               response: response,
-                                               cookieStore: cookieStore,
-                                               canShowInWebView: canShowInWebView,
-                                               forceDownload: forceDownload) {
-            // Clear the pending download web view so that subsequent navigations from the same
-            // web view don't invoke another download.
-            pendingDownloadWebView = nil
-
-            let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
-                self?.downloadQueue.enqueue(download)
-            }
-
-            // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
-                                                                        okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
-            }
+        // Check if this response should be downloaded. Only handles Blob URL Downloads
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+            downloadHelper.shouldDownloadBlob(canShowInWebView: canShowInWebView, forceDownload: forceDownload) {
+            handleDownloadFiles(downloadHelper: downloadHelper)
             decisionHandler(.cancel)
             return
         }
@@ -780,6 +765,15 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             tab.mimeType = response.mimeType
+        }
+
+        // Allow download not from main frame. update to use donwloadable docs after
+        if !navigationResponse.isForMainFrame, response.mimeType == MIMEType.PDF {
+            if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore) {
+                handleDownloadFiles(downloadHelper: downloadHelper)
+                decisionHandler(.cancel)
+                return
+            }
         }
 
         // If none of our helpers are responsible for handling this response,
@@ -811,6 +805,22 @@ extension BrowserViewController: WKNavigationDelegate {
                                    context: nil)
             }
             tab?.enqueueDocument(tempPDF)
+        }
+    }
+
+    func handleDownloadFiles(downloadHelper: DownloadHelper) {
+        // Clear the pending download web view so that subsequent navigations from the same
+        // web view don't invoke another download.
+        pendingDownloadWebView = nil
+
+        let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+            self?.downloadQueue.enqueue(download)
+        }
+
+        // Open our helper and cancel this response from the webview.
+        if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                    okAction: downloadAction) {
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
         }
     }
 
@@ -1055,6 +1065,38 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+}
+
+// MARK: - WKDownloadDelegate
+extension BrowserViewController: WKDownloadDelegate {
+    // Handle file destination for download
+    func download(_ download: WKDownload,
+                  decideDestinationUsing response: URLResponse,
+                  suggestedFilename: String,
+                  completionHandler: @escaping (URL?) -> Void) {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let destinationURL = documentsPath.appendingPathComponent(suggestedFilename)
+        print("Saving file to: \(destinationURL)")
+
+        completionHandler(destinationURL)
+    }
+
+    // Handle download completion
+    func downloadDidFinish(_ download: WKDownload) {
+        print("YRD ------ Download finished! ------")
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Download Complete",
+                                          message: "Your file has been saved to the Documents folder.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
+    }
+
+    // Handle download errors
+    func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
+        print("YRD ------ Download failed: \(error.localizedDescription)")
     }
 }
 

@@ -74,13 +74,17 @@ class DownloadHelper: NSObject {
     required init?(
         request: URLRequest?,
         response: URLResponse,
-        cookieStore: WKHTTPCookieStore,
-        canShowInWebView: Bool,
-        forceDownload: Bool
+        cookieStore: WKHTTPCookieStore
     ) {
         guard let request = request else { return nil }
 
-        let mimeType = response.mimeType ?? MIMEType.OctetStream
+        self.cookieStore = cookieStore
+        self.request = request
+        self.preflightResponse = response
+    }
+
+    func shouldDownloadBlob(canShowInWebView: Bool, forceDownload: Bool) -> Bool {
+        let mimeType = preflightResponse.mimeType ?? MIMEType.OctetStream
         let isAttachment = mimeType == MIMEType.OctetStream
 
         // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
@@ -89,11 +93,9 @@ class DownloadHelper: NSObject {
         // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
 
-        guard isAttachment || !canShowInWebView || forceDownload else { return nil }
+        guard isAttachment || !canShowInWebView || forceDownload else { return false }
 
-        self.cookieStore = cookieStore
-        self.request = request
-        self.preflightResponse = response
+        return true
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
