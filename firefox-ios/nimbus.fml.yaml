@@ -37,7 +37,6 @@ include:
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
-  - nimbus-features/pullToRefreshRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
   - nimbus-features/searchFeature.yaml
