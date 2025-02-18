@@ -3221,9 +3221,11 @@ class BrowserViewController: UIViewController,
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
 
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         if !isToolbarRefactorEnabled {
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
             legacyUrlBar?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
+        } else {
+            addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
         toolbar.applyTheme(theme: currentTheme)
