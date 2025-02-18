@@ -27,7 +27,8 @@ final class AddressToolbarContainer: UIView,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
                                      Autocompletable,
-                                     URLBarViewProtocol {
+                                     URLBarViewProtocol,
+                                     PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
         static let toolbarIsEditingLeadingPadding: CGFloat = 0
