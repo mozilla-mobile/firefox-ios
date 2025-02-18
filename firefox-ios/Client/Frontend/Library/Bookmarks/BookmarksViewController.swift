@@ -149,6 +149,19 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if tableView.isEditing {
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        } else if viewModel.isRootNode {
+            updatePanelState(newState: .bookmarks(state: .mainView))
+        } else {
+            updatePanelState(newState: .bookmarks(state: .inFolder))
+        }
+        sendPanelChangeNotification()
+    }
+
     // MARK: - Data
 
     override func reloadData() {
@@ -799,16 +812,8 @@ extension BookmarksViewController {
     }
 
     func handleLeftTopButton() {
-        guard case .bookmarks(let subState) = state else { return }
-
-        switch subState {
-        case .inFolder:
-            if viewModel.isRootNode {
-                updatePanelState(newState: .bookmarks(state: .mainView))
-            }
-        default:
-            return
-        }
+        // We use the "transitioning" so that the "<" back toolbar navigation button cannot be spammed
+        updatePanelState(newState: .bookmarks(state: .transitioning))
     }
 
     func shouldDismissOnDone() -> Bool {
