@@ -220,6 +220,10 @@ class BrowserViewController: UIViewController,
         progressView.setProgress(Float(progress), animated: true)
     }
 
+    func onHideProgressBar() {
+        progressView.isHidden = true
+    }
+
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
