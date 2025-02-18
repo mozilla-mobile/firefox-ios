@@ -188,11 +188,11 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        Task {
+        Task { @MainActor in
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
-                await tabManager.removeTab(tab.tabUUID)
+                tabManager.removeTab(tab.tabUUID)
             }
         }
     }

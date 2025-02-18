@@ -54,10 +54,10 @@ struct DefaultApplicationHelper: ApplicationHelper {
     ///
     /// - Parameters:
     ///   - urls: an array of URLs requested to be closed
-    func closeTabs(_ urls: [URL]) async {
+    func closeTabs(_ urls: [URL]) {
         let windowManager = AppContainer.shared.resolve() as WindowManager
         for tabManager in windowManager.allWindowTabManagers() {
-            await tabManager.removeTabs(by: urls)
+            tabManager.removeTabs(by: urls)
         }
     }
 }

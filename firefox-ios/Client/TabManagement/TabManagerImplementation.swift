@@ -217,8 +217,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     // MARK: - Remove Tab
-    @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID) {
+        assert(Thread.isMainThread)
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -263,20 +263,20 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         storeChanges()
     }
 
-    @MainActor
-    func removeTabs(by urls: [URL]) async {
+    func removeTabs(by urls: [URL]) {
+        assert(Thread.isMainThread)
         let urls = Set(urls)
         let tabsToRemove = normalTabs.filter { tab in
             guard let url = tab.url else { return false }
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            await removeTab(tab.tabUUID)
+            removeTab(tab.tabUUID)
         }
     }
 
-    @MainActor
-    func removeAllTabs(isPrivateMode: Bool) async {
+    func removeAllTabs(isPrivateMode: Bool) {
+        assert(Thread.isMainThread)
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?
 
@@ -290,7 +290,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
@@ -568,7 +568,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     private func migrateAndRestore() {
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
-            Task { @MainActor in
+            await MainActor.run {
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
                 logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
                 logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
@@ -582,7 +582,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
-            Task { @MainActor in
+            await MainActor.run {
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
                 logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
                 logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
@@ -618,14 +618,18 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            await generateEmptyTab()
+            await MainActor.run {
+                generateEmptyTab()
+            }
             logger.log("There was no tabs restored, creating a normal tab",
                        level: .debug,
                        category: .tabs)
 
             return
         }
-        await generateTabs(from: windowData)
+        await MainActor.run {
+            generateTabs(from: windowData)
+        }
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
 
@@ -642,8 +646,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     /// Creates the webview so needs to live on the main thread
-    @MainActor
-    private func generateTabs(from windowData: WindowData) async {
+    private func generateTabs(from windowData: WindowData) {
+        assert(Thread.isMainThread)
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
@@ -704,8 +708,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     /// Creates the webview so needs to live on the main thread
-    @MainActor
-    private func generateEmptyTab() async {
+    private func generateEmptyTab() {
+        assert(Thread.isMainThread)
         let newTab = addTab()
         selectTab(newTab)
     }
@@ -984,18 +988,18 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 
-    @MainActor
-    func removeAllInactiveTabs() async {
+    func removeAllInactiveTabs() {
+        assert(Thread.isMainThread)
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }
 
-    @MainActor
-    func undoCloseInactiveTabs() async {
+    func undoCloseInactiveTabs() {
+        assert(Thread.isMainThread)
         tabs.append(contentsOf: backupCloseTabs)
         storeChanges()
         backupCloseTabs = [Tab]()

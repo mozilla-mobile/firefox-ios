@@ -362,7 +362,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
                             : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
-        await tabManager.removeTab(tabUUID)
+        tabManager.removeTab(tabUUID)
         return isLastActiveTab
     }
 
@@ -464,30 +464,26 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-        Task {
-            let normalCount = tabManager.normalTabs.count
-            let privateCount = tabManager.privateTabs.count
-            await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
+        let normalCount = tabManager.normalTabs.count
+        let privateCount = tabManager.privateTabs.count
+        tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
-            ensureMainThread { [self] in
-                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
-                let action = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                      windowUUID: uuid,
-                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
-                store.dispatch(action)
+        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
+        let action = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                              windowUUID: uuid,
+                                              actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(action)
 
-                if tabsState.isPrivateMode {
-                    let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
-                                                          windowUUID: uuid,
-                                                          actionType: TabPanelMiddlewareActionType.showToast)
-                    store.dispatch(action)
-                } else {
-                    let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                           windowUUID: uuid,
-                                                           actionType: GeneralBrowserActionType.showToast)
-                    store.dispatch(toastAction)
-                }
-            }
+        if tabsState.isPrivateMode {
+            let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
+                                                  windowUUID: uuid,
+                                                  actionType: TabPanelMiddlewareActionType.showToast)
+            store.dispatch(action)
+        } else {
+            let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                   windowUUID: uuid,
+                                                   actionType: GeneralBrowserActionType.showToast)
+            store.dispatch(toastAction)
         }
 
         if !tabsState.isPrivateMode {
@@ -524,67 +520,62 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         inactiveTabTelemetry.closedAllTabs()
         let tabManager = tabManager(for: uuid)
-        Task {
-            await tabManager.removeAllInactiveTabs()
-            let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: [InactiveTabsModel](),
-                                                         windowUUID: uuid,
-                                                         actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-            store.dispatch(refreshAction)
+        tabManager.removeAllInactiveTabs()
+        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: [InactiveTabsModel](),
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
+        store.dispatch(refreshAction)
 
-            // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
-            // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
-            let model = getTabsDisplayModel(for: false, uuid: uuid)
-            let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                                        windowUUID: uuid,
-                                                                        actionType: TabPanelMiddlewareActionType.refreshTabs)
-            store.dispatch(refreshActiveTabsPanelAction)
+        // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
+        // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
+        let model = getTabsDisplayModel(for: false, uuid: uuid)
+        let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                                    windowUUID: uuid,
+                                                                    actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(refreshActiveTabsPanelAction)
 
-            let inactiveTabsCount = tabsState.inactiveTabs.count
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
-        }
+        let inactiveTabsCount = tabsState.inactiveTabs.count
+        let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),
+                                                   windowUUID: uuid,
+                                                   actionType: TabPanelMiddlewareActionType.showToast)
+        store.dispatch(toastAction)
     }
 
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        Task {
-            await tabManager.undoCloseInactiveTabs()
-            let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-            let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                         windowUUID: uuid,
-                                                         actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-            store.dispatch(refreshAction)
-        }
+
+        tabManager.undoCloseInactiveTabs()
+        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
+        store.dispatch(refreshAction)
     }
 
     private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         inactiveTabTelemetry.tabSwipedToClose()
         let tabManager = tabManager(for: uuid)
-        Task {
-            if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
-                let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
-                tabManager.backupCloseTab = BackupCloseTab(
-                    tab: tabToClose,
-                    restorePosition: index,
-                    isSelected: false)
-            }
-            await tabManager.removeTab(tabUUID)
-
-            let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-            let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                         windowUUID: uuid,
-                                                         actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-            store.dispatch(refreshAction)
-
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleInactiveTab,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
+        if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
+            let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
+            tabManager.backupCloseTab = BackupCloseTab(
+                tab: tabToClose,
+                restorePosition: index,
+                isSelected: false)
         }
+        tabManager.removeTab(tabUUID)
+
+        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
+        store.dispatch(refreshAction)
+
+        let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleInactiveTab,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPanelMiddlewareActionType.showToast)
+        store.dispatch(toastAction)
     }
 
     private func undoCloseInactiveTab(uuid: WindowUUID) {
