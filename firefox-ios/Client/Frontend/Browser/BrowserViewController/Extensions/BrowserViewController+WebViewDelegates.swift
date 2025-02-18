@@ -767,13 +767,12 @@ extension BrowserViewController: WKNavigationDelegate {
             tab.mimeType = response.mimeType
         }
 
-        // Allow download not from main frame. update to use donwloadable docs after
-        if !navigationResponse.isForMainFrame, response.mimeType == MIMEType.PDF {
-            if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore) {
+        // Allow download files . update to use downloadable docs after
+        let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore)
+        if let downloadHelper, downloadHelper.shouldDownloadAttachment(), !navigationResponse.isForMainFrame {
                 handleDownloadFiles(downloadHelper: downloadHelper)
                 decisionHandler(.cancel)
                 return
-            }
         }
 
         // If none of our helpers are responsible for handling this response,
