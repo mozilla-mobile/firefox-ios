@@ -40,7 +40,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
-    case pullToRefreshRefactor
     case ratingPromptFeature
     case reduxSearchSettings
     case reportSiteIssue
@@ -135,7 +134,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
-                .pullToRefreshRefactor,
                 .ratingPromptFeature,
                 .reduxSearchSettings,
                 .reportSiteIssue,
