@@ -55,7 +55,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         }
 
         subject.download { _ in }
-        wait(for: [expectation], timeout: 0.1)
+        wait(for: [expectation])
     }
 
     func testInit_passCorrectName_fromResponse() {
@@ -87,7 +87,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation])
     }
 
     func testDownload_onDownloadStarted() {
@@ -106,7 +106,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
             totalBytesExpectedToWrite: 0
         )
 
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation])
         // it is nilled out so to not call it again
         XCTAssertNil(self.subject.onDownloadStarted)
     }
@@ -129,7 +129,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
             totalBytesExpectedToWrite: 1
         )
 
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation])
     }
 
     func testDeinit_removeTempFile() {
