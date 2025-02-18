@@ -14,10 +14,7 @@ final class ToolbarTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         gleanWrapper = MockGleanWrapper()
-    }
-
-    private func createSubject(gleanWrapper: MockGleanWrapper) -> ToolbarTelemetry {
-        return ToolbarTelemetry(gleanWrapper: gleanWrapper)
+        subject = ToolbarTelemetry(gleanWrapper: gleanWrapper)
     }
 
     override func tearDown() {
@@ -26,9 +23,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenQrCodeTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.qrCodeButtonTapped(isPrivate: true)
-        
+        subject?.qrCodeButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.qrScanButtonTappedExtra>
         )
@@ -45,9 +41,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenClearSearchTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.clearSearchButtonTapped(isPrivate: true)
-        
+        subject?.clearSearchButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.clearSearchButtonTappedExtra>
         )
@@ -64,9 +59,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenShareButtonTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.shareButtonTapped(isPrivate: true)
-        
+        subject?.shareButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.shareButtonTappedExtra>
         )
@@ -83,9 +77,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenRefreshButtonTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.refreshButtonTapped(isPrivate: true)
-        
+        subject?.refreshButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.refreshButtonTappedExtra>
         )
@@ -102,9 +95,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenReaderModeTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.readerModeButtonTapped(isPrivate: true, isEnabled: true)
-        
+        subject?.readerModeButtonTapped(isPrivate: true, isEnabled: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.readerModeButtonTappedExtra>
         )
@@ -121,9 +113,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenSiteInfoTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.siteInfoButtonTapped(isPrivate: true)
-        
+        subject?.siteInfoButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.siteInfoButtonTappedExtra>
         )
@@ -140,9 +131,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenBackButtonTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.backButtonTapped(isPrivate: true)
-        
+        subject?.backButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.backButtonTappedExtra>
         )
@@ -159,9 +149,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenForwardButtonTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.forwardButtonTapped(isPrivate: true)
-        
+        subject?.forwardButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.forwardButtonTappedExtra>
         )
@@ -178,9 +167,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenBackLongPressedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.backButtonLongPressed(isPrivate: true)
-        
+        subject?.backButtonLongPressed(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.backLongPressExtra>
         )
@@ -197,9 +185,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenForwardLongPressedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.forwardButtonLongPressed(isPrivate: true)
-        
+        subject?.forwardButtonLongPressed(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.forwardLongPressExtra>
         )
@@ -216,9 +203,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenHomeButtonTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.homeButtonTapped(isPrivate: true)
-        
+        subject?.homeButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.homeButtonTappedExtra>
         )
@@ -235,9 +221,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenOneTapNewTabTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.oneTapNewTabButtonTapped(isPrivate: true)
-        
+        subject?.oneTapNewTabButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.oneTapNewTabButtonTappedExtra>
         )
@@ -254,9 +239,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenOneTapNewTabLongPressedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.oneTapNewTabButtonLongPressed(isPrivate: true)
-        
+        subject?.oneTapNewTabButtonLongPressed(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.oneTapNewTabLongPressExtra>
         )
@@ -273,9 +257,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenSearchTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.searchButtonTapped(isPrivate: true)
-        
+        subject?.searchButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.searchButtonTappedExtra>
         )
@@ -292,9 +275,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenTabTrayTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.tabTrayButtonTapped(isPrivate: true)
-        
+        subject?.tabTrayButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.tabTrayButtonTappedExtra>
         )
@@ -311,9 +293,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenTabTrayLongPressedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.tabTrayButtonLongPressed(isPrivate: true)
-        
+        subject?.tabTrayButtonLongPressed(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.tabTrayLongPressExtra>
         )
@@ -330,9 +311,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenMenuTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.menuButtonTapped(isPrivate: true)
-        
+        subject?.menuButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.appMenuButtonTappedExtra>
         )
@@ -349,9 +329,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenDataClearanceTappedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.dataClearanceButtonTapped(isPrivate: true)
-        
+        subject?.dataClearanceButtonTapped(isPrivate: true)
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Toolbar.dataClearanceButtonTappedExtra>
         )
@@ -368,9 +347,8 @@ final class ToolbarTelemetryTests: XCTestCase {
     }
 
     func testRecordToolbarWhenLocationDraggedThenGleanIsCalled() throws {
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.dragInteractionStarted()
-        
+        subject?.dragInteractionStarted()
+
         let savedEvent = try XCTUnwrap(
                 gleanWrapper.savedEvent as? EventMetricType<GleanMetrics.Awesomebar.dragLocationBarExtra>
         )
