@@ -1067,38 +1067,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 }
 
-// MARK: - WKDownloadDelegate
-extension BrowserViewController: WKDownloadDelegate {
-    // Handle file destination for download
-    func download(_ download: WKDownload,
-                  decideDestinationUsing response: URLResponse,
-                  suggestedFilename: String,
-                  completionHandler: @escaping (URL?) -> Void) {
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let destinationURL = documentsPath.appendingPathComponent(suggestedFilename)
-        print("Saving file to: \(destinationURL)")
-
-        completionHandler(destinationURL)
-    }
-
-    // Handle download completion
-    func downloadDidFinish(_ download: WKDownload) {
-        print("YRD ------ Download finished! ------")
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Download Complete",
-                                          message: "Your file has been saved to the Documents folder.",
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
-        }
-    }
-
-    // Handle download errors
-    func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
-        print("YRD ------ Download failed: \(error.localizedDescription)")
-    }
-}
-
 // MARK: - Private
 private extension BrowserViewController {
     // Handle Universal link for Firefox wallpaper setting
