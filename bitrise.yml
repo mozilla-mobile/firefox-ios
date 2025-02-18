@@ -2114,10 +2114,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '135.2'
+    BITRISE_RELEASE_VERSION: '135.3'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '135.2'
+    BITRISE_BETA_VERSION: '135.3'
 
 trigger_map:
 - push_branch: main
