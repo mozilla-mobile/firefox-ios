@@ -430,9 +430,8 @@ final class AddressToolbarContainer: UIView,
             endColor: gradientEndColor
         )
     }
-}
 
-extension AddressToolbarContainer: PrivateModeUI {
+    // MARK: - PrivateModeUI
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         applyProgressBarTheme(isPrivateMode: isPrivate, theme: theme)
     }
