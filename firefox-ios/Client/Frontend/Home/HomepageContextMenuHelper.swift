@@ -13,7 +13,7 @@ import enum MozillaAppServices.BookmarkRoots
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -206,8 +206,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
             // We don't need to do anything after this call completes
             _ = self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
 
-            let url = URL(string: site.url)
-            self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
+            self.delegate?.homePanelDidRequestBookmarkToast(urlString: site.url, action: .remove)
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .activityStream)
         })
     }
@@ -231,7 +230,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
 
-            self.delegate?.homePanelDidRequestBookmarkToast(url: URL(string: site.url), action: .add)
+            self.delegate?.homePanelDidRequestBookmarkToast(urlString: shareItem.url, action: .add)
             self.bookmarksTelemetry.addBookmark(eventLabel: .activityStream)
         })
     }
