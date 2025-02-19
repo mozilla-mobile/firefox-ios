@@ -8,7 +8,7 @@ open class RustKeychain {
     public private(set) var serviceName: String
     public private(set) var accessGroup: String?
 
-    static var sharedClientAppContainerKeychain: RustKeychain {
+    public static var sharedClientAppContainerKeychain: RustKeychain {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
 
         guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
@@ -34,7 +34,7 @@ open class RustKeychain {
                                                        kSecAttrGeneric as String: encodedIdentifier,
                                                        kSecAttrAccount as String: encodedIdentifier,
                                                        kSecAttrSynchronizable as String: false]
-       if let accessGroup = self.accessGroup {
+        if let accessGroup = self.accessGroup {
             keychainQueryDictionary[kSecAttrAccessGroup as String] = accessGroup
         }
         return keychainQueryDictionary

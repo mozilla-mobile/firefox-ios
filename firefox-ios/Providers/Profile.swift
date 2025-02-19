@@ -227,8 +227,10 @@ open class BrowserProfile: Profile {
             fatalError("Could not create directory at root path: \(error)")
         }
     }()
+    private var loginsRustKeychainEnabled = false
     fileprivate let name: String
-    fileprivate let keychain: MZKeychainWrapper
+    fileprivate let keychain: RustKeychain
+    fileprivate let legacyKeychain: MZKeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -254,6 +256,7 @@ open class BrowserProfile: Profile {
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
          creditCardAutofillEnabled: Bool = false,
+         loginsRustKeychainEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -261,7 +264,8 @@ open class BrowserProfile: Profile {
                    category: .setup)
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+        self.keychain = RustKeychain.sharedClientAppContainerKeychain
+        self.legacyKeychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.logger = logger
         self.fxaCommandsDelegate = fxaCommandsDelegate
 
@@ -673,7 +677,7 @@ open class BrowserProfile: Profile {
             fileURLWithPath: directory,
             isDirectory: true
         ).appendingPathComponent("loginsPerField.db").path
-        return RustLogins(databasePath: databasePath)
+        return RustLogins(databasePath: databasePath, loginsRustKeychainEnabled: self.loginsRustKeychainEnabled)
     }()
 
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
@@ -723,23 +727,33 @@ open class BrowserProfile: Profile {
 
         // Save the keys that will be restored
         let rustAutofillKey = RustAutofillEncryptionKeys()
-        let creditCardKey = keychain.string(forKey: rustAutofillKey.ccKeychainKey)
+        let creditCardKey = legacyKeychain.string(forKey: rustAutofillKey.ccKeychainKey)
         let rustLoginsKeys = RustLoginEncryptionKeys()
-        let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
+        var loginsKey: String?
+
+        if self.loginsRustKeychainEnabled {
+            (loginsKey, _) = rustLoginsKeys.getEncryptionKeyData(logger: logger)
+        } else {
+            loginsKey = legacyKeychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
+        }
         // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
         // simply restore what is needed.
-        keychain.removeAllKeys()
+        legacyKeychain.removeAllKeys()
 
-        if let perFieldKey = perFieldKey {
-            keychain.set(
-                perFieldKey,
-                forKey: rustLoginsKeys.loginPerFieldKeychainKey,
-                withAccessibility: .afterFirstUnlock
-            )
+        if let loginsKey = loginsKey {
+            if self.loginsRustKeychainEnabled {
+                rustLoginsKeys.addOrUpdateKeychainKey(loginsKey, key: rustLoginsKeys.loginPerFieldKeychainKey)
+            } else {
+                legacyKeychain.set(
+                    loginsKey,
+                    forKey: rustLoginsKeys.loginPerFieldKeychainKey,
+                    withAccessibility: .afterFirstUnlock
+                )
+            }
         }
 
         if let creditCardKey = creditCardKey {
-            keychain.set(creditCardKey, forKey: rustAutofillKey.ccKeychainKey, withAccessibility: .afterFirstUnlock)
+            legacyKeychain.set(creditCardKey, forKey: rustAutofillKey.ccKeychainKey, withAccessibility: .afterFirstUnlock)
         }
 
         // Tell any observers that our account has changed.
