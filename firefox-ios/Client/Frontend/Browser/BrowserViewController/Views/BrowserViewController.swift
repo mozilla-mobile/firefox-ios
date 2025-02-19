@@ -1735,11 +1735,16 @@ class BrowserViewController: UIViewController,
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
                     let folderName = bookmarkFolder.title
                     let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                    self.showToast(message: message, toastAction: .bookmarkPage)
+                    self.showToast(bookmarkURL, title, message: message, toastAction: .bookmarkPage)
                 }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel, toastAction: .bookmarkPage)
+                showToast(
+                    bookmarkURL,
+                    title,
+                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+                    toastAction: .bookmarkPage
+                )
             }
         case .remove:
             self.showToast(
@@ -1752,7 +1757,7 @@ class BrowserViewController: UIViewController,
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
-    internal func openBookmarkEditPanel() {
+    internal func openBookmarkEditPanel(url: URL? = nil) {
         guard !profile.isShutdown else { return }
 
         let bookmarksTelemetry = BookmarksTelemetry()
@@ -1760,7 +1765,7 @@ class BrowserViewController: UIViewController,
 
         // Open refactored bookmark edit view
         if isBookmarkRefactorEnabled {
-            guard let url = tabManager.selectedTab?.url else { return }
+            guard let url else { return }
             profile.places.getBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 guard let bookmarkItem = result.successValue?.first,
                 let parentGuid = bookmarkItem.parentGUID else { return }

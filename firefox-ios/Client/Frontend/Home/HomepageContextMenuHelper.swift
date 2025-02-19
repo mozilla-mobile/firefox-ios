@@ -231,7 +231,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
 
-            self.delegate?.homePanelDidRequestBookmarkToast(url: nil, action: .add)
+            self.delegate?.homePanelDidRequestBookmarkToast(url: URL(string: site.url), action: .add)
             self.bookmarksTelemetry.addBookmark(eventLabel: .activityStream)
         })
     }
