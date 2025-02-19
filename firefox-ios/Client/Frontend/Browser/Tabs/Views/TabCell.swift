@@ -331,26 +331,22 @@ extension TabCell {
         let activeBGColor = isPrivate ?
             theme.colors.ecosia.tabSelectedPrivateBackground :
             theme.colors.ecosia.buttonBackgroundPrimary
-        headerView.backgroundColor = isSelectedTab ? activeBGColor : theme.colors.ecosia.ntpCellBackground
 
-        titleText.textColor = isSelectedTab ? theme.colors.ecosia.textInversePrimary : theme.colors.ecosia.textPrimary
-        favicon.tintColor = isSelectedTab ? theme.colors.ecosia.textInversePrimary : theme.colors.ecosia.textPrimary
-        closeButton.tintColor = isSelectedTab ? theme.colors.ecosia.textInversePrimary : theme.colors.ecosia.textPrimary
+        titleText.textColor = theme.colors.ecosia.textPrimary
+        favicon.tintColor = theme.colors.ecosia.textPrimary
+        closeButton.tintColor = theme.colors.ecosia.textPrimary
 
-        let borderWidth: CGFloat = 3
+        layer.shadowOffset = .zero
 
         if isSelectedTab {
             // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
             layer.masksToBounds = false
             layer.shadowOpacity = 1
             layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-            // create a frame that is "BorderWidth" size bigger than the cell
-            layer.shadowOffset = CGSize(width: -borderWidth, height: -borderWidth)
             layer.shadowColor = activeBGColor.cgColor
         } else if theme.type == .dark {
             layer.masksToBounds = true
             layer.shadowOpacity = 0
-            layer.shadowOffset = .zero
         } else {
             layer.masksToBounds = false
             layer.shadowOffset = .init(width: 0, height: 1)
