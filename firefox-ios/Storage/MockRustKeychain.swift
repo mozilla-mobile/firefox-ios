@@ -5,26 +5,26 @@
 class MockRustKeychain: RustKeychain {
     static let shared = MockRustKeychain()
 
-    private var storage: [Data: Data] = [:]
+    private var storage: [String: String] = [:]
 
     private init() {
         super.init(serviceName: "Test")
     }
 
-    override func getBaseKeychainQuery(key: Data) -> [String: Any?] {
+    override func getBaseKeychainQuery(key: String) -> [String: Any?] {
         return [:]
     }
 
-    override func queryKeychainForKey(key: Data) -> Result<Data?, Error> {
+    override func queryKeychainForKey(key: String) -> Result<String?, Error> {
         return .success(storage[key])
     }
 
-    override func updateKeychainKey(_ data: Data, key: Data) -> OSStatus {
+    override func updateKeychainKey(_ data: String, key: String) -> OSStatus {
         storage[key] = data
         return errSecSuccess
     }
 
-    override func setKeychainKey(_ data: Data, key: Data) -> OSStatus {
+    override func setKeychainKey(_ data: String, key: String) -> OSStatus {
         storage[key] = data
         return errSecSuccess
     }
