@@ -1763,7 +1763,6 @@ class BrowserViewController: UIViewController,
         let bookmarksTelemetry = BookmarksTelemetry()
         bookmarksTelemetry.editBookmark(eventLabel: .addBookmarkToast)
 
-
         profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard let bookmarkItem = result.successValue?.first,
                   let parentGuid = bookmarkItem.parentGUID else { return }
