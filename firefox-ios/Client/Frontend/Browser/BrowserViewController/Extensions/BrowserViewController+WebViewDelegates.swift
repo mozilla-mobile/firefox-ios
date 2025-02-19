@@ -1023,7 +1023,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
         if isPDFRefactorEnabled {
-            scrollController.configureNewRefreshControl()
+            scrollController.configureRefreshControl()
             navigationHandler?.removeDocumentLoading()
         }
         if let tab = tabManager[webView],
