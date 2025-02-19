@@ -453,68 +453,68 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
-            let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
-            let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
+        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
 
-            switchToolbarIfNeeded()
+        switchToolbarIfNeeded()
 
-            if isToolbarRefactorEnabled {
-                if showNavToolbar {
-                    navigationToolbarContainer.isHidden = false
-                    navigationToolbarContainer.applyTheme(theme: currentTheme())
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    navigationToolbarContainer.isHidden = true
-                }
-                updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        if isToolbarRefactorEnabled {
+            if showNavToolbar {
+                navigationToolbarContainer.isHidden = false
+                navigationToolbarContainer.applyTheme(theme: currentTheme())
+                updateTabCountUsingTabManager(self.tabManager)
             } else {
-                legacyUrlBar?.topTabsIsShowing = showTopTabs
-                legacyUrlBar?.setShowToolbar(!showNavToolbar)
-
-                if showNavToolbar {
-                    toolbar.isHidden = false
-                    toolbar.tabToolbarDelegate = self
-                    toolbar.applyUIMode(
-                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                        theme: currentTheme()
-                    )
-                    toolbar.applyTheme(theme: currentTheme())
-                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    toolbar.tabToolbarDelegate = nil
-                    toolbar.isHidden = true
-                }
+                navigationToolbarContainer.isHidden = true
             }
-            appMenuBadgeUpdate()
+            updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        } else {
+            legacyUrlBar?.topTabsIsShowing = showTopTabs
+            legacyUrlBar?.setShowToolbar(!showNavToolbar)
 
-            if showTopTabs, topTabsViewController == nil {
-                let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-                topTabsViewController.delegate = self
-                addChild(topTabsViewController)
-                header.addArrangedViewToTop(topTabsViewController.view)
-                self.topTabsViewController = topTabsViewController
-                topTabsViewController.applyTheme()
-            } else if showTopTabs, topTabsViewController != nil {
-                topTabsViewController?.applyTheme()
+            if showNavToolbar {
+                toolbar.isHidden = false
+                toolbar.tabToolbarDelegate = self
+                toolbar.applyUIMode(
+                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                    theme: currentTheme()
+                )
+                toolbar.applyTheme(theme: currentTheme())
+                handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                updateTabCountUsingTabManager(self.tabManager)
             } else {
-                if let topTabsView = topTabsViewController?.view {
-                    header.removeArrangedView(topTabsView)
-                }
-                topTabsViewController?.removeFromParent()
-                topTabsViewController = nil
+                toolbar.tabToolbarDelegate = nil
+                toolbar.isHidden = true
             }
+        }
+        appMenuBadgeUpdate()
 
-            header.setNeedsLayout()
-            view.layoutSubviews()
-
-            if let tab = tabManager.selectedTab,
-               let webView = tab.webView,
-               !isToolbarRefactorEnabled {
-                updateURLBarDisplayURL(tab)
-                navigationToolbar.updateBackStatus(webView.canGoBack)
-                navigationToolbar.updateForwardStatus(webView.canGoForward)
+        if showTopTabs, topTabsViewController == nil {
+            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+            topTabsViewController.delegate = self
+            addChild(topTabsViewController)
+            header.addArrangedViewToTop(topTabsViewController.view)
+            self.topTabsViewController = topTabsViewController
+            topTabsViewController.applyTheme()
+        } else if showTopTabs, topTabsViewController != nil {
+            topTabsViewController?.applyTheme()
+        } else {
+            if let topTabsView = topTabsViewController?.view {
+                header.removeArrangedView(topTabsView)
             }
+            topTabsViewController?.removeFromParent()
+            topTabsViewController = nil
+        }
+
+        header.setNeedsLayout()
+        view.layoutSubviews()
+
+        if let tab = tabManager.selectedTab,
+           let webView = tab.webView,
+           !isToolbarRefactorEnabled {
+            updateURLBarDisplayURL(tab)
+            navigationToolbar.updateBackStatus(webView.canGoBack)
+            navigationToolbar.updateForwardStatus(webView.canGoForward)
+        }
     }
 
     func dismissVisibleMenus() {
