@@ -14,6 +14,7 @@ struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     let topSitesData: [TopSiteConfiguration]
     let numberOfRows: Int
+    let numberOfTilesPerRow: Int?
     let shouldShowSection: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
@@ -26,6 +27,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
+            numberOfTilesPerRow: nil,
             shouldShowSection: shouldShowSection
         )
     }
@@ -34,11 +36,13 @@ struct TopSitesSectionState: StateType, Equatable {
         windowUUID: WindowUUID,
         topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
+        numberOfTilesPerRow: Int?,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
+        self.numberOfTilesPerRow = numberOfTilesPerRow
         self.shouldShowSection = shouldShowSection
     }
 
@@ -55,6 +59,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return handleUpdatedNumberOfRowsAction(action: action, state: state)
         case TopSitesActionType.toggleShowSectionSetting:
             return handleToggleShowSectionSettingAction(action: action, state: state)
+        case HomepageActionType.viewWillTransition:
+            return handleViewChangeAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -71,6 +77,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: sites,
             numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: !sites.isEmpty && state.shouldShowSection
         )
     }
@@ -86,6 +93,23 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func handleViewChangeAction(action: Action, state: Self) -> TopSitesSectionState {
+        guard let homepageAction = action as? HomepageAction,
+              let numberOfTilesPerRow = homepageAction.numberOfTopSitesPerRow
+        else {
+            return defaultState(from: state)
+        }
+
+        return TopSitesSectionState(
+            windowUUID: state.windowUUID,
+            topSitesData: state.topSitesData,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: numberOfTilesPerRow,
             shouldShowSection: state.shouldShowSection
         )
     }
@@ -101,6 +125,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: isEnabled
         )
     }
@@ -110,6 +135,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
             shouldShowSection: state.shouldShowSection
         )
     }

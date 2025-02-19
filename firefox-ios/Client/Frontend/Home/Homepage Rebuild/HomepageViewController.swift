@@ -132,6 +132,7 @@ final class HomepageViewController: UIViewController,
         wallpaperView.updateImageForOrientationChange()
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillTransition
             )
@@ -230,9 +231,12 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
+
+        let numberOfCellsPerRow = state.topSitesState.numberOfTilesPerRow ?? numberOfTilesPerRow(for: availableWidth)
+
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth),
+            numberOfCellsPerRow: numberOfCellsPerRow,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
