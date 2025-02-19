@@ -957,6 +957,7 @@ struct AddressBarState: StateType, Equatable {
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
+            largeContentTitle: String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs)),
             a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }

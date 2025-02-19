@@ -26,6 +26,9 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element is in the selected state and should be displayed as highlighted.
     let isSelected: Bool
 
+    /// Title to display in the large content viewer
+    let largeContentTitle: String?
+
     /// Indicates that there is an associated contextual hint
     let contextualHintType: String?
 
@@ -63,6 +66,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 isSelected: Bool = false,
+                largeContentTitle: String? = nil,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
                 a11yHint: String?,
@@ -79,6 +83,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.isSelected = isSelected
+        self.largeContentTitle = largeContentTitle
         self.contextualHintType = contextualHintType
         self.onSelected = onSelected
         self.onLongPress = onLongPress
@@ -98,6 +103,7 @@ public struct ToolbarElement: Equatable {
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.isSelected == rhs.isSelected &&
+        lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&
