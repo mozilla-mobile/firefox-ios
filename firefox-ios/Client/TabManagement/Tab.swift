@@ -976,7 +976,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Returns true if the download was cancelled.
     ///
-    /// `forceReload` forces the reload of the page when a document is downloading, so after cancellation reload the page to ensure clean state.
+    /// `forceReload` forces the reload of the page when a document is downloading.
+    ///  After download cancellation reload the page to ensure clean state.
     @discardableResult
     private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
