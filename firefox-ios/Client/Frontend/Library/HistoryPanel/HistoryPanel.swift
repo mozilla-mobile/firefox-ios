@@ -285,13 +285,7 @@ class HistoryPanel: UIViewController,
 
     func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
-            // Delete groupings that belong to THAT section.
-            switch dateOption {
-            case .lastHour, .today, .yesterday:
-                self?.viewModel.deleteGroupsFor(dateOption: dateOption)
-            default:
-                self?.viewModel.removeAllData()
-            }
+            self?.viewModel.removeAllData()
 
             DispatchQueue.main.async {
                 self?.applySnapshot()
@@ -374,10 +368,6 @@ class HistoryPanel: UIViewController,
                 return getSiteCell(site: site, indexPath: indexPath)
             }
 
-            if let searchTermGroup = item as? ASGroup<Site> {
-                return getGroupCell(searchTermGroup: searchTermGroup, indexPath: indexPath)
-            }
-
             // This should never happen! You will have an empty row!
             return UITableViewCell()
         }
@@ -446,40 +436,6 @@ class HistoryPanel: UIViewController,
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         cell.accessoryView = nil
-        cell.applyTheme(theme: currentTheme())
-        return cell
-    }
-
-    private func getGroupCell(searchTermGroup: ASGroup<Site>, indexPath: IndexPath) -> UITableViewCell? {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
-            for: indexPath
-        ) as? TwoLineImageOverlayCell else {
-            logger.log("History Panel - cannot create TwoLineImageOverlayCell for Search Term Group",
-                       level: .debug,
-                       category: .library)
-            return nil
-        }
-
-        let asGroupCell = configureASGroupCell(searchTermGroup, cell)
-        return asGroupCell
-    }
-
-    private func configureASGroupCell(
-        _ asGroup: ASGroup<Site>,
-        _ cell: TwoLineImageOverlayCell
-    ) -> TwoLineImageOverlayCell {
-        if let groupCount = asGroup.description {
-            cell.descriptionLabel.text = groupCount
-        }
-
-        cell.titleLabel.text = asGroup.displayTitle
-        let imageView = UIImageView(image: chevronImage)
-        cell.accessoryView = imageView
-        let tabTrayImage = UIImage(named: StandardImageIdentifiers.Large.tabTray) ?? UIImage()
-        let tintedTabTrayImage = tabTrayImage.withTintColor(currentTheme().colors.iconSecondary)
-        cell.leftImageView.manuallySetImage(tintedTabTrayImage)
-        cell.leftImageView.backgroundColor = currentTheme().colors.layer5
         cell.applyTheme(theme: currentTheme())
         return cell
     }
@@ -719,10 +675,6 @@ extension HistoryPanel: UITableViewDelegate {
         if let historyActionable = item as? HistoryActionablesModel {
             handleHistoryActionableTapped(historyActionable: historyActionable)
         }
-
-        if let asGroupItem = item as? ASGroup<Site> {
-            handleASGroupItemTapped(asGroupItem: asGroupItem)
-        }
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -759,20 +711,6 @@ extension HistoryPanel: UITableViewDelegate {
         }
     }
 
-    private func handleASGroupItemTapped(asGroupItem: ASGroup<Site>) {
-        exitSearchState()
-        updatePanelState(newState: .history(state: .inFolder))
-
-        historyCoordinatorDelegate?.showSearchGroupedItems(asGroupItem)
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .navigate,
-            object: .navigateToGroupHistory,
-            value: nil,
-            extras: nil
-        )
-    }
-
     @objc
     private func sectionHeaderTapped(sender: UIGestureRecognizer) {
         guard let sectionNumber = sender.view?.tag else { return }
@@ -806,11 +744,6 @@ extension HistoryPanel: UITableViewDelegate {
         header.tag = section
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
         header.addGestureRecognizer(tapGesture)
-
-        // let historySectionsWithGroups
-        _ = viewModel.searchTermGroups.map { group in
-            viewModel.groupBelongsToSection(asGroup: group)
-        }
 
         return header
     }
