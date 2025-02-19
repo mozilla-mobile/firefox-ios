@@ -21,8 +21,8 @@ struct TelemetryContextualIdentifier {
     }
 
     /// Setup the contextual identifier used for some telemetry events
-    /// - Parameter allowed: True when we should setup the GleanMetrics TopSites at the same time as ensuring the `UserDefaults`
-    /// have a proper `contextId` available for this user. False when the ToS are not accepted.
+    /// - Parameter allowed: True when we should setup the GleanMetrics TopSites at the same time as ensuring
+    /// the `UserDefaults` have a proper `contextId` available for this user. False when the ToS are not accepted.
     static func setupContextId(isGleanMetricsAllowed allowed: Bool = true) {
         // Use existing client UUID, if doesn't exists create a new one
         if let stringContextId = contextId, let clientUUID = UUID(uuidString: stringContextId), allowed {
