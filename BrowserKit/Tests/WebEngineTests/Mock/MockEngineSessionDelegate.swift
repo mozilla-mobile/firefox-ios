@@ -9,6 +9,7 @@ import UIKit.UIContextMenuConfiguration
 class MockEngineSessionDelegate: EngineSessionDelegate {
     var onTitleChangeCalled = 0
     var onProgressCalled = 0
+    var onHideProgressCalled = 0
     var onNavigationStateChangeCalled = 0
     var onLoadingStateChangeCalled = 0
     var onLocationChangedCalled = 0
@@ -50,6 +51,10 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onProgress(progress: Double) {
         onProgressCalled += 1
         savedProgressValue = progress
+    }
+
+    func onHideProgressBar() {
+        onHideProgressCalled += 1
     }
 
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {

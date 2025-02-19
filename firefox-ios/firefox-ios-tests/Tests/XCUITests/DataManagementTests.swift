@@ -82,6 +82,8 @@ class DataManagementTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2802088
     func testFilterWebsiteData() {
+        cleanAllData()
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.goto(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-example.html"))

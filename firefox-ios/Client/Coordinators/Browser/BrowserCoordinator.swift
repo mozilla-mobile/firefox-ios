@@ -40,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -229,7 +228,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         screenshotService.screenshotableView = webviewController
-        self.errorViewController = nil
     }
 
     func browserHasLoaded() {
@@ -1039,16 +1037,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+        let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
-        guard browserViewController.embedContent(errorpageController) else {
+
+        guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
-        self.errorViewController = errorpageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

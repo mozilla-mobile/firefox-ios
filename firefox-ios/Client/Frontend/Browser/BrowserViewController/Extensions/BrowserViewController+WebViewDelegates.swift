@@ -188,10 +188,11 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        if let tab = tabManager[webView] {
-            // Need to wait here in case we're waiting for a pending `window.open()`.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.tabManager.removeTab(tab)
+        Task {
+            if let tab = tabManager[webView] {
+                // Need to wait here in case we're waiting for a pending `window.open()`.
+                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                await tabManager.removeTab(tab.tabUUID)
             }
         }
     }
@@ -552,7 +553,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     if let currentTab = self?.tabManager.selectedTab,
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabManager.removeTab(tab)
+                        self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
                     }
                 }
             }
@@ -912,13 +913,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
 
                 if isNativeErrorPageEnabled {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
+                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError

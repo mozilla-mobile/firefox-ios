@@ -38,11 +38,10 @@ class TabScrollingController: NSObject,
             scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            configureRefreshControl(isEnabled: true)
-            if isPullToRefreshRefactorEnabled {
-                tab?.onLoading = { [weak self] in
-                    self?.handleOnTabContentLoading()
-                }
+            configureRefreshControl()
+
+            tab?.onLoading = { [weak self] in
+                self?.handleOnTabContentLoading()
             }
         }
     }
@@ -107,12 +106,6 @@ class TabScrollingController: NSObject,
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    private var pullToRefreshView: PullRefreshView? {
-        return tab?.webView?.scrollView.subviews.first(where: {
-            $0 is PullRefreshView
-        }) as? PullRefreshView
-    }
-    private let isPullToRefreshRefactorEnabled: Bool
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
@@ -152,7 +145,6 @@ class TabScrollingController: NSObject,
     }
 
     init(windowUUID: WindowUUID,
-         isPullToRefreshRefactorEnabled: Bool,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
@@ -160,17 +152,13 @@ class TabScrollingController: NSObject,
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
-        self.isPullToRefreshRefactorEnabled = isPullToRefreshRefactorEnabled
         super.init()
         setupNotifications()
     }
 
     func traitCollectionDidChange() {
-        if isPullToRefreshRefactorEnabled {
-            pullToRefreshView?.stopObservingContentScroll()
-            pullToRefreshView?.removeFromSuperview()
-            configureRefreshControl(isEnabled: true)
-        }
+        tab?.webView?.removePullRefresh()
+        configureRefreshControl()
     }
 
     private func setupNotifications() {
@@ -187,10 +175,9 @@ class TabScrollingController: NSObject,
 
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
-            pullToRefreshView?.stopObservingContentScroll()
-            pullToRefreshView?.removeFromSuperview()
+            tab?.webView?.removePullRefresh()
         } else {
-            configureRefreshControl(isEnabled: true)
+            configureRefreshControl()
         }
     }
 
@@ -233,8 +220,6 @@ class TabScrollingController: NSObject,
                 updateToolbarState()
             }
         }
-
-        pullToRefreshView?.isHidden = false
     }
 
     func showToolbars(animated: Bool) {
@@ -322,45 +307,17 @@ class TabScrollingController: NSObject,
     // MARK: - Themeable
 
     func applyTheme() {
-        pullToRefreshView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        tab?.webView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 }
 
 // MARK: - Private
 private extension TabScrollingController {
-    private func configureRefreshControl(isEnabled: Bool) {
-        if isPullToRefreshRefactorEnabled {
-            configureNewRefreshControl()
-        } else {
-            scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
-            scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
-        }
-    }
-
-    private func configureNewRefreshControl() {
-        guard let scrollView,
-              let webView = tab?.webView,
-              !scrollView.subviews.contains(where: { $0 is PullRefreshView })
-        else {
-            pullToRefreshView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            pullToRefreshView?.startObservingContentScroll()
-            return
-        }
-
-        let refresh = PullRefreshView(parentScrollView: self.scrollView,
-                                      isPotraitOrientation: UIWindow.isPortrait) { [weak self] in
+    private func configureRefreshControl() {
+        tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
         }
-        scrollView.addSubview(refresh)
-        refresh.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            refresh.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
-            refresh.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
-            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height),
-            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
-        ])
-        refresh.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        applyTheme()
     }
 
     @objc
@@ -608,17 +565,12 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        if isPullToRefreshRefactorEnabled {
-            pullToRefreshView?.stopObservingContentScroll()
-            pullToRefreshView?.removeFromSuperview()
-        } else {
-            configureRefreshControl(isEnabled: false)
-        }
+        tab?.webView?.removePullRefresh()
         self.isUserZoom = true
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        configureRefreshControl(isEnabled: true)
+        configureRefreshControl()
         self.isUserZoom = false
     }
 

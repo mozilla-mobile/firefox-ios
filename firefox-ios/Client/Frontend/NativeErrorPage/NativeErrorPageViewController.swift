@@ -186,10 +186,8 @@ final class NativeErrorPageViewController: UIViewController,
         super.viewDidLoad()
         listenForThemeChange(view)
         applyTheme()
-        store.dispatch(NativeErrorPageAction( windowUUID: windowUUID,
-                                              actionType: NativeErrorPageActionType.errorPageLoaded
-                                            )
-        )
+        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
+                                             actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
     override func viewWillTransition(

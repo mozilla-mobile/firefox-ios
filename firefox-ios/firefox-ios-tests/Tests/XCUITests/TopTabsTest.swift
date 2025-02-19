@@ -259,7 +259,11 @@ class TopTabsTest: BaseTestCase {
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
         // Verify that the '+' is displayed
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        if iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
