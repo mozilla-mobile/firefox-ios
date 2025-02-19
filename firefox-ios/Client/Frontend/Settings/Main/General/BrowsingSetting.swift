@@ -2,12 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
-import Shared
 
-class TabsSetting: Setting {
-    private weak var settingsDelegate: BrowsingSettingsDelegate?
+class BrowsingSetting: Setting {
+    private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
@@ -15,21 +13,24 @@ class TabsSetting: Setting {
     }
 
     override var accessibilityIdentifier: String? {
-        return AccessibilityIdentifiers.Settings.Tabs.title
+        return AccessibilityIdentifiers.Settings.Browsing.title
     }
 
-    init(theme: Theme,
-         settingsDelegate: BrowsingSettingsDelegate?) {
+    init(settings: SettingsTableViewController,
+         settingsDelegate: GeneralSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
+        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
-                string: .Settings.SectionTitles.TabsTitle,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+                string: .Settings.Browsing.Title,
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
+                ]
             )
         )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.pressedTabs()
+        settingsDelegate?.pressedBrowsing()
     }
 }

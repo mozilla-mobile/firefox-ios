@@ -762,6 +762,10 @@ struct AccessibilityIdentifiers {
             static let title = "SiriSettings"
         }
 
+        struct Browsing {
+            static let title = "BrowsingSettings"
+        }
+
         struct StudiesToggle {
             static let title = "StudiesToggle"
         }

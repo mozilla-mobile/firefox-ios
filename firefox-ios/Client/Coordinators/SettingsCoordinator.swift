@@ -366,6 +366,12 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(ThemeSettingsController(windowUUID: windowUUID))
     }
 
+    func pressedBrowsing() {
+        let viewController = BrowsingSettingsViewController(profile: profile,
+                                                            windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
     // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {

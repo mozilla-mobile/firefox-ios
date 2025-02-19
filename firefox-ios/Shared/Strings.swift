@@ -2377,6 +2377,15 @@ extension String {
                 comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
         }
 
+        public struct Browsing {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Browsing.Title.v137",
+                tableName: "Settings",
+                value: "Browsing",
+                comment: "In the settings menu, in the General section, this is the title for Browsing customization section."
+            )
+        }
+
         public struct Notifications {
             public static let Title = MZLocalizedString(
                 key: "Settings.Notifications.Title.v112",
