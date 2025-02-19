@@ -453,7 +453,6 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
-        DispatchQueue.main.async { [self] in
             let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
             let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
 
@@ -516,7 +515,6 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateBackStatus(webView.canGoBack)
                 navigationToolbar.updateForwardStatus(webView.canGoForward)
             }
-        }
     }
 
     func dismissVisibleMenus() {
@@ -1211,7 +1209,9 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateToolbarStateForTraitCollection(traitCollection)
+        DispatchQueue.main.async { [self] in
+            updateToolbarStateForTraitCollection(traitCollection)
+        }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.applyThemeUpdatesToWindows()
         }
