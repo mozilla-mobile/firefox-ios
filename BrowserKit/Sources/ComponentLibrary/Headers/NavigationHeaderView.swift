@@ -36,13 +36,16 @@ public final class NavigationHeaderView: UIView {
         button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.imageView?.contentMode = .scaleAspectFit
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
-        button.contentHorizontalAlignment = .left
+        button.contentHorizontalAlignment = .leading
     }
 
     private let horizontalLine: UIView = .build()
 
+    private var backButtonText = ""
     private var viewConstraints: [NSLayoutConstraint] = []
 
     override init(frame: CGRect) {
@@ -108,12 +111,15 @@ public final class NavigationHeaderView: UIView {
 
     public func setViews(with title: String, and backButtonText: String) {
         titleLabel.text = title
+        self.backButtonText = backButtonText
         backButton.setTitle(backButtonText, for: .normal)
     }
 
     public func adjustLayout() {
+        let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
         backButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
-        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
+        backButton.setTitle(isAccessibilityCategory ? "" : backButtonText, for: .normal)
+        updateLayout(isAccessibilityCategory: isAccessibilityCategory)
     }
 
     public func updateHeaderLineView(isHidden: Bool) {
