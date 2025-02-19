@@ -10,11 +10,13 @@ public enum ToolbarButtonGesture {
     case longPress
 }
 
-class ToolbarButton: UIButton, ThemeApplicable {
+class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
+        static let defaultMinimumPressDuration: TimeInterval = 0.5
+        static let minimumPressDurationWithLargeContentViewer: TimeInterval = 1.5
     }
 
     private var foregroundColorNormal: UIColor = .clear
@@ -25,7 +27,10 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?
 
+    private var longPressRecognizer: UILongPressGestureRecognizer?
     private var onLongPress: ((UIButton) -> Void)?
+    private var notificationCenter: NotificationProtocol?
+    private var largeContentViewerInteraction: UILargeContentViewerInteraction?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,12 +42,15 @@ class ToolbarButton: UIButton, ThemeApplicable {
                                                                trailing: UX.horizontalInset)
     }
 
-    open func configure(element: ToolbarElement) {
+    open func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         guard var config = configuration else { return }
-        removeAllGestureRecognizers()
-        configureLongPressGestureRecognizerIfNeeded(for: element)
+        removeLongPressGestureRecognizer()
+        configureLongPressGestureRecognizerIfNeeded(for: element, notificationCenter: notificationCenter)
         configureCustomA11yActionIfNeeded(for: element)
         isSelected = element.isSelected
+        self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
@@ -91,6 +99,10 @@ class ToolbarButton: UIButton, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter?.removeObserver(self)
+    }
+
     override public func updateConfiguration() {
         guard var updatedConfiguration = configuration else { return }
 
@@ -137,14 +149,29 @@ class ToolbarButton: UIButton, ThemeApplicable {
         ])
     }
 
-    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement) {
+    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement,
+                                                             notificationCenter: NotificationProtocol) {
         guard element.onLongPress != nil else { return }
         onLongPress = element.onLongPress
         let longPressRecognizer = UILongPressGestureRecognizer(
             target: self,
             action: #selector(handleLongPress)
         )
+        longPressRecognizer.delegate = self
         addGestureRecognizer(longPressRecognizer)
+        self.longPressRecognizer = longPressRecognizer
+        setMinimumPressDuration()
+
+        let largeContentViewerInteraction = UILargeContentViewerInteraction()
+        self.largeContentViewerInteraction = largeContentViewerInteraction
+        addInteraction(largeContentViewerInteraction)
+
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(largeContentViewerInteractionDidChange),
+            name: UILargeContentViewerInteraction.enabledStatusDidChangeNotification,
+            object: nil
+        )
     }
 
     private func configureCustomA11yActionIfNeeded(for element: ToolbarElement) {
@@ -162,11 +189,24 @@ class ToolbarButton: UIButton, ThemeApplicable {
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 
-    private func removeAllGestureRecognizers() {
-        guard let gestureRecognizers else { return }
-            for recognizer in gestureRecognizers {
-                removeGestureRecognizer(recognizer)
-            }
+    private func removeLongPressGestureRecognizer() {
+        guard let recognizer = longPressRecognizer, let interaction = largeContentViewerInteraction else { return }
+        removeGestureRecognizer(recognizer)
+        longPressRecognizer = nil
+
+        removeInteraction(interaction)
+        largeContentViewerInteraction = nil
+    }
+
+    private func setMinimumPressDuration() {
+        // The default long press duration is 0.5. Here we extend it if
+        // UILargeContentViewInteraction is enabled to allow the large content
+        // viewer time to display the content
+        var minimumPressDuration: TimeInterval = UX.defaultMinimumPressDuration
+        if UILargeContentViewerInteraction.isEnabled {
+            minimumPressDuration = UX.minimumPressDurationWithLargeContentViewer
+        }
+        longPressRecognizer?.minimumPressDuration = minimumPressDuration
     }
 
     // MARK: - Selectors
@@ -175,8 +215,17 @@ class ToolbarButton: UIButton, ThemeApplicable {
         if gestureRecognizer.state == .began {
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
+
+            // Cancel showing the large content viewer
+            largeContentViewerInteraction?.gestureRecognizerForExclusionRelationship.state = .cancelled
+
             onLongPress?(self)
         }
+    }
+
+    @objc
+    private func largeContentViewerInteractionDidChange() {
+        setMinimumPressDuration()
     }
 
     // MARK: - ThemeApplicable
@@ -193,5 +242,13 @@ class ToolbarButton: UIButton, ThemeApplicable {
         maskImageView?.tintColor = colors.layer1
 
         setNeedsUpdateConfiguration()
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            let recognizerRelationship = largeContentViewerInteraction?.gestureRecognizerForExclusionRelationship
+            return gestureRecognizer == longPressRecognizer && otherGestureRecognizer == recognizerRelationship
     }
 }
