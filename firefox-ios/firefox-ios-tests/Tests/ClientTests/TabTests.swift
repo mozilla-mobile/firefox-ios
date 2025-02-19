@@ -23,9 +23,9 @@ class TabTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         tabDelegate = nil
         mockProfile = nil
+        super.tearDown()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
