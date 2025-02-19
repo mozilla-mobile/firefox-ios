@@ -1711,7 +1711,7 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-        showBookmarkToast(action: .add)
+        showBookmarkToast(bookmarkURL: URL(string: url), action: .add)
     }
 
     func removeBookmark(url: URL, title: String?, site: Site? = nil) {
