@@ -86,9 +86,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
 
         guard !engineNames.isEmpty else {
             logger.log("No search engines.", level: .fatal, category: .setup)
-            // swiftlint:disable line_length
-            fatalError("We are unable to populate search engines for this locale because the possibilities of search engines is blank.")
-            // swiftlint:enable line_length
+            fatalError("Unable to populate search engines for locale because possibilities is blank.")
         }
 
         DispatchQueue.global().async {
