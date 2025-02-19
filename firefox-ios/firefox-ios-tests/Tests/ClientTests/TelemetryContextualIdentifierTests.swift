@@ -36,6 +36,11 @@ class TelemetryContextualIdentifierTests: XCTestCase {
         XCTAssertEqual(contextId, TelemetryContextualIdentifier.contextId)
     }
 
+    func testContextId_noGleanMetricsSetsContextId() {
+        TelemetryContextualIdentifier.setupContextId(isGleanMetricsAllowed: false)
+        XCTAssertNotNil(TelemetryContextualIdentifier.contextId)
+    }
+
     func testTelemetryWrapper_setsContextId() {
         TelemetryWrapper.shared.setup(profile: MockProfile())
         XCTAssertNotNil(TelemetryContextualIdentifier.contextId)

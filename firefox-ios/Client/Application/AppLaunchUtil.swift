@@ -56,7 +56,7 @@ class AppLaunchUtil {
             } else {
                 // If ToS are not accepted, we still need to setup the Contextual Identifier for
                 // the Unified Ads Sponsored tiles
-                TelemetryContextualIdentifier.setupContextId()
+                TelemetryContextualIdentifier.setupContextId(isGleanMetricsAllowed: false)
             }
         } else {
             logger.setup(sendCrashReports: sendCrashReports)
