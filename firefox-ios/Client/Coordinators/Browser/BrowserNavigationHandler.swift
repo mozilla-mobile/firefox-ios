@@ -112,6 +112,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode)
 
     func openInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
+
+    func showDocumentLoading()
+
+    func removeDocumentLoading()
 }
 
 extension BrowserNavigationHandler {

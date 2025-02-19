@@ -221,7 +221,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -1006,6 +1006,14 @@ class BrowserCoordinator: BaseCoordinator,
         backForwardListVC.tabManager = tabManager
         backForwardListVC.modalPresentationStyle = .overCurrentContext
         present(backForwardListVC)
+    }
+
+    func showDocumentLoading() {
+        webviewController?.showDocumentLoadingView()
+    }
+
+    func removeDocumentLoading() {
+        webviewController?.removeDocumentLoadingView()
     }
 
     // MARK: Microsurvey

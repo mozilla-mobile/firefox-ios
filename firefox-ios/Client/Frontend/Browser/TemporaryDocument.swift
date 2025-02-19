@@ -9,7 +9,7 @@ import WebKit
 private let temporaryDocumentOperationQueue = OperationQueue()
 
 protocol TemporaryDocument {
-    var filename: String { get set }
+    var filename: String { get }
     var isDownloading: Bool { get }
 
     func canDownload(request: URLRequest) -> Bool
@@ -38,13 +38,14 @@ class DefaultTemporaryDocument: NSObject,
 
     private var onDownload: ((URL?) -> Void)?
     var onDownloadProgressUpdate: ((Double) -> Void)?
+    var onDownloadStarted: (() -> Void)?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
     private var localFileURL: URL?
 
     private let mimeType: String?
-    var filename: String
+    private(set) var filename: String
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
@@ -212,6 +213,8 @@ class DefaultTemporaryDocument: NSObject,
         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
         ensureMainThread { [weak self] in
             self?.onDownloadProgressUpdate?(progress)
+            self?.onDownloadStarted?()
+            self?.onDownloadStarted = nil
         }
     }
 }
