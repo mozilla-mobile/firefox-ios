@@ -33,25 +33,30 @@ class DownloadHelper: NSObject {
         self.preflightResponse = response
     }
 
-    func shouldDownloadBlob(canShowInWebView: Bool, forceDownload: Bool) -> Bool {
+    func shouldDownloadFile(canShowInWebView: Bool,
+                            forceDownload: Bool,
+                            isForMainFrame: Bool) -> Bool {
         let mimeType = preflightResponse.mimeType ?? MIMEType.OctetStream
-        let isBinaryData = mimeType == MIMEType.OctetStream
 
-        // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
-        // Leaving this here for now, but commented out. Checking this HTTP header is
-        // what Desktop does should we ever decide to change our minds on this.
-        // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
-        // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
+        // Handles automatic Blob URL download
+        if mimeType == MIMEType.OctetStream {
+            return true
+        }
 
-        guard isBinaryData || !canShowInWebView || forceDownload else { return false }
+        // Handles attachments downloads.
+        // Only supports PDF ATM but can be expanded to support more extension
+        if shouldDownloadAttachment(isForMainFrame: isForMainFrame) {
+            return true
+        }
 
-        return true
+        // Handles forced downloads && MIMETypes not supported on webview
+        return !canShowInWebView || forceDownload
     }
 
-    func shouldDownloadAttachment() -> Bool {
+    func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
         let contentDisposition = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
-        let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType)
+        let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType) && !isForMainFrame
 
         return isAttachment && canBeDownloaded
     }

@@ -735,9 +735,11 @@ extension BrowserViewController: WKNavigationDelegate {
             present(alert, animated: true)
         }
 
-        // Check if this response should be downloaded. Only handles Blob URL Downloads
+        // Check if this response should be downloaded
         if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
-            downloadHelper.shouldDownloadBlob(canShowInWebView: canShowInWebView, forceDownload: forceDownload) {
+            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                              forceDownload: forceDownload,
+                                              isForMainFrame: navigationResponse.isForMainFrame) {
             handleDownloadFiles(downloadHelper: downloadHelper)
             decisionHandler(.cancel)
             return
@@ -765,14 +767,6 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             tab.mimeType = response.mimeType
-        }
-
-        // Allow download files . update to use downloadable docs after
-        let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore)
-        if let downloadHelper, downloadHelper.shouldDownloadAttachment(), !navigationResponse.isForMainFrame {
-                handleDownloadFiles(downloadHelper: downloadHelper)
-                decisionHandler(.cancel)
-                return
         }
 
         // If none of our helpers are responsible for handling this response,
