@@ -52,7 +52,14 @@ class ActionProviderBuilder {
         )
     }
 
-    func addRemoveBookmarkLink(urlString: String, title: String?, removeBookmark: @escaping (String, String?, Site?) -> Void) {
+    func addRemoveBookmarkLink(
+        urlString: String,
+        title: String?,
+        removeBookmark: @escaping (
+            String,
+            String?,
+            Site?
+        ) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
