@@ -711,9 +711,9 @@ class BrowserViewController: UIViewController,
                 .removeShortcut,
                 .removeFromReadingList:
             showToast()
-        case .addBookmark:
+        case .addBookmark(let urlString):
             if isBookmarkRefactorEnabled {
-                showBookmarkToast(action: .add)
+                showBookmarkToast(urlString: urlString, action: .add)
             } else {
                 showToast()
             }

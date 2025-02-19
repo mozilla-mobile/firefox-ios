@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 enum ToastType: Equatable {
-    case addBookmark
+    case addBookmark(urlString: String)
     case addToReadingList
     case addShortcut
     case clearCookies
