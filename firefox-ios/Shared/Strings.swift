@@ -6775,6 +6775,12 @@ extension String {
             value: "Tabs open",
             comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
 
+        public static let TabsButtonLargeContentTitle = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
+            tableName: "Toolbar",
+            value: "Tabs open: %@",
+            comment: "Large content title for the tabs button in the toolbar, specifying the number of tabs open. The placeholder is getting replaced with the number of open tabs.")
+
         public static let MenuButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Menu.Button.A11y.Label.v135",
             tableName: "Toolbar",
