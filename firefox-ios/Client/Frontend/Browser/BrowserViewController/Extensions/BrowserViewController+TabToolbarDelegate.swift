@@ -434,6 +434,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showEditBookmark() {
-        openBookmarkEditPanel()
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        openBookmarkEditPanel(urlString: urlString)
     }
 }
