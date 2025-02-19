@@ -18,9 +18,9 @@ class WebviewViewController: UIViewController,
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private var webView: WKWebView
     var contentType: ContentType = .webview
-    var themeManager: any ThemeManager
-    var notificationCenter: any NotificationProtocol
-    var themeObserver: (any NSObjectProtocol)?
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: WindowUUID? {
         return windowUUID
@@ -28,8 +28,8 @@ class WebviewViewController: UIViewController,
 
     init(webView: WKWebView,
          windowUUID: WindowUUID,
-         themeManager: any ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: any NotificationProtocol = NotificationCenter.default) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.webView = webView
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -49,13 +49,7 @@ class WebviewViewController: UIViewController,
 
     private func setupWebView() {
         view.addSubview(webView)
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        webView.pinToSuperview()
     }
 
     func update(webView: WKWebView) {
@@ -70,12 +64,7 @@ class WebviewViewController: UIViewController,
         let documentLoadingView = TemporaryDocumentLoadingView(frame: view.bounds)
         documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(documentLoadingView)
-        NSLayoutConstraint.activate([
-            documentLoadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            documentLoadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            documentLoadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        documentLoadingView.pinToSuperview()
 
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         self.documentLoadingView = documentLoadingView

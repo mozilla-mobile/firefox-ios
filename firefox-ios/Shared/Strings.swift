@@ -2720,7 +2720,7 @@ extension String {
             key: "WebView.DocumentLoadingAccessibilityLabel.v137",
             tableName: "WebView",
             value: "Loading Document",
-            comment: "The accessibility label associated with Document loading label"
+            comment: "The accessibility label read when loading a document in the web view's custom document loading UI."
         )
     }
 }

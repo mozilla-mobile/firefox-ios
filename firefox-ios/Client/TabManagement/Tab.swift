@@ -974,7 +974,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Temporary Document handling - PDF Refactor
 
-    /// Returns true if the download was cancelled
+    /// Returns true if the download was cancelled.
+    ///
+    /// `forceReload` forces the reload of the page when a document is downloading, so after cancellation reload the page to ensure clean state.
     @discardableResult
     private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
@@ -1166,7 +1168,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
