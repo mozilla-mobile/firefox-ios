@@ -213,7 +213,7 @@ class TabTests: XCTestCase {
     // MARK: - Document Handling
 
     func testEnqueueDocument() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         subject.enqueueDocument(document)
@@ -223,7 +223,7 @@ class TabTests: XCTestCase {
     }
 
     func testLoadDocumentRequest() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url, request: URLRequest(url: url))
 
         subject.enqueueDocument(document)
@@ -233,7 +233,7 @@ class TabTests: XCTestCase {
     }
 
     func testReload_whenDocumentIsDownloading_cancelDownload() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         setIsPDFRefactorFeature(isEnabled: true)
@@ -250,7 +250,7 @@ class TabTests: XCTestCase {
     }
 
     func testGoBack_whenDocumentIsDownloading_cancelDownload() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         setIsPDFRefactorFeature(isEnabled: true)
@@ -271,7 +271,7 @@ class TabTests: XCTestCase {
     }
 
     func testGoForward_whenDocumentIsDownloading_cancelDownload() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         setIsPDFRefactorFeature(isEnabled: true)
@@ -291,7 +291,7 @@ class TabTests: XCTestCase {
     }
 
     func testLoadRequest_whenDocumentIsDownloading_cancelDownload() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         setIsPDFRefactorFeature(isEnabled: true)
@@ -310,7 +310,7 @@ class TabTests: XCTestCase {
     }
 
     func testStop_whenDocumentIsDownloading_cancelDownload() {
-        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
         setIsPDFRefactorFeature(isEnabled: true)
@@ -324,6 +324,12 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.loadCalled, 1)
         XCTAssertEqual(mockTabWebView.stopLoadingCalled, 1)
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
+    }
+
+    private func createSubject() -> Tab {
+        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func setIsPDFRefactorFeature(isEnabled: Bool) {

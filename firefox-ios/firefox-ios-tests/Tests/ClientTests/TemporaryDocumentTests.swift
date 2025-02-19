@@ -25,7 +25,6 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
         try? FileManager.default.removeItem(at: tempFileURL)
         mockURLSession = nil
-        subject = nil
         super.tearDown()
     }
 
@@ -56,6 +55,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
 
         subject.download { _ in }
         wait(for: [expectation])
+        subject = nil
     }
 
     func testInit_passCorrectName_fromResponse() {
@@ -63,6 +63,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         subject = createSubject(response: response, request: request, session: mockURLSession)
 
         XCTAssertEqual(subject.filename, filename)
+        subject = nil
     }
 
     func testDownloadAsync() async {
@@ -73,6 +74,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
 
         XCTAssertNotNil(localURL)
         XCTAssertEqual(localURL?.lastPathComponent, filename)
+        subject = nil
     }
 
     func testDownload() {
@@ -88,6 +90,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         }
 
         wait(for: [expectation])
+        subject = nil
     }
 
     func testDownload_onDownloadStarted() {
@@ -109,6 +112,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         wait(for: [expectation])
         // it is nilled out so to not call it again
         XCTAssertNil(self.subject.onDownloadStarted)
+        subject = nil
     }
 
     func testDownload_onProgressUpdate() {
@@ -130,9 +134,10 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         )
 
         wait(for: [expectation])
+        subject = nil
     }
 
-    func testDeinit_removeTempFile() {
+    func testDeinit_removeTempFile() async {
         XCTAssert(true)
     }
 
@@ -155,13 +160,15 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         mimeType: String? = nil,
         cookies: [HTTPCookie] = []
     ) -> DefaultTemporaryDocument {
-        return DefaultTemporaryDocument(
+        let subject = DefaultTemporaryDocument(
             filename: filename,
             request: request,
             mimeType: mimeType,
             cookies: cookies,
             session: session
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func createSubject(
@@ -170,11 +177,13 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         mimeType: String? = nil,
         session: URLSession = .shared
     ) -> DefaultTemporaryDocument {
-        return DefaultTemporaryDocument(
+        let subject = DefaultTemporaryDocument(
             preflightResponse: response,
             request: request,
             mimeType: mimeType,
             session: session
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
