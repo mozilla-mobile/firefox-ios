@@ -1980,6 +1980,8 @@
 		F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		F8324B122649B707007E4BFA /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		F8324B262649B76E007E4BFA /* SyncDisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncDisplayState.swift */; };
+		F83869BD2D5EACA500E8B999 /* RustKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83869BC2D5EAC8F00E8B999 /* RustKeychain.swift */; };
+		F83869BF2D5EB75600E8B999 /* MockRustKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83869BE2D5EB74C00E8B999 /* MockRustKeychain.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -10109,6 +10111,8 @@
 		F8324A0F2649A188007E4BFA /* CredentialProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CredentialProvider.entitlements; sourceTree = "<group>"; };
 		F8324AE12649B3E7007E4BFA /* CredentialProviderFennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CredentialProviderFennec.entitlements; sourceTree = "<group>"; };
 		F8324EB3B9CEED437A3D68A6 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
+		F83869BC2D5EAC8F00E8B999 /* RustKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustKeychain.swift; sourceTree = "<group>"; };
+		F83869BE2D5EB74C00E8B999 /* MockRustKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRustKeychain.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -11019,6 +11023,8 @@
 				2FCAE2411ABB531100877008 /* Cursor.swift */,
 				28302E3F1AF0747800521E2E /* DatabaseError.swift */,
 				0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */,
+				F83869BC2D5EAC8F00E8B999 /* RustKeychain.swift */,
+				F83869BE2D5EB74C00E8B999 /* MockRustKeychain.swift */,
 				394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */,
 				D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */,
 				E65075C11E37F956006961AC /* ExtensionUtils.swift */,
@@ -16524,7 +16530,9 @@
 				D05434E3225BBC4100FDE4EF /* RustShared.swift in Sources */,
 				2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
+				F83869BD2D5EACA500E8B999 /* RustKeychain.swift in Sources */,
 				0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */,
+				F83869BF2D5EB75600E8B999 /* MockRustKeychain.swift in Sources */,
 				74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */,
 				D07696F820697F9C00FACFD8 /* ReadingListSchema.swift in Sources */,
 				D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */,
