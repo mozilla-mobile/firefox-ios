@@ -23,8 +23,9 @@ class TabTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         tabDelegate = nil
+        mockProfile = nil
+        super.tearDown()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
@@ -44,6 +45,30 @@ class TabTests: XCTestCase {
         tab.url = url
         let expectedDisplayTitle = String.LegacyAppMenu.AppMenuOpenHomePageTitleString
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
+    }
+
+    func testTitle_WhenWebViewTitleIsNil_ThenShouldReturnNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.mockTitle = nil
+        XCTAssertNil(tab.title, "Expected title to be nil when webView.title is nil")
+    }
+
+    func testTitle_WhenWebViewTitleIsEmpty_ThenShouldReturnNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.mockTitle = ""
+        XCTAssertNil(tab.title, "Expected title to be nil when webView.title is empty")
+    }
+
+    func testTitle_WhenWebViewTitleIsValid_ThenShouldReturnTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.mockTitle = "Test Page Title"
+        XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
     func testTabDoesntLeak() {
@@ -111,7 +136,7 @@ class TabTests: XCTestCase {
     func testIsSameTypeAs_trueForTwoPrivateTabs_bothInactive() {
         let lastMonthDate = Date().lastMonth
 
-        let privateInctiveTab1 = Tab(
+        let privateInactiveTab1 = Tab(
             profile: mockProfile,
             isPrivate: true,
             windowUUID: windowUUID,
@@ -124,8 +149,8 @@ class TabTests: XCTestCase {
             tabCreatedTime: lastMonthDate
         )
 
-        XCTAssertTrue(privateInctiveTab1.isSameTypeAs(privateInactiveTab2))
-        XCTAssertTrue(privateInactiveTab2.isSameTypeAs(privateInctiveTab1))
+        XCTAssertTrue(privateInactiveTab1.isSameTypeAs(privateInactiveTab2))
+        XCTAssertTrue(privateInactiveTab2.isSameTypeAs(privateInactiveTab1))
     }
 
     func testIsSameTypeAs_falseForNormalTabAndPrivateTab() {
@@ -188,19 +213,19 @@ class TabTests: XCTestCase {
     func testIsSameTypeAs_trueForTwoNormalTabs_bothInactive() {
         let lastMonthDate = Date().lastMonth
 
-        let normalInctiveTab1 = Tab(
+        let normalInactiveTab1 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
-        let normalInctiveTab2 = Tab(
+        let normalInactiveTab2 = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
             tabCreatedTime: lastMonthDate
         )
 
-        XCTAssertTrue(normalInctiveTab1.isSameTypeAs(normalInctiveTab2))
-        XCTAssertTrue(normalInctiveTab2.isSameTypeAs(normalInctiveTab1))
+        XCTAssertTrue(normalInactiveTab1.isSameTypeAs(normalInactiveTab2))
+        XCTAssertTrue(normalInactiveTab2.isSameTypeAs(normalInactiveTab1))
     }
 }
 
@@ -217,4 +242,32 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {}
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
+}
+
+// MARK: - MockTabWebView
+class MockTabWebView: TabWebView {
+    var mockTitle: String?
+
+    override var title: String? {
+        return mockTitle
+    }
+
+    init(tab: Tab) {
+        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+        // Simulating the observer setup is required to use this mock because in production
+        // the observers are set up in Tab.createWebView() which we don't call during test
+        // and the observers are removed every time we call Tab.deinit(), so an error occurs
+        // if we don't first set up the observers manually here.
+        simulateObserverSetup(target: tab)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func simulateObserverSetup(target: NSObject) {
+        addObserver(target, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+        addObserver(target, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
+        addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
+    }
 }
