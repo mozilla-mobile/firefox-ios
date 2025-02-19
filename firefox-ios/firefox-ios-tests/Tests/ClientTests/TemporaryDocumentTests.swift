@@ -17,6 +17,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
         mockURLSession = URLSession(configuration: configuration, delegate: self, delegateQueue: .main)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
@@ -137,8 +138,29 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         subject = nil
     }
 
-    func testDeinit_removeTempFile() async {
-        XCTAssert(true)
+    func testDeinit_removeTempFile_whenPDFRefactorDisabled() async throws {
+        setIsPDFRefactorFeature(isEnabled: false)
+        subject = createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
+        let url = try await unwrapAsync {
+            return await subject.download()
+        }
+
+        subject = nil
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+    }
+
+    func testDeinit_doesNotRemoveTempPDFFile_whenPDFRefactorEnabled() async throws {
+        setIsPDFRefactorFeature(isEnabled: true)
+        // Make sure is a PDF, otherwise it falls back to remove the file
+        subject = createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
+        let url = try await unwrapAsync {
+            return await subject.download()
+        }
+
+        subject = nil
+
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
     }
 
     // MARK: - URLSessionDownloadDelegate
@@ -185,5 +207,11 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setIsPDFRefactorFeature(isEnabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            PdfRefactorFeature(enabled: isEnabled)
+        }
     }
 }
