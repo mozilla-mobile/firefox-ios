@@ -1725,7 +1725,7 @@ class BrowserViewController: UIViewController,
         switch action {
         case .add:
             if !isBookmarkRefactorEnabled {
-                showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+                showToast(urlString, title, message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
             }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
@@ -1758,44 +1758,32 @@ class BrowserViewController: UIViewController,
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
     internal func openBookmarkEditPanel(urlString: String? = nil) {
-        guard !profile.isShutdown else { return }
+        guard !profile.isShutdown, let urlString else { return }
 
         let bookmarksTelemetry = BookmarksTelemetry()
         bookmarksTelemetry.editBookmark(eventLabel: .addBookmarkToast)
 
-        // Open refactored bookmark edit view
-        if isBookmarkRefactorEnabled {
-            guard let urlString else { return }
-            profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
-                guard let bookmarkItem = result.successValue?.first,
-                let parentGuid = bookmarkItem.parentGUID else { return }
-                self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
-                    guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
-                }
-            }
-        // Open legacy bookmark edit view
-        } else {
-            // Fetch the last added bookmark in the mobile folder, which is the default location for all bookmarks
-            // added on mobile when the bookmark refactor is not enabled
-            profile.places.getBookmarksTree(
-                rootGUID: BookmarkRoots.MobileFolderGUID,
-                recursive: false
-            ).uponQueue(.main) { result in
-                guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                      let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
-                else { return }
 
-                let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                                 windowUUID: self.windowUUID,
-                                                                 bookmarkNode: bookmarkNode,
-                                                                 parentBookmarkFolder: bookmarkFolder,
-                                                                 presentedFromToast: true) { [weak self] in
-                    self?.showBookmarkToast(action: .remove)
+        profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
+            guard let bookmarkItem = result.successValue?.first,
+                  let parentGuid = bookmarkItem.parentGUID else { return }
+            self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
+                guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
+
+                if self.isBookmarkRefactorEnabled {
+                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
+                } else {
+                    let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
+                                                                     windowUUID: self.windowUUID,
+                                                                     bookmarkNode: bookmarkItem,
+                                                                     parentBookmarkFolder: parentFolder,
+                                                                     presentedFromToast: true) { [weak self] in
+                        self?.showBookmarkToast(action: .remove)
+                    }
+                    let controller: DismissableNavigationViewController
+                    controller = DismissableNavigationViewController(rootViewController: detailController)
+                    self.present(controller, animated: true, completion: nil)
                 }
-                let controller: DismissableNavigationViewController
-                controller = DismissableNavigationViewController(rootViewController: detailController)
-                self.present(controller, animated: true, completion: nil)
             }
         }
     }
