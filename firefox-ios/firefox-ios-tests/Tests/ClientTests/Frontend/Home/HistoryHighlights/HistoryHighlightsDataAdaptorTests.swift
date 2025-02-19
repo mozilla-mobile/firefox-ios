@@ -34,12 +34,12 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         subject = nil
         historyManager = nil
         notificationCenter = nil
         delegate = nil
         deletionUtility = nil
+        super.tearDown()
     }
 
     // Loads history on first launch with data

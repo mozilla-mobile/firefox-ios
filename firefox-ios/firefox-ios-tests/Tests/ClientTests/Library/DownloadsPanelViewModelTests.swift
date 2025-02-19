@@ -16,8 +16,8 @@ class DownloadsPanelViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         fileFetcher = nil
+        super.tearDown()
     }
 
     func testReloadData_WithResults() {

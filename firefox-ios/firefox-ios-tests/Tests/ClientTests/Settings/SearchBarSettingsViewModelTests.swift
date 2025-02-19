@@ -22,10 +22,11 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         prefs.clearAll()
         prefs = nil
         mockNotificationCenter = nil
+        
+        super.tearDown()
     }
 
     // MARK: Default

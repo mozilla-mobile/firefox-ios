@@ -22,10 +22,10 @@ final class FakespotCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile = nil
         self.mockRouter = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testInitialState() {

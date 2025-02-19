@@ -26,13 +26,12 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         notificationCenter = nil
         contileProviderMock = nil
         profile.prefs.clearAll()
         profile.shutdown()
         profile = nil
+        super.tearDown()
     }
 
     func testData_whenNotLoaded() {

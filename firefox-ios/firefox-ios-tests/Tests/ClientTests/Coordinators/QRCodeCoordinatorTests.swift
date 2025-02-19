@@ -16,9 +16,9 @@ final class QRCodeCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         router = nil
         parentCoordinator = nil
+        super.tearDown()
     }
 
     func testShowQRCode_presentsQRCodeNavigationController() {

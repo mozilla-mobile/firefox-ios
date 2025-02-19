@@ -23,8 +23,8 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     // MARK: - Sites

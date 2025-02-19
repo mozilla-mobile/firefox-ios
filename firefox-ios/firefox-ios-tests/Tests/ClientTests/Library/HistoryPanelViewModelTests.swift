@@ -25,13 +25,12 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         AppContainer.shared.reset()
         clear(profile: profile)
         profile.shutdown()
         profile = nil
         subject = nil
+        super.tearDown()
     }
 
     func testHistorySectionTitle() {

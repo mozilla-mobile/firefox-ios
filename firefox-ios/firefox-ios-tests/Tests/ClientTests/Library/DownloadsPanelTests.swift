@@ -16,8 +16,8 @@ class DownloadsPanelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testDownloadsPanelButtons() {

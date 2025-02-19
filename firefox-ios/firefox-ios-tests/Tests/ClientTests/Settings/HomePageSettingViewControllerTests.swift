@@ -20,10 +20,11 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         self.profile = nil
         self.delegate = nil
+        
+        super.tearDown()
     }
 
     func testHomePageSettingsLeaks_InitCall() throws {

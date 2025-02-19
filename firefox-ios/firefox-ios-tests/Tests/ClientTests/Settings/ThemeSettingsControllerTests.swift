@@ -16,8 +16,8 @@ class ThemeSettingsControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testUseSystemAppearance_WithRedux() {

@@ -19,10 +19,10 @@ final class FakespotViewModelTests: XCTestCase {
 //    }
 //
 //    override func tearDown() {
-//        super.tearDown()
 //        client = nil
 //        apiClient = nil
 //        productAdsCache = nil
+//        super.tearDown()
 //    }
 //
 //    // Mock ShoppingProduct for testing

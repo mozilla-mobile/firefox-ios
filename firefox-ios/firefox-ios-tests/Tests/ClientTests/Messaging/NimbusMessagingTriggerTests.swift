@@ -18,8 +18,8 @@ final class NimbusMessagingTriggerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     lazy var feature: Messaging = {
