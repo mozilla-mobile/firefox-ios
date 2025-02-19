@@ -939,7 +939,7 @@ class BrowserViewController: UIViewController,
 
             createLegacyUrlBar()
 
-            legacyUrlBar?.snp.remakeConstraints { make in
+            legacyUrlBar?.snp.makeConstraints { make in
                 legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             }
         }
