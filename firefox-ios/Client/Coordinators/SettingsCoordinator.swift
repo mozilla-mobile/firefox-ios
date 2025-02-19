@@ -22,7 +22,8 @@ class SettingsCoordinator: BaseCoordinator,
                            AccountSettingsDelegate,
                            AboutSettingsDelegate,
                            ParentCoordinatorDelegate,
-                           QRCodeNavigationHandler {
+                           QRCodeNavigationHandler,
+                           BrowsingSettingsDelegate {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -325,11 +326,6 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
-    func pressedMailApp() {
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
-        router.push(viewController)
-    }
-
     func pressedNewTab() {
         let viewController = NewTabContentSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         viewController.profile = profile
@@ -353,11 +349,6 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
-    func pressedTabs() {
-        let viewController = TabsSettingsViewController(windowUUID: windowUUID)
-        router.push(viewController)
-    }
-
     func pressedTheme() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
@@ -369,6 +360,7 @@ class SettingsCoordinator: BaseCoordinator,
     func pressedBrowsing() {
         let viewController = BrowsingSettingsViewController(profile: profile,
                                                             windowUUID: windowUUID)
+        viewController.parentCoordinator = self
         router.push(viewController)
     }
 
@@ -403,6 +395,18 @@ class SettingsCoordinator: BaseCoordinator,
                                                                 deepLinkParams: fxaParams,
                                                                 windowUUID: windowUUID)
         viewController.qrCodeNavigationHandler = self
+        router.push(viewController)
+    }
+
+    // MARK: - BrowsingSettingsDelegate
+
+    func pressedMailApp() {
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
+    func pressedTabs() {
+        let viewController = TabsSettingsViewController(windowUUID: windowUUID)
         router.push(viewController)
     }
 
