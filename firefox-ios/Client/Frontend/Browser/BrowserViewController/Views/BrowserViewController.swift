@@ -456,7 +456,9 @@ class BrowserViewController: UIViewController,
         DispatchQueue.main.async { [self] in
             let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
             let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+
             switchToolbarIfNeeded()
+
             if isToolbarRefactorEnabled {
                 if showNavToolbar {
                     navigationToolbarContainer.isHidden = false
@@ -469,6 +471,7 @@ class BrowserViewController: UIViewController,
             } else {
                 legacyUrlBar?.topTabsIsShowing = showTopTabs
                 legacyUrlBar?.setShowToolbar(!showNavToolbar)
+
                 if showNavToolbar {
                     toolbar.isHidden = false
                     toolbar.tabToolbarDelegate = self
@@ -502,8 +505,10 @@ class BrowserViewController: UIViewController,
                 topTabsViewController?.removeFromParent()
                 topTabsViewController = nil
             }
+
             header.setNeedsLayout()
             view.layoutSubviews()
+
             if let tab = tabManager.selectedTab,
                let webView = tab.webView,
                !isToolbarRefactorEnabled {
