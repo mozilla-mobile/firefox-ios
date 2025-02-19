@@ -7,30 +7,22 @@ import Shared
 import WebKit
 import Common
 
-struct TopTabsUX {
-    static let TopTabsViewHeight: CGFloat = 44
-    static let TopTabsBackgroundShadowWidth: CGFloat = 12
-    static let MinTabWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 130 : 76
-    static let MaxTabWidth: CGFloat = 220
-    static let FaderPading: CGFloat = 8
-    static let SeparatorWidth: CGFloat = 1
-    static let AnimationSpeed: TimeInterval = 0.1
-    static let SeparatorYOffset: CGFloat = 7
-    static let SeparatorHeight: CGFloat = 32
-    static let TabCornerRadius: CGFloat = 8
-}
-
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
     func topTabsDidLongPressNewTab(button: UIButton)
     func topTabsDidChangeTab()
     func topTabsDidPressPrivateMode()
+    func topTabsShowCloseTabsToast()
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
+        static let topTabsViewHeight: CGFloat = 44
+        static let topTabsBackgroundShadowWidth: CGFloat = 12
+        static let faderPading: CGFloat = 8
+        static let animationSpeed: TimeInterval = 0.1
     }
 
     // MARK: - Properties
@@ -151,11 +143,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     }
 
     func refreshTabs() {
-        topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(forceReload: true)
     }
 
     deinit {
-        tabManager.removeDelegate(self.topTabDisplayManager)
+        tabManager.removeDelegate(self.topTabDisplayManager, completion: nil)
     }
 
     override func viewDidLoad() {
@@ -212,7 +204,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
     @objc
     func tabsTrayTapped() {
-        topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(forceReload: true)
         delegate?.topTabsDidPressTabs()
     }
 
@@ -256,11 +248,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
                 } else {
                     // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                     let padFrame = frame.insetBy(
-                        dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading),
+                        dx: -(UX.topTabsBackgroundShadowWidth+UX.faderPading),
                         dy: 0
                     )
                     if animated {
-                        UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
+                        UIView.animate(withDuration: UX.animationSpeed, animations: {
                             self.collectionView.scrollRectToVisible(padFrame, animated: true)
                         })
                     } else {
@@ -284,7 +276,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.addSubview(privateModeButton)
 
         NSLayoutConstraint.activate([
-            view.heightAnchor.constraint(equalToConstant: TopTabsUX.TopTabsViewHeight),
+            view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
@@ -373,6 +365,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
+        delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
     }
 }

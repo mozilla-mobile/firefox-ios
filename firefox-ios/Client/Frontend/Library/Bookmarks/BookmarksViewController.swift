@@ -119,6 +119,9 @@ class BookmarksViewController: SiteTableViewController,
 
     deinit {
         notificationCenter.removeObserver(self)
+
+        // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
+        a11yEmptyStateScrollView.removeFromSuperview()
     }
 
     // MARK: - Lifecycle
@@ -146,6 +149,19 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if tableView.isEditing {
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        } else if viewModel.isRootNode {
+            updatePanelState(newState: .bookmarks(state: .mainView))
+        } else {
+            updatePanelState(newState: .bookmarks(state: .inFolder))
+        }
+        sendPanelChangeNotification()
+    }
+
     // MARK: - Data
 
     override func reloadData() {
@@ -155,7 +171,7 @@ class BookmarksViewController: SiteTableViewController,
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
                 }
-                self?.updateEmptyState()
+                self?.updateEmptyState(animated: false)
                 self?.updateParentViewControllerTitle()
             }
         }
@@ -253,8 +269,7 @@ class BookmarksViewController: SiteTableViewController,
 
             let toastVM = ButtonToastViewModel(
                 labelText: String(format: .Bookmarks.Menu.DeletedBookmark, bookmarkNode.title),
-                buttonText: .UndoString,
-                textAlignment: .left)
+                buttonText: .UndoString)
             let toast = ButtonToast(viewModel: toastVM,
                                     theme: self.currentTheme(),
                                     completion: { buttonPressed in
@@ -275,7 +290,7 @@ class BookmarksViewController: SiteTableViewController,
                                                    constant: Toast.UX.toastSidePadding),
                     toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                 ]
             }
         }
@@ -287,7 +302,7 @@ class BookmarksViewController: SiteTableViewController,
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
         viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
         tableView.endUpdates()
-        updateEmptyState()
+        updateEmptyState(animated: false)
     }
 
     /// Performs the delete asynchronously even though we update the
@@ -307,7 +322,7 @@ class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        updateEmptyState()
+        updateEmptyState(animated: false)
     }
 
     // MARK: Button Actions helpers
@@ -317,6 +332,7 @@ class BookmarksViewController: SiteTableViewController,
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
         sendPanelChangeNotification()
+        updateEmptyState(animated: true)
     }
 
     func disableEditMode() {
@@ -325,6 +341,7 @@ class BookmarksViewController: SiteTableViewController,
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
         sendPanelChangeNotification()
+        updateEmptyState(animated: true)
     }
 
     private func sendPanelChangeNotification() {
@@ -374,13 +391,23 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    private func updateEmptyState() {
-        a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
-        if !a11yEmptyStateScrollView.isHidden {
-            let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-            let isSignedIn = profile.hasAccount()
-            emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
+    private func updateEmptyState(animated: Bool) {
+        let showEmptyState = viewModel.bookmarkNodes.isEmpty && !tableView.isEditing
+
+        if animated {
+            a11yEmptyStateScrollView.isHidden = false
+            UIView.animate(withDuration: 0.2, animations: {
+                self.a11yEmptyStateScrollView.alpha = showEmptyState ? 1 : 0
+            }) { _ in
+                self.a11yEmptyStateScrollView.isHidden = !showEmptyState
+            }
+        } else {
+            a11yEmptyStateScrollView.alpha = showEmptyState ? 1 : 0
+            a11yEmptyStateScrollView.isHidden = !showEmptyState
         }
+
+        emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
+                                 isSignedIn: profile.hasAccount())
     }
 
     private func createContextButton() -> UIButton {
@@ -626,13 +653,17 @@ class BookmarksViewController: SiteTableViewController,
                     viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
-                    updateEmptyState()
+                    updateEmptyState(animated: false)
                     profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 }
             default:
                 return
             }
         }
+    }
+
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        updateEmptyState(animated: false)
     }
 }
 
@@ -780,16 +811,8 @@ extension BookmarksViewController {
     }
 
     func handleLeftTopButton() {
-        guard case .bookmarks(let subState) = state else { return }
-
-        switch subState {
-        case .inFolder:
-            if viewModel.isRootNode {
-                updatePanelState(newState: .bookmarks(state: .mainView))
-            }
-        default:
-            return
-        }
+        // We use the "transitioning" so that the "<" back toolbar navigation button cannot be spammed
+        updatePanelState(newState: .bookmarks(state: .transitioning))
     }
 
     func shouldDismissOnDone() -> Bool {

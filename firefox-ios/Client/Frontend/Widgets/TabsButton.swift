@@ -19,10 +19,10 @@ class TabsButton: UIButton, ThemeApplicable {
         static let flipAnimationVelocity: CGFloat = 0.0
 
         // Tab count related constants
-        static let defaultCountLabelText: String = "0"
-        static let defaultCountToBe: String = "1"
-        static let maxTabCountToShowInfinity: Int = 100
-        static let infinitySymbol: String = "\u{221E}"
+        static let defaultCountLabelText = "0"
+        static let defaultCountToBe = "1"
+        static let maxTabCountToShowInfinity = 100
+        static let infinitySymbol = "\u{221E}"
     }
 
     private var selectedTintColor: UIColor?

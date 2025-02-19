@@ -37,4 +37,16 @@ extension UIView {
     public func addSubviews(_ views: UIView...) {
         views.forEach(addSubview)
     }
+
+    /// Convenience utility for pinning a subview to the bounds of its superview.
+    public func pinToSuperview() {
+        guard let parentView = superview else { return }
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: parentView.topAnchor),
+            leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
+        ])
+        translatesAutoresizingMaskIntoConstraints = false
+    }
 }

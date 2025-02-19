@@ -35,8 +35,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
-        } else if let action = action as? HeaderAction {
-            self.resolveHomepageHeaderActions(with: action)
+        } else {
+            self.resolveHomepageActions(with: action)
         }
     }
 
@@ -876,11 +876,19 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         }
     }
 
-    // MARK: - Homepage Header Actions
-    private func resolveHomepageHeaderActions(with action: HeaderAction) {
+    // MARK: - Homepage Related Actions
+    private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
+        case HomepageActionType.initialize, JumpBackInActionType.fetchLocalTabs:
+            store.dispatch(
+                TabManagerAction(
+                    recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
+                    windowUUID: action.windowUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                )
+            )
         default:
             break
         }
@@ -906,6 +914,14 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
         }
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {

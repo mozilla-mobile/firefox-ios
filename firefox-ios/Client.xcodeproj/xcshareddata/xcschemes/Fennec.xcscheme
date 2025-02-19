@@ -269,6 +269,9 @@
          <TestPlanReference
             reference = "container:firefox-ios-tests/Tests/ExperimentIntegrationTests.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:firefox-ios-tests/Tests/AccessibilityTestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

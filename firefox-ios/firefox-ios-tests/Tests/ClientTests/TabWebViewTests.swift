@@ -40,6 +40,22 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         subject.accessoryView.savedCardsClosure = {}
     }
 
+    func testAddPullRefresh() async throws {
+        let subject = try await createSubject()
+        subject.addPullRefresh {}
+
+        XCTAssertNotNil(subject.scrollView.subviews.first(where: { $0 is PullRefreshView }))
+    }
+
+    func testRemovePullRefresh() async throws {
+        let subject = try await createSubject()
+
+        subject.addPullRefresh {}
+        subject.removePullRefresh()
+
+        XCTAssertNil(subject.subviews.first(where: { $0 is PullRefreshView }))
+    }
+
     func testTabWebView_doesntLeak() {
         let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
         tab.createWebview(configuration: configuration)

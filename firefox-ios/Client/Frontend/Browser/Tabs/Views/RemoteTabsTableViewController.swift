@@ -48,11 +48,7 @@ class RemoteTabsTableViewController: UITableViewController,
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    // Checks whether we have allowed the user to close tabs on other
-    // devices
-    private var closeRemoteTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.closeRemoteTabs, checking: .buildOnly)
-    }
+    private var buttonToast: ButtonToast?
 
     // MARK: - Initializer
 
@@ -156,9 +152,27 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     private func configureEmptyView() {
-        guard let emptyState = state.showingEmptyState else { return }
-        emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
+        guard let emptyStateReason = state.showingEmptyState else { return }
+        emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel)
         emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func show(toast: Toast,
+                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        if let buttonToast = toast as? ButtonToast {
+            self.buttonToast = buttonToast
+        }
+
+        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ]
+        }
     }
 
     // MARK: - Refreshing TableView
@@ -322,13 +336,16 @@ class RemoteTabsTableViewController: UITableViewController,
 
             // Creating a modal with an undo button that will allow the user to undo closing the last remote tab
             // they attempted to close
-            ActionToast(
-                text: .TabsTray.CloseTabsToast.SingleTabTitle,
-                bottomContainer: view,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                buttonTitle: .UndoString,
-                buttonAction: self.undo
-            ).show()
+            let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
+                                                 buttonText: .UndoString)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                                    completion: { didTapUndoButton in
+                                        if didTapUndoButton {
+                                            self.undo()
+                                        }
+                                    })
+            show(toast: toast)
 
             self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: fxaDeviceId, url: tab.URL)
 
@@ -352,8 +369,7 @@ class RemoteTabsTableViewController: UITableViewController,
         let isCloseRemoteTabCompatible = self.state.devices.first(where: { $0.id == deviceId })?
                                                             .capabilities.contains(.closeTabs) ?? false
 
-        // Enabling close tab UI if the capability on this device exists and the feature is enabled
-        return isCloseRemoteTabCompatible && closeRemoteTabsEnabled
+        return isCloseRemoteTabCompatible
     }
 
     override func tableView(_ tableView: UITableView,

@@ -98,4 +98,7 @@ module.exports = {
       Assets: path.resolve(__dirname, "firefox-ios/Client/Assets"),
     },
   },
+  performance: {
+    hints: false,
+  },
 };

@@ -29,6 +29,11 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "A11yOnboardingTests",
+        "A11yOnboardingTests\/testA11yFirstRunTour()",
+        "A11ySearchTest",
+        "A11ySearchTest\/testA11ySearchSuggestions()",
+        "A11yUtils",
         "ActivityStreamTest\/testActivityStreamPages()",
         "ActivityStreamTest\/testDefaultSites()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab()",
@@ -36,7 +41,6 @@
         "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testDeleteAddress()",
-        "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest\/testPromptPassCodeUponReentry()",
         "BaseTestCase",
         "BookmarksTests\/testBookmarkLibraryAddDeleteBookmark()",
@@ -127,6 +131,8 @@
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
+        "TabTrayTests",
+        "TabTrayTests\/testAccessibility()",
         "TabsPerformanceTest",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingLandscape()",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingPortrait()",

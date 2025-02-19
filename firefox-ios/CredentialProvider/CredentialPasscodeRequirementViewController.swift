@@ -64,7 +64,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.CredentialProvider.welcomeScreenBackgroundColor
+        view.backgroundColor = CredentialProvider.welcomeScreenBackgroundColor
 
         view.addSubviews(logoImageView, titleLabel, taglineLabel, warningLabel, cancelButton)
 

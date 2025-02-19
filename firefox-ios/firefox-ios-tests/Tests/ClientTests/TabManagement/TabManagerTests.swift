@@ -152,20 +152,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
     }
 
-    func testRemoveScreenshotWithImage() async throws {
-        let subject = createSubject()
-        addTabs(to: subject, count: 5)
-        guard let tab = subject.tabs.first else {
-            XCTFail("First tab was expected to be found")
-            return
-        }
-
-        tab.setScreenshot(UIImage())
-        await subject.removeScreenshot(tab: tab)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
-    }
-
     func testGetActiveAndInactiveTabs() {
         let totalTabCount = 3
         let subject = createSubject()
@@ -210,7 +196,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Test findRightOrLeftTab helper
 
-    func testFindRightOrLeftTab_forEmptyArray() async throws {
+    func testFindRightOrLeftTab_forEmptyArray() {
         // Set up a tab array as follows:
         // [] Empty
         // Will pretend to delete a normal active tab at index 0.
@@ -226,7 +212,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNil(rightOrLeftTab, "Cannot return a tab when the array is empty")
     }
 
-    func testFindRightOrLeftTab_forSingleTabInArray_ofSameType() async throws {
+    func testFindRightOrLeftTab_forSingleTabInArray_ofSameType() {
         // Set up a tab array as follows:
         // [A1]
         // Will pretend to delete a normal active tab at index 0.
@@ -244,7 +230,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(rightOrLeftTab, tabManager.tabs[safe: 0], "Should return neighbour of same type, as one exists")
     }
 
-    func testFindRightOrLeftTab_forSingleTabInArray_ofDifferentType() async throws {
+    func testFindRightOrLeftTab_forSingleTabInArray_ofDifferentType() {
         // Set up a tab array as follows:
         // [A1]
         // Will pretend to delete a private tab at index 0.
@@ -261,7 +247,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNil(rightOrLeftTab, "Cannot return neighbour tab of same type, as no other private tabs exist")
     }
 
-    func testFindRightOrLeftTab_forDeletedIndexInMiddle_uniformTabTypes() async throws {
+    func testFindRightOrLeftTab_forDeletedIndexInMiddle_uniformTabTypes() {
         // Set up a tab array as follows:
         // [A1, A2, A3, A4, A5, A6, A7]
         //   0   1   2   3   4   5   6
@@ -280,7 +266,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(rightOrLeftTab, tabManager.tabs[safe: 3], "Should pick tab A4 at the same position as deletedIndex")
     }
 
-    func testFindRightOrLeftTab_forDeletedIndexInMiddle_mixedTabTypes() async throws {
+    func testFindRightOrLeftTab_forDeletedIndexInMiddle_mixedTabTypes() {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -305,7 +291,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
-    func testFindRightOrLeftTab_forDeletedIndexAtStart() async throws {
+    func testFindRightOrLeftTab_forDeletedIndexAtStart() {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -330,7 +316,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
-    func testFindRightOrLeftTab_forDeletedIndexAtEnd() async throws {
+    func testFindRightOrLeftTab_forDeletedIndexAtEnd() {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -355,7 +341,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
-    func testFindRightOrLeftTab_prefersRightTabOverLeftTab() async throws {
+    func testFindRightOrLeftTab_prefersRightTabOverLeftTab() {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
@@ -418,10 +404,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondNormalActiveTab.tabUUID)
 
         // Remove the selected tab
-        tabManager.removeTab(secondNormalActiveTab)
+        await tabManager.removeTab(secondNormalActiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
@@ -457,10 +442,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondNormalActiveTab.tabUUID)
 
         // Remove the selected tab
-        tabManager.removeTab(secondNormalActiveTab)
+        await tabManager.removeTab(secondNormalActiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -503,10 +487,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondNormalActiveTab.tabUUID)
 
         // Remove the selected tab
-        tabManager.removeTab(secondNormalActiveTab)
+        await tabManager.removeTab(secondNormalActiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -555,10 +538,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
 
         // Remove the selected tab
-        tabManager.removeTab(secondPrivateTab)
+        await tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
@@ -601,10 +583,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
 
         // Remove the selected tab
-        tabManager.removeTab(secondPrivateTab)
+        await tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed with no parent, we expect the right tab to be selected.
@@ -647,10 +628,8 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
-
         // Remove the selected tab
-        tabManager.removeTab(secondPrivateTab)
+        await tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -704,10 +683,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondInactiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondInactiveTab.tabUUID)
 
         // Remove the selected inactive tab
-        tabManager.removeTab(secondInactiveTab)
+        await tabManager.removeTab(secondInactiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When a selected inactive tab is removed, this is a strange state. Handle like regular active tabs being cleared.
@@ -759,10 +737,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, privateTab)
         XCTAssertEqual(tabManager.selectedIndex, 0)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, privateTab.tabUUID)
 
         // Remove the selected single private tab
-        tabManager.removeTab(privateTab)
+        await tabManager.removeTab(privateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected private tab is removed, and there's a recent active tab, we expect that to be selected
@@ -799,10 +776,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, privateTab)
         XCTAssertEqual(tabManager.selectedIndex, 3)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, privateTab.tabUUID)
 
         // Remove the only active tab, which is selected
-        tabManager.removeTab(privateTab)
+        await tabManager.removeTab(privateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last normal active tab is removed, even if there are normal active tabs, we expect a new normal active
@@ -838,10 +814,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
         XCTAssertEqual(tabManager.selectedIndex, 0)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstTab.tabUUID)
 
         // Remove the last selected private tab
-        tabManager.removeTab(firstTab)
+        await tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected private tab is removed, and there are no normal active tabs,
@@ -881,10 +856,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
         XCTAssertEqual(tabManager.selectedIndex, 0)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstTab.tabUUID)
 
         // Remove the last selected private tab
-        tabManager.removeTab(firstTab)
+        await tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected private tab is removed, and there are no only inactive normal tabs remaining,
@@ -924,10 +898,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
         XCTAssertEqual(tabManager.selectedIndex, 0)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstTab.tabUUID)
 
         // Remove the last tab, which is active and selected
-        tabManager.removeTab(firstTab)
+        await tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last active tab is removed, we expect a new active normal tab to be added
@@ -964,10 +937,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, activeTab)
         XCTAssertEqual(tabManager.selectedIndex, 3)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, activeTab.tabUUID)
 
         // Remove the only active tab, which is selected
-        tabManager.removeTab(activeTab)
+        await tabManager.removeTab(activeTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last normal active tab is removed, even if there are normal active tabs, we expect a new normal active
@@ -1007,10 +979,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
         XCTAssertEqual(tabManager.selectedIndex, 0)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstTab.tabUUID)
 
         // Remove the last tab, which is inactive and selected
-        tabManager.removeTab(firstTab)
+        await tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected inactive tab is removed, we expect a new active normal tab to be added
@@ -1054,11 +1025,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, thirdNormalActiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 5)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, thirdNormalActiveTab.tabUUID)
 
         // Remove the unselected normal active tab at an index smaller than the selected tab to cause an array shift for the
         // selected tab
-        tabManager.removeTab(firstNormalActiveTab)
+        await tabManager.removeTab(firstNormalActiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1099,11 +1069,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstNormalActiveTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstNormalActiveTab.tabUUID)
 
         // Remove the unselected normal active tab at an index larger than the selected tab so no array shift is necessary
         // for the selected tab
-        tabManager.removeTab(thirdNormalActiveTab)
+        await tabManager.removeTab(thirdNormalActiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1143,11 +1112,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 7)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
 
         // Remove the unselected private tab at an index smaller than the selected tab to cause an array shift for the
         // selected tab
-        tabManager.removeTab(firstPrivateTab)
+        await tabManager.removeTab(firstPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1187,11 +1155,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 6)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstPrivateTab.tabUUID)
 
         // Remove the unselected private tab at an index larger than the selected private tab so no array shift is necessary
         // for the selected tab
-        tabManager.removeTab(thirdPrivateTab)
+        await tabManager.removeTab(thirdPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1231,11 +1198,10 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 6)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, firstPrivateTab.tabUUID)
 
         // Remove the unselected inactive normal tab at an index smaller than the selected tab to cause an array shift for
         // the selected tab
-        tabManager.removeTab(firstNormalInactiveTab)
+        await tabManager.removeTab(firstNormalInactiveTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1273,10 +1239,9 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondTab.tabUUID)
 
         // [1] First, remove the tab at index 0
-        tabManager.removeTab(firstTab)
+        await tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 1)
@@ -1287,7 +1252,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The selected tab index should have shifted left")
 
         // [2] Second, remove the tab at count - 1 (last tab)
-        tabManager.removeTab(thirdTab)
+        await tabManager.removeTab(thirdTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 2)
@@ -1298,7 +1263,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The selected tab index should not change")
 
         // [3] Finally, remove the only tab (which is also the selected tab)
-        tabManager.removeTab(secondTab)
+        await tabManager.removeTab(secondTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // We expect a new normal active tab will be created
@@ -1338,7 +1303,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondTab.tabUUID)
 
         await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
@@ -1377,7 +1341,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondTab.tabUUID)
 
         await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
@@ -1415,7 +1378,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberNormalPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
-        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
 
         await tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
@@ -1446,7 +1408,7 @@ class TabManagerTests: XCTestCase {
         case privateAny // `private` alone is a reserved compiler keyword
     }
 
-    private func addTabs(to subject: LegacyTabManager, ofType type: TabType = .normalActive, count: Int) {
+    private func addTabs(to subject: TabManagerImplementation, ofType type: TabType = .normalActive, count: Int) {
         for i in 0..<count {
             let tab: Tab
 

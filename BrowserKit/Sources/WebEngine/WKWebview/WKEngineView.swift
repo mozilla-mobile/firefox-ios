@@ -45,10 +45,10 @@ class WKEngineView: UIView, EngineView {
         let webView = session.webView
         webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: topAnchor),
+            webView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            webView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            webView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }

@@ -30,7 +30,7 @@ class PocketStandardCellViewModel {
 
     var onTap: (IndexPath) -> Void = { _ in }
 
-    var tag: Int = 0
+    var tag = 0
 
     private let story: PocketStory
 

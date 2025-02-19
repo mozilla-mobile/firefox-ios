@@ -9,11 +9,13 @@ import UIKit.UIContextMenuConfiguration
 class MockEngineSessionDelegate: EngineSessionDelegate {
     var onTitleChangeCalled = 0
     var onProgressCalled = 0
+    var onHideProgressCalled = 0
     var onNavigationStateChangeCalled = 0
     var onLoadingStateChangeCalled = 0
     var onLocationChangedCalled = 0
     var onHasOnlySecureContentCalled = 0
     var didLoadPagemetaDataCalled = 0
+    var onErrorPageCalled = 0
     var findInPageCalled = 0
     var searchCalled = 0
     var onProvideContextualMenuCalled = 0
@@ -27,6 +29,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedCanGoForward: Bool?
     var savedLoading: Bool?
     var savedPagemetaData: EnginePageMetadata?
+    var savedError: NSError?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
 
@@ -50,6 +53,10 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
         savedProgressValue = progress
     }
 
+    func onHideProgressBar() {
+        onHideProgressCalled += 1
+    }
+
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         onNavigationStateChangeCalled += 1
         savedCanGoBack = canGoBack
@@ -64,6 +71,11 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func didLoad(pageMetadata: EnginePageMetadata) {
         didLoadPagemetaDataCalled += 1
         savedPagemetaData = pageMetadata
+    }
+
+    func onErrorPageRequest(error: NSError) {
+        savedError = error
+        onErrorPageCalled += 1
     }
 
     func findInPage(with selection: String) {

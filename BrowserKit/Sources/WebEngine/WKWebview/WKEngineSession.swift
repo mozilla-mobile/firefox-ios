@@ -9,6 +9,7 @@ import Foundation
 protocol SessionHandler: AnyObject {
     func commitURLChange()
     func fetchMetadata(withURL url: URL)
+    func received(error: NSError, forURL url: URL)
 }
 
 class WKEngineSession: NSObject,
@@ -18,21 +19,12 @@ class WKEngineSession: NSObject,
                        AdsTelemetryScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate?
-    weak var findInPageDelegate: FindInPageHelperDelegate? {
-        didSet {
-            let script = contentScriptManager.scripts[FindInPageContentScript.name()]
-            guard let findInPage = script as? FindInPageContentScript else { return }
-            findInPage.delegate = findInPageDelegate
-        }
-    }
-
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
-    private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
     private var contentBlockingSettings: WKContentBlockingSettings = []
     private let navigationHandler: WKNavigationHandler
@@ -40,12 +32,11 @@ class WKEngineSession: NSObject,
 
     init?(userScriptManager: WKUserScriptManager,
           telemetryProxy: EngineTelemetryProxy? = nil,
-          configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
+          configurationProvider: WKEngineConfigurationProvider,
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
-          securityManager: SecurityManager = DefaultSecurityManager(),
           metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper(),
           navigationHandler: DefaultNavigationHandler = DefaultNavigationHandler(),
           uiHandler: WKUIHandler = DefaultUIHandler()) {
@@ -60,7 +51,6 @@ class WKEngineSession: NSObject,
         self.logger = logger
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
-        self.securityManager = securityManager
         self.metadataFetcher = metadataFetcher
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
@@ -79,29 +69,23 @@ class WKEngineSession: NSObject,
     }
 
     // TODO: FXIOS-7903 #17648 no return from this load(url:), we need a way to recordNavigationInTab
-    func load(url: String) {
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
-        guard securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed else { return }
-
+    func load(browserURL: BrowserURL) {
         // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
-        if let url = URL(string: url),
-           let syncedReaderModeURL = url.decodeReaderModeURL,
+        if let syncedReaderModeURL = browserURL.url.decodeReaderModeURL,
            let localReaderModeURL = syncedReaderModeURL
             .encodeReaderModeURL(WKEngineWebServer.shared.baseReaderModeURL()) {
             let readerModeRequest = URLRequest(url: localReaderModeURL)
             sessionData.lastRequest = readerModeRequest
-            sessionData.url = url
+            sessionData.url = browserURL.url
 
             webView.load(readerModeRequest)
             logger.log("Loaded reader mode request", level: .debug, category: .webview)
             return
         }
 
-        guard let url = URL(string: url) else { return }
-        let request = URLRequest(url: url)
-
+        let request = URLRequest(url: browserURL.url)
         sessionData.lastRequest = request
-        sessionData.url = url
+        sessionData.url = browserURL.url
 
         if let url = request.url, url.isFileURL {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
@@ -117,20 +101,48 @@ class WKEngineSession: NSObject,
         logger.log("Stop loading", level: .debug, category: .webview)
     }
 
-    func reload() {
-        // If the current page is an error page load the original URL
+    func reload(bypassCache: Bool = false) {
+        // Manage internal URLs reload
         if let url = sessionData.url,
-           let internalUrl = WKInternalURL(url),
-           let page = internalUrl.originalURLFromErrorPage {
-            webView.replaceLocation(with: page)
-            logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+           let internalUrl = WKInternalURL(url) {
+            // If the current page is an error page load the original URL
+            if let page = internalUrl.originalURLFromErrorPage {
+                let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+                webView.load(request)
+                logger.log("Reloaded webview as error page", level: .debug, category: .webview)
+                return
+            }
+
+            // If the URL is a home page load as privileged
+            if internalUrl.isAboutHomeURL {
+                internalUrl.authorize()
+                webView.load(URLRequest(url: internalUrl.url))
+                logger.log("Reloaded the webview with homepage URL", level: .debug, category: .webview)
+                return
+            }
+        }
+
+        // Reload bypassing the cache
+        if bypassCache, let url = sessionData.url {
+            let reloadRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+
+            webView.load(reloadRequest)
+            logger.log("Reloaded the webview ignoring cache", level: .debug, category: .webview)
             return
         }
 
         // Reloads the current webpage, and performs end-to-end revalidation of the content 
         // using cache-validating conditionals, if possible.
-        webView.reloadFromOrigin()
-        logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+        if webView.reloadFromOrigin() != nil {
+            logger.log("Reloaded webview from origin", level: .debug, category: .webview)
+            return
+        }
+
+        if let lastRequest = sessionData.lastRequest, webView.load(lastRequest) != nil {
+            logger.log("Restoring webView from lastRequest", level: .debug, category: .tabs)
+        } else {
+            logger.log("Could not reload webView", level: .fatal, category: .tabs)
+        }
     }
 
     func goBack() {
@@ -147,13 +159,13 @@ class WKEngineSession: NSObject,
         webView.engineScrollView?.setContentOffset(CGPoint.zero, animated: true)
     }
 
-    func findInPage(text: String, function: FindInPageFunction) {
-        let sanitizedInput = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(sanitizedInput)\")")
-    }
-
-    func findInPageDone() {
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
+    @available(iOS 16.0, *)
+    func showFindInPage(withSearchText searchText: String?) {
+        if let findInteraction = webView.findInteraction {
+            logger.log("Will show find in page", level: .debug, category: .webview)
+            findInteraction.searchText = searchText ?? ""
+            findInteraction.presentFindNavigator(showingReplace: false)
+        }
     }
 
     func goToHistory(index: Int) {
@@ -258,18 +270,25 @@ class WKEngineSession: NSObject,
         // Will be used as needed when we start using the engine session
         switch path {
         case .canGoBack:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
+            guard let canGoBack = change?[.newKey] as? Bool else { break }
+            delegate?.onNavigationStateChange(canGoBack: canGoBack,
                                               canGoForward: webView.canGoForward)
         case .canGoForward:
+            guard let canGoForward = change?[.newKey] as? Bool else { break }
             delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
-                                              canGoForward: webView.canGoForward)
+                                              canGoForward: canGoForward)
         case .contentSize:
             // TODO: FXIOS-8086 - Handle view port in WebEngine
             break
         case .estimatedProgress:
-            delegate?.onProgress(progress: webView.estimatedProgress)
+            if let url = webView.url, !WKInternalURL.isValid(url: url) {
+                delegate?.onProgress(progress: webView.estimatedProgress)
+            } else {
+                delegate?.onHideProgressBar()
+            }
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
+            setupLoadingSpinnerFor(webView, isLoading: loading)
             delegate?.onLoadingStateChange(loading: loading)
         case .title:
             guard let title = webView.title else { break }
@@ -282,24 +301,39 @@ class WKEngineSession: NSObject,
     }
 
     private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        sessionData.hasOnlySecureContent = value
         delegate?.onHasOnlySecureContentChanged(secure: value)
     }
 
     private func handleTitleChange(title: String) {
         // Ensure that the title actually changed to prevent repeated calls to onTitleChange
-        if !title.isEmpty {
+        if !title.isEmpty, title != sessionData.title {
             sessionData.title = title
             delegate?.onTitleChange(title: title)
         }
+    }
 
-        // TODO: FXIOS-8273 - Add telemetry integration in WebEngine and first telemetry call
-        // TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
+    private func setupLoadingSpinnerFor(_ webView: WKEngineWebView, isLoading: Bool) {
+        if isLoading {
+            webView.engineScrollView?.refreshControl?.beginRefreshing()
+        } else {
+            webView.engineScrollView?.refreshControl?.endRefreshing()
+        }
     }
 
     private func handleURLChange() {
         // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
         if sessionData.url?.absoluteString == EngineConstants.aboutBlank
             && webView.url == nil { return }
+
+        // Ensure we do have a URL from that observer
+        guard let url = webView.url else { return }
+
+        // Security safety check (Bugzilla #1933079)
+        if let internalURL = WKInternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+            webView.load(URLRequest(url: URL(string: EngineConstants.aboutBlank)!))
+            return
+        }
 
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -325,12 +359,14 @@ class WKEngineSession: NSObject,
         metadataFetcher.fetch(fromSession: self, url: url)
     }
 
+    func received(error: NSError, forURL url: URL) {
+        telemetryProxy?.handleTelemetry(event: .showErrorPage(errorCode: error.code))
+        delegate?.onErrorPageRequest(error: error)
+    }
+
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(FindInPageContentScript(),
-                                              name: FindInPageContentScript.name(),
-                                              forSession: self)
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)

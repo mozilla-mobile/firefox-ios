@@ -17,6 +17,8 @@ final class LocationView: UIView,
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
+        static let iconAnimationTime: CGFloat = 0.1
+        static let iconAnimationDelay: CGFloat = 0.03
     }
 
     private var urlAbsolutePath: String?
@@ -121,23 +123,24 @@ final class LocationView: UIView,
         return urlTextField.resignFirstResponder()
     }
 
-    func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
+    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
-        searchEngineContentView.configure(state, delegate: delegate)
 
-        configureLockIconButton(state)
-        configureURLTextField(state)
-        configureA11y(state)
+        searchEngineContentView.configure(config, delegate: delegate)
+
+        configureLockIconButton(config)
+        configureURLTextField(config)
+        configureA11y(config)
         formatAndTruncateURLTextField()
         updateIconContainer()
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        searchTerm = state.searchTerm
-        onLongPress = state.onLongPress
+        searchTerm = config.searchTerm
+        onLongPress = config.onLongPress
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -211,9 +214,18 @@ final class LocationView: UIView,
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
-        // hide the leading "..." by moving them behind the lock icon
-        if shouldAdjustForOverflow {
+        func handleOverflowAdjustment() {
+            // Hide the leading "..." by moving them behind the lock icon.
             updateURLTextFieldLeadingConstraint(constant: -dotWidth)
+            if lockIconImageName == nil {
+                // This is the case when we are in reader mode and the lock icon is not visible.
+                updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+                iconContainerStackViewLeadingConstraint?.constant = 0
+            }
+        }
+
+        if shouldAdjustForOverflow {
+            handleOverflowAdjustment()
         } else if shouldAdjustForNonEmpty {
             updateURLTextFieldLeadingConstraint()
         } else {
@@ -233,6 +245,7 @@ final class LocationView: UIView,
         guard !isEditing else {
             updateUIForSearchEngineDisplay()
             urlTextFieldTrailingConstraint?.constant = 0
+            animateIconAppearance()
             return
         }
 
@@ -241,7 +254,33 @@ final class LocationView: UIView,
         } else {
             updateUIForLockIconDisplay()
         }
+        animateIconAppearance()
         urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
+    }
+
+    private func animateIconAppearance() {
+        let shouldShowLockIcon: Bool
+        if isEditing {
+            lockIconButton.alpha = 0
+            shouldShowLockIcon = false
+        } else if isURLTextFieldEmpty {
+            shouldShowLockIcon = false
+        } else if lockIconImageName == nil {
+            shouldShowLockIcon = false
+        } else {
+            shouldShowLockIcon = true
+        }
+
+        let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+        if isAnimationEnabled {
+            UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+                self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+            }
+        } else {
+            searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
+            lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+        }
     }
 
     private func updateUIForSearchEngineDisplay() {
@@ -271,13 +310,14 @@ final class LocationView: UIView,
     }
 
     // MARK: - `urlTextField` Configuration
-    private func configureURLTextField(_ state: LocationViewState) {
-        isEditing = state.isEditing
+    private func configureURLTextField(_ config: LocationViewConfiguration) {
+        let configurationIsEditing = config.isEditing
+        isEditing = configurationIsEditing
 
-        urlTextField.placeholder = state.urlTextFieldPlaceholder
-        urlAbsolutePath = state.url?.absoluteString
+        urlTextField.placeholder = config.urlTextFieldPlaceholder
+        urlAbsolutePath = config.url?.absoluteString
 
-        let shouldShowKeyboard = state.isEditing && state.shouldShowKeyboard
+        let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our
@@ -286,15 +326,28 @@ final class LocationView: UIView,
             urlTextField.removeInteraction(dropInteraction)
         }
 
+        if configurationIsEditing {
+            let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
+            if isAnimationEnabled {
+                UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
+                    self.urlTextField.clearButton?.alpha = 1
+                }
+            } else {
+                urlTextField.clearButton?.alpha = 1
+            }
+        } else {
+            urlTextField.clearButton?.alpha = 0
+        }
+
         // Once the user started typing we should not update the text anymore as that interferes with
         // setting the autocomplete suggestions which is done using a delegate method.
-        guard !state.didStartTyping else { return }
-
-        let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
+        guard !config.didStartTyping else { return }
+        let shouldShowSearchTerm = (config.searchTerm != nil) && configurationIsEditing
+        let text = shouldShowSearchTerm ? config.searchTerm : config.url?.absoluteString
         urlTextField.text = text
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, state.shouldSelectSearchTerm {
+        if shouldShowKeyboard, config.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.text = text
                 self.urlTextField.selectAll(nil)
@@ -331,16 +384,16 @@ final class LocationView: UIView,
     }
 
     // MARK: - `lockIconButton` Configuration
-    private func configureLockIconButton(_ state: LocationViewState) {
-        lockIconImageName = state.lockIconImageName
-        lockIconNeedsTheming = state.lockIconNeedsTheming
-        safeListedURLImageName = state.safeListedURLImageName
+    private func configureLockIconButton(_ config: LocationViewConfiguration) {
+        lockIconImageName = config.lockIconImageName
+        lockIconNeedsTheming = config.lockIconNeedsTheming
+        safeListedURLImageName = config.safeListedURLImageName
         guard lockIconImageName != nil else {
             updateWidthForLockIcon(0)
             return
         }
         updateWidthForLockIcon(UX.lockIconImageViewSize.width)
-        onTapLockIcon = state.onTapLockIcon
+        onTapLockIcon = config.onTapLockIcon
 
         setLockIconImage()
     }
@@ -453,11 +506,11 @@ final class LocationView: UIView,
     }
 
     // MARK: - Accessibility
-    private func configureA11y(_ state: LocationViewState) {
-        lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId
-        lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
+    private func configureA11y(_ config: LocationViewConfiguration) {
+        lockIconButton.accessibilityIdentifier = config.lockIconButtonA11yId
+        lockIconButton.accessibilityLabel = config.lockIconButtonA11yLabel
 
-        urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
+        urlTextField.accessibilityIdentifier = config.urlTextFieldA11yId
     }
 
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]? {
@@ -480,6 +533,10 @@ final class LocationView: UIView,
         lockIconImageColor = colors.iconPrimary
 
         setLockIconImage()
+
+        // Applying the theme to urlTextField can cause the url formatting to get removed
+        // so we apply it again
+        formatAndTruncateURLTextField()
     }
 
     // MARK: - UIGestureRecognizerDelegate

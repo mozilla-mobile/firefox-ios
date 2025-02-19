@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@available(iOS 16.0, *)
 final class WKUserScriptManagerTests: XCTestCase {
     func testInitThenAddsUserScripts() {
         let subject = createSubject()

@@ -28,7 +28,7 @@ class MockTabManager: TabManager {
     var lastSelectedPreviousTabs = [Tab]()
 
     var delaySelectingNewPopupTab: TimeInterval = 0
-    var count: Int = 0
+    var count = 0
     var normalTabs = [Tab]()
     var normalActiveTabs = [Tab]()
     var inactiveTabs = [Tab]()
@@ -61,13 +61,6 @@ class MockTabManager: TabManager {
         }
     }
 
-    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        let profile = MockProfile()
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
-        tabs.append(tab)
-        return tab
-    }
-
     func getMostRecentHomepageTab() -> Tab? {
         return addTab(nil, afterTab: nil, isPrivate: false)
     }
@@ -85,11 +78,11 @@ class MockTabManager: TabManager {
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
-    func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
+    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {}
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: String) async {}
+    func removeTab(_ tabUUID: TabUUID) async {}
 
     func removeAllTabs(isPrivateMode: Bool) async {}
 
@@ -101,15 +94,9 @@ class MockTabManager: TabManager {
 
     func undoCloseTab() {}
 
-    func getTabFor(_ url: URL) -> Tab? {
-        return nil
-    }
-
     func clearAllTabsHistory() {}
 
     func willSwitchTabMode(leavingPBM: Bool) {}
-
-    func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool) {}
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
 
@@ -129,7 +116,7 @@ class MockTabManager: TabManager {
         return nil
     }
 
-    func expireSnackbars() {}
+    func expireLoginAlerts() {}
 
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         return .createdNewTab

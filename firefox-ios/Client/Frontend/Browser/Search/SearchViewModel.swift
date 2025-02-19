@@ -44,8 +44,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     weak var delegate: SearchViewDelegate?
     private let isPrivate: Bool
     let isBottomSearchBar: Bool
-    var savedQuery: String = ""
-    var searchQuery: String = "" {
+    var savedQuery = ""
+    var searchQuery = "" {
         didSet {
             querySuggestClient()
         }
@@ -129,8 +129,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var hasHistoryAndBookmarksSuggestions: Bool {
         let dataCount = delegate?.searchData.count
         return dataCount != 0 &&
-        shouldShowBookmarksSuggestions &&
-        shouldShowBrowsingHistorySuggestions
+        hasBookmarksSuggestions &&
+        hasHistorySuggestions
     }
 
     var hasFirefoxSuggestions: Bool {

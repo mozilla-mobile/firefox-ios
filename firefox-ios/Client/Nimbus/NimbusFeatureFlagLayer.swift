@@ -33,6 +33,9 @@ final class NimbusFeatureFlagLayer {
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
 
+        case .downloadLiveActivities:
+            return checkDownloadLiveActivitiesFeature(from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -88,17 +91,17 @@ final class NimbusFeatureFlagLayer {
         case .passwordGenerator:
             return checkPasswordGeneratorFeature(from: nimbus)
 
+        case .pdfRefactor:
+            return checkPdfRefactorFeature(from: nimbus)
+
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
-        case .pullToRefreshRefactor:
-            return checkPullToRefreshFeature(from: nimbus)
+        case .ratingPromptFeature:
+            return checkRatingPromptFeature(from: nimbus)
 
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
-
-        case .closeRemoteTabs:
-            return checkCloseRemoteTabsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -338,6 +341,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.passwordGeneratorFeature.value().enabled
     }
 
+    private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.pdfRefactorFeature.value().enabled
+    }
+
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
 
@@ -348,8 +355,8 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
-    private func checkPullToRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.pullToRefreshRefactorFeature.value().enabled
+    private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.ratingPromptFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
@@ -361,6 +368,10 @@ final class NimbusFeatureFlagLayer {
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
+    }
+
+    private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.downloadLiveActivitiesFeature.value().enabled
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
@@ -399,11 +410,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
-    }
-
-    private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.remoteTabManagement.value()
-        return config.closeTabsEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {

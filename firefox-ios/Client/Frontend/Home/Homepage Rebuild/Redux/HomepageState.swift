@@ -13,6 +13,7 @@ struct HomepageState: ScreenState, Equatable {
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
     let jumpBackInState: JumpBackInSectionState
+    let bookmarkState: BookmarksSectionState
     let pocketState: PocketState
     let wallpaperState: WallpaperState
 
@@ -32,6 +33,7 @@ struct HomepageState: ScreenState, Equatable {
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
             jumpBackInState: homepageState.jumpBackInState,
+            bookmarkState: homepageState.bookmarkState,
             pocketState: homepageState.pocketState,
             wallpaperState: homepageState.wallpaperState
         )
@@ -44,6 +46,7 @@ struct HomepageState: ScreenState, Equatable {
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
+            bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID)
         )
@@ -55,6 +58,7 @@ struct HomepageState: ScreenState, Equatable {
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
         jumpBackInState: JumpBackInSectionState,
+        bookmarkState: BookmarksSectionState,
         pocketState: PocketState,
         wallpaperState: WallpaperState
     ) {
@@ -63,6 +67,7 @@ struct HomepageState: ScreenState, Equatable {
         self.messageState = messageState
         self.topSitesState = topSitesState
         self.jumpBackInState = jumpBackInState
+        self.bookmarkState = bookmarkState
         self.pocketState = pocketState
         self.wallpaperState = wallpaperState
     }
@@ -74,13 +79,14 @@ struct HomepageState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        case HomepageActionType.initialize:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
                 messageState: MessageCardState.reducer(state.messageState, action),
                 topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
                 jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+                bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
                 pocketState: PocketState.reducer(state.pocketState, action),
                 wallpaperState: WallpaperState.reducer(state.wallpaperState, action)
             )
@@ -95,6 +101,7 @@ struct HomepageState: ScreenState, Equatable {
         var pocketState = state.pocketState
         var topSitesState = state.topSitesState
         var jumpBackInState = state.jumpBackInState
+        var bookmarkState = state.bookmarkState
         var wallpaperState = state.wallpaperState
 
         if let action {
@@ -102,6 +109,7 @@ struct HomepageState: ScreenState, Equatable {
             messageState = MessageCardState.reducer(state.messageState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
             jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
+            bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
             topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
             wallpaperState = WallpaperState.reducer(state.wallpaperState, action)
         }
@@ -112,6 +120,7 @@ struct HomepageState: ScreenState, Equatable {
             messageState: messageState,
             topSitesState: topSitesState,
             jumpBackInState: jumpBackInState,
+            bookmarkState: bookmarkState,
             pocketState: pocketState,
             wallpaperState: wallpaperState
         )

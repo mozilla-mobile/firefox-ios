@@ -77,7 +77,7 @@
 "Settings.CrashReports.Message.v135" = "Hutsegite-txostenek nabigatzailearen arazoak diagnostikatzen laguntzen digute.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v136" = "Nabigatzailearen arazoak diagnostikatzen eta konpontzen laguntzen digute.";
+"Settings.CrashReports.Message.v136" = "Nabigatzailearen arazoak diagnostikatzen eta konpontzen laguntzen digu honek.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Bidali automatikoki hutsegite-txostenak";

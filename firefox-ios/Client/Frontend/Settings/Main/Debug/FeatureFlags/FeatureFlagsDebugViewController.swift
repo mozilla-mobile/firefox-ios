@@ -38,13 +38,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
-                    with: .closeRemoteTabs,
-                    titleText: format(string: "Enable Close Remote Tabs"),
-                    statusText: format(string: "Toggle to enable closing tabs remotely feature")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
@@ -88,6 +81,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .feltPrivacyFeltDeletion,
+                    titleText: format(string: "Enable Felt Privacy Deletion"),
+                    statusText: format(string: "Toggle to felt privacy deletion")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .feltPrivacySimplifiedUI,
+                    titleText: format(string: "Enable Felt Privacy UI"),
+                    statusText: format(string: "Toggle to felt privacy UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .toolbarRefactor,
                     titleText: format(string: "Toolbar Redesign"),
                     statusText: format(string: "Toggle to enable the toolbar redesign")
@@ -112,6 +119,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     with: .passwordGenerator,
                     titleText: format(string: "Enable Password Generator"),
                     statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .pdfRefactor,
+                    titleText: format(string: "Enable PDF Refactor"),
+                    statusText: format(string: "Toggle to enable PDF Refactor feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .downloadLiveActivities,
+                    titleText: format(string: "Enable Download Live Activities"),
+                    statusText: format(string: "Toggle to enable download live activities")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },

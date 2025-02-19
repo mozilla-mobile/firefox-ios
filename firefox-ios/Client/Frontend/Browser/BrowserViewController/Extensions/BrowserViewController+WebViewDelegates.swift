@@ -31,6 +31,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        guard !isPayPalPopUp(navigationAction) else { return nil }
+
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -186,10 +188,11 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        if let tab = tabManager[webView] {
-            // Need to wait here in case we're waiting for a pending `window.open()`.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.tabManager.removeTab(tab)
+        Task {
+            if let tab = tabManager[webView] {
+                // Need to wait here in case we're waiting for a pending `window.open()`.
+                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                await tabManager.removeTab(tab.tabUUID)
             }
         }
     }
@@ -203,6 +206,21 @@ extension BrowserViewController: WKUIDelegate {
         completionHandler(contextMenuConfiguration(for: url, webView: webView))
     }
 
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView === webView, !contentContainer.hasAnyHomepage else {
+            decisionHandler(.deny)
+            return
+        }
+
+        decisionHandler(.prompt)
+    }
+
+    // MARK: - Helpers
     private func contextMenuConfiguration(for url: URL, webView: WKWebView) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
@@ -389,20 +407,6 @@ extension BrowserViewController: WKUIDelegate {
         pendingDownloadWebView = webView
     }
 
-    func webView(_ webView: WKWebView,
-                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-                 initiatedByFrame frame: WKFrameInfo,
-                 type: WKMediaCaptureType,
-                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
-        // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
-            decisionHandler(.deny)
-            return
-        }
-
-        decisionHandler(.prompt)
-    }
-
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
@@ -549,7 +553,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     if let currentTab = self?.tabManager.selectedTab,
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabManager.removeTab(tab)
+                        self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
                     }
                 }
             }
@@ -689,10 +693,10 @@ extension BrowserViewController: WKNavigationDelegate {
             var url: URL?
             group.enter()
             let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
-            temporaryDocument.getURL(completionHandler: { docURL in
+            temporaryDocument.download { docURL in
                 url = docURL
                 group.leave()
-            })
+            }
             _ = group.wait(timeout: .distantFuture)
 
             let previewHelper = OpenQLPreviewHelper(presenter: self, withTemporaryDocument: temporaryDocument)
@@ -761,7 +765,16 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType != MIMEType.HTML, let request = request {
+            if isPDFRefactorEnabled, response.mimeType == MIMEType.PDF, let request {
+                if !tab.canLoadDocumentRequest(request) {
+                    decisionHandler(.allow)
+                    return
+                }
+                handlePDFResponse(webView, tab: tab, response: response, request: request)
+                decisionHandler(.cancel)
+                return
+            }
+            if response.mimeType != MIMEType.HTML, let request {
                 tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             } else {
                 tab.temporaryDocument = nil
@@ -773,6 +786,33 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         decisionHandler(.allow)
+    }
+
+    func handlePDFResponse(_ webView: WKWebView,
+                           tab: Tab,
+                           response: URLResponse,
+                           request: URLRequest) {
+        if let webView = webView as? TabWebView {
+            webView.showDocumentLoadingView()
+            webView.applyTheme(theme: currentTheme())
+        }
+
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
+            let tempPDF = DefaultTemporaryDocument(
+                filename: response.suggestedFilename,
+                request: request,
+                mimeType: MIMEType.PDF,
+                cookies: cookies
+            )
+            tempPDF.onDownloadProgressUpdate = { progress in
+                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                                   of: webView,
+                                   change: [.newKey: progress],
+                                   context: nil)
+            }
+            tab?.enqueueDocument(tempPDF)
+        }
     }
 
     /// Tells the delegate that an error occurred during navigation.
@@ -873,13 +913,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
 
                 if isNativeErrorPageEnabled {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
+                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
@@ -943,7 +977,7 @@ extension BrowserViewController: WKNavigationDelegate {
               let metadataManager = tab.metadataManager
         else { return }
 
-        searchTelemetry?.trackTabAndTopSiteSAP(tab, webView: webView)
+        searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
 
@@ -986,7 +1020,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-
+        if isPDFRefactorEnabled, let webView = webView as? TabWebView {
+            webView.removeDocumentLoadingView()
+        }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
@@ -1115,9 +1151,16 @@ private extension BrowserViewController {
         return false
     }
 
+    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
+    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
+    // so we will block the creation of a new Webview with this check
+    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
+        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+    }
+
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView === webView))
             && (self.presentedViewController == nil)
     }
 

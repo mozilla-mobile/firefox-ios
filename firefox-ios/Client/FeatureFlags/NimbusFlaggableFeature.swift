@@ -37,10 +37,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case nightMode
     case passwordGenerator
+    case pdfRefactor
+    case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
-    case pullToRefreshRefactor
+    case ratingPromptFeature
     case reduxSearchSettings
-    case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
     case sentFromFirefox
@@ -59,8 +60,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
-                .closeRemoteTabs,
                 .homepageRebuild,
+                .feltPrivacyFeltDeletion,
+                .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
@@ -69,6 +71,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
+                .pdfRefactor,
+                .downloadLiveActivities,
                 .unifiedAds,
                 .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
@@ -112,7 +116,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .closeRemoteTabs,
                 .darkReader,
                 .fakespotBackInStock,
                 .fakespotFeature,
@@ -128,8 +131,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .noInternetConnectionErrorPage,
                 .nightMode,
                 .passwordGenerator,
+                .pdfRefactor,
+                .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
-                .pullToRefreshRefactor,
+                .ratingPromptFeature,
                 .reduxSearchSettings,
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,

@@ -14,7 +14,6 @@ class RootViewController: UIViewController,
                           AddressToolbarContainerDelegate,
                           SearchSuggestionDelegate,
                           SettingsDelegate,
-                          FindInPageBarDelegate,
                           Themeable {
     var currentWindowUUID: UUID?
     var themeManager: ThemeManager
@@ -29,12 +28,12 @@ class RootViewController: UIViewController,
 
     private var browserVC: BrowserViewController
     private var searchVC: SearchViewController
-    private var findInPageBar: FindInPageBar?
+    private var errorPage: ErrorPageViewController?
 
     private var model = RootViewControllerModel()
 
     // MARK: - Init
-    init(engineProvider: EngineProvider,
+    init(engineProvider: EngineProvider = AppContainer.shared.resolve(),
          windowUUID: UUID?,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
@@ -185,6 +184,8 @@ class RootViewController: UIViewController,
     // MARK: - NavigationDelegate
 
     func onLoadingStateChange(loading: Bool) {
+        removeErrorPage()
+
         model.updateReloadStopButton(loading: loading)
         updateNavigationToolbar()
     }
@@ -198,16 +199,8 @@ class RootViewController: UIViewController,
         updateAddressToolbar(url: URL(string: url))
     }
 
-    func onFindInPage(selected: String) {
-        showFindInPage()
-    }
-
-    func onFindInPage(currentResult: Int) {
-        findInPageBar?.currentResult = currentResult
-    }
-
-    func onFindInPage(totalResults: Int) {
-        findInPageBar?.totalResults = totalResults
+    func showFindInPage() {
+        browserVC.showFindInPage()
     }
 
     // MARK: - AddressToolbarDelegate
@@ -295,20 +288,29 @@ class RootViewController: UIViewController,
         browserVC.scrollToTop()
     }
 
-    func showFindInPage() {
-        let findInPageBar = FindInPageBar()
-        findInPageBar.translatesAutoresizingMaskIntoConstraints = false
-        findInPageBar.delegate = self
-        self.findInPageBar = findInPageBar
-
-        view.addSubview(findInPageBar)
+    func showErrorPage(page: ErrorPageViewController) {
+        self.errorPage = page
+        addChild(page)
+        page.view.frame = view.bounds
+        page.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(page.view)
 
         NSLayoutConstraint.activate([
-            findInPageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            findInPageBar.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor),
-            findInPageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            findInPageBar.heightAnchor.constraint(equalToConstant: 46)
+            page.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
+            page.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            page.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            page.view.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor)
         ])
+
+        page.didMove(toParent: self)
+    }
+
+    private func removeErrorPage() {
+        guard let errorPage else { return }
+        errorPage.willMove(toParent: nil)
+        errorPage.view.removeFromSuperview()
+        errorPage.removeFromParent()
+        self.errorPage = nil
     }
 
     // MARK: - AddressToolbarContainerDelegate
@@ -316,26 +318,6 @@ class RootViewController: UIViewController,
         let settingsVC = SettingsViewController()
         settingsVC.delegate = self
         present(settingsVC, animated: true)
-    }
-
-    // MARK: - FindInPageBarDelegate
-    func findInPage(_ findInPage: FindInPageBar, textChanged text: String) {
-        browserVC.findInPage(text: text, function: .find)
-    }
-
-    func findInPage(_ findInPage: FindInPageBar, findPreviousWithText text: String) {
-        browserVC.findInPage(text: text, function: .findPrevious)
-    }
-
-    func findInPage(_ findInPage: FindInPageBar, findNextWithText text: String) {
-        browserVC.findInPage(text: text, function: .findNext)
-    }
-
-    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
-        browserVC.findInPageDone()
-        findInPageBar?.endEditing(true)
-        findInPageBar?.removeFromSuperview()
-        findInPageBar = nil
     }
 
     // MARK: Themeable

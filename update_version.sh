@@ -12,3 +12,4 @@ perl -pi -e "s/$1/$2/g" firefox-ios/CredentialProvider/Info.plist
 perl -pi -e "s/$1/$2/g" firefox-ios/Extensions/*/*Info.plist
 perl -pi -e "s/$1/$2/g" firefox-ios/WidgetKit/Info.plist
 perl -pi -e "s/$1/$2/g" bitrise.yml
+echo "$2" > version.txt

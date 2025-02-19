@@ -303,6 +303,7 @@ class TabTrayViewController: UIViewController,
 
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
+            tabTrayState.showCloseConfirmation = false
         }
 
         if let toastType = tabTrayState.toastType {
@@ -461,8 +462,7 @@ class TabTrayViewController: UIViewController,
                                                    constant: Toast.UX.toastSidePadding),
                     toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                                  constant: -self.toolbarHeight)
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                 ]
             }
             shownToast = toast

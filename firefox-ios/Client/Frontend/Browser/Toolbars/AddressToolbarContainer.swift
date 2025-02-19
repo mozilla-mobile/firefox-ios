@@ -27,9 +27,11 @@ final class AddressToolbarContainer: UIView,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
                                      Autocompletable,
-                                     URLBarViewProtocol {
+                                     URLBarViewProtocol,
+                                     PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
+        static let toolbarIsEditingLeadingPadding: CGFloat = 0
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -75,9 +77,26 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
-    private func calculateToolbarSpace() -> CGFloat {
+    private func calculateToolbarTrailingSpace() -> CGFloat {
+        if shouldDisplayCompact {
+            return UX.toolbarHorizontalPadding
+        }
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+            return UX.toolbarHorizontalPadding
+        }
         // Provide 0 padding in iPhone landscape due to safe area insets
-        return shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
+        return 0
+    }
+
+    private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
+        if shouldDisplayCompact {
+            return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
+        }
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+            return UX.toolbarHorizontalPadding
+        }
+        return 0
     }
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
@@ -182,18 +201,20 @@ final class AddressToolbarContainer: UIView,
             if newModel.isEditing, !inOverlayMode {
                 enterOverlayMode(nil, pasted: false, search: true)
             }
-
             updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: newModel.addressToolbarState,
+
+            compactToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(),
-                                     trailingSpace: calculateToolbarSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-            regularToolbar.configure(state: newModel.addressToolbarState,
+                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
+                                     trailingSpace: calculateToolbarTrailingSpace(),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
+            regularToolbar.configure(config: newModel.addressToolbarConfig,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(),
-                                     trailingSpace: calculateToolbarSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
+                                     trailingSpace: calculateToolbarTrailingSpace(),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                                     animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
@@ -271,16 +292,8 @@ final class AddressToolbarContainer: UIView,
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
 
-        let isPrivateMode = model?.isPrivateMode ?? false
-        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
-        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
-        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
-
-        progressBar.setGradientColors(
-            startColor: gradientStartColor,
-            middleColor: gradientMiddleColor,
-            endColor: gradientEndColor
-        )
+        applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false,
+                              theme: theme)
     }
 
     // MARK: - AddressToolbarDelegate
@@ -405,5 +418,22 @@ final class AddressToolbarContainer: UIView,
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
             store.dispatch(action)
         }
+    }
+
+    private func applyProgressBarTheme(isPrivateMode: Bool, theme: Theme) {
+        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
+        progressBar.setGradientColors(
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
+        )
+    }
+
+    // MARK: - PrivateModeUI
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
+        applyProgressBarTheme(isPrivateMode: isPrivate, theme: theme)
     }
 }

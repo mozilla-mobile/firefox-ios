@@ -53,6 +53,11 @@ export class FormAutofillHandler {
   #fieldDetails = null;
 
   /**
+   * Flag to indicate whethere there is an ongoing autofilling/clearing process.
+   */
+  #isAutofillInProgress = false;
+
+  /**
    * Initialize the form from `FormLike` object to handle the section or form
    * operations.
    *
@@ -117,6 +122,10 @@ export class FormAutofillHandler {
    */
   hasIdentifiedFields() {
     return !!this.#fieldDetails;
+  }
+
+  get isAutofillInProgress() {
+    return this.#isAutofillInProgress;
   }
 
   handleEvent(event) {
@@ -366,6 +375,7 @@ export class FormAutofillHandler {
    *        The data profile containing the values to be autofilled into the form fields.
    */
   fillFields(focusedId, elementIds, profile) {
+    this.#isAutofillInProgress = true;
     this.getAdaptedProfiles([profile]);
 
     for (const fieldDetail of this.fieldDetails) {
@@ -424,9 +434,9 @@ export class FormAutofillHandler {
       }
     }
 
-    FormAutofillUtils.getElementByIdentifier(focusedId)?.focus({
-      preventScroll: true,
-    });
+    this.#isAutofillInProgress = false;
+
+    this.focusAfterClearingFields(focusedId);
 
     this.registerFormChangeHandler();
   }
@@ -988,6 +998,7 @@ export class FormAutofillHandler {
   }
 
   clearFilledFields(focusedId, elementIds) {
+    this.#isAutofillInProgress = true;
     const fieldDetails = elementIds.map(id =>
       this.getFieldDetailByElementId(id)
     );
@@ -1014,7 +1025,12 @@ export class FormAutofillHandler {
         FormAutofillHandler.fillFieldValue(element, value);
       }
     }
+    this.#isAutofillInProgress = false;
 
+    this.focusAfterClearingFields(focusedId);
+  }
+
+  focusAfterClearingFields(focusedId) {
     let focusedElement = FormAutofillUtils.getElementByIdentifier(focusedId);
     if (FormAutofillUtils.focusOnAutofill && focusedElement) {
       focusedElement.focus({ preventScroll: true });

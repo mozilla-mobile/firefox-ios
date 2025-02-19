@@ -10,19 +10,20 @@ struct AddressToolbarContainerModel {
     let toolbarPosition: AddressToolbarPosition
     let scrollY: CGFloat
     let isPrivate: Bool
-    let locationViewState: LocationViewState
+    let locationViewConfiguration: LocationViewConfiguration
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
     var manager: ToolbarManager = DefaultToolbarManager()
 
-    var state: AddressToolbarState {
-        return AddressToolbarState(
-            locationViewState: locationViewState,
+    var state: AddressToolbarConfiguration {
+        return AddressToolbarConfiguration(
+            locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition)
+            borderPosition: borderPosition,
+            shouldAnimate: false)
     }
 
     private var borderPosition: AddressToolbarBorderPosition? {

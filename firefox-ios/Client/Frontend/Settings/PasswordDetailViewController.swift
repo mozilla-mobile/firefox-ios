@@ -386,6 +386,11 @@ extension PasswordDetailViewController {
 
     @objc
     func doneEditing() {
+        // Only update if user made changes
+        guard usernameField?.text?.isEmpty == false, passwordField?.text?.isEmpty == false else {
+            return
+        }
+
         isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .edit,

@@ -18,9 +18,9 @@ enum LegacyTabGroupTimerState: String, Codable {
 }
 
 class LegacyTabGroupData: Codable {
-    var tabAssociatedSearchTerm: String = ""
-    var tabAssociatedSearchUrl: String = ""
-    var tabAssociatedNextUrl: String = ""
+    var tabAssociatedSearchTerm = ""
+    var tabAssociatedSearchUrl = ""
+    var tabAssociatedNextUrl = ""
     var tabHistoryCurrentState = ""
 
     func tabHistoryMetadatakey() -> HistoryMetadataKey {

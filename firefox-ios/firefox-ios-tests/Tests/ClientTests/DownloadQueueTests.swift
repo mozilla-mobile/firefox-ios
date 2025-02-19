@@ -124,7 +124,7 @@ class MockDownload: Download {
 class MockDownloadQueueDelegate: DownloadQueueDelegate {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    var methodCalled: String = "noneOfMethodWasCalled"
+    var methodCalled = "noneOfMethodWasCalled"
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         methodCalled = #function

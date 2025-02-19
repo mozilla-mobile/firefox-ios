@@ -27,10 +27,11 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
+    let shouldAnimate: Bool
 
     let windowUUID: UUID
 
-    var addressToolbarState: AddressToolbarState {
+    var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
 
         var droppableUrl: URL?
@@ -38,7 +39,7 @@ final class AddressToolbarContainerModel: Equatable {
             droppableUrl = url
         }
 
-        let locationViewState = LocationViewState(
+        let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: String(
                 format: .AddressToolbar.SearchEngineA11yLabel,
@@ -74,12 +75,13 @@ final class AddressToolbarContainerModel: Equatable {
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
                 store.dispatch(action)
             })
-        return AddressToolbarState(
-            locationViewState: locationViewState,
+        return AddressToolbarConfiguration(
+            locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition)
+            borderPosition: borderPosition,
+            shouldAnimate: shouldAnimate)
     }
 
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
@@ -114,6 +116,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
+        self.shouldAnimate = state.shouldAnimate
     }
 
     func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
@@ -127,7 +130,7 @@ final class AddressToolbarContainerModel: Equatable {
         return query
     }
 
-    private static func mapActions(_ actions: [ToolbarActionState],
+    private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in

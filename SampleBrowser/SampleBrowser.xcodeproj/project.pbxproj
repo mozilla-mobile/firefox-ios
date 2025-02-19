@@ -38,12 +38,12 @@
 		8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */; };
 		8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */; };
 		8A4602222B0FE55300FFD17F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */; };
+		8A7DE5382D5671A900240CFE /* ErrorPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7DE5372D5671A700240CFE /* ErrorPageViewController.swift */; };
 		8ADF72C62B73DB9700530E7A /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C12B73DB9700530E7A /* MainFrameAtDocumentStart.js */; };
 		8ADF72C72B73DB9700530E7A /* AllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C22B73DB9700530E7A /* AllFramesAtDocumentStart.js */; };
 		8ADF72C82B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */; };
 		8ADF72C92B73DB9700530E7A /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */; };
 		8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */; };
-		8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */; };
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
 		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
@@ -88,12 +88,12 @@
 		8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchbar+Extension.swift"; sourceTree = "<group>"; };
 		8A4602212B0FE55300FFD17F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		8A7DE5372D5671A700240CFE /* ErrorPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPageViewController.swift; sourceTree = "<group>"; };
 		8ADF72C12B73DB9700530E7A /* MainFrameAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentStart.js; sourceTree = "<group>"; };
 		8ADF72C22B73DB9700530E7A /* AllFramesAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebcompatAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
 		8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
-		8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPage.swift; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
@@ -239,7 +239,6 @@
 		8A4602152B0FE42300FFD17F /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
 				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
 				E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */,
@@ -263,6 +262,7 @@
 		8A4602232B0FE57C00FFD17F /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				8A7DE5372D5671A700240CFE /* ErrorPageViewController.swift */,
 				8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */,
 			);
 			path = Browser;
@@ -398,6 +398,7 @@
 				8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */,
 				E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */,
 				8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */,
+				8A7DE5382D5671A900240CFE /* ErrorPageViewController.swift in Sources */,
 				8A3DB3332B5AD3EC00F89705 /* SettingsCellViewModel.swift in Sources */,
 				8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */,
 				8A0F44752B56FD5300438589 /* SearchViewModel.swift in Sources */,
@@ -410,7 +411,6 @@
 				E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */,
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
-				8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
 				E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */,
@@ -576,7 +576,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -604,7 +604,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

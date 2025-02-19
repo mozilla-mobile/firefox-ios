@@ -4,7 +4,7 @@
 
 import UIKit
 
-public struct LocationViewState {
+public struct LocationViewConfiguration {
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
 

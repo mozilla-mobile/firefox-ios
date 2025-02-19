@@ -59,6 +59,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -84,7 +85,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenDesktopBookmarksExist() throws {
         profile.reopen()
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         createDesktopBookmark(subject: subject) {
@@ -115,6 +116,30 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
             XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no bookmarks")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testReloadData_createsDesktopBookmarksFolder_whenBookmarksRefactor() {
+        let bookmarksHandler = BookmarksHandlerMock()
+        bookmarksHandler.bookmarksInTreeValue = 1
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testReloadData_doesntCreateDesktopBookmarksFolder_whenBookmarksRefactor() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Mobile folder does not contain the local desktop folder")
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1)
@@ -157,6 +182,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testMoveRowAtGetNewIndex_MobileGuid_atFive() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
         let index = subject.getNewIndex(from: 5)
         XCTAssertEqual(index, 4)
     }
@@ -181,16 +207,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        createDesktopBookmark(subject: subject) {
-            let index = subject.getNewIndex(from: 5)
-            XCTAssertEqual(index, 4)
-        }
-    }
-
     func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         featureFlags.set(feature: .bookmarksRefactor, to: true)
@@ -206,21 +222,14 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
     }
-
-    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_atFive_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
-
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 4)
-    }
 }
 
 extension BookmarksPanelViewModelTests {
-    func createSubject(guid: GUID) -> BookmarksPanelViewModel {
+    func createSubject(guid: GUID, bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarksHandler: BookmarksHandlerMock(),
-                                                bookmarkFolderGUID: guid)
+                                                bookmarksHandler: bookmarksHandler,
+                                                bookmarkFolderGUID: guid,
+                                                mainQueue: MockDispatchQueue())
         trackForMemoryLeaks(viewModel)
         return viewModel
     }
@@ -263,7 +272,7 @@ extension BookmarksPanelViewModelTests {
 
 class MockBookmarkNode: FxBookmarkNode {
     var type: BookmarkNodeType = .bookmark
-    var guid: String = "12345"
+    var guid = "12345"
     var parentGUID: String?
     var position: UInt32 = 0
     var isRoot = false

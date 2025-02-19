@@ -112,6 +112,9 @@
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "തനതുതിരച്ചിൽയന്ത്രം";
 
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "തിരയൽ യന്ത്രങ്ങളിൽ നിന്നുള്ള നിർദ്ദേശങ്ങൾ";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "തിരയുക";
 

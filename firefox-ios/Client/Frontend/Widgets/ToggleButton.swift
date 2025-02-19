@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 private struct UX {
-    static let BackgroundColor = UIColor.Photon.Purple60
-
     // The amount of pixels the toggle button will expand over the normal size.
     // This results in the larger -> contract animation.
     static let ExpandDelta: CGFloat = 5
@@ -16,7 +15,7 @@ private struct UX {
     static let BackgroundSize = CGSize(width: 32, height: 32)
 }
 
-class ToggleButton: UIButton {
+class ToggleButton: UIButton, ThemeApplicable {
     func setSelected(_ selected: Bool, animated: Bool = true) {
         self.isSelected = selected
         if animated {
@@ -94,7 +93,6 @@ class ToggleButton: UIButton {
 
     fileprivate lazy var backgroundLayer: CALayer = {
         let backgroundLayer = CALayer()
-        backgroundLayer.backgroundColor = UX.BackgroundColor.cgColor
         backgroundLayer.mask = self.maskShapeLayer
         return backgroundLayer
     }()
@@ -122,5 +120,9 @@ class ToggleButton: UIButton {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        backgroundLayer.backgroundColor = theme.colors.layerAccentPrivate.cgColor
     }
 }

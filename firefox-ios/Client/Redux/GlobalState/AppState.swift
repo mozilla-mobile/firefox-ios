@@ -76,7 +76,8 @@ let middlewares = [
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
     PocketMiddleware().pocketSectionProvider,
     NativeErrorPageMiddleware().nativeErrorPageProvider,
-    WallpaperMiddleware().wallpaperProvider
+    WallpaperMiddleware().wallpaperProvider,
+    BookmarksMiddleware().bookmarksProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

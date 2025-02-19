@@ -12,18 +12,16 @@ public protocol EngineSession {
     /// Proxy object for handling telemetry events.
     var telemetryProxy: EngineTelemetryProxy? { get set }
 
-    /// Find in page delegate.
-    var findInPageDelegate: FindInPageHelperDelegate? { get set }
-
     /// The engine received a request to load a URL.
-    /// - Parameter url: The URL string that is requested
-    func load(url: String)
+    /// - Parameter browserURL: The BrowserURL that is requested to load
+    func load(browserURL: BrowserURL)
 
     /// Stops loading the current session.
     func stopLoading()
 
     /// Reloads the current URL.
-    func reload()
+    /// - Parameter bypassCache: Bypass the cache and fully reload from the origin
+    func reload(bypassCache: Bool)
 
     /// Navigates back in the history of this session.
     func goBack()
@@ -34,14 +32,11 @@ public protocol EngineSession {
     /// Scroll the session to the top.
     func scrollToTop()
 
-    /// Find a text selection in this session.
-    /// - Parameters:
-    ///   - text: The text to search
-    ///   - function: The functionality the find in page should search with
-    func findInPage(text: String, function: FindInPageFunction)
-
-    /// Called whenever the find in page session should be ended.
-    func findInPageDone()
+    /// Show the web view's built-in find interaction.
+    /// The find interactions close themselves.
+    /// - Parameter searchText: The optional text to search with in the find in page bar.
+    @available(iOS 16.0, *)
+    func showFindInPage(withSearchText searchText: String?)
 
     /// Navigates to the specified index in the history of this session. The current index of
     /// this session's history  will be updated but the items within it will be unchanged.
@@ -71,4 +66,15 @@ public protocol EngineSession {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
+}
+
+public extension EngineSession {
+    func reload(bypassCache: Bool = false) {
+        reload(bypassCache: bypassCache)
+    }
+
+    @available(iOS 16.0, *)
+    func showFindInPage(withSearchText searchText: String? = nil) {
+        showFindInPage(withSearchText: searchText)
+    }
 }

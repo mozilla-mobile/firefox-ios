@@ -6,13 +6,13 @@ import XCTest
 @testable import WebEngine
 import WebKit
 
+@available(iOS 16.0, *)
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
     private var webViewProvider: MockWKWebViewProvider!
     private var contentScriptManager: MockWKContentScriptManager!
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
-    private var findInPageDelegate: MockFindInPageHelperDelegate!
     private var metadataFetcher: MockMetadataFetcherHelper!
 
     override func setUp() {
@@ -22,7 +22,6 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = MockWKContentScriptManager()
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
-        findInPageDelegate = MockFindInPageHelperDelegate()
         metadataFetcher = MockMetadataFetcherHelper()
     }
 
@@ -33,66 +32,48 @@ final class WKEngineSessionTests: XCTestCase {
         contentScriptManager = nil
         userScriptManager = nil
         engineSessionDelegate = nil
-        findInPageDelegate = nil
         metadataFetcher = nil
     }
 
     // MARK: Load URL
 
-    func testLoadURLGivenEmptyThenDoesntLoad() {
-        let subject = createSubject()
-        let url = ""
-
-        subject?.load(url: url)
-
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
-        prepareForTearDown(subject!)
-    }
-
-    func testLoadURLGivenNotAURLThenDoesntLoad() {
-        let subject = createSubject()
-        let url = "blablablablabla"
-
-        subject?.load(url: url)
-
-        XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
-        prepareForTearDown(subject!)
-    }
-
     func testLoadURLGivenNormalURLThenLoad() {
         let subject = createSubject()
-        let url = "https://example.com"
+        let url = URL(string: "https://example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.url?.absoluteString, url)
-        prepareForTearDown(subject!)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     func testLoadURLGivenReaderModeURLThenLoad() {
         let subject = createSubject()
-        let url = "about:reader?url=http://example.com"
+        let url = URL(string: "about:reader?url=http://example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString,
                        "http://localhost:0/reader-mode/page?url=http%3A%2F%2Fexample%2Ecom")
-        prepareForTearDown(subject!)
     }
 
     func testLoadURLGivenFileURLThenLoadFileURL() {
         let subject = createSubject()
-        let url = "file://path/to/abc/dirA/A.html"
+        let url = URL(string: "file://path/to/abc/dirA/A.html")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
 
-        subject?.load(url: url)
+        subject?.load(browserURL: browserURL)
 
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
         XCTAssertEqual(webViewProvider.webView.loadFileURLCalled, 1)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, "file://path/to/abc/dirA/A.html")
         XCTAssertEqual(webViewProvider.webView.loadFileReadAccessURL?.absoluteString, "file://path/to/abc/dirA/")
-        prepareForTearDown(subject!)
     }
 
     // MARK: Stop URL
@@ -103,7 +84,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.stopLoading()
 
         XCTAssertEqual(webViewProvider.webView.stopLoadingCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Go back
@@ -114,7 +94,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goBack()
 
         XCTAssertEqual(webViewProvider.webView.goBackCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Go forward
@@ -125,7 +104,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.goForward()
 
         XCTAssertEqual(webViewProvider.webView.goForwardCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Scroll to top
@@ -138,84 +116,41 @@ final class WKEngineSessionTests: XCTestCase {
         let scrollView = webViewProvider.webView.engineScrollView as? MockEngineScrollView
         XCTAssertEqual(scrollView?.setContentOffsetCalled, 1)
         XCTAssertEqual(scrollView?.savedContentOffset, CGPoint.zero)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Find in page
 
-    func testFindInPageTextGivenFindAllThenJavascriptCalled() {
+    func testShowFindInPageGivenNoFindInteractionThenNothingHappens() {
         let subject = createSubject()
 
-        subject?.findInPage(text: "Banana", function: .find)
+        subject?.showFindInPage()
 
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"Banana\")")
-        prepareForTearDown(subject!)
+        XCTAssertNil(webViewProvider.webView.findInteraction)
     }
 
-    func testFindInPageTextGivenFindNextThenJavascriptCalled() {
+    func testShowFindInPageGivenFindInteractionThenPresentNavigatorCalledWithEmptySearchText() {
+        let findInteraction = MockUIFindInteraction()
         let subject = createSubject()
+        webViewProvider.webView.findInteraction = findInteraction
 
-        subject?.findInPage(text: "Banana", function: .findNext)
+        subject?.showFindInPage()
 
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findNext(\"Banana\")")
-        prepareForTearDown(subject!)
+        XCTAssertNotNil(webViewProvider.webView.findInteraction)
+        XCTAssertEqual(findInteraction.presentFindNavigatorCalled, 1)
+        XCTAssertEqual(findInteraction.searchText, "")
     }
 
-    func testFindInPageTextGivenFindPreviousThenJavascriptCalled() {
+    func testShowFindInPageGivenSearchTextThenPresentNavigatorCalled() {
+        let searchText = "SearchTerm"
+        let findInteraction = MockUIFindInteraction()
         let subject = createSubject()
+        webViewProvider.webView.findInteraction = findInteraction
 
-        subject?.findInPage(text: "Banana", function: .findPrevious)
+        subject?.showFindInPage(withSearchText: searchText)
 
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findPrevious(\"Banana\")")
-        prepareForTearDown(subject!)
-    }
-
-    func testFindInPageTextGivenMaliciousAlertCodeThenIsSanitized() {
-        let subject = createSubject()
-        let maliciousTextWithAlert = "'; alert('Malicious code injected!'); '"
-        subject?.findInPage(text: maliciousTextWithAlert, function: .find)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        let result = "__firefox__.find(\"\'; alert(\'Malicious code injected!\'); \'\")"
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, result)
-        prepareForTearDown(subject!)
-    }
-
-    func testFindInPageTextGivenMaliciousBrokenJsStringCodeThenIsSanitized() {
-        let subject = createSubject()
-        let maliciousText = "; maliciousFunction(); "
-        subject?.findInPage(text: maliciousText, function: .find)
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.find(\"; maliciousFunction(); \")")
-        prepareForTearDown(subject!)
-    }
-
-    func testFindInPageDoneThenJavascriptCalled() {
-        let subject = createSubject()
-
-        subject?.findInPageDone()
-
-        XCTAssertEqual(webViewProvider.webView.evaluateJavaScriptCalled, 1)
-        XCTAssertEqual(webViewProvider.webView.savedJavaScript, "__firefox__.findDone()")
-        prepareForTearDown(subject!)
-    }
-
-    func testFindInPageDelegateIsSetProperly() {
-        let subject = createSubject()
-
-        subject?.findInPageDelegate = findInPageDelegate
-        guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else {
-            XCTFail("Failed to cast script to FindInPageContentScript in testFindInPageDelegateIsSetProperly")
-            return
-        }
-        script.userContentController(didReceiveMessage: ["currentResult": 10])
-
-        XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
-        prepareForTearDown(subject!)
+        XCTAssertNotNil(webViewProvider.webView.findInteraction)
+        XCTAssertEqual(findInteraction.presentFindNavigatorCalled, 1)
+        XCTAssertEqual(findInteraction.searchText, searchText)
     }
 
     // MARK: Reload
@@ -226,21 +161,64 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.reload()
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
-        prepareForTearDown(subject!)
     }
 
-    func testReloadWhenErrorPageThenReplaceLocation() {
+    func testReloadWhenErrorPageThenLoadOriginalErrorPage() {
         let subject = createSubject()
         let errorPageURL = "errorpage"
-        let internalURL = "internal://local/errorpage?url=\(errorPageURL)"
-        subject?.load(url: internalURL)
+        let internalURL = URL(string: "internal://local/errorpage?url=\(errorPageURL)")!
+        let context = BrowsingContext(type: .internalNavigation, url: internalURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.reload()
 
         XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
-        XCTAssertEqual(webViewProvider.webView.replaceLocationCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
         XCTAssertEqual(webViewProvider.webView.url?.absoluteString, errorPageURL)
-        prepareForTearDown(subject!)
+    }
+
+    func testReloadWhenHomepageThenLoadHomepageAsPrivileged() throws {
+        let subject = createSubject()
+        let internalURL = URL(string: "internal://local/about/home")!
+        let context = BrowsingContext(type: .internalNavigation, url: internalURL)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
+        let url = try XCTUnwrap(webViewProvider.webView.url)
+        XCTAssertTrue(url.absoluteString.contains("internal://local/about/home?uuidkey="))
+    }
+
+    func testReloadWhenBypassCacheThenReloadBypassingCache() {
+        let subject = createSubject()
+        let url = URL(string: "https://www.example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
+
+        subject?.reload(bypassCache: true)
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 0)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
+        XCTAssertEqual(webViewProvider.webView.url, url)
+    }
+
+    func testReloadWhenReloadFromOriginFailsThenRestoreWebviewWithLastRequest() {
+        let subject = createSubject()
+        let url = URL(string: "https://www.example.com")!
+        let context = BrowsingContext(type: .internalNavigation, url: url)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
+
+        subject?.reload()
+
+        XCTAssertEqual(webViewProvider.webView.reloadFromOriginCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 2)
+        XCTAssertEqual(webViewProvider.webView.url, url)
     }
 
     // MARK: Restore
@@ -253,30 +231,29 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(webViewProvider.webView.interactionState as? Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testRestoreWhenHasLastRequestThenLoadISCalled() {
         let subject = createSubject()
         let restoredState = Data()
-        subject?.load(url: "https://example.com")
+        let context = BrowsingContext(type: .internalNavigation, url: URL(string: "https://example.com")!)
+        let browserURL = BrowserURL(browsingContext: context)!
+        subject?.load(browserURL: browserURL)
 
         subject?.restore(state: restoredState)
 
         XCTAssertEqual(webViewProvider.webView.interactionState as? Data, restoredState)
         XCTAssertEqual(webViewProvider.webView.loadCalled, 2, "Load calls it once, then restore calls it again")
-        prepareForTearDown(subject!)
     }
 
     // MARK: Observers
 
     func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
-        let subject = createSubject()
+        _ = createSubject()
         let expectedCount = WKEngineKVOConstants.allCases.count
         XCTAssertEqual(webViewProvider.webView.addObserverCalled,
                        expectedCount,
                        "There are \(expectedCount) KVO Constants")
-        prepareForTearDown(subject!)
     }
 
     func testRemoveObserversWhenCloseIsCalledThenObserversAreRemoved() {
@@ -288,46 +265,74 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(webViewProvider.webView.removeObserverCalled,
                        expectedCount,
                        "There are \(expectedCount) KVO Constants")
-        prepareForTearDown(subject!)
     }
 
     func testCanGoBackGivenWebviewStateThenCallsNavigationStateChanged() {
+        let canGoBack = true
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
-        webViewProvider.webView.canGoBack = true
+        webViewProvider.webView.canGoBack = canGoBack
         webViewProvider.webView.canGoForward = false
+
+        subject?.observeValue(forKeyPath: "canGoBack",
+                              of: nil,
+                              change: [NSKeyValueChangeKey.newKey: canGoBack],
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
+        XCTAssertTrue(engineSessionDelegate.savedCanGoBack!)
+        XCTAssertFalse(engineSessionDelegate.savedCanGoForward!)
+    }
+
+    func testCanGoBackGivenNoObserveValueChangeThenCallsNothing() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
 
         subject?.observeValue(forKeyPath: "canGoBack",
                               of: nil,
                               change: nil,
                               context: nil)
 
-        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
-        XCTAssertTrue(engineSessionDelegate.savedCanGoBack!)
-        XCTAssertFalse(engineSessionDelegate.savedCanGoForward!)
-        prepareForTearDown(subject!)
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 0)
+        XCTAssertNil(engineSessionDelegate.savedCanGoBack)
+        XCTAssertNil(engineSessionDelegate.savedCanGoForward)
     }
 
     func testCanGoForwardGivenWebviewStateThenCallsNavigationStateChanged() {
+        let canGoForward = true
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
         webViewProvider.webView.canGoBack = false
-        webViewProvider.webView.canGoForward = true
+        webViewProvider.webView.canGoForward = canGoForward
+
+        subject?.observeValue(forKeyPath: "canGoForward",
+                              of: nil,
+                              change: [NSKeyValueChangeKey.newKey: canGoForward],
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
+        XCTAssertFalse(engineSessionDelegate.savedCanGoBack!)
+        XCTAssertTrue(engineSessionDelegate.savedCanGoForward!)
+    }
+
+    func testCanGoForwardGivenNoObserveValueChangeThenCallsNothing() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
 
         subject?.observeValue(forKeyPath: "canGoForward",
                               of: nil,
                               change: nil,
                               context: nil)
 
-        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 1)
-        XCTAssertFalse(engineSessionDelegate.savedCanGoBack!)
-        XCTAssertTrue(engineSessionDelegate.savedCanGoForward!)
-        prepareForTearDown(subject!)
+        XCTAssertEqual(engineSessionDelegate.onNavigationStateChangeCalled, 0)
+        XCTAssertNil(engineSessionDelegate.savedCanGoBack)
+        XCTAssertNil(engineSessionDelegate.savedCanGoForward)
     }
 
     func testEstimatedProgressGivenWebviewStateThenCallsOnProgress() {
         let subject = createSubject()
         subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = URL(string: "www.mozilla.com")!
         webViewProvider.webView.estimatedProgress = 70
 
         subject?.observeValue(forKeyPath: "estimatedProgress",
@@ -337,7 +342,18 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onProgressCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedProgressValue, 70)
-        prepareForTearDown(subject!)
+    }
+
+    func testEstimatedProgressGivenNoURLThenCallsOnHideProgressBar() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.observeValue(forKeyPath: "estimatedProgress",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(engineSessionDelegate.onHideProgressCalled, 1)
     }
 
     func testLoadingGivenNoChangeThenDoesNotCallOnLoadingStateChange() {
@@ -350,7 +366,6 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testLoadingGivenOldKeyThenDoesNotCallOnLoadingStateChange() {
@@ -363,7 +378,6 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testLoadingGivenNewKeyThenCallsOnLoadingStateChange() {
@@ -377,7 +391,36 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 1)
         XCTAssertTrue(engineSessionDelegate.savedLoading!)
-        prepareForTearDown(subject!)
+    }
+
+    func testLoadingGivenIsLoadingThenCallsRefreshControlBegin() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let refreshControl = MockUIRefreshControl()
+        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.newKey: true],
+                              context: nil)
+
+        XCTAssertEqual(refreshControl.beginRefreshingCalled, 1)
+        XCTAssertEqual(refreshControl.endRefreshingCalled, 0)
+    }
+
+    func testLoadingGivenIsNotLoadingThenCallsRefreshControlEnd() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        let refreshControl = MockUIRefreshControl()
+        webViewProvider.webView.engineScrollView?.refreshControl = refreshControl
+
+        subject?.observeValue(forKeyPath: "loading",
+                              of: nil,
+                              change: [.newKey: false],
+                              context: nil)
+
+        XCTAssertEqual(refreshControl.beginRefreshingCalled, 0)
+        XCTAssertEqual(refreshControl.endRefreshingCalled, 1)
     }
 
     func testTitleChangeGivenEmptyTitleThenDoesntCallDelegate() {
@@ -392,7 +435,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertNil(subject?.sessionData.title)
         XCTAssertEqual(engineSessionDelegate.onTitleChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testTitleChangeGivenATitleThenCallsDelegate() {
@@ -408,7 +450,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.title, expectedTitle)
         XCTAssertEqual(engineSessionDelegate.onTitleChangeCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     func testURLChangeGivenNilURLThenDoesntCallDelegate() {
@@ -422,7 +463,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertNil(subject?.sessionData.url)
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testURLChangeGivenAboutBlankWithNilURLThenDoesntCallDelegate() {
@@ -436,7 +476,6 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testURLChangeGivenNotTheSameOriginThenDoesntCallDelegate() {
@@ -450,7 +489,6 @@ final class WKEngineSessionTests: XCTestCase {
                               context: nil)
 
         XCTAssertEqual(engineSessionDelegate.onLoadingStateChangeCalled, 0)
-        prepareForTearDown(subject!)
     }
 
     func testURLChangeGivenAboutBlankWithURLThenCallsDelegate() {
@@ -467,7 +505,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.url, aboutBlankURL)
         XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     func testURLChangeGivenLoadedURLWithURLThenCallsDelegate() {
@@ -484,7 +521,36 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.url, loadedURL)
         XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
-        prepareForTearDown(subject!)
+    }
+
+    func testURLChangeGivenNotAuthorizedErrorPageThenLoadsAboutBlank() {
+        let internalURL = URL(string: "internal://local/errorpage?url=errorPage")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = internalURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.url, nil)
+        XCTAssertEqual(webViewProvider.webView.loadCalled, 1)
+        XCTAssertEqual(webViewProvider.webView.url, URL(string: "about:blank")!)
+    }
+
+    func testHadOnlySecureContentGivenSecureContentThenSavesAndCallsDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.hasOnlySecureContent = true
+
+        subject?.observeValue(forKeyPath: "hasOnlySecureContent",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(subject?.sessionData.hasOnlySecureContent, true)
+        XCTAssertEqual(engineSessionDelegate.onHasOnlySecureContentCalled, 1)
     }
 
     // MARK: Page Zoom
@@ -497,7 +563,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.updatePageZoom(.increase)
         // Assert zoom increased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
-        prepareForTearDown(subject!)
     }
 
     func testDecreaseZoom() {
@@ -508,7 +573,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.updatePageZoom(.decrease)
         // Assert zoom decreased by expected step
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
-        prepareForTearDown(subject!)
     }
 
     func testSetZoomLevelAndReset() {
@@ -524,8 +588,6 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.updatePageZoom(.reset)
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
-
-        prepareForTearDown(subject!)
     }
 
     // MARK: Metadata parser
@@ -544,7 +606,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
         XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
-        prepareForTearDown(subject!)
     }
 
     func testFetchMetadataGivenDidFinishNavigationThenFetchMetadata() {
@@ -559,27 +620,34 @@ final class WKEngineSessionTests: XCTestCase {
 
 //        XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
 //        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
-        prepareForTearDown(subject!)
+    }
+
+    // MARK: Error page
+
+    func testReceivedErrorGivenErrorThenCallsErrorDelegate() {
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+
+        subject?.received(error: NSError(), forURL: URL(string: "www.example.com")!)
+
+        XCTAssertEqual(engineSessionDelegate.onErrorPageCalled, 1)
     }
 
     // MARK: User script manager
 
     func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
-        let subject = createSubject()
+        _ = createSubject()
         XCTAssertEqual(userScriptManager.injectUserScriptsIntoWebViewCalled, 1)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Content script manager
 
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
-        let subject = createSubject()
+        _ = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], FindInPageContentScript.name())
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], AdsTelemetryContentScript.name())
-        prepareForTearDown(subject!)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], AdsTelemetryContentScript.name())
     }
 
     func testContentScriptWhenCloseCalledThenUninstallIsCalled() {
@@ -601,7 +669,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.findInPageCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedFindInPageSelection, expectedSelection)
-        prepareForTearDown(subject!)
     }
 
     func testSearchGivenSelectionThenCallsDelegate() {
@@ -613,7 +680,6 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(engineSessionDelegate.searchCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedSearchSelection, expectedSelection)
-        prepareForTearDown(subject!)
     }
 
     // MARK: Helper
@@ -630,13 +696,12 @@ final class WKEngineSessionTests: XCTestCase {
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
-        return subject
-    }
+        // Each registered teardown block is run once, in last-in, first-out order, executed serially.
+        // Order is important here since the close() function needs to be called before we check for leaks
+        addTeardownBlock { [weak subject] in
+            subject?.close()
+        }
 
-    // Adding a special teardown since as part of tracking memory leaks, we can't use an instance variable on the
-    // test suite. A normal instance `tearDown` is called after a `addTeardownBlock`. To ensure we still can
-    // `trackForMemoryLeaks` we need to always close any engine session that is opened, otherwise leaks happens.
-    func prepareForTearDown(_ subject: WKEngineSession) {
-        subject.close()
+        return subject
     }
 }

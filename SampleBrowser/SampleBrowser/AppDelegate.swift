@@ -4,12 +4,20 @@
 
 import Common
 import UIKit
+import WebEngine
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
+
+    lazy var engineProvider: EngineProvider = {
+        let parameters = WKWebviewParameters(blockPopups: false, isPrivate: false)
+        let dependencies = EngineSessionDependencies(webviewParameters: parameters,
+                                                     telemetryProxy: TelemetryHandler())
+        return EngineProvider(sessionDependencies: dependencies)!
+    }()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
