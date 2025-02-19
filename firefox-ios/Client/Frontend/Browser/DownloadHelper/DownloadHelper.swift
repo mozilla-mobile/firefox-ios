@@ -44,7 +44,7 @@ class DownloadHelper: NSObject {
         }
 
         // Handles attachments downloads.
-        // Only supports PDF ATM but can be expanded to support more extension
+        // Only supports PDF and Words docs but can be expanded to support more extensions
         if shouldDownloadAttachment(isForMainFrame: isForMainFrame) {
             return true
         }

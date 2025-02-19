@@ -21,6 +21,8 @@ struct MIMEType {
     static let Calendar = "text/calendar"
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
+    static let OpenDocument = "application/msword"
+    static let MicrosoftWord = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
     private static let webViewViewableTypes: [String] = [
         MIMEType.Bitmap,
@@ -34,7 +36,9 @@ struct MIMEType {
     ]
 
     private static let downloadableTypes: [String] = [
-        MIMEType.PDF
+        MIMEType.PDF,
+        MIMEType.OpenDocument,
+        MIMEType.MicrosoftWord
     ]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
