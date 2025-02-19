@@ -8,7 +8,7 @@ open class RustKeychain {
     public private(set) var serviceName: String
     public private(set) var accessGroup: String?
 
-    static var sharedClientAppContainerKeychain: RustKeychain {
+    public static var sharedClientAppContainerKeychain: RustKeychain {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
 
         guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
