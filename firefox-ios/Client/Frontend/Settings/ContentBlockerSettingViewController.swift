@@ -47,7 +47,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         super.viewDidLoad()
         applyTheme()
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
-        linkButton.isHidden = currentBlockingStrength == .strict
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -71,8 +70,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
                                          forKey: ContentBlockingConfig.Prefs.StrengthKey)
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
-
-                    self.linkButton.isHidden = option == .strict
 
                     self.recordEventOnChecked(option: option)
                 })
