@@ -405,11 +405,6 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
-    func pressedTabs() {
-        let viewController = TabsSettingsViewController(windowUUID: windowUUID)
-        router.push(viewController)
-    }
-
     // MARK: - SupportSettingsDelegate
 
     func pressedOpenSupportPage(url: URL) {

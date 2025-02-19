@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Common
 
+// TODO: Laurie - remove
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)

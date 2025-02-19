@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 
+// TODO: Laurie - to delete
 class TabsSetting: Setting {
     private weak var settingsDelegate: BrowsingSettingsDelegate?
 
@@ -30,6 +31,6 @@ class TabsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.pressedTabs()
+//        settingsDelegate?.pressedTabs()
     }
 }

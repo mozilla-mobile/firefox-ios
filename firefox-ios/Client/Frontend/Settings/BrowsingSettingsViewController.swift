@@ -7,7 +7,6 @@ import Shared
 
 /// Child settings pages browsing actions
 protocol BrowsingSettingsDelegate: AnyObject {
-    func pressedTabs()
     func pressedMailApp()
 }
 
@@ -25,18 +24,33 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func getDefaultBrowserSetting() -> [SettingSection] {
+        let footerTitle = NSAttributedString(
+            string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
+
+        return [SettingSection(footerTitle: footerTitle,
+                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
+    }
+
+    // TODO: Laurie - Strings and prefKey
     override func generateSettings() -> [SettingSection] {
-        var childrenSection = [Setting]()
+        var settings = [SettingSection]()
 
         if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
-            childrenSection += [TabsSetting(
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                settingsDelegate: parentCoordinator
-            )]
+            let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
+                                                  titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
+
+            // TODO: Laurie - Remove .Settings.Tabs.TabsSectionTitle),
+            settings.append(
+                SettingSection(
+                    title: NSAttributedString(string: "TABS"),
+                    footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
+                    children: [inactiveTabsSetting]
+                )
+            )
         }
 
-        childrenSection += [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
-
+        var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
         if let profile {
             let offerToOpenCopiedLinksSettings = BoolSetting(
                 prefs: profile.prefs,
@@ -56,6 +70,13 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 statusText: .SettingsShowLinkPreviewsStatus
             )
 
+            linksSettings += [offerToOpenCopiedLinksSettings,
+                              showLinksPreviewSettings]
+        }
+        settings += [SettingSection(title: NSAttributedString(string: "LINKS"), children: linksSettings)]
+
+        if let profile {
+            var mediaSection = [Setting]()
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -64,15 +85,15 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 titleText: .SettingsBlockOpeningExternalAppsTitle
             )
 
-            childrenSection += [
+            mediaSection += [
                 BlockPopupSetting(prefs: profile.prefs),
                 NoImageModeSetting(profile: profile),
-                offerToOpenCopiedLinksSettings,
-                showLinksPreviewSettings,
                 blockOpeningExternalAppsSettings
             ]
+
+            settings += [SettingSection(title: NSAttributedString(string: "MEDIA"), children: mediaSection)]
         }
 
-        return [SettingSection(children: childrenSection)]
+        return settings
     }
 }
