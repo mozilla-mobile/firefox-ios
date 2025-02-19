@@ -137,7 +137,7 @@ final class HomepageDiffableDataSource:
         with state: JumpBackInSectionState,
         and config: JumpBackInSectionLayoutConfiguration
     ) -> ([HomepageDiffableDataSource.HomeItem], JumpBackInSectionLayoutConfiguration)? {
-        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
+        guard state.shouldShowSection else { return nil }
         var updatedConfig = config
         updatedConfig.hasSyncedTab = state.mostRecentSyncedTab != nil
 
@@ -153,7 +153,7 @@ final class HomepageDiffableDataSource:
                 tabs.insert(.jumpBackInSyncedTab(mostRecentSyncedTab), at: 0)
             }
         }
-
+        guard !tabs.isEmpty else { return nil }
         return (tabs, updatedConfig)
     }
 

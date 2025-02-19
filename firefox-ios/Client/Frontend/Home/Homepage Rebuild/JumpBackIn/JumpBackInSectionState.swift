@@ -4,13 +4,15 @@
 
 import Common
 import Redux
+import Shared
 import Storage
 
 /// State for the jump back in section that is used in the homepage view
 struct JumpBackInSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
-    var jumpBackInTabs: [JumpBackInTabConfiguration]
-    var mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
+    let jumpBackInTabs: [JumpBackInTabConfiguration]
+    let mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
+    let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderState(
         title: .FirefoxHomeJumpBackInSectionTitle,
@@ -20,22 +22,30 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         buttonTitle: .BookmarksSavedShowAllText
     )
 
-    init(windowUUID: WindowUUID) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        windowUUID: WindowUUID
+    ) {
+        // TODO: FXIOS-11412 / 11226 - Move profile dependency and show section also based on feature flags
+        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.JumpBackInSection) ?? true
         self.init(
             windowUUID: windowUUID,
             jumpBackInTabs: [],
-            mostRecentSyncedTab: nil
+            mostRecentSyncedTab: nil,
+            shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         jumpBackInTabs: [JumpBackInTabConfiguration],
-        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil
+        mostRecentSyncedTab: JumpBackInSyncedTabConfiguration? = nil,
+        shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.jumpBackInTabs = jumpBackInTabs
         self.mostRecentSyncedTab = mostRecentSyncedTab
+        self.shouldShowSection = shouldShowSection
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -49,6 +59,8 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             return handleInitializeAction(for: state, with: action)
         case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
             return handleRemoteTabsAction(for: state, with: action)
+        case JumpBackInActionType.toggleShowSectionSetting:
+            return handleToggleShowSectionSettingAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -76,7 +88,8 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                     siteURL: itemURL
                 )
             },
-            mostRecentSyncedTab: state.mostRecentSyncedTab
+            mostRecentSyncedTab: state.mostRecentSyncedTab,
+            shouldShowSection: state.shouldShowSection
         )
     }
 
@@ -101,7 +114,23 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
                 titleText: site.title,
                 descriptionText: descriptionText,
                 url: mostRecentSyncedTab.tab.URL
-            )
+            ),
+            shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func handleToggleShowSectionSettingAction(action: Action, state: Self) -> JumpBackInSectionState {
+        guard let jumpBackInAction = action as? JumpBackInAction,
+              let isEnabled = jumpBackInAction.isEnabled
+        else {
+            return defaultState(from: state)
+        }
+
+        return JumpBackInSectionState(
+            windowUUID: state.windowUUID,
+            jumpBackInTabs: state.jumpBackInTabs,
+            mostRecentSyncedTab: state.mostRecentSyncedTab,
+            shouldShowSection: isEnabled
         )
     }
 
@@ -109,7 +138,8 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
             jumpBackInTabs: state.jumpBackInTabs,
-            mostRecentSyncedTab: state.mostRecentSyncedTab
+            mostRecentSyncedTab: state.mostRecentSyncedTab,
+            shouldShowSection: state.shouldShowSection
         )
     }
 }
