@@ -68,6 +68,12 @@
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
+		121416752D6373BA0097788B /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416722D6373BA0097788B /* AllFramesAtDocumentEnd.js */; };
+		121416762D6373BA0097788B /* AllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416732D6373BA0097788B /* AllFramesAtDocumentStart.js */; };
+		121416772D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416742D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js */; };
+		121416782D6373BA0097788B /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416712D6373BA0097788B /* AddressFormManager.js */; };
+		1214167B2D6375960097788B /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 1214167A2D6375960097788B /* MainFrameAtDocumentStart.js */; };
+		1214167C2D6375960097788B /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416792D6375960097788B /* MainFrameAtDocumentEnd.js */; };
 		124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		124DAE8A2D3512FA0050104C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		1251623C2D59FB30005CB958 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
@@ -2357,6 +2363,12 @@
 		10CD44F0A402C84BB31E5474 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		11F747589EB8A55A47647C93 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		120F42119EB30F217AB9493E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/FindInPage.strings; sourceTree = "<group>"; };
+		121416712D6373BA0097788B /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
+		121416722D6373BA0097788B /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
+		121416732D6373BA0097788B /* AllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentStart.js; sourceTree = "<group>"; };
+		121416742D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AutofillAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
+		121416792D6375960097788B /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
+		1214167A2D6375960097788B /* MainFrameAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentStart.js; sourceTree = "<group>"; };
 		123045959E0F295753B4B4DB /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Today.strings; sourceTree = "<group>"; };
 		124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDarkTheme.swift; sourceTree = "<group>"; };
 		124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveredLegacyTheme.swift; sourceTree = "<group>"; };
@@ -14582,12 +14594,18 @@
 			isa = PBXGroup;
 			children = (
 				E699220D1B94E3EF007C480D /* About */,
+				121416712D6373BA0097788B /* AddressFormManager.js */,
+				121416722D6373BA0097788B /* AllFramesAtDocumentEnd.js */,
+				121416732D6373BA0097788B /* AllFramesAtDocumentStart.js */,
+				121416742D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js */,
 				43879AFB287BDFB100B15D10 /* CC_Script */,
 				D308EE551CBF0BF5006843F2 /* CertError.css */,
 				D38A1EDF1CB458EC0080C842 /* CertError.html */,
 				F84B22391A0914A300AAB793 /* Fonts */,
 				D0E17FA7201F847600F1FCB5 /* FxASignIn.js */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
+				121416792D6375960097788B /* MainFrameAtDocumentEnd.js */,
+				1214167A2D6375960097788B /* MainFrameAtDocumentStart.js */,
 				0BA1E02F1B051A07007675AF /* NetError.css */,
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
 				8AF4E76A2C41D60A00BAD91C /* RemoteSettingsData */,
@@ -15648,6 +15666,8 @@
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
 				8A1A935A2B757C7C0069C190 /* portrait.json in Resources */,
 				23BEA76A251A99ED00A014BF /* NewYorkMedium-RegularItalic.otf in Resources */,
+				1214167B2D6375960097788B /* MainFrameAtDocumentStart.js in Resources */,
+				1214167C2D6375960097788B /* MainFrameAtDocumentEnd.js in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
 				E1AF27442A17BCF700CE5991 /* engagementNotificationWithoutConditions.json in Resources */,
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
@@ -15670,6 +15690,10 @@
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E1AF3566286DE5F800960045 /* Smoketest1.xctestplan in Resources */,
+				121416752D6373BA0097788B /* AllFramesAtDocumentEnd.js in Resources */,
+				121416762D6373BA0097788B /* AllFramesAtDocumentStart.js in Resources */,
+				121416772D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js in Resources */,
+				121416782D6373BA0097788B /* AddressFormManager.js in Resources */,
 				E1AF3561286DE5F800960045 /* Smoketest4.xctestplan in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */,
