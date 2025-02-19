@@ -52,6 +52,7 @@
         "AddressesTests\/testAutofillAddressesByTapingPhoneField()",
         "AddressesTests\/testAutofillAddressesByTapingStateField()",
         "AddressesTests\/testDeleteAllAddresses()",
+        "AddressesTests\/testToggleAddressOnOff()",
         "AddressesTests\/testUpdateAddressFieldCity()",
         "AddressesTests\/testUpdateAddressFieldCountry()",
         "AddressesTests\/testUpdateAddressFieldEmail()",

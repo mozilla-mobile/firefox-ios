@@ -914,6 +914,14 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
         }
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {

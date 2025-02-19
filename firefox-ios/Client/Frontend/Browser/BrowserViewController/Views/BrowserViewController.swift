@@ -153,13 +153,7 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = TabScrollingController(
-        windowUUID: windowUUID,
-        isPullToRefreshRefactorEnabled: featureFlags.isFeatureEnabled(
-            .pullToRefreshRefactor,
-            checking: .buildOnly
-        )
-    )
+    private(set) lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -1960,18 +1954,24 @@ class BrowserViewController: UIViewController,
             }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
-            // the same origin as the current URL. Otherwise, do nothing and wait for
-            // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == url.origin {
-                tab.url = url
-
-                if tab === tabManager.selectedTab {
-                    updateUIForReaderHomeStateForTab(tab)
+            // the same origin as the current URL. Otherwise, if the origins are different
+            // or either origin is nil, set the tab URL to the URL's origin and return.
+            guard let tabURLOrigin = tab.url?.origin,
+                  let urlOrigin = url.origin,
+                  tabURLOrigin == urlOrigin else {
+                if let urlOrigin = url.origin {
+                    tab.url = URL(string: urlOrigin)!
                 }
-                // Catch history pushState navigation, but ONLY for same origin navigation,
-                // for reasons above about URL spoofing risk.
-                navigateInTab(tab: tab, webViewStatus: .url)
+                return
             }
+            tab.url = url
+
+            if tab === tabManager.selectedTab {
+                updateUIForReaderHomeStateForTab(tab)
+            }
+            // Catch history pushState navigation, but ONLY for same origin navigation,
+            // for reasons above about URL spoofing risk.
+            navigateInTab(tab: tab, webViewStatus: .url)
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:) except when ReaderModeState is active
@@ -3245,9 +3245,11 @@ class BrowserViewController: UIViewController,
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
 
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         if !isToolbarRefactorEnabled {
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
             legacyUrlBar?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
+        } else {
+            addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
         toolbar.applyTheme(theme: currentTheme)
