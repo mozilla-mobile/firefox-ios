@@ -4054,7 +4054,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         // When the newly selected tab is the homepage or another internal tab,
-        // we need to explicitely set the reader mode state to be unavailable.
+        // we need to explicitly set the reader mode state to be unavailable.
         if let url = selectedTab.webView?.url, InternalURL.scheme != url.scheme,
            let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)

@@ -23,7 +23,7 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
         guard let actionSheet = (self.presenting ? screens.to : screens.from) as? PhotonActionSheet else { return }
 
         let bottomViewController = (self.presenting ? screens.from : screens.to) as UIViewController
-        animateWitVC(actionSheet, presentingVC: bottomViewController, transitionContext: transitionContext)
+        animateWithVC(actionSheet, presentingVC: bottomViewController, transitionContext: transitionContext)
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -50,7 +50,7 @@ extension PhotonActionSheetAnimator: UIViewControllerTransitioningDelegate {
 }
 
 extension PhotonActionSheetAnimator {
-    fileprivate func animateWitVC(
+    fileprivate func animateWithVC(
         _ actionSheet: PhotonActionSheet,
         presentingVC viewController: UIViewController,
         transitionContext: UIViewControllerContextTransitioning
