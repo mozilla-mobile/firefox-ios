@@ -11,6 +11,7 @@ class SendDataSetting: BoolSetting {
     private weak var settingsDelegate: SupportSettingsDelegate?
     private var a11yId: String
     private var learnMoreURL: URL?
+    private var learnMoreButtonA11y: String?
 
     var shouldSendData: ((Bool) -> Void)?
 
@@ -23,7 +24,8 @@ class SendDataSetting: BoolSetting {
          linkedText: String,
          prefKey: String,
          a11yId: String,
-         learnMoreURL: URL?) {
+         learnMoreURL: URL?,
+         learnMoreButtonA11y: String?) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -51,10 +53,15 @@ class SendDataSetting: BoolSetting {
             prefKey: prefKey,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: title),
-            attributedStatusText: statusText
+            attributedStatusText: statusText,
+            attributedAccessibilityStatusText: NSAttributedString(string: message),
+            accessibilityLearnMoreButtonText: linkedText,
+            learnMoreButtonA11y: learnMoreButtonA11y,
+            hasLearnMoreButton: learnMoreURL != nil
         )
 
         setupSettingDidChange()
+        setupLearnMoreButtonDidTap()
 
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
@@ -67,6 +74,12 @@ class SendDataSetting: BoolSetting {
         }
     }
 
+    private func setupLearnMoreButtonDidTap() {
+        self.learnMoreDidTap = { [weak self] in
+            self?.settingsDelegate?.askedToOpen(url: self?.url, withTitle: self?.title)
+        }
+    }
+
     override var accessibilityIdentifier: String? {
         return a11yId
     }
@@ -76,6 +89,8 @@ class SendDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.askedToOpen(url: url, withTitle: title)
+        if learnMoreURL == nil {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+        }
     }
 }

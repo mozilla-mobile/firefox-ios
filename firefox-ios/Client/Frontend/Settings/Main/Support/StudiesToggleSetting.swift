@@ -15,7 +15,8 @@ class StudiesToggleSetting: BoolSetting {
          settingsDelegate: SupportSettingsDelegate?,
          title: String,
          message: String,
-         linkedText: String) {
+         linkedText: String,
+         learnMoreButtonA11y: String?) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -39,12 +40,17 @@ class StudiesToggleSetting: BoolSetting {
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: title),
             attributedStatusText: statusText,
+            attributedAccessibilityStatusText: NSAttributedString(string: message),
+            accessibilityLearnMoreButtonText: linkedText,
+            learnMoreButtonA11y: learnMoreButtonA11y,
+            hasLearnMoreButton: true,
             settingDidChange: {
                 Experiments.setStudiesSetting($0)
             }
         )
 
         setupSettingDidChange()
+        setupLearnMoreButtonDidTap()
 
         let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
 
@@ -55,6 +61,12 @@ class StudiesToggleSetting: BoolSetting {
     private func setupSettingDidChange() {
         self.settingDidChange = {
             Experiments.setStudiesSetting($0)
+        }
+    }
+
+    private func setupLearnMoreButtonDidTap() {
+        self.learnMoreDidTap = { [weak self] in
+            self?.settingsDelegate?.askedToOpen(url: self?.url, withTitle: self?.title)
         }
     }
 
@@ -81,9 +93,5 @@ class StudiesToggleSetting: BoolSetting {
 
     override var url: URL? {
         return SupportUtils.URLForTopic("ios-studies")
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.askedToOpen(url: url, withTitle: title)
     }
 }
