@@ -27,17 +27,20 @@ open class RustKeychain {
         let errorMessage: String
     }
 
-    func getBaseKeychainQuery(key: Data) -> [String: Any?] {
-        let keychainQueryDictionary: [String: Any?] = [kSecClass as String: kSecClassGenericPassword,
-                                                       kSecAttrAccessGroup as String: self.accessGroup,
+    func getBaseKeychainQuery(key: String) -> [String: Any?] {
+        let encodedIdentifier: Data? = key.data(using: String.Encoding.utf8)
+        var keychainQueryDictionary: [String: Any?] = [kSecClass as String: kSecClassGenericPassword,
                                                        kSecAttrService as String: self.serviceName,
-                                                       kSecAttrGeneric as String: key,
-                                                       kSecAttrAccount as String: key,
+                                                       kSecAttrGeneric as String: encodedIdentifier,
+                                                       kSecAttrAccount as String: encodedIdentifier,
                                                        kSecAttrSynchronizable as String: false]
+       if let accessGroup = self.accessGroup {
+            keychainQueryDictionary[kSecAttrAccessGroup as String] = accessGroup
+        }
         return keychainQueryDictionary
     }
 
-    func queryKeychainForKey(key: Data) -> Result<Data?, Error> {
+    func queryKeychainForKey(key: String) -> Result<String?, Error> {
         var keychainQueryDictionary = getBaseKeychainQuery(key: key)
         keychainQueryDictionary[kSecMatchLimit as String] = kSecMatchLimitOne
         keychainQueryDictionary[kSecReturnData as String] = kCFBooleanTrue
@@ -49,17 +52,22 @@ open class RustKeychain {
             let errMsg = SecCopyErrorMessageString(status, nil)
             return .failure(KeychainError(errorMessage: errMsg as? String ?? ""))
         }
-        return .success(queryResult as? Data)
+
+        guard let data = queryResult as? Data else {
+            return .failure(KeychainError(errorMessage: "Unable to encode query result"))
+        }
+
+        return .success(String(data: data, encoding: .utf8))
     }
 
-    func updateKeychainKey(_ data: Data, key: Data) -> OSStatus {
+    func updateKeychainKey(_ value: String, key: String) -> OSStatus {
         return SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
-                             [kSecValueData: data] as CFDictionary)
+                             [kSecValueData: value.data(using: String.Encoding.utf8)] as CFDictionary)
     }
 
-    func setKeychainKey(_ data: Data, key: Data) -> OSStatus {
+    func setKeychainKey(_ value: String, key: String) -> OSStatus {
         var keychainQueryDictionary = getBaseKeychainQuery(key: key)
-        keychainQueryDictionary[kSecValueData as String] = data
+        keychainQueryDictionary[kSecValueData as String] = value.data(using: String.Encoding.utf8)
         keychainQueryDictionary[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
 
         return SecItemAdd(keychainQueryDictionary as CFDictionary, nil)
