@@ -165,7 +165,7 @@ class SettingsCoordinator: BaseCoordinator,
             return contentBlockerVC
 
         case .tabs:
-            return TabsSettingsViewController(windowUUID: windowUUID)
+            return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)

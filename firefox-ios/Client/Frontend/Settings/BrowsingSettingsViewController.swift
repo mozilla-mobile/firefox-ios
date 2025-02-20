@@ -32,18 +32,15 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                                children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
     }
 
-    // TODO: Laurie - Strings and prefKey
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
         if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
             let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
                                                   titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
-
-            // TODO: Laurie - Remove .Settings.Tabs.TabsSectionTitle),
             settings.append(
                 SettingSection(
-                    title: NSAttributedString(string: "TABS"),
+                    title: NSAttributedString(string: .Settings.Browsing.Tabs),
                     footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
                     children: [inactiveTabsSetting]
                 )
@@ -55,7 +52,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             let offerToOpenCopiedLinksSettings = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: "showClipboardBar",
+                prefKey: PrefsKeys.ShowClipboardBar,
                 defaultValue: false,
                 titleText: .SettingsOfferClipboardBarTitle,
                 statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
@@ -73,7 +70,8 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             linksSettings += [offerToOpenCopiedLinksSettings,
                               showLinksPreviewSettings]
         }
-        settings += [SettingSection(title: NSAttributedString(string: "LINKS"), children: linksSettings)]
+        settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Links),
+                                    children: linksSettings)]
 
         if let profile {
             var mediaSection = [Setting]()
@@ -91,7 +89,8 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 blockOpeningExternalAppsSettings
             ]
 
-            settings += [SettingSection(title: NSAttributedString(string: "MEDIA"), children: mediaSection)]
+            settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Media),
+                                        children: mediaSection)]
         }
 
         return settings

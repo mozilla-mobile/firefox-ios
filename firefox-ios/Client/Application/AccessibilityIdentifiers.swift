@@ -764,20 +764,11 @@ struct AccessibilityIdentifiers {
 
         struct Browsing {
             static let title = "BrowsingSettings"
+            // Laurie?
         }
 
         struct StudiesToggle {
             static let title = "StudiesToggle"
-        }
-
-        struct Tabs {
-            static let title = "TabsSetting"
-
-            struct Customize {
-                static let title = "CUSTOMIZE TAB TRAY"
-                static let inactiveTabsSwitch = "Inactive Tabs"
-                static let doneButton = "Done"
-            }
         }
 
         struct Theme {
