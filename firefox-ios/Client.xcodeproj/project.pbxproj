@@ -237,6 +237,7 @@
 		2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173326629CCD259007F20C7 /* TabScrollControllerTests.swift */; };
 		2173326A29CCF901007F20C7 /* UIPanGestureRecognizerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */; };
 		21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */; };
+		217641B82D651DB900597B6F /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217641B72D651DB900597B6F /* MIMEType.swift */; };
 		2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */; };
 		2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */; };
 		2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */; };
@@ -2682,6 +2683,7 @@
 		2173326629CCD259007F20C7 /* TabScrollControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollControllerTests.swift; sourceTree = "<group>"; };
 		2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPanGestureRecognizerMock.swift; sourceTree = "<group>"; };
 		21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewModelTests.swift; sourceTree = "<group>"; };
+		217641B72D651DB900597B6F /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
 		2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeThemeButton.swift; sourceTree = "<group>"; };
 		2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontSizeLabel.swift; sourceTree = "<group>"; };
 		2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontSizeButton.swift; sourceTree = "<group>"; };
@@ -10427,6 +10429,15 @@
 			path = ThemeSettings;
 			sourceTree = "<group>";
 		};
+		217641B62D651D8600597B6F /* DownloadHelper */ = {
+			isa = PBXGroup;
+			children = (
+				7BA8D1C61BA037F500C8AE9E /* DownloadHelper.swift */,
+				217641B72D651DB900597B6F /* MIMEType.swift */,
+			);
+			path = DownloadHelper;
+			sourceTree = "<group>";
+		};
 		2178A69D291453CC002EC290 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -11873,7 +11884,6 @@
 		8A590C5F28C122FF0032F1AA /* OpenInHelper */ = {
 			isa = PBXGroup;
 			children = (
-				7BA8D1C61BA037F500C8AE9E /* DownloadHelper.swift */,
 				8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */,
 				8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */,
 			);
@@ -13680,6 +13690,7 @@
 				C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */,
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				E17798942BD6B30700F6F0EB /* Toolbars */,
+				217641B62D651D8600597B6F /* DownloadHelper */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
 				C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */,
 				C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */,
@@ -16874,6 +16885,7 @@
 				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
 				8A93F86029D36EBD004159D9 /* Router.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
+				217641B82D651DB900597B6F /* MIMEType.swift in Sources */,
 				219935E92B070F9000E5966F /* TabPanelAction.swift in Sources */,
 				8A5D1CB22A30D756005AD35C /* SiriPageSetting.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,

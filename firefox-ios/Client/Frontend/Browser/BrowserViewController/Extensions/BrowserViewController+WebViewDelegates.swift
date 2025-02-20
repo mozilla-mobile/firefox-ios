@@ -735,25 +735,12 @@ extension BrowserViewController: WKNavigationDelegate {
             present(alert, animated: true)
         }
 
-        // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request,
-                                               response: response,
-                                               cookieStore: cookieStore,
-                                               canShowInWebView: canShowInWebView,
-                                               forceDownload: forceDownload) {
-            // Clear the pending download web view so that subsequent navigations from the same
-            // web view don't invoke another download.
-            pendingDownloadWebView = nil
-
-            let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
-                self?.downloadQueue.enqueue(download)
-            }
-
-            // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
-                                                                        okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
-            }
+        // Check if this response should be downloaded
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                              forceDownload: forceDownload,
+                                              isForMainFrame: navigationResponse.isForMainFrame) {
+            handleDownloadFiles(downloadHelper: downloadHelper)
             decisionHandler(.cancel)
             return
         }
@@ -776,6 +763,22 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         decisionHandler(.allow)
+    }
+
+    func handleDownloadFiles(downloadHelper: DownloadHelper) {
+        // Clear the pending download web view so that subsequent navigations from the same
+        // web view don't invoke another download.
+        pendingDownloadWebView = nil
+
+        let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+            self?.downloadQueue.enqueue(download)
+        }
+
+        // Open our helper and cancel this response from the webview.
+        if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                    okAction: downloadAction) {
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
+        }
     }
 
     /// Tells the delegate that an error occurred during navigation.
