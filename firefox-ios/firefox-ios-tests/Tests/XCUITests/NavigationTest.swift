@@ -345,7 +345,9 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         let switchValue = switchBlockPopUps.value!
         XCTAssertEqual(switchValue as? String, "1")
 
@@ -404,7 +406,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
