@@ -735,25 +735,12 @@ extension BrowserViewController: WKNavigationDelegate {
             present(alert, animated: true)
         }
 
-        // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request,
-                                               response: response,
-                                               cookieStore: cookieStore,
-                                               canShowInWebView: canShowInWebView,
-                                               forceDownload: forceDownload) {
-            // Clear the pending download web view so that subsequent navigations from the same
-            // web view don't invoke another download.
-            pendingDownloadWebView = nil
-
-            let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
-                self?.downloadQueue.enqueue(download)
-            }
-
-            // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
-                                                                        okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
-            }
+        // Check if this response should be downloaded
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                              forceDownload: forceDownload,
+                                              isForMainFrame: navigationResponse.isForMainFrame) {
+            handleDownloadFiles(downloadHelper: downloadHelper)
             decisionHandler(.cancel)
             return
         }
@@ -778,6 +765,54 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
+<<<<<<< HEAD
+=======
+    func handlePDFResponse(_ webView: WKWebView,
+                           tab: Tab,
+                           response: URLResponse,
+                           request: URLRequest) {
+        navigationHandler?.showDocumentLoading()
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
+            let tempPDF = DefaultTemporaryDocument(
+                filename: response.suggestedFilename,
+                request: request,
+                mimeType: MIMEType.PDF,
+                cookies: cookies
+            )
+            tempPDF.onDownloadProgressUpdate = { progress in
+                self?.observeValue(forKeyPath: KVOConstants.estimatedProgress.rawValue,
+                                   of: webView,
+                                   change: [.newKey: progress],
+                                   context: nil)
+            }
+            tempPDF.onDownloadStarted = {
+                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                                   of: webView,
+                                   change: [.newKey: true],
+                                   context: nil)
+            }
+            tab?.enqueueDocument(tempPDF)
+        }
+    }
+
+    func handleDownloadFiles(downloadHelper: DownloadHelper) {
+        // Clear the pending download web view so that subsequent navigations from the same
+        // web view don't invoke another download.
+        pendingDownloadWebView = nil
+
+        let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+            self?.downloadQueue.enqueue(download)
+        }
+
+        // Open our helper and cancel this response from the webview.
+        if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                    okAction: downloadAction) {
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
+        }
+    }
+
+>>>>>>> d032a5124 (Bugfix FXIOS-10917  Firefox on iPadOS fails to download from Google Docs Website (#24840))
     /// Tells the delegate that an error occurred during navigation.
     func webView(
         _ webView: WKWebView,

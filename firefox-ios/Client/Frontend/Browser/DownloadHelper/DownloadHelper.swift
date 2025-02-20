@@ -7,56 +7,6 @@ import Foundation
 import MobileCoreServices
 import WebKit
 import Shared
-import UniformTypeIdentifiers
-
-struct MIMEType {
-    static let Bitmap = "image/bmp"
-    static let CSS = "text/css"
-    static let GIF = "image/gif"
-    static let JavaScript = "text/javascript"
-    static let JPEG = "image/jpeg"
-    static let HTML = "text/html"
-    static let OctetStream = "application/octet-stream"
-    static let Passbook = "application/vnd.apple.pkpass"
-    static let PDF = "application/pdf"
-    static let PlainText = "text/plain"
-    static let PNG = "image/png"
-    static let WebP = "image/webp"
-    static let Calendar = "text/calendar"
-    static let USDZ = "model/vnd.usdz+zip"
-    static let Reality = "model/vnd.reality"
-
-    private static let webViewViewableTypes: [String] = [
-        MIMEType.Bitmap,
-        MIMEType.GIF,
-        MIMEType.JPEG,
-        MIMEType.HTML,
-        MIMEType.PDF,
-        MIMEType.PlainText,
-        MIMEType.PNG,
-        MIMEType.WebP]
-
-    static func canShowInWebView(_ mimeType: String) -> Bool {
-        return webViewViewableTypes.contains(mimeType.lowercased())
-    }
-
-    static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
-        if let uti = UTType(filenameExtension: fileExtension),
-           let mimeType = uti.preferredMIMEType {
-            return mimeType as String
-        }
-
-        return MIMEType.OctetStream
-    }
-
-    static func fileExtensionFromMIMEType(_ mimeType: String) -> String? {
-        if let uti = UTType(mimeType: mimeType),
-           let fileExtension = uti.preferredFilenameExtension {
-            return fileExtension as String
-        }
-        return nil
-    }
-}
 
 class DownloadHelper: NSObject {
     private let request: URLRequest
@@ -74,26 +24,41 @@ class DownloadHelper: NSObject {
     required init?(
         request: URLRequest?,
         response: URLResponse,
-        cookieStore: WKHTTPCookieStore,
-        canShowInWebView: Bool,
-        forceDownload: Bool
+        cookieStore: WKHTTPCookieStore
     ) {
         guard let request = request else { return nil }
-
-        let mimeType = response.mimeType ?? MIMEType.OctetStream
-        let isAttachment = mimeType == MIMEType.OctetStream
-
-        // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
-        // Leaving this here for now, but commented out. Checking this HTTP header is
-        // what Desktop does should we ever decide to change our minds on this.
-        // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
-        // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
-
-        guard isAttachment || !canShowInWebView || forceDownload else { return nil }
 
         self.cookieStore = cookieStore
         self.request = request
         self.preflightResponse = response
+    }
+
+    func shouldDownloadFile(canShowInWebView: Bool,
+                            forceDownload: Bool,
+                            isForMainFrame: Bool) -> Bool {
+        let mimeType = preflightResponse.mimeType ?? MIMEType.OctetStream
+
+        // Handles automatic Blob URL download
+        if mimeType == MIMEType.OctetStream {
+            return true
+        }
+
+        // Handles attachments downloads.
+        // Only supports PDF and Words docs but can be expanded to support more extensions
+        if shouldDownloadAttachment(isForMainFrame: isForMainFrame) {
+            return true
+        }
+
+        // Handles forced downloads && MIMETypes not supported on webview
+        return !canShowInWebView || forceDownload
+    }
+
+    func shouldDownloadAttachment(isForMainFrame: Bool) -> Bool {
+        let contentDisposition = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
+        let isAttachment = contentDisposition?.starts(with: "attachment") ?? false
+        let canBeDownloaded = MIMEType.canBeDownloaded(preflightResponse.mimeType) && !isForMainFrame
+
+        return isAttachment && canBeDownloaded
     }
 
     func downloadViewModel(windowUUID: WindowUUID,
