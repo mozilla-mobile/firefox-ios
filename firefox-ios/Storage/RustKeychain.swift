@@ -27,18 +27,17 @@ open class RustKeychain {
         let errorMessage: String
     }
 
-    func getBaseKeychainQuery(key: String) -> [String: Any?] {
-        let encodedIdentifier: Data? = key.data(using: String.Encoding.utf8)
+    func getBaseKeychainQuery(key: Data) -> [String: Any?] {
         let keychainQueryDictionary: [String: Any?] = [kSecClass as String: kSecClassGenericPassword,
                                                        kSecAttrAccessGroup as String: self.accessGroup,
                                                        kSecAttrService as String: self.serviceName,
-                                                       kSecAttrGeneric as String: encodedIdentifier,
-                                                       kSecAttrAccount as String: encodedIdentifier,
+                                                       kSecAttrGeneric as String: key,
+                                                       kSecAttrAccount as String: key,
                                                        kSecAttrSynchronizable as String: false]
         return keychainQueryDictionary
     }
 
-    func queryKeychainForKey(key: String) -> Result<Data?, Error> {
+    func queryKeychainForKey(key: Data) -> Result<Data?, Error> {
         var keychainQueryDictionary = getBaseKeychainQuery(key: key)
         keychainQueryDictionary[kSecMatchLimit as String] = kSecMatchLimitOne
         keychainQueryDictionary[kSecReturnData as String] = kCFBooleanTrue
@@ -53,12 +52,12 @@ open class RustKeychain {
         return .success(queryResult as? Data)
     }
 
-    func updateKeychainKey(_ data: Data, key: String) -> OSStatus {
+    func updateKeychainKey(_ data: Data, key: Data) -> OSStatus {
         return SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
                              [kSecValueData: data] as CFDictionary)
     }
 
-    func setKeychainKey(_ data: Data, key: String) -> OSStatus {
+    func setKeychainKey(_ data: Data, key: Data) -> OSStatus {
         var keychainQueryDictionary = getBaseKeychainQuery(key: key)
         keychainQueryDictionary[kSecValueData as String] = data
         keychainQueryDictionary[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
