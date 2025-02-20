@@ -44,7 +44,7 @@ extension BrowserViewController {
         guard let tab = tabManager.selectedTab,
               let url = tab.canonicalURL?.displayURL else { return }
 
-        if !contentContainer.hasAnyHomepage {
+        if !contentContainer.hasLegacyHomepage {
             addBookmark(urlString: url.absoluteString, title: tab.title)
         }
     }
