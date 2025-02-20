@@ -38,7 +38,7 @@ struct SimpleToast: ThemeApplicable {
     func showAlertWithText(_ text: String,
                            bottomContainer: UIView,
                            theme: Theme,
-                           bottomConstraintPadding: CGFloat = 16) {
+                           bottomConstraintPadding: CGFloat = 0) {
         toastLabel.text = text
         bottomContainer.addSubview(containerView)
         containerView.addSubview(shadowView)
@@ -50,8 +50,8 @@ struct SimpleToast: ThemeApplicable {
                                                    constant: Toast.UX.toastSidePadding),
             containerView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
-            containerView.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor,
-                                                  constant: -bottomConstraintPadding),
+            containerView.bottomAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
+                                                  constant: bottomConstraintPadding),
 
             shadowView.topAnchor.constraint(equalTo: containerView.topAnchor,
                                             constant: Toast.UX.shadowHorizontalSpacing / 2),

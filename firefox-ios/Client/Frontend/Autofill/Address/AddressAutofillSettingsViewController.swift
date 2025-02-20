@@ -32,8 +32,6 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     // MARK: Views
 
-    var buttonToast: ButtonToast?
-
     /// Hosting controller for the empty state view in address autofill settings.
     var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
@@ -115,10 +113,6 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     private func show(toast: Toast,
                       afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
                       duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
-        if let buttonToast = toast as? ButtonToast {
-            self.buttonToast = buttonToast
-        }
-
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
