@@ -32,6 +32,8 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     // MARK: Views
 
+    var buttonToast: ButtonToast?
+
     /// Hosting controller for the empty state view in address autofill settings.
     var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
@@ -90,13 +92,16 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
             guard let self else { return }
             switch status {
             case let .error(errorType):
-                ActionToast(
-                    text: errorType.message,
-                    bottomContainer: view,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    buttonTitle: errorType.actionTitle,
-                    buttonAction: errorType.action
-                ).show()
+                let viewModel = ButtonToastViewModel(labelText: errorType.message,
+                                                     buttonText: errorType.actionTitle)
+                let toast = ButtonToast(viewModel: viewModel,
+                                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                                        completion: { buttonTap in
+                    if buttonTap {
+                        errorType.action()
+                    }
+                })
+                show(toast: toast)
             default:
                 SimpleToast().showAlertWithText(
                     status.message,
@@ -104,6 +109,24 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
                     theme: themeManager.getCurrentTheme(for: windowUUID)
                 )
             }
+        }
+    }
+
+    private func show(toast: Toast,
+                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        if let buttonToast = toast as? ButtonToast {
+            self.buttonToast = buttonToast
+        }
+
+        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ]
         }
     }
 
