@@ -2713,7 +2713,7 @@ extension String {
         public static let DocumentLoadingLabel = MZLocalizedString(
             key: "WebView.DocumentLoadingLabel.v137",
             tableName: "WebView",
-            value: "Loading ...",
+            value: "Loading…",
             comment: "The label shown while loading a document in the web view's custom document loading UI"
         )
         public static let DocumentLoadingAccessibilityLabel = MZLocalizedString(
