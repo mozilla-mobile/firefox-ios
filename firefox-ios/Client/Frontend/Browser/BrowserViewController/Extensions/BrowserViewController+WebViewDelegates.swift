@@ -369,7 +369,7 @@ extension BrowserViewController: WKUIDelegate {
             .value
             .successValue ?? false
         if isBookmarkedSite {
-            actionBuilder.addRemoveBookmarkLink(url: url,
+            actionBuilder.addRemoveBookmarkLink(urlString: url.absoluteString,
                                                 title: title,
                                                 removeBookmark: self.removeBookmark)
         } else {

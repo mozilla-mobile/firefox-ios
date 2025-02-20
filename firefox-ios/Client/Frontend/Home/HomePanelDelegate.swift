@@ -12,7 +12,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction)
 }
 
 extension HomePanelDelegate {

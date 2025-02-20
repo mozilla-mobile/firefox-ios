@@ -573,8 +573,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func editLatestBookmark() {
-        browserViewController.openBookmarkEditPanel()
+    func editBookmarkForCurrentTab() {
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 
     func showFindInPage() {

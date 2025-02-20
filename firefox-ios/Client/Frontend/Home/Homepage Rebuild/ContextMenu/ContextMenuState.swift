@@ -12,8 +12,8 @@ import Redux
 /// Classes conforming to this protocol can manage adding and removing bookmarks.
 /// Since bookmarks are not using Redux, we use this instead of dispatching an action.
 protocol BookmarksHandlerDelegate: AnyObject {
-    func addBookmark(url: String, title: String?, site: Site?)
-    func removeBookmark(url: URL, title: String?, site: Site?)
+    func addBookmark(urlString: String, title: String?, site: Site?)
+    func removeBookmark(urlString: String, title: String?, site: Site?)
 }
 
 /// State to populate actions for the `PhotonActionSheet` view
@@ -214,15 +214,7 @@ struct ContextMenuState {
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            guard let siteURL = site.url.asURL else {
-                self.logger.log(
-                    "Unable to retrieve URL for \(site.url), unable to remove bookmarks",
-                    level: .warning,
-                    category: .homepage
-                )
-                return
-            }
-            bookmarkDelegate.removeBookmark(url: siteURL, title: site.title, site: site)
+            bookmarkDelegate.removeBookmark(urlString: site.url, title: site.title, site: site)
             // TODO: FXIOS-10171 - Add telemetry
         })
     }
@@ -233,7 +225,7 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             // The method in BVC also handles the toast for this use case
-            bookmarkDelegate.addBookmark(url: site.url, title: site.title, site: site)
+            bookmarkDelegate.addBookmark(urlString: site.url, title: site.title, site: site)
             // TODO: FXIOS-10171 - Add telemetry
         })
     }
