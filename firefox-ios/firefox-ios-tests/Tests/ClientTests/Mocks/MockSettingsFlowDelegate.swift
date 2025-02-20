@@ -66,6 +66,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedTheme() {}
 
+    func pressedBrowsing() {}
+
     // MARK: BrowsingSettingsDelegate
 
     func pressedMailApp() {}

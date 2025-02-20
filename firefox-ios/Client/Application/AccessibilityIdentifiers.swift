@@ -706,6 +706,10 @@ struct AccessibilityIdentifiers {
             static let title = "showClipboardBar"
         }
 
+        struct BlockExternal  {
+            static let title = "blockOpeningExternalApps"
+        }
+
         struct ShowLink {
             static let title = "showLinkPreviews"
         }
@@ -764,7 +768,8 @@ struct AccessibilityIdentifiers {
 
         struct Browsing {
             static let title = "BrowsingSettings"
-            // Laurie?
+            static let tabs = "Tabs"
+            static let inactiveTabsSwitch = "Inactive Tabs"
         }
 
         struct StudiesToggle {

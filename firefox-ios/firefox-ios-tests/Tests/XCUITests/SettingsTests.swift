@@ -144,29 +144,67 @@ class SettingsTests: BaseTestCase {
         mozWaitForElementToExist(table)
         let toolbarElement = table.cells[settingsQuery.SearchBar.searchBarSetting]
         let settingsElements = [
-            table.cells[settingsQuery.DefaultBrowser.defaultBrowser], table.cells[settingsQuery.ConnectSetting.title],
-            table.cells[settingsQuery.Search.title], table.cells[settingsQuery.NewTab.title],
-            table.cells[settingsQuery.Homepage.homeSettings], table.cells[settingsQuery.Tabs.title],
-            table.cells[settingsQuery.OpenWithMail.title], table.cells[settingsQuery.Theme.title],
-            table.cells[settingsQuery.Siri.title], table.cells[settingsQuery.BlockPopUp.title],
-            table.cells[settingsQuery.NoImageMode.title], app.switches[settingsQuery.OfferToOpen.title],
-            table.cells[settingsQuery.Logins.title], app.switches[settingsQuery.ShowLink.title],
-            table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
-            table.cells[settingsQuery.ClearData.title], app.switches[settingsQuery.ClosePrivateTabs.title],
-            table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
-            table.cells[settingsQuery.PrivacyPolicy.title], table.cells[settingsQuery.SendFeedback.title],
+            table.cells[settingsQuery.DefaultBrowser.defaultBrowser],
+            table.cells[settingsQuery.ConnectSetting.title],
+            table.cells[settingsQuery.Search.title],
+            table.cells[settingsQuery.NewTab.title],
+            table.cells[settingsQuery.Homepage.homeSettings],
+            table.cells[settingsQuery.Browsing.title],
+            table.cells[settingsQuery.Theme.title],
+            table.cells[settingsQuery.Siri.title],
+            table.cells[settingsQuery.Logins.title],
+            table.cells[settingsQuery.CreditCards.title],
+            table.cells[settingsQuery.Address.title],
+            table.cells[settingsQuery.ClearData.title],
+            app.switches[settingsQuery.ClosePrivateTabs.title],
+            table.cells[settingsQuery.ContentBlocker.title],
+            table.cells[settingsQuery.Notifications.title],
+            table.cells[settingsQuery.PrivacyPolicy.title],
+            table.cells[settingsQuery.SendFeedback.title],
             table.cells[settingsQuery.ShowIntroduction.title],
             table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
             table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
             table.cells[settingsQuery.SendData.sendCrashReportsTitle],
-            table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],
-            table.cells[settingsQuery.Help.title], table.cells[settingsQuery.RateOnAppStore.title],
-            table.cells[settingsQuery.Licenses.title], table.cells[settingsQuery.YourRights.title]
+            table.cells[settingsQuery.StudiesToggle.title],
+            table.cells[settingsQuery.Version.title],
+            table.cells[settingsQuery.Help.title],
+            table.cells[settingsQuery.RateOnAppStore.title],
+            table.cells[settingsQuery.Licenses.title],
+            table.cells[settingsQuery.YourRights.title]
         ]
         if !iPad() {
             mozWaitForElementToExist(toolbarElement)
             XCTAssertTrue(toolbarElement.isVisible())
         }
+
+        for i in settingsElements {
+            scrollToElement(i)
+            mozWaitForElementToExist(i)
+            XCTAssertTrue(i.isVisible())
+        }
+    }
+
+    func testBrowsingSettingsOptionSubtitles() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        mozWaitForElementToExist(table)
+
+        // Navigate to the Browsing settings screen
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let settingsElements = [
+            table.cells[settingsQuery.Browsing.tabs],
+            table.cells[settingsQuery.OpenWithMail.title],
+            app.switches[settingsQuery.OfferToOpen.title],
+            table.cells[settingsQuery.BlockPopUp.title],
+            table.cells[settingsQuery.NoImageMode.title],
+            app.switches[settingsQuery.ShowLink.title],
+            app.switches[settingsQuery.BlockExternal.title]
+        ]
 
         for i in settingsElements {
             scrollToElement(i)

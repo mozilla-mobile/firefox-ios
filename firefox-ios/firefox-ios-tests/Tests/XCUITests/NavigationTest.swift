@@ -529,10 +529,12 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
     func testOpenExternalLink() {
-        // Disable "Block external links" toggle
+        // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        let switchBlockLinks = app.tables.cells.switches["blockOpeningExternalApps"]
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
         scrollToElement(switchBlockLinks)
         if let switchValue = switchBlockLinks.value as? String, switchValue == "1" {
             switchBlockLinks.waitAndTap()
