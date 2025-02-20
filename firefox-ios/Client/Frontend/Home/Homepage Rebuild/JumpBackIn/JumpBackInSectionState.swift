@@ -55,7 +55,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         }
 
         switch action.actionType {
-        case TabManagerMiddlewareActionType.fetchRecentTabs:
+        case TabManagerMiddlewareActionType.fetchedRecentTabs:
             return handleInitializeAction(for: state, with: action)
         case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
             return handleRemoteTabsAction(for: state, with: action)

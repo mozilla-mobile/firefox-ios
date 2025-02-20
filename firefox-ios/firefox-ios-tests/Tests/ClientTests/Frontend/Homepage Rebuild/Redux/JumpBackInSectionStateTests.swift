@@ -37,7 +37,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
                 windowUUID: .XCTestDefaultUUID,
-                actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
             )
         )
 
