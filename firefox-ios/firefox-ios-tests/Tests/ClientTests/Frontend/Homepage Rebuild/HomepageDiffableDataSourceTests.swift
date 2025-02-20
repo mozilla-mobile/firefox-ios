@@ -38,7 +38,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         dataSource.updateSnapshot(
             state: HomepageState(windowUUID: .XCTestDefaultUUID),
-            numberOfCellsPerRow: 4,
             jumpBackInDisplayConfig: mockSectionConfig
         )
 
@@ -84,7 +83,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         dataSource.updateSnapshot(
             state: updatedState,
-            numberOfCellsPerRow: 4,
             jumpBackInDisplayConfig: mockSectionConfig
         )
 
@@ -113,7 +111,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: updatedState, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(4)), 8)
@@ -138,7 +136,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 21)
@@ -168,7 +166,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
@@ -200,7 +198,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSnapshot(state: state, numberOfCellsPerRow: 4, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)

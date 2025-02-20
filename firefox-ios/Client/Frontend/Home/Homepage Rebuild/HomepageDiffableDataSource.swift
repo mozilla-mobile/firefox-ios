@@ -63,7 +63,6 @@ final class HomepageDiffableDataSource:
 
     func updateSnapshot(
         state: HomepageState,
-        numberOfCellsPerRow: Int,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
@@ -78,7 +77,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
         }
 
-        if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
+        if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
         }
@@ -120,17 +119,16 @@ final class HomepageDiffableDataSource:
     ///   - textColor: text color from wallpaper configuration
     private func getTopSites(
         with topSitesState: TopSitesSectionState,
-        and textColor: TextColor?,
-        numberOfCellsPerRow: Int
-    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        and textColor: TextColor?
+    ) -> ([HomepageDiffableDataSource.HomeItem], Int)? {
         guard topSitesState.shouldShowSection else { return nil }
         let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * numberOfCellsPerRow
+            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
         ).compactMap {
             .topSite($0, textColor)
         }
         guard !topSites.isEmpty else { return nil }
-        return topSites
+        return (topSites, topSitesState.numberOfTilesPerRow)
     }
 
     private func getJumpBackInTabs(

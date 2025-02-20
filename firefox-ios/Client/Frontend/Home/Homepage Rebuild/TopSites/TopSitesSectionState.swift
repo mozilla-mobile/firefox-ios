@@ -14,7 +14,7 @@ struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     let topSitesData: [TopSiteConfiguration]
     let numberOfRows: Int
-    let numberOfTilesPerRow: Int?
+    let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
@@ -27,7 +27,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: nil,
+            numberOfTilesPerRow: HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards,
             shouldShowSection: shouldShowSection
         )
     }
@@ -36,7 +36,7 @@ struct TopSitesSectionState: StateType, Equatable {
         windowUUID: WindowUUID,
         topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
-        numberOfTilesPerRow: Int?,
+        numberOfTilesPerRow: Int,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
@@ -59,7 +59,7 @@ struct TopSitesSectionState: StateType, Equatable {
             return handleUpdatedNumberOfRowsAction(action: action, state: state)
         case TopSitesActionType.toggleShowSectionSetting:
             return handleToggleShowSectionSettingAction(action: action, state: state)
-        case HomepageActionType.viewWillTransition:
+        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
             return handleViewChangeAction(action: action, state: state)
         default:
             return defaultState(from: state)

@@ -116,6 +116,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -232,11 +233,8 @@ final class HomepageViewController: UIViewController,
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
 
-        let numberOfCellsPerRow = state.topSitesState.numberOfTilesPerRow ?? numberOfTilesPerRow(for: availableWidth)
-
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfCellsPerRow,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
