@@ -706,7 +706,7 @@ struct AccessibilityIdentifiers {
             static let title = "showClipboardBar"
         }
 
-        struct BlockExternal  {
+        struct BlockExternal {
             static let title = "blockOpeningExternalApps"
         }
 
