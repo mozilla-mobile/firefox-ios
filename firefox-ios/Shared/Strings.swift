@@ -7581,8 +7581,8 @@ extension String {
             public static let FileNameText = MZLocalizedString(
                 key: "LiveActivity.Downloads.FileNameText.v137",
                 tableName: "LiveActivity",
-                value: "Downloading \"%@\"",
-                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the filename of the file being downloaded (e.g. Downloading \"MyFile.pdf\")")
+                value: "Downloading “%@”",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the filename of the file being downloaded (e.g. Downloading “MyFile.pdf”)")
             public static let FileCountText = MZLocalizedString(
                 key: "LiveActivity.Downloads.FileCountText.v137",
                 tableName: "LiveActivity",
