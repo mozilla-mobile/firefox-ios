@@ -15,7 +15,7 @@ protocol TabCellDelegate: AnyObject {
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let borderWidth: CGFloat = 3.0
-        static let cornerRadius: CGFloat = 6
+        static let cornerRadius: CGFloat = 12
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconYOffset: CGFloat = 10.0
         static let faviconSize: CGFloat = 20
