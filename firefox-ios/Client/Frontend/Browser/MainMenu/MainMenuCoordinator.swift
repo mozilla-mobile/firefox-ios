@@ -8,7 +8,7 @@ import MenuKit
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
-    func editLatestBookmark()
+    func editBookmarkForCurrentTab()
     func openURLInNewTab(_ url: URL?)
     func openNewTab(inPrivateMode: Bool)
     func showLibraryPanel(_ panel: Route.HomepanelSection)
@@ -82,7 +82,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showLibraryPanel(.downloads)
 
             case .editBookmark:
-                self.navigationHandler?.editLatestBookmark()
+                self.navigationHandler?.editBookmarkForCurrentTab()
 
             case .findInPage:
                 self.navigationHandler?.showFindInPage()

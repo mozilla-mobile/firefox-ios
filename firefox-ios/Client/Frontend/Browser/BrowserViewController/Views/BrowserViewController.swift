@@ -709,9 +709,9 @@ class BrowserViewController: UIViewController,
                 .removeShortcut,
                 .removeFromReadingList:
             showToast()
-        case .addBookmark:
+        case .addBookmark(let urlString):
             if isBookmarkRefactorEnabled {
-                showBookmarkToast(action: .add)
+                showBookmarkToast(urlString: urlString, action: .add)
             } else {
                 showToast()
             }
@@ -1692,13 +1692,13 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func addBookmark(url: String, title: String? = nil, site: Site? = nil) {
+    func addBookmark(urlString: String, title: String? = nil, site: Site? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
-            title = url
+            title = urlString
         }
 
-        let shareItem = ShareItem(url: url, title: title)
+        let shareItem = ShareItem(url: urlString, title: title)
 
         Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
@@ -1711,17 +1711,17 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-        showBookmarkToast(action: .add)
+        showBookmarkToast(urlString: urlString, action: .add)
     }
 
-    func removeBookmark(url: URL, title: String?, site: Site? = nil) {
-        profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+    func removeBookmark(urlString: String, title: String?, site: Site? = nil) {
+        profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
+            self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
         }
     }
 
-    private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
+    private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
             if !isBookmarkRefactorEnabled {
@@ -1735,15 +1735,20 @@ class BrowserViewController: UIViewController,
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
                     let folderName = bookmarkFolder.title
                     let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                    self.showToast(message: message, toastAction: .bookmarkPage)
+                    self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                 }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel, toastAction: .bookmarkPage)
+                showToast(
+                    urlString,
+                    title,
+                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+                    toastAction: .bookmarkPage
+                )
             }
         case .remove:
             self.showToast(
-                bookmarkURL,
+                urlString,
                 title,
                 message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
                 toastAction: .removeBookmark
@@ -1752,7 +1757,7 @@ class BrowserViewController: UIViewController,
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
-    internal func openBookmarkEditPanel() {
+    internal func openBookmarkEditPanel(urlString: String? = nil) {
         guard !profile.isShutdown else { return }
 
         let bookmarksTelemetry = BookmarksTelemetry()
@@ -1760,8 +1765,8 @@ class BrowserViewController: UIViewController,
 
         // Open refactored bookmark edit view
         if isBookmarkRefactorEnabled {
-            guard let url = tabManager.selectedTab?.url else { return }
-            profile.places.getBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+            guard let urlString else { return }
+            profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
                 guard let bookmarkItem = result.successValue?.first,
                 let parentGuid = bookmarkItem.parentGUID else { return }
                 self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
@@ -3806,8 +3811,8 @@ extension BrowserViewController: HomePanelDelegate {
         navigationHandler?.show(settings: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
-        showBookmarkToast(bookmarkURL: url, action: action)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction) {
+        showBookmarkToast(urlString: urlString, action: action)
     }
 
     @objc
