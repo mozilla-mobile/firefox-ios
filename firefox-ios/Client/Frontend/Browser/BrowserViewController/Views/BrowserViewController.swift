@@ -444,34 +444,32 @@ class BrowserViewController: UIViewController,
 
         switchToolbarIfNeeded()
 
-        DispatchQueue.main.async { [self] in
-            if isToolbarRefactorEnabled {
-                if showNavToolbar {
-                    navigationToolbarContainer.isHidden = false
-                    navigationToolbarContainer.applyTheme(theme: currentTheme())
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    navigationToolbarContainer.isHidden = true
-                }
-                updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        if isToolbarRefactorEnabled {
+            if showNavToolbar {
+                navigationToolbarContainer.isHidden = false
+                navigationToolbarContainer.applyTheme(theme: currentTheme())
+                updateTabCountUsingTabManager(self.tabManager)
             } else {
-                legacyUrlBar?.topTabsIsShowing = showTopTabs
-                legacyUrlBar?.setShowToolbar(!showNavToolbar)
+                navigationToolbarContainer.isHidden = true
+            }
+            updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        } else {
+            legacyUrlBar?.topTabsIsShowing = showTopTabs
+            legacyUrlBar?.setShowToolbar(!showNavToolbar)
 
-                if showNavToolbar {
-                    toolbar.isHidden = false
-                    toolbar.tabToolbarDelegate = self
-                    toolbar.applyUIMode(
-                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                        theme: currentTheme()
-                    )
-                    toolbar.applyTheme(theme: currentTheme())
-                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    toolbar.tabToolbarDelegate = nil
-                    toolbar.isHidden = true
-                }
+            if showNavToolbar {
+                toolbar.isHidden = false
+                toolbar.tabToolbarDelegate = self
+                toolbar.applyUIMode(
+                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                    theme: currentTheme()
+                )
+                toolbar.applyTheme(theme: currentTheme())
+                handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                updateTabCountUsingTabManager(self.tabManager)
+            } else {
+                toolbar.tabToolbarDelegate = nil
+                toolbar.isHidden = true
             }
         }
         appMenuBadgeUpdate()
@@ -1201,7 +1199,9 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateToolbarStateForTraitCollection(traitCollection)
+        DispatchQueue.main.async { [self] in
+            updateToolbarStateForTraitCollection(traitCollection)
+        }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.applyThemeUpdatesToWindows()
         }
@@ -1254,8 +1254,6 @@ class BrowserViewController: UIViewController,
     }
 
     override func updateViewConstraints() {
-        super.updateViewConstraints()
-
         NSLayoutConstraint.activate([
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1298,6 +1296,8 @@ class BrowserViewController: UIViewController,
         } else {
             adjustBottomSearchBarForKeyboard()
         }
+
+        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
