@@ -6,9 +6,16 @@ import Common
 import Redux
 
 final class HomepageAction: Action {
-    var showiPadSetup: Bool?
+    let showiPadSetup: Bool?
+    let numberOfTopSitesPerRow: Int?
 
-    init(showiPadSetup: Bool? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+    init(
+        numberOfTopSitesPerRow: Int? = nil,
+        showiPadSetup: Bool? = nil,
+        windowUUID: WindowUUID,
+        actionType: any ActionType
+    ) {
+        self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.showiPadSetup = showiPadSetup
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
