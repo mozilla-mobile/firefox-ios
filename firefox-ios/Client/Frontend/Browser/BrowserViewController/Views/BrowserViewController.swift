@@ -1846,11 +1846,11 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        handleMiddleButtonState(.home)
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         }
-        currentMiddleButtonState = state
+        handleMiddleButtonState(.home)
+        currentMiddleButtonState = .home
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
