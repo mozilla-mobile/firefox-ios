@@ -135,7 +135,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let jumpBackInSetting = BoolSetting(
             with: .jumpBackIn,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
-        )
+        ) { value in
+            store.dispatch(
+                JumpBackInAction(
+                    isEnabled: value,
+                    windowUUID: self.windowUUID,
+                    actionType: JumpBackInActionType.toggleShowSectionSetting
+                )
+            )
+        }
 
         let historyHighlightsSetting = BoolSetting(
             with: .historyHighlights,

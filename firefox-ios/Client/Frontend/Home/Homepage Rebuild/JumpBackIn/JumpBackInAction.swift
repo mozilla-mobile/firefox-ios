@@ -6,13 +6,16 @@ import Common
 import Redux
 
 final class JumpBackInAction: Action {
+    let isEnabled: Bool?
     let tab: Tab?
 
     init(
+        isEnabled: Bool? = nil,
         tab: Tab? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.isEnabled = isEnabled
         self.tab = tab
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -22,4 +25,5 @@ enum JumpBackInActionType: ActionType {
     case fetchLocalTabs
     case fetchRemoteTabs
     case tapOnCell
+    case toggleShowSectionSetting
 }
