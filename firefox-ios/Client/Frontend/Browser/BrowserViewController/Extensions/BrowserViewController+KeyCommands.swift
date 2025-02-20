@@ -44,13 +44,8 @@ extension BrowserViewController {
         guard let tab = tabManager.selectedTab,
               let url = tab.canonicalURL?.displayURL else { return }
 
-<<<<<<< HEAD
-        if !contentContainer.hasLegacyHomepage {
-            addBookmark(url: url.absoluteString, title: tab.title)
-=======
         if !contentContainer.hasAnyHomepage {
             addBookmark(urlString: url.absoluteString, title: tab.title)
->>>>>>> 06b380e01 (Bugfix FXIOS-11223 [Bookmarks Evolution] Restore bookmark toast edit button functionality (#24838))
         }
     }
 
