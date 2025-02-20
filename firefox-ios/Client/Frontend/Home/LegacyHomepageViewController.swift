@@ -893,8 +893,8 @@ extension LegacyHomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
-        homePanelDelegate?.homePanelDidRequestBookmarkToast(url: url, action: action)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(urlString: urlString, action: action)
     }
 }
 

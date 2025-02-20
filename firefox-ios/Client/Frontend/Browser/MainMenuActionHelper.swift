@@ -12,7 +12,7 @@ import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
-    func addBookmark(url: String, title: String?, site: Site?)
+    func addBookmark(urlString: String, title: String?, site: Site?)
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
@@ -20,7 +20,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 
     func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
-    func showToast(_ bookmarkURL: URL?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
+    func showToast(_ bookmarkURL: String?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
@@ -31,8 +31,8 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 }
 
 extension ToolBarActionMenuDelegate {
-    func showToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
-        showToast(bookmarkURL, title, message: message, toastAction: toastAction)
+    func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
+        showToast(urlString, title, message: message, toastAction: toastAction)
     }
 }
 
@@ -734,7 +734,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             else { return }
 
             // The method in BVC also handles the toast for this use case
-            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, site: nil)
+            self.delegate?.addBookmark(urlString: url.absoluteString, title: tab.title, site: nil)
             let bookmarksTelemetry = BookmarksTelemetry()
             bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
         }

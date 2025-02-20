@@ -52,14 +52,21 @@ class ActionProviderBuilder {
         )
     }
 
-    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?, Site?) -> Void) {
+    func addRemoveBookmarkLink(
+        urlString: String,
+        title: String?,
+        removeBookmark: @escaping (
+            String,
+            String?,
+            Site?
+        ) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
             ) { _ in
-                removeBookmark(url, title, nil)
+                removeBookmark(urlString, title, nil)
                 let bookmarksTelemetry = BookmarksTelemetry()
                 bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
             }

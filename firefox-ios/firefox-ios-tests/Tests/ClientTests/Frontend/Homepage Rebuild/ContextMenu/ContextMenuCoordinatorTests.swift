@@ -64,6 +64,6 @@ final class ContextMenuCoordinatorTests: XCTestCase {
 }
 
 class MockBookmarksHandlerDelegate: BookmarksHandlerDelegate {
-    func addBookmark(url: String, title: String?, site: Site?) { }
-    func removeBookmark(url: URL, title: String?, site: Site?) { }
+    func addBookmark(urlString: String, title: String?, site: Site?) { }
+    func removeBookmark(urlString: String, title: String?, site: Site?) { }
 }
