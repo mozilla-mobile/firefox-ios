@@ -38,6 +38,11 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var accessoryArrowView: UIImageView = .build()
 
+    private var isIconHidden: Bool {
+        guard let model else { return true }
+        return !model.hasSubmenu || model.isActive
+    }
+
     // MARK: - Properties
     public var model: MenuElement?
 
@@ -83,7 +88,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin),
 
             accessoryArrowView.leadingAnchor.constraint(equalTo: contentStackView.trailingAnchor,
-                                                        constant: UX.contentMargin),
+                                                        constant: isIconHidden ? -UX.iconSize : UX.contentMargin),
             accessoryArrowView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.contentMargin),
             accessoryArrowView.centerYAnchor.constraint(equalTo: centerYAnchor),
             accessoryArrowView.widthAnchor.constraint(equalToConstant: UX.iconSize),
@@ -107,7 +112,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
-        accessoryArrowView.isHidden = !model.hasSubmenu || model.isActive ? true : false
+        accessoryArrowView.isHidden = isIconHidden ? true : false
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary

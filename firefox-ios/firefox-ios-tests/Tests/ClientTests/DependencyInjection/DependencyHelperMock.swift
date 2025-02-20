@@ -10,6 +10,7 @@ import TabDataStore
 
 class DependencyHelperMock {
     func bootstrapDependencies(
+        injectedWindowManager: WindowManager? = nil,
         injectedTabManager: TabManager? = nil,
         injectedMicrosurveyManager: MicrosurveyManager? = nil,
         injectedPocketManager: PocketManagerProvider? = nil
@@ -28,7 +29,9 @@ class DependencyHelperMock {
         AppContainer.shared.register(service: diskImageStore)
 
         let windowUUID = WindowUUID.XCTestDefaultUUID
-        let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
+        let windowManager: WindowManager = injectedWindowManager ?? MockWindowManager(
+            wrappedManager: WindowManagerImplementation()
+        )
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile,
                                                        uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),

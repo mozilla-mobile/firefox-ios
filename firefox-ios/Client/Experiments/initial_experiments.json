@@ -85,75 +85,6 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "ios-search-bar-placement-v2-treatment-a-rollout",
-      "id": "ios-search-bar-placement-v2-treatment-a-rollout",
-      "arguments": {},
-      "application": "org.mozilla.ios.Firefox",
-      "appName": "firefox_ios",
-      "appId": "org.mozilla.ios.Firefox",
-      "channel": "release",
-      "userFacingName": "iOS Search Bar Placement v2 - Treatment A Rollout",
-      "userFacingDescription": "Search Bar Placement",
-      "isEnrollmentPaused": false,
-      "isRollout": true,
-      "bucketConfig": {
-        "randomizationUnit": "nimbus_id",
-        "namespace": "ios-search-release-mobile_first_run-rollout-1",
-        "start": 0,
-        "count": 10000,
-        "total": 10000
-      },
-      "featureIds": [
-        "search"
-      ],
-      "probeSets": [],
-      "outcomes": [],
-      "branches": [
-        {
-          "slug": "treatment-a",
-          "ratio": 1,
-          "feature": {
-            "featureId": "this-is-included-for-mobile-pre-96-support",
-            "enabled": false,
-            "value": {}
-          },
-          "features": [
-            {
-              "featureId": "search",
-              "enabled": true,
-              "value": {
-                "awesome-bar": {
-                  "position": {
-                    "is-position-feature-enabled": true,
-                    "is-bottom": false,
-                    "is-toolbar-cfr-on": false
-                  }
-                }
-              }
-            }
-          ]
-        }
-      ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('113.!') >= 0)))",
-      "startDate": "2023-04-17",
-      "enrollmentEndDate": null,
-      "endDate": null,
-      "proposedDuration": 28,
-      "proposedEnrollment": 7,
-      "referenceBranch": "treatment-a",
-      "featureValidationOptOut": false,
-      "localizations": null,
-      "locales": null,
-      "publishedDate": null,
-      "isFirefoxLabsOptIn": false,
-      "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null,
-      "firefoxLabsDescriptionLinks": null,
-      "firefoxLabsGroup": null,
-      "requiresRestart": false
-    },
-    {
-      "schemaVersion": "1.12.0",
       "slug": "long-term-holdback-2025-h1-growth-ios",
       "id": "long-term-holdback-2025-h1-growth-ios",
       "arguments": {},
@@ -240,7 +171,7 @@
       "channel": "release",
       "userFacingName": "New Toolbar iOS - Phase 1 Experiment Share + Home",
       "userFacingDescription": "New toolbar experiment.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -298,7 +229,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('135.1.0') >= 0)))",
       "startDate": "2025-02-06",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2025-02-14",
       "endDate": null,
       "proposedDuration": 42,
       "proposedEnrollment": 14,
