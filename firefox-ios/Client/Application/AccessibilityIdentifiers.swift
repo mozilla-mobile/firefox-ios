@@ -768,7 +768,7 @@ struct AccessibilityIdentifiers {
 
         struct Browsing {
             static let title = "BrowsingSettings"
-            static let tabs = "Tabs"
+            static let tabs = "TABS"
             static let inactiveTabsSwitch = "Inactive Tabs"
         }
 

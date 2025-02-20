@@ -114,12 +114,15 @@ class SettingsTests: BaseTestCase {
         // Select no images or hide images, check it's hidden or not
         waitUntilPageLoad()
 
-        // Select hide images
+        // Select hide images under Browsing Settings page
         let blockImagesSwitch = app.otherElements.tables.cells.switches[
             AccessibilityIdentifiers.Settings.BlockImages.title
         ]
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+
         mozWaitForElementToExist(blockImagesSwitch)
         app.swipeUp()
         navigator.performAction(Action.ToggleNoImageMode)
@@ -197,7 +200,7 @@ class SettingsTests: BaseTestCase {
 
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let settingsElements = [
-            table.cells[settingsQuery.Browsing.tabs],
+            app.switches[settingsQuery.Browsing.inactiveTabsSwitch],
             table.cells[settingsQuery.OpenWithMail.title],
             app.switches[settingsQuery.OfferToOpen.title],
             table.cells[settingsQuery.BlockPopUp.title],

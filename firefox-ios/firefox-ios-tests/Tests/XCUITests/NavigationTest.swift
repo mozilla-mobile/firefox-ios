@@ -358,9 +358,12 @@ class NavigationTest: BaseTestCase {
         let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
 
-        // Now disable the Block PopUps option
+        // Now disable the Browsing -> Block PopUps option
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
