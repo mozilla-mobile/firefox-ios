@@ -88,7 +88,7 @@ We use [SwiftLint](https://github.com/realm/SwiftLint) to enforce Swift style an
     cd firefox-ios
     sh ./bootstrap.sh
     ```
-5. Open `Client.xcodeproj` in Xcode.
+5. Open `./firefox-ios/Client.xcodeproj` in Xcode.
 6. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
 7. Select the destination device you want to build on.
 8. Run the app with `Cmd + R` or by pressing the `build and run` button.
