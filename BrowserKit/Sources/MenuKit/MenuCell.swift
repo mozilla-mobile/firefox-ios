@@ -62,7 +62,9 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         self.accessoryArrowView.image =
-        UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
         self.isAccessibilityElement = true
         self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId
