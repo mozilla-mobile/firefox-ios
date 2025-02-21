@@ -97,7 +97,7 @@ final class PasswordGeneratorMiddleware {
         passwordGeneratorTelemetry.usePasswordButtonPressed()
         if let escapedPassword = escapeString(string: password) {
             let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
-            frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
+            frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (_, error) in
                 if error != nil {
                     self.logger.log("Error filling in password info",
                                     level: .warning,

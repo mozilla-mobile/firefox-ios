@@ -19,7 +19,7 @@ class ExperimentsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         navigationItem.title = "Experiments"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { item in
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
             self.showSettings()
         }
 

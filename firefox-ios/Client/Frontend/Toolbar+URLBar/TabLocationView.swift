@@ -231,7 +231,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
-            reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize)
         ])
 
         // Setup UIDragInteraction to handle dragging the location

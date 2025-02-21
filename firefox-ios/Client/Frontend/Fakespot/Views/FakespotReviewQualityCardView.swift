@@ -243,7 +243,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
             collapsibleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             collapsibleContainer.topAnchor.constraint(equalTo: topAnchor),
             collapsibleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collapsibleContainer.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         adjustLayout()
     }

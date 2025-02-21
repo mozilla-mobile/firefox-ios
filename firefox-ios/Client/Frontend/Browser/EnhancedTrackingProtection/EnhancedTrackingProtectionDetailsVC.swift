@@ -9,8 +9,8 @@ import SiteImageView
 
 class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     // MARK: - UI
-    private let scrollView: UIScrollView = .build { scrollView in }
-    private let baseView: UIView = .build { view in }
+    private let scrollView: UIScrollView = .build { _ in }
+    private let baseView: UIView = .build { _ in }
     private let siteTitleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.websiteTitle
     }

@@ -171,7 +171,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
 
             footerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             footerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            footerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            footerView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 

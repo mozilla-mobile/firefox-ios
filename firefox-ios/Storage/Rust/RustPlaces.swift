@@ -124,7 +124,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     }
 
     private func withWriter<T>(
-        _ callback: @escaping(_ connection: PlacesWriteConnection) throws -> T
+        _ callback: @escaping (_ connection: PlacesWriteConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
@@ -184,7 +184,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     }
 
     private func withReader<T>(
-        _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
+        _ callback: @escaping (_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
@@ -552,11 +552,11 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     public func noteHistoryMetadataObservation(key: HistoryMetadataKey,
                                                observation: HistoryMetadataObservation,
                                                completion: @escaping () -> Void) {
-        let deferredResponse = withReader { connection in
+        let deferredResponse = withReader { _ in
             return self.noteHistoryMetadataObservation(key: key, observation: observation)
         }
 
-        deferredResponse.upon { result in
+        deferredResponse.upon { _ in
             completion()
         }
     }

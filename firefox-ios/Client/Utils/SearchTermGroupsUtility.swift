@@ -126,7 +126,7 @@ class SearchTermGroupsUtility {
         var itemGroupData: [String: [T]] = [:]
         var itemsInGroups = [T]()
 
-        outeritemLoop: for item in items {
+        for item in items {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
                 .contains(where: { metadata in
                 var stringURL: String = ""

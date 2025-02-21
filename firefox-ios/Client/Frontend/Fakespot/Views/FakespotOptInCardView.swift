@@ -129,7 +129,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
             contentStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor,
                                                       constant: UX.contentStackHorizontalPadding),
             contentStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor,
-                                                       constant: -UX.contentStackHorizontalPadding),
+                                                       constant: -UX.contentStackHorizontalPadding)
         ])
 
         contentStackView.setCustomSpacing(UX.buttonAdjustedVerticalSpacing, after: bodyLabel)

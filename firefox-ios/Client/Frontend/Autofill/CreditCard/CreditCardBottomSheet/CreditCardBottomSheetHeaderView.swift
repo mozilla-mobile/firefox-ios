@@ -113,7 +113,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
                 mainContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
                 mainContainerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
                 mainContainerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-                mainContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing),
+                mainContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing)
             ]
         )
     }

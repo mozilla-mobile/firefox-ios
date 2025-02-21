@@ -39,7 +39,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let telemetryWrapper = TrackingProtectionTelemetry()
 
     // MARK: - UI
-    private let scrollView: UIScrollView = .build { scrollView in }
+    private let scrollView: UIScrollView = .build { _ in }
     private let baseView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
@@ -138,7 +138,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             baseView.widthAnchor.constraint(
                 equalTo: scrollView.widthAnchor,
                 constant: -2 * TPMenuUX.UX.horizontalMargin
-            ),
+            )
         ]
 
         constraints.append(contentsOf: contentViewContraints)

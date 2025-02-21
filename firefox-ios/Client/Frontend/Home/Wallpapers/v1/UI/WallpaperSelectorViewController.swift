@@ -165,7 +165,7 @@ private extension WallpaperSelectorViewController {
 
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
 
@@ -181,7 +181,7 @@ private extension WallpaperSelectorViewController {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
-        let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { _, environment in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(WallpaperSelectorViewController.UX.cardWidth),
                 heightDimension: .fractionalHeight(1.0)

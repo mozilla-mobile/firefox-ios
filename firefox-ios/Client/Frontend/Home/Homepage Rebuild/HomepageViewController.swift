@@ -265,7 +265,7 @@ final class HomepageViewController: UIViewController,
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -331,7 +331,7 @@ final class HomepageViewController: UIViewController,
 
         dataSource = HomepageDiffableDataSource(
             collectionView: collectionView
-        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { [weak self] (_, indexPath, item) -> UICollectionViewCell? in
             return self?.configureCell(for: item, at: indexPath)
         }
 

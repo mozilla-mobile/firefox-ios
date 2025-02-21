@@ -59,7 +59,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         // Make sure the year saved is a 4 digit year and not 2 digit
         // 2000 because that is our current period
         XCTAssertTrue(decryptedCreditCard.ccExpYear > 2000)
-        subject.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
+        subject.saveCreditCard(with: decryptedCreditCard) { _, _ in
             XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
@@ -73,13 +73,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let expectationSave = expectation(description: "wait for credit card fields to be saved")
         let expectationUpdate = expectation(description: "wait for credit card fields to be updated")
 
-        subject.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
+        subject.saveCreditCard(with: samplePlainTextCard) { creditCard, _ in
             XCTAssertEqual(self.autofill.addCreditCardCalledCount, 1)
             expectationSave.fulfill()
             subject.state = .update
             subject.updateCreditCard(for: creditCard?.guid,
                                      with: self.samplePlainTextCard
-            ) { didUpdate, error in
+            ) { _, _ in
                 XCTAssertEqual(self.autofill.updateCreditCardCalledCount, 1)
                 expectationUpdate.fulfill()
             }
@@ -394,7 +394,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.creditCard = nil
         subject.decryptedCreditCard = nil
 
-        subject.updateCreditCardList(queue: dispatchQueue) { cards in
+        subject.updateCreditCardList(queue: dispatchQueue) { _ in
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0)

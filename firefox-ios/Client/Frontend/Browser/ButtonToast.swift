@@ -31,7 +31,7 @@ class ButtonToast: Toast {
         stackView.spacing = UX.padding
     }
 
-    private var imageView: UIImageView = .build { imageView in }
+    private var imageView: UIImageView = .build { _ in }
 
     private var labelStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical

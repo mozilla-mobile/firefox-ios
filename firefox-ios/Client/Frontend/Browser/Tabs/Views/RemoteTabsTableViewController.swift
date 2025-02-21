@@ -115,7 +115,7 @@ class RemoteTabsTableViewController: UITableViewController,
             emptyView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
             emptyView.topAnchor.constraint(equalTo: tableView.topAnchor),
             emptyView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            emptyView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
         ])
 
         reloadUI()

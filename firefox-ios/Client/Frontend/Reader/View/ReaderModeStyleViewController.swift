@@ -66,7 +66,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             fontTypeRow.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
             fontTypeRow.leftAnchor.constraint(equalTo: view.leftAnchor),
             fontTypeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            fontTypeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
+            fontTypeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight)
         ])
 
         fontTypeButtons = [
@@ -87,14 +87,14 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             fontSizeRow.topAnchor.constraint(equalTo: separatorLines[0].bottomAnchor),
             fontSizeRow.leftAnchor.constraint(equalTo: view.leftAnchor),
             fontSizeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            fontSizeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
+            fontSizeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight)
         ])
 
         fontSizeRow.addSubview(fontSizeLabel)
 
         NSLayoutConstraint.activate([
             fontSizeLabel.centerXAnchor.constraint(equalTo: fontSizeRow.centerXAnchor),
-            fontSizeLabel.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor),
+            fontSizeLabel.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor)
         ])
 
         fontSizeButtons = [
@@ -145,7 +145,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
                 brightnessRow.bottomAnchor.constraint(
                     equalTo: view.bottomAnchor,
                     constant: viewModel.brightnessRowOffset
-                ),
+                )
             ]
         )
 
@@ -299,10 +299,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             switch button.fontSizeAction {
             case .bigger:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isLargest()
-                break
             case .smaller:
                 button.isEnabled = !viewModel.readerModeStyle.fontSize.isSmallest()
-                break
             case .reset:
                 break
             }

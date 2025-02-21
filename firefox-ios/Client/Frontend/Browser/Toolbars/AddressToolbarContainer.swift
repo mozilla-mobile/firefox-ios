@@ -233,7 +233,7 @@ final class AddressToolbarContainer: UIView,
 
         NSLayoutConstraint.activate([
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
 
         setupToolbarConstraints()

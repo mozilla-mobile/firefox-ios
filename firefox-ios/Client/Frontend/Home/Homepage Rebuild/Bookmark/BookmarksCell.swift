@@ -93,7 +93,7 @@ final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, 
             itemTitle.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
             itemTitle.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
             itemTitle.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                              constant: -UX.generalSpacing),
+                                              constant: -UX.generalSpacing)
         ])
     }
 

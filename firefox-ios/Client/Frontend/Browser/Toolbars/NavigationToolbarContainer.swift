@@ -88,7 +88,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
             toolbar.topAnchor.constraint(equalTo: topAnchor),
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 

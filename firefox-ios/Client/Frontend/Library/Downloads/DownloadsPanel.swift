@@ -120,7 +120,6 @@ class DownloadsPanel: UIViewController,
                     self.emptyStateOverlayView.removeFromSuperview()
                 }
                 self.emptyStateOverlayView = self.createEmptyStateOverlayView()
-                break
             case .DownloadPanelFileWasDeleted:
                 guard let uuid = notification.windowUUID,
                       uuid != self.windowUUID else { return }

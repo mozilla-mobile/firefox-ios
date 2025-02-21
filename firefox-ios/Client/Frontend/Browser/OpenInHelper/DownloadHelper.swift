@@ -134,7 +134,7 @@ class DownloadHelper: NSObject {
             return 80
         }
 
-        filenameItem.customRender = { label, contentView in
+        filenameItem.customRender = { label, _ in
             label.numberOfLines = 2
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping

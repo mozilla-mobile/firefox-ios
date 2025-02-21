@@ -38,7 +38,7 @@ class SearchEnginesManagerTests: XCTestCase {
         // Verify that the set of shipped engines includes the expected subset.
         let expectation = expectation(description: "Completed parse engines")
 
-        searchEnginesManager.getOrderedEngines { result in
+        searchEnginesManager.getOrderedEngines { _ in
             XCTAssertEqual(self.searchEnginesManager.orderedEngines.count, 6)
             expectation.fulfill()
         }
@@ -188,7 +188,7 @@ class SearchEnginesManagerTests: XCTestCase {
         // Verify that the set of shipped engines includes the expected subset.
         let expectation = expectation(description: "Completed parse engines")
 
-        searchEnginesManager.getOrderedEngines { result in
+        searchEnginesManager.getOrderedEngines { _ in
             XCTAssert(self.searchEnginesManager.orderedEngines.count > 1, "There should be more than one search engine")
             XCTAssertEqual(self.searchEnginesManager.orderedEngines.first?.shortName, "ATester")
             expectation.fulfill()

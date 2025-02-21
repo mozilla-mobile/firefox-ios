@@ -236,7 +236,7 @@ class QRCodeViewController: UIViewController {
 
             instructionsLabel.topAnchor.constraint(equalTo: scanBorder.bottomAnchor, constant: 30),
             instructionsLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            instructionsLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            instructionsLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor)
         ])
     }
 
@@ -274,7 +274,7 @@ class QRCodeViewController: UIViewController {
                        animations: {
             self.scanLineTopConstraint?.constant = self.scanBorder.frame.size.height - UX.scanLineHeight
             self.view.layoutIfNeeded()
-        }) { (value: Bool) in
+        }) { (_: Bool) in
             self.scanLineTopConstraint?.constant = UX.scanLineHeight
             self.perform(#selector(self.startScanLineAnimation), with: nil, afterDelay: 0)
         }
@@ -391,7 +391,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             alert.addAction(
                 UIAlertAction(title: .ScanQRCodeErrorOKButton,
                               style: .default,
-                              handler: { (UIAlertAction) in
+                              handler: { (_) in
                 self.captureSession.startRunning()
             }),
                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrScanFailedAlertOkButton)

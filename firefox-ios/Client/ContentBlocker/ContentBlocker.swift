@@ -173,7 +173,7 @@ class ContentBlocker {
 
         for list in rules {
             group.enter()
-            ruleStore?.lookUpContentRuleList(forIdentifier: list) { rule, error in
+            ruleStore?.lookUpContentRuleList(forIdentifier: list) { rule, _ in
                 if let rule = rule {
                     self.add(contentRuleList: rule, toTab: tab)
                 }

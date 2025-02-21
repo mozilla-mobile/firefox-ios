@@ -26,7 +26,7 @@ class PerfTestThread: NSThread {
 
     override func main() {
         joinLock.lock()
-        let doNothing: () -> () = {}
+        let doNothing: () -> Void = {}
         for i in 0 ..< iters {
             if (i % 10) == 0 {
                 lock.withWriteLock(doNothing)
@@ -57,11 +57,6 @@ class ReadWriteLockTests: XCTestCase {
         casSpinLock = CASSpinLock()
 
         queue = dispatch_queue_create("ReadWriteLockTests", DISPATCH_QUEUE_CONCURRENT)
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
     }
 
     func testMultipleConcurrentReaders() {
@@ -116,7 +111,7 @@ class ReadWriteLockTests: XCTestCase {
         for (var lock) in locks {
             var x: Int32 = 0
 
-            let startReader: (Int) -> () = { i in
+            let startReader: (Int) -> Void = { i in
                 let expectation = self.expectationWithDescription("reader \(i)")
                 dispatch_async(self.queue) {
                     lock.withReadLock {
@@ -147,7 +142,7 @@ class ReadWriteLockTests: XCTestCase {
             for i in 32 ..< 64 {
                 startReader(i)
             }
-            
+
             waitForExpectationsWithTimeout(5, handler: nil)
         }
     }

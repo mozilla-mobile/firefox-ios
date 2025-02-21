@@ -266,7 +266,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             productImageView.leadingAnchor.constraint(equalTo: imageContainerView.leadingAnchor),
             productImageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
             productImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
-            productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor),
+            productImageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor)
         ])
 
         adjustLayout()
@@ -352,7 +352,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
             starRatingView.leadingAnchor.constraint(greaterThanOrEqualTo: priceLabel.trailingAnchor,
                                                     constant: UX.horizontalElementSpacing),
             starRatingView.bottomAnchor.constraint(equalTo: secondRowView.bottomAnchor),
-            starRatingView.trailingAnchor.constraint(equalTo: secondRowView.trailingAnchor),
+            starRatingView.trailingAnchor.constraint(equalTo: secondRowView.trailingAnchor)
         ])
     }
 
@@ -396,7 +396,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
                                             constant: UX.verticalElementSpacing),
             priceLabel.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
             priceLabel.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+            priceLabel.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor)
         ])
     }
 

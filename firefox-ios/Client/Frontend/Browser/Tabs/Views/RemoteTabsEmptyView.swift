@@ -110,7 +110,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
             signInButton.leadingAnchor.constraint(equalTo: instructionsLabel.leadingAnchor),
             signInButton.trailingAnchor.constraint(equalTo: instructionsLabel.trailingAnchor),
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
-            emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
+            emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height)
         ])
     }
 

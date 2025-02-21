@@ -108,7 +108,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 
-    private let connectionButton: UIButton = .build { button in }
+    private let connectionButton: UIButton = .build { _ in }
 
     // TrackingProtection toggle View
     private let toggleContainer: UIView = .build { view in
@@ -259,7 +259,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             horizontalLine.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor),
             horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),
-            headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor),
+            headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor)
         ]
 
         if asPopover {

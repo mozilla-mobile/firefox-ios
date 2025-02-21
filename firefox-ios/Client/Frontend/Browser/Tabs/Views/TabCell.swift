@@ -286,7 +286,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             smallFaviconView.heightAnchor.constraint(equalToConstant: UX.topSiteIconSize.height),
             smallFaviconView.widthAnchor.constraint(equalToConstant: UX.topSiteIconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
-            smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
+            smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor)
         ])
     }
 

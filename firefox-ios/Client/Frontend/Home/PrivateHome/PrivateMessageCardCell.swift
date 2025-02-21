@@ -107,7 +107,7 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
             contentStackView.leadingAnchor.constraint(equalTo: cardContainer.leadingAnchor,
                                                       constant: UX.contentStackPadding),
             contentStackView.trailingAnchor.constraint(equalTo: cardContainer.trailingAnchor,
-                                                       constant: -UX.contentStackPadding),
+                                                       constant: -UX.contentStackPadding)
         ])
     }
 

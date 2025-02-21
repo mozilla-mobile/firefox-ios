@@ -273,7 +273,7 @@ final class MicrosurveyViewController: UIViewController,
                 tableView.topAnchor.constraint(equalTo: containerView.topAnchor),
                 tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                tableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                tableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ]
         )
     }

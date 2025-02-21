@@ -169,7 +169,7 @@ class CustomSearchViewController: SettingsTableViewController {
             placeholder: .SettingsAddCustomEngineURLPlaceholder,
             height: 133,
             keyboardType: .URL,
-            settingIsValid: { text in
+            settingIsValid: { _ in
                 // Can check url text text validity here.
                 return true
             }, settingDidChange: {fieldText in

@@ -18,7 +18,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let collectionView = try XCTUnwrap(collectionView)
         diffableDataSource = HomepageDiffableDataSource(
             collectionView: collectionView
-        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { (_, _, _) -> UICollectionViewCell? in
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()

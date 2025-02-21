@@ -275,7 +275,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             [
                 CardElementNames.popupFirstInstruction,
                 CardElementNames.popupSecondInstruction,
-                CardElementNames.popupThirdInstruction,
+                CardElementNames.popupThirdInstruction
             ])
     }
 

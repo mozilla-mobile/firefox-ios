@@ -87,7 +87,7 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                 constant: -UX.trailingInset),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
 
         // Setting custom values to resolve horizontal ambiguity

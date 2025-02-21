@@ -32,7 +32,7 @@ final class TopSitesMiddleware {
         self.logger = logger
     }
 
-    lazy var topSitesProvider: Middleware<AppState> = { state, action in
+    lazy var topSitesProvider: Middleware<AppState> = { _, action in
         switch action.actionType {
         case HomepageActionType.initialize:
             self.getTopSitesDataAndUpdateState(for: action)

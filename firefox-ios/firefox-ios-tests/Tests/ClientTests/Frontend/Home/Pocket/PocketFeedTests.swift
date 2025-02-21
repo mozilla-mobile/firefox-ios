@@ -23,7 +23,7 @@ class PocketStoriesTests: XCTestCase {
             forMethod: "GET",
             path: "/pocketglobalfeed",
             request: GCDWebServerRequest.self
-        ) { (request) -> GCDWebServerResponse in
+        ) { (_) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(data: data, contentType: "application/json")
         }
 

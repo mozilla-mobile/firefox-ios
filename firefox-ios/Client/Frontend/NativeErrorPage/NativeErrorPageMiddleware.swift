@@ -9,7 +9,7 @@ import Common
 
 final class NativeErrorPageMiddleware {
     private var nativeErrorPageHelper: NativeErrorPageHelper?
-    lazy var nativeErrorPageProvider: Middleware<AppState> = { [self] state, action in
+    lazy var nativeErrorPageProvider: Middleware<AppState> = { [self] _, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
         case NativeErrorPageActionType.receivedError:

@@ -1278,7 +1278,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         webServer.addHandler(forMethod: "GET",
                              path: "/",
-                             request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+                             request: GCDWebServerRequest.self) { (_) -> GCDWebServerResponse? in
             return GCDWebServerDataResponse()
         }
 

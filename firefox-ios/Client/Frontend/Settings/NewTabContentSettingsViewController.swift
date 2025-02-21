@@ -61,7 +61,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             placeholder: .CustomNewPageURL,
             accessibilityIdentifier: "NewTabAsCustomURL",
             isChecked: { return !showTopSites.isChecked() && !showBlankPage.isChecked() },
-            settingDidChange: { (string) in
+            settingDidChange: { (_) in
                 self.currentChoice = NewTabPage.homePage
                 onFinished()
             }

@@ -38,7 +38,7 @@ class ShareManager: NSObject, FeatureFlaggable {
 
         activityViewController.excludedActivityTypes = excludingActivities
 
-        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+        activityViewController.completionWithItemsHandler = { activityType, completed, _, _ in
             guard completed else {
                 completionHandler(completed, activityType)
                 return

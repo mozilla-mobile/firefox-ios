@@ -126,7 +126,7 @@ private extension WallpaperCollectionViewCell {
             selectedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
 }

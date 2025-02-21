@@ -14,7 +14,7 @@ final class MicrosurveyPromptMiddleware {
         self.microsurveyManager = microsurveyManager
     }
 
-    lazy var microsurveyProvider: Middleware<AppState> = { state, action in
+    lazy var microsurveyProvider: Middleware<AppState> = { _, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

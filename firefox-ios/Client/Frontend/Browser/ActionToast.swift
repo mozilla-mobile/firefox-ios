@@ -124,7 +124,7 @@ final class ActionToast: ThemeApplicable {
                 self.heightConstraint.constant = 0
                 toast.superview?.layoutIfNeeded()
             },
-            completion: { finished in
+            completion: { _ in
                 toast.removeFromSuperview()
             }
         )
@@ -139,7 +139,7 @@ final class ActionToast: ThemeApplicable {
                 frame.size.height = Toast.UX.toastHeightWithoutShadow
                 toast.frame = frame
             },
-            completion: { finished in
+            completion: { _ in
                 let thousandMilliseconds = DispatchTimeInterval.milliseconds(1000)
                 let zeroMilliseconds = DispatchTimeInterval.milliseconds(0)
                 let voiceOverDelay = UIAccessibility.isVoiceOverRunning ? thousandMilliseconds : zeroMilliseconds

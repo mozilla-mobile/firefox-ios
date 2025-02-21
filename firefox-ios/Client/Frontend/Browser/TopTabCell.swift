@@ -181,7 +181,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                 closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
                 closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
                 closeButton.heightAnchor.constraint(equalTo: heightAnchor),
-                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor)
             ]
         )
 

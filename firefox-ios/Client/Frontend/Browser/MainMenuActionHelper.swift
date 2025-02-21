@@ -499,7 +499,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func syncMenuButton() -> PhotonRowActions? {
-        let action: (SingleActionViewModel) -> Void = { [weak self] action in
+        let action: (SingleActionViewModel) -> Void = { [weak self] _ in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let parameters = FxASignInViewParameters(launchParameters: fxaParams,
                                                      flowType: .emailLoginFlow,

@@ -66,7 +66,7 @@ class FakespotLoadingView: UIView, ThemeApplicable {
             cardView4.heightAnchor.constraint(equalToConstant: UX.mediumCardHeight),
 
             cardView5.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.cardPadding),
-            cardView5.heightAnchor.constraint(equalToConstant: UX.mediumCardHeight),
+            cardView5.heightAnchor.constraint(equalToConstant: UX.mediumCardHeight)
         ])
     }
 

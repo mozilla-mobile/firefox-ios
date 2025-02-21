@@ -14,7 +14,7 @@ class FeltPrivacyMiddleware {
         self.privacyStateManager = privacyStateManager
     }
 
-    lazy var privacyManagerProvider: Middleware<AppState> = { state, action in
+    lazy var privacyManagerProvider: Middleware<AppState> = { _, action in
         guard let action = action as? PrivateModeAction else { return }
         switch action.actionType {
         case PrivateModeActionType.setPrivateModeTo:

@@ -38,7 +38,7 @@ import Shared
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
-public class DBOperationCancelled : MaybeErrorType {
+public class DBOperationCancelled: MaybeErrorType {
     public var description: String {
         return "Database operation cancelled"
     }
@@ -324,7 +324,7 @@ private class SQLiteDBStatement {
             sqlite3_finalize(self.pointer)
         }
     }
-    
+
     func makeUtf8CString(from str: String) -> UnsafeMutablePointer<Int8> {
         let count = str.utf8CString.count
         let result: UnsafeMutableBufferPointer<Int8> = UnsafeMutableBufferPointer<Int8>.allocate(capacity: count)
@@ -339,8 +339,8 @@ public protocol SQLiteDBConnection {
     var numberOfRowsModified: Int { get }
     var version: Int { get }
 
-    func executeChange(_ sqlStr: String) throws -> Void
-    func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void
+    func executeChange(_ sqlStr: String) throws
+    func executeChange(_ sqlStr: String, withArgs args: Args?) throws
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T>
     func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T, withArgs args: Args?) -> Cursor<T>
@@ -352,8 +352,8 @@ public protocol SQLiteDBConnection {
     func checkpoint()
     func checkpoint(_ mode: Int32)
     func optimize()
-    func vacuum() throws -> Void
-    func setVersion(_ version: Int) throws -> Void
+    func vacuum() throws
+    func setVersion(_ version: Int) throws
 }
 
 // Represents a failure to open.
@@ -366,10 +366,10 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
         return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: str])
     }
 
-    func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
+    func executeChange(_ sqlStr: String, withArgs args: Args?) throws {
         throw fail("Non-open connection; can't execute change.")
     }
-    func executeChange(_ sqlStr: String) throws -> Void {
+    func executeChange(_ sqlStr: String) throws {
         throw fail("Non-open connection; can't execute change.")
     }
 
@@ -391,10 +391,10 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func checkpoint() {}
     func checkpoint(_ mode: Int32) {}
     func optimize() {}
-    func vacuum() throws -> Void {
+    func vacuum() throws {
         throw fail("Non-open connection; can't vacuum.")
     }
-    func setVersion(_ version: Int) throws -> Void {
+    func setVersion(_ version: Int) throws {
         throw fail("Non-open connection; can't set user_version.")
     }
 }
@@ -454,7 +454,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // If we cannot even open the database file, return `nil` to force SwiftData
         // into using a `FailedSQLiteDBConnection` so we can retry opening again later.
         if !doOpen() {
-            let extra = ["filename" : filename]
+            let extra = ["filename": filename]
             logger.log("Cannot open a database connection.",
                        level: .warning,
                        category: .storage,
@@ -537,7 +537,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         self.closeCustomConnection()
     }
 
-    public func setVersion(_ version: Int) throws -> Void {
+    public func setVersion(_ version: Int) throws {
         try executeChange("PRAGMA user_version = \(version)")
     }
 
@@ -566,7 +566,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     fileprivate func prepareShared() {
         if SwiftData.EnableForeignKeys {
-            let _ = pragma("foreign_keys=ON", factory: IntFactory)
+            _ = pragma("foreign_keys=ON", factory: IntFactory)
         }
 
         // Retry queries before returning locked errors.
@@ -579,7 +579,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         //
         // For where these values come from, see Bug 1213623.
         let desiredPageSize = 32 * 1024
-        let _ = pragma("page_size=\(desiredPageSize)", factory: IntFactory)
+        _ = pragma("page_size=\(desiredPageSize)", factory: IntFactory)
 
         let currentPageSize = pragma("page_size", factory: IntFactory)
 
@@ -935,7 +935,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         _ = pragma("optimize", factory: StringFactory)
     }
 
-    public func vacuum() throws -> Void {
+    public func vacuum() throws {
         try executeChange("VACUUM")
     }
 
@@ -1004,12 +1004,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return nil
     }
 
-    open func executeChange(_ sqlStr: String) throws -> Void {
+    open func executeChange(_ sqlStr: String) throws {
         try executeChange(sqlStr, withArgs: nil)
     }
 
     /// Executes a change on the database.
-    open func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
+    open func executeChange(_ sqlStr: String, withArgs args: Args?) throws {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -1268,13 +1268,13 @@ open class SDRow: Sequence {
         let i = Int32(index)
 
         let type = sqlite3_column_type(statement.pointer, i)
-        var ret: Any? = nil
+        var ret: Any?
 
         switch type {
         case SQLITE_NULL:
             return nil
         case SQLITE_INTEGER:
-            //Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
+            // Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
             ret = Int(truncatingIfNeeded: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:
             if let text = sqlite3_column_text(statement.pointer, i) {

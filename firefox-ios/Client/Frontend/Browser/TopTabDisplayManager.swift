@@ -414,7 +414,7 @@ extension TopTabDisplayManager: UIDropInteractionDelegate {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
         if let localDragSession = session.localDragSession,
            let item = localDragSession.items.first,
-           item.localObject as? Tab != nil {
+           item.localObject is Tab {
             return false
         }
 
@@ -672,7 +672,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
         collectionView.numberOfItems(inSection: 0)
         collectionView.performBatchUpdates({
             operation()
-        }, completion: { [weak self] (done) in
+        }, completion: { [weak self] (_) in
             self?.performingChainedOperations = false
             self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
             self?.performChainedOperations()

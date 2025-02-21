@@ -329,7 +329,7 @@ class FakespotViewController: UIViewController,
             betaLabel.topAnchor.constraint(equalTo: betaView.topAnchor, constant: UX.betaVerticalSpace),
             betaLabel.leadingAnchor.constraint(equalTo: betaView.leadingAnchor, constant: UX.betaHorizontalSpace),
             betaLabel.trailingAnchor.constraint(equalTo: betaView.trailingAnchor, constant: -UX.betaHorizontalSpace),
-            betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace),
+            betaLabel.bottomAnchor.constraint(equalTo: betaView.bottomAnchor, constant: -UX.betaVerticalSpace)
         ])
     }
 

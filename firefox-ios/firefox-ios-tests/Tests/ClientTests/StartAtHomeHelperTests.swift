@@ -30,7 +30,7 @@ class StartAtHomeHelperTests: XCTestCase {
         helper = nil
 
         DependencyHelperMock().reset()
-        
+
         super.tearDown()
     }
 

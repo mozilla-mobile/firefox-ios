@@ -87,7 +87,7 @@ class SearchEngineSelectionViewController: UIViewController,
             searchEngineTableView.topAnchor.constraint(equalTo: view.topAnchor),
             searchEngineTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             searchEngineTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchEngineTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchEngineTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 

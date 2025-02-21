@@ -79,7 +79,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
         setupConstraints(for: showiPadSetup)
@@ -93,7 +93,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoImage.widthAnchor.constraint(equalToConstant: UX.Logo.logoSizeConstant(for: iPadSetup)),
             logoImage.heightAnchor.constraint(equalToConstant: UX.Logo.logoSizeConstant(for: iPadSetup)),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.TextImage.textImageWidthConstant(for: iPadSetup)),
-            logoTextImage.heightAnchor.constraint(equalTo: logoImage.heightAnchor),
+            logoTextImage.heightAnchor.constraint(equalTo: logoImage.heightAnchor)
         ]
 
         if iPadSetup {

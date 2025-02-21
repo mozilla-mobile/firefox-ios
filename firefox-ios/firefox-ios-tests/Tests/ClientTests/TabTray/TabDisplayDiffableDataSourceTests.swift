@@ -106,7 +106,7 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
 
         diffableDataSource = TabDisplayDiffableDataSource(
             collectionView: tabCollectionView
-        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { (_, _, _) -> UICollectionViewCell? in
             return UICollectionViewCell()
         }
 

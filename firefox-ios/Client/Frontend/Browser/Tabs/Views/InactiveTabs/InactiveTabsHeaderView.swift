@@ -67,7 +67,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
                 moreButton.trailingAnchor.constraint(
                     equalTo: safeAreaLayoutGuide.trailingAnchor,
                     constant: -UX.buttonBottomPadding
-                ),
+                )
             ]
         )
     }
