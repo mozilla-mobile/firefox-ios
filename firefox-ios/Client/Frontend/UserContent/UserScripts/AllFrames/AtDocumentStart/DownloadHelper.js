@@ -63,6 +63,8 @@ Object.defineProperty(window.__firefox__, "download", {
 document.addEventListener("click", (event) => {
   if (event.target.localName == "a" && event.target.hasAttribute("download")) {
     event.preventDefault();
+    // The APP_ID_TOKEN is a unique identifier associated with the app used by scripts to verify the *app*
+    // (not JS on the web) is calling into them.
     window.__firefox__.download(event.target.href, APP_ID_TOKEN, event.target.download)
   }
 })
