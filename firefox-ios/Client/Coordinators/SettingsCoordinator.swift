@@ -164,7 +164,7 @@ class SettingsCoordinator: BaseCoordinator,
             contentBlockerVC.tabManager = tabManager
             return contentBlockerVC
 
-        case .tabs:
+        case .browser:
             return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
 
         case .toolbar:

@@ -48,6 +48,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
         }
 
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
+        var mediaSection = [Setting]()
         if let profile {
             let offerToOpenCopiedLinksSettings = BoolSetting(
                 prefs: profile.prefs,
@@ -69,12 +70,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
 
             linksSettings += [offerToOpenCopiedLinksSettings,
                               showLinksPreviewSettings]
-        }
-        settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Links),
-                                    children: linksSettings)]
 
-        if let profile {
-            var mediaSection = [Setting]()
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -88,10 +84,12 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 NoImageModeSetting(profile: profile),
                 blockOpeningExternalAppsSettings
             ]
-
-            settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Media),
-                                        children: mediaSection)]
         }
+
+        settings += [SettingSection(title: NSAttributedString(string: .Settings.Browsing.Links),
+                                    children: linksSettings),
+                     SettingSection(title: NSAttributedString(string: .Settings.Browsing.Media),
+                                    children: mediaSection)]
 
         return settings
     }
