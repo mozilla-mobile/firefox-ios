@@ -33,6 +33,9 @@ final class NimbusFeatureFlagLayer {
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
 
+        case .deeplinkOptimizationRefactor:
+                return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
+
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
 
@@ -368,6 +371,11 @@ final class NimbusFeatureFlagLayer {
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
+    }
+
+    private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
+        return config.enabled
     }
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {

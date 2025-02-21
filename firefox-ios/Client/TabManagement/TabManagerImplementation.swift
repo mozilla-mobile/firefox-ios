@@ -98,6 +98,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
+    // The only tab present before doing tab restoration, since deeplink happens before it
+    private var deeplinkTab: Tab?
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
@@ -451,8 +453,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     // MARK: - Restore tabs
 
     func restoreTabs(_ forced: Bool = false) {
+        deeplinkTab = tabs.popLast()
         guard !isRestoringTabs,
-              forced || (tabs.count == 1 || tabs.isEmpty)
+              forced || tabs.isEmpty
         else {
             logger.log("No restore tabs running",
                        level: .debug,
@@ -577,7 +580,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     private func restoreOnly() {
-//        tabs = [Tab]()
+        tabs = [Tab]()
         Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
@@ -610,12 +613,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
-        let shouldGenerateTabs = tabs.isEmpty || tabs.count == 1
 
         guard let windowData = window,
               let nonPrivateTabs,
               !nonPrivateTabs.isEmpty,
-              shouldGenerateTabs
+              tabs.isEmpty
         else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
@@ -649,8 +651,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
 
-        let isThereDeeplinkTab = tabs.count == 1
-
         for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
             newTab.url = URL(string: tabData.siteUrl, invalidCharacters: false)
@@ -676,7 +676,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             // Restore screenshot
             restoreScreenshot(tab: newTab)
 
-            guard !isThereDeeplinkTab else { continue }
+            guard deeplinkTab == nil else { continue }
             if windowData.activeTabId == tabData.id {
                 tabToSelect = newTab
             }
@@ -685,7 +685,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
-        guard !isThereDeeplinkTab else { return }
+        if let deeplinkTab {
+            tabs.append(deeplinkTab)
+            self.deeplinkTab = nil
+            selectedIndex = tabs.count - 1
+            return
+        }
+
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
