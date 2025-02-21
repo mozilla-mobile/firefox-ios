@@ -24,6 +24,18 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   },
 });
 
+function documentReady(callback) {
+  const listener = () => {
+    if (document.readyState !== "complete") return;
+    document.removeEventListener("readystatechange", listener);
+    callback();
+  };
+  document.addEventListener("readystatechange", listener);
+  listener();
+}
+
 window.addEventListener("pageshow", () => {
-  webkit.messageHandlers.NightMode.postMessage({ state: "ready" });
+  documentReady(() =>
+    webkit.messageHandlers.NightMode.postMessage({ state: "ready" })
+  );
 });
