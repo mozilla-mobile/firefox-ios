@@ -459,19 +459,20 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testRemoveDocumentLoading() {
+        let expectation = expectation(description: "Remove Document loading is done ")
         let subject = createSubject()
 
         subject.show(webView: WKWebView())
         subject.showDocumentLoading()
-        subject.removeDocumentLoading()
-
-        // It shouldn't cause any flaky tests, it is just for the completion on the WebViewController to be called
-        wait(0.1)
-
-        let loadingView = subject.webviewController?.view.subviews.first {
-            $0 is TemporaryDocumentLoadingView
+        subject.removeDocumentLoading {
+            let loadingView = subject.webviewController?.view.subviews.first {
+                $0 is TemporaryDocumentLoadingView
+            }
+            XCTAssertNil(loadingView)
+            expectation.fulfill()
         }
-        XCTAssertNil(loadingView)
+
+        wait(for: [expectation])
     }
 
     // MARK: - ParentCoordinatorDelegate
