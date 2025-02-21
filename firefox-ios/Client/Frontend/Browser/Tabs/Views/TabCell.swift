@@ -15,7 +15,7 @@ protocol TabCellDelegate: AnyObject {
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let borderWidth: CGFloat = 3.0
-        static let cornerRadius: CGFloat = 12
+        static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconYOffset: CGFloat = 10.0
         static let faviconSize: CGFloat = 20
@@ -45,7 +45,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     // MARK: - UI
 
     private lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius = UX.cornerRadius + UX.borderWidth
+        view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
     }
 
@@ -213,12 +213,12 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                          right: UX.borderWidth)
             layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
             layer.borderWidth = UX.borderWidth
-            layer.cornerRadius = UX.cornerRadius + UX.borderWidth
+            layer.cornerRadius = UX.cornerRadius
         } else {
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
-            layer.cornerRadius = UX.cornerRadius + UX.borderWidth
+            layer.cornerRadius = UX.cornerRadius
         }
     }
 
