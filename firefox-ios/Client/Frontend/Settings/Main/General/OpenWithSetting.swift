@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class OpenWithSetting: Setting {
-    private weak var settingsDelegate: GeneralSettingsDelegate?
+    private weak var settingsDelegate: BrowsingSettingsDelegate?
     private let profile: Profile?
     private let windowUUID: WindowUUID
 
@@ -37,7 +37,7 @@ class OpenWithSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController,
-         settingsDelegate: GeneralSettingsDelegate?) {
+         settingsDelegate: BrowsingSettingsDelegate?) {
         self.profile = settings.profile
         self.windowUUID = settings.windowUUID
         self.settingsDelegate = settingsDelegate

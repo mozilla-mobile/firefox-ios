@@ -309,70 +309,19 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getGeneralSettings() -> [SettingSection] {
         var generalSettings: [Setting] = [
+            BrowsingSetting(settings: self, settingsDelegate: parentCoordinator),
             SearchSetting(settings: self, settingsDelegate: parentCoordinator),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
-            OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
         ]
-        if let profile {
-            generalSettings += [
-                BlockPopupSetting(prefs: profile.prefs),
-                NoImageModeSetting(profile: profile)
-            ]
-        }
 
         if isSearchBarLocationFeatureEnabled, let profile {
             generalSettings.insert(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator),
                 at: 5
             )
-        }
-
-        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
-        if inactiveTabsAreBuildActive {
-            generalSettings.insert(
-                TabsSetting(
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    settingsDelegate: parentCoordinator
-                ),
-                at: 3
-            )
-        }
-
-        if let profile {
-            let offerToOpenCopiedLinksSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: "showClipboardBar",
-                defaultValue: false,
-                titleText: .SettingsOfferClipboardBarTitle,
-                statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
-            )
-
-            let showLinksPreviewSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-                defaultValue: true,
-                titleText: .SettingsShowLinkPreviewsTitle,
-                statusText: .SettingsShowLinkPreviewsStatus
-            )
-
-            let blockOpeningExternalAppsSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.BlockOpeningExternalApps,
-                defaultValue: false,
-                titleText: .SettingsBlockOpeningExternalAppsTitle
-            )
-
-            generalSettings += [
-                offerToOpenCopiedLinksSettings,
-                showLinksPreviewSettings,
-                blockOpeningExternalAppsSettings
-            ]
         }
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
