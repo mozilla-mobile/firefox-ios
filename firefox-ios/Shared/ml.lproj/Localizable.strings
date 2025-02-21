@@ -236,7 +236,7 @@
 "Decrease text size" = "അക്ഷരങ്ങളുടെ വലിപ്പം കുറയ്ക്കുക";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "സ്വതേയുള്ള തിരച്ചില്‍ യന്ത്രം";
+"Default Search Engine" = "തനതുതിരച്ചില്‍ യന്ത്രം";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "അടയ്ക്കുക";

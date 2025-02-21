@@ -1,5 +1,5 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
-"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Divulgue o %1$@ toda vez que compartilhar um link no %2$@.";
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Divulgar o %1$@ toda vez que compartilhar um link no %2$@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
 "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Incluir link para baixar o %1$@ em compartilhamentos no %2$@";

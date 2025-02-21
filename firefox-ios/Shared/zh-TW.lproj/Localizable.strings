@@ -392,7 +392,7 @@
 "fxa.signin.ready-to-scan" = "準備好了，開始掃描！";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "改用電子郵件";
+"fxa.signin.use-email-instead" = "改以接收電子郵件來登入";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "立刻同步";
@@ -893,7 +893,7 @@
 "Oops! Firefox crashed" = "喔喔，Firefox 發生錯誤";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "點選標題列出現的書本圖示，即可將該頁面於閱讀畫面開啟。";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "點選標題列出現的書本圖示，即可用閱讀畫面開啟該頁面。";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "開啟設定";

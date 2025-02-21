@@ -92,13 +92,13 @@
 "Bookmarks" = "Markah";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
-"Bookmarks.Edit.Button" = "Ubah";
+"Bookmarks.Edit.Button" = "Edit";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "Ubah Markah";
+"Bookmarks.EditBookmark.Label" = "Edit Markah";
 
 /* The button to edit a folder */
-"Bookmarks.EditFolder.Label" = "Ubah Folder";
+"Bookmarks.EditFolder.Label" = "Edit Folder";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Folder";

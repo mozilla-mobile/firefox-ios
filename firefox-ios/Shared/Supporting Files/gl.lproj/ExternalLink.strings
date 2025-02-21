@@ -1,0 +1,12 @@
+/* A statement shown to user when tapping an external link and the link doesn't work. */
+"ExternalLink.ExternalInvalidLinkMessage.v136" = "Non se pode atopar a aplicación necesaria para abrir esa ligazón.";
+
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "Abrir o correo electrónico na aplicación de correo predeterminada?";
+
+/* The call to action button for a user to open an external link. */
+"ExternalLink.ExternalOpenMessage.v136" = "Abrir";
+
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "Abrir os SMS nunha aplicación externa?";
+
