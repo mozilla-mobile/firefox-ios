@@ -60,16 +60,18 @@ open class RustKeychain {
         return .success(String(data: data, encoding: .utf8))
     }
 
-    func updateKeychainKey(_ value: String, key: String) -> OSStatus {
-        return SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
-                             [kSecValueData: value.data(using: String.Encoding.utf8)] as CFDictionary)
-    }
+    func addOrUpdateKeychainKey(_ value: String, key: String) -> OSStatus {
+        var addQueryDictionary = getBaseKeychainQuery(key: key)
+        addQueryDictionary[kSecValueData as String] = value.data(using: String.Encoding.utf8)
+        addQueryDictionary[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
 
-    func setKeychainKey(_ value: String, key: String) -> OSStatus {
-        var keychainQueryDictionary = getBaseKeychainQuery(key: key)
-        keychainQueryDictionary[kSecValueData as String] = value.data(using: String.Encoding.utf8)
-        keychainQueryDictionary[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+        let addStatus = SecItemAdd(addQueryDictionary as CFDictionary, nil)
 
-        return SecItemAdd(keychainQueryDictionary as CFDictionary, nil)
+        if addStatus == errSecDuplicateItem {
+            return SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
+                                 [kSecValueData: value.data(using: String.Encoding.utf8)] as CFDictionary)
+        } else {
+            return addStatus
+        }
     }
 }
