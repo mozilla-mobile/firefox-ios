@@ -16,37 +16,37 @@ class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     var handleContentSizeChangeCalled = 0
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {}
-    
+
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String) {}
-    
+
     func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView {
         return .default
     }
-    
+
     func loadingChanged(loading: Bool) {
         loadingChangedCalled += 1
     }
-    
+
     func progressChanged() {
         progressChangedCalled += 1
     }
-    
+
     func urlChanged() {
         urlChangedCalled += 1
     }
-    
+
     func titleChanged(title: String) {
         titleChangedCalled += 1
     }
-    
+
     func canGoBackChanged(canGoBack: Bool) {
         canGoBackChangedCalled += 1
     }
-    
+
     func canGoForwardChanged(canGoForward: Bool) {
         canGoForwardChangedCalled += 1
     }
-    
+
     func hasOnlySecureBrowserChanged() {
         hasOnlySecureBrowserChangedCalled += 1
     }
