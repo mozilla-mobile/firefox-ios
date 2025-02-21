@@ -10,12 +10,13 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testFolderTitle = "testTitle"
+    var testFolderGuid = ""
 
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-        await addFolder(title: testFolderTitle)
+        testFolderGuid = await addFolder(title: testFolderTitle)
     }
 
     override func tearDown() {
@@ -35,12 +36,20 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
         XCTAssertEqual(folder.indentation, 0)
     }
 
+    func testFetchFolder_ignoresExcludedGuidTrees() async throws {
+        _ = await addFolder(title: "testSubFolder", parentFolderGUID: testFolderGuid)
+        let subject = createSubject()
+        let folders = await subject.fetchFolders(excludedGuids: [testFolderGuid])
+        // Should be zero folders since we are excluding our root folder (testFolderGuid)
+        XCTAssertEqual(folders.count, 0)
+    }
+
     func testAddFolderToPreviousAddedFolderGUID_returnsFolderWithIndentationHigherThenPreviousFolder() async throws {
         let subject = createSubject()
         let previousFolders = await subject.fetchFolders()
         let previouslyAddedFolder = try XCTUnwrap(previousFolders.first)
         let folderTitle = "indented"
-        await addFolder(title: folderTitle, parentFolderGUID: previouslyAddedFolder.guid)
+        _ = await addFolder(title: folderTitle, parentFolderGUID: previouslyAddedFolder.guid)
 
         let folders = await subject.fetchFolders()
         let lastAddedFolder = try XCTUnwrap(folders.first { $0.title == folderTitle })
@@ -54,12 +63,17 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
         return subject
     }
 
-    private func addFolder(title: String, parentFolderGUID: String? = nil) async {
+    private func addFolder(title: String, parentFolderGUID: String? = nil) async -> String {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,
                                             title: title,
                                             position: 0).uponQueue(.main, block: { result in
-                continuation.resume()
+                switch result {
+                case .success(let guid):
+                    return continuation.resume(returning: guid)
+                case .failure:
+                    return continuation.resume(returning: "")
+                }
             })
         }
     }
