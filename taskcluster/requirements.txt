@@ -210,9 +210,9 @@ mozilla-repo-urls==0.1.1 \
     --hash=sha256:30510d3519479aa70211145d0ac9cf6e2fadcb8d30fa3b196bb957bd773502ba \
     --hash=sha256:7364da790751db2a060eb45adbf1d7db89a145ed279ba235f3425db9dd255915
     # via taskcluster-taskgraph
-mozilla-taskgraph==2.0.3 \
-    --hash=sha256:4a5d1eb2682e61b2956b0bf26098acd96638a362f594110637eb5f9b43c7d93b \
-    --hash=sha256:92705caf3636afcc4e4ac45b3b80154ecad3a0ee0cb0cd209190155cd65555fa
+mozilla-taskgraph==3.0.3 \
+    --hash=sha256:0a9a4ad20163fb85f56584ce05c5c9fdd4948e2ddfe1a568446b7e63e5da95fd \
+    --hash=sha256:65d0dcadae2960d7a45ffeb07479dcf9f4d9c5478555e5b6f3ba2098c5af3f06
     # via -r requirements.in
 pygments==2.18.0 \
     --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \
@@ -305,9 +305,9 @@ slugid==2.0.0 \
     --hash=sha256:a950d98b72691178bdd4d6c52743c4a2aa039207cf7a97d71060a111ff9ba297 \
     --hash=sha256:aec8b0e01c4ad32e38e12d609eab3ec912fd129aaf6b2ded0199b56a5f8fd67c
     # via taskcluster-taskgraph
-taskcluster-taskgraph==9.2.1 \
-    --hash=sha256:1307bb5fa4669966c34993de7855b78999a296e53177e961f4077d1d2a571dd4 \
-    --hash=sha256:9e01d175523b92122ceb343aae56318c653b70c280ae18e61e95fb085c1d9626
+taskcluster-taskgraph==13.1.0 \
+    --hash=sha256:68bbcb094d4b97c4fd59a5f61385bca5aee70f8da7b432a139efe221153abe36 \
+    --hash=sha256:be7d8dea6587eca3a751a501afe2708e37f8dbea631614775cca21432fa4f2d0
     # via
     #   -r requirements.in
     #   mozilla-taskgraph

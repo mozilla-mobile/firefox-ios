@@ -18,7 +18,6 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         super.setUp()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
-
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
@@ -39,12 +38,8 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabs() async {
+        mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
         mockProfile.hasSyncableAccountMock = false
-        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -53,10 +48,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabsAndSyncedData() async {
-        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
+        mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
                                                        tabs: remoteTabs(idRange: 1...3))]
 
@@ -192,5 +184,12 @@ extension JumpBackInDataAdaptorTests {
             remoteTabs.append(tab)
         }
         return remoteTabs
+    }
+
+    private func createTabs() -> [Tab] {
+        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
+        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
+        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
+        return [tab1, tab2, tab3]
     }
 }

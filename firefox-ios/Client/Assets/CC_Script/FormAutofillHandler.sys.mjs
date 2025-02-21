@@ -131,7 +131,7 @@ export class FormAutofillHandler {
   handleEvent(event) {
     switch (event.type) {
       case "input": {
-        if (!event.isTrusted) {
+        if (!event.isTrusted || this.isAutofillInProgress) {
           return;
         }
 
@@ -434,9 +434,8 @@ export class FormAutofillHandler {
       }
     }
 
+    this.focusPreviouslyFocusedElement(focusedId);
     this.#isAutofillInProgress = false;
-
-    this.focusAfterClearingFields(focusedId);
 
     this.registerFormChangeHandler();
   }
@@ -1025,12 +1024,12 @@ export class FormAutofillHandler {
         FormAutofillHandler.fillFieldValue(element, value);
       }
     }
-    this.#isAutofillInProgress = false;
 
-    this.focusAfterClearingFields(focusedId);
+    this.focusPreviouslyFocusedElement(focusedId);
+    this.#isAutofillInProgress = false;
   }
 
-  focusAfterClearingFields(focusedId) {
+  focusPreviouslyFocusedElement(focusedId) {
     let focusedElement = FormAutofillUtils.getElementByIdentifier(focusedId);
     if (FormAutofillUtils.focusOnAutofill && focusedElement) {
       focusedElement.focus({ preventScroll: true });

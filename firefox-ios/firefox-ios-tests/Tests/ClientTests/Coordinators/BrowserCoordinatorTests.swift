@@ -446,6 +446,34 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is PhotonActionSheet)
     }
 
+    func testShowLoadingDocument() {
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+
+        let loadingView = subject.webviewController?.view.subviews.first {
+            $0 is TemporaryDocumentLoadingView
+        }
+        XCTAssertNotNil(loadingView)
+    }
+
+    func testRemoveDocumentLoading() {
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+        subject.removeDocumentLoading()
+
+        // It shouldn't cause any flaky tests, it is just for the completion on the WebViewController to be called
+        wait(0.1)
+
+        let loadingView = subject.webviewController?.view.subviews.first {
+            $0 is TemporaryDocumentLoadingView
+        }
+        XCTAssertNil(loadingView)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

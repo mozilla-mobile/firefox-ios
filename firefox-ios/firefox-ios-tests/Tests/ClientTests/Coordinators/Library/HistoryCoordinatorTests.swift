@@ -42,15 +42,6 @@ final class HistoryCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowSearchGroupedItems() {
-        let subject = createSubject()
-
-        subject.showSearchGroupedItems(ASGroup(searchTerm: "", groupedItems: [], timestamp: .zero))
-
-        XCTAssertTrue(router.pushedViewController is SearchGroupedItemsViewController)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
     func testOpenClearRecentSearch_receiveNotificationCorrectly() {
         _ = createSubject()
 

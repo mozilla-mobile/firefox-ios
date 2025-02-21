@@ -36,7 +36,9 @@ final class TabNumberButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func configure(element: ToolbarElement) {
+    override func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         super.configure(element: element)
 
         guard let numberOfTabs = element.numberOfTabs else { return }

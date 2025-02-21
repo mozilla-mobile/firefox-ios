@@ -26,8 +26,6 @@ public final class NavigationHeaderView: UIView {
         label.lineBreakMode = .byTruncatingTail
         label.accessibilityTraits.insert(.header)
         label.isAccessibilityElement = false
-        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -38,14 +36,16 @@ public final class NavigationHeaderView: UIView {
         button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.imageView?.contentMode = .scaleAspectFit
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
-        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        button.contentHorizontalAlignment = .leading
     }
 
     private let horizontalLine: UIView = .build()
 
+    private var backButtonText = ""
     private var viewConstraints: [NSLayoutConstraint] = []
 
     override init(frame: CGRect) {
@@ -69,10 +69,8 @@ public final class NavigationHeaderView: UIView {
         viewConstraints.append(contentsOf: [
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.imageMargins),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backButton.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.leadingAnchor,
-                                                 constant: -UX.horizontalMargin),
 
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: backButton.trailingAnchor,
+            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor,
                                                 constant: UX.horizontalMargin),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
                                                  constant: -UX.horizontalMargin),
@@ -113,12 +111,15 @@ public final class NavigationHeaderView: UIView {
 
     public func setViews(with title: String, and backButtonText: String) {
         titleLabel.text = title
+        self.backButtonText = backButtonText
         backButton.setTitle(backButtonText, for: .normal)
     }
 
     public func adjustLayout() {
+        let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
         backButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
-        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
+        backButton.setTitle(isAccessibilityCategory ? "" : backButtonText, for: .normal)
+        updateLayout(isAccessibilityCategory: isAccessibilityCategory)
     }
 
     public func updateHeaderLineView(isHidden: Bool) {

@@ -50,7 +50,7 @@ struct SimpleToast: ThemeApplicable {
                                                    constant: Toast.UX.toastSidePadding),
             containerView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
-            containerView.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor,
+            containerView.bottomAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
                                                   constant: bottomConstraintPadding),
 
             shadowView.topAnchor.constraint(equalTo: containerView.topAnchor,
