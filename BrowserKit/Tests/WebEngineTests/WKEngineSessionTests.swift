@@ -247,24 +247,21 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Observers
+// Laurie
+//    func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
+//        _ = createSubject()
+//        let expectedCount = WKEngineKVOConstants.allCases.count
+//        XCTAssertEqual(webViewProvider.webView.addObserverCalled,
+//                       expectedCount,
+//                       "There are \(expectedCount) KVO Constants")
+//    }
 
-    func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
-        _ = createSubject()
-        let expectedCount = WKEngineKVOConstants.allCases.count
-        XCTAssertEqual(webViewProvider.webView.addObserverCalled,
-                       expectedCount,
-                       "There are \(expectedCount) KVO Constants")
-    }
-
-    func testRemoveObserversWhenCloseIsCalledThenObserversAreRemoved() {
+    func testRemoveObserversWhenCloseIsCalledThenCloseIsCalled() {
         let subject = createSubject()
 
         subject?.close()
 
-        let expectedCount = WKEngineKVOConstants.allCases.count
-        XCTAssertEqual(webViewProvider.webView.removeObserverCalled,
-                       expectedCount,
-                       "There are \(expectedCount) KVO Constants")
+        XCTAssertEqual(webViewProvider.webView.closeCalled, 1)
     }
 
     func testCanGoBackGivenWebviewStateThenCallsNavigationStateChanged() {
