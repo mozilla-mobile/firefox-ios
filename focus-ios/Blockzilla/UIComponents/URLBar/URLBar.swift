@@ -1015,7 +1015,15 @@ class URLBar: UIView {
         components?.password = nil
         let fullUrl = components?.url?.absoluteString
         let truncatedURL = components?.host
-        let displayText = truncatedURL
+        
+        let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(url) ?? (nil, false)
+        var displayText: String?
+        if isSearchQuery {
+            displayText = locationText
+        } else {
+            displayText = truncatedURL
+        }
+        
         urlTextField.text = displayFullUrl ? fullUrl : displayText
         truncatedUrlText.text = truncatedURL
     }
