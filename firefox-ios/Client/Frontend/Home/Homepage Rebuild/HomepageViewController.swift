@@ -19,6 +19,7 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
+    private(set) var isZeroSearch: Bool
 
     // MARK: - Themable variables
     var themeManager: ThemeManager
@@ -63,6 +64,7 @@ final class HomepageViewController: UIViewController,
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         isZeroSearch: Bool,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -72,6 +74,7 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.isZeroSearch = isZeroSearch
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -126,6 +129,11 @@ final class HomepageViewController: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("helloooo")
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

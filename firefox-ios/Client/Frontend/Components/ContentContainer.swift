@@ -60,6 +60,7 @@ class ContentContainer: UIView {
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
         case .homepage:
+//            let isZeroSearch = (content as? HomepageViewController)?.isZeroSearch ?? true
             return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
