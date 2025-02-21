@@ -31,7 +31,8 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider {
+                          BookmarksRefactorFeatureFlagProvider,
+                          FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
@@ -50,6 +51,9 @@ class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
 
     override var isDismissable: Bool { false }
 
@@ -281,17 +285,15 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        if case .search = route {
-            return true
-        }
-
-        guard browserIsReady, !tabManager.isRestoringTabs else {
-            let readyMessage = "browser is ready? \(browserIsReady)"
-            let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
-            logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                       level: .info,
-                       category: .coordinator)
-            return false
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            guard browserIsReady, !tabManager.isRestoringTabs else {
+                let readyMessage = "browser is ready? \(browserIsReady)"
+                let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
+                logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
+                           level: .info,
+                           category: .coordinator)
+                return false
+            }
         }
 
         switch route {
@@ -303,16 +305,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        if case .search(let url, _, _) = route {
-            handle(url: url, isPrivate: false)
-            return
-        }
-
-        guard browserIsReady, !tabManager.isRestoringTabs else {
-            logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
-                       level: .info,
-                       category: .coordinator)
-            return
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            guard browserIsReady, !tabManager.isRestoringTabs else {
+                logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
+                           level: .info,
+                           category: .coordinator)
+                return
+            }
         }
 
         logger.log("Handling a route", level: .info, category: .coordinator)

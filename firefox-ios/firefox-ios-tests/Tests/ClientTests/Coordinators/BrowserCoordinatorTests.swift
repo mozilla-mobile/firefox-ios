@@ -1271,6 +1271,10 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         return result
     }
 
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        
+    }
+
     // MARK: - Mock Server
 
     func startMockServer() throws -> URL {

@@ -8,7 +8,9 @@ import Shared
 import UserNotifications
 import Common
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+class SceneDelegate: UIResponder,
+                     UIWindowSceneDelegate,
+                     FeatureFlaggable {
     var window: UIWindow?
 
     let profile: Profile = AppContainer.shared.resolve()
@@ -20,6 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private let logger: Logger = DefaultLogger.shared
     private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -234,6 +239,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        sceneCoordinator.findAndHandle(route: route)
+        if isDeeplinkOptimizationRefactorEnabled {
+            sceneCoordinator.findAndHandle(route: route)
+        } else {
+            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+                self?.logger.log("Start up flow and restoration done, will handle route",
+                                 level: .info,
+                                 category: .coordinator)
+                sceneCoordinator.findAndHandle(route: route)
+            }
+        }
     }
 }

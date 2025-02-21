@@ -242,6 +242,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
 
+    var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1006,11 +1010,15 @@ class BrowserViewController: UIViewController,
         super.viewWillAppear(animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        AppEventQueue.wait(for: [.recordStartupTimeOpenURLComplete]) { [weak self] in
-            self?.tabManager.restoreTabs()
-        }
-        AppEventQueue.wait(for: [.recordStartupTimeOpenURLCancelled]) { [weak self] in
-            self?.tabManager.restoreTabs()
+        if isDeeplinkOptimizationRefactorEnabled {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenURLComplete]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+            AppEventQueue.wait(for: [.recordStartupTimeOpenURLCancelled]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        } else {
+            tabManager.restoreTabs()
         }
 
         switchToolbarIfNeeded()
@@ -1037,7 +1045,9 @@ class BrowserViewController: UIViewController,
 
         prepareURLOnboardingContextualHint()
 
-        browserDelegate?.browserHasLoaded()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            browserDelegate?.browserHasLoaded()
+        }
         AppEventQueue.signal(event: .browserIsReady)
     }
 
@@ -2657,6 +2667,7 @@ class BrowserViewController: UIViewController,
         cancelEditMode()
         openBlankNewTab(focusLocationField: false, isPrivate: false)
         navigationHandler?.showQRCode(delegate: self)
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
