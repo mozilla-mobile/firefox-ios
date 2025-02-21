@@ -212,13 +212,23 @@ class PaddedSwitch: UIView {
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting, FeatureFlaggable {
+    private struct UX {
+        static let learnMoreButtonMargin: CGFloat = 15
+        static let learnMoreButtonHeight: CGFloat = 44
+    }
+
     // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
     let prefKey: String?
     let prefs: Prefs?
 
     var settingDidChange: ((Bool) -> Void)?
+    var learnMoreDidTap: (() -> Void)?
     private let defaultValue: Bool?
     private let statusText: NSAttributedString?
+    private let accessibilityStatusText: NSAttributedString?
+    private let accessibilityLearnMoreButtonText: String?
+    private let learnMoreButtonA11y: String?
+    private var hasLearnMoreButton = false
     private let featureFlagName: NimbusFeatureFlagID?
 
     init(
@@ -227,6 +237,10 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool?,
         attributedTitleText: NSAttributedString,
         attributedStatusText: NSAttributedString? = nil,
+        attributedAccessibilityStatusText: NSAttributedString? = nil,
+        accessibilityLearnMoreButtonText: String? = nil,
+        learnMoreButtonA11y: String? = nil,
+        hasLearnMoreButton: Bool = false,
         featureFlagName: NimbusFeatureFlagID? = nil,
         settingDidChange: ((Bool) -> Void)? = nil
     ) {
@@ -235,6 +249,10 @@ class BoolSetting: Setting, FeatureFlaggable {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
         self.statusText = attributedStatusText
+        self.accessibilityStatusText = attributedAccessibilityStatusText
+        self.accessibilityLearnMoreButtonText = accessibilityLearnMoreButtonText
+        self.learnMoreButtonA11y = learnMoreButtonA11y
+        self.hasLearnMoreButton = hasLearnMoreButton
         self.featureFlagName = featureFlagName
         super.init(title: attributedTitleText)
     }
@@ -276,6 +294,9 @@ class BoolSetting: Setting, FeatureFlaggable {
         settingDidChange: @escaping (Bool) -> Void
     ) {
         self.statusText = description.map(NSAttributedString.init(string:))
+        self.accessibilityStatusText = description.map(NSAttributedString.init(string:))
+        self.accessibilityLearnMoreButtonText = nil
+        self.learnMoreButtonA11y = nil
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -310,6 +331,10 @@ class BoolSetting: Setting, FeatureFlaggable {
         return control
     }()
 
+    public lazy var learnMoreButton: UIButton = .build { [weak self] button in
+        button.addTarget(self, action: #selector(self?.learnMoreTapped), for: .touchUpInside)
+    }
+
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
@@ -320,12 +345,20 @@ class BoolSetting: Setting, FeatureFlaggable {
 
         displayBool(control.switchView)
         if let title = title {
-            if let status = status {
+            if let status = accessibilityStatusText {
                 control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
             } else {
                 control.switchView.accessibilityLabel = title.string
             }
-            cell.accessibilityLabel = nil
+
+            if let accessibilityStatusText {
+                learnMoreButton.accessibilityIdentifier = learnMoreButtonA11y
+                learnMoreButton.accessibilityLabel = accessibilityLearnMoreButtonText
+                cell.accessibilityLabel = "\(title.string), \(accessibilityStatusText.string)"
+            } else {
+                cell.accessibilityLabel = nil
+            }
+            cell.accessibilityTraits = .none
         }
 
         cell.accessoryView = control
@@ -334,6 +367,19 @@ class BoolSetting: Setting, FeatureFlaggable {
         if !enabled {
             cell.subviews.forEach { $0.alpha = 0.5 }
         }
+
+        guard hasLearnMoreButton else { return }
+        cell.contentView.addSubview(learnMoreButton)
+
+        let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        let width = isAccessibilityCategory ? cell.contentView.frame.width / 1.5 : cell.contentView.frame.width / 3
+        let height = isAccessibilityCategory ? UX.learnMoreButtonHeight * 2 : UX.learnMoreButtonHeight
+
+        learnMoreButton.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor,
+                                                 constant: UX.learnMoreButtonMargin).isActive = true
+        learnMoreButton.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor).isActive = true
+        learnMoreButton.widthAnchor.constraint(equalToConstant: width).isActive = true
+        learnMoreButton.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
 
     @objc
@@ -352,6 +398,11 @@ class BoolSetting: Setting, FeatureFlaggable {
                                          object: .setting,
                                          extras: ["pref": prefKey as Any, "to": control.isOn])
         }
+    }
+
+    @objc
+    private func learnMoreTapped() {
+        learnMoreDidTap?()
     }
 
     func getFeatureFlagName() -> NimbusFeatureFlagID? {

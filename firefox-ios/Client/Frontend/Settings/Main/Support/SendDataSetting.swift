@@ -11,6 +11,7 @@ class SendDataSetting: BoolSetting {
     private weak var settingsDelegate: SupportSettingsDelegate?
     private var a11yId: String
     private var learnMoreURL: URL?
+    private var learnMoreButtonA11y: String?
 
     var shouldSendData: ((Bool) -> Void)?
 
@@ -23,7 +24,9 @@ class SendDataSetting: BoolSetting {
          linkedText: String,
          prefKey: String,
          a11yId: String,
-         learnMoreURL: URL?) {
+         learnMoreURL: URL?,
+         learnMoreButtonA11y: String?,
+         isStudiesCase: Bool = false) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -51,20 +54,54 @@ class SendDataSetting: BoolSetting {
             prefKey: prefKey,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: title),
-            attributedStatusText: statusText
+            attributedStatusText: statusText,
+            attributedAccessibilityStatusText: NSAttributedString(string: message),
+            accessibilityLearnMoreButtonText: linkedText,
+            learnMoreButtonA11y: learnMoreButtonA11y,
+            hasLearnMoreButton: learnMoreURL != nil
         )
 
         setupSettingDidChange()
+        setupLearnMoreButtonDidTap()
 
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
+        if isStudiesCase {
+            let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            // Special Case (EXP-4780) disable studies if usage data is disabled
+            updateSetting(for: sendUsageDataPref)
+        } else {
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
+        }
     }
 
     private func setupSettingDidChange() {
         self.settingDidChange = { [weak self] value in
             self?.shouldSendData?(value)
         }
+    }
+
+    private func setupLearnMoreButtonDidTap() {
+        self.learnMoreDidTap = { [weak self] in
+            self?.settingsDelegate?.askedToOpen(url: self?.url, withTitle: self?.title)
+        }
+    }
+
+    func updateSetting(for isUsageEnabled: Bool) {
+        guard !isUsageEnabled else {
+            // Note: switch should be enabled only when telemetry usage is enabled
+            control.setSwitchTappable(to: true)
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setStudiesSetting(prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+            return
+        }
+
+        // Special Case (EXP-4780) disable Studies if usage data is disabled
+        control.setSwitchTappable(to: false)
+        control.toggleSwitch(to: false)
+        writeBool(control.switchView)
+        Experiments.setStudiesSetting(false)
     }
 
     override var accessibilityIdentifier: String? {
@@ -76,6 +113,8 @@ class SendDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.askedToOpen(url: url, withTitle: title)
+        if learnMoreURL == nil {
+            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+        }
     }
 }
