@@ -34,6 +34,10 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
     }
 
+    var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
     var count: Int {
         return tabs.count
     }
@@ -98,6 +102,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
+    // The only tab present before doing tab restoration, since deeplink happens before it
+    private var deeplinkTab: Tab?
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
@@ -451,6 +457,12 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     // MARK: - Restore tabs
 
     func restoreTabs(_ forced: Bool = false) {
+        if isDeeplinkOptimizationRefactorEnabled {
+            // Deeplinks happens before tab restoration, so we should a tabs already present in the tabs list
+            // If a deeplink open was requested
+            deeplinkTab = tabs.popLast()
+        }
+
         guard !isRestoringTabs,
               forced || tabs.isEmpty
         else {
@@ -649,30 +661,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         var tabToSelect: Tab?
 
         for tabData in filteredTabs {
-            let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-            newTab.url = URL(string: tabData.siteUrl, invalidCharacters: false)
-            newTab.lastTitle = tabData.title
-            newTab.tabUUID = tabData.id.uuidString
-            newTab.screenshotUUID = tabData.id
-            newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
-            newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-            let groupData = LegacyTabGroupData(
-                searchTerm: tabData.tabGroupData?.searchTerm ?? "",
-                searchUrl: tabData.tabGroupData?.searchUrl ?? "",
-                nextReferralUrl: tabData.tabGroupData?.nextUrl ?? "",
-                tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? ""
-            )
-            newTab.metadataManager?.tabGroupData = groupData
-
-            if newTab.url == nil {
-                logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
-                           level: .debug,
-                           category: .tabs)
-            }
-
-            // Restore screenshot
-            restoreScreenshot(tab: newTab)
-
+            let newTab = configureNewTab(with: tabData)
+            guard deeplinkTab == nil else { continue }
             if windowData.activeTabId == tabData.id {
                 tabToSelect = newTab
             }
@@ -681,7 +671,62 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
+        handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
+    }
 
+    private func configureNewTab(with tabData: TabData) -> Tab? {
+        let newTab: Tab
+        if isDeeplinkOptimizationRefactorEnabled {
+            if let deeplinkTab, deeplinkTab.url?.absoluteString == tabData.siteUrl {
+                newTab = deeplinkTab
+                let data = tabSessionStore.fetchTabSession(tabID: tabData.id)
+                newTab.webView?.interactionState = data
+                tabs.append(newTab)
+            } else {
+                newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
+            }
+        } else {
+            newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
+        }
+
+        newTab.url = URL(string: tabData.siteUrl, invalidCharacters: false)
+        newTab.lastTitle = tabData.title
+        newTab.tabUUID = tabData.id.uuidString
+        newTab.screenshotUUID = tabData.id
+        newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
+        newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
+        let groupData = LegacyTabGroupData(
+            searchTerm: tabData.tabGroupData?.searchTerm ?? "",
+            searchUrl: tabData.tabGroupData?.searchUrl ?? "",
+            nextReferralUrl: tabData.tabGroupData?.nextUrl ?? "",
+            tabHistoryCurrentState: tabData.tabGroupData?.tabHistoryCurrentState?.rawValue ?? ""
+        )
+        newTab.metadataManager?.tabGroupData = groupData
+
+        if newTab.url == nil {
+            logger.log("Tab restored has empty URL for tab id \(tabData.id.uuidString). It was last used \(tabData.lastUsedTime)",
+                       level: .debug,
+                       category: .tabs)
+        }
+
+        // Restore screenshot
+        restoreScreenshot(tab: newTab)
+        return newTab
+    }
+
+    private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
+        if isDeeplinkOptimizationRefactorEnabled {
+            if let deeplinkTab {
+                if let index = tabs.firstIndex(of: deeplinkTab) {
+                    selectedIndex = index
+                } else {
+                    tabs.append(deeplinkTab)
+                    selectedIndex = tabs.count - 1
+                }
+                return
+            }
+            deeplinkTab = nil
+        }
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
