@@ -150,8 +150,7 @@ class SyncDataDisplay {
         case .thisDeviceDisconnected:
             displayThisDeviceDisconnectedNotification()
         default:
-            displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
-            break
+        displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
         }
     }
 

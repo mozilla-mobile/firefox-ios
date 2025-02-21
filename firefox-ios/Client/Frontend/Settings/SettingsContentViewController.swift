@@ -37,7 +37,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
                     to: settingsWebView,
                     duration: 0.5,
                     options: .transitionCrossDissolve,
-                    completion: { finished in
+                    completion: { _ in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
                     }
@@ -55,7 +55,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
                     to: interstitialErrorView,
                     duration: 0.5,
                     options: .transitionCrossDissolve,
-                    completion: { finished in
+                    completion: { _ in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
                     }

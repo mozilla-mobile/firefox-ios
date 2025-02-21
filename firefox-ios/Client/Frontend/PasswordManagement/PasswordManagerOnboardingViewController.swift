@@ -160,7 +160,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
                 continueButton.topAnchor.constraint(
                     greaterThanOrEqualTo: infoContainer.bottomAnchor,
                     constant: UX.standardSpacing
-                ),
+                )
             ])
     }
 

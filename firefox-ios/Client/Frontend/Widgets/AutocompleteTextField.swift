@@ -122,7 +122,7 @@ class AutocompleteTextField: UITextField,
                 input: UIKeyCommand.inputEscape,
                 modifierFlags: [],
                 action: #selector(self.handleKeyCommand(sender:))
-            ),
+            )
         ]
         arrowKeysCommands.forEach { $0.wantsPriorityOverSystemBehavior = true }
 

@@ -113,7 +113,7 @@ class BackForwardListViewController: UIViewController,
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
 
             shadow.leftAnchor.constraint(equalTo: view.leftAnchor),
-            shadow.rightAnchor.constraint(equalTo: view.rightAnchor),
+            shadow.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
         remakeVerticalConstraints()
         view.layoutIfNeeded()

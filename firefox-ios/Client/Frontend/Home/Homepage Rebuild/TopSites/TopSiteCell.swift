@@ -230,7 +230,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             pinViewHolder.topAnchor.constraint(equalTo: pinImageView.topAnchor),
 
             pinImageView.widthAnchor.constraint(equalToConstant: UX.pinIconSize.width),
-            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height),
+            pinImageView.heightAnchor.constraint(equalToConstant: UX.pinIconSize.height)
         ])
     }
 

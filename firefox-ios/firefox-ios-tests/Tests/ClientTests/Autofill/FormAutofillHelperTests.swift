@@ -287,7 +287,7 @@ class FormAutofillHelperTests: XCTestCase {
         tab.createWebview(configuration: .init())
         tab.addContentScript(subject, name: FormAutofillHelper.name())
 
-        subject.foundFieldValues = { fieldValues, type, frame in
+        subject.foundFieldValues = { _, _, _ in
             guard let tabWebView = tab.webView else { return }
             tabWebView.accessoryView.savedCardsClosure = {}
         }

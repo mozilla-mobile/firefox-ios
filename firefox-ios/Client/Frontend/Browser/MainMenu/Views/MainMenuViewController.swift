@@ -196,7 +196,7 @@ class MainMenuViewController: UIViewController,
             menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         let icon = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?

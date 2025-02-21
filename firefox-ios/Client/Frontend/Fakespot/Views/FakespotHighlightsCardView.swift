@@ -193,7 +193,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
                                                       constant: UX.contentHorizontalSpace),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                        constant: -UX.contentHorizontalSpace),
-            dividerView.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
+            dividerView.heightAnchor.constraint(equalToConstant: UX.dividerHeight)
         ])
     }
 

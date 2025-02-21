@@ -159,7 +159,7 @@ final class PrivateHomepageViewController:
             scrollContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
                                                  constant: UX.defaultScrollContainerPadding),
             scrollContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-                                                    constant: -UX.defaultScrollContainerPadding),
+                                                    constant: -UX.defaultScrollContainerPadding)
         ])
 
         setupConstraintsForMultitasking()

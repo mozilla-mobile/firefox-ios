@@ -313,7 +313,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
             OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
-            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
         if let profile {
             generalSettings += [
@@ -429,7 +429,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func getSupportSettings() -> [SettingSection] {
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
-            SendFeedbackSetting(settingsDelegate: parentCoordinator),
+            SendFeedbackSetting(settingsDelegate: parentCoordinator)
         ]
 
         // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
@@ -461,7 +461,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         supportSettings.append(contentsOf: [
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                                   settingsDelegate: parentCoordinator),
+                                   settingsDelegate: parentCoordinator)
         ])
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),

@@ -16,7 +16,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - UI Elements
-    let imageView: FaviconImageView = .build { imageView in }
+    let imageView: FaviconImageView = .build { _ in }
 
     let itemTitle: UILabel = .build { label in
         label.font =  FXFontStyles.Regular.body.scaledFont()

@@ -72,7 +72,7 @@ public struct SearchProviderModel {
                 #"^https:\/\/www\.bing\.com\/acli?c?k"#,
                 #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#
             ]
-        ),
+        )
     ]
 }
 

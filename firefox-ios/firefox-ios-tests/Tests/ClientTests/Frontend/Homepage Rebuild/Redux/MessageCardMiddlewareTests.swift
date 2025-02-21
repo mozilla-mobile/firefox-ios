@@ -141,7 +141,7 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID
                         )
-                    ),
+                    )
                 ]
             )
         )

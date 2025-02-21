@@ -103,7 +103,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         setupSiteVisits()
         subject.isSearchInProgress = true
 
-        fetchSearchHistory(searchTerm: "") { hasResults in
+        fetchSearchHistory(searchTerm: "") { _ in
             XCTAssertFalse(self.subject.shouldShowEmptyState(searchText: ""))
         }
     }
@@ -112,7 +112,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         setupSiteVisits()
         subject.isSearchInProgress = true
 
-        fetchSearchHistory(searchTerm: "ui") { hasResults in
+        fetchSearchHistory(searchTerm: "ui") { _ in
             XCTAssertTrue(self.subject.shouldShowEmptyState(searchText: "ui"))
         }
     }

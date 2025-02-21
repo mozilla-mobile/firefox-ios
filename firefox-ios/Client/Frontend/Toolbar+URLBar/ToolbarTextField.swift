@@ -79,7 +79,7 @@ extension ToolbarTextField {
             UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
                          input: UIKeyCommand.inputRightArrow),
             UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
-                         input: UIKeyCommand.inputLeftArrow),
+                         input: UIKeyCommand.inputLeftArrow)
         ]
         return commands
     }

@@ -157,7 +157,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                  constant: -UX.padding),
+                                                  constant: -UX.padding)
         ])
     }
 

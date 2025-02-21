@@ -235,7 +235,7 @@ class BookmarksViewController: SiteTableViewController,
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderCancelButtonLabel,
                                                 style: .default))
         alertController.addAction(UIAlertAction(title: .BookmarksDeleteFolderDeleteButtonLabel,
-                                                style: .destructive) { [weak self] action in
+                                                style: .destructive) { [weak self] _ in
             self?.deleteBookmarkWithUndo(indexPath: indexPath, bookmarkNode: bookmarkNode)
         })
         present(alertController, animated: true, completion: nil)
@@ -449,7 +449,7 @@ class BookmarksViewController: SiteTableViewController,
                 emptyStateView.bottomAnchor.constraint(equalTo: a11yEmptyStateScrollView.contentLayoutGuide.bottomAnchor),
                 emptyStateView.widthAnchor.constraint(equalTo: a11yEmptyStateScrollView.frameLayoutGuide.widthAnchor),
                 emptyStateView.heightAnchor.constraint(
-                    greaterThanOrEqualTo: a11yEmptyStateScrollView.frameLayoutGuide.heightAnchor),
+                    greaterThanOrEqualTo: a11yEmptyStateScrollView.frameLayoutGuide.heightAnchor)
             ]
         )
         emptyStateView.applyTheme(theme: currentTheme())

@@ -143,7 +143,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     func allWindowTabManagers() -> [TabManager] {
-        return windows.compactMap { uuid, window in window.tabManager }
+        return windows.compactMap { _, window in window.tabManager }
     }
 
     func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID] {
@@ -242,7 +242,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
-        windows.forEach { uuid, windowInfo in
+        windows.forEach { _, windowInfo in
             // Notify any interested Coordinators, in each window, of the
             // event. Any Coordinator can receive these by conforming to the
             // WindowEventCoordinator protocol.

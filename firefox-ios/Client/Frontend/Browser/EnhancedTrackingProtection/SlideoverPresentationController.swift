@@ -60,18 +60,18 @@ class SlideOverPresentationController: UIPresentationController, FeatureFlaggabl
         blurEffectView.alpha = 0
         containerView?.addSubview(blurEffectView)
         presentedViewController.transitionCoordinator?
-            .animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
+            .animate(alongsideTransition: { (_) in
                 self.blurEffectView.alpha = 0.1
             },
-                     completion: { (UIViewControllerTransitionCoordinatorContext) in })
+                     completion: { (_) in })
     }
 
     override func dismissalTransitionWillBegin() {
         presentedViewController.transitionCoordinator?
-            .animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) in
+            .animate(alongsideTransition: { (_) in
                 self.blurEffectView.alpha = 0
             },
-                     completion: { (UIViewControllerTransitionCoordinatorContext) in
+                     completion: { (_) in
                 self.blurEffectView.removeFromSuperview()
         })
     }

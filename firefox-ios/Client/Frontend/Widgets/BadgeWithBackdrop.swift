@@ -55,7 +55,7 @@ class BadgeWithBackdrop: ThemeApplicable {
             backdrop.centerYAnchor.constraint(equalTo: button.centerYAnchor),
 
             badge.centerXAnchor.constraint(equalTo: button.centerXAnchor, constant: UX.badgeOffset),
-            badge.centerYAnchor.constraint(equalTo: button.centerYAnchor, constant: -UX.badgeOffset),
+            badge.centerYAnchor.constraint(equalTo: button.centerYAnchor, constant: -UX.badgeOffset)
         ])
         button.superview?.sendSubviewToBack(backdrop)
     }

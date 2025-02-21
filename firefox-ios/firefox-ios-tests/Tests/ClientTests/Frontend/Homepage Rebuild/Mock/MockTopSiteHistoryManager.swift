@@ -28,7 +28,7 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
                     url: "https://firefox.com",
                     title: "Firefox Sponsored Tile"
                 )
-            ),
+            )
         ]
     }
 

@@ -229,7 +229,7 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { [weak self] success in
+        viewModel.reloadData { [weak self] _ in
             DispatchQueue.main.async {
                 self?.applySnapshot(animatingDifferences: animating)
             }
@@ -326,14 +326,12 @@ class HistoryPanel: UIViewController,
             if profile.hasSyncableAccount() {
                 resyncHistory()
             }
-            break
         case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
             emptyStateOverlayView = createEmptyStateOverlayView()
             resyncHistory()
-            break
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "browser.db" {
                 fetchDataAndUpdateLayout(animating: true)
@@ -344,11 +342,9 @@ class HistoryPanel: UIViewController,
             }
 
             showClearRecentHistory()
-            break
         case .OpenRecentlyClosedTabs:
             historyCoordinatorDelegate?.showRecentlyClosedTab()
             applySnapshot(animatingDifferences: true)
-            break
         default:
             // no need to do anything at all
             break
@@ -362,7 +358,7 @@ class HistoryPanel: UIViewController,
         diffableDataSource = UITableViewDiffableDataSource<
             HistoryPanelSections,
             AnyHashable
-        >(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        >(tableView: tableView) { [weak self] (_, indexPath, item) -> UITableViewCell? in
             guard let self else { return nil }
 
             if var historyActionable = item as? HistoryActionablesModel {
@@ -558,7 +554,7 @@ class HistoryPanel: UIViewController,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
         if let item = diffableDataSource?.itemIdentifier(for: indexPath),
-           item as? HistoryActionablesModel != nil {
+           item is HistoryActionablesModel {
             return nil
         }
 

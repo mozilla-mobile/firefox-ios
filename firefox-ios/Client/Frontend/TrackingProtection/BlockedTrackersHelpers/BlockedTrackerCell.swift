@@ -74,7 +74,7 @@ class BlockedTrackerCell: UITableViewCell,
             dividerView.leadingAnchor.constraint(equalTo: trackerLabel.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trackerLabel.trailingAnchor),
             dividerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
+            dividerView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
         ])
     }
 

@@ -18,7 +18,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
-            .make(title: "feed3"),
+            .make(title: "feed3")
         ]
 
         subject = StoryProvider(

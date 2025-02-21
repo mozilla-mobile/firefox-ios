@@ -271,7 +271,7 @@ class FormAutofillHelper: TabContentScript {
             "cc-number": sanitizedNumber,
             "cc-exp-month": card.ccExpMonth,
             "cc-exp-year": card.ccExpYear,
-            "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
+            "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)"
         ]
         return injectionJSON
     }

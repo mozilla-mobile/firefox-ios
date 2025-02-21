@@ -98,7 +98,7 @@ class OpenPassBookHelper {
             return
         }
 
-        session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) { (data, response, _) in
             guard validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                   let data = data
             else {
@@ -158,7 +158,7 @@ class OpenPassBookHelper {
                                                 preferredStyle: .alert)
 
         alertController.addAction(UIAlertAction(title: .UnableToAddPassErrorDismiss,
-                                                style: .cancel) { (action) in })
+                                                style: .cancel) { (_) in })
         presenter.present(alertController, animated: true, completion: {
             completion()
         })

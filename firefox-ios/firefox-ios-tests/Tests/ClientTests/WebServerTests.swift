@@ -19,7 +19,7 @@ class WebServerTests: XCTestCase {
             forMethod: "GET",
             path: "/hello",
             request: GCDWebServerRequest.self
-        ) { (request) -> GCDWebServerResponse in
+        ) { (_) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(html: "<html><body><p>Hello World</p></body></html>")!
         }
         if webServer.start(withPort: 0, bonjourName: nil) == false {

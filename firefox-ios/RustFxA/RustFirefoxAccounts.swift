@@ -89,7 +89,7 @@ open class RustFirefoxAccounts {
             completion(accManager)
         }
         let manager = RustFirefoxAccounts.shared.createAccountManager(features: features)
-        manager.initialize { result in
+        manager.initialize { _ in
             assert(Thread.isMainThread)
             if !Thread.isMainThread {
                 logger.log("Initialization of RustFirefoxAccountsManager is happening OFF the main thread!",

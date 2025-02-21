@@ -203,7 +203,7 @@ class LegacyHomepageViewController:
             reloadOnRotation(newSize: size)
         }
 
-        coordinator.animate { sin_ in
+        coordinator.animate { _ in
             let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? self.statusBarFrame?.height ?? 0
             self.wallpaperViewTopConstraint?.constant = -wallpaperTopConstant
         }
@@ -382,7 +382,7 @@ class LegacyHomepageViewController:
     private func reloadOnRotation(newSize: CGSize) {
         logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .legacyHomepage)
 
-        if presentedViewController as? PhotonActionSheet != nil {
+        if presentedViewController is PhotonActionSheet {
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 

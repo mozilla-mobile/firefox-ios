@@ -17,10 +17,10 @@ final class LoggerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         beaverBuilder = nil
         crashManager = nil
         cleanUp()
+        super.tearDown()
     }
 
     // MARK: - Log

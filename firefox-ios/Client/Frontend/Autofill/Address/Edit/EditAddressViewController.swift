@@ -89,7 +89,7 @@ class EditAddressViewController: UIViewController,
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
 
         model.toggleEditModeAction = { [weak self] isEditMode in
@@ -175,7 +175,7 @@ class EditAddressViewController: UIViewController,
 
     private func evaluateJavaScript(_ jsCode: String) {
         guard let webView else { return }
-        webView.evaluateJavaScript(jsCode) { [weak self] result, error in
+        webView.evaluateJavaScript(jsCode) { [weak self] _, error in
             if let error = error {
                 self?.logger.log(
                     "JavaScript execution error",

@@ -130,13 +130,13 @@ extension SponsoredContentFilterUtilityTests {
     func createSites(normalSitesCount: Int,
                      sponsoredSitesCount: Int) -> [Site] {
         var sites = [Site]()
-        (0..<normalSitesCount).forEach { index in
+        (0..<normalSitesCount).forEach { _ in
             let site = Site.createBasicSite(url: normalURL,
                                             title: "")
             sites.append(site)
         }
 
-        (0..<sponsoredSitesCount).forEach { index in
+        (0..<sponsoredSitesCount).forEach { _ in
             let site = Site.createBasicSite(url: SponsoredContentFilterUtilityTests.sponsoredStandardURL,
                                             title: "")
             sites.append(site)
@@ -149,18 +149,18 @@ extension SponsoredContentFilterUtilityTests {
                     emptyURLTabsCount: Int,
                     sponsoredTabsCount: Int) -> [Tab] {
         var tabs = [Tab]()
-        (0..<normalTabsCount).forEach { index in
+        (0..<normalTabsCount).forEach { _ in
             let tab = Tab(profile: profile, windowUUID: windowUUID)
             tab.url = URL(string: normalURL)
             tabs.append(tab)
         }
 
-        (0..<emptyURLTabsCount).forEach { index in
+        (0..<emptyURLTabsCount).forEach { _ in
             let tab = Tab(profile: profile, windowUUID: windowUUID)
             tabs.append(tab)
         }
 
-        (0..<sponsoredTabsCount).forEach { index in
+        (0..<sponsoredTabsCount).forEach { _ in
             let tab = Tab(profile: profile, windowUUID: windowUUID)
             tab.url = URL(string: SponsoredContentFilterUtilityTests.sponsoredStandardURL)
             tabs.append(tab)
@@ -175,7 +175,7 @@ extension SponsoredContentFilterUtilityTests {
         sponsoredUrl: String = SponsoredContentFilterUtilityTests.sponsoredStandardURL
     ) -> [HistoryHighlight] {
         var highlights = [HistoryHighlight]()
-        (0..<normalHighlightsCount).forEach { index in
+        (0..<normalHighlightsCount).forEach { _ in
             let highlight = HistoryHighlight(score: 0,
                                              placeId: 0,
                                              url: normalURL,
@@ -184,7 +184,7 @@ extension SponsoredContentFilterUtilityTests {
             highlights.append(highlight)
         }
 
-        (0..<sponsoredHighlightsCount).forEach { index in
+        (0..<sponsoredHighlightsCount).forEach { _ in
             let highlight = HistoryHighlight(score: 0,
                                              placeId: 0,
                                              url: sponsoredUrl,

@@ -173,7 +173,7 @@ enum Experiments {
             "is_first_run": isFirstRun,
             "is_phone": isPhone,
             "is_review_checker_enabled": isReviewCheckerEnabled(),
-            "is_default_browser": isDefaultBrowser(),
+            "is_default_browser": isDefaultBrowser()
         ]
 
         // App settings, to allow experiments to target the app name and the
@@ -205,7 +205,7 @@ enum Experiments {
         let bundles = [
             Bundle.main,
             Strings.bundle,
-            Strings.bundle.fallbackTranslationBundle(language: "en-US"),
+            Strings.bundle.fallbackTranslationBundle(language: "en-US")
         ].compactMap { $0 }
 
         let nimbusRecordedContext = RecordedNimbusContext(

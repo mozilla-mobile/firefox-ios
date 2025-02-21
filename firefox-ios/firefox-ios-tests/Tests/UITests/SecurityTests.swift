@@ -44,13 +44,13 @@ class SecurityTests: KIFTestCase {
     /// in a new tab via window.open(). Make sure nothing happens.
     func testErrorExploit() {
         // We should only have one tab open.
-        let tabcount:String?
+        let tabcount: String?
         tabcount = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)?.accessibilityValue
 
         // make sure a new tab wasn't opened.
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
         tester().wait(forTimeInterval: 1.0)
-        let newTabcount:String?
+        let newTabcount: String?
         newTabcount = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)?.accessibilityValue
 
         XCTAssert(tabcount != nil && tabcount == newTabcount)
@@ -129,7 +129,7 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.removeTabsButton")
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        
+
       }
 
     override func tearDown() {

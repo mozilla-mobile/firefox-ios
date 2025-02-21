@@ -71,7 +71,7 @@ extension BackForwardListAnimator {
                 backForward.view.topAnchor.constraint(equalTo: containerView.topAnchor),
                 backForward.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 backForward.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                backForward.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                backForward.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
             ])
             backForward.view.layoutIfNeeded()
 

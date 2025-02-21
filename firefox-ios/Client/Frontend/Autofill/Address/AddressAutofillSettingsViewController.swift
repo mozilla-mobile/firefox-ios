@@ -126,7 +126,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
             emptyAddressAutofillView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyAddressAutofillView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyAddressAutofillView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            emptyAddressAutofillView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyAddressAutofillView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
     }
 

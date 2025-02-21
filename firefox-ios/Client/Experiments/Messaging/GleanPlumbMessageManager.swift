@@ -286,7 +286,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             value: .messageMalformed,
             extras: [
                 MessagingKey.messageKey.rawValue: id,
-                MessagingKey.messageSurface.rawValue: surface.rawValue,
+                MessagingKey.messageSurface.rawValue: surface.rawValue
             ]
         )
     }

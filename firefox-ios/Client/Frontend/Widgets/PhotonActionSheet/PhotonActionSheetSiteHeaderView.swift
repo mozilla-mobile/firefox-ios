@@ -96,7 +96,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
             descriptionLabel.trailingAnchor.constraint(equalTo: labelContainerView.trailingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: PhotonActionSheetSiteHeaderView.UX.verticalPadding),
-            descriptionLabel.bottomAnchor.constraint(equalTo: labelContainerView.bottomAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: labelContainerView.bottomAnchor)
         ])
     }
 }

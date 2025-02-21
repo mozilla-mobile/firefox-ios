@@ -302,7 +302,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             selectedOverlay.leadingAnchor.constraint(equalTo: leadingAnchor),
 
             statusIcon.widthAnchor.constraint(equalToConstant: statusIconWidth),
-            statusIcon.heightAnchor.constraint(equalToConstant: statusIconHeight),
+            statusIcon.heightAnchor.constraint(equalToConstant: statusIconHeight)
         ])
     }
 
@@ -352,7 +352,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
             NSLayoutConstraint.activate([
                 tabsLabel.centerXAnchor.constraint(equalTo: statusIcon.centerXAnchor),
-                tabsLabel.centerYAnchor.constraint(equalTo: statusIcon.centerYAnchor),
+                tabsLabel.centerYAnchor.constraint(equalTo: statusIcon.centerYAnchor)
             ])
 
         case .None:

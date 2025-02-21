@@ -214,7 +214,7 @@ class DownloadToast: Toast {
                 horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
 
                 closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-                closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+                closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize)
             ]
         )
 
@@ -233,7 +233,7 @@ class DownloadToast: Toast {
                         accessibilityIdentifier: AccessibilityIdentifiers.Alert.cancelDownloadResume)
         alert.addAction(UIAlertAction(title: .CancelDownloadDialogCancel,
                                       style: .default,
-                                      handler: { action in
+                                      handler: { _ in
             self.completionHandler?(true)
             self.dismiss(true)
             TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)

@@ -44,7 +44,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
         // For efficiency, we'll delete data in parallel, which is why closures are
         // not encloning each subsequent call
-        deleteProfileHistorySince(dateOption) { result in
+        deleteProfileHistorySince(dateOption) { _ in
             self.clearRecentlyClosedTabs(using: dateOption)
             completion(dateOption)
         }

@@ -207,7 +207,7 @@ struct NimbusOnboardingTestingConfigUtility {
             instructions: [
                 CardElementNames.popupFirstInstruction,
                 CardElementNames.popupSecondInstruction,
-                CardElementNames.popupThirdInstruction,
+                CardElementNames.popupThirdInstruction
             ],
             title: CardElementNames.popupTitle)
     }

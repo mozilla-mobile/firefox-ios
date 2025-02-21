@@ -13,7 +13,7 @@ final class MockPocketManager: PocketManagerProvider {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
-            .make(title: "feed3"),
+            .make(title: "feed3")
         ]
 
         return stories.compactMap { PocketStoryState(story: PocketStory(pocketFeedStory: $0)) }

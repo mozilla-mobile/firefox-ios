@@ -50,7 +50,7 @@ struct SearchQuickLinksWidget: Widget {
     private let kind: String = "Quick Actions - Medium"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { _ in
             SearchQuickLinksEntryView()
         }
         .contentMarginsDisabled()

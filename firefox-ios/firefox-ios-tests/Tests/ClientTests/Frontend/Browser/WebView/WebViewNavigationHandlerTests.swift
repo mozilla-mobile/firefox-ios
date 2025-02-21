@@ -11,7 +11,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
     // MARK: - Data scheme
 
     func testShouldNotHandleNonDataSchemeURL() {
-        let handler: (WKNavigationActionPolicy) -> Void = { policy in
+        let handler: (WKNavigationActionPolicy) -> Void = { _ in
             XCTFail("Handler should not be called")
         }
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)
@@ -21,7 +21,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
     }
 
     func testShouldHandleDataSchemeURL() {
-        let handler: (WKNavigationActionPolicy) -> Void = { policy in
+        let handler: (WKNavigationActionPolicy) -> Void = { _ in
             XCTFail("Handler should not be called")
         }
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)

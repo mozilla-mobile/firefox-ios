@@ -82,7 +82,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID
                         )
-                    ),
+                    )
                 ]
             )
         )

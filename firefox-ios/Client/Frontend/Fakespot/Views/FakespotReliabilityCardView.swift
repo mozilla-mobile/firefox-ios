@@ -160,7 +160,7 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
             reliabilityDescriptionLabel.trailingAnchor.constraint(equalTo: reliabilityDescriptionView.trailingAnchor,
                                                                   constant: -UX.descriptionHorizontalPadding),
             reliabilityDescriptionLabel.bottomAnchor.constraint(equalTo: reliabilityDescriptionView.bottomAnchor,
-                                                                constant: -UX.descriptionVerticalPadding),
+                                                                constant: -UX.descriptionVerticalPadding)
         ])
     }
 }

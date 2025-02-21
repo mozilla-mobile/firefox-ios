@@ -124,7 +124,7 @@ private extension WallpaperSettingsHeaderView {
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topBottomSpacing),
             contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.topBottomSpacing),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

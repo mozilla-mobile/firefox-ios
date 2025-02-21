@@ -58,7 +58,7 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
         return await withCheckedContinuation { continuation in
             mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,
                                             title: title,
-                                            position: 0).uponQueue(.main, block: { result in
+                                            position: 0).uponQueue(.main, block: { _ in
                 continuation.resume()
             })
         }

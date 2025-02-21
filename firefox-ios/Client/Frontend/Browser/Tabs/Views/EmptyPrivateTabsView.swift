@@ -120,7 +120,7 @@ class EmptyPrivateTabsView: UIView {
             learnMoreButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             learnMoreButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             learnMoreButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                    constant: -UX.paddingInBetweenItems),
+                                                    constant: -UX.paddingInBetweenItems)
         ])
     }
 

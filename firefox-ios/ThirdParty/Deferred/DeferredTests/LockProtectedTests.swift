@@ -10,7 +10,7 @@ import XCTest
 import Deferred
 
 class LockProtectedTests: XCTestCase {
-    var protected: LockProtected<(NSDate?,[Int])>!
+    var protected: LockProtected<(NSDate?, [Int])>!
     var queue: dispatch_queue_t!
 
     override func setUp() {
@@ -19,19 +19,14 @@ class LockProtectedTests: XCTestCase {
         protected = LockProtected(item: (nil, []))
         queue = dispatch_queue_create("LockProtectedTests", DISPATCH_QUEUE_CONCURRENT)
     }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
 
     func testConcurrentReadingWriting() {
         var lastWriterDate: NSDate?
 
-        let startReader: (Int) -> () = { i in
+        let startReader: (Int) -> Void = { i in
             let expectation = self.expectationWithDescription("reader \(i)")
             dispatch_async(self.queue) {
-                self.protected.withReadLock { (date,items) -> () in
+                self.protected.withReadLock { (date, items) in
                     if items.count == 0 && date == nil {
                         // OK - we're before the writer has added items
                     } else if items.count == 5 && date! === lastWriterDate! {
@@ -49,7 +44,7 @@ class LockProtectedTests: XCTestCase {
         }
         let expectation = self.expectationWithDescription("writer")
         dispatch_async(self.queue) {
-            self.protected.withWriteLock { dateItemsTuple -> () in
+            self.protected.withWriteLock { dateItemsTuple in
                 for i in 0 ..< 5 {
                     dateItemsTuple.0 = NSDate.date()
                     dateItemsTuple.1.append(i)

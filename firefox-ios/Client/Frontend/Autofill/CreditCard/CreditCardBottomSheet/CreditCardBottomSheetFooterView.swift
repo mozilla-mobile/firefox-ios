@@ -14,7 +14,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         static let manageCardsButtonBottomSpace: CGFloat = 24
     }
 
-    public lazy var manageCardsButton: LinkButton  = .build { button in }
+    public lazy var manageCardsButton: LinkButton  = .build { _ in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)

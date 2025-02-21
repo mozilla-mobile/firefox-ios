@@ -19,7 +19,7 @@ final class SearchEngineSelectionMiddleware {
         self.searchEnginesManager = searchEnginesManager ?? SearchEnginesManager(prefs: profile.prefs, files: profile.files)
     }
 
-    lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
+    lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] _, action in
         guard let action = action as? SearchEngineSelectionAction else { return }
 
         switch action.actionType {

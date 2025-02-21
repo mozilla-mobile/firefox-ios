@@ -87,7 +87,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
             passwordRefreshButton.centerYAnchor.constraint(
                 equalTo: self.centerYAnchor),
             passwordRefreshButtonWidthConstraint,
-            passwordRefreshButtonHeightConstraint,
+            passwordRefreshButtonHeightConstraint
         ])
     }
 

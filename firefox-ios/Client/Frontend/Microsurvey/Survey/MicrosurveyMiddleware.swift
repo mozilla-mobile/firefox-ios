@@ -10,7 +10,7 @@ import Common
 final class MicrosurveyMiddleware {
     private let microsurveyTelemetry = MicrosurveyTelemetry()
 
-    lazy var microsurveyProvider: Middleware<AppState> = { state, action in
+    lazy var microsurveyProvider: Middleware<AppState> = { _, action in
         let windowUUID = action.windowUUID
         guard let surveyId = (action as? MicrosurveyAction)?.surveyId else { return }
         switch action.actionType {

@@ -34,7 +34,7 @@ final class PocketStateTests: XCTestCase {
         let feedStories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
-            .make(title: "feed3"),
+            .make(title: "feed3")
         ]
 
         let stories = feedStories.compactMap {

@@ -207,7 +207,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -UX.padding),
-            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
+            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth)
         ]
         constraints.append(contentsOf: bottomConstraints)
     }
@@ -219,7 +219,7 @@ class PhotonActionSheet: UIViewController, Themeable {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width),
+            tableView.widthAnchor.constraint(greaterThanOrEqualToConstant: width)
         ]
 
         // Can't set this on iPad (not in multitasking) since it causes the menu to take all the width of the screen.
@@ -234,7 +234,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         let tableViewConstraints = [
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
+            tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth)
         ]
         constraints.append(contentsOf: tableViewConstraints)
     }

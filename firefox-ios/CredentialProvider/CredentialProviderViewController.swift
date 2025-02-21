@@ -180,7 +180,7 @@ extension CredentialProviderViewController: CredentialWelcomeViewControllerDeleg
                 self.extensionContext.cancelRequest(withError: ASExtensionError(.failed))
                 return
             }
-            self.presenter?.profile.syncCredentialIdentities().upon { result in
+            self.presenter?.profile.syncCredentialIdentities().upon { _ in
                 self.extensionContext.completeExtensionConfigurationRequest()
             }
         }

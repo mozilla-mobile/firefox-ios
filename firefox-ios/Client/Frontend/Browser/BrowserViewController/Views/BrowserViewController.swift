@@ -508,7 +508,7 @@ class BrowserViewController: UIViewController,
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -519,7 +519,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if self.presentedViewController as? PhotonActionSheet != nil {
+        if self.presentedViewController is PhotonActionSheet {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
         if let tab = tabManager.selectedTab, let screenshotHelper {
@@ -1150,7 +1150,7 @@ class BrowserViewController: UIViewController,
         }
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
-        coordinator.animate(alongsideTransition: { context in
+        coordinator.animate(alongsideTransition: { _ in
             self.scrollController.showToolbars(animated: false)
         }, completion: nil)
     }
@@ -1174,7 +1174,7 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        coordinator.animate(alongsideTransition: { [self] context in
+        coordinator.animate(alongsideTransition: { [self] _ in
             scrollController.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
@@ -1229,7 +1229,7 @@ class BrowserViewController: UIViewController,
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         ])
 
         updateHeaderConstraints()
@@ -2777,7 +2777,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController is JSPromptAlertController
     }
 
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
@@ -3125,7 +3125,7 @@ class BrowserViewController: UIViewController,
     func showCreditCardAutofillSheet(fieldValues: UnencryptedCreditCardFields) {
         self.profile.autofill.checkForCreditCardExistance(
             cardNumber: fieldValues.ccNumberLast4
-        ) { existingCard, error in
+        ) { existingCard, _ in
             guard let existingCard = existingCard else {
                 DispatchQueue.main.async {
                     self.navigationHandler?.showCreditCardAutofill(creditCard: nil,
@@ -3482,7 +3482,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
+            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, _ in
                 let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
 
                 DispatchQueue.main.async {
@@ -3900,7 +3900,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                     TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
                     TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
                     TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
-                    TelemetryWrapper.EventValue.fxSuggestionDidAbandonSearchSession.rawValue: didAbandonSearchSession,
+                    TelemetryWrapper.EventValue.fxSuggestionDidAbandonSearchSession.rawValue: didAbandonSearchSession
                 ]
             )
             if didTap {
@@ -3910,7 +3910,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
                     object: TelemetryWrapper.EventObject.fxSuggest,
                     extras: [
                         TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
-                        TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
+                        TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position
                     ]
                 )
             }
@@ -4173,7 +4173,7 @@ extension BrowserViewController {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
-            ) { (data, response, error) in
+            ) { (data, response, _) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
                 success(data)

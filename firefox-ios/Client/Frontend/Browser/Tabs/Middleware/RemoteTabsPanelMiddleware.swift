@@ -25,7 +25,7 @@ class RemoteTabsPanelMiddleware {
         observeNotifications()
     }
 
-    lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
+    lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] _, action in
         let uuid = action.windowUUID
         guard let action = action as? RemoteTabsPanelAction else { return }
         switch action.actionType {

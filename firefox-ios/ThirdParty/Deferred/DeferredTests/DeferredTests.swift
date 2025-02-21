@@ -13,22 +13,12 @@ import Deferred
 import DeferredMac
 #endif
 
-func dispatch_main_after(interval: NSTimeInterval, block: () -> ()) {
+func dispatch_main_after(interval: NSTimeInterval, block: () -> Void) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(NSTimeInterval(NSEC_PER_SEC)*interval)),
             dispatch_get_main_queue(), block)
 }
 
 class DeferredTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
 
     func testPeek() {
         let d1 = Deferred<Int>()
@@ -170,7 +160,7 @@ class DeferredTests: XCTestCase {
 
         let expectation = expectationWithDescription("paired deferred should be filled")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            while (!both.isFilled) { /* spin */ }
+            while !both.isFilled { /* spin */ }
             XCTAssertEqual(both.value.0, 1)
             XCTAssertEqual(both.value.1, "foo")
             expectation.fulfill()
@@ -200,7 +190,7 @@ class DeferredTests: XCTestCase {
             d[0].fill(0)
 
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                while (!w.isFilled) { /* spin */ }
+                while !w.isFilled { /* spin */ }
                 XCTAssertTrue(w.value == [Int](0 ..< d.count))
                 innerExpectation.fulfill()
             }

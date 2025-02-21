@@ -136,7 +136,7 @@ class LegacyPocketStandardCell: UICollectionViewCell, ReusableCell {
                                                         constant: -UX.horizontalMargin),
 
             sponsoredIcon.heightAnchor.constraint(equalToConstant: UX.sponsoredIconSize.height),
-            sponsoredIcon.widthAnchor.constraint(equalToConstant: UX.sponsoredIconSize.width),
+            sponsoredIcon.widthAnchor.constraint(equalToConstant: UX.sponsoredIconSize.width)
         ])
     }
 

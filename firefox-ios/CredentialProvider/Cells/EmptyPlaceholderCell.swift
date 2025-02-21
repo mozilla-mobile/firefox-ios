@@ -33,7 +33,7 @@ class EmptyPlaceholderCell: UITableViewCell {
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 55),
             descriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             descriptionLabel.widthAnchor.constraint(equalToConstant: 280),
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.layoutMarginsGuide.bottomAnchor, constant: 20),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.layoutMarginsGuide.bottomAnchor, constant: 20)
         ])
     }
 

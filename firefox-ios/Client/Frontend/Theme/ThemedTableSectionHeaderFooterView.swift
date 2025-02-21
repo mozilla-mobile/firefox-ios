@@ -106,7 +106,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: UX.titleHorizontalPadding),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                constant: -UX.titleHorizontalPadding),
+                                                constant: -UX.titleHorizontalPadding)
         ])
     }
 

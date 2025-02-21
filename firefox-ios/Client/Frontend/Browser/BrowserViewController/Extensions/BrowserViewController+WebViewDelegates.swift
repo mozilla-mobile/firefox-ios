@@ -210,7 +210,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     private func contextMenuActionProvider(for url: URL, webView: WKWebView) -> UIContextMenuActionProvider {
-        return { [self] (suggested) -> UIMenu? in
+        return { [self] (_) -> UIMenu? in
             guard let currentTab = tabManager.selectedTab,
                   let contextHelper = currentTab.getContentScript(
                     name: ContextMenuHelper.name()

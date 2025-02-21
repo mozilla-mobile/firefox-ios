@@ -96,7 +96,7 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
             titleLabel.bottomAnchor.constraint(equalTo: highlightLabel.topAnchor, constant: -UX.verticalSpace),
 
             highlightLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            highlightLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            highlightLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 

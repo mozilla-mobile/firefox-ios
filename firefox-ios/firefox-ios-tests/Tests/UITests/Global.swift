@@ -33,7 +33,7 @@ extension KIFUITestActor {
     }
 
     func waitForViewWithAccessibilityHint(_ hint: String) -> UIView? {
-        var view: UIView? = nil
+        var view: UIView?
         autoreleasepool {
             wait(for: nil, view: &view, withElementMatching: NSPredicate(format: "accessibilityHint = %@", hint), tappable: false)
         }
@@ -114,7 +114,7 @@ extension KIFUITestActor {
      * elements with the given textContent or title.
      */
     func waitForWebViewElementWithAccessibilityLabel(_ text: String) {
-        run { error in
+        run { _ in
             if self.hasWebViewElementWithAccessibilityLabel(text) {
                 return KIFTestStepResult.success
             }
@@ -222,10 +222,9 @@ class BrowserUtils {
     }
     internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies, Clearable.TrackingProtection])
 
-
     class func resetToAboutHomeKIF(_ tester: KIFUITestActor) {
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
-        
+
         // if in private mode, close all tabs
         tester.tapView(withAccessibilityLabel: "privateModeLarge")
 
@@ -234,7 +233,7 @@ class BrowserUtils {
 
         tester.wait(forTimeInterval: 3)
         /* go to Normal mode */
-        if (tester.viewExistsWithLabel("Show Tabs")) {
+        if tester.viewExistsWithLabel("Show Tabs") {
             tester.tapView(withAccessibilityLabel: "1")
         } else {
             tester.tapView(withAccessibilityLabel: "1")
@@ -245,19 +244,19 @@ class BrowserUtils {
 
     class func dismissFirstRunUI(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish(withTimeout: 10)
-        if (tester.viewExistsWithLabel("Next")) {
+        if tester.viewExistsWithLabel("Next") {
             tester.tapView(withAccessibilityIdentifier: "nextOnboardingButton")
             tester.waitForAnimationsToFinish(withTimeout: 3)
             tester.tapView(withAccessibilityIdentifier: "startBrowsingButtonSyncView")
         }
     }
-    
+
     class func enterUrlAddressBar(_ tester: KIFUITestActor, typeUrl: String) {
         tester.tapView(withAccessibilityIdentifier: "url")
         tester.enterText(intoCurrentFirstResponder: typeUrl)
         tester.enterText(intoCurrentFirstResponder: "\n")
     }
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
@@ -381,13 +380,13 @@ class SimplePageServer {
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+        webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (_) -> GCDWebServerResponse? in
             let img = UIImage(named: StandardImageIdentifiers.Large.chevronLeft)!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
         for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "blobURL", "firefoxScheme"] {
-            webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+            webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (_) -> GCDWebServerResponse? in
                 return GCDWebServerDataResponse(html: self.getPageData(page))
             }
         }
@@ -409,7 +408,7 @@ class SimplePageServer {
             return GCDWebServerDataResponse(html: pageData as String)
         }
 
-        webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+        webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (_) -> GCDWebServerResponse? in
             return GCDWebServerDataResponse(html: self.getPageData("readerContent"))
         }
 
@@ -442,7 +441,7 @@ class SimplePageServer {
             return response
         }
 
-        func htmlForImageBlockingTest(imageURL: String) -> String{
+        func htmlForImageBlockingTest(imageURL: String) -> String {
             let html =
             """
             <html><head><script>
@@ -474,15 +473,14 @@ class SimplePageServer {
         }
 
         // Add tracking protection check page
-        webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (_: GCDWebServerRequest?) in
             return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "http://ymail.com/favicon.ico"))
         }
 
         // Add image blocking test page
-        webServer.addHandler(forMethod: "GET", path: "/hide-images-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+        webServer.addHandler(forMethod: "GET", path: "/hide-images-test.html", request: GCDWebServerRequest.self) { (_: GCDWebServerRequest?) in
             return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "https://www.mozilla.com/favicon.ico"))
         }
-
 
         if !webServer.start(withPort: 0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")

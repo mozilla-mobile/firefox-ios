@@ -258,7 +258,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             accessoryView.leadingAnchor.constraint(equalTo: iconContainerView.leadingAnchor),
             accessoryView.topAnchor.constraint(equalTo: iconContainerView.topAnchor),
             accessoryView.trailingAnchor.constraint(equalTo: iconContainerView.trailingAnchor),
-            accessoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor),
+            accessoryView.bottomAnchor.constraint(equalTo: iconContainerView.bottomAnchor)
         ])
 
         if let primaryActionText = viewModel.primaryActionText {

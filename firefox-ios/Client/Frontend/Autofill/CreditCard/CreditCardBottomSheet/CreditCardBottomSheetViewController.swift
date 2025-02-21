@@ -213,7 +213,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                     constant: -UX.tableMargin
                 ),
 
-                yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
+                yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight)
             ]
         )
     }

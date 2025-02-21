@@ -196,7 +196,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     fileprivate func setCookies(_ webView: WKWebView, cookie: String) {
         let expectation = self.expectation(description: "Set cookie")
-        webView.evaluateJavascriptInDefaultContentWorld("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { result, _ in
+        webView.evaluateJavascriptInDefaultContentWorld("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { _, _ in
             expectation.fulfill()
         }
         waitForExpectations(timeout: 10, handler: nil)
@@ -245,7 +245,7 @@ private class CachedPageServer {
 
     func start() -> String {
         let webServer = GCDWebServer()
-        webServer.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+        webServer.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (_) -> GCDWebServerResponse? in
             self.requests += 1
             return GCDWebServerDataResponse(html: "<html><head><title>Cached page</title></head><body>Cache test</body></html>")
         }

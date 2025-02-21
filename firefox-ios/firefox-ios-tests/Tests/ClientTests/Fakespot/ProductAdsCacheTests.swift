@@ -37,7 +37,7 @@ final class ProductAdsCacheTests: XCTestCase {
                 adjustedRating: 3.8,
                 analysisUrl: URL(string: "https://ad2.com/analysis")!,
                 sponsored: false,
-                aid: "67890"),
+                aid: "67890")
         ]
     }
 

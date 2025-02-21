@@ -51,7 +51,7 @@ final class MainMenuMiddleware {
         self.logger = logger
     }
 
-    lazy var mainMenuProvider: Middleware<AppState> = { state, action in
+    lazy var mainMenuProvider: Middleware<AppState> = { _, action in
         guard let action = action as? MainMenuAction else { return }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 

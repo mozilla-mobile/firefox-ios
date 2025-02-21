@@ -8,7 +8,7 @@ import Shared
 class BlockPopupSetting: BoolSetting {
     init(prefs: Prefs) {
         let currentValue = prefs.boolForKey(PrefsKeys.KeyBlockPopups)
-        let didChange = { (isEnabled: Bool) in
+        let didChange = { (_: Bool) in
             NotificationCenter.default.post(name: .BlockPopup,
                                             object: nil)
         }

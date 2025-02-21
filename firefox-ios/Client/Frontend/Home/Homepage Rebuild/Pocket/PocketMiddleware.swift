@@ -11,7 +11,7 @@ final class PocketMiddleware {
         self.pocketManager = pocketManager
     }
 
-    lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
+    lazy var pocketSectionProvider: Middleware<AppState> = { _, action in
         switch action.actionType {
         case HomepageActionType.initialize,
             PocketActionType.enteredForeground:

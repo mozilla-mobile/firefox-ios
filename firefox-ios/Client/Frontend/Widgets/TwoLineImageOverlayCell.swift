@@ -134,7 +134,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                               constant: -8),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                constant: -8),
+                                                constant: -8)
         ])
 
         selectedBackgroundView = selectedView

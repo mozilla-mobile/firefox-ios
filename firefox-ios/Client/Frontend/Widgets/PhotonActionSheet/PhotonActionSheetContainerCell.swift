@@ -53,7 +53,7 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
             containerStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
 

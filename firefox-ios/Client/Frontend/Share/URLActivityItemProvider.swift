@@ -21,7 +21,7 @@ class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
 
     // We don't want to add this URL to Safari's Reading List
     static let excludedActivities = [
-        UIActivity.ActivityType.addToReadingList,
+        UIActivity.ActivityType.addToReadingList
     ]
 
     init(url: URL, allowSentFromFirefoxTreatment: Bool = false) {

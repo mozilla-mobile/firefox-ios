@@ -55,7 +55,7 @@ class PasswordManagerViewModelTests: XCTestCase {
                         "password": "password"
                     ])
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.save(loginRecord: login) { exampleQueryResult in
+        viewModel.save(loginRecord: login) { _ in
             XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
             expectation.fulfill()
         }
@@ -71,7 +71,7 @@ class PasswordManagerViewModelTests: XCTestCase {
                         "password": "password"
                     ])
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.save(loginRecord: login) { exampleQueryResult in
+        viewModel.save(loginRecord: login) { _ in
             XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
             expectation.fulfill()
         }
@@ -81,7 +81,7 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     func testQueryLoginsWithEmptyString() {
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.queryLogins("") { emptyQueryResult in
+        viewModel.queryLogins("") { _ in
             XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
             XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()
@@ -91,7 +91,7 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     func testQueryLoginsWithExampleString() {
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.queryLogins("example") { exampleQueryResult in
+        viewModel.queryLogins("example") { _ in
             XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
             XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()

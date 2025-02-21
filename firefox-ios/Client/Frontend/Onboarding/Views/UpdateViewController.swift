@@ -118,7 +118,7 @@ class UpdateViewController: UIViewController,
         NSLayoutConstraint.activate([
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 

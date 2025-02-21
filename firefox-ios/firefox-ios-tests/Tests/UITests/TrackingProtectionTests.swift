@@ -7,7 +7,6 @@ import Storage
 @testable import Client
 import KIF
 
-
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     private var webRoot: String!
     var stats = TPPageStats()
@@ -42,7 +41,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         register(self, forTabEvents: .didChangeContentBlocking)
     }
-    
+
     func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
         tester().waitForAnimationsToFinish(withTimeout: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
@@ -58,11 +57,10 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         tester().tapView(withAccessibilityLabel: "OK")
         }
 
-    
     func tabDidChangeContentBlocking(_ tab: Tab) {
         stats = tab.contentBlocker!.stats
 
-        if (stats.total == 0) {
+        if stats.total == 0 {
             statsZero?.fulfill()
             statsZero = nil
         } else {
@@ -167,7 +165,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         checkStrictTrackingProtection(isBlocking: false)
 
         let expRemove = self.expectation(description: "safelist removed")
-        ContentBlocker.shared.safelist(enable: false,  url: url) { expRemove.fulfill() }
+        ContentBlocker.shared.safelist(enable: false, url: url) { expRemove.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
 

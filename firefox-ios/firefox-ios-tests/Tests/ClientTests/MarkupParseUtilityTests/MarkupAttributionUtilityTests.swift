@@ -55,7 +55,7 @@ class MarkupAttributionUtilityTests: XCTestCase {
             NSAttributedString(string: "Jedi slime",
                                attributes: [NSAttributedString.Key.font: italicFont]),
             NSAttributedString(string: " myself.",
-                               attributes: [NSAttributedString.Key.font: baseFont]),
+                               attributes: [NSAttributedString.Key.font: baseFont])
         ].joined()
 
         let result = subject.addAttributesTo(text: input)

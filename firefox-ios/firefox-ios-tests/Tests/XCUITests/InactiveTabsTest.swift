@@ -15,7 +15,7 @@ final class InactiveTabsTest: BaseTestCase {
             LaunchArguments.SkipWhatsNew,
             LaunchArguments.SkipETPCoverSheet,
             LaunchArguments.SkipContextualHints,
-            LaunchArguments.DisableAnimations,
+            LaunchArguments.DisableAnimations
         ]
         launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
 
@@ -83,7 +83,7 @@ final class InactiveTabsTest: BaseTestCase {
                 app.otherElements["Tabs Tray"].staticTexts["Homepage"],
                 app.otherElements["Tabs Tray"].staticTexts["Google"],
                 app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"],
-                app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."],
+                app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."]
             ]
         )
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])

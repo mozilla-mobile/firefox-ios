@@ -130,7 +130,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
                 containerView.topAnchor.constraint(equalTo: self.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
             ]
         )
     }
