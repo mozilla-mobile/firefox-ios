@@ -116,6 +116,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -132,6 +133,7 @@ final class HomepageViewController: UIViewController,
         wallpaperView.updateImageForOrientationChange()
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillTransition
             )
@@ -230,9 +232,9 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
+
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth),
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
@@ -637,7 +639,11 @@ final class HomepageViewController: UIViewController,
     private func navigateToPocketLearnMore() {
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.link, url: homepageState.pocketState.footerURL),
+                navigationDestination: NavigationDestination(
+                    .link,
+                    url: homepageState.pocketState.footerURL,
+                    visitType: .link
+                ),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
             )
@@ -733,24 +739,19 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(.link, url: story.url),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: story.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocketDiscover(let item):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: item.url
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: item.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }

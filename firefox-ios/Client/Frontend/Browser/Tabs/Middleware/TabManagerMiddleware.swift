@@ -888,7 +888,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                 TabManagerAction(
                     recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
                     windowUUID: action.windowUUID,
-                    actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
                 )
             )
         case JumpBackInActionType.tapOnCell:

@@ -58,7 +58,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? TabManagerMiddlewareActionType)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchRecentTabs)
+        XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
         XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
     }
 
