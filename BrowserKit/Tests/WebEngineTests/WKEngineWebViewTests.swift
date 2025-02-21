@@ -6,7 +6,6 @@ import XCTest
 @testable import WebEngine
 import WebKit
 
-@available(iOS 16.0, *)
 final class WKEngineWebViewTests: XCTestCase {
     private var delegate: MockWKEngineWebViewDelegate!
 
@@ -21,7 +20,25 @@ final class WKEngineWebViewTests: XCTestCase {
     }
 
     func testNoLeaks() {
-        _ = createSubject()
+        let subject = createSubject()
+        subject.close()
+
+        // Wait for Webview to fully deallocate
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testLoadingObserver() {
+        let subject = createSubject()
+        let expectation = keyValueObservingExpectation(for: subject, keyPath: "loading", expectedValue: false)
+
+        subject.load(URLRequest(url: URL(string: "https://www.example.com")!))
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(delegate.progressChangedCalled, 3)
+        XCTAssertEqual(delegate.loadingChangedCalled, 2)
+        XCTAssertEqual(delegate.urlChangedCalled, 1)
+        XCTAssertEqual(delegate.hasOnlySecureBrowserChangedCalled, 1)
     }
 
     func createSubject(file: StaticString = #file,
@@ -32,13 +49,6 @@ final class WKEngineWebViewTests: XCTestCase {
                                              configurationProvider: configuration)!
         subject.delegate = delegate
         trackForMemoryLeaks(subject, file: file, line: line)
-
-        // Each registered teardown block is run once, in last-in, first-out order, executed serially.
-        // Order is important here since the close() function needs to be called before we check for leaks
-        addTeardownBlock { [weak subject] in
-            subject?.close()
-            print("Laurie -                     \(CFGetRetainCount(subject))")
-        }
 
         return subject
     }
