@@ -71,10 +71,8 @@ class EditFolderViewModel {
 
     private func getFolderStructure(_ selectedFolder: Folder) {
         Task { @MainActor [weak self] in
-            let folders = await self?.folderFetcher.fetchFolders().filter {
-                // exclude the current editing folder from the folder structure
-                return $0.guid != self?.folder?.guid
-            }
+            guard let currentGuid = self?.folder?.guid else { return }
+            let folders = await self?.folderFetcher.fetchFolders(excludedGuids: [currentGuid])
             guard let folders else { return }
             self?.folderStructures = folders
             self?.onFolderStatusUpdate?()

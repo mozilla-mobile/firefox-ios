@@ -8,7 +8,7 @@ class MockFolderHierarchyFetcher: FolderHierarchyFetcher {
     var fetchFoldersCalled = 0
     var mockFolderStructures = [Folder(title: "Example", guid: "123456", indentation: 0)]
 
-    func fetchFolders() async -> [Folder] {
+    func fetchFolders(excludedGuids: [String] = []) async -> [Folder] {
         fetchFoldersCalled += 1
         return mockFolderStructures
     }
