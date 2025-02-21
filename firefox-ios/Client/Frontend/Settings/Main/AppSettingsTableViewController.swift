@@ -190,7 +190,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func setupDataSettings() {
         guard let profile else { return }
 
-        let studiesSetting = StudiesToggleSetting(
+        let studiesSetting = SendDataSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -198,8 +198,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
             title: .StudiesSettingTitleV2,
             message: .StudiesSettingMessageV2,
             linkedText: .StudiesSettingLinkV2,
-            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.StudiesToggle.learnMoreButton
+            prefKey: AppConstants.prefStudiesToggle,
+            a11yId: AccessibilityIdentifiers.Settings.SendData.studiesTitle,
+            learnMoreURL: SupportUtils.URLForTopic("ios-studies"),
+            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.SendData.studiesLearnMoreButton,
+            isStudiesCase: true
         )
+        studiesSetting.shouldSendData = {
+            Experiments.setStudiesSetting($0)
+        }
 
         let sendTechnicalDataSettings = SendDataSetting(
             prefs: profile.prefs,

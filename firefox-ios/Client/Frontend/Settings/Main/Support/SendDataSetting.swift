@@ -25,7 +25,8 @@ class SendDataSetting: BoolSetting {
          prefKey: String,
          a11yId: String,
          learnMoreURL: URL?,
-         learnMoreButtonA11y: String?) {
+         learnMoreButtonA11y: String?,
+         isStudiesCase: Bool = false) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -63,9 +64,15 @@ class SendDataSetting: BoolSetting {
         setupSettingDidChange()
         setupLearnMoreButtonDidTap()
 
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
+        if isStudiesCase {
+            let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            // Special Case (EXP-4780) disable studies if usage data is disabled
+            updateSetting(for: sendUsageDataPref)
+        } else {
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
+        }
     }
 
     private func setupSettingDidChange() {
@@ -78,6 +85,23 @@ class SendDataSetting: BoolSetting {
         self.learnMoreDidTap = { [weak self] in
             self?.settingsDelegate?.askedToOpen(url: self?.url, withTitle: self?.title)
         }
+    }
+
+    func updateSetting(for isUsageEnabled: Bool) {
+        guard !isUsageEnabled else {
+            // Note: switch should be enabled only when telemetry usage is enabled
+            control.setSwitchTappable(to: true)
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setStudiesSetting(prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+            return
+        }
+
+        // Special Case (EXP-4780) disable Studies if usage data is disabled
+        control.setSwitchTappable(to: false)
+        control.toggleSwitch(to: false)
+        writeBool(control.switchView)
+        Experiments.setStudiesSetting(false)
     }
 
     override var accessibilityIdentifier: String? {
