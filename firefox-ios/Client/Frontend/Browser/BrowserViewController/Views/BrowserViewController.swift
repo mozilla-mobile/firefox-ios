@@ -1043,9 +1043,7 @@ class BrowserViewController: UIViewController,
 
         prepareURLOnboardingContextualHint()
 
-        if !isDeeplinkOptimizationRefactorEnabled {
-            browserDelegate?.browserHasLoaded()
-        }
+        browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
     }
 
