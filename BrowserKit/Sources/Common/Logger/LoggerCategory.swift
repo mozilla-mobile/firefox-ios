@@ -11,7 +11,7 @@ public enum LoggerCategory: String {
     /// Related to content (trackers, advertisements) blocking
     case adblock
 
-    /// Related to address and credit card autofill
+    /// Related to address, credit card and password autofill
     case autofill
 
     /// Related to the certificate handler

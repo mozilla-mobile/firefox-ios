@@ -48,6 +48,8 @@ class RemoteTabsTableViewController: UITableViewController,
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
+    private var buttonToast: ButtonToast?
+
     // MARK: - Initializer
 
     init(state: RemoteTabsPanelState,
@@ -153,6 +155,24 @@ class RemoteTabsTableViewController: UITableViewController,
         guard let emptyState = state.showingEmptyState else { return }
         emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
         emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func show(toast: Toast,
+                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        if let buttonToast = toast as? ButtonToast {
+            self.buttonToast = buttonToast
+        }
+
+        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ]
+        }
     }
 
     // MARK: - Refreshing TableView
@@ -316,13 +336,16 @@ class RemoteTabsTableViewController: UITableViewController,
 
             // Creating a modal with an undo button that will allow the user to undo closing the last remote tab
             // they attempted to close
-            ActionToast(
-                text: .TabsTray.CloseTabsToast.SingleTabTitle,
-                bottomContainer: view,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                buttonTitle: .UndoString,
-                buttonAction: self.undo
-            ).show()
+            let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
+                                                 buttonText: .UndoString)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                                    completion: { didTapUndoButton in
+                                        if didTapUndoButton {
+                                            self.undo()
+                                        }
+                                    })
+            show(toast: toast)
 
             self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: fxaDeviceId, url: tab.URL)
 

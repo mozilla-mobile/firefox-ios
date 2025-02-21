@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Pli da informo";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Raportoj pri paneo helpas nin diagnozi kaj solvi problemojn en la retumilo.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Tio ĉi helpas nin diagnozi kaj solvi problemojn en la retumilo.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

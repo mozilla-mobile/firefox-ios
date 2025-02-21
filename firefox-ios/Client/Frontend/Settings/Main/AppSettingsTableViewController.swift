@@ -51,6 +51,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var applicationHelper: ApplicationHelper
     private let logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
+    private var hasAppearedBefore = false
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -97,10 +98,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
         configureAccessibilityIdentifiers()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 
-        askedToReload()
+        if hasAppearedBefore {
+            // Only reload if we're returning from a child view
+            askedToReload()
+        }
+
+        hasAppearedBefore = true
     }
 
     // MARK: - Actions

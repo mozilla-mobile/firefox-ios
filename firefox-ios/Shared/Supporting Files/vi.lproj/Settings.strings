@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "Tìm hiểu thêm";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Báo cáo sự cố giúp chúng tôi chẩn đoán và khắc phục sự cố của trình duyệt.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Điều này giúp chúng tôi chẩn đoán và khắc phục sự cố của trình duyệt.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

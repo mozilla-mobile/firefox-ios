@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "מידע נוסף";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "דיווחי קריסה מאפשרים לנו לאבחן ולתקן בעיות בדפדפן.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "זה מסייע לנו לאבחן ולתקן בעיות בדפדפן.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */

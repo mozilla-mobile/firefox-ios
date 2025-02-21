@@ -128,6 +128,7 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
+    let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
@@ -279,7 +280,8 @@ class BrowserViewController: UIViewController,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs)
+        self.crashTracker = DefaultCrashTracker()
+        self.ratingPromptManager = RatingPromptManager(prefs: profile.prefs, crashTracker: crashTracker)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
@@ -305,6 +307,7 @@ class BrowserViewController: UIViewController,
         let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
 
         self.navigationContextHintVC = ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
+        self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -344,8 +347,10 @@ class BrowserViewController: UIViewController,
             self?.browserDidBecomeActive()
         }
 
-        ratingPromptManager.updateData()
-        ratingPromptManager.showRatingPromptIfNeeded()
+        crashTracker.updateData()
+        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
+            ratingPromptManager.showRatingPromptIfNeeded()
+        }
     }
 
     @objc
@@ -742,35 +747,20 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        KeyboardHelper.defaultHelper.addDelegate(self)
-        trackTelemetry()
-        setupNotifications()
+
+        setupEssentialUI()
+        subscribeToRedux()
+
+        Task(priority: .background) {
+            // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
+            self.trackStartupTelemetry()
+        }
+    }
+
+    private func setupEssentialUI() {
         addSubviews()
-        listenForThemeChange(view)
-        setupAccessibleActions()
-
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
-
-        navigationToolbarContainer.toolbarDelegate = self
-
-        scrollController.header = header
-        scrollController.overKeyboardContainer = overKeyboardContainer
-        scrollController.bottomContainer = bottomContainer
-
-        updateToolbarStateForTraitCollection(traitCollection)
-
         setupConstraints()
-
-        // Setup UIDropInteraction to handle dragging and dropping
-        // links into the view from other apps.
-        let dropInteraction = UIDropInteraction(delegate: self)
-        view.addInteraction(dropInteraction)
-
-        searchTelemetry = SearchTelemetry(tabManager: tabManager)
-
-        // Awesomebar Location Telemetry
-        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+        setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
 
@@ -783,6 +773,24 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+        listenForThemeChange(view)
+        setupAccessibleActions()
+
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                tabManager: tabManager)
+        clipboardBarDisplayHandler?.delegate = self
+
+        navigationToolbarContainer.toolbarDelegate = self
+        scrollController.header = header
+        scrollController.overKeyboardContainer = overKeyboardContainer
+        scrollController.bottomContainer = bottomContainer
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links into the view from other apps.
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+
         // Feature flag for credit card until we fully enable this feature
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(
             .creditCardAutofillStatus, checking: .buildOnly)
@@ -790,13 +798,6 @@ class BrowserViewController: UIViewController,
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
         profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
-        // Credit card initial setup telemetry
-        creditCardInitialSetupTelemetry()
-
-        // Send settings telemetry for Fakespot
-        FakespotUtils().addSettingTelemetry()
-
-        subscribeToRedux()
     }
 
     private func setupAccessibleActions() {
@@ -2156,6 +2157,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
+    /// Used to handle general navigation for views that can be presented from multiple places
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
         case .contextMenu:
@@ -2173,13 +2175,17 @@ class BrowserViewController: UIViewController,
         case .settings(let section):
             navigationHandler?.show(settings: section)
         case .link:
-            guard let url = type.url else {
-                logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
+            guard let url = type.url, let visitType = type.visitType else {
+                logger.log(
+                    "url or visitType should not be nil when navigating for a link type, instead received \(String(describing: type.url)) and \(String(describing: type.visitType))",
+                    level: .warning,
+                    category: .coordinator
+                )
                 return
             }
             navigationHandler?.navigateFromHomePanel(
                 to: url,
-                visitType: .link,
+                visitType: visitType,
                 isGoogleTopSite: type.isGoogleTopSite ?? false
             )
         case .newTab:
@@ -2197,6 +2203,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
+        case .tabTray:
+            navigationHandler?.showTabTray(selectedPanel: .tabs)
         }
     }
 
@@ -2220,6 +2228,7 @@ class BrowserViewController: UIViewController,
             guard let button = state.buttonTapped else { return }
             presentRefreshLongPressAction(from: button)
         case .tabTray:
+            // TODO: FXIOS-11248 Use NavigationBrowserAction instead of GeneralBrowserAction to open tab tray
             focusOnTabSegment()
         case .share:
             // User tapped the Share button in the toolbar
@@ -4303,6 +4312,10 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressPrivateMode() {
         updateZoomPageBarVisibility(visible: false)
     }
+
+    func topTabsShowCloseTabsToast() {
+        showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+    }
 }
 
 extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
@@ -4346,10 +4359,14 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 }
 
 extension BrowserViewController {
-    func trackTelemetry() {
+    func trackStartupTelemetry() {
+        let toolbarLocation: SearchBarPosition = self.isBottomSearchBar ? .bottom : .top
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: toolbarLocation)
         trackAccessibility()
         trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
+        creditCardInitialSetupTelemetry()
+        FakespotUtils().addSettingTelemetry()
     }
 
     func trackAccessibility() {
@@ -4385,15 +4402,17 @@ extension BrowserViewController {
             extras: [Key.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description]
         )
 
-        let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
-        let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .dynamicTextSize,
-            object: .app,
-            extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
-                     Key.preferredContentSizeCategory.rawValue: a11yCategory]
-        )
+        ensureMainThread {
+            let a11yEnabled = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description
+            let a11yCategory = UIApplication.shared.preferredContentSizeCategory.rawValue.description
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .dynamicTextSize,
+                object: .app,
+                extras: [Key.isAccessibilitySizeEnabled.rawValue: a11yEnabled,
+                         Key.preferredContentSizeCategory.rawValue: a11yCategory]
+            )
+        }
     }
 
     func trackNotificationPermission() {

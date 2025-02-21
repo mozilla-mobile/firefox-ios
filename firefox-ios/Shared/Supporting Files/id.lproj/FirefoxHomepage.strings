@@ -1,0 +1,3 @@
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "Data Penjelajahan Pribadi Dihapus";
+

@@ -127,7 +127,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension BookmarksViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let bookmarksCell = cell as? BookmarksCell else { return UICollectionViewCell() }
+        guard let bookmarksCell = cell as? LegacyBookmarksCell else { return UICollectionViewCell() }
 
         if let item = bookmarkItems[safe: indexPath.row] {
             let site = Site.createBasicSite(url: item.url, title: item.title, isBookmarked: true)

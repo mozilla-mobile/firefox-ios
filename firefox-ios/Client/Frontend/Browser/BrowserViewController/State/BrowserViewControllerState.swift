@@ -160,6 +160,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             NavigationBrowserActionType.tapOnTrackingProtection,
             NavigationBrowserActionType.tapOnCell,
             NavigationBrowserActionType.tapOnLink,
+            NavigationBrowserActionType.tapOnJumpBackInShowAllButton,
             NavigationBrowserActionType.longPressOnCell,
             NavigationBrowserActionType.tapOnOpenInNewTab,
             NavigationBrowserActionType.tapOnSettingsSection,

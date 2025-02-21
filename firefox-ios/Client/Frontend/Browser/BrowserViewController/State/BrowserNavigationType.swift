@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import enum MozillaAppServices.VisitType
 
 /// View types that the browser coordinator can navigate to
 enum BrowserNavigationDestination: Equatable {
@@ -10,6 +11,7 @@ enum BrowserNavigationDestination: Equatable {
     case contextMenu
     case settings(Route.SettingsSection)
     case trackingProtectionSettings
+    case tabTray
 
     // Webpage views
     case link
@@ -35,6 +37,7 @@ struct NavigationDestination: Equatable {
     let isPrivate: Bool?
     let selectNewTab: Bool?
     let isGoogleTopSite: Bool?
+    let visitType: VisitType?
     let contextMenuConfiguration: ContextMenuConfiguration?
 
     init(
@@ -43,6 +46,7 @@ struct NavigationDestination: Equatable {
         isPrivate: Bool? = nil,
         selectNewTab: Bool? = nil,
         isGoogleTopSite: Bool? = nil,
+        visitType: VisitType? = nil,
         contextMenuConfiguration: ContextMenuConfiguration? = nil
     ) {
         self.destination = destination
@@ -50,6 +54,7 @@ struct NavigationDestination: Equatable {
         self.isPrivate = isPrivate
         self.selectNewTab = selectNewTab
         self.isGoogleTopSite = isGoogleTopSite
+        self.visitType = visitType
         self.contextMenuConfiguration = contextMenuConfiguration
     }
 }

@@ -74,9 +74,6 @@
 "Settings.CrashReports.Link.v136" = "تەپسىلاتى";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "يىمىرىلىش دوكلاتى توركۆرگۈدىكى مەسىلىگە دىياگنوز قويۇپ ۋە ئوڭشىشىمىزغا يول قويىدۇ.";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "بۇ توركۆرگۈدىكى مەسىلىگە دىياگنوز قويۇپ ۋە ئوڭشىشىمىزغا ياردەم بېرىدۇ.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
