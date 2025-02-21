@@ -22,11 +22,11 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         }
         var downloads: [Download]
 
-        func getCompletedDownloads() -> Int {
+        var completedDownloads: Int {
             return downloads.filter { $0.isComplete }.count
         }
 
-        func getTotalDownloads() -> Int {
+        var totalDownloads: Int {
             return downloads.count
         }
 
@@ -35,9 +35,8 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
             var totalBytesDownloaded: UInt64 = 0
 
             for download in downloads {
-                // downloads with content encoding cannot
-                // be estimated accurately and should be
-                // skipped entirely in the calculation of progress
+                // downloads with content encoding cannot be estimated accurately and should be skipped entirely in the
+                // calculation of progress
                 if download.hasContentEncoding == true || download.totalBytesExpected == nil {
                     continue
                 }
