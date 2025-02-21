@@ -25,11 +25,6 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         prefs.clearAll()
         prefs = nil
         mockNotificationCenter = nil
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> main
         super.tearDown()
     }
 

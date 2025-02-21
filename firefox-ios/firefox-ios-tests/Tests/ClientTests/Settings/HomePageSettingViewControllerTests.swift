@@ -23,11 +23,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         DependencyHelperMock().reset()
         self.profile = nil
         self.delegate = nil
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> main
         super.tearDown()
     }
 
