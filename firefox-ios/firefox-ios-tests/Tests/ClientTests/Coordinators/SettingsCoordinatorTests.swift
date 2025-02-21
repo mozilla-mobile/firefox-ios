@@ -143,7 +143,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testTabsSettingsRoute_showsTabsSettingsPage() throws {
         let subject = createSubject()
 
-        subject.start(with: .tabs)
+        subject.start(with: .browser)
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is BrowsingSettingsViewController)
