@@ -5,7 +5,9 @@
 import Foundation
 
 public class WKEngine: Engine {
+    private var shutdownWebServer: DispatchSourceTimer?
     private let userScriptManager: WKUserScriptManager
+    private let webServerUtil: WKWebServerUtil
 
     public static func factory() -> WKEngine {
         return WKEngine()
@@ -15,6 +17,7 @@ public class WKEngine: Engine {
         self.userScriptManager = userScriptManager
 
         InternalUtil().setUpInternalHandlers()
+        webServerUtil = WKWebServerUtil()
     }
 
     public func createView() -> EngineView {
@@ -30,5 +33,25 @@ public class WKEngine: Engine {
         }
 
         return session
+    }
+
+    public func warmEngine() {
+        shutdownWebServer?.cancel()
+        shutdownWebServer = nil
+
+        webServerUtil.setUpWebServer()
+    }
+
+    public func idleEngine() {
+        let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+        // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
+        // <500ms is expected on newer devices.
+        singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
+        singleShotTimer.setEventHandler {
+            self.webServerUtil.stopWebServer()
+            self.shutdownWebServer = nil
+        }
+        singleShotTimer.resume()
+        shutdownWebServer = singleShotTimer
     }
 }
