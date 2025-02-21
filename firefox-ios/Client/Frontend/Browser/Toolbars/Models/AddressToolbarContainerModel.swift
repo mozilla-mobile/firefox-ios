@@ -142,6 +142,7 @@ final class AddressToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
+                largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
