@@ -39,7 +39,10 @@ public struct StandardImageIdentifiers {
     public struct Large {
         public static let addToHomescreen = "addToHomescreenLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
+        /* Ecosia: Update Menu icon
         public static let appMenu = "appMenuLarge"
+         */
+        public static let appMenu = "nav-menu"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
