@@ -448,66 +448,86 @@ public class RustAutofill {
         getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
             switch (key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
-                // We expected the key to be present, and it is.
-                var canaryIsValid = false
-                do {
-                    canaryIsValid = try rustKeys.checkCanary(
-                        canary: encryptedCanaryPhrase!,
-                        text: rustKeys.canaryPhrase,
-                        key: key!
-                    )
-                } catch let error as NSError {
-                    self.logger.log("Error validating autofill encryption key",
-                                    level: .warning,
-                                    category: .storage,
-                                    description: error.localizedDescription)
-                    completion(.failure(error))
-                    return
-                }
-                if canaryIsValid {
-                    completion(.success(key!))
-                } else {
-                    self.logger.log("Autofill key was corrupted, new one generated",
-                                    level: .warning,
-                                    category: .storage)
-                    self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
-                }
+                self.handleExpectedKeyAction(rustKeys: rustKeys,
+                                             encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                             key: key,
+                                             completion: completion)
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
-                // The key is present, but we didn't expect it to be there.
-                // or
-                // We expected the key to be present, but it's gone missing on us
-                self.logger.log("Autofill key lost, new one generated",
-                                level: .warning,
-                                category: .storage)
-                self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+                self.handleUnexpectedKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
-                // We didn't expect the key to be present, which either means this is a first-time
-                // call or the key data has been cleared from the keychain.
-                self.hasCreditCards { result in
-                    switch result {
-                    case .success(let hasCreditCards):
-                        if hasCreditCards {
-                            // Since the key data isn't present and we have credit card records in
-                            // the database, we both scrub the records and reset the key.
-                            self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
-                        } else {
-                            // There are no records in the database so we don't need to scrub any
-                            // existing credit card records. We just need to create a new key.
-                            do {
-                                let key = try rustKeys.createAndStoreKey()
-                                completion(.success(key))
-                            } catch let error as NSError {
-                                completion(.failure(error))
-                            }
-                        }
-                    case .failure(let err):
-                        completion(.failure(err as NSError))
-                    }
-                }
+                self.handleFirstTimeCallOrClearedKeychainAction(rustKeys: rustKeys, completion: completion)
             default:
                 // If none of the above cases apply, we're in a state that shouldn't be possible
                 // but is disallowed nonetheless
                 completion(.failure(AutofillEncryptionKeyError.illegalState as NSError))
+            }
+        }
+    }
+
+    private func handleExpectedKeyAction(rustKeys: RustAutofillEncryptionKeys,
+                                         encryptedCanaryPhrase: String?,
+                                         key: String?,
+                                         completion: @escaping (Result<String, NSError>) -> Void) {
+        // We expected the key to be present, and it is.
+        var canaryIsValid = false
+        do {
+            canaryIsValid = try rustKeys.checkCanary(
+                canary: encryptedCanaryPhrase!,
+                text: rustKeys.canaryPhrase,
+                key: key!
+            )
+        } catch let error as NSError {
+            logger.log("Error validating autofill encryption key",
+                       level: .warning,
+                       category: .storage,
+                       description: error.localizedDescription)
+            completion(.failure(error))
+            return
+        }
+        if canaryIsValid {
+            completion(.success(key!))
+        } else {
+            logger.log("Autofill key was corrupted, new one generated",
+                       level: .warning,
+                       category: .storage)
+            resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+        }
+    }
+
+    private func handleUnexpectedKeyAction(rustKeys: RustAutofillEncryptionKeys,
+                                           completion: @escaping (Result<String, NSError>) -> Void) {
+        // The key is present, but we didn't expect it to be there.
+        // or
+        // We expected the key to be present, but it's gone missing on us
+        logger.log("Autofill key lost, new one generated",
+                   level: .warning,
+                   category: .storage)
+        resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+    }
+
+    private func handleFirstTimeCallOrClearedKeychainAction(rustKeys: RustAutofillEncryptionKeys,
+                                                            completion: @escaping (Result<String, NSError>) -> Void) {
+        // We didn't expect the key to be present, which either means this is a first-time
+        // call or the key data has been cleared from the keychain.
+        hasCreditCards { result in
+            switch result {
+            case .success(let hasCreditCards):
+                if hasCreditCards {
+                    // Since the key data isn't present and we have credit card records in
+                    // the database, we both scrub the records and reset the key.
+                    self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+                } else {
+                    // There are no records in the database so we don't need to scrub any
+                    // existing credit card records. We just need to create a new key.
+                    do {
+                        let key = try rustKeys.createAndStoreKey()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let err):
+                completion(.failure(err as NSError))
             }
         }
     }
