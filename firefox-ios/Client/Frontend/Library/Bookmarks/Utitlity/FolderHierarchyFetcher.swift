@@ -104,7 +104,13 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
-                prependDesktopFolders(folder, folders: &folders, indent: indent, excludedGuids: excludedGuids, prefixFolders: prefixFolders)
+                prependDesktopFolders(
+                    folder,
+                    folders: &folders,
+                    indent: indent,
+                    excludedGuids: excludedGuids,
+                    prefixFolders: prefixFolders
+                )
             }
         } else { return }
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
