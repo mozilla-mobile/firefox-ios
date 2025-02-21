@@ -350,6 +350,10 @@ class NavigationTest: BaseTestCase {
         let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         let switchValue = switchBlockPopUps.value!
         XCTAssertEqual(switchValue as? String, "1")
+        // Navigate back to the homepage
+        app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)
@@ -369,9 +373,12 @@ class NavigationTest: BaseTestCase {
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
+        // Navigate back to the homepage
+        app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        navigator.nowAt(NewTabScreen)
 
         // Check that now pop ups are shown, two sites loaded
-        navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
         app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)

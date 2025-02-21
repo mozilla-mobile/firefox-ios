@@ -554,6 +554,7 @@ struct AccessibilityIdentifiers {
     }
 
     struct Settings {
+        static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
