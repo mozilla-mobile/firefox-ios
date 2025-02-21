@@ -19,12 +19,7 @@ class MockRustKeychain: RustKeychain {
         return .success(storage[key])
     }
 
-    override func updateKeychainKey(_ value: String, key: String) -> OSStatus {
-        storage[key] = value
-        return errSecSuccess
-    }
-
-    override func setKeychainKey(_ value: String, key: String) -> OSStatus {
+    override func addOrUpdateKeychainKey(_ value: String, key: String) -> OSStatus {
         storage[key] = value
         return errSecSuccess
     }
