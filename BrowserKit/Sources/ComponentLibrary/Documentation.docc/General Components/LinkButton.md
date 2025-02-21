@@ -10,7 +10,7 @@ The `LinkButton` is a subclass of the `UIButton`. This means properties of the `
 
 > This image is illustrative only. For precise examples of iOS implementation, please run the SampleApplication.
 
-![The LinkButton on iOS]LinkButton
+![The LinkButton on iOS](LinkButton)
 
 ## Topics
 
