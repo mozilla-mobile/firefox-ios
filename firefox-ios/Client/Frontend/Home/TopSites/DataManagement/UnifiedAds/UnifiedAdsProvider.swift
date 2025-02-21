@@ -37,6 +37,11 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
         case noDataAvailable
     }
 
+    enum TileOrder: String {
+        case position1 = "newtab_mobile_tile_1"
+        case position2 = "newtab_mobile_tile_2"
+    }
+
     init(
         networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
@@ -91,8 +96,8 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
         let requestBody = RequestBody(
             context_id: contextId,
             placements: [
-                AdPlacement(placement: "newtab_mobile_tile_1", count: 1),
-                AdPlacement(placement: "newtab_mobile_tile_2", count: 1)
+                AdPlacement(placement: TileOrder.position1.rawValue, count: 1),
+                AdPlacement(placement: TileOrder.position2.rawValue, count: 1)
             ]
         )
 
@@ -134,7 +139,8 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let tilesDictionary = try decoder.decode([String: [UnifiedTile]].self, from: data)
-            let tiles = tilesDictionary.values.flatMap { $0 }
+            let placementOrder = [TileOrder.position1.rawValue, TileOrder.position2.rawValue]
+            let tiles = placementOrder.compactMap { tilesDictionary[$0] }.flatMap { $0 }
 
             guard !tiles.isEmpty else {
                 completion(.failure(Error.noDataAvailable))
