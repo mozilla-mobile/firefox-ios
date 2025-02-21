@@ -10,6 +10,16 @@ protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
     func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView
+
+    // Observers
+    func loadingChanged(loading: Bool)
+    func progressChanged()
+    func urlChanged()
+    func titleChanged(title: String)
+    func canGoBackChanged(canGoBack: Bool)
+    func canGoForwardChanged(canGoForward: Bool)
+    func hasOnlySecureBrowserChanged()
+    func handleContentSizeChange(newSize: CGSize)
 }
 
 /// Abstraction on top of the `WKWebView`
@@ -18,19 +28,19 @@ protocol WKEngineWebView: UIView {
     var uiDelegate: WKUIDelegate? { get set }
     var delegate: WKEngineWebViewDelegate? { get set }
 
+    var estimatedProgress: Double { get }
+    var url: URL? { get }
+    var title: String? { get }
+    var canGoBack: Bool { get }
+    var canGoForward: Bool { get }
+    var hasOnlySecureContent: Bool { get }
+
     var allowsBackForwardNavigationGestures: Bool { get set }
     var allowsLinkPreview: Bool { get set }
     var backgroundColor: UIColor? { get set }
     var interactionState: Any? { get set }
-    var url: URL? { get }
-    var title: String? { get }
     var engineScrollView: WKScrollView? { get }
     var engineConfiguration: WKEngineConfiguration { get }
-    var hasOnlySecureContent: Bool { get }
-
-    var estimatedProgress: Double { get }
-    var canGoBack: Bool { get }
-    var canGoForward: Bool { get }
 
     @available(iOS 16.0, *)
     var isFindInteractionEnabled: Bool { get set }
@@ -64,19 +74,7 @@ protocol WKEngineWebView: UIView {
         completionHandler: ((Result<Any, Error>) -> Void)?
     )
 
-    func removeAllUserScripts()
-    func removeFromSuperview()
-
-    // MARK: Custom WKEngineView functions
-
-    func addObserver(
-        _ observer: NSObject,
-        forKeyPath keyPath: String,
-        options: NSKeyValueObservingOptions,
-        context: UnsafeMutableRawPointer?
-    )
-
-    func removeObserver(_ observer: NSObject, forKeyPath keyPath: String)
+    func close()
 }
 
 extension WKEngineWebView {
@@ -128,6 +126,16 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInter
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
 
+    // Observers
+    private var loadingObserver: NSKeyValueObservation?
+    private var progressObserver: NSKeyValueObservation?
+    private var urlObserver: NSKeyValueObservation?
+    private var titleObserver: NSKeyValueObservation?
+    private var canGoBackObserver: NSKeyValueObservation?
+    private var canGoForwardObserver: NSKeyValueObservation?
+    private var hasOnlySecureBrowserObserver: NSKeyValueObservation?
+    private var contentSizeObserver: NSKeyValueObservation?
+
     override var inputAccessoryView: UIView? {
         if let delegatePreference = delegate?.tabWebViewInputAccessoryView(self) {
             switch delegatePreference {
@@ -146,10 +154,83 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInter
         super.init(frame: frame, configuration: configuration.webViewConfiguration)
 
         self.engineScrollView = scrollView
+        self.setupObservers()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        close()
+    }
+
+    func close() {
+        removeObservers()
+        removeAllUserScripts()
+        engineScrollView = nil
+        scrollView.delegate = nil
+        navigationDelegate = nil
+        uiDelegate = nil
+        delegate = nil
+    }
+
+    private func setupObservers() {
+        loadingObserver = observe(\.isLoading, options: [.new]) { [weak self] _, change in
+            guard let loading = change.newValue else { return }
+            self?.delegate?.loadingChanged(loading: loading)
+        }
+
+        progressObserver = observe(\.estimatedProgress, options: [.new]) { [weak self] _, change in
+            self?.delegate?.progressChanged()
+        }
+
+        urlObserver = observe(\.url, options: [.new]) { [weak self] _, _ in
+            self?.delegate?.urlChanged()
+        }
+
+        titleObserver = observe(\.title, options: [.new]) { [weak self] _, change in
+            guard let title = self?.title else { return }
+            self?.delegate?.titleChanged(title: title)
+        }
+
+        canGoBackObserver = observe(\.canGoBack, options: [.new]) { [weak self] _, change in
+            guard let canGoBack = change.newValue else { return }
+            self?.delegate?.canGoBackChanged(canGoBack: canGoBack)
+        }
+
+        canGoForwardObserver = observe(\.canGoForward, options: [.new]) { [weak self] _, change in
+            guard let canGoForward = change.newValue else { return }
+            self?.delegate?.canGoForwardChanged(canGoForward: canGoForward)
+        }
+
+        hasOnlySecureBrowserObserver = observe(\.hasOnlySecureContent, options: [.new]) { [weak self] _, change in
+            self?.delegate?.hasOnlySecureBrowserChanged()
+        }
+
+        contentSizeObserver = scrollView.observe(\.contentSize, options: [.new]) { [weak self] _, change in
+            guard let newSize = change.newValue else { return }
+            self?.delegate?.handleContentSizeChange(newSize: newSize)
+        }
+    }
+
+    private func removeObservers() {
+        loadingObserver?.invalidate()
+        loadingObserver = nil
+        progressObserver?.invalidate()
+        progressObserver = nil
+        urlObserver?.invalidate()
+        urlObserver = nil
+        titleObserver?.invalidate()
+        titleObserver = nil
+        canGoBackObserver?.invalidate()
+        canGoBackObserver = nil
+        canGoForwardObserver?.invalidate()
+        canGoForwardObserver = nil
+        hasOnlySecureBrowserObserver?.invalidate()
+        hasOnlySecureBrowserObserver = nil
+        contentSizeObserver?.invalidate()
+        contentSizeObserver = nil
     }
 
     func removeAllUserScripts() {

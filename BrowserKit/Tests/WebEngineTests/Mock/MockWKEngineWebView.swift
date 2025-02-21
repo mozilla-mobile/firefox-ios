@@ -39,8 +39,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var goForwardCalled = 0
     var removeAllUserScriptsCalled = 0
     var removeFromSuperviewCalled = 0
-    var addObserverCalled = 0
-    var removeObserverCalled = 0
+    var closeCalled = 0
     var evaluateJavaScriptCalled = 0
     var savedJavaScript: String?
     var javascriptResult: (Result<Any, Error>)?
@@ -98,16 +97,8 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
         removeFromSuperviewCalled += 1
     }
 
-    override func addObserver(_ observer: NSObject,
-                              forKeyPath keyPath: String,
-                              options: NSKeyValueObservingOptions,
-                              context: UnsafeMutableRawPointer?) {
-        addObserverCalled += 1
-    }
-
-    override func removeObserver(_ observer: NSObject,
-                                 forKeyPath keyPath: String) {
-        removeObserverCalled += 1
+    func close() {
+        closeCalled += 1
     }
 
     func evaluateJavaScript(_ javaScript: String,
