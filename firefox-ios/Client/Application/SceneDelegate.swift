@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder,
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
+    private var handleRouteCalled = false
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -39,7 +40,6 @@ class SceneDelegate: UIResponder,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
-        cancelStartupTimeRecordIfNeeded(options: connectionOptions)
         logger.log("SceneDelegate: will connect to session", level: .info, category: .lifecycle)
 
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
@@ -59,12 +59,9 @@ class SceneDelegate: UIResponder,
         self.window = sceneCoordinator.window
         sceneCoordinator.start()
         handle(connectionOptions: connectionOptions)
-    }
-
-    private func cancelStartupTimeRecordIfNeeded(options: UIScene.ConnectionOptions) {
-        // if the conditions are met it means the app was launched with no deeplink options
-        guard options.urlContexts.isEmpty, options.shortcutItem == nil, options.userActivities.isEmpty else { return }
-        AppEventQueue.signal(event: .recordStartupTimeOpenURLCancelled)
+        if !handleRouteCalled {
+            AppEventQueue.signal(event: .recordStartupTimeOpenURLCancelled)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -249,5 +246,6 @@ class SceneDelegate: UIResponder,
                 sceneCoordinator.findAndHandle(route: route)
             }
         }
+        handleRouteCalled = true
     }
 }
