@@ -1,6 +1,6 @@
 # ``ComponentLibrary/BottomSheetViewController``
 
-The bottom sheet is a modal view presented from the bottom as a pop over.
+The bottom sheet is a modal view presented from the bottom of the screen as a popover.
 
 ## Overview
 
