@@ -8,48 +8,11 @@ import WidgetKit
 @testable import Client
 
 class DownloadLiveActivityTest: XCTestCase {
-    let download1 = DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "file1",
-        mimeType: "application/pdf",
-        hasContentEncoding: true,
-        downloadPath: URL(string: "https://example.com/file1")!,
-        totalBytesExpected: 1000,
-        bytesDownloaded: 1000,
-        isComplete: true
-    )
-    let download2 = DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "file2",
-        mimeType: "application/pdf",
-        hasContentEncoding: nil,
-        downloadPath: URL(string: "https://example.com/file2")!,
-        totalBytesExpected: 1000,
-        bytesDownloaded: 500,
-        isComplete: false
-    )
-    let download3 = DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "file3",
-        mimeType: "application/pdf",
-        hasContentEncoding: nil,
-        downloadPath: URL(string: "https://example.com/file3")!,
-        totalBytesExpected: 500,
-        bytesDownloaded: 500,
-        isComplete: true
-    )
-    let download4 = DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "file4",
-        mimeType: "application/pdf",
-        hasContentEncoding: nil,
-        downloadPath: URL(string: "https://example.com/file4")!,
-        totalBytesExpected: nil,
-        bytesDownloaded: 500,
-        isComplete: false
-    )
-
     func testContentStateComputedProperties() {
+        let download1 = makeDownload(type: DownloadType.normal, isComplete: true)
+        let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
+        let download3 = makeDownload(type: DownloadType.nilExpectedBytes, isComplete: false)
+        let download4 = makeDownload(type: DownloadType.normal, totalBytesExpected: nil, isComplete: false)
         let contentState = DownloadLiveActivityAttributes.ContentState(
             downloads: [download1, download2, download3, download4]
         )
@@ -59,27 +22,88 @@ class DownloadLiveActivityTest: XCTestCase {
     }
 
     func testGetDownloadProgress() {
+        let bytesDownloaded1: Int64 = 500
+        let bytesDownloaded2: Int64 = 300
+        let totalBytesExpected1: Int64? = 1000
+        let totalBytesExpected2: Int64? = 2000
+        let download1 = makeDownload(
+            type: DownloadType.normal,
+            bytesDownloaded: bytesDownloaded1,
+            totalBytesExpected: totalBytesExpected1,
+            isComplete: true
+        )
+        let download2 = makeDownload(
+            type: DownloadType.normal,
+            bytesDownloaded: bytesDownloaded2,
+            totalBytesExpected: totalBytesExpected2,
+            isComplete: false
+        )
+        let download3 = makeDownload(
+            type: DownloadType.contentEncoded,
+            bytesDownloaded: 100,
+            totalBytesExpected: 100,
+            isComplete: true
+        )
+        let download4 = makeDownload(
+            type: DownloadType.nilExpectedBytes,
+            bytesDownloaded: 100,
+            totalBytesExpected: 100,
+            isComplete: false
+        )
         let contentState = DownloadLiveActivityAttributes.ContentState(
             downloads: [download1, download2, download3, download4]
         )
-        let expectedProgress = (500 + 500) / (1000 + 1000)
+        let expectedProgress =
+            Double(bytesDownloaded1 + bytesDownloaded2) / Double(totalBytesExpected1! + totalBytesExpected2!)
 
-        // download 1 and download 4 progress should be ignored
+        // download 3 and download 4 progress should be ignored
         XCTAssertEqual(contentState.getTotalProgress(), expectedProgress)
+        XCTAssertEqual(contentState.totalBytesExpected, totalBytesExpected1! + totalBytesExpected2!)
+        XCTAssertEqual(contentState.totalBytesDownloaded, bytesDownloaded1 + bytesDownloaded2)
     }
 
     func testGetDownloadProgressNoEstimate() {
+        let download1 = makeDownload(type: DownloadType.contentEncoded)
+        let download2 = makeDownload(type: DownloadType.nilExpectedBytes)
         let contentState = DownloadLiveActivityAttributes.ContentState(
-            downloads: [download1, download4]
+            downloads: [download1, download2]
         )
 
-        // download 1 and download 4 progress should be ignored
         XCTAssertEqual(contentState.getTotalProgress(), 0)
+        XCTAssertEqual(contentState.totalBytesExpected, 0)
+        XCTAssertEqual(contentState.totalBytesDownloaded, 0)
     }
 
     func testGetTotalProgressWhenNoDownloads() {
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: [])
 
         XCTAssertEqual(contentState.getTotalProgress(), 0)
+        XCTAssertEqual(contentState.totalDownloads, 0)
+        XCTAssertEqual(contentState.completedDownloads, 0)
+    }
+
+    // MARK: - Helper Methods
+
+    enum DownloadType {
+        case normal
+        case contentEncoded
+        case nilExpectedBytes
+    }
+
+    private func makeDownload(
+        type: DownloadType,
+        fileName: String = "file",
+        bytesDownloaded: Int64 = 100,
+        totalBytesExpected: Int64? = 100,
+        isComplete: Bool = false
+    ) -> DownloadLiveActivityAttributes.ContentState.Download {
+        DownloadLiveActivityAttributes.ContentState.Download(
+            id: UUID(),
+            fileName: fileName,
+            hasContentEncoding: type == DownloadType.contentEncoded,
+            totalBytesExpected: type == DownloadType.nilExpectedBytes ? nil : totalBytesExpected,
+            bytesDownloaded: bytesDownloaded,
+            isComplete: isComplete
+        )
     }
 }

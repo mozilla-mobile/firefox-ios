@@ -21,22 +21,24 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         var downloads: [Download]
 
         var completedDownloads: Int {
-            return downloads.filter { $0.isComplete }.count
+            downloads.filter { $0.isComplete }.count
         }
 
         var totalDownloads: Int {
-            return downloads.count
+            downloads.count
         }
 
         var totalBytesDownloaded: Int64 {
-            return downloads
-                .filter { $0.hasContentEncoding == false }
+            // we ignore bytes downloaded for downloads without bytes expected to ensure we don't report invalid progress
+            // to the user (i.e. 50MB of 20MB downloaded).
+            downloads
+                .filter { $0.hasContentEncoding == false && $0.totalBytesExpected != nil }
                 .compactMap { $0.bytesDownloaded }
                 .reduce(0, +)
         }
 
         var totalBytesExpected: Int64 {
-            return downloads
+            downloads
                 .filter { $0.hasContentEncoding == false }
                 .compactMap { $0.totalBytesExpected }
                 .reduce(0, +)
