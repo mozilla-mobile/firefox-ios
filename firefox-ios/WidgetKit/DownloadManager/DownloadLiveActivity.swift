@@ -12,12 +12,10 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         struct Download: Codable, Hashable {
             var id: UUID
             var fileName: String
-            var mimeType: String
             var hasContentEncoding: Bool?
-            var downloadPath: URL
 
             var totalBytesExpected: Int64?
-            var bytesDownloaded: UInt64
+            var bytesDownloaded: Int64
             var isComplete: Bool
         }
         var downloads: [Download]
@@ -31,8 +29,8 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         }
 
         func getTotalProgress() -> Double {
-            var totalBytesExpected: UInt64 = 0
-            var totalBytesDownloaded: UInt64 = 0
+            var totalBytesExpected: Int64 = 0
+            var totalBytesDownloaded: Int64 = 0
 
             for download in downloads {
                 // downloads with content encoding cannot be estimated accurately and should be skipped entirely in the
@@ -40,7 +38,7 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
                 if download.hasContentEncoding == true || download.totalBytesExpected == nil {
                     continue
                 }
-                totalBytesExpected += UInt64(download.totalBytesExpected!)
+                totalBytesExpected += download.totalBytesExpected!
                 totalBytesDownloaded += download.bytesDownloaded
             }
 
