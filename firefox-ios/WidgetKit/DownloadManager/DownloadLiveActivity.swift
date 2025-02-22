@@ -28,6 +28,20 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
             return downloads.count
         }
 
+        var totalBytesDownloaded: Int64 {
+            return downloads
+                .filter { $0.hasContentEncoding == false }
+                .compactMap { $0.bytesDownloaded }
+                .reduce(0, +)
+        }
+
+        var totalBytesExpected: Int64 {
+            return downloads
+                .filter { $0.hasContentEncoding == false }
+                .compactMap { $0.totalBytesExpected }
+                .reduce(0, +)
+        }
+
         func getTotalProgress() -> Double {
             var totalBytesExpected: Int64 = 0
             var totalBytesDownloaded: Int64 = 0
