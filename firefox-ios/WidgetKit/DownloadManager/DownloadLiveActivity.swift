@@ -57,8 +57,53 @@ struct DownloadLiveActivity: Widget {
             // Using Rectangle instead of EmptyView because the hitbox
             // of the empty view is too small (likely non existent),
             // meaning we'd never be redirected to the downloads panel
-            Rectangle()
-                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+            ZStack {
+                Rectangle()
+                    .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+                    .foregroundStyle(LinearGradient(
+                            gradient: Gradient(colors: [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                HStack(spacing: 16) {
+                    ZStack {
+                        Image("AppIcon")
+                            .frame(width: 44, height: 44)
+                        Image("faviconFox")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Downloading")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(Color("widgetLabelColors"))
+                        Text("[] of []")
+                            .font(.system(size: 15))
+                            .opacity(0.8)
+                            .foregroundColor(Color("widgetLabelColors"))
+                    }
+                    Spacer()
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 4)
+                            .foregroundColor(Color("widgetLabelColors"))
+                            .opacity(0.3)
+                        Circle()
+                            .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
+                            .stroke(style: StrokeStyle(lineWidth: 4))
+                            .rotationEffect(.degrees(270.0))
+                            .animation(.linear, value: 0.5)
+                            .foregroundColor(Color("widgetLabelColors"))
+                        RoundedRectangle(cornerSize: CGSize(width: 2, height: 2))
+                            .frame(width: 12, height: 12)
+                            .foregroundColor(Color("widgetLabelColors"))
+                    }
+                    .frame(width: 44, height: 44)
+                }
+                .padding()
+            }
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
