@@ -68,15 +68,13 @@ struct DownloadLiveActivity: Widget {
                     )
                 HStack(spacing: 16) {
                     ZStack {
-                        Image("AppIcon")
-                            .frame(width: 44, height: 44)
                         Image("faviconFox")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Downloading")
+                        Text("Downloading []")
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(Color("widgetLabelColors"))
                         Text("[] of []")
