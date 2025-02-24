@@ -52,7 +52,6 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Restore tabs
 
-    @MainActor
     func testRestoreTabs() {
         // Needed to ensure AppEventQueue is not fired from a previous test case with the same WindowUUID
         let testUUID = UUID()
@@ -72,7 +71,6 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
-    @MainActor
     func testRestoreTabsForced() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
@@ -93,7 +91,6 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
-    @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
@@ -118,7 +115,6 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
-    @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
@@ -146,7 +142,6 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
-    @MainActor
     func testRestoreScreenshotsForTabs() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()

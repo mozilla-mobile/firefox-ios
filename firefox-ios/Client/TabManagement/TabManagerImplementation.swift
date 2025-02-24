@@ -167,6 +167,10 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             ])
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     subscript(index: Int) -> Tab? {
         if index >= tabs.count {
             return nil
@@ -590,14 +594,15 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     private func restoreOnly() {
         tabs = [Tab]()
-        Task {
+        Task { [weak self, windowUUID] in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
-            let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
-            await buildTabRestore(window: windowData)
+            let windowIsNew = self?.windowIsNew ?? false
+            let windowData: WindowData? = windowIsNew ? nil : await self?.tabDataStore.fetchWindowData(uuid: windowUUID)
+            await self?.buildTabRestore(window: windowData)
             Task { @MainActor in
                 // Log on main thread, where computed `tab` properties can be accessed without risk of races
-                logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+                self?.logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+                self?.logger.log("Normal tabs count; \(self?.normalTabs.count ?? 0), Inactive tabs count; \(self?.inactiveTabs.count ?? 0), Private tabs count; \(self?.privateTabs.count ?? 0)", level: .debug, category: .tabs)
             }
         }
     }

@@ -1009,10 +1009,10 @@ class BrowserViewController: UIViewController,
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
         if isDeeplinkOptimizationRefactorEnabled {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenURLComplete]) { [weak self] in
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
                 self?.tabManager.restoreTabs()
             }
-            AppEventQueue.wait(for: [.recordStartupTimeOpenURLCancelled]) { [weak self] in
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
                 self?.tabManager.restoreTabs()
             }
         } else {

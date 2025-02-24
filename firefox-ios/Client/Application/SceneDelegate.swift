@@ -59,7 +59,7 @@ class SceneDelegate: UIResponder,
         sceneCoordinator.start()
         handle(connectionOptions: connectionOptions)
         if !sessionManager.launchSessionProvider.openedFromExternalSource {
-            AppEventQueue.signal(event: .recordStartupTimeOpenURLCancelled)
+            AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkCancelled)
         }
     }
 
@@ -237,12 +237,14 @@ class SceneDelegate: UIResponder,
 
         if isDeeplinkOptimizationRefactorEnabled {
             sceneCoordinator.findAndHandle(route: route)
+            AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkComplete)
         } else {
             AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
                 self?.logger.log("Start up flow and restoration done, will handle route",
                                  level: .info,
                                  category: .coordinator)
                 sceneCoordinator.findAndHandle(route: route)
+                AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkComplete)
             }
         }
     }
