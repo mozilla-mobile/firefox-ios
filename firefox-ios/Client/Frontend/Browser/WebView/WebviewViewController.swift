@@ -71,13 +71,14 @@ class WebviewViewController: UIViewController,
         applyTheme()
     }
 
-    func removeDocumentLoadingView() {
+    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
         guard let documentLoadingView else { return }
         UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
             documentLoadingView.alpha = 0.0
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
+            completion?()
         }
     }
 
