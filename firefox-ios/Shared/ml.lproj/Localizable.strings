@@ -236,7 +236,7 @@
 "Decrease text size" = "അക്ഷരങ്ങളുടെ വലിപ്പം കുറയ്ക്കുക";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "സ്വതേയുള്ള തിരച്ചില്‍ യന്ത്രം";
+"Default Search Engine" = "തനതുതിരച്ചില്‍ യന്ത്രം";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "അടയ്ക്കുക";
@@ -1355,7 +1355,7 @@
 "Settings.Homepage.Shortcuts.ToggleOn.v100" = "തുറന്നതു്";
 
 /* Title of the setting section containing the URL of the current home page. */
-"Settings.HomePage.URL.Title" = "നിലവിലെ ഹോംപേജ്";
+"Settings.HomePage.URL.Title" = "നിലവിലെ ആമുഖം";
 
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "നിലവിലെ താൾ ഉപയോഗിക്കുക";
@@ -1676,7 +1676,7 @@
 "TabTrayButtons.Accessibility.ShowTabs.v106" = "ടാബുകള്‍ കാണിക്കുക";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
-"The page could not be displayed in Reader View." = "വായനാരീതിയില്‍ പേജ് കാണിക്കുവാന്‍ കഴിയുന്നില്ല.";
+"The page could not be displayed in Reader View." = "വായനാപരിയില്‍ താളിനെ കാണിക്കുവാന്‍ കഴിയുന്നില്ല.";
 
 /* Error message in the remote tabs panel */
 "There was a problem accessing tabs from your other devices. Try again in a few moments." = "താങ്കളുടെ മറ്റു ഡിവൈസുകളില്‍ നിന്നും ടാബുകള്‍ ലഭ്യമാക്കാന്‍ എന്തോ പ്രശ്നം ഉണ്ട്. കുറച്ചു സമയത്തിന്‍ ശേഷം വീണും ശ്രമിക്കുക.";
