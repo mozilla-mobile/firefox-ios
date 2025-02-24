@@ -1,0 +1,19 @@
+# The configuration for the tabTrayUIExperiments feature
+features:
+  tab-tray-ui-experiments:
+    description: >
+      The tab tray will undergo some UI experimentation to test potential improvements.
+    variables:
+      enabled:
+        description: >
+          If true, enables the tab tray UI experiments.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
+
