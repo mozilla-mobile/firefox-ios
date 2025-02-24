@@ -25,7 +25,6 @@ class SceneDelegate: UIResponder,
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
-    private var handleRouteCalled = false
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -59,7 +58,7 @@ class SceneDelegate: UIResponder,
         self.window = sceneCoordinator.window
         sceneCoordinator.start()
         handle(connectionOptions: connectionOptions)
-        if !handleRouteCalled {
+        if !sessionManager.launchSessionProvider.openedFromExternalSource {
             AppEventQueue.signal(event: .recordStartupTimeOpenURLCancelled)
         }
     }
@@ -246,6 +245,5 @@ class SceneDelegate: UIResponder,
                 sceneCoordinator.findAndHandle(route: route)
             }
         }
-        handleRouteCalled = true
     }
 }

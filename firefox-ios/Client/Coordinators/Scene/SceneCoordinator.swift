@@ -134,8 +134,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
 
-        if let savedRoute {
-            browserCoordinator.findAndHandle(route: savedRoute)
+        // With tab restoration postponing this route contains a deeplink when app opens from it.
+        // This happens because route handling happens before browser coordinator exists.
+        if let deeplinkRoute = savedRoute {
+            browserCoordinator.handleDeeplinkRoute(deeplinkRoute)
         }
     }
 

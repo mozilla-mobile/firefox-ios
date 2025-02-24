@@ -399,6 +399,11 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Handle Deeplink Open URL / text
 
+    func handleDeeplinkRoute(_ route: Route) {
+        findAndHandle(route: route)
+        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
+    }
+
     private func handle(query: String, isPrivate: Bool) {
         browserViewController.handle(query: query, isPrivate: isPrivate)
     }
