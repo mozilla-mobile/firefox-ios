@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Вақте ки шумо браузери «Firefox»-ро ҳамчун браузери пешфарзи худ танзим мекунед, шумо барои Интернети кушод ва дастрас овоз медиҳед.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Ба Интернети беҳтар ба таври қатъӣ гузаред";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Бифаҳмед, ки чӣ тавр";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Пайвандҳоеро, танзим кунед, то ки онҳо аз сомонаҳо, почтаи электронӣ ва паёмҳо дар браузери «Firefox» ба таври худкор кушода шаванд.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Барои озодона ба даст овардани суръат, бехатарӣ ва махфият, браузери «Firefox»-ро ҳамчун браузери пешфарзи худ танзим кунед.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Сифати тамошобинии ҳаррӯзаи худро баланд бардоред";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Браузери «Firefox» ҳар моҳ ба ҳисоби миёна зиёда аз 3000+ васоити пайгириро барои ҳар як корбар алоҳида манъ мекунад. Браузери моро ҳамчун браузери пешфарзи худ бо роҳати дилу ҷон дар махфият танзим кунед.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Браузери «Firefox» махфиятро таъмин мекунад";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Гузоштан ба браузери пешфарзи худ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Ба Танзимот гузаред";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Ба Танзимот гузаред";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Барномаи браузери пешфарзро пахш кунед";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. «Firefox»-ро интихоб намоед";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Барномаи браузери пешфарз";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Гузоштан ҳамчун браузери пешфарз";
+

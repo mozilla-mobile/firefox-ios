@@ -185,10 +185,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Chiuji e nesci dâ ntruduzzioni a %@";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "U nostru navicaturi senza scopy di lucru t'ajuta a bluccari 'n autumàticu l'urganizzazzioni chi, 'n sicritu, ti sicùtanu riti riti mentri chi nàvichi.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "U nostru navicaturi senza scopu di lucru t'ajuta a bluccari 'n autumàticu l'urganizzazzioni chi, 'n sicritu, ti sicùtanu riti riti mentri chi nàvichi.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "U nostru navicaturi senza scopy di lucru t'ajuta a bluccari 'n autumàticu l'urganizzazzioni chi, 'n sicritu, ti sicùtanu riti riti mentri chi nàvichi.";
+"Onboarding.Welcome.Description.v120" = "U nostru navicaturi senza scopu di lucru t'ajuta a bluccari 'n autumàticu l'urganizzazzioni chi, 'n sicritu, ti sicùtanu riti riti mentri chi nàvichi.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Cchiù nfurmazzioni nnô nostru abbisu di privatizza";

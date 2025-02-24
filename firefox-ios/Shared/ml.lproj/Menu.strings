@@ -47,7 +47,7 @@
 "Menu.SeeAllAction.Title" = "മുഴുവന്‍ കാണുക";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "ഉപയോഗിച്ച് പേജ് പങ്കിടുക…";
+"Menu.SharePageAction.Title" = "ഉപയോഗിച്ച് താളിനെ പങ്കിടുക…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "ഡെസ്ക്ടോപ്പ് സൈറ്റ് ആവശ്യപ്പെടുക";

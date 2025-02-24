@@ -7,6 +7,14 @@
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
 "SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ sdílen z aplikace %2$@ 🦊 Vyzkoušejte mobilní prohlížeč: %3$@";
 
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nOdesláno z aplikace %2$@ 🦊 Vyzkoušejte mobilní prohlížeč: %3$@";
+
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
 "SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ Odeslané z aplikace %2$@ 🦊 %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v137" = "%1$@\n\nOdesláno z aplikace %2$@ 🦊 %3$@";
 

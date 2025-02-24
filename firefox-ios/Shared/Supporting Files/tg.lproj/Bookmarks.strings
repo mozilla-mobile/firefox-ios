@@ -1,0 +1,60 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Ҳангоми тамошо, хатбаракҳоро илова кунед, то тавонед сомонаҳои дӯстдоштаи худро дар оянда пайдо кунед.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Ин ҷузвдон холӣ аст";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "Сомонаҳоро ҳангоми тамошо нигоҳ доред. Мо, инчунин, аз дастгоҳҳои ҳамоҳангшудаи дигар хатбаракҳоро ба даст меорем. ";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Сомонаҳоро ҳангоми тамошо нигоҳ доред. Барои ба даст овардани хатбаракҳо аз дастгоҳҳои ҳамоҳангшудаи дигар, ба ҳисоби худ ворид шавед.";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Барои ҳамоҳангсозӣ ворид шавед";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "То ҳол ягон хатбарак нест";
+
+/* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
+"Bookmarks.Menu.AllBookmarks.v131" = "Ҳама";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "Нест кардани хатбарак";
+
+/* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
+"Bookmarks.Menu.DeletedBookmark.v131" = "«%@» нест карда шуд";
+
+/* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
+"Bookmarks.Menu.DeleteFolder.v131" = "Нест кардани ҷузвдон";
+
+/* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
+"Bookmarks.Menu.EditBookmark.v131" = "Таҳрир кардани хатбарак";
+
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "ХАТБАРАКҲОИ МИЗИ КОРӢ";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "Нигоҳ доштан";
+
+/* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
+"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Нигоҳ доштан дар";
+
+/* Label on the top of the `Edit Bookmarks` screen. */
+"Bookmarks.Menu.EditBookmarkTitle.v131" = "Таҳрир кардани хатбарак";
+
+/* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
+"Bookmarks.Menu.EditFolder.v131" = "Таҳрир кардани ҷузвдон";
+
+/* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Имконоти бештар";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Ба «Хатбаракҳо» нигоҳ дошта шуд";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. The placeholder represents the custom name of the folder, created by the user, where the bookmark will be saved to */
+"Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Дар «%@» нигоҳ дошта шуд";
+
+/* The title for the Edit context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Edit.v131" = "Таҳрир кардан";
+

@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "Номи корбарро нигоҳ медоред?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "Ниҳонвожаро нигоҳ медоред?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "Ниҳонвожаро аз нав нигоҳ медоред?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "Ниҳонвожаро аз нав нигоҳ медоред?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "Ҷустуҷӯи ниҳонвожаҳо";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "НИҲОНВОЖАҲОИ НИГОҲДОШТАШУДА";
+
