@@ -5,5 +5,5 @@
 "ExternalLink.ExternalOpenMessage.v136" = "Abrir";
 
 /* Question shown to user when tapping an SMS link that opens the external app for those. */
-"ExternalLink.ExternalSmsLinkConfirmation.v136" = "Abrir sms numa aplicação externa?";
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "Abrir SMS numa aplicação externa?";
 

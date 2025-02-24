@@ -1,0 +1,12 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Аз нав бор кардан";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Эҳтиёт шавед. Чизе нодуруст ба назар мерасад.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Кӯшиш кунед, ки дар дастгоҳи дигар пайваст шавед. Модем ё роутери худро тафтиш кунед. Пайвастшавии «Wi-Fi»-ро қатъ карда, аз нав пайваст шавед.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Чунин ба назар мерасад, ки дар пайвасти Интернети шумо мушкилӣ ба миён омад.";
+

@@ -1,5 +1,17 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "താങ്ങളുടെ പ്രിയപ്പെട്ട വെബ്സ്ഥാനങ്ങളെ പിന്നീടു് കണ്ടെത്താൻ താങ്ങൾക്കു് തിരയുമ്പോൾ അടയാളക്കുറിപ്പുകളൾ ചേൎക്കാം.";
+
 /* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Nested.Title.v135" = "ഈ അറയിൽ ഒന്നുമില്ല";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "താങ്ങൾ തിരയുമ്പോഴു് സൈറ്റുകളെ കരുതിവയ്ക്കുക. മറ്റു് സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു് അടയാളക്കുറിപ്പുകൾ ഞങ്ങൾ കൊണ്ടുവരാം.";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "താങ്ങൾ തിരയുമ്പോഴു് സൈറ്റുകളെ കരുതിവയ്ക്കുക. മറ്റു് സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു് അടയാളക്കുറിപ്പുകൾ പിടിച്ചുകൊണ്ടുവരാനായി പ്രവേശിക്കുക.";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കുക";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
 "Bookmarks.EmptyState.Root.Title.v135" = "ഇതുവരെ അടയാളക്കുറിപ്പുകളൊന്നുമില്ല";
