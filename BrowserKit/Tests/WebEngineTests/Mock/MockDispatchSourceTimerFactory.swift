@@ -29,11 +29,11 @@ class MockDispatchSourceInterface: DispatchSourceInterface {
         setEventHandlerCalled += 1
         completion()
     }
-    
+
     func resume() {
         resumeCalled += 1
     }
-    
+
     func cancel() {
         cancelCalled += 1
     }
