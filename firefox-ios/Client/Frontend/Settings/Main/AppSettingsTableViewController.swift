@@ -316,6 +316,28 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
+        // For enrolled users whose devices support alternate app icons, add the App Icon setting
+        if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
+           UIApplication.shared.supportsAlternateIcons {
+            generalSettings.append(
+                AppIconSetting(
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
+
+        generalSettings += [
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
+        ]
+
+        if let profile {
+            generalSettings += [
+                BlockPopupSetting(prefs: profile.prefs),
+                NoImageModeSetting(profile: profile)
+            ]
+        }
+
         if isSearchBarLocationFeatureEnabled, let profile {
             generalSettings.append(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)

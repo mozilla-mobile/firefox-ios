@@ -320,8 +320,7 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: GeneralSettingsDelegate
 
     func pressedCustomizeAppIcon() {
-        let viewController = UIViewController() // TODO FXIOS-11470 Implement
-        viewController.view.backgroundColor = UIColor.white // TODO FXIOS-11470 Implement
+        let viewController = UIHostingController(rootView: UIViewController()) // TODO FXIOS-11470 Implement
         viewController.title = "App Icon" // TODO FXIOS-11471 strings
         router.push(viewController)
     }
