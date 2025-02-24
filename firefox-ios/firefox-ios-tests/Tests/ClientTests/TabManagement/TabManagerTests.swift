@@ -62,9 +62,9 @@ class TabManagerTests: XCTestCase {
                                                      activeTabId: UUID(),
                                                      tabData: getMockTabData(count: 4))
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [weak subject, weak self] in
-            XCTAssertEqual(subject?.tabs.count, 4)
-            XCTAssertEqual(self?.mockTabStore.fetchWindowDataCalledCount, 1)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, 4)
+            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -83,9 +83,9 @@ class TabManagerTests: XCTestCase {
                                                      activeTabId: UUID(),
                                                      tabData: getMockTabData(count: 3))
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [weak subject, weak self] in
-            XCTAssertEqual(subject?.tabs.count, 3)
-            XCTAssertEqual(self?.mockTabStore.fetchWindowDataCalledCount, 1)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, 3)
+            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
             expectation.fulfill()
         }
 
@@ -108,9 +108,9 @@ class TabManagerTests: XCTestCase {
             tabData: getMockTabData(count: 4)
         )
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [weak subject] in
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
             // Tabs count has to be same as restoration data, since deeplink tab has same of URL of a restored tab.
-            XCTAssertEqual(subject?.tabs.count, 4)
+            XCTAssertEqual(subject.tabs.count, 4)
             expectation.fulfill()
         }
 
@@ -135,10 +135,10 @@ class TabManagerTests: XCTestCase {
             tabData: getMockTabData(count: 4)
         )
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [weak subject] in
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
             // Tabs count has to be the sum of deeplink and restored tabs, since the deeplink tab is not present in
             // the restored once.
-            XCTAssertEqual(subject?.tabs.count, 5)
+            XCTAssertEqual(subject.tabs.count, 5)
             expectation.fulfill()
         }
 
@@ -155,8 +155,8 @@ class TabManagerTests: XCTestCase {
                                                      activeTabId: UUID(),
                                                      tabData: getMockTabData(count: 2))
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [weak self] in
-            XCTAssertEqual(self?.mockDiskImageStore.getImageForKeyCallCount, 2)
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(self.mockDiskImageStore.getImageForKeyCallCount, 2)
             expectation.fulfill()
         }
 
