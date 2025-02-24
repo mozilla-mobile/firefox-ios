@@ -60,16 +60,16 @@ final class InactiveTabsTest: BaseTestCase {
         )
         app.buttons[AccessibilityIdentifiers.TabTray.doneButton].waitAndTap()
 
-        // Go to Settings -> Tabs and disable "Inactive tabs"
+        // Go to Settings -> Browsing and disable "Inactive tabs"
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Tabs.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Tabs.Customize.title])
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "1")
-        app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].waitAndTap()
+            app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].value as? String, "1")
+        app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].waitAndTap()
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "0")
+            app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].value as? String, "0")
         app.navigationBars.buttons["Settings"].waitAndTap() // Note: No AccessibilityIdentifiers
         navigator.nowAt(SettingsScreen)
 
@@ -90,12 +90,12 @@ final class InactiveTabsTest: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.TabTray.doneButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
 
-        // Go to Settings -> Tabs and enable "Inactive tabs"
+        // Go to Settings -> Browsing and disable "Inactive tabs"
         navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Tabs.title].waitAndTap()
-        app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].waitAndTap()
+        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].waitAndTap()
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "1")
+            app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].value as? String, "1")
         app.navigationBars.buttons["Settings"].waitAndTap()
         navigator.nowAt(SettingsScreen)
 
