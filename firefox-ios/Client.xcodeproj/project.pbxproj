@@ -1949,6 +1949,7 @@
 		EDDEB52D2D35C1A300517783 /* SiteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDEB52C2D35C1A300517783 /* SiteType.swift */; };
 		EDDF340A2CDD159F008BB6A4 /* SearchEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */; };
 		EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */; };
+		EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2C0552D693A7300723609 /* AppIconSetting.swift */; };
 		EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDF2C05B2D6CDB6F00723609 /* AppIcons.xcassets */; };
 		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
 		EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EDF567A12C8B51E100FDB09D /* Kingfisher */; };
@@ -9865,6 +9866,7 @@
 		EDDEB52C2D35C1A300517783 /* SiteType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteType.swift; sourceTree = "<group>"; };
 		EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineModel.swift; sourceTree = "<group>"; };
 		EDEE4CC7BD65892525632A4E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Today.strings; sourceTree = "<group>"; };
+		EDF2C0552D693A7300723609 /* AppIconSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconSetting.swift; sourceTree = "<group>"; };
 		EDF2C05B2D6CDB6F00723609 /* AppIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AppIcons.xcassets; sourceTree = "<group>"; };
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		EE4D49BBA90C11374B6718A4 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -11991,6 +11993,7 @@
 				8A5D1CA52A30D6BD005AD35C /* NewTabPageSetting.swift */,
 				8A5D1CB32A30D7D9005AD35C /* NoImageModeSetting.swift */,
 				8A5D1CAB2A30D70B005AD35C /* OpenWithSetting.swift */,
+				EDF2C0552D693A7300723609 /* AppIconSetting.swift */,
 				211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */,
 				8A5D1CAF2A30D740005AD35C /* SearchBarSetting.swift */,
 				8A5D1CA32A30D69A005AD35C /* SearchSetting.swift */,
@@ -16889,6 +16892,7 @@
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
 				814B60F52C90C0A0000997BE /* MainMenuConfigurationUtility.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
+				EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
 				8AAEBA082BF52708000C02B5 /* MicrosurveyCoordinator.swift in Sources */,
 				5A679E4B2B239FAE004F2B0D /* TabPeekViewController.swift in Sources */,
