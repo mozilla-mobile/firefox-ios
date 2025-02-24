@@ -365,7 +365,7 @@
 "Settings.setAsDefaultBrowser" = "ნაგულისხმევ ბრაუზერად მითითება";
 
 /* %@ is the name of the app. Description for set as default browser option */
-"Settings.setAsDefaultBrowserDescription" = "შედეგად ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის %@.";
+"Settings.setAsDefaultBrowserDescription" = "შედეგად, ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის %@.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "სისტემის მიხედვით";
