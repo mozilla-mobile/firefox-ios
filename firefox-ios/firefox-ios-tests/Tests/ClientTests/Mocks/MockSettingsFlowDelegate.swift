@@ -72,6 +72,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedMailApp() {}
 
+    func pressedAutoPlay() {}
+
     // MARK: PrivacySettingsDelegate
 
     func pressedCreditCard() {}

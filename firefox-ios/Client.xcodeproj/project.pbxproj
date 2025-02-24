@@ -747,6 +747,7 @@
 		8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */; };
 		8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */; };
 		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
+		8A0DF2C22D6D1C670066EC00 /* AutoplaySettingTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */; };
 		8A106D632D416F82009AD7E4 /* MessageCardMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
@@ -7700,6 +7701,7 @@
 		8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateHomepageViewController.swift; sourceTree = "<group>"; };
 		8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageCardCell.swift; sourceTree = "<group>"; };
 		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
+		8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingTelemetry.swift; sourceTree = "<group>"; };
 		8A0E5F3D2BFBA49400DE052B /* MicrosurveyCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A0F46E89E106C66C6C29F07 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardMiddlewareTests.swift; sourceTree = "<group>"; };
@@ -14417,6 +14419,7 @@
 		E69DB0B91E97E301008A67E6 /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */,
 				43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */,
 				AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */,
 				8AABBCFB2A0010900089941E /* GleanWrapper.swift */,
@@ -17256,6 +17259,7 @@
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */,
 				1DA3CE5F24EEE7C600422BB2 /* LegacyTabDataRetriever.swift in Sources */,
+				8A0DF2C22D6D1C670066EC00 /* AutoplaySettingTelemetry.swift in Sources */,
 				8A7A26EA29D4C3C800EA76F1 /* LaunchType.swift in Sources */,
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				8A93F87429D3A5C1004159D9 /* LaunchCoordinator.swift in Sources */,
