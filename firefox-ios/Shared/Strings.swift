@@ -4304,6 +4304,16 @@ extension String {
                     tableName: "MainMenu",
                     value: "Zoom",
                     comment: "On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool.")
+                public static let ZoomNegativeSymbol = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137",
+                    tableName: "MainMenu",
+                    value: "-",
+                    comment: "This string is for the Zoom tool, when Zoom value is negative. (-50%)")
+                public static let ZoomPositiveSymbol = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.Zoom.PositiveSymbol.v137",
+                    tableName: "MainMenu",
+                    value: "+",
+                    comment: "This string is for the Zoom tool, when Zoom value is positive. (+125%)")
                 public static let ReaderViewOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReaderView.On.Title.v131",
                     tableName: "MainMenu",
