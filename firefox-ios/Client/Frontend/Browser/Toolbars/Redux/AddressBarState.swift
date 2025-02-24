@@ -950,6 +950,10 @@ struct AddressBarState: StateType, Equatable {
         numberOfTabs: Int = 1,
         isPrivateMode: Bool = false)
     -> ToolbarActionConfiguration {
+        let largeContentTitle = numberOfTabs > 99 ?
+            .Toolbars.TabsButtonOverflowLargeContentTitle :
+            String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
+
         return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
@@ -957,7 +961,7 @@ struct AddressBarState: StateType, Equatable {
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
-            largeContentTitle: String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs)),
+            largeContentTitle: largeContentTitle,
             a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
