@@ -24,8 +24,8 @@ class DownloadLiveActivityTest: XCTestCase {
     func testGetDownloadProgress() {
         let bytesDownloaded1: Int64 = 500
         let bytesDownloaded2: Int64 = 300
-        let totalBytesExpected1: Int64? = 1000
-        let totalBytesExpected2: Int64? = 2000
+        let totalBytesExpected1: Int64 = 1000
+        let totalBytesExpected2: Int64 = 2000
         let download1 = makeDownload(
             type: DownloadType.normal,
             bytesDownloaded: bytesDownloaded1,
@@ -54,11 +54,11 @@ class DownloadLiveActivityTest: XCTestCase {
             downloads: [download1, download2, download3, download4]
         )
         let expectedProgress =
-            Double(bytesDownloaded1 + bytesDownloaded2) / Double(totalBytesExpected1! + totalBytesExpected2!)
+            Double(bytesDownloaded1 + bytesDownloaded2) / Double(totalBytesExpected1 + totalBytesExpected2)
 
         // download 3 and download 4 progress should be ignored
-        XCTAssertEqual(contentState.getTotalProgress(), expectedProgress)
-        XCTAssertEqual(contentState.totalBytesExpected, totalBytesExpected1! + totalBytesExpected2!)
+        XCTAssertEqual(contentState.totalProgress, expectedProgress)
+        XCTAssertEqual(contentState.totalBytesExpected, totalBytesExpected1 + totalBytesExpected2)
         XCTAssertEqual(contentState.totalBytesDownloaded, bytesDownloaded1 + bytesDownloaded2)
     }
 
@@ -69,7 +69,7 @@ class DownloadLiveActivityTest: XCTestCase {
             downloads: [download1, download2]
         )
 
-        XCTAssertEqual(contentState.getTotalProgress(), 0)
+        XCTAssertEqual(contentState.totalProgress, 0)
         XCTAssertEqual(contentState.totalBytesExpected, 0)
         XCTAssertEqual(contentState.totalBytesDownloaded, 0)
     }
@@ -77,7 +77,7 @@ class DownloadLiveActivityTest: XCTestCase {
     func testGetTotalProgressWhenNoDownloads() {
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: [])
 
-        XCTAssertEqual(contentState.getTotalProgress(), 0)
+        XCTAssertEqual(contentState.totalProgress, 0)
         XCTAssertEqual(contentState.totalDownloads, 0)
         XCTAssertEqual(contentState.completedDownloads, 0)
     }

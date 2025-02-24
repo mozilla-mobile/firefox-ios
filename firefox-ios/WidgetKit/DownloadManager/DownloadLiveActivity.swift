@@ -44,25 +44,8 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
                 .reduce(0, +)
         }
 
-        func getTotalProgress() -> Double {
-            var totalBytesExpected: Int64 = 0
-            var totalBytesDownloaded: Int64 = 0
-
-            for download in downloads {
-                // downloads with content encoding cannot be estimated accurately and should be skipped entirely in the
-                // calculation of progress
-                if download.hasContentEncoding == true || download.totalBytesExpected == nil {
-                    continue
-                }
-                totalBytesExpected += download.totalBytesExpected!
-                totalBytesDownloaded += download.bytesDownloaded
-            }
-
-            if totalBytesExpected == 0 {
-                return 0
-            }
-
-            return Double(totalBytesDownloaded) / Double(totalBytesExpected)
+        var totalProgress: Double {
+            totalBytesExpected == 0 ? 0 : Double(totalBytesDownloaded) / Double(totalBytesExpected)
         }
     }
 }
