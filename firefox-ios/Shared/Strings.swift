@@ -2109,14 +2109,6 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
-        public struct SectionTitles {
-            public static let TabsTitle = MZLocalizedString(
-                key: "Settings.Tabs.Title",
-                tableName: nil,
-                value: "Tabs",
-                comment: "In the settings menu, this is the title for the Tabs customization section option")
-        }
-
         public struct Homepage {
             public struct Current {
                 public static let Description = MZLocalizedString(
@@ -2375,6 +2367,33 @@ extension String {
                 tableName: nil,
                 value: "Tab Groups",
                 comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
+        }
+
+        public struct Browsing {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Browsing.Title.v137",
+                tableName: "Settings",
+                value: "Browsing",
+                comment: "In the settings menu, in the General section, this is the title for Browsing customization section."
+            )
+            public static let Tabs = MZLocalizedString(
+                key: "Settings.Browsing.Tabs.v137",
+                tableName: "Settings",
+                value: "Tabs",
+                comment: "This is the title for Tabs customization under the Browsing settings section."
+            )
+            public static let Links = MZLocalizedString(
+                key: "Settings.Browsing.Links.v137",
+                tableName: "Settings",
+                value: "Links",
+                comment: "This is the title for Links customization under the Browsing settings section."
+            )
+            public static let Media = MZLocalizedString(
+                key: "Settings.Browsing.Media.v137",
+                tableName: "Settings",
+                value: "Media",
+                comment: "This is the title for Media customization under the Browsing settings section."
+            )
         }
 
         public struct Notifications {
@@ -7796,6 +7815,11 @@ extension String {
                 tableName: "SocialShare",
                 value: "%1$@ Sent from %2$@ 🦊 %3$@",
                 comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
+            public static let TabsTitle = MZLocalizedString(
+                key: "Settings.Tabs.Title",
+                tableName: nil,
+                value: "Tabs",
+                comment: "In the settings menu, this is the title for the Tabs customization section option")
         }
     }
 }

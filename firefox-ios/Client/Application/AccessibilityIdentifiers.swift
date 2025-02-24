@@ -554,6 +554,7 @@ struct AccessibilityIdentifiers {
     }
 
     struct Settings {
+        static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
@@ -706,6 +707,10 @@ struct AccessibilityIdentifiers {
             static let title = "showClipboardBar"
         }
 
+        struct BlockExternal {
+            static let title = "blockOpeningExternalApps"
+        }
+
         struct ShowLink {
             static let title = "showLinkPreviews"
         }
@@ -762,18 +767,15 @@ struct AccessibilityIdentifiers {
             static let title = "SiriSettings"
         }
 
-        struct StudiesToggle {
-            static let title = "StudiesToggle"
+        struct Browsing {
+            static let title = "BrowsingSettings"
+            static let tabs = "TABS"
+            static let inactiveTabsSwitch = "Inactive Tabs"
+            static let blockPopUps = "blockPopups"
         }
 
-        struct Tabs {
-            static let title = "TabsSetting"
-
-            struct Customize {
-                static let title = "CUSTOMIZE TAB TRAY"
-                static let inactiveTabsSwitch = "Inactive Tabs"
-                static let doneButton = "Done"
-            }
+        struct StudiesToggle {
+            static let title = "StudiesToggle"
         }
 
         struct Theme {
