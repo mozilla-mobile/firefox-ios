@@ -622,6 +622,9 @@ class BrowserCoordinator: BaseCoordinator,
                 if FileManager.default.fileExists(atPath: outputURL.path) {
                     let url = URL(fileURLWithPath: outputURL.path)
                     let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    if let popover = controller.popoverPresentationController {
+                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+                    }
                     self?.present(controller)
                 }
             case .failure(let error):
@@ -1021,8 +1024,8 @@ class BrowserCoordinator: BaseCoordinator,
         webviewController?.showDocumentLoadingView()
     }
 
-    func removeDocumentLoading() {
-        webviewController?.removeDocumentLoadingView()
+    func removeDocumentLoading(completion: (() -> Void)? = nil) {
+        webviewController?.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey
