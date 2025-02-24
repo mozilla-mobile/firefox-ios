@@ -214,8 +214,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         profile.syncManager?.applicationDidEnterBackground()
 
-        // TODO: Laurie - Is this still needed? The dispatch? We don't restore session anymore
-        // with previous method. See #4343
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
         // <500ms is expected on newer devices.
