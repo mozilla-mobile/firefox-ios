@@ -29,6 +29,7 @@ class AutoplaySettingsViewController: SettingsTableViewController {
         let onFinished = { [weak self] in
             guard let currentChoice = self?.currentChoice else { return }
             self?.prefs.setString(currentChoice.rawValue, forKey: AutoplayAccessors.autoplayPrefKey)
+            NotificationCenter.default.post(name: .AutoPlayChanged, object: nil)
             self?.tableView.reloadData()
         }
 

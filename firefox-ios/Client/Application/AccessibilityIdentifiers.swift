@@ -772,6 +772,7 @@ struct AccessibilityIdentifiers {
             static let tabs = "TABS"
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
+            static let autoPlay = "AutoplaySettings"
         }
 
         struct StudiesToggle {

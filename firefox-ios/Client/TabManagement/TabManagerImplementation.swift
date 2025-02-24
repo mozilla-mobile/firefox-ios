@@ -157,7 +157,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             observing: [
                 UIApplication.willResignActiveNotification,
                 .TabMimeTypeDidSet,
-                .BlockPopup
+                .BlockPopup,
+                .AutoPlayChanged
             ])
     }
 
@@ -602,12 +603,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         // The default tab configurations also need to change.
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+    }
 
-        // TODO: Laurie - Would need its own notification - not under blockPopUpDidChange()
-        self.configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
-            .getMediaTypesRequiringUserActionForPlayback(
-                profile.prefs
-            )
+    @objc
+    private func autoPlayDidChange() {
+        let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
+        // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
+        // The web view incorporates our configuration settings only at creation time; we cannot change
+        //  those settings dynamically later. So this change will apply to new webviews only.
+        configuration.mediaTypesRequiringUserActionForPlayback = mediaType
+        privateConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
     }
 
     private func buildTabRestore(window: WindowData?) async {
@@ -1275,6 +1280,8 @@ extension TabManagerImplementation: Notifiable {
             updateMenuItemsForSelectedTab()
         case .BlockPopup:
             blockPopUpDidChange()
+        case .AutoPlayChanged:
+            autoPlayDidChange()
         default:
             break
         }
