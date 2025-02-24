@@ -1282,8 +1282,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
             refresh.leadingAnchor.constraint(equalTo: leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-            refresh.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.width),
+            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.height)
         ])
         refresh.startObservingContentScroll()
         pullRefresh = refresh
