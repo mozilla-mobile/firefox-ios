@@ -27,6 +27,7 @@ class AutoplaySetting: Setting {
     init(theme: Theme,
          prefs: Prefs,
          settingsDelegate: BrowsingSettingsDelegate?) {
+        self.theme = theme
         self.prefs = prefs
         self.settingsDelegate = settingsDelegate
         let color = theme.colors.textPrimary
