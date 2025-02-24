@@ -190,15 +190,23 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func setupDataSettings() {
         guard let profile else { return }
 
-        let studiesSetting = StudiesToggleSetting(
+        let studiesSetting = SendDataSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator,
             title: .StudiesSettingTitleV2,
             message: .StudiesSettingMessageV2,
-            linkedText: .StudiesSettingLinkV2
+            linkedText: .StudiesSettingLinkV2,
+            prefKey: AppConstants.prefStudiesToggle,
+            a11yId: AccessibilityIdentifiers.Settings.SendData.studiesTitle,
+            learnMoreURL: SupportUtils.URLForTopic("ios-studies"),
+            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.SendData.studiesLearnMoreButton,
+            isStudiesCase: true
         )
+        studiesSetting.shouldSendData = {
+            Experiments.setStudiesSetting($0)
+        }
 
         let sendTechnicalDataSettings = SendDataSetting(
             prefs: profile.prefs,
@@ -210,7 +218,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             linkedText: .SendTechnicalDataSettingLinkV2,
             prefKey: AppConstants.prefSendUsageData,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
-            learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
+            learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"),
+            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataLearnMoreButton
         )
 
         sendTechnicalDataSettings.shouldSendData = { [weak self] value in
@@ -230,7 +239,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             linkedText: .SendDailyUsagePingSettingLinkV2,
             prefKey: AppConstants.prefSendDailyUsagePing,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
-            learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile")
+            learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile"),
+            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingLearnMoreButton
         )
         sendDailyUsagePingSettings.shouldSendData = { [weak self] value in
             if value {
@@ -251,7 +261,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             linkedText: .SendCrashReportsSettingLinkV2,
             prefKey: AppConstants.prefSendCrashReports,
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
-            learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports")
+            learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports"),
+            learnMoreButtonA11y: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsDataLearnMoreButton
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
