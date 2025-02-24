@@ -12,7 +12,7 @@ class MockWKWebServerUtil: WKWebServerUtil {
     func setUpWebServer() {
         setUpWebServerCalled += 1
     }
-    
+
     func stopWebServer() {
         stopWebServerCalled += 1
     }

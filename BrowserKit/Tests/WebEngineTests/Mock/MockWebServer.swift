@@ -17,15 +17,15 @@ class MockWebServer: WKEngineWebServerProtocol {
         startCalled += 1
         return true
     }
-    
+
     func stop() {
         stopCalled += 1
     }
-    
+
     func addTestHandler() {
         addTestHandlerCalled += 1
     }
-    
+
     func baseReaderModeURL() -> String {
         baseReaderModeURLCalled += 1
         return mockBaseReaderModeURL
