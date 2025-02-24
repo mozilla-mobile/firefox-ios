@@ -195,15 +195,13 @@ extension BrowserViewController {
 
     @objc
     func closeTabKeyCommand() {
-        Task {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .press,
-                                         object: .keyCommand,
-                                         extras: ["action": "close-tab"])
-            guard let currentTab = tabManager.selectedTab else { return }
-            await tabManager.removeTab(currentTab.tabUUID)
-            keyboardPressesHandler().reset()
-        }
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .keyCommand,
+                                     extras: ["action": "close-tab"])
+        guard let currentTab = tabManager.selectedTab else { return }
+        tabManager.removeTab(currentTab.tabUUID)
+        keyboardPressesHandler().reset()
     }
 
     @objc
