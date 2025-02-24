@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
 
     func application(
         _ application: UIApplication,
-        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         engineProvider.warmEngine()
 
