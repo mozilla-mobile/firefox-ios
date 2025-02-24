@@ -1567,7 +1567,7 @@ class BrowserViewController: UIViewController,
 
         let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
 
-        guard url != nil else {
+        guard let url else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
                 legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
@@ -1576,8 +1576,8 @@ class BrowserViewController: UIViewController,
         }
 
         /// Used for checking if current error code is for no internet connection
-        let isNICErrorCode = url?.absoluteString.contains(String(Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
+        let isNICErrorCode = url.absoluteString.contains(String(Int(
+            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
         let genericErrorPageEnabled = isErrorURL && isNativeErrorPageEnabled
 
@@ -4001,12 +4001,18 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            browserDelegate?.show(webView: webView)
+            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView)
+            } else {
+                browserDelegate?.show(webView: webView)
+            }
+
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.
                 // See: [FXIOS-10612] + [FXIOS-10335]
                 needsReload = true
             }
+
             if webView.url == nil {
                 // The webView can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
@@ -4070,6 +4076,15 @@ extension BrowserViewController: TabManagerDelegate {
 
         if needsReload {
             selectedTab.reloadPage()
+        }
+    }
+
+    /// Updates the content in BVC depending on whether its a home page or web page
+    private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView) {
+        if isHomeTab {
+            updateInContentHomePanel(webView.url)
+        } else {
+            browserDelegate?.show(webView: webView)
         }
     }
 
