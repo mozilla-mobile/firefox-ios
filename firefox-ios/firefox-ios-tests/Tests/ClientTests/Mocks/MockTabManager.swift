@@ -142,7 +142,7 @@ class MockTabManager: TabManager {
                 isPrivate: Bool
     ) -> Tab {
         addTabWasCalled = true
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        return Tab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,
