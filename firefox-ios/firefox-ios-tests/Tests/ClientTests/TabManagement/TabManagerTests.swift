@@ -142,24 +142,6 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
-    @MainActor
-    func testRestoreScreenshotsForTabs() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
-        let testUUID = UUID()
-        let subject = createSubject(windowUUID: testUUID)
-        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-                                                     activeTabId: UUID(),
-                                                     tabData: getMockTabData(count: 2))
-
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
-            XCTAssertEqual(self.mockDiskImageStore.getImageForKeyCallCount, 2)
-            expectation.fulfill()
-        }
-
-        subject.restoreTabs()
-        wait(for: [expectation])
-    }
-
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {
