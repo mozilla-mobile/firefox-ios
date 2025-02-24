@@ -1940,6 +1940,7 @@
 		ED7A08DD2CF6749B0035EC8F /* ShareType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DC2CF6749B0035EC8F /* ShareType.swift */; };
 		ED7A08DF2CF674BA0035EC8F /* ShareTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */; };
 		ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */; };
+		ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B49B82D6CF72700743444 /* AppIcon.swift */; };
 		ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */; };
 		EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */; };
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
@@ -9859,6 +9860,7 @@
 		ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTab.swift; sourceTree = "<group>"; };
 		ED7A08E02CF679CE0035EC8F /* MockShareTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockShareTab.swift; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
+		ED8B49B82D6CF72700743444 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
 		ED9FD5DA2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentFromFirefoxSetting.swift; sourceTree = "<group>"; };
 		EDA240A8BBFD0A19FB2C3D7E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		EDB94DDC89DE1F2C624C9841 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -17169,6 +17171,7 @@
 				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
+				ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				8A7A26E529D4C0A800EA76F1 /* IntroScreenManager.swift in Sources */,
