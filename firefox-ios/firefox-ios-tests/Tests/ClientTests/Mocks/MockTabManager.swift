@@ -35,6 +35,8 @@ class MockTabManager: TabManager {
 
     var removeTabsByURLCalled = 0
 
+    var addTabWasCalled = false
+
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
         recentlyAccessedNormalTabs: [Tab] = [Tab]()
@@ -139,6 +141,7 @@ class MockTabManager: TabManager {
                 zombie: Bool,
                 isPrivate: Bool
     ) -> Tab {
+        addTabWasCalled = true
         return Tab(profile: MockProfile(), windowUUID: windowUUID)
     }
 

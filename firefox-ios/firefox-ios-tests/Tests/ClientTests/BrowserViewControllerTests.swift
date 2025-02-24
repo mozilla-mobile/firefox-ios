@@ -7,6 +7,7 @@ import Storage
 import XCTest
 import Shared
 import Glean
+import Common
 
 @testable import Client
 
@@ -67,5 +68,19 @@ class BrowserViewControllerTests: XCTestCase {
         ))
 
         wait(for: [expectation], timeout: 5.0)
+    }
+
+    func testOpenURLInNewTab_withPrivateModeEnabled() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        browserViewController.topTabsViewController = topTabsViewController
+        browserViewController.openURLInNewTab(nil, isPrivate: true)
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertTrue(tabManager.addTabWasCalled)
+        XCTAssertNotNil(tabManager.selectedTab)
+        guard let selectedTab = tabManager.selectedTab else {
+            XCTFail("selected tab was nil")
+            return
+        }
+        XCTAssertTrue(selectedTab.isPrivate)
     }
 }
