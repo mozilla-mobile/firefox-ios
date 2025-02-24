@@ -452,34 +452,32 @@ class BrowserViewController: UIViewController,
 
         switchToolbarIfNeeded()
 
-        DispatchQueue.main.async { [self] in
-            if isToolbarRefactorEnabled {
-                if showNavToolbar {
-                    navigationToolbarContainer.isHidden = false
-                    navigationToolbarContainer.applyTheme(theme: currentTheme())
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    navigationToolbarContainer.isHidden = true
-                }
-                updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        if isToolbarRefactorEnabled {
+            if showNavToolbar {
+                navigationToolbarContainer.isHidden = false
+                navigationToolbarContainer.applyTheme(theme: currentTheme())
+                updateTabCountUsingTabManager(self.tabManager)
             } else {
-                legacyUrlBar?.topTabsIsShowing = showTopTabs
-                legacyUrlBar?.setShowToolbar(!showNavToolbar)
+                navigationToolbarContainer.isHidden = true
+            }
+            updateToolbarStateTraitCollectionIfNecessary(newCollection)
+        } else {
+            legacyUrlBar?.topTabsIsShowing = showTopTabs
+            legacyUrlBar?.setShowToolbar(!showNavToolbar)
 
-                if showNavToolbar {
-                    toolbar.isHidden = false
-                    toolbar.tabToolbarDelegate = self
-                    toolbar.applyUIMode(
-                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                        theme: currentTheme()
-                    )
-                    toolbar.applyTheme(theme: currentTheme())
-                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                    updateTabCountUsingTabManager(self.tabManager)
-                } else {
-                    toolbar.tabToolbarDelegate = nil
-                    toolbar.isHidden = true
-                }
+            if showNavToolbar {
+                toolbar.isHidden = false
+                toolbar.tabToolbarDelegate = self
+                toolbar.applyUIMode(
+                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                    theme: currentTheme()
+                )
+                toolbar.applyTheme(theme: currentTheme())
+                handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                updateTabCountUsingTabManager(self.tabManager)
+            } else {
+                toolbar.tabToolbarDelegate = nil
+                toolbar.isHidden = true
             }
         }
         appMenuBadgeUpdate()
@@ -711,9 +709,9 @@ class BrowserViewController: UIViewController,
                 .removeShortcut,
                 .removeFromReadingList:
             showToast()
-        case .addBookmark:
+        case .addBookmark(let urlString):
             if isBookmarkRefactorEnabled {
-                showBookmarkToast(action: .add)
+                showBookmarkToast(urlString: urlString, action: .add)
             } else {
                 showToast()
             }
@@ -1205,7 +1203,9 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateToolbarStateForTraitCollection(traitCollection)
+        DispatchQueue.main.async { [self] in
+            updateToolbarStateForTraitCollection(traitCollection)
+        }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.applyThemeUpdatesToWindows()
         }
@@ -1258,8 +1258,6 @@ class BrowserViewController: UIViewController,
     }
 
     override func updateViewConstraints() {
-        super.updateViewConstraints()
-
         NSLayoutConstraint.activate([
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1302,6 +1300,8 @@ class BrowserViewController: UIViewController,
         } else {
             adjustBottomSearchBarForKeyboard()
         }
+
+        super.updateViewConstraints()
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -1692,13 +1692,13 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func addBookmark(url: String, title: String? = nil, site: Site? = nil) {
+    func addBookmark(urlString: String, title: String? = nil, site: Site? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
-            title = url
+            title = urlString
         }
 
-        let shareItem = ShareItem(url: url, title: title)
+        let shareItem = ShareItem(url: urlString, title: title)
 
         Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
@@ -1711,21 +1711,21 @@ class BrowserViewController: UIViewController,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-        showBookmarkToast(action: .add)
+        showBookmarkToast(urlString: urlString, action: .add)
     }
 
-    func removeBookmark(url: URL, title: String?, site: Site? = nil) {
-        profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+    func removeBookmark(urlString: String, title: String?, site: Site? = nil) {
+        profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
+            self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
         }
     }
 
-    private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
+    private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
             if !isBookmarkRefactorEnabled {
-                showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+                showToast(urlString, title, message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
             }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
@@ -1735,15 +1735,20 @@ class BrowserViewController: UIViewController,
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
                     let folderName = bookmarkFolder.title
                     let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                    self.showToast(message: message, toastAction: .bookmarkPage)
+                    self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                 }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel, toastAction: .bookmarkPage)
+                showToast(
+                    urlString,
+                    title,
+                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+                    toastAction: .bookmarkPage
+                )
             }
         case .remove:
             self.showToast(
-                bookmarkURL,
+                urlString,
                 title,
                 message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
                 toastAction: .removeBookmark
@@ -1752,45 +1757,32 @@ class BrowserViewController: UIViewController,
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
-    internal func openBookmarkEditPanel() {
-        guard !profile.isShutdown else { return }
+    internal func openBookmarkEditPanel(urlString: String? = nil) {
+        guard !profile.isShutdown, let urlString else { return }
 
         let bookmarksTelemetry = BookmarksTelemetry()
         bookmarksTelemetry.editBookmark(eventLabel: .addBookmarkToast)
 
-        // Open refactored bookmark edit view
-        if isBookmarkRefactorEnabled {
-            guard let url = tabManager.selectedTab?.url else { return }
-            profile.places.getBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
-                guard let bookmarkItem = result.successValue?.first,
-                let parentGuid = bookmarkItem.parentGUID else { return }
-                self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
-                    guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
-                }
-            }
-        // Open legacy bookmark edit view
-        } else {
-            // Fetch the last added bookmark in the mobile folder, which is the default location for all bookmarks
-            // added on mobile when the bookmark refactor is not enabled
-            profile.places.getBookmarksTree(
-                rootGUID: BookmarkRoots.MobileFolderGUID,
-                recursive: false
-            ).uponQueue(.main) { result in
-                guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                      let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
-                else { return }
+        profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
+            guard let bookmarkItem = result.successValue?.first,
+                  let parentGuid = bookmarkItem.parentGUID else { return }
+            self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
+                guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
 
-                let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                                 windowUUID: self.windowUUID,
-                                                                 bookmarkNode: bookmarkNode,
-                                                                 parentBookmarkFolder: bookmarkFolder,
-                                                                 presentedFromToast: true) { [weak self] in
-                    self?.showBookmarkToast(action: .remove)
+                if self.isBookmarkRefactorEnabled {
+                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
+                } else {
+                    let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
+                                                                     windowUUID: self.windowUUID,
+                                                                     bookmarkNode: bookmarkItem,
+                                                                     parentBookmarkFolder: parentFolder,
+                                                                     presentedFromToast: true) { [weak self] in
+                        self?.showBookmarkToast(action: .remove)
+                    }
+                    let controller: DismissableNavigationViewController
+                    controller = DismissableNavigationViewController(rootViewController: detailController)
+                    self.present(controller, animated: true, completion: nil)
                 }
-                let controller: DismissableNavigationViewController
-                controller = DismissableNavigationViewController(rootViewController: detailController)
-                self.present(controller, animated: true, completion: nil)
             }
         }
     }
@@ -1854,11 +1846,11 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        handleMiddleButtonState(.home)
         if !isToolbarRefactorEnabled {
             legacyUrlBar?.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
         }
-        currentMiddleButtonState = state
+        handleMiddleButtonState(.home)
+        currentMiddleButtonState = .home
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
@@ -2183,10 +2175,10 @@ class BrowserViewController: UIViewController,
         case .contextMenu:
             guard let configuration = type.contextMenuConfiguration else {
                 logger.log(
-                        "configuration should not be nil when navigating for a context menu type",
-                        level: .warning,
-                        category: .coordinator
-                    )
+                    "configuration should not be nil when navigating for a context menu type",
+                    level: .warning,
+                    category: .coordinator
+                )
                 return
             }
             navigationHandler?.showContextMenu(for: configuration)
@@ -2223,8 +2215,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
-        case .tabTray:
-            navigationHandler?.showTabTray(selectedPanel: .tabs)
+        case .tabTray(let panelType):
+            navigationHandler?.showTabTray(selectedPanel: panelType)
         }
     }
 
@@ -3806,8 +3798,8 @@ extension BrowserViewController: HomePanelDelegate {
         navigationHandler?.show(settings: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
-        showBookmarkToast(bookmarkURL: url, action: action)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction) {
+        showBookmarkToast(urlString: urlString, action: action)
     }
 
     @objc
@@ -4054,7 +4046,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         // When the newly selected tab is the homepage or another internal tab,
-        // we need to explicitely set the reader mode state to be unavailable.
+        // we need to explicitly set the reader mode state to be unavailable.
         if let url = selectedTab.webView?.url, InternalURL.scheme != url.scheme,
            let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)

@@ -349,14 +349,14 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
-    func showToast(_ bookmarkURL: URL? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
+    func showToast(_ urlString: String? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .bookmarkPage:
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .BookmarksEdit)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { isButtonTapped in
-                isButtonTapped ? self.openBookmarkEditPanel() : nil
+                isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
             }
             if isBookmarkRefactorEnabled {
                 self.show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
@@ -370,7 +370,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
                                     theme: currentTheme()) { [weak self] isButtonTapped in
                 guard let self, let currentTab = tabManager.selectedTab else { return }
                 isButtonTapped ? self.addBookmark(
-                    url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
+                    urlString: urlString ?? currentTab.url?.absoluteString ?? "",
                     title: title ?? currentTab.title
                 ) : nil
             }
@@ -434,6 +434,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showEditBookmark() {
-        openBookmarkEditPanel()
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        openBookmarkEditPanel(urlString: urlString)
     }
 }

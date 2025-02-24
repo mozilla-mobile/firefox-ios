@@ -413,7 +413,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark,
+        // The Tab Tray uses a "SimpleToast", so the urlString will go unused
+        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
                                                    windowUUID: uuid,
                                                    actionType: TabPanelMiddlewareActionType.showToast)
         store.dispatch(toastAction)
@@ -713,9 +714,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
             addToBookmarks(shareItem)
 
+            guard let shareItem else { return }
             store.dispatch(
                 GeneralBrowserAction(
-                    toastType: .addBookmark,
+                    toastType: .addBookmark(urlString: shareItem.url),
                     windowUUID: action.windowUUID,
                     actionType: GeneralBrowserActionType.showToast
                 )
@@ -886,9 +888,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                 TabManagerAction(
                     recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
                     windowUUID: action.windowUUID,
-                    actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
                 )
             )
+        case JumpBackInActionType.tapOnCell:
+            guard let jumpBackInAction = action as? JumpBackInAction,
+                  let tab = jumpBackInAction.tab else { return }
+            tabManager(for: action.windowUUID).selectTab(tab)
         default:
             break
         }

@@ -106,21 +106,21 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSection)
     }
 
-    func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() throws {
+    func test_numberOfTilesPerRow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
         let newState = reducer(
             initialState,
-            TopSitesAction(
-                isEnabled: false,
+            HomepageAction(
+                numberOfTopSitesPerRow: 8,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: TopSitesActionType.toggleShowSectionSetting
+                actionType: HomepageActionType.viewWillTransition
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.shouldShowSection)
+        XCTAssertEqual(newState.numberOfTilesPerRow, 8)
     }
 
     // MARK: - Private

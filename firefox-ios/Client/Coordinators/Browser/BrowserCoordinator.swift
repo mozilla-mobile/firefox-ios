@@ -221,7 +221,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -568,8 +568,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func editLatestBookmark() {
-        browserViewController.openBookmarkEditPanel()
+    func editBookmarkForCurrentTab() {
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 
     func showFindInPage() {
@@ -613,6 +614,9 @@ class BrowserCoordinator: BaseCoordinator,
                 if FileManager.default.fileExists(atPath: outputURL.path) {
                     let url = URL(fileURLWithPath: outputURL.path)
                     let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    if let popover = controller.popoverPresentationController {
+                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+                    }
                     self?.present(controller)
                 }
             case .failure(let error):
@@ -1006,6 +1010,14 @@ class BrowserCoordinator: BaseCoordinator,
         backForwardListVC.tabManager = tabManager
         backForwardListVC.modalPresentationStyle = .overCurrentContext
         present(backForwardListVC)
+    }
+
+    func showDocumentLoading() {
+        webviewController?.showDocumentLoadingView()
+    }
+
+    func removeDocumentLoading(completion: (() -> Void)? = nil) {
+        webviewController?.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey

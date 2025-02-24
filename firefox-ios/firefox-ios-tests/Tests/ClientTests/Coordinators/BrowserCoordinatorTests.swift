@@ -446,6 +446,35 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is PhotonActionSheet)
     }
 
+    func testShowLoadingDocument() {
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+
+        let loadingView = subject.webviewController?.view.subviews.first {
+            $0 is TemporaryDocumentLoadingView
+        }
+        XCTAssertNotNil(loadingView)
+    }
+
+    func testRemoveDocumentLoading() {
+        let expectation = expectation(description: "Remove Document loading is done ")
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+        subject.removeDocumentLoading {
+            let loadingView = subject.webviewController?.view.subviews.first {
+                $0 is TemporaryDocumentLoadingView
+            }
+            XCTAssertNil(loadingView)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation])
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

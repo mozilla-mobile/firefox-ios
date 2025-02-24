@@ -35,6 +35,7 @@
         "AddressesTests\/testAddNewAddressPhoneFilled()",
         "AddressesTests\/testAddNewAddressPostalCodeFilled()",
         "AddressesTests\/testAddNewAddressStreetAddressFilled()",
+        "AddressesTests\/testAddressOptionIsAvailableInSettingsMenu()",
         "AddressesTests\/testAutofillAddressesByTapingCountryField()",
         "AddressesTests\/testAutofillAddressesByTapingEmailField()",
         "AddressesTests\/testAutofillAddressesByTapingOrganizationField()",
