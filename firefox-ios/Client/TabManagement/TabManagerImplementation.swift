@@ -723,9 +723,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                     tabs.append(deeplinkTab)
                     selectedIndex = tabs.count - 1
                 }
+                self.deeplinkTab = nil
                 return
             }
-            deeplinkTab = nil
         }
         if let tabToSelect {
             selectTab(tabToSelect)
