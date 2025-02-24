@@ -6595,3 +6595,5 @@ nimbus_system:
       - chumphreys@mozilla.com
       - project-nimbus@mozilla.com
     expires: never
+    send_in_pings:
+      - nimbus

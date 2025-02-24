@@ -20,7 +20,7 @@ private extension Double? {
     }
 }
 
-private extension Int32? {
+public extension Int32? {
     func toInt64() -> Int64? {
         guard let self = self else { return nil }
         return Int64(self)
@@ -126,6 +126,7 @@ class RecordedNimbusContext: RecordedContext {
             daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
         )
 
+        GleanMetrics.Pings.shared.nimbus.setEnabled(enabled: true)
         GleanMetrics.NimbusSystem.recordedNimbusContext.set(
             GleanMetrics.NimbusSystem.RecordedNimbusContextObject(
                 isFirstRun: isFirstRun,
@@ -141,6 +142,7 @@ class RecordedNimbusContext: RecordedContext {
                 isDefaultBrowser: isDefaultBrowser
             )
         )
+        GleanMetrics.Pings.shared.nimbus.submit()
         logger.log("record end", level: .debug, category: .experiments)
     }
 
