@@ -313,9 +313,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SearchSetting(settings: self, settingsDelegate: parentCoordinator),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
-            OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
+
+        if isSearchBarLocationFeatureEnabled, let profile {
+            generalSettings.append(
+                SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
+            )
+        }
 
         // For enrolled users whose devices support alternate app icons, add the App Icon setting
         if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
@@ -329,22 +334,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         generalSettings += [
-            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
-
-        if let profile {
-            generalSettings += [
-                BlockPopupSetting(prefs: profile.prefs),
-                NoImageModeSetting(profile: profile)
-            ]
-        }
-
-        if isSearchBarLocationFeatureEnabled, let profile {
-            generalSettings.insert(
-                SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator),
-                at: 5
-            )
-        }
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                children: generalSettings)]
