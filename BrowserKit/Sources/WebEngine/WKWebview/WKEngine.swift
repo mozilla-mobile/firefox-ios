@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 public class WKEngine: Engine {
-    private var shutdownWebServer: DispatchSourceTimer?
+    private let sourceTimerFactory: DispatchSourceTimerFactory
+    private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager
     private let webServerUtil: WKWebServerUtil
 
@@ -13,11 +15,14 @@ public class WKEngine: Engine {
         return WKEngine()
     }
 
-    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager()) {
+    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
+         webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
+         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory()) {
         self.userScriptManager = userScriptManager
+        self.webServerUtil = webServerUtil
+        self.sourceTimerFactory = sourceTimerFactory
 
         InternalUtil().setUpInternalHandlers()
-        webServerUtil = WKWebServerUtil()
     }
 
     public func createView() -> EngineView {
@@ -36,22 +41,22 @@ public class WKEngine: Engine {
     }
 
     public func warmEngine() {
-        shutdownWebServer?.cancel()
-        shutdownWebServer = nil
+        shutdownWebServerTimer?.cancel()
+        shutdownWebServerTimer = nil
 
         webServerUtil.setUpWebServer()
     }
 
     public func idleEngine() {
-        let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+        let timer = sourceTimerFactory.createDispatchSource()
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
         // <500ms is expected on newer devices.
-        singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
-        singleShotTimer.setEventHandler {
+        timer.schedule(deadline: .now() + 2.0, repeating: .never)
+        timer.setEventHandler {
             self.webServerUtil.stopWebServer()
-            self.shutdownWebServer = nil
+            self.shutdownWebServerTimer = nil
         }
-        singleShotTimer.resume()
-        shutdownWebServer = singleShotTimer
+        timer.resume()
+        shutdownWebServerTimer = timer
     }
 }
