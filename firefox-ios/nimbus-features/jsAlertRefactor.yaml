@@ -8,7 +8,7 @@ features:
         description: >
           When true this enables the new JS alerts system to be used
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:

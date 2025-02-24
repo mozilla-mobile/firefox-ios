@@ -2713,8 +2713,14 @@ extension String {
         public static let DocumentLoadingLabel = MZLocalizedString(
             key: "WebView.DocumentLoadingLabel.v137",
             tableName: "WebView",
-            value: "Loading ...",
+            value: "Loading…",
             comment: "The label shown while loading a document in the web view's custom document loading UI"
+        )
+        public static let DocumentLoadingAccessibilityLabel = MZLocalizedString(
+            key: "WebView.DocumentLoadingAccessibilityLabel.v137",
+            tableName: "WebView",
+            value: "Loading Document",
+            comment: "The accessibility label read when loading a document in the web view's custom document loading UI."
         )
     }
 }
@@ -6774,6 +6780,18 @@ extension String {
             tableName: "Toolbar",
             value: "Tabs open",
             comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
+        public static let TabsButtonLargeContentTitle = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
+            tableName: "Toolbar",
+            value: "Tabs open: %@",
+            comment: "Large content title for the tabs button in the toolbar, specifying the number of tabs open. The placeholder is getting replaced with the number of open tabs.")
+
+        public static let TabsButtonOverflowLargeContentTitle = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
+            tableName: "Toolbar",
+            value: "Tabs open: 99+",
+            comment: "Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open.")
 
         public static let MenuButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Menu.Button.A11y.Label.v135",

@@ -6,6 +6,7 @@ import UIKit
 
 /// The `WKEngineWebView` scroll view
 protocol WKScrollView {
+    var refreshControl: UIRefreshControl? { get set }
     func setContentOffset(
         _ contentOffset: CGPoint,
         animated: Bool

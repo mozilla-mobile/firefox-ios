@@ -12,13 +12,16 @@ class MockTemporaryDocument: TemporaryDocument {
     var isDownloading = false
     var downloadCalled = 0
     var downloadAsyncCalled = 0
+    var request: URLRequest?
 
-    init(withFileURL fileURL: URL) {
+    init(withFileURL fileURL: URL,
+         request: URLRequest? = nil) {
         self.fileURL = fileURL
+        self.request = request
     }
 
     func canDownload(request: URLRequest) -> Bool {
-        return true
+        return request.url != self.request?.url
     }
 
     func download(_ completion: @escaping (URL?) -> Void) {

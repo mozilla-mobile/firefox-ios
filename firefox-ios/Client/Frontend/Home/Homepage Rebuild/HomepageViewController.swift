@@ -116,6 +116,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -130,6 +131,13 @@ final class HomepageViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
+        store.dispatch(
+            HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillTransition
+            )
+        )
     }
 
     // called when the homepage is displayed to make sure it's scrolled to top
@@ -186,13 +194,19 @@ final class HomepageViewController: UIViewController,
     /// - Parameter availableWidth: The total width available for displaying the tiles, determined by the view's size.
     /// - Returns: The number of tiles that can fit in a single row within the available width.
     private func numberOfTilesPerRow(for availableWidth: CGFloat) -> Int {
-        let tiles = TopSitesDimensionCalculator.numberOfTilesPerRow(
+        let tiles = HomepageDimensionCalculator.numberOfTopSitesPerRow(
             availableWidth: availableWidth,
             leadingInset: HomepageSectionLayoutProvider.UX.leadingInset(
                 traitCollection: traitCollection
             )
         )
         return tiles
+    }
+
+    private func getJumpBackInDisplayConfig() -> JumpBackInSectionLayoutConfiguration {
+        return HomepageDimensionCalculator.retrieveJumpBackInDisplayInfo(
+            traitCollection: traitCollection
+        )
     }
 
     // MARK: - Redux
@@ -218,7 +232,11 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
-        dataSource?.updateSnapshot(state: state, numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth))
+
+        dataSource?.updateSnapshot(
+            state: state,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+        )
     }
 
     func unsubscribeFromRedux() {
@@ -416,11 +434,11 @@ final class HomepageViewController: UIViewController,
             syncedTabCell.configure(
                 configuration: config,
                 theme: currentTheme,
-                onTapShowAllAction: {
-                    // TODO: FXIOS-11229 - Handle actions
+                onTapShowAllAction: { [weak self] in
+                    self?.navigateToTabTray(with: .syncedTabs)
                 },
-                onOpenSyncedTabAction: { _ in
-                    // TODO: FXIOS-11229 - Handle actions
+                onOpenSyncedTabAction: { [weak self] url in
+                    self?.navigateToNewTab(with: url)
                 }
             )
             return syncedTabCell
@@ -515,11 +533,11 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .jumpBackIn(let textColor):
+        case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
                 state: homepageState.jumpBackInState.sectionHeaderState,
                 moreButtonAction: { [weak self] _ in
-                    self?.navigateToTabTray()
+                    self?.navigateToTabTray(with: .tabs)
                 },
                 textColor: textColor,
                 theme: currentTheme
@@ -621,7 +639,11 @@ final class HomepageViewController: UIViewController,
     private func navigateToPocketLearnMore() {
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.link, url: homepageState.pocketState.footerURL),
+                navigationDestination: NavigationDestination(
+                    .link,
+                    url: homepageState.pocketState.footerURL,
+                    visitType: .link
+                ),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
             )
@@ -644,14 +666,21 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func navigateToTabTray() {
-        store.dispatch(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.tabTray),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
-            )
+    private func navigateToTabTray(with type: TabTrayPanelType) {
+        dispatchNavigationBrowserAction(
+            with: NavigationDestination(.tabTray(type)),
+            actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
         )
+    }
+
+    private func navigateToNewTab(with url: URL) {
+        let destination = NavigationDestination(
+            .newTab,
+            url: url,
+            isPrivate: false,
+            selectNewTab: true
+        )
+        self.dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
     }
 
     private func navigateToBookmarksPanel() {
@@ -693,6 +722,14 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .jumpBackIn(let config):
+            store.dispatch(
+                JumpBackInAction(
+                    tab: config.tab,
+                    windowUUID: self.windowUUID,
+                    actionType: JumpBackInActionType.tapOnCell
+                )
+            )
         case .bookmark(let config):
             let destination = NavigationDestination(
                 .link,
@@ -702,24 +739,19 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(.link, url: story.url),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: story.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocketDiscover(let item):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: item.url
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: item.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }

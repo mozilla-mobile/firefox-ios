@@ -12,10 +12,14 @@ class TabTests: XCTestCase {
     var mockProfile: MockProfile!
     private var tabDelegate: MockLegacyTabDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    private var mockTabWebView: MockTabWebView!
+    private let url = URL(string: "https://www.example.com")!
 
     override func setUp() {
         super.setUp()
         mockProfile = MockProfile()
+        mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
+        mockTabWebView.loadedURL = url
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
@@ -23,8 +27,11 @@ class TabTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
+        setIsPDFRefactorFeature(isEnabled: false)
         tabDelegate = nil
+        mockProfile = nil
+        mockTabWebView = nil
+        super.tearDown()
     }
 
     func testShareURL_RemovingReaderModeComponents() {
@@ -201,6 +208,134 @@ class TabTests: XCTestCase {
 
         XCTAssertTrue(normalInctiveTab1.isSameTypeAs(normalInctiveTab2))
         XCTAssertTrue(normalInctiveTab2.isSameTypeAs(normalInctiveTab1))
+    }
+
+    // MARK: - Document Handling
+
+    func testEnqueueDocument() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        subject.enqueueDocument(document)
+
+        XCTAssertEqual(document.downloadCalled, 1)
+        XCTAssertNotNil(subject.temporaryDocument)
+    }
+
+    func testLoadDocumentRequest() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url, request: URLRequest(url: url))
+
+        subject.enqueueDocument(document)
+
+        XCTAssertFalse(subject.canLoadDocumentRequest(URLRequest(url: url)))
+        XCTAssertNotNil(subject.temporaryDocument)
+    }
+
+    func testReload_whenDocumentIsDownloading_cancelDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        document.isDownloading = true
+        subject.webView = mockTabWebView
+        subject.enqueueDocument(document)
+
+        subject.reload()
+        subject.webView = nil
+
+        XCTAssertNil(subject.temporaryDocument)
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
+    }
+
+    func testGoBack_whenDocumentIsDownloading_cancelDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        subject.webView = mockTabWebView
+        subject.url = url
+        document.isDownloading = true
+        subject.enqueueDocument(document)
+
+        subject.goBack()
+        // remove it so in Tab deinit there is no crash for KVO
+        subject.webView = nil
+
+        XCTAssertNil(subject.temporaryDocument)
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
+        // it doesn't go back while cancelling a document
+        XCTAssertEqual(mockTabWebView.goBackCalled, 0)
+    }
+
+    func testGoForward_whenDocumentIsDownloading_cancelDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        subject.webView = mockTabWebView
+        document.isDownloading = true
+        subject.enqueueDocument(document)
+
+        subject.goForward()
+        // remove it so in Tab deinit there is no crash for KVO
+        subject.webView = nil
+
+        XCTAssertNil(subject.temporaryDocument)
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
+        // it doesn't go forward while cancelling a document
+        XCTAssertEqual(mockTabWebView.goForwardCalled, 0)
+    }
+
+    func testLoadRequest_whenDocumentIsDownloading_cancelDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        subject.webView = mockTabWebView
+        document.isDownloading = true
+        subject.enqueueDocument(document)
+
+        subject.loadRequest(URLRequest(url: url))
+        // remove it so in Tab deinit there is no crash for KVO
+        subject.webView = nil
+
+        XCTAssertNil(subject.temporaryDocument)
+        // once for enqueuing doc and for loadRequest
+        XCTAssertEqual(mockTabWebView.loadCalled, 2)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 0)
+    }
+
+    func testStop_whenDocumentIsDownloading_cancelDownload() {
+        let subject = createSubject()
+        let document = MockTemporaryDocument(withFileURL: url)
+
+        setIsPDFRefactorFeature(isEnabled: true)
+        subject.webView = mockTabWebView
+        document.isDownloading = true
+
+        subject.enqueueDocument(document)
+        subject.stop()
+        subject.webView = nil
+
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.stopLoadingCalled, 1)
+        XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
+    }
+
+    private func createSubject() -> Tab {
+        let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func setIsPDFRefactorFeature(isEnabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            PdfRefactorFeature(enabled: isEnabled)
+        }
     }
 }
 

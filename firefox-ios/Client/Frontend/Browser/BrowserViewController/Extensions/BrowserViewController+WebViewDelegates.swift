@@ -188,10 +188,11 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        if let tab = tabManager[webView] {
-            // Need to wait here in case we're waiting for a pending `window.open()`.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.tabManager.removeTab(tab)
+        Task {
+            if let tab = tabManager[webView] {
+                // Need to wait here in case we're waiting for a pending `window.open()`.
+                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                await tabManager.removeTab(tab.tabUUID)
             }
         }
     }
@@ -369,7 +370,7 @@ extension BrowserViewController: WKUIDelegate {
             .value
             .successValue ?? false
         if isBookmarkedSite {
-            actionBuilder.addRemoveBookmarkLink(url: url,
+            actionBuilder.addRemoveBookmarkLink(urlString: url.absoluteString,
                                                 title: title,
                                                 removeBookmark: self.removeBookmark)
         } else {
@@ -552,7 +553,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     if let currentTab = self?.tabManager.selectedTab,
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabManager.removeTab(tab)
+                        self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
                     }
                 }
             }
@@ -735,25 +736,12 @@ extension BrowserViewController: WKNavigationDelegate {
             present(alert, animated: true)
         }
 
-        // Check if this response should be downloaded.
-        if let downloadHelper = DownloadHelper(request: request,
-                                               response: response,
-                                               cookieStore: cookieStore,
-                                               canShowInWebView: canShowInWebView,
-                                               forceDownload: forceDownload) {
-            // Clear the pending download web view so that subsequent navigations from the same
-            // web view don't invoke another download.
-            pendingDownloadWebView = nil
-
-            let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
-                self?.downloadQueue.enqueue(download)
-            }
-
-            // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
-                                                                        okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
-            }
+        // Check if this response should be downloaded
+        if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
+            downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
+                                              forceDownload: forceDownload,
+                                              isForMainFrame: navigationResponse.isForMainFrame) {
+            handleDownloadFiles(downloadHelper: downloadHelper)
             decisionHandler(.cancel)
             return
         }
@@ -791,11 +779,7 @@ extension BrowserViewController: WKNavigationDelegate {
                            tab: Tab,
                            response: URLResponse,
                            request: URLRequest) {
-        if let webView = webView as? TabWebView {
-            webView.showDocumentLoadingView()
-            webView.applyTheme(theme: currentTheme())
-        }
-
+        navigationHandler?.showDocumentLoading()
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -810,7 +794,29 @@ extension BrowserViewController: WKNavigationDelegate {
                                    change: [.newKey: progress],
                                    context: nil)
             }
+            tempPDF.onDownloadStarted = {
+                self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
+                                   of: webView,
+                                   change: [.newKey: true],
+                                   context: nil)
+            }
             tab?.enqueueDocument(tempPDF)
+        }
+    }
+
+    func handleDownloadFiles(downloadHelper: DownloadHelper) {
+        // Clear the pending download web view so that subsequent navigations from the same
+        // web view don't invoke another download.
+        pendingDownloadWebView = nil
+
+        let downloadAction: (HTTPDownload) -> Void = { [weak self] download in
+            self?.downloadQueue.enqueue(download)
+        }
+
+        // Open our helper and cancel this response from the webview.
+        if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                    okAction: downloadAction) {
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
         }
     }
 
@@ -912,13 +918,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 )
 
                 if isNativeErrorPageEnabled {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-                } else if isNICErrorPageEnabled && (error.code == noInternetErrorCode) {
+                    guard isNICErrorPageEnabled && error.code == noInternetErrorCode else { return }
                     let action = NativeErrorPageAction(networkError: error,
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
@@ -1025,8 +1025,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webviewTelemetry.stop()
-        if isPDFRefactorEnabled, let webView = webView as? TabWebView {
-            webView.removeDocumentLoadingView()
+        if isPDFRefactorEnabled {
+            scrollController.configureRefreshControl()
+            navigationHandler?.removeDocumentLoading()
         }
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {

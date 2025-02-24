@@ -40,7 +40,6 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
-    var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -222,14 +221,13 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
 
         screenshotService.screenshotableView = webviewController
-        self.errorViewController = nil
     }
 
     func browserHasLoaded() {
@@ -570,8 +568,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func editLatestBookmark() {
-        browserViewController.openBookmarkEditPanel()
+    func editBookmarkForCurrentTab() {
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 
     func showFindInPage() {
@@ -615,6 +614,9 @@ class BrowserCoordinator: BaseCoordinator,
                 if FileManager.default.fileExists(atPath: outputURL.path) {
                     let url = URL(fileURLWithPath: outputURL.path)
                     let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    if let popover = controller.popoverPresentationController {
+                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+                    }
                     self?.present(controller)
                 }
             case .failure(let error):
@@ -1010,6 +1012,14 @@ class BrowserCoordinator: BaseCoordinator,
         present(backForwardListVC)
     }
 
+    func showDocumentLoading() {
+        webviewController?.showDocumentLoadingView()
+    }
+
+    func removeDocumentLoading(completion: (() -> Void)? = nil) {
+        webviewController?.removeDocumentLoadingView(completion: completion)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
@@ -1039,16 +1049,15 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
-        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+        let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
             overlayManager: overlayManager
         )
-        guard browserViewController.embedContent(errorpageController) else {
+
+        guard browserViewController.embedContent(errorPageController) else {
             logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
-        self.errorViewController = errorpageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

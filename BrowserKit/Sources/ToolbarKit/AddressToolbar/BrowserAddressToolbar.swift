@@ -27,11 +27,12 @@ public class BrowserAddressToolbar: UIView,
         static let locationHeight: CGFloat = 44
         // This could be changed at some point, depending on the a11y UX design.
         static let locationMaxHeight: CGFloat = 54
-        static let toolbarAnimationTime: CGFloat = 0.25
-        static let iconsAnimationTime: CGFloat = 0.15
+        static let toolbarAnimationTime: CGFloat = 0.15
+        static let iconsAnimationTime: CGFloat = 0.1
+        static let iconsAnimationDelay: CGFloat = 0.075
     }
 
-    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
+    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
@@ -267,13 +268,12 @@ public class BrowserAddressToolbar: UIView,
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled && animated
 
         if isAnimationEnabled {
-            UIView.animate(withDuration: UX.toolbarAnimationTime) {
+            UIView.animate(withDuration: UX.toolbarAnimationTime, delay: 0.0, options: .curveEaseOut) {
                 self.layoutIfNeeded()
-            } completion: { _ in
-                UIView.animate(withDuration: UX.iconsAnimationTime) {
-                    stacks.forEach {
-                        $0.alpha = 1.0
-                    }
+            }
+            UIView.animate(withDuration: UX.iconsAnimationTime, delay: UX.iconsAnimationDelay, options: .curveEaseOut) {
+                stacks.forEach {
+                    $0.alpha = 1.0
                 }
             }
         } else {

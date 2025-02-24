@@ -13,11 +13,12 @@ final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
+
     enum HomeSection: Hashable {
         case header
         case messageCard
         case topSites(NumberOfTilesPerRow)
-        case jumpBackIn(TextColor?)
+        case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
         case customizeHomepage
@@ -60,7 +61,10 @@ final class HomepageDiffableDataSource:
         }
     }
 
-    func updateSnapshot(state: HomepageState, numberOfCellsPerRow: Int) {
+    func updateSnapshot(
+        state: HomepageState,
+        jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration
+    ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
@@ -73,14 +77,14 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
         }
 
-        if let topSites = getTopSites(with: state.topSitesState, and: textColor, numberOfCellsPerRow: numberOfCellsPerRow) {
+        if let (topSites, numberOfCellsPerRow) = getTopSites(with: state.topSitesState, and: textColor) {
             snapshot.appendSections([.topSites(numberOfCellsPerRow)])
             snapshot.appendItems(topSites, toSection: .topSites(numberOfCellsPerRow))
         }
 
-        if let tabs = getJumpBackInTabs(with: state.jumpBackInState) {
-            snapshot.appendSections([.jumpBackIn(textColor)])
-            snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor))
+        if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
+            snapshot.appendSections([.jumpBackIn(textColor, configuration)])
+            snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
         }
 
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
@@ -115,32 +119,40 @@ final class HomepageDiffableDataSource:
     ///   - textColor: text color from wallpaper configuration
     private func getTopSites(
         with topSitesState: TopSitesSectionState,
-        and textColor: TextColor?,
-        numberOfCellsPerRow: Int
-    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        and textColor: TextColor?
+    ) -> ([HomepageDiffableDataSource.HomeItem], Int)? {
         guard topSitesState.shouldShowSection else { return nil }
         let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * numberOfCellsPerRow
+            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
         ).compactMap {
             .topSite($0, textColor)
         }
         guard !topSites.isEmpty else { return nil }
-        return topSites
+        return (topSites, topSitesState.numberOfTilesPerRow)
     }
 
     private func getJumpBackInTabs(
-        with jumpBackInSectionState: JumpBackInSectionState
-    ) -> [HomepageDiffableDataSource.HomeItem]? {
-        // TODO: FXIOS-11226 Show items or hide items depending user prefs / feature flag
-        // TODO: FXIOS-11224 Configure items to display based on device sizes
-        let maxItemsToDisplay = 1
-        var tabs: [HomeItem] = jumpBackInSectionState.jumpBackInTabs
-            .prefix(maxItemsToDisplay)
+        with state: JumpBackInSectionState,
+        and config: JumpBackInSectionLayoutConfiguration
+    ) -> ([HomepageDiffableDataSource.HomeItem], JumpBackInSectionLayoutConfiguration)? {
+        guard state.shouldShowSection else { return nil }
+        var updatedConfig = config
+        updatedConfig.hasSyncedTab = state.mostRecentSyncedTab != nil
+
+        var tabs: [HomeItem] = state.jumpBackInTabs
+            .prefix(updatedConfig.getMaxNumberOfLocalTabsLayout)
             .compactMap { .jumpBackIn($0) }
-        if let mostRecentSyncedTab = jumpBackInSectionState.mostRecentSyncedTab {
-            tabs.append(.jumpBackInSyncedTab(mostRecentSyncedTab))
+
+        // Determines if remote tab should appear first depending on device size
+        if let mostRecentSyncedTab = state.mostRecentSyncedTab {
+            if updatedConfig.layoutType == .compact {
+                tabs.append(.jumpBackInSyncedTab(mostRecentSyncedTab))
+            } else {
+                tabs.insert(.jumpBackInSyncedTab(mostRecentSyncedTab), at: 0)
+            }
         }
-        return tabs
+        guard !tabs.isEmpty else { return nil }
+        return (tabs, updatedConfig)
     }
 
     private func getBookmarks(

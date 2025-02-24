@@ -16,11 +16,7 @@ class MockTabManager: TabManager {
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
-    var nextRecentlyAccessedNormalTabs = [Tab]()
-
-    var recentlyAccessedNormalTabs: [Tab] {
-        return nextRecentlyAccessedNormalTabs
-    }
+    var recentlyAccessedNormalTabs: [Tab]
 
     var tabs = [Tab]()
 
@@ -39,8 +35,12 @@ class MockTabManager: TabManager {
 
     var removeTabsByURLCalled = 0
 
-    init(windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID) {
+    init(
+        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
+        recentlyAccessedNormalTabs: [Tab] = [Tab]()
+    ) {
         self.windowUUID = windowUUID
+        self.recentlyAccessedNormalTabs = recentlyAccessedNormalTabs
     }
 
     subscript(index: Int) -> Tab? {
@@ -54,18 +54,12 @@ class MockTabManager: TabManager {
     func selectTab(_ tab: Tab?, previous: Tab?) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
+            selectedTab = tab
         }
 
         if let previous = previous {
             lastSelectedPreviousTabs.append(previous)
         }
-    }
-
-    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        let profile = MockProfile()
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
-        tabs.append(tab)
-        return tab
     }
 
     func getMostRecentHomepageTab() -> Tab? {
@@ -85,11 +79,11 @@ class MockTabManager: TabManager {
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
-    func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
+    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {}
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: String) async {}
+    func removeTab(_ tabUUID: TabUUID) async {}
 
     func removeAllTabs(isPrivateMode: Bool) async {}
 
@@ -104,8 +98,6 @@ class MockTabManager: TabManager {
     func clearAllTabsHistory() {}
 
     func willSwitchTabMode(leavingPBM: Bool) {}
-
-    func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool) {}
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
 

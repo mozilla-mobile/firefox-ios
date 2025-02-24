@@ -19,5 +19,5 @@ final class TabManagerAction: Action {
 }
 
 enum TabManagerMiddlewareActionType: ActionType {
-    case fetchRecentTabs
+    case fetchedRecentTabs
 }

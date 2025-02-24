@@ -63,6 +63,10 @@ struct AccessibilityIdentifiers {
         struct ToolbarButtons {
             static let qrCode = "Toolbar.QRCode.button"
         }
+
+        struct WebView {
+            static let documentLoadingLabel = "WebView.documentLoadingLabel"
+        }
     }
 
     struct ContextualHints {

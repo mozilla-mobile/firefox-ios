@@ -328,12 +328,13 @@ class TopTabDisplayManager: NSObject {
             // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
                tabsToDisplay.count == 1 {
-                self.tabManager.removeTabs([tab])
-                self.tabManager.selectTab(self.tabManager.addTab())
+                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
+                    self.tabManager.selectTab(self.tabManager.addTab())
+                }
                 return
             }
 
-            self.tabManager.removeTab(tab)
+            self.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }
 
@@ -708,6 +709,10 @@ extension TopTabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
+    }
+
+    func tabManagerTabDidFinishLoading() {
+        refreshStore()
     }
 }
 
