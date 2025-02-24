@@ -5,7 +5,12 @@
 import GCDWebServers
 import Common
 
-class WKWebServerUtil {
+protocol WKWebServerUtil {
+    func setUpWebServer()
+    func stopWebServer()
+}
+
+class DefaultWKWebServerUtil: WKWebServerUtil {
     // TODO: FXIOS-11373 Handle Reader mode in WebEngine
     //    private var readerModeHander: ReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
