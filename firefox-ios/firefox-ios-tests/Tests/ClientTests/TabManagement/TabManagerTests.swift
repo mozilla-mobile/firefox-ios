@@ -142,6 +142,7 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    @MainActor
     func testRestoreScreenshotsForTabs() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
