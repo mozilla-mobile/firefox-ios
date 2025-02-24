@@ -58,4 +58,8 @@ public protocol EngineSessionDelegate: AnyObject {
     /// This is utilized in conjunction with the related ads telemetry events (e.g. `.trackAdsFoundOnPage`
     /// which are also passed along to telemetry proxy (`EngineTelemetryProxy`).
     func adsSearchProviderModels() -> [EngineSearchProviderModel]
+
+    /// Allows delegate to provide custom permissions for requesting media capture (e.g. camera/microphone permissions)
+    /// Returns a bool indicating whether media capture is allowed
+    func requestMediaCapturePermission() -> Bool
 }

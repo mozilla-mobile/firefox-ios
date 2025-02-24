@@ -6,6 +6,7 @@ import WebKit
 
 protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
+    var isActive: Bool {get set}
 
     func webView(_ webView: WKWebView,
                  createWebViewWith configuration: WKWebViewConfiguration,
@@ -42,17 +43,19 @@ protocol WKUIHandler: WKUIDelegate {
         completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     )
 
+    @available(iOS 15.0, *)
     func webView(
-        _ webView: WKWebView,
-        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-        initiatedByFrame frame: WKFrameInfo,
-        type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
-    )
+            _ webView: WKWebView,
+            requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+            initiatedByFrame frame: WKFrameInfo,
+            type: WKMediaCaptureType,
+            decisionHandler: @escaping (WKPermissionDecision) -> Void
+        )
 }
 
 class DefaultUIHandler: NSObject, WKUIHandler {
     weak var delegate: EngineSessionDelegate?
+    public var isActive = false
 
     func webView(_ webView: WKWebView,
                  createWebViewWith configuration: WKWebViewConfiguration,
@@ -102,13 +105,18 @@ class DefaultUIHandler: NSObject, WKUIHandler {
         completionHandler(delegate?.onProvideContextualMenu(linkURL: elementInfo.linkURL))
     }
 
+    @available(iOS 15.0, *)
     func webView(
-        _ webView: WKWebView,
-        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-        initiatedByFrame frame: WKFrameInfo,
-        type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
-    ) {
-        // TODO: FXIOS-8247 - Handle media capture in WebEngine (epic part 3)
+            _ webView: WKWebView,
+            requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+            initiatedByFrame frame: WKFrameInfo,
+            type: WKMediaCaptureType,
+            decisionHandler: @escaping (WKPermissionDecision) -> Void
+        ) {
+            guard isActive && (delegate?.requestMediaCapturePermission() ?? false) else {
+                decisionHandler(.deny)
+                return
+            }
+            decisionHandler(.prompt)
     }
 }
