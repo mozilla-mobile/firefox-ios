@@ -423,13 +423,13 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         }
 
         let title = String(format: .MainMenu.Submenus.Tools.Zoom, "\(zoomSymbol)\(zoomLevel)")
-        let icon = tabInfo.zoomLevel == 1.0 ? Icons.zoomOff : Icons.zoomOn
+        let icon = tabInfo.zoomLevel == regularZoom ? Icons.zoomOff : Icons.zoomOn
 
         return MenuElement(
             title: title,
             iconName: icon,
             isEnabled: true,
-            isActive: tabInfo.zoomLevel != 1.0,
+            isActive: tabInfo.zoomLevel != regularZoom,
             a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, "\(zoomSymbol)\(zoomLevel)"),
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
