@@ -33,6 +33,9 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         let allowedInternalResources = [
             "/errorpage-resource/NetError.css",
             "/errorpage-resource/CertError.css",
+            // Ecosia: Allow EcosiaNetError resources
+            "/errorpage-resource/EcosiaNetError.css",
+            "/errorpage-resource/EcosiaErrorPlaceholderPath.png",
            // "/reader-mode/..."
         ]
 
@@ -51,6 +54,13 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
                         textEncodingName: nil
                     )
                 )
+                urlSchemeTask.didReceive(data)
+                urlSchemeTask.didFinish()
+                return true
+            // Ecosia: Replace placeholder error image
+            } else if path.hasSuffix("EcosiaErrorPlaceholderPath.png"),
+                      let data = UIImage(named: "noInternet")?.pngData() {
+                urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
                 urlSchemeTask.didReceive(data)
                 urlSchemeTask.didFinish()
                 return true

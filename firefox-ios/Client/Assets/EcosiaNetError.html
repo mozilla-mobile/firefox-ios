@@ -1,0 +1,43 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>%error_title%</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="internal://local/errorpage-resource/EcosiaNetError.css" type="text/css" media="all" />
+  <script type="application/javascript">
+    // If the user swipes back and forth to this tab, we want to make sure we make an attempt to reload the original page.
+    var fresh = true;
+    window.addEventListener('popstate', function () {
+      if (fresh)
+        fresh = false;
+      else
+        webkit.messageHandlers.localRequestHelper.postMessage({ appIdToken: APP_ID_TOKEN, type: "reload" });
+    });
+  </script>
+</head>
+
+<body dir="&locale.dir;">
+  <div class="error-container">
+    <div>
+      <!-- Placeholder image is replaced inside `InternalSchemeHandler` -->
+      <img src="internal://local/errorpage-resource/EcosiaErrorPlaceholderPath.png" />
+    </div>
+    <div>
+      <p class="error-title">%error_title%</p>
+    </div>
+    <div>
+      <div class="error-description-container">
+        <p class="error-description">%short_description%</p>
+      </div>
+      <!-- Actions are replaced inside `ErrorPageHandler` -->
+      <div id="actions">%actions%</div>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

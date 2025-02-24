@@ -199,13 +199,24 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             "short_description": errDomain,
             ]
 
+        /* Ecosia: Update button text
         let tryAgain: String = .ErrorPageTryAgain
+         */
+        let tryAgain: String = noConnectionErrorButtonTitle
+
         // swiftlint:disable line_length
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
                     "</script><button onclick='reloader()'>\(tryAgain)</button>"
         // swiftlint:enable line_length
 
+        /* Ecosia: Add custom no internet screen
         if errDomain == kCFErrorDomainCFNetwork as String {
+         */
+        if errDomain == NSURLErrorDomain {
+            asset = Bundle.main.path(forResource: "EcosiaNetError", ofType: "html")
+            variables["error_title"] = noConnectionErrorTitle
+            variables["short_description"] = noConnectionErrorMessage
+        } else if errDomain == kCFErrorDomainCFNetwork as String {
             if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
                 errDomain = cfErrorToName(code)
             }

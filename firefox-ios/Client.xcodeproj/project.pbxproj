@@ -74,6 +74,8 @@
 		121416782D6373BA0097788B /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416712D6373BA0097788B /* AddressFormManager.js */; };
 		1214167B2D6375960097788B /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 1214167A2D6375960097788B /* MainFrameAtDocumentStart.js */; };
 		1214167C2D6375960097788B /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 121416792D6375960097788B /* MainFrameAtDocumentEnd.js */; };
+		12141E6C2D6877EB0097788B /* EcosiaNetError.html in Resources */ = {isa = PBXBuildFile; fileRef = 12141E682D686C030097788B /* EcosiaNetError.html */; };
+		12141E6D2D6877F00097788B /* EcosiaNetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 12141E6A2D686C1C0097788B /* EcosiaNetError.css */; };
 		124DAE822D350EFD0050104C /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		124DAE8A2D3512FA0050104C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		1251623C2D59FB30005CB958 /* Ecosia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CFE99662D45329200B25CE0 /* Ecosia.framework */; };
@@ -2369,6 +2371,8 @@
 		121416742D6373BA0097788B /* AutofillAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AutofillAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		121416792D6375960097788B /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
 		1214167A2D6375960097788B /* MainFrameAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentStart.js; sourceTree = "<group>"; };
+		12141E682D686C030097788B /* EcosiaNetError.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EcosiaNetError.html; sourceTree = "<group>"; };
+		12141E6A2D686C1C0097788B /* EcosiaNetError.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = EcosiaNetError.css; sourceTree = "<group>"; };
 		123045959E0F295753B4B4DB /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Today.strings; sourceTree = "<group>"; };
 		124DAE792D2FD1330050104C /* LegacyDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDarkTheme.swift; sourceTree = "<group>"; };
 		124DAE7A2D2FD1330050104C /* RecoveredLegacyTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveredLegacyTheme.swift; sourceTree = "<group>"; };
@@ -14601,6 +14605,8 @@
 				43879AFB287BDFB100B15D10 /* CC_Script */,
 				D308EE551CBF0BF5006843F2 /* CertError.css */,
 				D38A1EDF1CB458EC0080C842 /* CertError.html */,
+				12141E6A2D686C1C0097788B /* EcosiaNetError.css */,
+				12141E682D686C030097788B /* EcosiaNetError.html */,
 				F84B22391A0914A300AAB793 /* Fonts */,
 				D0E17FA7201F847600F1FCB5 /* FxASignIn.js */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
@@ -15649,6 +15655,7 @@
 				2C4BFFCA2D470E4100707D2F /* disconnect-block-cookies-analytics.json in Resources */,
 				2C4BFFCB2D470E4100707D2F /* disconnect-block-cookies-advertising.json in Resources */,
 				2C4BFFCC2D470E4100707D2F /* disconnect-block-cookies-social.json in Resources */,
+				12141E6C2D6877EB0097788B /* EcosiaNetError.html in Resources */,
 				2C4BFFCD2D470E4100707D2F /* disconnect-block-social.json in Resources */,
 				2C4BFFCE2D470E4100707D2F /* disconnect-block-advertising.json in Resources */,
 				2C4BFFCF2D470E4100707D2F /* disconnect-block-cookies-content.json in Resources */,
@@ -15666,6 +15673,7 @@
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
 				8A1A935A2B757C7C0069C190 /* portrait.json in Resources */,
 				23BEA76A251A99ED00A014BF /* NewYorkMedium-RegularItalic.otf in Resources */,
+				12141E6D2D6877F00097788B /* EcosiaNetError.css in Resources */,
 				1214167B2D6375960097788B /* MainFrameAtDocumentStart.js in Resources */,
 				1214167C2D6375960097788B /* MainFrameAtDocumentEnd.js in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,

@@ -1,0 +1,93 @@
+/* 
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0
+*/
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+:root {
+    --body-bg: #F0F0EB;
+    --body-color: #333333;
+    --error-title-text-color: #333333;
+    --error-short-desc-color: #6C6C6C;
+    --refresh-button-color: #008009;
+}
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+:root {
+    --body-bg: #1A1A1A;
+    --body-color: #FFFFFF;
+    --error-title-text-color: #FFFFFF;
+    --error-short-desc-color: #DEDED9;
+    --refresh-button-color: #5DD25E;
+}
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: var(--body-bg);
+    padding: 0 65px;
+    -webkit-text-size-adjust: none;
+    font-size: 17px;
+    font: -apple-system-body;
+    text-align: center;
+}
+
+.error-title {
+    color: var(--error-title-text-color);
+    font-weight: 600;
+}
+
+.error-description {
+    color: var(--error-short-desc-color);
+    font-weight: 400;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+button {
+    /* Force buttons to display: block here to try and enforce collapsing margins */
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 1rem;
+    font: -apple-system-body;
+    background-color: transparent;
+    font-weight: 300;
+    border-radius: 5px;
+    background-image: none;
+    margin: 10px 0 0;
+    position: -webkit-sticky;
+    bottom: 5px;
+    font-weight: 400;
+    font-size: 17px;
+    color: var(--refresh-button-color);
+}
+
+.error-container {
+    -webkit-transform: translateY(127px);
+    padding-bottom: 10px;
+    min-height: calc(100% - 127px - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error-description-container {
+    /* Margins between the li and buttons below it won't be collapsed. Remove the bottom margin here. */
+    margin: 20px 0 0;
+}
