@@ -5,10 +5,10 @@
 "DefaultBrowserPopup.DescriptionFooter.v124" = "*%@ 已經是您的預設瀏覽器了嗎？* 可關閉此訊息並點擊「略過」。";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.FirstLabel.v114" = "1. 開啟*設定*";
+"DefaultBrowserPopup.FirstLabel.v114" = "1. 開啟 *設定*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.SecondLabel.v114" = "2. 點擊*預設瀏覽器*";
+"DefaultBrowserPopup.SecondLabel.v114" = "2. 點擊 *預設瀏覽器*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. 選擇 *%@*";
@@ -44,7 +44,7 @@
 "Onboarding.Customization.Theme.Skip.Action.v123" = "略過";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
-"Onboarding.Customization.Theme.System.Action.v123" = "自動使用系統色調";
+"Onboarding.Customization.Theme.System.Action.v123" = "使用系統色調";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "挑選佈景主題";
@@ -80,7 +80,7 @@
 "Onboarding.Notification.Continue.Action.v114" = "繼續";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v120" = "在您的不同裝置間，安全地傳送分頁，並且探索 %@ 當中其他保護隱私權的相關功能。";
+"Onboarding.Notification.Description.v120" = "在您的不同裝置間安全地傳送分頁，並且探索 %@ 當中其他保護隱私權的相關功能。";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "略過";
@@ -116,10 +116,10 @@
 "Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "為了幫助改善瀏覽器，%1$@ 會將除錯與互動資料傳送回 %2$@。%3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
-"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 關心您的隱私。到我們的 %2$@ 閱讀更多資訊。";
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ 關心您的隱私。到我們的%2$@閱讀更多資訊。";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隱私權保護政策。";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "隱私權保護政策";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "了解更多資訊。";
@@ -185,13 +185,13 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "結束並關閉 %@ 使用教學";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "我們這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+"Onboarding.Welcome.Description.TreatementA.v120" = "這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "我們這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
+"Onboarding.Welcome.Description.v120" = "這套由非營利組織所開發的瀏覽器，會自動封鎖讓大企業在網路上偷偷跟蹤您的程式。";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Link.Action.v114" = "可以到我們的隱私權公告了解更多資訊";
+"Onboarding.Welcome.Link.Action.v114" = "歡迎到隱私權公告了解更多資訊";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "略過";

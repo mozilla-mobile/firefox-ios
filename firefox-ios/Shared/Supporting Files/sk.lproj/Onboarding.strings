@@ -146,7 +146,7 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "Rýchle a bezpečné prehliadanie webu";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračovaním súhlasíte s %@";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Pokračovaním súhlasíte s dokumentom %@";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Podmienkami používania %@u.";
