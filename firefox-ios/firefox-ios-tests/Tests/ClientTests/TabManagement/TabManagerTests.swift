@@ -54,9 +54,10 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRestoreTabs() {
+        // Needed to ensure AppEventQueue is not fired from a previous test case with the same WindowUUID
         let testUUID = UUID()
         let subject = createSubject(windowUUID: testUUID)
-        let expectation = XCTestExpectation(description: "Tab restoration event should be called")
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
                                                      activeTabId: UUID(),
                                                      tabData: getMockTabData(count: 4))
@@ -73,7 +74,7 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRestoreTabsForced() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should be called")
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
         let subject = createSubject(windowUUID: testUUID)
         addTabs(to: subject, count: 5)
@@ -94,7 +95,7 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should be called")
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
         let subject = createSubject(windowUUID: testUUID)
 
@@ -119,7 +120,7 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRestoreTabs_whenDeeplinkTabPresent() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should be called")
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
         let subject = createSubject(windowUUID: testUUID)
 
@@ -147,7 +148,7 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRestoreScreenshotsForTabs() {
-        let expectation = XCTestExpectation(description: "Tab restoration event should be called")
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
         let subject = createSubject(windowUUID: testUUID)
         mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
