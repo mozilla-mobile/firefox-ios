@@ -12,7 +12,7 @@ import SiteImageView
 class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
-        static let unselectedBorderWidth: CGFloat = 1.0
+        static let unselectedBorderWidth: CGFloat = 0.8
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconYOffset: CGFloat = 10.0
@@ -23,6 +23,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
                                                                   leading: 10,
                                                                   bottom: 10,
                                                                   trailing: 10)
+        static let closeButtonTop: CGFloat = 6
+        static let closeButtonTrailing: CGFloat = 8
+        static let tabViewFooterSpacing: CGFloat = 4
 
         // Using the same sizes for fallback favicon as the top sites on the homepage
         static let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
@@ -46,7 +49,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.alignment = .fill
-        stackView.spacing = 4
+        stackView.spacing = UX.tabViewFooterSpacing
         stackView.backgroundColor = .clear
     }
 
@@ -101,6 +104,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         animator = SwipeAnimator(animatingView: self)
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
+        layer.cornerRadius = UX.cornerRadius
         contentView.addSubview(backgroundHolder)
         contentView.addSubview(footerView)
 
@@ -221,20 +225,12 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            // Laurie
-//            layoutMargins = UIEdgeInsets(top: UX.selectedBorderWidth,
-//                                         left: UX.selectedBorderWidth,
-//                                         bottom: UX.selectedBorderWidth,
-//                                         right: UX.selectedBorderWidth)
             let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
             backgroundHolder.layer.borderColor = borderColor.cgColor
             backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
-            backgroundHolder.layer.cornerRadius = UX.cornerRadius
         } else {
-//            layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
             backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
-            backgroundHolder.layer.cornerRadius = UX.cornerRadius
         }
     }
 
@@ -260,7 +256,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundHolder.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -4),
+            backgroundHolder.bottomAnchor.constraint(equalTo: footerView.topAnchor,
+                                                     constant: -UX.tabViewFooterSpacing),
 
             footerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -272,8 +269,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.topAnchor.constraint(equalTo: backgroundHolder.topAnchor, constant: 8),
-            closeButton.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor, constant: -12),
+            closeButton.topAnchor.constraint(equalTo: backgroundHolder.topAnchor,
+                                             constant: UX.closeButtonTop),
+            closeButton.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor,
+                                                  constant: -UX.closeButtonTrailing),
 
             // Screenshot either shown or favicon takes its place as fallback
             screenshotView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),

@@ -353,7 +353,6 @@ class TabDisplayView: UIView,
 
     // MARK: - SwipeAnimatorDelegate
     func swipeAnimator(_ animator: SwipeAnimator) {
-        // Laurie - to test
         guard let tabCell = animator.animatingView as? UICollectionViewCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
 
