@@ -12,7 +12,7 @@ protocol SessionHandler: AnyObject {
     func received(error: NSError, forURL url: URL)
 }
 
-class WKEngineSession: NSObject,
+final class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
