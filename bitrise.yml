@@ -1814,22 +1814,22 @@ workflows:
 
   focus-set-project-version:
     steps:
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
