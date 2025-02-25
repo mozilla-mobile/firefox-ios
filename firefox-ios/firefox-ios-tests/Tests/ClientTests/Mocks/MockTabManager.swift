@@ -35,6 +35,8 @@ class MockTabManager: TabManager {
 
     var removeTabsByURLCalled = 0
 
+    var addTabWasCalled = false
+
     init(
         windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
         recentlyAccessedNormalTabs: [Tab] = [Tab]()
@@ -139,7 +141,8 @@ class MockTabManager: TabManager {
                 zombie: Bool,
                 isPrivate: Bool
     ) -> Tab {
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        addTabWasCalled = true
+        return Tab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,
