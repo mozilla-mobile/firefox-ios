@@ -714,7 +714,11 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar {
+        /// SFSafariViewController only accepts http(s) URLs.
+        /// Passing calendar blobs for instance will cause the app to crash.
+        if let url = responseURL,
+           ["http", "https"].contains(url.scheme),
+           tabManager[webView]?.mimeType == MIMEType.Calendar {
             let alertMessage: String
             if let baseDomain = url.baseDomain {
                 alertMessage = String(format: .Alerts.AddToCalendar.Body, baseDomain)
