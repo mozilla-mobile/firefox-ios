@@ -4,7 +4,6 @@
 
 import Common
 import XCTest
-import Shared
 
 class A11yOnboardingTests: BaseTestCase {
     var currentScreen = 0
