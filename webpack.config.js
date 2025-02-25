@@ -21,8 +21,8 @@ const WebcompatAllFramesAtDocumentStart = glob.sync(
 const AutofillAllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
-const NightModeMainFrameAtDocumentEnd = glob.sync(
-  "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/NightModeAtDocumentEnd/*.{js,mjs}"
+const NightModeMainFrameAtDocumentStart = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/NightModeAtDocumentStart/*.{js,mjs}"
 );
 const AddressFormManager = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
@@ -38,7 +38,7 @@ const needsFirefoxFile = {
   // to include __firefox__.js for the document end scripts.
   // ¯\_(ツ)_/¯
   AllFramesAtDocumentEnd,
-  NightModeMainFrameAtDocumentEnd,
+  NightModeMainFrameAtDocumentStart,
 };
 
 for (let [name, files] of Object.entries(needsFirefoxFile)) {
@@ -72,7 +72,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
-    NightModeMainFrameAtDocumentEnd,
+    NightModeMainFrameAtDocumentStart,
     AutofillAllFramesAtDocumentStart,
     AddressFormManager,
   },
@@ -84,7 +84,9 @@ module.exports = {
     rules: [
       {
         test: /\.mjs$/,
-        include: [path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/")],
+        include: [
+          path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/"),
+        ],
         type: "javascript/auto",
       },
     ],
