@@ -11,7 +11,7 @@ class MockRustKeychain: RustKeychain {
         super.init(serviceName: "Test")
     }
 
-    override func getBaseKeychainQuery(key: String) -> [String: Any?] {
+    override func getBaseKeychainQuery(key: String) -> [String: Any] {
         return [:]
     }
 
