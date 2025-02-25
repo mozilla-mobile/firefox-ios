@@ -162,6 +162,7 @@ struct UIConstants {
         static let aboutPrivateBullet3 = NSLocalizedString("About.privateBullet3", value: "Erase to delete cookies as well as search and browsing history", comment: "Label on About screen")
         static let aboutRowHelp = NSLocalizedString("About.rowHelp", value: "Help", comment: "Label for row in About screen")
         static let aboutRowRights = NSLocalizedString("About.rowRights", value: "Your Rights", comment: "Label for row in About screen")
+        static let aboutRowTerms = NSLocalizedString("About.rowTerms", value: "Terms of Use", comment: "Label for row in About screen")
         static let aboutRowPrivacy = NSLocalizedString("About.rowPrivacy", value: "Privacy Notice", comment: "Link to Privacy Notice in the About screen")
         static let aboutSafariBulletHeader = NSLocalizedString("About.safariBulletHeader", value: "Use it as a Safari extension:", comment: "Label on About screen")
         static let aboutTitle = NSLocalizedString("About.title", value: "About %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page.")

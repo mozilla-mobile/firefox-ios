@@ -41,7 +41,7 @@ class SettingTest: BaseTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         // Check Your Rights page, until the text is displayed
-        tablesQuery.staticTexts["Your Rights"].tap()
+        tablesQuery.staticTexts["Terms of Use"].tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         // Go back to Settings

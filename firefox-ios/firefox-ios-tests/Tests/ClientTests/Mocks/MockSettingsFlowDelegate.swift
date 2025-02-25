@@ -54,6 +54,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     // MARK: GeneralSettingsDelegate
 
+    func pressedCustomizeAppIcon() {}
+
     func pressedHome() {}
 
     func pressedNewTab() {}

@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
+        case .appIconSelection:
+            return checkAppIconSelectionSetting(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -124,6 +127,9 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
+        case .tabTrayUIExperiments:
+            return checkTabTrayUIExperiments(from: nimbus)
+
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
 
@@ -225,6 +231,11 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
+    }
+
+    private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.enabled
     }
 
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
@@ -363,6 +374,11 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
+    }
+
+    private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.appIconSelectionFeature.value()
+        return config.enabled
     }
 
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {

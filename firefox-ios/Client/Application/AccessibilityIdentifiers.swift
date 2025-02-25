@@ -558,6 +558,10 @@ struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
+        struct AppIconSelection {
+            static let settingsRowTitle = "AppIconSelectionTitle"
+        }
+
         struct DefaultBrowser {
             static let defaultBrowser = "DefaultBrowserSettings"
         }

@@ -1022,6 +1022,7 @@ export class FormAutofillHandler {
           value = selected ? selected.value : element.options[0].value;
         }
         FormAutofillHandler.fillFieldValue(element, value);
+        this.changeFieldState(fieldDetail, FIELD_STATES.NORMAL);
       }
     }
 
