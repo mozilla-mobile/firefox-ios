@@ -462,8 +462,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     func restoreTabs(_ forced: Bool = false) {
         if isDeeplinkOptimizationRefactorEnabled {
-            // Deeplinks happens before tab restoration, so we should a tabs already present in the tabs list
-            // If a deeplink open was requested
+            // Deeplinks happens before tab restoration, so we should a tab already present in the tabs list
+            // if the application was opened from a deeplink.
             deeplinkTab = tabs.popLast()
         }
 

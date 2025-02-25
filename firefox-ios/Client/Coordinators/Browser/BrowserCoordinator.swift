@@ -235,14 +235,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func browserHasLoaded() {
-        browserIsReady = true
-        logger.log("Browser has loaded", level: .info, category: .coordinator)
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            browserIsReady = true
+            logger.log("Browser has loaded", level: .info, category: .coordinator)
 
-        if let savedRoute {
-            logger.log("Find and handle route called after browserHasLoaded",
-                       level: .info,
-                       category: .coordinator)
-            findAndHandle(route: savedRoute)
+            if let savedRoute {
+                logger.log("Find and handle route called after browserHasLoaded",
+                           level: .info,
+                           category: .coordinator)
+                findAndHandle(route: savedRoute)
+            }
         }
     }
 

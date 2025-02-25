@@ -1009,6 +1009,9 @@ class BrowserViewController: UIViewController,
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
         if isDeeplinkOptimizationRefactorEnabled {
+            // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
+            // has ended. If there is no deeplink then restore when the startup time record cancellation has been
+            // signaled.
             AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
                 self?.tabManager.restoreTabs()
             }
@@ -1043,7 +1046,9 @@ class BrowserViewController: UIViewController,
 
         prepareURLOnboardingContextualHint()
 
-        browserDelegate?.browserHasLoaded()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            browserDelegate?.browserHasLoaded()
+        }
         AppEventQueue.signal(event: .browserIsReady)
     }
 

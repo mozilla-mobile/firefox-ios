@@ -34,7 +34,7 @@ final class NimbusFeatureFlagLayer {
             return checkDarkReaderFeature(from: nimbus)
 
         case .deeplinkOptimizationRefactor:
-                return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
+            return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
