@@ -136,6 +136,10 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
               let type = res["type"] as? String
         else { return }
 
+        if type == "clearAccessoryView" {
+            tab?.webView?.accessoryView.reloadViewFor(.standard)
+        }
+
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
             if type == "generatePassword",
                 let tab = self.tab,

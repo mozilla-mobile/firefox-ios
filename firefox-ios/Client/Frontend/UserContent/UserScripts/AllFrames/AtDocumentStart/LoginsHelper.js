@@ -499,6 +499,17 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     const formHasNewPassword =
       password && Logic.isProbablyANewPasswordField(password);
     const isPasswordField = field === password;
+    const isLoginField = field === username || isPasswordField;
+
+    if(!isLoginField) {
+      return ;
+    }
+
+    // Always clear accessory view when a field is focused to start from a clean state
+    webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+      type: "clearAccessoryView",
+    });
+    field.shouldIgnoreAutofill = true;
     const isYieldingFocus = LoginManagerContent.activeField === field;
     LoginManagerContent.activeField = field;
     if (formHasNewPassword && isPasswordField && !LoginManagerContent.fromFill) {
