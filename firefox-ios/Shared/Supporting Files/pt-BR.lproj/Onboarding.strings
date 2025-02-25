@@ -35,7 +35,7 @@
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Escuro";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
-"Onboarding.Customization.Theme.Description.v123" = "Veja a web da melhor maneira possível.";
+"Onboarding.Customization.Theme.Description.v123" = "Veja a web de modo mais agradável.";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Claro";
@@ -185,10 +185,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Fechar e sair da introdução do %@";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Nosso navegador respaldado por uma entidade sem fins lucrativos ajuda a impedir que empresas sigam você secretamente pela web.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Nosso navegador, respaldado por uma entidade sem fins lucrativos, ajuda a impedir que empresas sigam você secretamente pela web.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "Nosso navegador respaldado por uma entidade sem fins lucrativos ajuda a impedir que empresas sigam você secretamente pela web.";
+"Onboarding.Welcome.Description.v120" = "Nosso navegador, respaldado por uma entidade sem fins lucrativos, ajuda a impedir que empresas sigam você secretamente pela web.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Saiba mais em nosso aviso de privacidade";

@@ -89,7 +89,7 @@
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "檢視憑證";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ 已關閉，建議您重新開啟保護。";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ 不會保護您，建議重新開啟保護。";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "您已關閉保護";

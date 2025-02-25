@@ -26,7 +26,7 @@
 "DeleteLoginAlert.Message.Local.v122" = "Você não pode desfazer esta ação.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "Isto remove a senha de todos os seus dispositivos sincronizados.";
+"DeleteLoginAlert.Message.Synced.v122" = "Remove esta senha de todos os seus dispositivos sincronizados.";
 
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Remover senha?";

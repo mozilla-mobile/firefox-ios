@@ -5,7 +5,7 @@
 "DefaultBrowserPopup.DescriptionFooter.v124" = "*‏%@ כבר מוגדר כברירת המחדל שלך?* יש לסגור הודעה זו ולהקיש על דילוג.";
 
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.FirstLabel.v114" = "1. יש לעבור ל*הגדרות*";
+"DefaultBrowserPopup.FirstLabel.v114" = "1. יש לעבור אל *הגדרות*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.SecondLabel.v114" = "2. להקיש על *אפליקציית דפדפן ברירת מחדל*";
