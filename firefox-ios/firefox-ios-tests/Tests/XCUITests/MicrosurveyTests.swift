@@ -4,7 +4,6 @@
 
 import Common
 import XCTest
-import Shared
 
 final class MicrosurveyTests: BaseTestCase {
     override func setUp() {
