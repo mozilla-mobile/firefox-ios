@@ -31,7 +31,8 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider {
+                          BookmarksRefactorFeatureFlagProvider,
+                          FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
@@ -980,7 +981,12 @@ class BrowserCoordinator: BaseCoordinator,
         }
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        let modalPresentationStyle: UIModalPresentationStyle
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+            modalPresentationStyle = .fullScreen
+        } else {
+            modalPresentationStyle = isPad ? .fullScreen: .formSheet
+        }
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(

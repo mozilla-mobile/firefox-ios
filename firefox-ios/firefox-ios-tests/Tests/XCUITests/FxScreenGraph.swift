@@ -873,11 +873,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
             syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            regularModeSelector = app.toolbars["Toolbar"]
+            regularModeSelector = app
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
-            privateModeSelector = app.toolbars["Toolbar"]
+            privateModeSelector = app
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 1)
-            syncModeSelector = app.toolbars["Toolbar"]
+            syncModeSelector = app
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 2)
         }
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
