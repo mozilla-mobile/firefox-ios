@@ -343,16 +343,13 @@ class NavigationTest: BaseTestCase {
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
         mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
         let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         let switchValue = switchBlockPopUps.value!
         XCTAssertEqual(switchValue as? String, "1")
         // Navigate back to the homepage
-        app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        navigator.goto(BrowserTab)
         navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
@@ -366,8 +363,7 @@ class NavigationTest: BaseTestCase {
 
         // Now disable the Browsing -> Block PopUps option
         navigator.goto(BrowserTabMenu)
-        navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
 
         switchBlockPopUps.waitAndTap()
@@ -411,8 +407,7 @@ class NavigationTest: BaseTestCase {
     func testWriteToChildPopupTab() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
+        navigator.goto(BrowsingSettings)
         let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
@@ -543,8 +538,7 @@ class NavigationTest: BaseTestCase {
     func testOpenExternalLink() {
         // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
         let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
         scrollToElement(switchBlockLinks)
@@ -552,6 +546,8 @@ class NavigationTest: BaseTestCase {
             switchBlockLinks.waitAndTap()
         }
         // Open website and tap on one of the external article links
+        navigator.nowAt(BrowsingSettings)
+        navigator.goto(NewTabScreen)
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)

@@ -48,7 +48,7 @@ class SettingsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2334756
     func testCopiedLinks() {
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        navigator.goto(BrowsingSettings)
 
         // For iOS 15, we must scroll until the switch is visible.
         if #unavailable(iOS 16) {
@@ -66,10 +66,9 @@ class SettingsTests: BaseTestCase {
         let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
-        app.navigationBars["Settings"].buttons["Done"].waitAndTap()
-
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        app.staticTexts["Settings"].waitAndTap()
+        navigator.nowAt(BrowsingSettings)
+        navigator.goto(NewTabScreen)
+        navigator.goto(BrowsingSettings)
 
         // Check Offer to open copied links, when opening firefox is on
         let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
@@ -80,7 +79,7 @@ class SettingsTests: BaseTestCase {
     func testOpenMailAppSettings() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
-        navigator.goto(OpenWithSettings)
+        navigator.goto(MailAppSettings)
 
         // Check that the list is shown
         mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
@@ -103,7 +102,7 @@ class SettingsTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
 
         // Check that user can go back from that setting
-        navigator.nowAt(OpenWithSettings)
+        navigator.nowAt(MailAppSettings)
         navigator.goto(SettingsScreen)
     }
 
@@ -195,7 +194,7 @@ class SettingsTests: BaseTestCase {
         mozWaitForElementToExist(table)
 
         // Navigate to the Browsing settings screen
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
 
         let settingsQuery = AccessibilityIdentifiers.Settings.self
