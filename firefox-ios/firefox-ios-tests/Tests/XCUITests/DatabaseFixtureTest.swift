@@ -4,7 +4,6 @@
 
 import Common
 import XCTest
-import Shared
 
 class DatabaseFixtureTest: BaseTestCase {
     let fixtures = [
