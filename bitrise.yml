@@ -2097,15 +2097,15 @@ workflows:
     - focus-configure-nimbus
     - focus-configure-sentry
     steps:
-    - certificate-and-profile-installer@1.11.4: {}
-    - xcode-archive@5.4.0:
+    - certificate-and-profile-installer@1: {}
+    - xcode-archive@3:
         inputs:
         - project_path: focus-ios/Blockzilla.xcodeproj
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
         title: Build Focus
-    - deploy-to-itunesconnect-application-loader@1.5.0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -2118,13 +2118,13 @@ workflows:
             set -x
             focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project focus-ios "$BITRISE_DSYM_DIR_PATH"
-    - xcode-archive@5.4.0:
+    - xcode-archive@3:
         inputs:
         - project_path: focus-ios/Blockzilla.xcodeproj
         - scheme: Klar
         - export_method: app-store
         title: Build Klar
-    - deploy-to-itunesconnect-application-loader@1.5.0:
+    - deploy-to-itunesconnect-application-loader@1:
         inputs:
         - connection: 'off'
         - app_password: "$APPLE_ACCOUNT_PW"
