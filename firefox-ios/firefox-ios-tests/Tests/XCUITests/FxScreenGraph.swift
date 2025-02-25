@@ -38,7 +38,7 @@ let ClearPrivateDataSettings = "ClearPrivateDataSettings"
 let WebsiteDataSettings = "WebsiteDataSettings"
 let WebsiteSearchDataSettings = "WebsiteSearchDataSettings"
 let LoginsSettings = "LoginsSettings"
-let OpenWithSettings = "OpenWithSettings"
+let MailAppSettings = "MailAppSettings"
 let ShowTourInSettings = "ShowTourInSettings"
 let TrackingProtectionSettings = "TrackingProtectionSettings"
 let Intro_FxASignin = "Intro_FxASignin"
@@ -63,6 +63,7 @@ let NotificationsSettings = "NotificationsSetting"
 let AddressesSettings = "AutofillAddress"
 let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
+let BrowsingSettings = "BrowsingSettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -72,7 +73,7 @@ let allSettingsScreens = [
     SearchSettings,
     AddCustomSearchSettings,
     NewTabSettings,
-    OpenWithSettings,
+    MailAppSettings,
     DisplaySettings,
     ClearPrivateDataSettings,
     TrackingProtectionSettings,
@@ -593,9 +594,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings], to: HomeSettings)
         screenState.tap(table.cells["Tabs"], to: TabsSettings)
-        screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
@@ -801,7 +802,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(OpenWithSettings) { screenState in
+    map.addScreenState(MailAppSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(BrowsingSettings) { screenState in
+        screenState.tap(app.tables.element(boundBy: 0).cells["OpenWith.Setting"], to: MailAppSettings)
         screenState.backAction = navigationControllerBackAction
     }
 
