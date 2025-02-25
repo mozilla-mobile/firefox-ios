@@ -8,13 +8,11 @@ import UIKit
 import Shared
 import SiteImageView
 
-protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(for tabUUID: TabUUID)
-}
-
-class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
+/// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
+class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
     struct UX {
-        static let borderWidth: CGFloat = 3.0
+        static let selectedBorderWidth: CGFloat = 3.0
+        static let unselectedBorderWidth: CGFloat = 1.0
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconYOffset: CGFloat = 10.0
@@ -40,12 +38,21 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
-    private lazy var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     // MARK: - UI
 
+    // Contains the title and the favicon under the tab screenshot view
+    private lazy var footerView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = 4
+        stackView.backgroundColor = .clear
+    }
+
     private lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
+        view.layer.borderWidth = UX.unselectedBorderWidth
         view.clipsToBounds = true
     }
 
@@ -64,13 +71,13 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
 
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = FXFontStyles.Bold.caption1.scaledFont()
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
+        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.crossCircleFill), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         var configuration = UIButton.Configuration.plain()
@@ -82,6 +89,11 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        favicon.layer.cornerRadius = UX.faviconSize / 2
+    }
+
     // MARK: - Initializer
 
     override init(frame: CGRect) {
@@ -90,20 +102,19 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
+        contentView.addSubview(footerView)
+
+        footerView.addArrangedSubview(favicon)
+        footerView.addArrangedSubview(titleText)
 
         faviconBG.addSubview(smallFaviconView)
-        backgroundHolder.addSubviews(screenshotView, faviconBG, headerView)
+        backgroundHolder.addSubviews(screenshotView, faviconBG, closeButton)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
                                         target: animator,
                                         selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
-
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.contentView.addSubview(closeButton)
-        headerView.contentView.addSubview(titleText)
-        headerView.contentView.addSubview(favicon)
 
         setupConstraints()
     }
@@ -158,7 +169,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        headerView.effect = UIBlurEffect(style: theme.type.tabTitleBlurStyle())
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary
@@ -211,18 +221,20 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
                                           theme: Theme?) {
         guard let theme = theme else { return }
         if selected {
-            layoutMargins = UIEdgeInsets(top: UX.borderWidth,
-                                         left: UX.borderWidth,
-                                         bottom: UX.borderWidth,
-                                         right: UX.borderWidth)
-            layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-            layer.borderWidth = UX.borderWidth
-            layer.cornerRadius = UX.cornerRadius
+            // Laurie
+//            layoutMargins = UIEdgeInsets(top: UX.selectedBorderWidth,
+//                                         left: UX.selectedBorderWidth,
+//                                         bottom: UX.selectedBorderWidth,
+//                                         right: UX.selectedBorderWidth)
+            let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+            backgroundHolder.layer.borderColor = borderColor.cgColor
+            backgroundHolder.layer.borderWidth = UX.selectedBorderWidth
+            backgroundHolder.layer.cornerRadius = UX.cornerRadius
         } else {
-            layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layer.borderColor = UIColor.clear.cgColor
-            layer.borderWidth = 0
-            layer.cornerRadius = UX.cornerRadius
+//            layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
+            backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
+            backgroundHolder.layer.cornerRadius = UX.cornerRadius
         }
     }
 
@@ -247,37 +259,24 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
         NSLayoutConstraint.activate([
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundHolder.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -4),
 
-            headerView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: backgroundHolder.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: UX.textBoxHeight),
+            footerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            footerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
 
-            // Parts of the header view
-            favicon.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: UX.subviewDefaultPadding),
-            favicon.topAnchor.constraint(
-                equalTo: headerView.topAnchor,
-                constant: (UX.textBoxHeight - UX.faviconSize) / 2.0
-            ),
             favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
-
-            titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor,
-                                               constant: UX.subviewDefaultPadding),
-            titleText.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: UX.subviewDefaultPadding),
-            titleText.topAnchor.constraint(equalTo: headerView.contentView.topAnchor),
-            titleText.bottomAnchor.constraint(equalTo: headerView.contentView.bottomAnchor),
+            closeButton.topAnchor.constraint(equalTo: backgroundHolder.topAnchor, constant: 8),
+            closeButton.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor, constant: -12),
 
             // Screenshot either shown or favicon takes its place as fallback
-            screenshotView.topAnchor.constraint(equalTo: headerView.contentView.bottomAnchor),
+            screenshotView.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
             screenshotView.leadingAnchor.constraint(equalTo: backgroundHolder.leadingAnchor),
             screenshotView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor),
             screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),

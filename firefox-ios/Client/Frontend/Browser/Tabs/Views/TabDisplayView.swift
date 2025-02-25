@@ -12,7 +12,8 @@ class TabDisplayView: UIView,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
-                      InactiveTabsSectionManagerDelegate {
+                      InactiveTabsSectionManagerDelegate,
+                        FeatureFlaggable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -27,6 +28,10 @@ class TabDisplayView: UIView,
     var theme: Theme?
 
     private var dataSource: TabDisplayDiffableDataSource?
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+    }
 
     var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
@@ -55,7 +60,11 @@ class TabDisplayView: UIView,
         let collectionView = UICollectionView(frame: bounds,
                                               collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(cellType: TabCell.self)
+        if isTabTrayUIExperimentsEnabled {
+            collectionView.register(cellType: ExperimentTabCell.self)
+        } else {
+            collectionView.register(cellType: TabCell.self)
+        }
         collectionView.register(cellType: InactiveTabsCell.self)
         collectionView.register(
             InactiveTabsHeaderView.self,
@@ -159,16 +168,25 @@ class TabDisplayView: UIView,
                 return cell
 
             case .tab(let tab):
-                guard
-                    let cell = collectionView.dequeueReusableCell(
+                if isTabTrayUIExperimentsEnabled {
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ExperimentTabCell.cellIdentifier,
+                        for: indexPath
+                    ) as? ExperimentTabCell else { return UICollectionViewCell() }
+
+                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    return cell
+                } else {
+                    guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: TabCell.cellIdentifier,
                         for: indexPath
-                    ) as? TabCell
-                else { return UICollectionViewCell() }
+                    ) as? TabCell else { return UICollectionViewCell() }
 
-                let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
-                return cell
+                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    return cell
+                }
             }
         }
 
@@ -335,7 +353,8 @@ class TabDisplayView: UIView,
 
     // MARK: - SwipeAnimatorDelegate
     func swipeAnimator(_ animator: SwipeAnimator) {
-        guard let tabCell = animator.animatingView as? TabCell,
+        // Laurie - to test
+        guard let tabCell = animator.animatingView as? UICollectionViewCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
 
         let tab = tabsState.tabs[indexPath.item]
