@@ -11,6 +11,7 @@ class TabsSectionManager: FeatureFlaggable {
         static let cellAbsoluteHeight: CGFloat = 200
         static let experimentCellAbsoluteHeight: CGFloat = 220
         static let cardSpacing: CGFloat = 16
+        static let experimentCardSpacing: CGFloat = 32
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
@@ -62,7 +63,7 @@ class TabsSectionManager: FeatureFlaggable {
                                                         leading: horizontalInset,
                                                         bottom: UX.verticalInset,
                                                         trailing: horizontalInset)
-        section.interGroupSpacing = UX.cardSpacing
+        section.interGroupSpacing = isTabTrayUIExperimentsEnabled ? UX.experimentCardSpacing : UX.cardSpacing
 
         return section
     }
