@@ -7,11 +7,10 @@ import Foundation
 /// Child settings pages general actions
 protocol GeneralSettingsDelegate: AnyObject {
     func pressedHome()
-    func pressedMailApp()
     func pressedNewTab()
     func pressedSearchEngine()
     func pressedSiri()
     func pressedToolbar()
-    func pressedTabs()
     func pressedTheme()
+    func pressedBrowsing()
 }
