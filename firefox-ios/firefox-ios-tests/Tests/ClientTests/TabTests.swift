@@ -378,30 +378,30 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
 }
 
-// MARK: - MockTabWebView
-class MockTabWebView: TabWebView {
-    var mockTitle: String?
-
-    override var title: String? {
-        return mockTitle
-    }
-
-    init(tab: Tab) {
-        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
-        // Simulating the observer setup is required to use this mock because in production
-        // the observers are set up in Tab.createWebView() which we don't call during test
-        // and the observers are removed every time we call Tab.deinit(), so an error occurs
-        // if we don't first set up the observers manually here.
-        simulateObserverSetup(target: tab)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func simulateObserverSetup(target: NSObject) {
-        addObserver(target, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-        addObserver(target, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
-        addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
-    }
-}
+//// MARK: - MockTabWebView
+//class MockTabWebView: TabWebView {
+//    var mockTitle: String?
+//
+//    override var title: String? {
+//        return mockTitle
+//    }
+//
+//    init(tab: Tab) {
+//        super.init(frame: .zero, configuration: WKWebViewConfiguration(), windowUUID: .XCTestDefaultUUID)
+//        // Simulating the observer setup is required to use this mock because in production
+//        // the observers are set up in Tab.createWebView() which we don't call during test
+//        // and the observers are removed every time we call Tab.deinit(), so an error occurs
+//        // if we don't first set up the observers manually here.
+//        simulateObserverSetup(target: tab)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//
+//    func simulateObserverSetup(target: NSObject) {
+//        addObserver(target, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+//        addObserver(target, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
+//        addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
+//    }
+//}
