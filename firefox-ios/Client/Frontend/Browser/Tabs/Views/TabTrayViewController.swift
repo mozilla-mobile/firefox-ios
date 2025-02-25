@@ -24,7 +24,8 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             FeatureFlaggable {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -50,6 +51,10 @@ class TabTrayViewController: UIViewController,
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+    }
 
     // MARK: - Redux state
     var tabTrayState: TabTrayState
@@ -177,10 +182,20 @@ class TabTrayViewController: UIViewController,
         return [deleteButton, flexibleSpace, newTabButton]
     }()
 
+    private lazy var experimentBottomToolbarItems: [UIBarButtonItem] = {
+        return [deleteButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
+    }()
+
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
         guard hasSyncableAccount else { return [] }
 
         return [flexibleSpace, syncTabButton]
+    }()
+
+    private lazy var experimentBottomToolbarItemsForSync: [UIBarButtonItem] = {
+        guard hasSyncableAccount else { return [flexibleSpace, doneButton] }
+
+        return [syncTabButton, flexibleSpace, doneButton]
     }()
 
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
@@ -253,8 +268,12 @@ class TabTrayViewController: UIViewController,
         switch layout {
         case .compact:
             navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItems = [doneButton]
             navigationItem.titleView = nil
+            if isTabTrayUIExperimentsEnabled {
+                navigationItem.rightBarButtonItems = nil
+            } else {
+                navigationItem.rightBarButtonItems = [doneButton]
+            }
         case .regular:
             navigationItem.titleView = segmentedControl
         }
@@ -393,7 +412,14 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
+        var toolbarItems: [UIBarButtonItem]
+        if isTabTrayUIExperimentsEnabled {
+            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+        } else {
+            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        }
+
         setToolbarItems(toolbarItems, animated: true)
     }
 
