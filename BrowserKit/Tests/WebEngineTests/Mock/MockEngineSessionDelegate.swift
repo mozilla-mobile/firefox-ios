@@ -20,6 +20,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var searchCalled = 0
     var onProvideContextualMenuCalled = 0
     var onWillDisplayAcccessoryViewCalled = 0
+    var requestMediaCapturePermissionCalled = 0
 
     var savedTitleChange: String?
     var savedURL: String?
@@ -32,6 +33,8 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedError: NSError?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
+    
+    var hasMediaCapturePermission = true
 
     func onTitleChange(title: String) {
         onTitleChangeCalled += 1
@@ -96,6 +99,11 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onWillDisplayAccessoryView() -> EngineInputAccessoryView {
         onWillDisplayAcccessoryViewCalled += 1
         return .default
+    }
+    
+    func requestMediaCapturePermission() -> Bool {
+        requestMediaCapturePermissionCalled += 1
+        return hasMediaCapturePermission
     }
 
     func adsSearchProviderModels() -> [EngineSearchProviderModel] {
