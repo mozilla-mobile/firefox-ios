@@ -12,6 +12,9 @@ public protocol EngineSession {
     /// Proxy object for handling telemetry events.
     var telemetryProxy: EngineTelemetryProxy? { get set }
 
+    // Whether the engine session is currently being rendered
+    var isActive: Bool {get set}
+
     /// The engine received a request to load a URL.
     /// - Parameter browserURL: The BrowserURL that is requested to load
     func load(browserURL: BrowserURL)
