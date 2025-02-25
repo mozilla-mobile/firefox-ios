@@ -13,7 +13,7 @@ class TabDisplayView: UIView,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
                       InactiveTabsSectionManagerDelegate,
-                        FeatureFlaggable {
+                      FeatureFlaggable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }

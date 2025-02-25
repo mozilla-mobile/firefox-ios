@@ -12,7 +12,7 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(for tabUUID: TabUUID)
 }
 
-class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
+class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let borderWidth: CGFloat = 3.0
         static let cornerRadius: CGFloat = 16
@@ -76,10 +76,6 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlagg
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
-    }
-
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
     }
 
     // MARK: - Initializer
