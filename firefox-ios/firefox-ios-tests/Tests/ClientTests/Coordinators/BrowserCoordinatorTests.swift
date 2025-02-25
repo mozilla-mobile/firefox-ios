@@ -28,6 +28,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.tabManager = mockTabManager
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        setIsDeeplinkOptimizationRefactorEnabled(false)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
@@ -1298,6 +1299,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
     }
 
     // MARK: - Mock Server

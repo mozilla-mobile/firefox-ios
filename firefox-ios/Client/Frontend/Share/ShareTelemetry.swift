@@ -3,14 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import Glean
 
 class ShareTelemetry {
     private let gleanWrapper: GleanWrapper
     private var openURLTimerId: TimerId?
+    private let logger: Logger
+    private var time = 0.0
 
-    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper(), logger: Logger = DefaultLogger.shared) {
         self.gleanWrapper = gleanWrapper
+        self.logger = logger
     }
 
     func sharedTo(
@@ -32,14 +36,17 @@ class ShareTelemetry {
 
     // MARK: - Deeplinks
 
-    func recordOpenURLTime() {
+    func recordOpenDeeplinkTime() {
         openURLTimerId = gleanWrapper.startTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime)
+        time = CACurrentMediaTime()
     }
 
-    func sendOpenURLTimeRecord() {
+    func sendOpenDeeplinkTimeRecord() {
         guard let openURLTimerId else { return }
         gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Share.deeplinkOpenUrlStartupTime,
                                              timerId: openURLTimerId)
+        time = CACurrentMediaTime() - time
+        logger.log("Startup time handling deeplink took \"\(time)\" seconds", level: .debug, category: .lifecycle)
     }
 
     func cancelOpenURLTimeRecord() {

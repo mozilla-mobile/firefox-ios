@@ -443,8 +443,8 @@ private extension TabScrollingController {
             UIView.animate(withDuration: duration,
                            delay: 0,
                            options: .allowUserInteraction,
-                           animations: animation) { finished in
-                self.isAnimatingToolbar = false
+                           animations: animation) { [weak self] finished in
+                self?.isAnimatingToolbar = false
                 completion?(finished)
             }
         } else {
