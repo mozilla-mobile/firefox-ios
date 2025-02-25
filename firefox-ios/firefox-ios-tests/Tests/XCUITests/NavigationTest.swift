@@ -343,11 +343,14 @@ class NavigationTest: BaseTestCase {
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
         mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        navigator.goto(BrowsingSettings)
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         let switchValue = switchBlockPopUps.value!
         XCTAssertEqual(switchValue as? String, "1")
+        // Navigate back to the homepage
+        navigator.goto(BrowserTab)
+        navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)
@@ -358,15 +361,20 @@ class NavigationTest: BaseTestCase {
         let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
 
-        // Now disable the Block PopUps option
+        // Now disable the Browsing -> Block PopUps option
         navigator.goto(BrowserTabMenu)
-        navigator.goto(SettingsScreen)
+        navigator.goto(BrowsingSettings)
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
+        // Navigate back to the homepage
+        app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        navigator.nowAt(NewTabScreen)
 
         // Check that now pop ups are shown, two sites loaded
-        navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
         app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
@@ -399,9 +407,8 @@ class NavigationTest: BaseTestCase {
     func testWriteToChildPopupTab() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        navigator.goto(BrowsingSettings)
+        let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         switchBlockPopUps.waitAndTap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
@@ -529,15 +536,18 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
     func testOpenExternalLink() {
-        // Disable "Block external links" toggle
+        // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        let switchBlockLinks = app.tables.cells.switches["blockOpeningExternalApps"]
+        navigator.goto(BrowsingSettings)
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
         scrollToElement(switchBlockLinks)
         if let switchValue = switchBlockLinks.value as? String, switchValue == "1" {
             switchBlockLinks.waitAndTap()
         }
         // Open website and tap on one of the external article links
+        navigator.nowAt(BrowsingSettings)
+        navigator.goto(NewTabScreen)
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
