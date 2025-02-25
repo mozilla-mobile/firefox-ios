@@ -26,6 +26,14 @@ class TabDisplayPanelViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
     }
 
+    private lazy var layout: TabTrayLayoutType = {
+        return shouldUseiPadSetup() ? .regular : .compact
+    }()
+
+    var isCompactLayout: Bool {
+        return layout == .compact
+    }
+
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(panelType: self.panelType,
@@ -122,7 +130,7 @@ class TabDisplayPanelViewController: UIViewController,
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty {
+        if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty, isCompactLayout {
             gradientLayer.locations = [0.0, 0.1]
             fadeView.layer.addSublayer(gradientLayer)
             view.addSubview(fadeView)

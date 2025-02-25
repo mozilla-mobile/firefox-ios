@@ -405,7 +405,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        if !isTabTrayUIExperimentsEnabled {
+        if !isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
             navigationItem.title = tabTrayState.navigationTitle
         }
     }
@@ -505,7 +505,7 @@ class TabTrayViewController: UIViewController,
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
-                if self.isTabTrayUIExperimentsEnabled {
+                if self.isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
                     [
                         toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
                                                        constant: Toast.UX.toastSidePadding),
@@ -556,7 +556,7 @@ class TabTrayViewController: UIViewController,
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
-        if isTabTrayUIExperimentsEnabled {
+        if isTabTrayUIExperimentsEnabled, !isRegularLayout {
             NSLayoutConstraint.activate([
                 panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
