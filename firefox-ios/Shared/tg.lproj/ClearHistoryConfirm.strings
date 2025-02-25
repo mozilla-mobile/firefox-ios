@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear history. */
+"Cancel" = "Бекор кардан";
+
+/* The confirmation button that clears history even when Sync is connected. */
+"OK" = "ХУБ";
+
+/* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
+"This action will clear all of your private data, including history from your synced devices." = "Ин амал тамоми маълумоти шахсии шуморо, аз ҷумла таърих аз дастгоҳҳои ҳамоҳангшудаи шумо, пок месозад.";
+

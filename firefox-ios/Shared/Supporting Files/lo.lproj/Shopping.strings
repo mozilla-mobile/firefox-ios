@@ -1,0 +1,84 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
+"ContextualHints.Shopping.NotOptedInAction.v120" = "ລອງກວດເບິ່ງຕົວກວດສອບ";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "ພິຈາລະນາເພີ່ມເຕີມ";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ ຈາກທັງໝົດ 5 ດາວ";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "ປັບຄະແນນ";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "ເຂົ້າໃຈແລ້ວ";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "ການວິເຄາະແມ່ນທັນສະໄຫມ";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "ການແຂ່ງຂັນ";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "ສະແດງໜ້ອຍ";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "ສະແດງເພີ່ມເຕີມ";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "ການຫຸ້ມຫໍ່";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "ລາຄາ";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "ຄຸນະພາບ";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "ການຂົນສົ່ງ";
+
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "ຈຸດເດັ່ນຈາກການທົບທວນຄືນທີ່ຜ່ານມາ";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "ແຕ່ຫນ້າເສຍດາຍ, ພວກເຮົາບໍ່ສາມາດກວດສອບຄຸນນະພາບການທົບທວນສໍາລັບບາງປະເພດຂອງຜະລິດຕະພັນ. ຕົວຢ່າງ, ບັດຂອງຂວັນ ແລະ ການຖ່າຍທອດວິດີໂອ, ເພງ, ແລະເກມ.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "ຂໍ້ມູນຈະມາໃນໄວໆນີ້";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "ກວດເບິງດຽວນີ້";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "ເບິ່ງວ່າການ review ຜະລິດຕະພັນທີ່ເຊື່ອຖືໄດ້ແນວໃດຢູ່ໃນ %1$@ ກ່ອນທີ່ທ່ານຈະຊື້. Review Checker, ຄຸນສົມບັດທົດລອງຈາກ %2$@, ຖືກສ້າງຂຶ້ນໃນ browser.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "ເບິ່ງວ່າການ review ຜະລິດຕະພັນທີ່ເຊື່ອຖືໄດ້ແນວໃດຢູ່ໃນ %1$@ ກ່ອນທີ່ທ່ານຈະຊື້. Review Checker, ຄຸນສົມບັດທົດລອງຈາກ %2$@, ຖືກສ້າງຂຶ້ນໃນ browser. ມັນເຮັດວຽກຢູ່ໃນ %3$@ ແລະ %4$@, ເຊັ່ນກັນ.";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "ສຶກສາເພີ່ມເຕີມ";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "ການ​ນໍາ​ໃຊ້​ພະ​ລັງ​ງານ​ຂອງ %1$@ ໂດຍ %2$@, ພວກ​ເຮົາ​ຊ່ວຍ​ໃຫ້​ທ່ານ​ຫຼີກ​ເວັ້ນ​ການ​ review ແບບມີອະ​ຄະ​ຕິ ​ແລະ ​ບໍ່​ຖືກ​ຕ້ອງ. ໂມເດວ AI ຂອງພວກເຮົາແມ່ນມີການປັບປຸງສະເຫມີເພື່ອປົກປ້ອງທ່ານໃນເວລາທີ່ທ່ານຊື້ເຄື່ອງ.";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "ເງື່ອນໄຂການນຳໃຊ້ຂອງ %@";
+
+/* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
+"Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "ລະດັບ %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "ການ review ເຫຼົ່ານີ້ມີຄວາມຫນ້າເຊື່ອຖືຫຼາຍປານໃດ?";
+
+/* Description of the reliability ratings for rating 'A' and 'B' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.AB.Description.v120" = "ການ review ທີ່ເຊື່ອຖືໄດ້";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "ການປະສົມປະສານຂອງການ review ທີ່ຫນ້າເຊື່ອຖື ແລະ ບໍ່ຫນ້າເຊື່ອຖື";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "ປິດໂຕກວດສອບ";
+

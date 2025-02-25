@@ -1,0 +1,1701 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Номи корбар ва ниҳонвожа аз ҷониби «%@» дархост карда шуданд.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Номи корбар ва ниҳонвожа аз ҷониби «%1$@» дархост карда шуданд. Сомона хабар медиҳад: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Дар бораи барнома";
+
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Илова кардан ба миёнбурҳо";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Васл кардан";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ҷудо кардан";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Бозгашт ба";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Варақаҳо: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Нигоҳдошташудаи охирин";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Дидашудаи охирин";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Шумораи сатрҳо";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Илова кардани варақа";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Илова кардан ба «Рӯйхати хониш»";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Саҳифа ба «Рӯйхати хониш» илова шуд";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ХУБ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Ҳангоми илова кардани ниҳонвожа ба Ҳамён хато ба миён омад. Лутфан, баъдтар аз нав кӯшиш кунед.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Ниҳонвожа илова карда нашуд";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Нишонӣ ва ҷустуҷӯ";
+
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Илова кардан ба «Рӯйхати хониш»";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Навори нишонӣ";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Ҳамеша фиристода шавад";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Санҷиши ҳаққоният лозим аст";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Ба қафо";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Манъ кардани равзанаҳои зоҳиршаванда";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "Сарлавҳа";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "Нишонии «URL»";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Хатбаракҳо";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Таҳрир кардан";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Таҳрир кардани хатбарак";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Таҳрир кардани ҷузвдон";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Ҷузвдон";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Хатбаракҳо дар компютери мизи корӣ";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Хатбараки нав";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Ҷузвдони нав";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Ҷудосози нав";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Сарлавҳа";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Ин вайронӣ дар санаи зерин ба вуҷуд омад";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Пас аз ҳамон охирин дафъае, ки шумо ниҳонвожаи худро иваз карда будед, ниҳонвожаҳо дуздӣ ва ошкор карда буданд. Барои муҳофизат кардани ин ҳисоб, ба сомона ворид шавед ва ниҳонвожаи худро иваз намоед.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Маълумоти бештар";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Гузариш ба";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Ҳамла дар сомона";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Равшанӣ";
+
+/* Label for Cancel button */
+"Cancel" = "Бекор кардан";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Мавзуи рангинро иваз мекунад.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Навъи шрифтро иваз мекунад.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Гузариш";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Ба пайванди нусхабардоришуда ворид мешавед?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Пӯшидан";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Пӯшидани варақа";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Гузоштани хатбарак барои пайванд";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Варақаи хусусии нав кушода шуд";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Варақаи хусусии нав кушода шуд";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Қатъу васл кардан";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Варақаи нав кушода шуд";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Варақаи нав кушода шуд";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Нусха бардоштани тасвир";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Нусха бардоштани пайванди тасвир";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Нусха бардоштани пайванд";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Боргирӣ кардани тавассути пайванд";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Кушодан дар варақаи нав";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Нигоҳ доштани тасвир";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Мубодила кардани пайванд";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Танзимоти навори абзорҳо";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Варақаҳое, ки шумо ду ҳафта такроран надидаед, ба ин ҷо интиқол дода мешаванд.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Дар танзимот хомӯш кунед";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Пӯшидан";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Саҳифа ба «Рӯйхати хониш» илова карда нашуд";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Саҳифа ба «Рӯйхати хониш» илова карда нашуд. Шояд он аллакай дар рӯйхат аст?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Саҳифа бор карда нашуд.";
+
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Вазифаи «Муҳофизати такмилёфта аз пайгирӣ» кумак мекунад, то ки ҳар гуна реклама ва таблиғот манъ карда шавад ва шуморо дар саросари Интернет пайгирӣ накунад. Реҷаи «Ҷиддӣ»-ро фаъол созед, то ки боз ҳам бештар васоити пайгирӣ, таблиғот ва ҳар гуна равзанаҳои зоҳиршаванда манъ карда шаванд. ";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Ба Танзимот гузаред";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Муҳофизат бар зидди васоити пайгирии рекламавӣ";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Эҷод кардани ҳисоб";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Торик";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Хурд кардани андозаи матн";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "Низоми ҷустуҷӯии пешфарз";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Пӯшидан";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Танзимоти намоиш";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Фиристода нашавад";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Тайёр";
+
+/* Panel accessibility label */
+"Downloads" = "Боргириҳо";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "Ҳозир боргирӣ мекунам";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "Бекор кардан";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "Шумо мутмаин ҳастед, ки мехоҳед ин боргириро бекор кунед?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "Давом додан";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "Бекор кардани боргирӣ";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "Боргирӣ бекор карда шуд";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "Боргирӣ иҷро нашуд";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "Боргириҳо";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 аз %d файл";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Нест кардан";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "Файлҳои боргиришуда дар ин ҷой пайдо мешаванд.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Мубодила кардан";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "Барои пайваст шудан ниҳонвожаи худро ворид кунед";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Иловагӣ";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Огоҳӣ: мо тасдиқ карда наметавонем, ки пайвасти шумо ба ин сомона бехатар аст.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Эҳтимол аст, ки ин ба сабаби танзимоти нодуруст ё дахолати ҳамлакунанда ба миён меояд. Шумо метавонед хатари эҳтимолиро ба зимма гирифта, идома диҳед.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Соҳиби %@ сомонаи худро нодуруст танзим кардааст. Барои муҳофизат кардани маълумоти шумо аз дуздӣ, браузери «Firefox» ба ин сомона пайваст нашуд.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Ин пайвастшавӣ беэътимод аст";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Бозгашт";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Ба ҳар ҳол ба сомона ворид шавед";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "Ин пайвандро дар «App Store» мекушоед?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Ин пайвандро дар барномаи беруна мекушоед?";
+
+/* Tile title for Facebook */
+"Facebook" = "Фейсбук";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Саҳифаи асосии «Firefox»";
+
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Танзимоти саҳифаи асосӣ";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Бештар омӯзед";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d дақиқа";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Ҳикояҳои андешаангез";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Тоза кардан";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Саҳифаҳо: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Танзимот";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Сарпарастони мо ва махфияти шумо";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Кушодани варақаи ҳамоҳангшуда";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Дидани ҳамаи варақаҳои ҳамоҳангшуда";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Интихоби варақа";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Сарпарастӣ";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Сарпарастӣ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Ба пеш";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Ҳисоби «Firefox»";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "Идоракунии ҳисоб ва дастгоҳҳо";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "Пайвасти интернет нест";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Ворид шудан ба воситаи камера";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "Дар компютери худ Firefox-ро кушоед ва ба firefox.com/pair гузаред";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Барои аксбардорӣ омода аст";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Ба ҷояш почтаи электрониро истифода баред";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "Ҳозир ҳамоҳанг кунед";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "Ҳамоҳангсозии «Firefox» ба «%@» пайваст шуд";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "Ҳамоҳангсозӣ пайваст шуд";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "Пайвасти «%@» бо муваффақият қатъ карда шуд.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "Пайвасти ин дастгоҳ аз низоми ҳамоҳангсозии «Firefox» бо муваффақият қатъ карда шуд.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Пайвасти ҳамоҳангсозӣ қатъ шуд";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "Пайвасти ҳамоҳангсозӣ қатъ шуд";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Пайвасти дастгоҳ аз ҳамоҳангсозии «Firefox» қатъ шуд";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Тамғаи «Firefox», иваз кардани тасвири замина.";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Кумак";
+
+/* Toggle history syncing setting */
+"History" = "Таърих";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "Пок кардани таърихи охирин…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "Комилан";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "Дар 1 соати гузашта";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "Имрӯз";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "Имрӯз ва дирӯз";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Сомонаҳое, ки шумо ба наздикӣ тамошо кардаед, дар ин ҷой пайдо мешаванд.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Варақаҳои шумо аз дастгоҳҳои дигар дар ин ҷой пайдо мешаванд.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "Барои дидани рӯйхати варақаҳо аз дастгоҳҳои дигар, ворид шавед.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Ҳамоҳангсозии «Firefox»";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Таърих";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Пӯшидашудаи охирин";
+
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Саҳифаи асосӣ";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Хатбарак";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Нест кардан аз таърих";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Кушодан дар варақаи хусусӣ";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Кушодан дар варақаи нав";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Тоза кардан";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Тоза кардани хатбаракҳо";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Мубодила кардан";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "Ба қафо";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Пӯшидани варақа";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "Ҷустуҷӯ";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "Ба пеш";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Варақаи хусусии нав";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "Варақаи нав";
+
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NormalMode.DiscoveryTitle" = "Реҷаи «Тамошобинии муқаррар»";
+
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Реҷаи «Тамошобинии хусусӣ»";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "Аз нав бор кардани саҳифа";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Интихоби навори нишонӣ";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Нишон додани варақаи навбатӣ";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Нишон додани варақаи қаблӣ";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Пӯшидани ҳамаи варақаҳои ғайрифаъол";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Калон кардани андозаи матн";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ҳоли ҳозир";
+
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Андозаи воқеӣ";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Илова кардани хатбарак";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Пок кардани таърихи охирин";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Аз нав ҷустуҷӯ кардан";
+
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "Аз нав бор кардан бе дарназардошти зерҳофиза";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Хатбаракҳо";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Таърих";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Абзорҳо";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Равзана";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Танзимот";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Намоиш додани хатбаракҳо";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Намоиш додани боргириҳо";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Нишон додани варақаи аввал";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Намоиш додани таърих";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Нишон додани варақаи охирин";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Калон кардан";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Хурд кардан";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "Моҳи гузашта";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "Ҳафтаи гузашта";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Хатбаракҳо";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Таърих";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Бекор кардан";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Нест кардан";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Ҳамаи сомонаҳоро аз «%@» нест мекунед?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Таърих (аз он ҷумла, таърихи ҳамоҳангшуда аз дастгоҳҳои дигар), кукиҳо ва иттилооти тамошокунии дигарро тоза мекунад.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Нест кардан";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Ягон таърих ёфт нашуд";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Варақаҳои ба наздикӣ пӯшидашуда";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Вожаҳои ҷустуҷӯиро ворид намоед";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Таърихи ҳамоҳангшуда";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Пештар";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Иҷозатномаҳо";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Равшан";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Бор кардани саҳифаи аслӣ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Дар ҳоли боркунии муҳтаво…";
+
+/* Authentication prompt log in button */
+"Log in" = "Ворид шдуан";
+
+/* Toggle logins syncing setting */
+"Logins" = "Воридшавиҳо";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Маълумоти бештар";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Идома додан";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Маълумоти бештар";
+
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "Барои истифода кардани хусусияти пуркунии худкор дар браузери «Firefox», шумо бояд ниҳонвожаи рамзиро фаъол созед.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Ниҳонвожаҳои худро аз ҷойи дилхоҳ ба даст оред";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Пуркунии худкори ниҳонвожаҳо дар «Firefox»";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Фаъол кардани пуркунии худкор";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Нигоҳ дошта нашавад";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "Навсозӣ карда нашавад";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Воридшавии «%1$@»-ро барои «%2$@» нигоҳ медоред?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Ниҳонвожаро барои «%@» нигоҳ медоред?";
+
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Воридшавиро барои «%@» аз нав нигоҳ медоред?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Воридшавии «%1$@»-ро барои «%2$@» аз нав нигоҳ медоред?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Нигоҳ доштани воридшавӣ";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Аз нав нигоҳ доштан";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Поло";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Ягон натиҷа мувофиқи ҷустуҷӯи шумо ёфт нашуд.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Бекор кардан";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Ниҳонвожаеро, барои пур кардани сатр интихоб намоед";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ВОРИДШАВИҲОИ НИГОҲДОШТАШУДА";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Чунин ба назар мерасад, ки браузери «Firefox» қаблан вайрон шудааст. Шумо мехоҳед, ки варақаҳои худро барқарор созед?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "Қайд кардан ҳамчун хондашуда";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Қайд кардан ҳамчун хонданашуда";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "Хатбарак илова карда шуд";
+
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Илова кардан";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Ба миёнбурҳо илова карда шуд";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Илова кардан";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "Ба рӯйхати хониш илова карда шуд";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Илова кардан ба миёнбурҳо";
+
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Хатбаракҳо";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "Нусха бардоштани нишонӣ";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "Нишонии «URL» ба ҳофизаи муваққатӣ нусха бардошта шуд";
+
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Танзимоти саҳифаи асосӣ";
+
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Боргириҳо";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Муҳофизат барои ин сомона ғайрифаъол аст";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Муҳофизат барои ин сомона фаъол аст";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Кумак";
+
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
+"Menu.History.Label" = "Таърих";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Варақаи хусусии нав";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Варақаи нав";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Хомӯш кардани «Реҷаи шабона»";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Фаъол кардани «Реҷаи шабона»";
+
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Ниҳонвожаҳо";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "Гузоштан";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "Гузоштан ва идома додан";
+
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Рӯйхати хониш";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "Аз нав бор кардан бе «Муҳофизати такмилёфта аз пайгирӣ»";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "Аз нав бор кардан бо «Муҳофизати такмилёфта аз пайгирӣ»";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "Хатбарак тоза карда шуд";
+
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Тоза кардан";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Тоза кардан аз «Миёнбурҳо»";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "Аз «Миёнбурҳо» тоза карда шуд";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Аз «Рӯйхати хониш» тоза карда шуд";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Тоза кардан";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Мубодила кардан";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Ҳамоҳангсозӣ ва нигоҳ доштани маълумот";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Варақа фиристода шуд";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Хатбаракҳо";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Саҳифаи асосӣ";
+
+/* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Аз ҷониби «%@» тасдиқ карда шудааст";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Танзимоти муҳофизат";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Муҳтавои пайгирикунанда";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Васоити пайгирии шабакаҳои иҷтимоӣ";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Васоити пайгирии байнисомонавӣ";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Криптомайнерҳо";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Сомонаҳо метавонанд рекламаи беруна, видеоҳои беруна ва муҳтавои дигареро, ки дорои васоити пайгирии пинҳонӣ мебошанд, бор кунанд. Амали манъкунии муҳтавои пайгирикунанда ба сомонаҳо барои кушоиши тезтар мусоидат менамояд, аммо беъзе тугмаҳо, шаклҳо ва майдонҳои воридшавӣ метавонанд кор накунанд.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Чунин кукиҳо шуморо аз сомона ба сомона пайгирӣ мекунанд ва дар бораи фаъолияти шумо дар онлайн маълумотро ҷамъ мекунанд. Онҳо аз ҷониби тарафҳои сеюм монанди ширкатҳои таҳлилӣ ё рекламадеҳ ба роҳ монда мешаванд.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Криптомайнерҳо барои ба даст овардани пули рақамӣ аз қувваи барқи компютери шумо пинҳонӣ истифода мебаранд. Скриптҳои криптомайнингӣ батареяи шуморо бемадор мекунанд ва кори компютерро суст менамоянд ва метавонанд маблағи пардохтҳои шуморо барои масрафи барқ зиёд кунанд.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Танзимоти браузер ва компютери шумо беназир аст. Технологияи хонандаи нақши ангуштон метавонад як қатор ин танзимоти беназиреро ҷамъоварӣ карда, профили шуморо эҷод кунад, ки минбаъд метавонад барои пайгирӣ кардани фаъолияти шумо дар Интернет истифода бурда шавад.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Хонандаи нақши ангуштон";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "Чӣ нав аст";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Танзими андоза (%@)";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "дастгоҳи мобилӣ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "зиёда аз як мох пеш";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "зиёда аз як ҳафта пеш";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Навори абзорҳои паймоиш";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "Варақаи нав";
+
+/* Restore Tabs Negative Action */
+"No" = "Не";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ягон варақа нест";
+
+/* OK button */
+"OK" = "ХУБ";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Хуб";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Оғоз кардани тамошо";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Оҳ! Браузери «Firefox» вайрон шуд";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Кушодани танзимот";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "Варақаҳои кушодашуда";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Браузери «Firefox» саҳифаро кушода наметавонад, зеро ки он нишонии нодуруст дорад.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Саҳифа кушода намешавад";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Ниҳонвожа";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ин ба шумо имкон медиҳад, ки тавонед аксҳоро дар нигористони дастгоҳ нигоҳ доред.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Браузери «Firefox» мехоҳад, ки ба аксҳои шумо дастрасӣ пайдо кунад";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "Пӯшидан";
+
+/* Privacy section title */
+"Privacy" = "Махфият";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Сиёсати махфият";
+
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Пайвастшавӣ бехатар нест";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Пайвастшавӣ бехатар аст";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Низомҳои ҷустуҷӯии зудамал";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Баҳодиҳӣ тавассути «App Store»";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "хондашуда";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Намоиши хонанда";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Реҷаи «Намоиши хонанда» дастрас аст";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Қайд кардан ҳамчун хондашуда";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Қайд кардан ҳамчун хонданашуда";
+
+/* Panel accessibility label */
+"Reading list" = "Рӯйхати хониш";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Пӯшидашудаи охирин";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Ҳамаро намоиш додан";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Аз нав бор кардан";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Аз нав бор кардани саҳифа";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Тоза кардан";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Тоза кардан аз «Рӯйхати хониш»";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Бекор кардан";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Аз нав кушодан";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Аз нав кушодани варақаи пӯшидашудаи охирин";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Барқарор кардани андозаи матн";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ХУБ";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Рамзи «QR»-ро дар ҳудуди чорчӯбаи тасвирбардорӣ мос кунед";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "Маълумот беэътибор аст";
+
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Дар дастгоҳ ба «Танзимот» > «Firefox» гузаред. Ба «Firefox» иҷозат диҳед, ки ба камера дастрасӣ пайдо кунад.";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Рамзи «QR»-ро тасвирбардорӣ намоед";
+
+/* Open search section of settings */
+"Search" = "Ҷустуҷӯ";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Нишониеро ҷустуҷӯ кунед ё ворид намоед";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Ба варақа гузаштан";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Пешниҳоди «Firefox»";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Низоми ҷустуҷӯии нав дар навори ҷустуҷӯии зудамал пайдо мешавад.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Низоми ҷустуҷӯӣ илова карда шуд!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Таъминкунандаи низоми ҷустуҷӯиро илова мекунед?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Бекор кардан";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Низоми ҷустуҷӯӣ бо ҳамин сарлавҳа ё нишонии «URL» аллакай илова карда шудааст.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Иҷро нашуд";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Таъминкунандаи низоми ҷустуҷӣ илова карда намешавад.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Иҷро нашуд";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Лутфан, ҳамаи майдонҳоро дуруст пур намоед.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Иҷро нашуд";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ХУБ";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Фиристодани изҳои назар";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Фиристодани гузориш";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "Бекор кардан";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Пӯшидан";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "Дастгоҳҳои дастрас:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Танҳо пайвандҳои «HTTP» ва «HTTPS» метавонанд мубодила карда шаванд.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ХУБ";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Пайвандеро, ки шумо мехоҳед мубодила кунед, мубодила карда намешавад.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Фиристодани варақа";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Шумо ба ҳисоби «Firefox»-и худ ворид нашудаед.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Фиристодан";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Варақаи нав аз дастгоҳи дигар омад.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Рарақа қабул шуд";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Варақаи нав дар «%@» омад";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Варақа аз «%@» қабул шуд";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Барои оғоз пахш кунед";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Ҳамоҳангсозии «Firefox»";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "Намоиш";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Сепия";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Барҷаста";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Танзимот";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Илова кардани низоми ҷустуҷӯӣ";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Нигоҳ доштан";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Илова кардани низоми ҷустуҷӯӣ";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Сарлавҳа";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Низоми ҷустуҷӯӣ";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "Нишонии «URL»";
+
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Манъ кардани кушоиши барномаҳои беруна";
+
+/* Button in Data Management that clears all items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "Пок кардани тамоми маълумоти сомона";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Пок кардани маълумоти хусусӣ";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Пок кардани маълумоти хусусӣ";
+
+/* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Пок кардани унсурҳо: %1$@";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "Ба ҳофизаи муваққатӣ нусха бардошта шуд";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "Полои сомонаҳо";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "Идоракунии маълумот";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "Идоракунии маълумот";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "Firefox ҳамоҳангсозиро бо ҳисоби шумо қатъ мекунад, аммо ягон маълумоти тамошокунии шуморо дар ин дастгоҳ нест намекунад.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "Қатъ кардани пайвасти ҳамоҳангсозӣ";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "Бекор кардан";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "Қатъ кардани пайваст";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "Пайвасти ҳамоҳангсозиро қатъ мекунед?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Меъёр";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Ба таври дастӣ";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Мавзуи дилхоҳеро интихоб намоед";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "Ба таври дастӣ";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "Торик";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "Равшан";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Ба таври худкор";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Иваз кардани реҷа";
+
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "Ба таври худкор";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Мавзуи низомӣ";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Истифодаи реҷаи низомии торик/равшан";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Интихоби мавзуъ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "Мавзуъ";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "Номи дастгоҳ";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "Танзимоти ҳамоҳангсозӣ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Ҳисоби «Firefox»";
+
+/* General settings section title */
+"Settings.General.SectionName" = "Умумӣ";
+
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Он чизеро, ки ҳамчун саҳифаи асосӣ намоиш дода мешавад, интихоб кунед.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Он чизеро, ки ба сафҳаи асосии «Firefox» дохил карда мешавад, интихоб кунед.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Бозгашт ба";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Аз ҷониби «Pocket» тавсия дода мешавад";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Нигоҳдошташудаи охирин";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Дидашудаи охирин";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Миёнбурҳо";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Саҳифаи асосӣ пас аз чор соати беамалӣ";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Саҳифаи асосӣ";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Он чизеро, ки шумо ҳангоми бозгашт ба браузери «Firefox» мебинед, интихоб кунед.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Варақаи охирин";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Экрани ибтидоӣ";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Дохил кардан ба саҳифаи асосӣ";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Тасвири замина";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Классикӣ - %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "ЭКРАНИ ИБТИДОӢ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Маълумоти бештар";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Маҷмуаи навро кӯшиш кунед.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Маҷмуаи нави «Овозҳои мустақил».";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Нашри маҳдуд";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Тасвири заминаро бо зеркунии тамғаи саҳифаи асосии «Firefox» иваз намоед";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Тасвири замина";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Тасвири замина навсозӣ карда шуд!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Намоиш";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Саҳифаи асосӣ";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Сатрҳо";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Сатрҳо";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Миёнбурҳо";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Миёнбурҳо";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Миёнбурҳои сарпарастӣ";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Ғайрифаъол";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Фаъол";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Саҳифаи асосии ҷорӣ";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Истифодаи саҳифаи ҷорӣ";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "Воридшавиҳо ва ниҳонвожаҳо";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Нишонии «URL»-и фармоишӣ";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "Саҳифаи холӣ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Фармоишӣ";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Саҳифаи асосии «Firefox»";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "Саҳифаи асосӣ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Варақаи нав";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "Варақаи нав";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "Намоиш додан";
+
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Манъ кардани тасвирҳо";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "Ҳангоми кушодани «Firefox»";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Ҳангоми кушодани «%@»";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "Кушодани пайвандҳои почта тавассути";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "Барномаи почта";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Акнун барои пайдо кардани дастрасӣ ба ниҳонвожаҳои худ аз нақши ангушт истифода баред.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Акнун ниҳонвожаҳои шумо ба воситаи «Face ID», «Touch ID» ё ниҳонвожаи рамзии дастгоҳ муҳофизат карда мешаванд.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Нигоҳ доштани ниҳонвожаҳо";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Ниҳонвожаҳо";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Нигоҳ доштани воридшавиҳо";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Тайёр";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Таҳрир кардан";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "Маълумоти бештар.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "«Mozilla» cаъю кӯшиш мекунад, ки танҳо он маълумотеро ҷамъоварӣ намояд, ки мо бояд барои фаъолият ва беҳтарсозии «Firefox» барои ҳар як кас таъмин намоем.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "Фиристодани маълумоти истифодабарӣ";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Ҳангоми пахши дарозмуддат ба пайвандҳо";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Ҳангоми пахши дарозмуддат ба пайвандҳо";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Намоиш додани пешнамоиши пайванд";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Намоиш додан дар менюи барномаҳо";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Кушодани варақаи нав";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "Миёнбурҳои «Siri»";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Маълумоти бештар.";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Баъзе вақт «Firefox» метавонад омӯзишҳоро насб ва иҷро намояд.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Омӯзишҳо";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Барои ҳамоҳангсозии варақаҳо, хатбаракҳо, ниҳонвожаҳо ва чизҳои дигар, ворид шавед.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Ҳамоҳангсозӣ ва нигоҳ доштани маълумот";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Ҳамоҳангсозӣ ва нигоҳ доштани маълумот";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Варақаҳои ғайрифаъол";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Варақаҳое, ки шумо ду ҳафта такроран надидаед, ба қисмати ғайрифаъол интиқол дода мешаванд.";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Гурӯҳҳои варақаҳо";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Фармоишдиҳии лавҳачаи варақаҳо";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Варақаҳо";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Поён";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Навори абзорҳо";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Боло";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Хуб, фаҳмидам";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Диққат!";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "МАНЪШУДА";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Маълумоти бештар";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Барои фаъолияти баъзе васоити пайгирии рекламавӣ иҷозат медиҳад, то ки сомонаҳо тавонанд дуруст кор кунанд.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Васоити пайгирӣ, реклама ва равзанаҳои зоҳиршавандаи бештарро маҳдуд мекунад. Саҳифаҳо зудтар бор мешаванд, аммо баъзеи функсияҳо метавонанд кор накунанд.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Сатҳи муҳофизат";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "Муҳофизат аз пайгирӣ";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Стандартӣ (пешфарз)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Стандартӣ";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Ҷиддӣ";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Муҳофизати такмилёфта аз пайгирӣ";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Ислоҳкунии хатоҳо";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "Бештар нишон диҳед";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "Ин амал тамоми маълумоти сомонавии шуморо пок месозад. Ин амал бекор карда намешавад.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Ин амал унсурҳои интихобшударо пок месозад. Ин амал бекор карда намешавад.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "Маълумоти сомона";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "Илова кардан ба «Рӯйхати хониш»";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "Ба «Рӯйхати хониш» илова карда шуд";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "Гузоштани хатбарак барои ин саҳифа";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Дар хатбаракҳо";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "Бор кардан дар реҷаи заминаӣ";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Боркунӣ дар «Firefox»";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "Кушодан дар «Firefox»";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "Ҷустуҷӯ дар «Firefox»";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Нусха бардоштан";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Фиристодани пайванд ба дастгоҳ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Намоиш додани пешниҳодҳои ҷустуҷӯ";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "Намоиш додани варақаҳо";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Оғоз кардани намоиш";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Истодан";
+
+/* Support section title */
+"Support" = "Дастгирӣ";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Ҳамоҳангсозӣ…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Ҳамоҳангсозӣ офлайн аст";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Варақаи %1$@ аз %2$@";
+
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Намоиш додани ҳамаи варақаҳо";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Лавҳачаи варақаҳо";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Бекор кардан";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d варақа пӯшида шуд";
+
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Нишон додани варақаҳои ғайрифаъол";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Пинҳон кардани варақаҳои ғайрифаъол";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Ҷустуҷӯ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Илова кардани варақа";
+
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "Пӯшидани ҳамаи варақаҳо";
+
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Варақаи ҷории интихобшуда.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as \"Others\" */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Дигарон";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Варақаҳои ғайрифаъол";
+
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "Кушодани варақаи нав";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Хусусӣ";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Ҳамоҳангшуда";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Варақаҳо";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Варақаҳои кушодашуда";
+
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Намоиш додани варақаҳо";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Ин саҳифа дар реҷаи «Намоиши хонанда» намоиш дода намешавад.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Ҳангоми табдил додани саҳифа хато ба миён омад";
+
+/* Relative date for date in past week. */
+"this week" = "ҳамин ҳафта";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "дирӯз";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "Ҳоло не";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "Кушодани «App Store»";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Бекор кардан";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "Имрӯз";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "имрӯз дар %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Меню";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "Пӯшидани ҳамаи варақаҳо";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Тоза кардани саҳифа — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Не";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Ҳа";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Гузоштан ва идома додан";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "Ҷустуҷӯ ба воситаи «Firefox»";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "хонданашуда";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Номи корбар";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Тасвири замина иваз карда нашуд";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Бекор кардан";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Аз нав кӯшиш кардан";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Муҳтавои сомона";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Хуш омадед ба «Рӯйхати хониши» шумо";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "дирӯз";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "Дирӯз";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Шумо дар дастгоҳҳои дигари худ дар Firefox ягон варақаи кушодашуда надоред.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Ҳуқуқҳои шумо";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

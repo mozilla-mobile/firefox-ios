@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "იხილეთ, როგორ";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "შედეგად ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის Firefox.";
+"DefaultBrowserCard.Description" = "შედეგად, ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის Firefox.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "აირჩიეთ Firefox ნაგულისხმევ ბრაუზერად თავისთავადი სიჩქარის, უსაფრთხოებისა და პირადულობისთვის.";

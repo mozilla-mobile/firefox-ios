@@ -1,5 +1,20 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "ຈັດການທີ່ຢູ່";
+
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "ທີ່ຢູ່ທີ່ບັນທຶກໄວ້";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "ບັນທຶກຂໍ້ມູນບັດຂອງທ່ານໄວ້ຢ່າງປອດໄພເພື່ອຈ່າຍເງິນໄດ້ໄວຂຶ້ນໃນຄັ້ງຕໍ່ໄປ.";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v122" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v122" = "ອັບເດດບັດບໍ?";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.Yes.v122" = "ອັບເດດ";
 
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
 "CreditCards.Settings.Done.v114" = "ສຳເລັດ";
@@ -7,11 +22,23 @@
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "ຈັດການບັດ";
 
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseASavedCard.v122" = "ໃຊ້ບັດທີ່ບັນທຶກໄວ້";
+
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "ໃຊ້ບັດທີ່ບັນທຶກໄວ້";
 
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "ບັນຊີ";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ບັນຊີ";
@@ -42,4 +69,19 @@
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ ພະຍາຍາມເກັບເອົາແຕ່ສິ່ງທີ່ພວກເຮົາຕ້ອງການເພື່ອສະໜອງ ແລະ ປັບປຸງ %2$@ ສໍາລັບທຸກຄົນ.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "ຂໍ້​ມູນ​ກ່ຽວ​ກັບ​ອຸ​ປະ​ກອນ​ຂອງ​ທ່ານ​, ການ​ຕັ້ງ​ຄ່າ​ຮາດ​ແວ​, ແລະ ​ການ​ນໍາ​ໃຊ້​ຊ່ວຍ​ໃຫ້​ພວກ​ເຮົາ​ປັບ​ປຸງ %@ ຄຸນ​ນະ​ສົມ​ບັດ​, ປະ​ສິດ​ທິ​ພາບ​ ແລະ​ ຄວາມ​ສະຖຽນ.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "ຂໍ້ມູນດ້ານເຕັກນິກ ແລະ ການໂຕ້ຕອບ";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "ເງື່ອນໄຂການນໍາໃຊ້";
 

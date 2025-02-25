@@ -53,7 +53,7 @@
 "No logins found" = "පිවිසුම් හමු නොවුණි";
 
 /* Label displayed when no logins are found after searching. */
-"NoLoginsFound.Title.v122" = "මුරපද හමු නොවිණි";
+"NoLoginsFound.Title.v122" = "මුරපද හමු නොවුණි";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "විවෘත කර පුරවන්න";
