@@ -132,7 +132,7 @@ class JumpBackInTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
+            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
         }
         app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
 
