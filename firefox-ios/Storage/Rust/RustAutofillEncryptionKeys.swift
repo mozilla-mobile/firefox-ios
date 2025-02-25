@@ -27,7 +27,8 @@ public extension AutofillApiError {
 public class RustAutofillEncryptionKeys {
     public let ccKeychainKey = "appservices.key.creditcard.perfield"
 
-    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let legacyKeychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain = RustKeychain.sharedClientAppContainerKeychain
     let ccCanaryPhraseKey = "creditCardCanaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 
@@ -43,20 +44,20 @@ public class RustAutofillEncryptionKeys {
             let canary = try self.createCanary(text: canaryPhrase, key: secret)
 
             DispatchQueue.global(qos: .background).sync {
-                keychain.set(secret,
-                             forKey: ccKeychainKey,
-                             withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-                keychain.set(canary,
-                             forKey: ccCanaryPhraseKey,
-                             withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                legacyKeychain.set(secret,
+                                   forKey: ccKeychainKey,
+                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                legacyKeychain.set(canary,
+                                   forKey: ccCanaryPhraseKey,
+                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             }
 
             return secret
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                logAutofillStoreError(err: autofillStoreError,
-                                      errorDomain: err.domain,
-                                      errorMessage: "Error while creating and storing credit card key")
+                keychain.logAutofillStoreError(err: autofillStoreError,
+                                               errorDomain: err.domain,
+                                               errorMessage: "Error while creating and storing credit card key")
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             } else {
@@ -70,16 +71,24 @@ public class RustAutofillEncryptionKeys {
         }
     }
 
-    func decryptCreditCardNum(encryptedCCNum: String) -> String? {
-        guard let key = self.keychain.string(forKey: self.ccKeychainKey) else { return nil }
+    func decryptCreditCardNum(encryptedCCNum: String, rustKeychainEnabled: Bool) -> String? {
+        var keyValue: String?
+
+        if rustKeychainEnabled {
+            (keyValue, _) = keychain.getCreditCardKeyData()
+        } else {
+            keyValue = legacyKeychain.string(forKey: self.ccKeychainKey)
+        }
+
+        guard let key = keyValue else { return nil }
 
         do {
             return try decryptString(key: key, ciphertext: encryptedCCNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                logAutofillStoreError(err: autofillStoreError,
-                                      errorDomain: err.domain,
-                                      errorMessage: "Error while decrypting credit card")
+                keychain.logAutofillStoreError(err: autofillStoreError,
+                                               errorDomain: err.domain,
+                                               errorMessage: "Error while decrypting credit card")
             } else {
                 logger.log("Unknown error while decrypting credit card",
                            level: .warning,
@@ -99,26 +108,5 @@ public class RustAutofillEncryptionKeys {
     private func createCanary(text: String,
                               key: String) throws -> String {
         return try encryptString(key: key, cleartext: text)
-    }
-
-    private func logAutofillStoreError(err: AutofillApiError,
-                                       errorDomain: String,
-                                       errorMessage: String) {
-        var message: String {
-            switch err {
-            case .SqlError(let message),
-                    .CryptoError(let message),
-                    .NoSuchRecord(let message),
-                    .UnexpectedAutofillApiError(let message):
-                return message
-            case .InterruptedError:
-                return "Interrupted Error"
-            }
-        }
-
-        logger.log(errorMessage,
-                   level: .warning,
-                   category: .storage,
-                   description: "\(errorDomain) - \(err.descriptionValue): \(message)")
     }
 }
