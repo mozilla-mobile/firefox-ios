@@ -2146,13 +2146,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		8ACD19612D6CB56C002CC7C2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Localizations;
-		};
 		C82043702523DBEB00740B71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -15427,7 +15420,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8ACD19622D6CB56C002CC7C2 /* PBXTargetDependency */,
 			);
 			name = Sticker;
 			productName = sticker;
@@ -18301,11 +18293,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB64421C7345600092C02E /* PBXContainerItemProxy */;
-		};
-		8ACD19622D6CB56C002CC7C2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* Localizations */;
-			targetProxy = 8ACD19612D6CB56C002CC7C2 /* PBXContainerItemProxy */;
 		};
 		C82043712523DBEB00740B71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
