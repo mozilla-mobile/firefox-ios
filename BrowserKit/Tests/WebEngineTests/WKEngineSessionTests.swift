@@ -247,14 +247,6 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     // MARK: Observers
-// Laurie
-//    func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
-//        _ = createSubject()
-//        let expectedCount = WKEngineKVOConstants.allCases.count
-//        XCTAssertEqual(webViewProvider.webView.addObserverCalled,
-//                       expectedCount,
-//                       "There are \(expectedCount) KVO Constants")
-//    }
 
     func testRemoveObserversWhenCloseIsCalledThenCloseIsCalled() {
         let subject = createSubject()
