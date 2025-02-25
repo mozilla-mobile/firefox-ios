@@ -413,6 +413,11 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedAutoPlay() {
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
     // MARK: - SupportSettingsDelegate
 
     func pressedOpenSupportPage(url: URL) {

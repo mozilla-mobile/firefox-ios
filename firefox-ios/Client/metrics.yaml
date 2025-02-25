@@ -3329,6 +3329,23 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+  autoplay_setting_changed:
+    type: event
+    description: |
+      Event for user changing the autoplay setting
+    extra_keys:
+      media_type:
+        type: string
+        description: |
+          We either send "allowAudioAndVideo", "blockAudio" or "blockAudioAndVideo".
+          Default is "allowAudioAndVideo".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12862
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
 
 # Private Browsing
 private_browsing:
