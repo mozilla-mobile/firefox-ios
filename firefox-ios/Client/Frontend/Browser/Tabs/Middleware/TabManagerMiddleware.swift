@@ -369,8 +369,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
-        Task { @MainActor in
+        Task {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
+            await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
@@ -391,10 +392,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                        windowUUID: uuid,
                                                        actionType: GeneralBrowserActionType.showToast)
                 store.dispatch(toastAction)
-                let tabManager = tabManager(for: uuid)
-                if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-                    tabManager.addTab(nil, isPrivate: false)
-                }
             } else {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
@@ -490,9 +487,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
-                    if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-                        tabManager.addTab(nil, isPrivate: false)
-                    }
                 }
             }
         }
