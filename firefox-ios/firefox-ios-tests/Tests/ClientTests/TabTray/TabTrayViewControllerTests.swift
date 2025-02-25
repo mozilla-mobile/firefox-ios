@@ -75,6 +75,35 @@ final class TabTrayViewControllerTests: XCTestCase {
         XCTAssertEqual(viewController.toolbarItems?.count, 0)
     }
 
+    func testBottomToolbarItemsWithExperiment_ForTabsInCompact() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let viewController = createSubject()
+
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 5)
+    }
+
+    func testBottomToolbarItemsWithExperiment_ForPrivateTabsInCompact() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let viewController = createSubject(selectedSegment: .privateTabs)
+
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 5)
+    }
+
+    func testBottomToolbarItemsWithExperiment_ForSyncTabsEnabledInCompact() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let viewController = createSubject(selectedSegment: .syncedTabs)
+        viewController.layout = .compact
+        viewController.viewWillAppear(false)
+
+        XCTAssertEqual(viewController.toolbarItems?.count, 2)
+    }
+
     // MARK: Regular layout
     func testToolbarItems_ForRegular() {
         let viewController = createSubject()
