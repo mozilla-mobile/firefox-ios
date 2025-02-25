@@ -27,6 +27,9 @@ class ButtonToast: Toast {
     // MARK: - UI
     private var contentStackView: UIStackView = .build { stackView in
         stackView.spacing = UX.stackViewSpacing
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
     }
 
     private var imageView: UIImageView = .build { imageView in }
@@ -108,7 +111,7 @@ class ButtonToast: Toast {
         }
 
         contentStackView.addArrangedSubview(labelStackView)
-        setupPaddedButton(stackView: contentStackView, buttonText: viewModel.buttonText)
+        setupPaddedButton(stackView: labelStackView, buttonText: viewModel.buttonText)
         toastView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
@@ -149,13 +152,13 @@ class ButtonToast: Toast {
     override func adjustLayoutForA11ySizeCategory() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         if contentSizeCategory.isAccessibilityCategory {
-            contentStackView.axis = .vertical
-            contentStackView.alignment = .leading
-            contentStackView.distribution = .fillProportionally
+            // Description label changes with progress and if this isn't clipped the height of the
+            // toast changes continually while loading
+            descriptionLabel.numberOfLines = 1
+            descriptionLabel.lineBreakMode = .byTruncatingTail
         } else {
-            contentStackView.axis = .horizontal
-            contentStackView.alignment = .center
-            contentStackView.distribution = .fill
+            descriptionLabel.numberOfLines = 0
+            descriptionLabel.lineBreakMode = .byWordWrapping
         }
 
         setNeedsLayout()
