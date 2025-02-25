@@ -318,7 +318,7 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
+            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         // userState.numTabs does not work on iOS 15
@@ -352,14 +352,14 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
+            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
         }
         XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].isHittable)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         if isTablet {
             XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
         } else {
-            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+            XCTAssertTrue(app.segmentedControls["navBarTabTray"].buttons["privateModeLarge"].isSelected)
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         XCTAssertEqual(userState.numTabs, 1)
