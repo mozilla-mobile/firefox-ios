@@ -18,9 +18,9 @@ public class BrowserAddressToolbar: UIView,
                                     UIDragInteractionDelegate {
     private enum UX {
         static let verticalEdgeSpace: CGFloat = 8
-        static let horizontalSpace: CGFloat = 8
-        static let cornerRadius: CGFloat = 8
-        static let dividerWidth: CGFloat = 4
+        static let horizontalSpace: CGFloat = 16
+        static let cornerRadius: CGFloat = 12
+        static let dividerWidth: CGFloat = 0
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 44, height: 44)
@@ -138,18 +138,23 @@ public class BrowserAddressToolbar: UIView,
         addSubview(toolbarTopBorderView)
         addSubview(toolbarBottomBorderView)
 
+        locationContainer.layer.shadowOpacity = 1
+        locationContainer.layer.shadowRadius = UX.cornerRadius
+        locationContainer.layer.shadowOffset = CGSize(width: 1, height: 4)
+        locationContainer.layer.masksToBounds = false
+
+        locationContainer.addSubview(navigationActionStack)
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
 
-        toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
         toolbarContainerView.addSubview(browserActionStack)
 
-        leadingLocationContainerConstraint = navigationActionStack.trailingAnchor.constraint(
-            equalTo: locationContainer.leadingAnchor,
-            constant: -UX.horizontalSpace)
-        leadingLocationContainerConstraint?.isActive = true
+//        leadingLocationContainerConstraint = navigationActionStack.leadingAnchor.constraint(
+//            equalTo: locationContainer.leadingAnchor,
+//            constant: 0.0)
+//        leadingLocationContainerConstraint?.isActive = true
 
         leadingBrowserActionConstraint = browserActionStack.leadingAnchor.constraint(
             equalTo: locationContainer.trailingAnchor,
@@ -166,9 +171,9 @@ public class BrowserAddressToolbar: UIView,
         toolbarTopBorderHeightConstraint?.isActive = true
         toolbarBottomBorderHeightConstraint?.isActive = true
 
-        leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
-            equalTo: toolbarContainerView.leadingAnchor)
-        leadingNavigationActionStackConstraint?.isActive = true
+//        leadingNavigationActionStackConstraint = locationContainer.leadingAnchor.constraint(
+//            equalTo: toolbarContainerView.leadingAnchor)
+//        leadingNavigationActionStackConstraint?.isActive = true
 
         trailingBrowserActionStackConstraint = browserActionStack.trailingAnchor.constraint(
             equalTo: toolbarContainerView.trailingAnchor)
@@ -193,13 +198,19 @@ public class BrowserAddressToolbar: UIView,
             toolbarBottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbarBottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            navigationActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
-            navigationActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+            navigationActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
+            navigationActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
+            navigationActionStack.trailingAnchor.constraint(equalTo: locationView.leadingAnchor),
+            navigationActionStack.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+            locationContainer.trailingAnchor.constraint(equalTo: toolbarContainerView.trailingAnchor,
+                                                        constant: -UX.horizontalSpace),
+            locationContainer.leadingAnchor.constraint(equalTo: toolbarContainerView.leadingAnchor,
+                                                       constant: UX.horizontalSpace),
 
-            locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
+            locationView.leadingAnchor.constraint(equalTo: navigationActionStack.trailingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             locationView.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
@@ -418,9 +429,10 @@ public class BrowserAddressToolbar: UIView,
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        locationContainer.backgroundColor = theme.colors.layerSearch
-        locationDividerView.backgroundColor = theme.colors.layer1
+        locationContainer.layer.shadowColor = theme.colors.shadowSubtle.cgColor
+        backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+        locationContainer.backgroundColor = theme.colors.layer2
+        locationDividerView.backgroundColor = theme.colors.layer2
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)

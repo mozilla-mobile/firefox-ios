@@ -94,6 +94,7 @@ final class LocationView: UIView,
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
         urlTextField.autocompleteDelegate = self
+        urlTextField.leftView = lockIconButton
         urlTextField.accessibilityActionsSource = self
         // Update the `textAlignment` property only when the entire layout direction is RTL or LTR,
         // similar to Apple's handling in Safari, ensuring that `textAlignment` remains in sync with the layout constraints.
@@ -162,38 +163,38 @@ final class LocationView: UIView,
     }
 
     private func setupLayout() {
-        addSubviews(urlTextField, iconContainerStackView, gradientView)
-        iconContainerStackView.addSubview(iconContainerBackgroundView)
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        addSubviews(urlTextField, gradientView)
+//        iconContainerStackView.addSubview(iconContainerBackgroundView)
+//        iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
-        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
+        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
 
         urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor)
         urlTextFieldTrailingConstraint?.isActive = true
 
-        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
-        iconContainerStackViewLeadingConstraint?.isActive = true
+//        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
+//        iconContainerStackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: urlTextField.trailingAnchor),
             gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
 
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
-            iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor),
-            iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
+//            iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+//            iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
+//            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor),
+//            iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
             lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
 
-            iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
-            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+//            iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
+//            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
@@ -287,14 +288,14 @@ final class LocationView: UIView,
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
-        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
+//        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
     private func updateUIForLockIconDisplay() {
         guard !isEditing else { return }
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(lockIconButton)
+//        iconContainerStackView.addArrangedSubview(lockIconButton)
         updateURLTextFieldLeadingConstraint()
 
         let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
@@ -356,7 +357,12 @@ final class LocationView: UIView,
     }
 
     private func formatAndTruncateURLTextField() {
-        guard !isEditing else { return }
+        guard !isEditing else {
+//            iconContainerStackViewLeadingConstraint?.isActive = true
+            urlTextField.leftViewMode = .never
+            urlTextField.textAlignment = .natural
+            return
+        }
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
@@ -381,6 +387,9 @@ final class LocationView: UIView,
             )
         )
         urlTextField.attributedText = attributedString
+        urlTextField.leftViewMode = .always
+//        iconContainerStackViewLeadingConstraint?.isActive = false
+        urlTextField.textAlignment = .center
     }
 
     // MARK: - `lockIconButton` Configuration
@@ -525,8 +534,8 @@ final class LocationView: UIView,
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = colors.layerSearch
-        lockIconButton.backgroundColor = colors.layerSearch
+        iconContainerBackgroundView.backgroundColor = colors.layer2
+        lockIconButton.backgroundColor = colors.layer2
         urlTextField.applyTheme(theme: theme)
         safeListedURLImageColor = colors.iconAccentBlue
         lockIconButton.tintColor = colors.iconPrimary

@@ -228,7 +228,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: [ToolbarActionConfiguration](),
-            pageActions: [qrCodeScanAction],
+            pageActions: [],
             browserActions: [tabsAction(), menuAction()],
             borderPosition: borderPosition,
             url: nil,
@@ -854,6 +854,9 @@ struct AddressBarState: StateType, Equatable {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
             }
+        } else {
+            guard !addressBarState.showQRPageAction else { return actions }
+            actions.append(shareAction)
         }
 
         return actions
@@ -874,32 +877,33 @@ struct AddressBarState: StateType, Equatable {
 
         guard !showQrCodeButton else {
             // On homepage we only show the QR code button
-            return [qrCodeScanAction]
+            return []
         }
 
         guard !isEditing else { return actions }
 
         switch readerModeState {
         case .active, .available:
-            let isSelected = readerModeState == .active
-            let iconName = isSelected ?
-            StandardImageIdentifiers.Large.readerViewFill :
-            StandardImageIdentifiers.Large.readerView
-
-            let readerModeAction = ToolbarActionConfiguration(
-                actionType: .readerMode,
-                iconName: iconName,
-                isEnabled: true,
-                isSelected: isSelected,
-                a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-                a11yHint: .TabLocationReloadAccessibilityHint,
-                a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
-                a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-            actions.append(readerModeAction)
+                break
+//            let isSelected = readerModeState == .active
+//            let iconName = isSelected ?
+//            StandardImageIdentifiers.Large.readerViewFill :
+//            StandardImageIdentifiers.Large.readerView
+//
+//            let readerModeAction = ToolbarActionConfiguration(
+//                actionType: .readerMode,
+//                iconName: iconName,
+//                isEnabled: true,
+//                isSelected: isSelected,
+//                a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+//                a11yHint: .TabLocationReloadAccessibilityHint,
+//                a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+//                a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+//            actions.append(readerModeAction)
         default: break
         }
 
-        actions.append(shareAction)
+//        actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
