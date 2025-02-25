@@ -8,6 +8,7 @@ import Shared
 /// Child settings pages browsing actions
 protocol BrowsingSettingsDelegate: AnyObject {
     func pressedMailApp()
+    func pressedAutoPlay()
 }
 
 class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
@@ -50,9 +51,10 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
         var mediaSection = [Setting]()
         if let profile {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
             let offerToOpenCopiedLinksSettings = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: theme,
                 prefKey: PrefsKeys.ShowClipboardBar,
                 defaultValue: false,
                 titleText: .SettingsOfferClipboardBarTitle,
@@ -61,7 +63,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
 
             let showLinksPreviewSettings = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: theme,
                 prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
                 defaultValue: true,
                 titleText: .SettingsShowLinkPreviewsTitle,
@@ -73,13 +75,18 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
 
             let blockOpeningExternalAppsSettings = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: theme,
                 prefKey: PrefsKeys.BlockOpeningExternalApps,
                 defaultValue: false,
                 titleText: .SettingsBlockOpeningExternalAppsTitle
             )
 
+            let autoplaySetting = AutoplaySetting(theme: theme,
+                                                  prefs: profile.prefs,
+                                                  settingsDelegate: parentCoordinator)
+
             mediaSection += [
+                autoplaySetting,
                 BlockPopupSetting(prefs: profile.prefs),
                 NoImageModeSetting(profile: profile),
                 blockOpeningExternalAppsSettings

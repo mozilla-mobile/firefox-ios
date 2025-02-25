@@ -159,7 +159,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             observing: [
                 UIApplication.willResignActiveNotification,
                 .TabMimeTypeDidSet,
-                .BlockPopup
+                .BlockPopup,
+                .AutoPlayChanged
             ])
     }
 
@@ -183,6 +184,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
+        configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
+            .getMediaTypesRequiringUserActionForPlayback(prefs)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -602,6 +605,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         // The default tab configurations also need to change.
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+    }
+
+    @objc
+    private func autoPlayDidChange() {
+        let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
+        // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
+        // The web view incorporates our configuration settings only at creation time; we cannot change
+        //  those settings dynamically later. So this change will apply to new webviews only.
+        configuration.mediaTypesRequiringUserActionForPlayback = mediaType
+        privateConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
     }
 
     private func buildTabRestore(window: WindowData?) async {
@@ -1269,6 +1282,8 @@ extension TabManagerImplementation: Notifiable {
             updateMenuItemsForSelectedTab()
         case .BlockPopup:
             blockPopUpDidChange()
+        case .AutoPlayChanged:
+            autoPlayDidChange()
         default:
             break
         }
