@@ -541,7 +541,7 @@ class TabTrayViewController: UIViewController,
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
         containerView.addSubview(panel.view)
-        containerView.bringSubviewToFront(navigationToolbar) // Laurie
+        containerView.bringSubviewToFront(navigationToolbar)
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
