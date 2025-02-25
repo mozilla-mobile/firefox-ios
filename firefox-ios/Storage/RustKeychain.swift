@@ -27,14 +27,15 @@ open class RustKeychain {
         let errorMessage: String
     }
 
-    func getBaseKeychainQuery(key: String) -> [String: Any?] {
+    func getBaseKeychainQuery(key: String) -> [String: Any] {
         let encodedIdentifier: Data? = key.data(using: String.Encoding.utf8)
-        var keychainQueryDictionary: [String: Any?] = [kSecClass as String: kSecClassGenericPassword,
+        var keychainQueryDictionary: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                                        kSecAttrService as String: self.serviceName,
-                                                       kSecAttrGeneric as String: encodedIdentifier,
-                                                       kSecAttrAccount as String: encodedIdentifier,
                                                        kSecAttrSynchronizable as String: false]
-       if let accessGroup = self.accessGroup {
+        keychainQueryDictionary[kSecAttrGeneric as String] = encodedIdentifier
+        keychainQueryDictionary[kSecAttrAccount as String] = encodedIdentifier
+
+        if let accessGroup = self.accessGroup {
             keychainQueryDictionary[kSecAttrAccessGroup as String] = accessGroup
         }
         return keychainQueryDictionary
