@@ -101,9 +101,9 @@ class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-            centeredView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: UX.verticalPadding),
+            centeredView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.verticalPadding),
             centeredView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            centeredView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor),
+            centeredView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             centeredView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
             iconImageView.topAnchor.constraint(equalTo: centeredView.topAnchor,
@@ -119,13 +119,16 @@ class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
 
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: UX.paddingInBetweenItems),
-            descriptionLabel.leadingAnchor.constraint(equalTo: centeredView.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: centeredView.trailingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: centeredView.leadingAnchor,
+                                                      constant: UX.horizontalPadding),
+            descriptionLabel.trailingAnchor.constraint(equalTo: centeredView.trailingAnchor,
+                                                       constant: -UX.horizontalPadding),
 
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
                                                  constant: UX.paddingInBetweenItems),
-            learnMoreButton.leadingAnchor.constraint(equalTo: centeredView.leadingAnchor),
-            learnMoreButton.trailingAnchor.constraint(equalTo: centeredView.trailingAnchor),
+            learnMoreButton.leadingAnchor.constraint(greaterThanOrEqualTo: centeredView.leadingAnchor),
+            learnMoreButton.trailingAnchor.constraint(lessThanOrEqualTo: centeredView.trailingAnchor),
+            learnMoreButton.centerXAnchor.constraint(equalTo: centeredView.centerXAnchor),
             learnMoreButton.bottomAnchor.constraint(equalTo: centeredView.bottomAnchor,
                                                     constant: -UX.paddingInBetweenItems),
         ])

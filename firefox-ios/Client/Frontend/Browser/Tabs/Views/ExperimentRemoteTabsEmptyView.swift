@@ -108,13 +108,16 @@ class ExperimentRemoteTabsEmptyView: UIView, RemoteTabsEmptyViewProtocol {
 
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: UX.paddingInBetweenItems),
-            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                      constant: UX.horizontalPadding),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                       constant: -UX.horizontalPadding),
 
             signInButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
                                               constant: UX.paddingInBetweenItems),
-            signInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            signInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            signInButton.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
+            signInButton.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
+            signInButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             signInButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                                  constant: -UX.paddingInBetweenItems),
         ])

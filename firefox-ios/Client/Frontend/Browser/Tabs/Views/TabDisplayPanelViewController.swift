@@ -122,7 +122,7 @@ class TabDisplayPanelViewController: UIViewController,
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        if isTabTrayUIExperimentsEnabled, tabsState.isPrivateMode && tabsState.isPrivateTabsEmpty{
+        if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty {
             gradientLayer.locations = [0.0, 0.1]
             fadeView.layer.addSublayer(gradientLayer)
             view.addSubview(fadeView)
