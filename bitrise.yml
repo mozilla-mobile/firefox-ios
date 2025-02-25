@@ -784,7 +784,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   L10nBuild:
     steps:
@@ -879,7 +879,7 @@ workflows:
       the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   L10nScreenshotsTests:
     steps:
@@ -924,7 +924,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
