@@ -412,15 +412,25 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             from: NSNumber(value: tabInfo.zoomLevel),
             number: .percent
         )
-        let title = String(format: .MainMenu.Submenus.Tools.Zoom, zoomLevel)
-        let icon = tabInfo.zoomLevel == 1.0 ? Icons.zoomOff : Icons.zoomOn
+
+        let regularZoom: CGFloat = 1.0
+        let zoomSymbol: String = if tabInfo.zoomLevel > regularZoom {
+            .MainMenu.Submenus.Tools.ZoomPositiveSymbol
+        } else if tabInfo.zoomLevel < regularZoom {
+            .MainMenu.Submenus.Tools.ZoomNegativeSymbol
+        } else {
+            ""
+        }
+
+        let title = String(format: .MainMenu.Submenus.Tools.Zoom, "\(zoomSymbol)\(zoomLevel)")
+        let icon = tabInfo.zoomLevel == regularZoom ? Icons.zoomOff : Icons.zoomOn
 
         return MenuElement(
             title: title,
             iconName: icon,
             isEnabled: true,
-            isActive: tabInfo.zoomLevel != 1.0,
-            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, zoomLevel),
+            isActive: tabInfo.zoomLevel != regularZoom,
+            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, "\(zoomSymbol)\(zoomLevel)"),
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {
