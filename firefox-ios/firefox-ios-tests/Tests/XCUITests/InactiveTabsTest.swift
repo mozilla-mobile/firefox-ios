@@ -62,8 +62,7 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Go to Settings -> Browsing and disable "Inactive tabs"
         navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
         XCTAssertEqual(
             app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].value as? String, "1")
@@ -91,8 +90,7 @@ final class InactiveTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         // Go to Settings -> Browsing and disable "Inactive tabs"
-        navigator.goto(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
+        navigator.goto(BrowsingSettings)
         app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].waitAndTap()
         XCTAssertEqual(
             app.switches[AccessibilityIdentifiers.Settings.Browsing.inactiveTabsSwitch].value as? String, "1")
