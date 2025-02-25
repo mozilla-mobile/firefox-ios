@@ -15,4 +15,13 @@ extension View {
             return background(backgroundView)
         }
     }
+
+    @ViewBuilder
+    func widgetAccentableCompat() -> some View {
+        if #available(iOSApplicationExtension 16.0, *) {
+            self.widgetAccentable()
+        } else {
+            self
+        }
+    }
 }
