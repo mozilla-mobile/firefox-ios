@@ -185,12 +185,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return webView?.estimatedProgress ?? 0
     }
 
-    var backList: [WKBackForwardListItem]? {
+    private var backList: [WKBackForwardListItem]? {
         return webView?.backForwardList.backList
-    }
-
-    var forwardList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.forwardList
     }
 
     var historyList: [URL] {

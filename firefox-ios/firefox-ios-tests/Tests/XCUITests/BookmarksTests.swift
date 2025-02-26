@@ -456,7 +456,7 @@ class BookmarksTests: BaseTestCase {
         }
         navigator.goto(TabTray)
         if !iPad() {
-            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+            mozWaitForElementToExist(app.segmentedControls.buttons["Private"])
         }
         // Tap to "Remove bookmark"
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)

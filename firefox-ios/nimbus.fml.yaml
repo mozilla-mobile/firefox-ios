@@ -15,6 +15,7 @@ channels:
 include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
@@ -44,6 +45,7 @@ include:
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
+  - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml

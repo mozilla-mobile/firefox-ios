@@ -9,7 +9,8 @@ import UIKit
 class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
-                                     StoreSubscriber {
+                                     StoreSubscriber,
+                                     FeatureFlaggable {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -21,6 +22,10 @@ class TabDisplayPanelViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+    }
+
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(panelType: self.panelType,
@@ -31,6 +36,17 @@ class TabDisplayPanelViewController: UIViewController,
     }()
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
+
+    private lazy var fadeView: UIView = .build { view in
+        view.isUserInteractionEnabled = false
+    }
+
+    private lazy var gradientLayer = CAGradientLayer()
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = fadeView.bounds
+    }
 
     init(isPrivateMode: Bool,
          windowUUID: WindowUUID,
@@ -96,6 +112,19 @@ class TabDisplayPanelViewController: UIViewController,
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
+        if isTabTrayUIExperimentsEnabled {
+            gradientLayer.locations = [0.0, 0.1]
+            fadeView.layer.addSublayer(gradientLayer)
+            view.addSubview(fadeView)
+
+            NSLayoutConstraint.activate([
+                fadeView.topAnchor.constraint(equalTo: view.topAnchor),
+                fadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                fadeView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                fadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+        }
+
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
     }
@@ -130,6 +159,13 @@ class TabDisplayPanelViewController: UIViewController,
         backgroundPrivacyOverlay.backgroundColor = currentTheme().colors.layerScrim
         tabDisplayView.applyTheme(theme: currentTheme())
         emptyPrivateTabsView.applyTheme(currentTheme())
+
+        if isTabTrayUIExperimentsEnabled {
+            gradientLayer.colors = [
+                currentTheme().colors.layer1.cgColor,
+                currentTheme().colors.layer1.withAlphaComponent(0.0).cgColor
+            ]
+        }
     }
 
     // MARK: - Redux

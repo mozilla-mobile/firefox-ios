@@ -31,6 +31,7 @@ public struct PrefsKeys {
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
+    public static let ShowClipboardBar = "showClipboardBar"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
@@ -145,6 +146,7 @@ public struct PrefsKeys {
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
     public static let KeyBlockPopups = "blockPopups"
+    public static let AutoplayMediaKey = "autoplayMedia"
 
     // Tabs Tray
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
