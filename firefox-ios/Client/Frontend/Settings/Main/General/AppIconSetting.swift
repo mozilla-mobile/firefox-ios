@@ -24,7 +24,7 @@ class AppIconSetting: Setting {
         self.settingsDelegate = settingsDelegate
         super.init(
             title: NSAttributedString(
-                string: "App Icon", // TODO FXIOS-11471 strings
+                string: .Settings.AppIconSelection.SettingsOptionName,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]

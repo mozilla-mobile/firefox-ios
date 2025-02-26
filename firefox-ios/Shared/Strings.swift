@@ -2466,6 +2466,18 @@ extension String {
         }
 
         public struct AppIconSelection {
+            public static let SettingsOptionName = MZLocalizedString(
+                key: "Settings.AppIconSelection.SettingsOptionName.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the Settings screen, the name of the row that opens app icon selection options.")
+
+            public static let ScreenTitle = MZLocalizedString(
+                key: "Settings.AppIconSelection.ScreenTitle.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
+
             public struct AppIconNames {
                 public static let Regular = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Regular.Title.v136",

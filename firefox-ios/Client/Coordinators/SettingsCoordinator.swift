@@ -325,7 +325,7 @@ class SettingsCoordinator: BaseCoordinator,
                 windowUUID: windowUUID
             )
         )
-        viewController.title = "App Icon" // TODO FXIOS-11471 strings
+        viewController.title = .Settings.AppIconSelection.ScreenTitle
         router.push(viewController)
     }
 
