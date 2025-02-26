@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import SwiftUI
-import Shared
 
 struct RemoveCardButton: View {
     // Theming

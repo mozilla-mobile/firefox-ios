@@ -5,7 +5,6 @@
 import Common
 import ComponentLibrary
 import UIKit
-import Shared
 
 class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {

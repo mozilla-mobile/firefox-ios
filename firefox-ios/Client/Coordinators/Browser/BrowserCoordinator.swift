@@ -8,7 +8,6 @@ import WebKit
 import Shared
 import Storage
 import Redux
-import TabDataStore
 import PDFKit
 
 import enum MozillaAppServices.VisitType

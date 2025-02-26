@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 protocol FindInPageBarDelegate: AnyObject {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)

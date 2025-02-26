@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import SwiftUI
-import Shared
 
 protocol ToggleModelDelegate: AnyObject {
     func toggleDidChange(_ toggleModel: ToggleModel)

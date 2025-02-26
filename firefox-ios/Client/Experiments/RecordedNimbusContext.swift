@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Glean
-import Shared
 
 import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
