@@ -16,7 +16,7 @@ class MockWKFrameInfo: WKFrameInfo {
     }
 
     override var isMainFrame: Bool {
-        return isMainFrame
+        return overridenIsMainFrame
     }
 
     override var webView: WKWebView? {
