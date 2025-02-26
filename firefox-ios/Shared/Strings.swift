@@ -4376,6 +4376,18 @@ extension String {
                     tableName: "MainMenu",
                     value: "Reader View",
                     comment: "On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool.")
+
+                public static let WebsiteDarkModeOn = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn on Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode on in the application.")
+                public static let WebsiteDarkModeOff = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn off Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
+
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
                     tableName: "MainMenu",
@@ -6072,6 +6084,31 @@ extension String {
         tableName: nil,
         value: "Theme",
         comment: "Title in main app settings for Theme settings")
+    public static let SettingsAppearanceTitle = MZLocalizedString(
+        key: "Settings.Appearance.Title.v137",
+        tableName: nil,
+        value: "Appearance",
+        comment: "Title in main app settings for Appearance settings")
+    public static let BrowserThemeSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.BrowserTheme.SectionHeader.v137",
+        tableName: nil,
+        value: "Browser Theme",
+        comment: "Browser theme settings section title in Appearance settings")
+    public static let WebsiteAppearanceSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteAppearance.SectionHeader.v137",
+        tableName: nil,
+        value: "Website Appearance",
+        comment: "Website Appearance settings section title in Appearance settings")
+    public static let WebsiteDarkModeToggleTitle = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkModeToggle.Title.v137",
+        tableName: nil,
+        value: "Website Dark Mode",
+        comment: "Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off.")
+    public static let WebsiteDarkModeDescription = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkMode.Description.v137",
+        tableName: nil,
+        value: "Gives websites a dark appearance. Some sites might not look right.",
+        comment: "Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature.")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,
