@@ -759,6 +759,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
+        enqueueTabRestoration()
 
         Task(priority: .background) {
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
@@ -1004,21 +1005,32 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
+    private func enqueueTabRestoration() {
         if isDeeplinkOptimizationRefactorEnabled {
             // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
             // has ended. If there is no deeplink then restore when the startup time record cancellation has been
             // signaled.
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                self?.tabManager.restoreTabs()
+
+            // Enqueues the actions only if the opposite action where not signaled, this happen when the app
+            // handles a deeplink when was already opened
+            if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
+                AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                self?.tabManager.restoreTabs()
+            if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
+                AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
+                    self?.tabManager.restoreTabs()
+                }
             }
-        } else {
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
+        if !isDeeplinkOptimizationRefactorEnabled {
             tabManager.restoreTabs()
         }
 
