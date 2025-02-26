@@ -209,14 +209,11 @@ class ActivityStreamTest: BaseTestCase {
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
+        let numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
         if iPad() {
             navigator.goto(TabTray)
-            numTabsOpen = app.otherElements["Tabs Tray"].collectionViews.cells.count
-            waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
-        } else {
-            waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
         }
+        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {

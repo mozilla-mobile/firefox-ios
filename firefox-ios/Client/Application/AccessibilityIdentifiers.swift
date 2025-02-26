@@ -558,6 +558,10 @@ struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
+        struct AppIconSelection {
+            static let settingsRowTitle = "AppIconSelectionTitle"
+        }
+
         struct DefaultBrowser {
             static let defaultBrowser = "DefaultBrowserSettings"
         }
@@ -772,6 +776,7 @@ struct AccessibilityIdentifiers {
             static let tabs = "TABS"
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
+            static let autoPlay = "AutoplaySettings"
         }
 
         struct StudiesToggle {
@@ -803,6 +808,12 @@ struct AccessibilityIdentifiers {
         struct TrackingProtection {
             static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
             static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
+        }
+
+        struct Autoplay {
+            static let allowAudioAndVideo = "AllowAudioAndVideo"
+            static let blockAudio = "BlockAudio"
+            static let blockAudioAndVideo = "BlockAudioAndVideo"
         }
     }
 

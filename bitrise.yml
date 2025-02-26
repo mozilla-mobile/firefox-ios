@@ -784,7 +784,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   L10nBuild:
     steps:
@@ -879,7 +879,7 @@ workflows:
       the rest of the builds
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   L10nScreenshotsTests:
     steps:
@@ -924,7 +924,7 @@ workflows:
       This Workflow is to run L10n tests for all locales
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x-edge
+        stack: osx-xcode-16.2.x
         machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
@@ -1814,22 +1814,22 @@ workflows:
 
   focus-set-project-version:
     steps:
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/Blockzilla/Info.plist
         title: Set Blockzilla version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/ContentBlocker/Info.plist
         title: Set ContentBlocker version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/FocusIntentExtension/Info.plist
         title: Set FocusIntentExtension version numbers
-    - set-xcode-build-number@2.0.6:
+    - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: focus-ios/OpenInFocus/Info.plist
