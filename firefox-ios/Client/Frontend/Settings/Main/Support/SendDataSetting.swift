@@ -7,83 +7,117 @@ import Foundation
 import Glean
 import Shared
 
-class SendDataSetting: BoolSetting {
-    private weak var settingsDelegate: SupportSettingsDelegate?
-    private var a11yId: String
-    private var learnMoreURL: URL?
-    private var learnMoreButtonA11y: String?
+final class SendDataSetting: Setting, FeatureFlaggable {
+    private let prefKey: String?
+    private let prefs: Prefs?
+    private let titleText: String
+    private let subtitleText: String
+    private let learnMoreText: String
+    private let learnMoreURL: URL?
+    private let a11yId: String?
+    private let defaultValue: Bool?
+    private let featureFlagName: NimbusFeatureFlagID?
 
+    private weak var settingsDelegate: SupportSettingsDelegate?
     var shouldSendData: ((Bool) -> Void)?
 
-    init(prefs: Prefs,
-         delegate: SettingsDelegate?,
-         theme: Theme,
-         settingsDelegate: SupportSettingsDelegate?,
-         title: String,
-         message: String,
-         linkedText: String,
-         prefKey: String,
-         a11yId: String,
-         learnMoreURL: URL?,
-         learnMoreButtonA11y: String?,
-         isStudiesCase: Bool = false) {
-        let statusText = NSMutableAttributedString()
-        statusText.append(
-            NSAttributedString(
-                string: message,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
-            )
-        )
-        statusText.append(
-            NSAttributedString(
-                string: "\n"
-            )
-        )
-        statusText.append(
-            NSAttributedString(
-                string: linkedText,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
-            )
-        )
+    override var url: URL? { return learnMoreURL }
+    override var accessibilityIdentifier: String? { return a11yId }
 
-        self.a11yId = a11yId
+    init(
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool?,
+        titleText: String,
+        subtitleText: String,
+        learnMoreText: String,
+        learnMoreURL: URL?,
+        a11yId: String?,
+        settingsDelegate: SupportSettingsDelegate?,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        enabled: Bool = true,
+        isStudiesCase: Bool = false
+    ) {
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.titleText = titleText
+        self.subtitleText = subtitleText
+        self.learnMoreText = learnMoreText
         self.learnMoreURL = learnMoreURL
+        self.a11yId = a11yId
         self.settingsDelegate = settingsDelegate
-        super.init(
-            prefs: prefs,
-            prefKey: prefKey,
-            defaultValue: true,
-            attributedTitleText: NSAttributedString(string: title),
-            attributedStatusText: statusText,
-            attributedAccessibilityStatusText: NSAttributedString(string: message),
-            accessibilityLearnMoreButtonText: linkedText,
-            learnMoreButtonA11y: learnMoreButtonA11y,
-            hasLearnMoreButton: learnMoreURL != nil
-        )
-
-        setupSettingDidChange()
-        setupLearnMoreButtonDidTap()
+        self.featureFlagName = featureFlagName
+        super.init(title: NSAttributedString(string: titleText), enabled: enabled)
 
         if isStudiesCase {
-            let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            let sendUsageDataPref = prefs?.boolForKey(AppConstants.prefSendUsageData) ?? true
             // Special Case (EXP-4780) disable studies if usage data is disabled
             updateSetting(for: sendUsageDataPref)
         } else {
             // We make sure to set this on initialization, in case the setting is turned off
             // in which case, we would to make sure that users are opted out of experiments
-            Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
+            guard let key = prefKey else { return }
+            Experiments.setTelemetrySetting(prefs?.boolForKey(key) ?? true)
         }
     }
 
-    private func setupSettingDidChange() {
-        self.settingDidChange = { [weak self] value in
-            self?.shouldSendData?(value)
+    public lazy var control: PaddedSwitch = {
+        let control = PaddedSwitch()
+        control.switchView.accessibilityIdentifier = prefKey
+        control.switchView.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+        return control
+    }()
+
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
+
+        cell.configure(
+            title: titleText,
+            subtitle: subtitleText,
+            learnMoreText: learnMoreText,
+            theme: theme
+        )
+
+        control.configureSwitch(
+            onTintColor: theme.colors.actionPrimary,
+            isEnabled: enabled
+        )
+
+        displayBool(control.switchView)
+        control.switchView.accessibilityLabel = "\(titleText), \(subtitleText)"
+        if let accessibilityIdentifier {
+            cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
+        }
+
+        cell.accessoryView = control
+        cell.selectionStyle = .none
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
+
+        cell.learnMoreDidTap = { [weak self] in
+            guard let self else { return }
+            self.settingsDelegate?.askedToOpen(url: url, withTitle: NSAttributedString(string: self.titleText))
         }
     }
 
-    private func setupLearnMoreButtonDidTap() {
-        self.learnMoreDidTap = { [weak self] in
-            self?.settingsDelegate?.askedToOpen(url: self?.url, withTitle: self?.title)
+    @objc
+    func switchValueChanged(_ control: UISwitch) {
+        writeBool(control)
+        shouldSendData?(control.isOn)
+        if let featureFlagName = featureFlagName {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .change,
+                                         object: .setting,
+                                         extras: ["pref": featureFlagName.rawValue as Any,
+                                                  "to": control.isOn])
+        } else {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .change,
+                                         object: .setting,
+                                         extras: ["pref": prefKey as Any, "to": control.isOn])
         }
     }
 
@@ -104,17 +138,22 @@ class SendDataSetting: BoolSetting {
         Experiments.setStudiesSetting(false)
     }
 
-    override var accessibilityIdentifier: String? {
-        return a11yId
+    // These methods allow a subclass to control how the pref is saved
+    func displayBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
+        } else {
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
+            control.isOn = prefs?.boolForKey(key) ?? defaultValue
+        }
     }
 
-    override var url: URL? {
-        return learnMoreURL
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        if learnMoreURL == nil {
-            settingsDelegate?.askedToOpen(url: url, withTitle: title)
+    func writeBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
+        } else {
+            guard let key = prefKey else { return }
+            prefs?.setBool(control.isOn, forKey: key)
         }
     }
 }

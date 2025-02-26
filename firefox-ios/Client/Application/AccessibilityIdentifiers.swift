@@ -725,10 +725,6 @@ struct AccessibilityIdentifiers {
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"
             static let studiesTitle = "StudiesToggle"
-            static let sendTechnicalDataLearnMoreButton = "SendTechnicalDataLearnMoreButton"
-            static let sendCrashReportsDataLearnMoreButton = "SendCrashReportsLearnMoreButton"
-            static let sendDailyUsagePingLearnMoreButton = "SendDailyUsagePingLearnMoreButton"
-            static let studiesLearnMoreButton = "StudiesToggleLearnMoreButton"
         }
 
         struct PrivacyPolicy {
