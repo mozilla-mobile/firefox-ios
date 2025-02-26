@@ -121,9 +121,8 @@ extension WKEngineWebView {
     }
 }
 
-// TODO: FXIOS-7896 #17641 Handle WKEngineWebView ThemeApplicable
 // TODO: FXIOS-7897 #17642 Handle WKEngineWebView AccessoryViewProvider
-class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface {
+final class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInterface, ThemeApplicable {
     var engineScrollView: WKScrollView?
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
@@ -178,5 +177,16 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInter
             becomeFirstResponder()
         }
         return super.hitTest(point, with: event)
+    }
+
+    // MARK: - ThemeApplicable
+
+    /// Updates the `background-color` of the webview to match
+    /// the theme if the webview is showing "about:blank" (nil).
+    func applyTheme(theme: any Common.Theme) {
+        if url == nil {
+            let backgroundColor = theme.colors.layer1.hexString
+            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+        }
     }
 }
