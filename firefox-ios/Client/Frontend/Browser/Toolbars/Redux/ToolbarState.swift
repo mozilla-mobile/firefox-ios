@@ -9,7 +9,7 @@ import ToolbarKit
 struct ToolbarState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
-    var toolbarLayout: ToolbarLayoutType
+    var toolbarLayout: ToolbarLayoutStyle
     var isPrivateMode: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
@@ -77,7 +77,7 @@ struct ToolbarState: ScreenState, Equatable {
     init(
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
-        toolbarLayout: ToolbarLayoutType,
+        toolbarLayout: ToolbarLayoutStyle,
         isPrivateMode: Bool,
         addressToolbar: AddressBarState,
         navigationToolbar: NavigationBarState,

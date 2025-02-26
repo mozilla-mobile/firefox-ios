@@ -8,7 +8,7 @@ import ToolbarKit
 
 final class ToolbarAction: Action {
     let toolbarPosition: SearchBarPosition?
-    let toolbarLayout: ToolbarLayoutType?
+    let toolbarLayout: ToolbarLayoutStyle?
     let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
@@ -29,7 +29,7 @@ final class ToolbarAction: Action {
     let canShowDataClearanceAction: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
-         toolbarLayout: ToolbarLayoutType? = nil,
+         toolbarLayout: ToolbarLayoutStyle? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
