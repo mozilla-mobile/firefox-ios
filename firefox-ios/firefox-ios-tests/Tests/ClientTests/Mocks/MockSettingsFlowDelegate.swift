@@ -54,6 +54,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     // MARK: GeneralSettingsDelegate
 
+    func pressedCustomizeAppIcon() {}
+
     func pressedHome() {}
 
     func pressedNewTab() {}
@@ -71,6 +73,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     // MARK: BrowsingSettingsDelegate
 
     func pressedMailApp() {}
+
+    func pressedAutoPlay() {}
 
     // MARK: PrivacySettingsDelegate
 

@@ -104,7 +104,13 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
-                prependDesktopFolders(folder, folders: &folders, indent: indent, prefixFolders: prefixFolders)
+                prependDesktopFolders(
+                    folder,
+                    folders: &folders,
+                    indent: indent,
+                    excludedGuids: excludedGuids,
+                    prefixFolders: prefixFolders
+                )
             }
         } else { return }
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
@@ -135,9 +141,16 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
     private func prependDesktopFolders(_ folder: BookmarkFolderData,
                                        folders: inout [Folder],
                                        indent: Int = 0,
+                                       excludedGuids: [String],
                                        prefixFolders: [BookmarkFolderData] = []) {
         prefixFolders.forEach {
-            folders.append(Folder(title: $0.title, guid: $0.guid, indentation: indent + 2))
+            recursiveAddSubFolders(
+                $0,
+                folders: &folders,
+                hasDesktopBookmarks: true,
+                indent: indent + 2,
+                excludedGuids: excludedGuids
+            )
         }
         // Find the first desktop folder and prepend a dummy folder object to use for the "DESKTOP BOOKMARKS" header
         if let firstDesktopFolderIndex = folders.firstIndex(where: { BookmarkRoots.DesktopRoots.contains($0.guid) }) {

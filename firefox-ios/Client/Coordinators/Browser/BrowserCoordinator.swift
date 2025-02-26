@@ -990,7 +990,12 @@ class BrowserCoordinator: BaseCoordinator,
         }
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        let modalPresentationStyle: UIModalPresentationStyle
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+            modalPresentationStyle = .fullScreen
+        } else {
+            modalPresentationStyle = isPad ? .fullScreen: .formSheet
+        }
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(

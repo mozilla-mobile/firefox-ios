@@ -4,16 +4,22 @@
 
 import Foundation
 
-class TabsSectionManager {
+class TabsSectionManager: FeatureFlaggable {
     struct UX {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
+        static let experimentCellAbsoluteHeight: CGFloat = 220
         static let cardSpacing: CGFloat = 16
+        static let experimentCardSpacing: CGFloat = 32
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
         static let verticalInset: CGFloat = 20
+    }
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
     }
 
     static func leadingInset(traitCollection: UITraitCollection,
@@ -35,15 +41,16 @@ class TabsSectionManager {
                                   ? minNumberOfCellsPerRow
                                   : maxNumberOfCellsPerRow
 
+        let cellHeight = isTabTrayUIExperimentsEnabled ? UX.experimentCellAbsoluteHeight : UX.cellAbsoluteHeight
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(UX.cellEstimatedWidth),
-            heightDimension: .absolute(UX.cellAbsoluteHeight)
+            heightDimension: .absolute(cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.cellAbsoluteHeight)
+            heightDimension: .estimated(cellHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                        subitem: item,
@@ -56,7 +63,7 @@ class TabsSectionManager {
                                                         leading: horizontalInset,
                                                         bottom: UX.verticalInset,
                                                         trailing: horizontalInset)
-        section.interGroupSpacing = UX.cardSpacing
+        section.interGroupSpacing = isTabTrayUIExperimentsEnabled ? UX.experimentCardSpacing : UX.cardSpacing
 
         return section
     }

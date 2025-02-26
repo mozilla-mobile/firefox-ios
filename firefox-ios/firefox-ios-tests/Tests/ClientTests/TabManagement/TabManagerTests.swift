@@ -50,6 +50,128 @@ class TabManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    func testRecentlyAccessedNormalTabs() {
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .normalInactive, count: 2))
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
+        let subject = createSubject(tabs: tabs)
+        let normalActiveTabs = subject.recentlyAccessedNormalTabs
+        XCTAssertEqual(normalActiveTabs.count, 5)
+        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let normalTabs = subject.recentlyAccessedNormalTabs
+        XCTAssertEqual(normalTabs.count, 7)
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+    }
+
+    func testTabIndexSubscript() {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        let tab = subject[0]
+        XCTAssertNotNil(tab)
+    }
+
+    func testRemoveTabs() {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        let tabs = subject.tabs
+        subject.removeTabs(tabs)
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
+
+    func testRemoveTabsByURLs() async {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        await subject.removeTabs(by: [URL(string: "https://mozilla.com?item=4")!, URL(string: "https://mozilla.com?item=1")!])
+        let remainingURLs = subject.tabs.compactMap { $0.url?.absoluteString }
+        XCTAssertEqual(remainingURLs, ["https://mozilla.com?item=0", "https://mozilla.com?item=2", "https://mozilla.com?item=3"])
+    }
+
+    func testRemoveAllTabsForPrivateMode() async {
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        await subject.removeAllTabs(isPrivateMode: true)
+        XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    // This test has to be run on the main thread since we are messing with the WebView.
+    @MainActor
+    func testRemoveAllTabsCallsSaveTabSession() async {
+        let subject = createSubject()
+        _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        await subject.removeAllTabs(isPrivateMode: false)
+        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
+            return XCTFail("windowManager was not found")
+        }
+
+        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+    }
+
+    func testRemoveAllTabsForNotPrivateMode() async {
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        await subject.removeAllTabs(isPrivateMode: false)
+        XCTAssertEqual(subject.tabs.count, 4)
+    }
+
+    func testGetTabForUUID() {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        let uuid = subject.tabs.first!.tabUUID
+        let tab = subject.getTabForUUID(uuid: uuid)
+        XCTAssertEqual(tab, subject.tabs.first)
+    }
+
+    // This test has to be run on the main thread since we are messing with the WebView.
+    @MainActor
+    func testGetTabForURL() {
+        let subject = createSubject()
+        let addedTab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab = subject.getTabForURL(URL(string: "https://mozilla.com/")!)
+        XCTAssertEqual(tab, addedTab)
+    }
+
+    func testGetMostRecentHomepageTab() {
+        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        tab.url = URL(string: "\(InternalURL.baseUrl)/about/home#panel=0")!
+        let subject = createSubject(tabs: [tab])
+        let homeTab = subject.getMostRecentHomepageTab()
+        XCTAssertEqual(tab, homeTab)
+    }
+
+    func testUndoCloseTab() {
+        let subject = createSubject()
+        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        tab.url = URL(string: "https://mozilla.com/")!
+        XCTAssertEqual(subject.selectedIndex, -1)
+        subject.backupCloseTab = BackupCloseTab(tab: tab, isSelected: true)
+        subject.undoCloseTab()
+        XCTAssertEqual(subject.selectedIndex, 0)
+        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
+            return XCTFail("windowManager was not found")
+        }
+
+        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
+    }
+
+    func testUndoCloseTabWithSelectedTab() {
+        let closedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        closedTab.url = URL(string: "https://mozilla.com/")!
+        let selectedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        selectedTab.url = URL(string: "https://mozilla.com/1")!
+        let subject = createSubject(tabs: [selectedTab])
+        subject.selectTab(selectedTab)
+        XCTAssertEqual(subject.selectedIndex, 0)
+        subject.backupCloseTab = BackupCloseTab(tab: closedTab, isSelected: true)
+        subject.undoCloseTab()
+        XCTAssertEqual(subject.selectedIndex, 1)
+        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
+            return XCTFail("windowManager was not found")
+        }
+
+        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
+    }
+
     // MARK: - Restore tabs
 
     @MainActor
@@ -157,9 +279,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithOneTab() async throws {
-        let subject = createSubject()
+        let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
-        addTabs(to: subject, count: 1)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
@@ -167,9 +288,8 @@ class TabManagerTests: XCTestCase {
     }
 
     func testPreserveTabsWithManyTabs() async throws {
-        let subject = createSubject()
+        let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
-        addTabs(to: subject, count: 5)
         subject.preserveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
@@ -179,8 +299,7 @@ class TabManagerTests: XCTestCase {
     // MARK: - Save preview screenshot
 
     func testSaveScreenshotWithNoImage() async throws {
-        let subject = createSubject()
-        addTabs(to: subject, count: 5)
+        let subject = createSubject(tabs: generateTabs(count: 5))
         guard let tab = subject.tabs.first else {
             XCTFail("First tab was expected to be found")
             return
@@ -192,8 +311,7 @@ class TabManagerTests: XCTestCase {
     }
 
     func testSaveScreenshotWithImage() async throws {
-        let subject = createSubject()
-        addTabs(to: subject, count: 5)
+        let subject = createSubject(tabs: generateTabs(count: 5))
         guard let tab = subject.tabs.first else {
             XCTFail("First tab was expected to be found")
             return
@@ -206,8 +324,7 @@ class TabManagerTests: XCTestCase {
 
     func testGetActiveAndInactiveTabs() {
         let totalTabCount = 3
-        let subject = createSubject()
-        addTabs(to: subject, count: totalTabCount)
+        let subject = createSubject(tabs: generateTabs(count: totalTabCount))
 
         // Preconditions
         XCTAssertEqual(subject.tabs.count, totalTabCount, "Expected 3 newly added tabs.")
@@ -269,9 +386,8 @@ class TabManagerTests: XCTestCase {
         // [A1]
         // Will pretend to delete a normal active tab at index 0.
         // Expect A1 tab to be returned.
-        let tabManager = createSubject()
         let numberActiveTabs = 1
-        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberActiveTabs))
 
         let deletedIndex = 0
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID) // Active normal tab
@@ -287,9 +403,8 @@ class TabManagerTests: XCTestCase {
         // [A1]
         // Will pretend to delete a private tab at index 0.
         // Expect no tab to be returned (no other private tabs).
-        let tabManager = createSubject()
         let numberActiveTabs = 1
-        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberActiveTabs))
 
         let deletedIndex = 0
         let removedTab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID) // Private tab
@@ -305,9 +420,8 @@ class TabManagerTests: XCTestCase {
         //   0   1   2   3   4   5   6
         // Will pretend to delete a normal active tab at index 3.
         // Expect A4 tab to be returned.
-        let tabManager = createSubject()
         let numberActiveTabs = 7
-        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberActiveTabs))
 
         let deletedIndex = 3
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID) // Active normal tab
@@ -324,8 +438,7 @@ class TabManagerTests: XCTestCase {
         //   0   1   2   3   4   5   6   7   8
         // Will pretend to delete a normal active tab at index 5.
         // Expect to return A3 (nearest active tab on right).
-        let tabManager = createSubject()
-        setupForFindRightOrLeftTab_mixedTypes(tabManager)
+        let tabManager = setupForFindRightOrLeftTab_mixedTypes()
 
         let deletedIndex = 5 // Pretend a normal active tab between A2 and I2 was just deleted
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID) // Active normal tab
@@ -349,9 +462,7 @@ class TabManagerTests: XCTestCase {
         //   0   1   2   3   4   5   6   7   8
         // Will pretend to delete a normal active tab at index 0.
         // Expect to return A1 (nearest active tab on right).
-        let tabManager = createSubject()
-        setupForFindRightOrLeftTab_mixedTypes(tabManager)
-
+        let tabManager = setupForFindRightOrLeftTab_mixedTypes()
         let deletedIndex = 0 // Pretend a normal active tab at the start of the array was just deleted
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID) // Active normal tab
 
@@ -374,8 +485,7 @@ class TabManagerTests: XCTestCase {
         //   0   1   2   3   4   5   6   7   8
         // Will pretend to delete a normal active tab at index 9.
         // Expect to return A4 (nearest active tab on left, since there is no right tab available).
-        let tabManager = createSubject()
-        setupForFindRightOrLeftTab_mixedTypes(tabManager)
+        let tabManager = setupForFindRightOrLeftTab_mixedTypes()
 
         let deletedIndex = 9 // Pretend a normal active tab at the end of the array was just deleted
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID) // Active normal tab
@@ -399,8 +509,7 @@ class TabManagerTests: XCTestCase {
         //   0   1   2   3   4   5   6   7   8
         // Will pretend to delete an inactive active tab at index 4.
         // Expect to return I2 (nearest inactive tab on the right, as right is given preference to left).
-        let tabManager = createSubject()
-        setupForFindRightOrLeftTab_mixedTypes(tabManager)
+        let tabManager = setupForFindRightOrLeftTab_mixedTypes()
 
         let deletedIndex = 4 // Pretend a normal active tab at the end of the array was just deleted
         let removedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
@@ -423,10 +532,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRecentParentNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberNormalActiveTabs))
         guard let firstNormalActiveTab = tabManager.normalActiveTabs[safe: 0],
               let secondNormalActiveTab = tabManager.normalActiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
@@ -472,10 +579,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftNormalActiveTab_ifNoParent() async throws {
-        let tabManager = createSubject()
-
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberNormalActiveTabs))
         guard let secondNormalActiveTab = tabManager.normalActiveTabs[safe: 1],
               let thirdNormalActiveTab = tabManager.normalActiveTabs[safe: 2] else {
             XCTFail("Test did not meet preconditions")
@@ -510,10 +615,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftActiveTab_ifParentNotRecent() async throws {
-        let tabManager = createSubject()
-
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .normalActive, count: numberNormalActiveTabs))
         guard let firstNormalActiveTab = tabManager.normalActiveTabs[safe: 0],
               let secondNormalActiveTab = tabManager.normalActiveTabs[safe: 1],
               let thirdNormalActiveTab = tabManager.normalActiveTabs[safe: 2] else {
@@ -557,10 +660,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRecentParentPrivateTab() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 3
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .privateAny, count: numberPrivateTabs))
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let secondPrivateTab = tabManager.privateTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
@@ -606,10 +707,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifNoRecentParent() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 3
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .privateAny, count: numberPrivateTabs))
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let secondPrivateTab = tabManager.privateTabs[safe: 1],
               let thirdPrivateTab = tabManager.privateTabs[safe: 2] else {
@@ -651,10 +750,8 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifParentNotRecent() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 3
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let tabManager = createSubject(tabs: generateTabs(ofType: .privateAny, count: numberPrivateTabs))
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let secondPrivateTab = tabManager.privateTabs[safe: 1],
               let thirdPrivateTab = tabManager.privateTabs[safe: 2] else {
@@ -699,12 +796,13 @@ class TabManagerTests: XCTestCase {
     func testRemoveTab_removeSelectedNormalInactiveTab_createsNewNormalActiveTab() async throws {
         // This is a weird edge case that shouldn't happen in practice, but let's make sure we can handle it.
         // If the selected tab is removed, and it also happens to be inactive, treat it like a normal active tab.
-        let tabManager = createSubject()
 
         let numberInactiveTabs = 3
         let numberActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        let inactiveTabs = generateTabs(ofType: .normalInactive, count: numberInactiveTabs)
+        let activeTabs = generateTabs(ofType: .normalActive, count: numberActiveTabs)
+        let tabManager = createSubject(tabs: inactiveTabs + activeTabs)
+
         guard let secondInactiveTab = tabManager.inactiveTabs[safe: 1],
               let secondNormalTab = tabManager.normalActiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
@@ -757,12 +855,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastPrivateTab_hasNormalTabs_selectsRecentNormalTab() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 1
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let privateTabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+        let normalActiveTabs = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+
+        let tabManager = createSubject(tabs: privateTabs + normalActiveTabs)
         guard let privateTab = tabManager.privateTabs[safe: 0],
               let secondNormalTab = tabManager.normalActiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
@@ -805,12 +903,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastPrivateTab_hasInactiveTabs_hasNoActiveTabs_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberPrivateTabs = 1
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let privateTabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+        let normalInactiveTabs = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+
+        let tabManager = createSubject(tabs: normalInactiveTabs + privateTabs)
         guard let privateTab = tabManager.privateTabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -845,10 +943,9 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastPrivateTab_isOnlyTab_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 1
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let privateTabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+        let tabManager = createSubject(tabs: privateTabs)
         guard let firstTab = tabManager.tabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -883,12 +980,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastPrivateTab_onlyOtherTabsAreNormalInactiveTabs_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberPrivateTabs = 1
         let numberInactiveTabs = 3
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberInactiveTabs)
+        let privateTabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+        let normalInactiveTabs = generateTabs(ofType: .normalInactive, count: numberInactiveTabs)
+
+        let tabManager = createSubject(tabs: privateTabs + normalInactiveTabs)
         guard let firstTab = tabManager.tabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -929,10 +1026,10 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastNormalActiveTab_isOnlyTab_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberNormalActiveTabs = 1
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let normalActiveTabs = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+
+        let tabManager = createSubject(tabs: normalActiveTabs)
         guard let firstTab = tabManager.tabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -966,12 +1063,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastNormalActiveTab_hasInactiveTabs_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 1
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let normalActiveTabs = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+        let normalInactiveTabs = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+
+        let tabManager = createSubject(tabs: normalInactiveTabs + normalActiveTabs)
         guard let activeTab = tabManager.normalActiveTabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -1008,10 +1105,10 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeLastNormalInactiveTab_isOnlyTab_createsNewNormalActiveTab() async throws {
-        let tabManager = createSubject()
-
         let numberInactiveTabs = 1
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberInactiveTabs)
+        let inactiveTabs = generateTabs(ofType: .normalInactive, count: numberInactiveTabs)
+        let tabManager = createSubject(tabs: inactiveTabs)
+
         guard let firstTab = tabManager.tabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -1049,16 +1146,17 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_causesArrayShift() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
         let totalTabCount = numberNormalInactiveTabs + numberNormalActiveTabs
         // Mix up the normal active and inactive tabs in the `tabs` array
-        addTabs(to: tabManager, ofType: .normalInactive, count: 1)
-        addTabs(to: tabManager, ofType: .normalActive, count: 2)
-        addTabs(to: tabManager, ofType: .normalInactive, count: 2)
-        addTabs(to: tabManager, ofType: .normalActive, count: 1)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: 1)
+        let normalActive = generateTabs(ofType: .normalActive, count: 2)
+        let normalInactive2 = generateTabs(ofType: .normalInactive, count: 2)
+        let normalActive2 = generateTabs(ofType: .normalActive, count: 1)
+
+        let tabManager = createSubject(tabs: normalInactive + normalActive + normalInactive2 + normalActive2)
+
         guard let firstNormalActiveTab = tabManager.normalActiveTabs[safe: 0],
               let thirdNormalActiveTab = tabManager.normalActiveTabs[safe: 2] else {
             XCTFail("Test did not meet preconditions")
@@ -1093,16 +1191,17 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_noArrayShift() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
         let totalTabCount = numberNormalInactiveTabs + numberNormalActiveTabs
         // Mix up the normal active and inactive tabs in the `tabs` array
-        addTabs(to: tabManager, ofType: .normalInactive, count: 1)
-        addTabs(to: tabManager, ofType: .normalActive, count: 2)
-        addTabs(to: tabManager, ofType: .normalInactive, count: 2)
-        addTabs(to: tabManager, ofType: .normalActive, count: 1)
+        let normalInactive1 = generateTabs(ofType: .normalInactive, count: 1)
+        let normalActive1 = generateTabs(ofType: .normalActive, count: 2)
+        let normalInactive2 = generateTabs(ofType: .normalInactive, count: 2)
+        let normalActive2 = generateTabs(ofType: .normalActive, count: 1)
+
+        let tabManager = createSubject(tabs: normalInactive1 + normalActive1 + normalInactive2 + normalActive2)
+
         guard let firstNormalActiveTab = tabManager.normalActiveTabs[safe: 0],
               let thirdNormalActiveTab = tabManager.normalActiveTabs[safe: 2] else {
             XCTFail("Test did not meet preconditions")
@@ -1137,15 +1236,16 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_causesArrayShift() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
         let numberPrivateTabs = 3
         let totalTabCount = numberNormalInactiveTabs + numberPrivateTabs + numberNormalActiveTabs
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let normalActive = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+        let privateAny = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+
+        let tabManager = createSubject(tabs: normalInactive + normalActive + privateAny)
+
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let secondPrivateTab = tabManager.privateTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
@@ -1180,15 +1280,16 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_noArrayShift() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
         let numberPrivateTabs = 3
         let totalTabCount = numberNormalInactiveTabs + numberPrivateTabs + numberNormalActiveTabs
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let normalActive = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+        let privateAny = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+
+        let tabManager = createSubject(tabs: normalInactive + normalActive + privateAny)
+
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let thirdPrivateTab = tabManager.privateTabs[safe: 2] else {
             XCTFail("Test did not meet preconditions")
@@ -1223,15 +1324,16 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeUnselectedNormalInactiveTab_fromManyMixedTabs_causesArrayShift() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
         let numberPrivateTabs = 3
         let totalTabCount = numberNormalInactiveTabs + numberPrivateTabs + numberNormalActiveTabs
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
-        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let normalActive = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+        let privateAny = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
+
+        let tabManager = createSubject(tabs: normalInactive + normalActive + privateAny)
+
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
               let firstNormalInactiveTab = tabManager.inactiveTabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
@@ -1268,10 +1370,11 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveTab_removeFirstTab_removeLastTime_removeOnlyTab() async throws {
-        let tabManager = createSubject()
-
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let tabs = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+
+        let tabManager = createSubject(tabs: tabs)
+
         guard let firstTab = tabManager.normalActiveTabs[safe: 0],
               let secondTab = tabManager.normalActiveTabs[safe: 1],
               let thirdTab = tabManager.normalActiveTabs[safe: 2] else {
@@ -1332,10 +1435,10 @@ class TabManagerTests: XCTestCase {
     @MainActor
     func testRemoveAllInactiveTabs_whenOnlyInactiveTabs_opensNewActiveTab() async throws {
         // This is a strange edge case that can happen if your active tab goes inactive (most commonly with 10s debug timer).
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let tabs = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let tabManager = createSubject(tabs: tabs)
+
         guard let secondTab = tabManager.inactiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -1370,12 +1473,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveAllInactiveTabs_whenNormalActiveTabsExist_isNormalBrowsingMode() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalActiveTabs = 3
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let normalActive = generateTabs(ofType: .normalActive, count: numberNormalActiveTabs)
+        let tabManager = createSubject(tabs: normalInactive + normalActive)
+
         guard let secondTab = tabManager.normalActiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -1407,12 +1510,12 @@ class TabManagerTests: XCTestCase {
 
     @MainActor
     func testRemoveAllInactiveTabs_whenOnlyPrivateTabsExist_isPrivateBrowsingMode() async throws {
-        let tabManager = createSubject()
-
         let numberNormalInactiveTabs = 3
         let numberNormalPrivateTabs = 3
-        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        addTabs(to: tabManager, ofType: .privateAny, count: numberNormalPrivateTabs)
+        let normalInactive = generateTabs(ofType: .normalInactive, count: numberNormalInactiveTabs)
+        let privateAny = generateTabs(ofType: .privateAny, count: numberNormalPrivateTabs)
+        let tabManager = createSubject(tabs: normalInactive + privateAny)
+
         guard let secondPrivateTab = tabManager.privateTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -1444,13 +1547,15 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func createSubject(windowUUID: WindowUUID? = nil) -> TabManagerImplementation {
-        let subject = TabManagerImplementation(profile: mockProfile,
-                                               imageStore: mockDiskImageStore,
-                                               uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID,
-                                                                        isNew: false),
-                                               tabDataStore: mockTabStore,
-                                               tabSessionStore: mockSessionStore)
+    private func createSubject(tabs: [Tab] = []) -> TabManagerImplementation {
+        let subject = TabManagerImplementation(
+            profile: mockProfile,
+            imageStore: mockDiskImageStore,
+            uuid: ReservedWindowUUID(uuid: tabWindowUUID, isNew: false),
+            tabDataStore: mockTabStore,
+            tabSessionStore: mockSessionStore,
+            tabs: tabs
+        )
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -1467,7 +1572,8 @@ class TabManagerTests: XCTestCase {
         case privateAny // `private` alone is a reserved compiler keyword
     }
 
-    private func addTabs(to subject: TabManagerImplementation, ofType type: TabType = .normalActive, count: Int) {
+    private func generateTabs(ofType type: TabType = .normalActive, count: Int) -> [Tab] {
+        var tabs = [Tab]()
         for i in 0..<count {
             let tab: Tab
 
@@ -1481,9 +1587,11 @@ class TabManagerTests: XCTestCase {
                 tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID)
             }
 
-            tab.url = testURL(count: i)
-            subject.tabs.append(tab)
+            tab.url = URL(string: "https://mozilla.com?item=\(i)")!
+            tabs.append(tab)
         }
+
+        return tabs
     }
 
     private func getMockTabData(count: Int) -> [TabData] {
@@ -1507,22 +1615,24 @@ class TabManagerTests: XCTestCase {
         return URL(string: "https://mozilla.com?item=\(count)")!
     }
 
-    private func setupForFindRightOrLeftTab_mixedTypes(_ tabManager: TabManagerImplementation) {
+    private func setupForFindRightOrLeftTab_mixedTypes() -> TabManagerImplementation {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
         //   0   1   2   3   4   5   6   7   8
-        addTabs(to: tabManager, ofType: .normalActive, count: 1)
-        addTabs(to: tabManager, ofType: .privateAny, count: 2)
-        addTabs(to: tabManager, ofType: .normalInactive, count: 1)
-        addTabs(to: tabManager, ofType: .normalActive, count: 1)
-        addTabs(to: tabManager, ofType: .normalInactive, count: 1)
-        addTabs(to: tabManager, ofType: .normalActive, count: 2)
-        addTabs(to: tabManager, ofType: .privateAny, count: 1)
+        let tabs1 = generateTabs(ofType: .normalActive, count: 1)
+        let tabs2 = generateTabs(ofType: .privateAny, count: 2)
+        let tabs3 = generateTabs(ofType: .normalInactive, count: 1)
+        let tabs4 = generateTabs(ofType: .normalActive, count: 1)
+        let tabs5 = generateTabs(ofType: .normalInactive, count: 1)
+        let tabs6 = generateTabs(ofType: .normalActive, count: 2)
+        let tabs7 = generateTabs(ofType: .privateAny, count: 1)
 
+        let tabManager = createSubject(tabs: tabs1 + tabs2 + tabs3 + tabs4 + tabs5 + tabs6 + tabs7)
         // Check preconditions
         XCTAssertEqual(tabManager.tabs.count, 9)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 4)
         XCTAssertEqual(tabManager.inactiveTabs.count, 2)
         XCTAssertEqual(tabManager.privateTabs.count, 3)
+        return tabManager
     }
 }

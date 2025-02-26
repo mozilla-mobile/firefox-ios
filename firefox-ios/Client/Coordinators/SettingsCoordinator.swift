@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import Redux
+import SwiftUI
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
@@ -318,6 +319,16 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
 
+    func pressedCustomizeAppIcon() {
+        let viewController = UIHostingController(
+            rootView: AppIconSelectionView(
+                windowUUID: windowUUID
+            )
+        )
+        viewController.title = "App Icon" // TODO FXIOS-11471 strings
+        router.push(viewController)
+    }
+
     func pressedHome() {
         let viewController = HomePageSettingViewController(prefs: profile.prefs,
                                                            settingsDelegate: self,
@@ -402,6 +413,11 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedMailApp() {
         let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
+    func pressedAutoPlay() {
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 
