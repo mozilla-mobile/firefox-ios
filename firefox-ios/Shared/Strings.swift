@@ -2465,6 +2465,36 @@ extension String {
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
         }
 
+        public struct AppIconSelection {
+            public struct AppIconNames {
+                public static let Regular = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Regular.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Default",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
+
+                public static let Legacy = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Legacy.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Legacy",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the legacy Firefox for iOS icon with a dark purple background.")
+
+                public static let Hug = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Hug",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+
+                public struct AppIconAccessibility {
+                    
+
+                }
+            }
+
+
+
+        }
+
         public struct Autoplay {
             public static let Autoplay = MZLocalizedString(
                 key: "Settings.Autoplay.SettingsTitle.v137",

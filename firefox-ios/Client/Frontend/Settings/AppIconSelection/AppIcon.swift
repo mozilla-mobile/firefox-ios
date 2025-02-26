@@ -18,11 +18,11 @@ enum AppIcon: CaseIterable {
     var displayName: String {
         switch self {
         case .regular:
-            return "Default"
+            return .Settings.AppIconSelection.AppIconNames.Regular
         case .legacy:
-            return "Legacy"
+            return .Settings.AppIconSelection.AppIconNames.Legacy
         case .hug:
-            return "Hug"
+            return .Settings.AppIconSelection.AppIconNames.Hug
         }
     }
 
