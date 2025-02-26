@@ -10,7 +10,7 @@ public enum WallpaperSettingsError: Error {
     case itemNotFound
 }
 
-class WallpaperSettingsViewModel {
+class WallpaperSettingsViewModel: FeatureFlaggable {
     typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
 
@@ -205,7 +205,7 @@ private extension WallpaperSettingsViewModel {
                                 in collection: WallpaperCollection,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaper) { [weak self] result in
-            guard let extra = self?.telemetryMetadata(for: wallpaper, in: collection) else {
+            guard let self else {
                 completion(result)
                 return
             }
@@ -213,9 +213,19 @@ private extension WallpaperSettingsViewModel {
                                          method: .tap,
                                          object: .wallpaperSettings,
                                          value: .wallpaperSelected,
-                                         extras: extra)
+                                         extras: self.telemetryMetadata(for: wallpaper, in: collection))
 
-           completion(result)
+            // TODO: FXIOS-11486 Move interface for setting wallpaper into Wallpaper middleware
+            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+                let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
+                let action = WallpaperAction(
+                    wallpaperConfiguration: wallpaperConfig,
+                    windowUUID: .unavailable,
+                    actionType: WallpaperActionType.wallpaperSelected
+                )
+                store.dispatch(action)
+            }
+            completion(result)
         }
     }
 
