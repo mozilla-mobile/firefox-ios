@@ -37,7 +37,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
                 windowUUID: .XCTestDefaultUUID,
-                actionType: TabManagerMiddlewareActionType.fetchRecentTabs
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
             )
         )
 
@@ -67,6 +67,40 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.mostRecentSyncedTab?.descriptionText, "Fake client")
         XCTAssertEqual(newState.mostRecentSyncedTab?.url.absoluteString, "www.mozilla.org")
         XCTAssertEqual(newState.mostRecentSyncedTab?.accessibilityLabel, "Tab pickup: Mozilla, Fake client")
+    }
+
+    func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = jumpBackInSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            JumpBackInAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.shouldShowSection)
+    }
+
+    func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = jumpBackInSectionReducer()
+
+        let newState = reducer(
+            initialState,
+            JumpBackInAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldShowSection)
     }
 
     // MARK: - Private

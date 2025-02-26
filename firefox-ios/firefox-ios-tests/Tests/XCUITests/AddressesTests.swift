@@ -12,15 +12,26 @@ class AddressesTests: BaseTestCase {
     override func setUp() {
         super.setUp()
         if #available(iOS 16, *) {
-            navigator.nowAt(NewTabScreen)
-            waitForTabsButton()
-            navigator.goto(AddressesSettings)
-            // Making sure "Save and Fill Addresses" toggle is on
-            if (app.switches.element(boundBy: 1).value as? String) == "0" {
-                app.switches.element(boundBy: 1).waitAndTap()
+            if !name.contains("testAddressOptionIsAvailableInSettingsMenu") {
+                navigator.nowAt(NewTabScreen)
+                waitForTabsButton()
+                navigator.goto(AddressesSettings)
+                // Making sure "Save and Fill Addresses" toggle is on
+                if (app.switches.element(boundBy: 1).value as? String) == "0" {
+                    app.switches.element(boundBy: 1).waitAndTap()
+                }
+                navigator.goto(NewTabScreen)
             }
-            navigator.goto(NewTabScreen)
         }
+    }
+
+    override func tearDown() {
+        if name.contains("testAddressOptionIsAvailableInSettingsMenu") {
+            switchThemeToDarkOrLight(theme: "Light")
+            XCUIDevice.shared.orientation = .portrait
+        }
+        app.terminate()
+        super.tearDown()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618637
@@ -360,6 +371,72 @@ class AddressesTests: BaseTestCase {
         app.switches.element(boundBy: 1).waitAndTap()
         // The toggle successfully turns ON
         XCTAssertEqual(app.switches.element(boundBy: 1).value! as? String, "1")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2546293
+    // Smoketest
+    func testAddressOptionIsAvailableInSettingsMenu() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        // While in Portrait mode check for the options
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        validatePrivacyOptions()
+        // While in landscape mode check for the options
+        XCUIDevice.shared.orientation = .landscapeLeft
+        validatePrivacyOptions()
+        XCUIDevice.shared.orientation = .portrait
+        // While in dark mode check for the options
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(NewTabScreen)
+        switchThemeToDarkOrLight(theme: "Dark")
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        validatePrivacyOptions()
+        // While in light mode check for the options
+        app.buttons["Done"].waitAndTap()
+        switchThemeToDarkOrLight(theme: "Light")
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        validatePrivacyOptions()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+        // Go to a webpage, and select night mode on and off, check options
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        validateNightModeOnOff()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+        validateNightModeOnOff()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+    }
+
+    private func validateNightModeOnOff() {
+        navigator.performAction(Action.ToggleNightMode)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SettingsScreen)
+        validatePrivacyOptions()
+    }
+
+    private func validatePrivacyOptions() {
+        let table = app.tables.element(boundBy: 0)
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        waitForElementsToExist(
+            [
+                table.cells[settingsQuery.Logins.title],
+                table.cells[settingsQuery.CreditCards.title],
+                table.cells[settingsQuery.Address.title],
+                table.cells[settingsQuery.ClearData.title],
+                app.switches[settingsQuery.ClosePrivateTabs.title],
+                table.cells[settingsQuery.ContentBlocker.title],
+                table.cells[settingsQuery.Notifications.title],
+                table.cells[settingsQuery.PrivacyPolicy.title]
+            ]
+        )
     }
 
     private func addAddressAndReachAutofillForm(indexField: Int) {

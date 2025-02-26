@@ -111,6 +111,7 @@ extension Notification.Name {
     // MARK: Settings
 
     public static let BlockPopup = Notification.Name("BlockPopup")
+    public static let AutoPlayChanged = Notification.Name("AutoPlayChanged")
     public static let BookmarksUpdated = Notification.Name("BookmarksUpdated")
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")

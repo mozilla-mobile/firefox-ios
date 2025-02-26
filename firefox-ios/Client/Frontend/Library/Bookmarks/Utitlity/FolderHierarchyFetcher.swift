@@ -6,7 +6,14 @@ import Foundation
 import MozillaAppServices
 
 protocol FolderHierarchyFetcher {
+    func fetchFolders(excludedGuids: [String]) async -> [Folder]
     func fetchFolders() async -> [Folder]
+}
+
+extension FolderHierarchyFetcher {
+    func fetchFolders() async -> [Folder] {
+        await fetchFolders(excludedGuids: [])
+    }
 }
 
 struct Folder: Equatable, Hashable {
@@ -31,7 +38,7 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
     let profile: Profile
     let rootFolderGUID: String
 
-    func fetchFolders() async -> [Folder] {
+    func fetchFolders(excludedGuids: [String] = []) async -> [Folder] {
         let numDesktopBookmarks = await countDesktopBookmarks()
         return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID, recursive: true) { result in
@@ -65,6 +72,7 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
                         recursiveAddSubFolders(folder,
                                                folders: &folders,
                                                hasDesktopBookmarks: hasDesktopBookmarks,
+                                               excludedGuids: excludedGuids,
                                                prefixFolders: desktopFolders)
                     }
                 case .failure: return
@@ -85,13 +93,24 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
                                         folders: inout [Folder],
                                         hasDesktopBookmarks: Bool,
                                         indent: Int = 0,
+                                        excludedGuids: [String],
                                         prefixFolders: [BookmarkFolderData] = []) {
-        if !BookmarkRoots.DesktopRoots.contains(folder.guid) || hasDesktopBookmarks {
+        // Only add the folder if it is:
+        // a) A desktop folder and we have desktop bookmarks
+        // b) Not a desktop or excluded folder
+        if (BookmarkRoots.DesktopRoots.contains(folder.guid) && hasDesktopBookmarks) ||
+            (!BookmarkRoots.DesktopRoots.contains(folder.guid) && !excludedGuids.contains(folder.guid)) {
             folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
 
             // Prepend desktop folders to the top of the mobile bookmarks folder hierarchy
             if folder.guid == BookmarkRoots.MobileFolderGUID {
-                prependDesktopFolders(folder, folders: &folders, indent: indent, prefixFolders: prefixFolders)
+                prependDesktopFolders(
+                    folder,
+                    folders: &folders,
+                    indent: indent,
+                    excludedGuids: excludedGuids,
+                    prefixFolders: prefixFolders
+                )
             }
         } else { return }
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
@@ -100,7 +119,8 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
                 subFolder,
                 folders: &folders,
                 hasDesktopBookmarks: hasDesktopBookmarks,
-                indent: indentation
+                indent: indentation,
+                excludedGuids: excludedGuids
             )
         }
     }
@@ -121,9 +141,16 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
     private func prependDesktopFolders(_ folder: BookmarkFolderData,
                                        folders: inout [Folder],
                                        indent: Int = 0,
+                                       excludedGuids: [String],
                                        prefixFolders: [BookmarkFolderData] = []) {
         prefixFolders.forEach {
-            folders.append(Folder(title: $0.title, guid: $0.guid, indentation: indent + 2))
+            recursiveAddSubFolders(
+                $0,
+                folders: &folders,
+                hasDesktopBookmarks: true,
+                indent: indent + 2,
+                excludedGuids: excludedGuids
+            )
         }
         // Find the first desktop folder and prepend a dummy folder object to use for the "DESKTOP BOOKMARKS" header
         if let firstDesktopFolderIndex = folders.firstIndex(where: { BookmarkRoots.DesktopRoots.contains($0.guid) }) {

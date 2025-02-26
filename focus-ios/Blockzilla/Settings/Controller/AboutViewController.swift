@@ -36,7 +36,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             case .aboutCategories:
                 switch row {
                 case 0: cell.textLabel?.text = UIConstants.strings.aboutRowHelp
-                case 1: cell.textLabel?.text = UIConstants.strings.aboutRowRights
+                case 1: cell.textLabel?.text = UIConstants.strings.aboutRowTerms
                 case 2: cell.textLabel?.text = UIConstants.strings.aboutRowPrivacy
                 default: break
                 }

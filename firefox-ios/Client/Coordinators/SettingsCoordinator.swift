@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import Redux
+import SwiftUI
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     func openURLinNewTab(_ url: URL)
@@ -22,7 +23,8 @@ class SettingsCoordinator: BaseCoordinator,
                            AccountSettingsDelegate,
                            AboutSettingsDelegate,
                            ParentCoordinatorDelegate,
-                           QRCodeNavigationHandler {
+                           QRCodeNavigationHandler,
+                           BrowsingSettingsDelegate {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -163,8 +165,8 @@ class SettingsCoordinator: BaseCoordinator,
             contentBlockerVC.tabManager = tabManager
             return contentBlockerVC
 
-        case .tabs:
-            return TabsSettingsViewController(windowUUID: windowUUID)
+        case .browser:
+            return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
@@ -317,16 +319,21 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
 
+    func pressedCustomizeAppIcon() {
+        let viewController = UIHostingController(
+            rootView: AppIconSelectionView(
+                windowUUID: windowUUID
+            )
+        )
+        viewController.title = "App Icon" // TODO FXIOS-11471 strings
+        router.push(viewController)
+    }
+
     func pressedHome() {
         let viewController = HomePageSettingViewController(prefs: profile.prefs,
                                                            settingsDelegate: self,
                                                            tabManager: tabManager)
         viewController.profile = profile
-        router.push(viewController)
-    }
-
-    func pressedMailApp() {
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 
@@ -353,17 +360,19 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
-    func pressedTabs() {
-        let viewController = TabsSettingsViewController(windowUUID: windowUUID)
-        router.push(viewController)
-    }
-
     func pressedTheme() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
         store.dispatch(action)
         router.push(ThemeSettingsController(windowUUID: windowUUID))
+    }
+
+    func pressedBrowsing() {
+        let viewController = BrowsingSettingsViewController(profile: profile,
+                                                            windowUUID: windowUUID)
+        viewController.parentCoordinator = self
+        router.push(viewController)
     }
 
     // MARK: AccountSettingsDelegate
@@ -397,6 +406,18 @@ class SettingsCoordinator: BaseCoordinator,
                                                                 deepLinkParams: fxaParams,
                                                                 windowUUID: windowUUID)
         viewController.qrCodeNavigationHandler = self
+        router.push(viewController)
+    }
+
+    // MARK: - BrowsingSettingsDelegate
+
+    func pressedMailApp() {
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
+    func pressedAutoPlay() {
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 

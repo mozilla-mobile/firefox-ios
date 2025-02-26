@@ -6,16 +6,17 @@ import Common
 import Foundation
 import Shared
 
-class TabsSetting: Setting {
+class AppIconSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
+
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
     override var accessibilityIdentifier: String? {
-        return AccessibilityIdentifiers.Settings.Tabs.title
+        return AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle
     }
 
     init(theme: Theme,
@@ -23,13 +24,15 @@ class TabsSetting: Setting {
         self.settingsDelegate = settingsDelegate
         super.init(
             title: NSAttributedString(
-                string: .Settings.SectionTitles.TabsTitle,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+                string: "App Icon", // TODO FXIOS-11471 strings
+                attributes: [
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
+                ]
             )
         )
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.pressedTabs()
+        settingsDelegate?.pressedCustomizeAppIcon()
     }
 }

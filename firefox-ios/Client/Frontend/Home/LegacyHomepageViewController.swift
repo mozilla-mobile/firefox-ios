@@ -539,7 +539,7 @@ class LegacyHomepageViewController:
                 self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController)
             },
             sourceRect: rect,
-            andActionForButton: { [weak self] in self?.openTabsSettings() },
+            andActionForButton: { [weak self] in self?.openInactiveTabsSettings() },
             overlayState: overlayManager)
     }
 
@@ -869,8 +869,8 @@ private extension LegacyHomepageViewController {
                                      value: .customizeHomepageButton)
     }
 
-    func openTabsSettings() {
-        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .tabs)
+    func openInactiveTabsSettings() {
+        homePanelDelegate?.homePanelDidRequestToOpenSettings(at: .browser)
     }
 
     func getPopoverSourceRect(sourceView: UIView?) -> CGRect {
@@ -893,8 +893,8 @@ extension LegacyHomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
-        homePanelDelegate?.homePanelDidRequestBookmarkToast(url: url, action: action)
+    func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(urlString: urlString, action: action)
     }
 }
 
