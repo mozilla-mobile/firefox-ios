@@ -28,7 +28,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     var isRestoringTabs = false
     var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
-    var tabs = [Tab]()
+    private(set) var tabs: [Tab]
 
     var isInactiveTabsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
@@ -130,7 +130,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
          tabMigration: TabMigrationUtility? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
-         windowManager: WindowManager = AppContainer.shared.resolve()
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.tabDataStore = dataStore
@@ -145,6 +146,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.logger = logger
+        self.tabs = tabs
 
         super.init()
 
@@ -157,7 +159,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             observing: [
                 UIApplication.willResignActiveNotification,
                 .TabMimeTypeDidSet,
-                .BlockPopup
+                .BlockPopup,
+                .AutoPlayChanged
             ])
     }
 
@@ -181,6 +184,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
+        configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors
+            .getMediaTypesRequiringUserActionForPlayback(prefs)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -602,6 +607,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
     }
 
+    @objc
+    private func autoPlayDidChange() {
+        let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
+        // https://developer.apple.com/documentation/webkit/wkwebviewconfiguration
+        // The web view incorporates our configuration settings only at creation time; we cannot change
+        //  those settings dynamically later. So this change will apply to new webviews only.
+        configuration.mediaTypesRequiringUserActionForPlayback = mediaType
+        privateConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
+    }
+
     private func buildTabRestore(window: WindowData?) async {
         defer {
             isRestoringTabs = false
@@ -784,14 +799,13 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
-    func storeChanges() {
-        let windowManager: WindowManager = AppContainer.shared.resolve()
+    private func storeChanges() {
         windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveSessionData(forTab: selectedTab)
     }
 
-    func saveSessionData(forTab tab: Tab?) {
+    private func saveSessionData(forTab tab: Tab?) {
         guard let tab = tab,
               let tabSession = tab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: tab.tabUUID)
@@ -1124,13 +1138,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     /// Note: Inserts AND configures the given tab.
-    func configureTab(_ tab: Tab,
-                      request: URLRequest?,
-                      afterTab parent: Tab? = nil,
-                      flushToDisk: Bool,
-                      zombie: Bool,
-                      isPopup: Bool = false,
-                      requiredConfiguration: WKWebViewConfiguration? = nil
+    private func configureTab(
+        _ tab: Tab,
+        request: URLRequest?,
+        afterTab parent: Tab? = nil,
+        flushToDisk: Bool,
+        zombie: Bool,
+        isPopup: Bool = false,
+        requiredConfiguration: WKWebViewConfiguration? = nil
     ) {
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -1267,6 +1282,8 @@ extension TabManagerImplementation: Notifiable {
             updateMenuItemsForSelectedTab()
         case .BlockPopup:
             blockPopUpDidChange()
+        case .AutoPlayChanged:
+            autoPlayDidChange()
         default:
             break
         }

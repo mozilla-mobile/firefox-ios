@@ -1,0 +1,18 @@
+# The configuration for the sentFromFirefoxFeature feature
+features:
+  app-icon-selection-feature:
+    description: >
+      Adds the App Icon Selection screen to Settings so users can change their default app icon.
+    variables:
+      enabled:
+        description: >
+          Controls whether users see the setting to customize their app icon in Settings.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
