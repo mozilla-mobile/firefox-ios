@@ -198,8 +198,7 @@ class TabManagerTests: XCTestCase {
     func testRestoreTabsForced() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
-        let subject = createSubject(windowUUID: testUUID)
-        addTabs(to: subject, count: 5)
+        let subject = createSubject(tabs: generateTabs(count: 5), windowUUID: testUUID)
 
         mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
                                                      activeTabId: UUID(),
@@ -219,11 +218,9 @@ class TabManagerTests: XCTestCase {
     func testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
-        let subject = createSubject(windowUUID: testUUID)
-
         setIsDeeplinkOptimizationRefactorEnabled(true)
-        // Simulate deeplink tab
-        addTabs(to: subject, count: 1)
+        let subject = createSubject(tabs: generateTabs(count: 1), windowUUID: testUUID)
+
         mockTabStore.fetchTabWindowData = WindowData(
             id: UUID(),
             activeTabId: UUID(),
@@ -244,13 +241,12 @@ class TabManagerTests: XCTestCase {
     func testRestoreTabs_whenDeeplinkTabPresent() {
         let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
         let testUUID = UUID()
-        let subject = createSubject(windowUUID: testUUID)
-
         setIsDeeplinkOptimizationRefactorEnabled(true)
         // Simulate deeplink tab
         let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
         tab.url = URL(string: "https://example.com")
-        subject.tabs.append(tab)
+        let subject = createSubject(tabs: [tab], windowUUID: testUUID)
+
         mockTabStore.fetchTabWindowData = WindowData(
             id: UUID(),
             activeTabId: UUID(),
@@ -1547,11 +1543,11 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func createSubject(tabs: [Tab] = []) -> TabManagerImplementation {
+    private func createSubject(tabs: [Tab] = [], windowUUID: WindowUUID? = nil) -> TabManagerImplementation {
         let subject = TabManagerImplementation(
             profile: mockProfile,
             imageStore: mockDiskImageStore,
-            uuid: ReservedWindowUUID(uuid: tabWindowUUID, isNew: false),
+            uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID, isNew: false),
             tabDataStore: mockTabStore,
             tabSessionStore: mockSessionStore,
             tabs: tabs
