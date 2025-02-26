@@ -544,10 +544,11 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func selectCreditCardOnFormWebsite() {
-        mozWaitForElementToExist(app.scrollViews.otherElements.tables.buttons["Test"])
+        let nameOnCard = app.scrollViews.otherElements.tables.buttons.element(boundBy: 2)
+        mozWaitForElementToExist(nameOnCard)
         var attempts = 4
-        while app.scrollViews.otherElements.tables.buttons["Test"].isHittable && attempts > 0 {
-            app.scrollViews.otherElements.tables.cells.firstMatch.waitAndTap()
+        while nameOnCard.isHittable && attempts > 0 {
+            nameOnCard.waitAndTap()
             attempts -= 1
         }
     }

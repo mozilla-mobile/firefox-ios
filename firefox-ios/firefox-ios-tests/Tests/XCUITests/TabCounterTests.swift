@@ -68,7 +68,7 @@ class TabCounterTests: BaseTestCase {
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
             app.otherElements["Tabs Tray"].cells
-                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         }
 
         app.otherElements["Tabs Tray"].cells.element(boundBy: 0).waitAndTap()
@@ -79,7 +79,6 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.navigationBars["Open Tabs"])
         tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {
