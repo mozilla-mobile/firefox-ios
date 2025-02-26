@@ -61,7 +61,7 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView, ThemeApplicable {
         [home, newTab, share, settings].forEach { item in
             let view = NTPLibraryShortcutView()
             view.button.layer.cornerRadius = 10
-            view.button.setImage(item.image, for: .normal)
+            view.button.setImage(item.image?.withRenderingMode(.alwaysTemplate), for: .normal)
             view.button.tag = item.tag
             view.button.addTarget(self, action: #selector(tapped), for: .primaryActionTriggered)
             view.title.text = item.title

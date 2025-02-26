@@ -237,8 +237,12 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
         backgroundColor = theme.colors.layer5
         [previousButton, nextButton, doneButton].forEach {
+            /* Ecosia: update button colors
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue
+             */
+            $0.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
+            $0.customView?.tintColor = theme.colors.ecosia.buttonBackgroundPrimary
         }
 
         [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {

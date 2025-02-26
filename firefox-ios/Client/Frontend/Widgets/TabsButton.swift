@@ -27,7 +27,14 @@ class TabsButton: UIButton, ThemeApplicable {
 
     private var selectedTintColor: UIColor!
     private var unselectedTintColor: UIColor!
+    /* Ecosia: Update so theme is not nil on `createTabsButton`
+     (required so colors are present for the animated cloned button)
     private var theme: Theme?
+     */
+    private var theme: Theme? {
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.getCurrentTheme(for: currentWindowUUID)
+    }
 
     // When all animations are completed, this is the most-recently assigned tab count that is shown.
     // updateTabCount() can be called in rapid succession, this ensures only final tab count is displayed.

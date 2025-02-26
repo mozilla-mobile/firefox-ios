@@ -63,6 +63,7 @@ public protocol EcosiaSemanticColors {
     var newSeedCollectedCircle: UIColor { get }
     var tabTrayScreenshotBackground: UIColor { get }
     var tableViewRowText: UIColor { get }
+    var impactNavigationBarTitleBackground: UIColor { get }
 }
 
 public protocol EcosiaThemeColourPalette: ThemeColourPalette {
@@ -111,4 +112,5 @@ class FakeEcosiaSemanticColors: EcosiaSemanticColors {
     var newSeedCollectedCircle: UIColor = .systemGray
     var tabTrayScreenshotBackground: UIColor = .systemGray
     var tableViewRowText: UIColor = .systemGray
+    var impactNavigationBarTitleBackground: UIColor = .systemGray
 }

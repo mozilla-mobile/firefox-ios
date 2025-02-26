@@ -87,7 +87,7 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
     var iconPrimary: UIColor { ecosia.iconPrimary }
     var iconSecondary: UIColor { ecosia.iconSecondary }
     var iconDisabled: UIColor { fallbackTheme.colors.iconDisabled }
-    var iconAccent: UIColor { fallbackTheme.colors.iconAccent }
+    var iconAccent: UIColor { ecosia.iconSecondary }
     var iconOnColor: UIColor { fallbackTheme.colors.iconOnColor }
     var iconCritical: UIColor { ecosia.stateError }
     var iconSpinner: UIColor { fallbackTheme.colors.iconSpinner }
@@ -152,4 +152,5 @@ private struct EcosiaLightSemanticColors: EcosiaSemanticColors {
     var newSeedCollectedCircle: UIColor = EcosiaColor.Peach30
     var tabTrayScreenshotBackground: UIColor = EcosiaColor.White
     var tableViewRowText: UIColor = .Photon.Grey90
+    var impactNavigationBarTitleBackground: UIColor = EcosiaColor.DarkGreen50
 }

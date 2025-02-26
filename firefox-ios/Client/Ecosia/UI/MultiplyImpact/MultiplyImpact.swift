@@ -426,14 +426,13 @@ class MultiplyImpact: UIViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
         view.backgroundColor = theme.colors.ecosia.modalBackground
-        topBackground?.backgroundColor = theme.colors.ecosia.brandPrimary.withAlphaComponent(0.2)
         inviteButton.backgroundColor = theme.colors.ecosia.brandPrimary
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .highlighted)
         inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .selected)
         learnMoreButton?.setTitleColor(theme.colors.ecosia.brandPrimary, for: .normal)
         waves?.tintColor = theme.colors.ecosia.modalBackground
-        topBackground?.backgroundColor = theme.colors.ecosia.modalBackground
+        topBackground?.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
         forestOverlay?.backgroundColor = theme.colors.ecosia.modalBackground
         subtitle?.textColor = UX.hardcodedDarkTextColor
         copyControl?.backgroundColor = theme.colors.ecosia.backgroundSecondary
@@ -468,11 +467,11 @@ class MultiplyImpact: UIViewController, Themeable {
         appearance.configureWithOpaqueBackground()
         appearance.largeTitleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
         appearance.titleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
-        appearance.backgroundColor = theme.colors.ecosia.modalBackground
+        appearance.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
         appearance.shadowColor = nil
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.modalBackground
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.impactNavigationBarTitleBackground
         navigationController?.navigationBar.tintColor = theme.type == .light ? UX.hardcodedDarkTextColor : theme.colors.ecosia.brandPrimary
     }
 
