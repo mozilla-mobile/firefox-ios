@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import SiteImageView
-import Shared
 
 /// A cell used in FxHomeScreen's Bookmarks section.
 class LegacyBookmarksCell: UICollectionViewCell, ReusableCell {

@@ -5,7 +5,6 @@
 import UIKit
 import Common
 import ComponentLibrary
-import Shared
 
 class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     private struct UX {

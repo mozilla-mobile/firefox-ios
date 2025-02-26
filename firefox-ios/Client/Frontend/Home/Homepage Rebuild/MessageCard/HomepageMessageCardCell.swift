@@ -4,7 +4,6 @@
 
 import Common
 import ComponentLibrary
-import Shared
 import UIKit
 
 /// The card that appears at the top of the Firefox Homepage and is powered by the mobile messaging system.
