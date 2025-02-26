@@ -33,7 +33,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedError: NSError?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
-    
+
     var hasMediaCapturePermission = true
 
     func onTitleChange(title: String) {
@@ -100,7 +100,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
         onWillDisplayAcccessoryViewCalled += 1
         return .default
     }
-    
+
     func requestMediaCapturePermission() -> Bool {
         requestMediaCapturePermissionCalled += 1
         return hasMediaCapturePermission

@@ -567,39 +567,37 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(engineSessionDelegate.searchCalled, 1)
         XCTAssertEqual(engineSessionDelegate.savedSearchSelection, expectedSelection)
     }
-    
+
     func testUIHandlerIsActiveSetTrue() {
         let uiHandler = DefaultUIHandler()
-        
+
         let subject = createSubject(uiHandler: uiHandler)
-        
+
         subject?.isActive = true
-        
+
         XCTAssertTrue(uiHandler.isActive)
     }
-    
+
     func testUIHandlerIsActiveSetFalse() {
         let uiHandler = DefaultUIHandler()
-        
+
         let subject = createSubject(uiHandler: uiHandler)
-        
+
         subject?.isActive = true
         subject?.isActive = false
-        
+
         XCTAssertFalse(uiHandler.isActive)
     }
-    
-    func testSettingEngineSessionDelegateSetsUIHandlerDelegate(){
+
+    func testSettingEngineSessionDelegateSetsUIHandlerDelegate() {
         let uiHandler = DefaultUIHandler()
         let subject = createSubject(uiHandler: uiHandler)
-        
+
         subject?.delegate = engineSessionDelegate
-        
+
         XCTAssertNotNil(uiHandler.delegate)
     }
-    
 
-    
     // MARK: Helper
 
     func createSubject(file: StaticString = #file,
