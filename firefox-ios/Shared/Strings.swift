@@ -2395,7 +2395,7 @@ extension String {
                 comment: "This is the title for Media customization under the Browsing settings section."
             )
         }
-        
+
         public struct AutofillAndPassword {
             public static let Title = MZLocalizedString(
                 key: "Settings.AutofillAndPassword.Title.v137",

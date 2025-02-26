@@ -790,7 +790,7 @@ struct AccessibilityIdentifiers {
         struct BlockImages {
             static let title = "Block Images"
         }
-        
+
         struct AutofillsPasswords {
             static let title = "AutofillsPasswordsSettings"
         }
