@@ -167,10 +167,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
             ])
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     subscript(index: Int) -> Tab? {
         if index >= tabs.count {
             return nil
