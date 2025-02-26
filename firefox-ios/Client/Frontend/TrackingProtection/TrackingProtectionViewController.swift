@@ -58,8 +58,10 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: UI components Header View
     private var headerContainer: HeaderView = .build()
 
+    /* Ecosia: Remove Firefox branded header view
     // MARK: Connection Details View
     private var connectionDetailsHeaderView: TrackingProtectionConnectionDetailsView = .build()
+     */
 
     // MARK: Blocked Trackers View
     private var trackersView: TrackingProtectionBlockedTrackersView = .build()
@@ -68,6 +70,11 @@ class TrackingProtectionViewController: UIViewController,
         stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.axis = .vertical
+
+        // Ecosia: Remove Firefox branded header view (had to move corner radius to this view)
+        stack.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
+        stack.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        stack.layer.masksToBounds = true
     }
 
     // MARK: Connection Status View
@@ -278,6 +285,7 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Connection Status Header Setup
     private func setupConnectionHeaderView() {
+        /* Ecosia: Remove Firefox branded header view
         baseView.addSubviews(connectionDetailsHeaderView)
         let connectionHeaderConstraints = [
             connectionDetailsHeaderView.leadingAnchor.constraint(
@@ -293,6 +301,7 @@ class TrackingProtectionViewController: UIViewController,
                 constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
         ]
         constraints.append(contentsOf: connectionHeaderConstraints)
+         */
     }
 
     // MARK: Trackers Connection Setup
@@ -312,7 +321,10 @@ class TrackingProtectionViewController: UIViewController,
                 equalTo: view.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
+            /* Ecosia: Remove Firefox branded header view
             trackersConnectionContainer.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
+             */
+            trackersConnectionContainer.topAnchor.constraint(equalTo: baseView.topAnchor),
             connectionHorizontalLine.topAnchor.constraint(equalTo: trackersConnectionContainer.bottomAnchor),
             connectionHorizontalLine.leadingAnchor.constraint(equalTo: trackersConnectionContainer.leadingAnchor),
             connectionHorizontalLine.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
@@ -412,9 +424,11 @@ class TrackingProtectionViewController: UIViewController,
                                      title: model.displayTitle,
                                      icon: headerIcon)
 
+        /* Ecosia: Remove Firefox branded header view
         connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)
+         */
 
         updateBlockedTrackersCount()
         connectionStatusView.setupDetails(image: model.getConnectionStatusImage(themeType: currentTheme().type),
@@ -462,7 +476,9 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
+        /* Ecosia: Remove Firefox branded header view
         connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
+         */
         trackersView.setupAccessibilityIdentifiers(
             arrowImageA11yId: model.arrowImageA11yId,
             trackersBlockedLabelA11yId: model.trackersBlockedLabelA11yId,
@@ -483,7 +499,9 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.adjustLayout(isWebsiteIcon: true)
         trackersView.adjustLayout()
         connectionStatusView.adjustLayout()
+        /* Ecosia: Remove Firefox branded header view
         connectionDetailsHeaderView.adjustLayout()
+         */
         toggleView.adjustLayout()
         configureProtectionSettingsView()
 
@@ -596,10 +614,12 @@ class TrackingProtectionViewController: UIViewController,
             model.isProtectionEnabled = false
         }
         toggleView.setToggleSwitchVisibility(with: !isContentBlockingConfigEnabled)
+        /* Ecosia: Remove Firefox branded header view
         connectionDetailsHeaderView.setupDetails(color: model.getConnectionDetailsBackgroundColor(theme: currentTheme()),
                                                  title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)
+         */
         adjustLayout()
     }
 }
@@ -611,7 +631,9 @@ extension TrackingProtectionViewController {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         headerContainer.applyTheme(theme: theme)
+        /* Ecosia: Remove Firefox branded header view
         connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
+         */
         trackersView.applyTheme(theme: theme)
         connectionStatusView.applyTheme(theme: theme)
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: theme.type),
