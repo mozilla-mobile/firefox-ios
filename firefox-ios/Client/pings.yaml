@@ -155,7 +155,7 @@ nimbus:
   bugs:
     - https://mozilla-hub.atlassian.net/browse/EXP-5154
   data_reviews:
-    - 'TODO'
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24950
   notification_emails:
     - chumphreys@mozilla.com
     - project-nimbus@mozilla.com

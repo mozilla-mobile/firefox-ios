@@ -54,24 +54,10 @@ class RecordedNimbusContextTests: XCTestCase {
     func testObjectRecordedToGleanMatchesExpected() throws {
         let recordedContext = RecordedNimbusContext(isFirstRun: true, isReviewCheckerEnabled: true, isDefaultBrowser: true)
 
+        var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
-            let value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
-
-            XCTAssertNotNil(value)
-            XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
-            XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
-            XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
-            XCTAssertEqual(value?.isReviewCheckerEnabled, recordedContext.isReviewCheckerEnabled)
-            XCTAssertEqual(value?.locale, recordedContext.locale)
-            XCTAssertEqual(value?.region, recordedContext.region)
-            XCTAssertEqual(value?.language, recordedContext.language)
-            XCTAssertEqual(value?.daysSinceInstall, recordedContext.daysSinceInstall.toInt64())
-            XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
-            XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
-
-            XCTAssertNotNil(value?.eventQueryValues)
-            XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
+            value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
             expectation.fulfill()
         }
 
@@ -79,6 +65,21 @@ class RecordedNimbusContextTests: XCTestCase {
         recordedContext.record()
 
         wait(for: [expectation], timeout: 5.0)
+
+        XCTAssertNotNil(value)
+        XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
+        XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
+        XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
+        XCTAssertEqual(value?.isReviewCheckerEnabled, recordedContext.isReviewCheckerEnabled)
+        XCTAssertEqual(value?.locale, recordedContext.locale)
+        XCTAssertEqual(value?.region, recordedContext.region)
+        XCTAssertEqual(value?.language, recordedContext.language)
+        XCTAssertEqual(value?.daysSinceInstall, recordedContext.daysSinceInstall.toInt64())
+        XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
+        XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
+
+        XCTAssertNotNil(value?.eventQueryValues)
+        XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
     }
 
     func testGetEventQueries() throws {
