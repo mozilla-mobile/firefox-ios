@@ -6,7 +6,6 @@ import Account
 import Foundation
 import Shared
 import Storage
-import Sync
 import XCTest
 
 @testable import Client

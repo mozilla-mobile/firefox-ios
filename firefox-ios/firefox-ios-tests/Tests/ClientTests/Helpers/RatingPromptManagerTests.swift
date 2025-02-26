@@ -5,7 +5,6 @@
 import Common
 import MozillaAppServices
 import Shared
-import Storage
 import StoreKit
 import XCTest
 

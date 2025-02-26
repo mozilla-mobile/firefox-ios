@@ -4,7 +4,6 @@
 
 import Common
 import XCTest
-import Shared
 @testable import Client
 
 class HomepageMessageCardViewModelTests: XCTestCase {

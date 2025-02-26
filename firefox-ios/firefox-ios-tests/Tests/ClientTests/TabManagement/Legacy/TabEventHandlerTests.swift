@@ -7,7 +7,6 @@ import Foundation
 import WebKit
 import GCDWebServers
 import XCTest
-import Shared
 import Common
 
 class TabEventHandlerTests: XCTestCase {
