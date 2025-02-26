@@ -2484,15 +2484,21 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Hug",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
-
-                public struct AppIconAccessibility {
-                    
-
-                }
             }
 
+            public struct Accessibility {
+                public static let AppIconSelectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Selected app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option.")
 
-
+                public static let AppIconUnselectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Unselected app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option.")
+            }
         }
 
         public struct Autoplay {

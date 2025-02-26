@@ -33,6 +33,12 @@ struct AppIconView: View, ThemeApplicable {
                : UX.uncheckedCircleImageIdentifier
     }
 
+    var selectionImageAccessibilityLabel: String {
+        return isSelected
+               ? .Settings.AppIconSelection.Accessibility.AppIconSelectedLabel
+               : .Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel
+    }
+
     var body: some View {
         guard let image = UIImage(named: appIcon.imageSetAssetName) else {
             return EmptyView()
@@ -44,7 +50,7 @@ struct AppIconView: View, ThemeApplicable {
                     Image(systemName: selectionImageIdentifier)
                         .padding(.trailing, UX.itemPadding)
                         .tint(themeColors.actionPrimary.color)
-                        .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
+                        .accessibilityLabel(selectionImageAccessibilityLabel)
 
                     Image(uiImage: image)
                         .resizable()
