@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Shared
 
 import struct MozillaAppServices.HistoryHighlight
 

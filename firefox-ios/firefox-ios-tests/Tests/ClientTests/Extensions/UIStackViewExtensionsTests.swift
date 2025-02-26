@@ -5,8 +5,6 @@
 import UIKit
 import XCTest
 
-@testable import Client
-
 class UIStackViewExtensionsTests: XCTestCase {
     // MARK: Top
 

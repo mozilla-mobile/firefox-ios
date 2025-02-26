@@ -5,8 +5,6 @@
 import Common
 import Account
 import Shared
-import Storage
-import Sync
 import UserNotifications
 
 import class MozillaAppServices.Viaduct

@@ -5,8 +5,6 @@
 @testable import Client
 import XCTest
 import Foundation
-import Shared
-import Common
 
 enum TestEvent: AppEventType {
     // Standard test events

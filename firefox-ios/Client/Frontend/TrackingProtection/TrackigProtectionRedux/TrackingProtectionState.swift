@@ -5,7 +5,6 @@
 import Foundation
 import Redux
 import Common
-import Shared
 
 struct TrackingProtectionState: StateType, Equatable, ScreenState {
     enum NavType {
