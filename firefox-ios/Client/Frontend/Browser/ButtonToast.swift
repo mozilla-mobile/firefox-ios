@@ -117,9 +117,33 @@ class ButtonToast: Toast {
         NSLayoutConstraint.activate([
             contentStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.spacing),
             contentStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -UX.spacing),
-            contentStackView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing),
             contentStackView.topAnchor.constraint(equalTo: toastView.topAnchor, constant: UX.spacing)
         ])
+
+        if let buttonText = viewModel.buttonText {
+            roundedButton.setTitle(buttonText, for: [])
+            roundedButton.translatesAutoresizingMaskIntoConstraints = false
+            toastView.addSubview(roundedButton)
+
+            NSLayoutConstraint.activate([
+                // Size constraints
+                roundedButton.heightAnchor.constraint(
+                    equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
+                roundedButton.widthAnchor.constraint(
+                    equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding),
+
+                // Position constraints
+                roundedButton.topAnchor.constraint(equalTo: contentStackView.bottomAnchor, constant: UX.stackViewSpacing),
+                roundedButton.leadingAnchor.constraint(equalTo: labelStackView.leadingAnchor),
+                roundedButton.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing)
+            ])
+
+            roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
+        } else {
+            // If no button, content stack extends to bottom
+            contentStackView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing).isActive = true
+        }
+
         return toastView
     }
 
