@@ -90,6 +90,7 @@ class SettingsCoordinator: BaseCoordinator,
         }
     }
 
+    // TODO: Check this
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .addresses:
@@ -263,6 +264,11 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     // MARK: PrivacySettingsDelegate
+
+    func pressedAutoFillsPasswords() {
+        let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        router.push(viewController)
+    }
 
     func pressedAddressAutofill() {
         let viewModel = AddressAutofillSettingsViewModel(
