@@ -36,9 +36,6 @@ class WallpaperSettingsViewModel: FeatureFlaggable {
         }
     }
 
-    private var theme: Theme
-    private var wallpaperManager: WallpaperManagerInterface
-    private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManager
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
     var selectedIndexPath: IndexPath?
@@ -47,12 +44,21 @@ class WallpaperSettingsViewModel: FeatureFlaggable {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         tabManager: TabManager,
-         theme: Theme) {
+    private var theme: Theme
+    private var wallpaperManager: WallpaperManagerInterface
+    private var wallpaperCollections = [WallpaperCollection]()
+    private let windowUUID: WindowUUID
+
+    init(
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+        tabManager: TabManager,
+        theme: Theme,
+        windowUUID: WindowUUID
+    ) {
         self.wallpaperManager = wallpaperManager
         self.tabManager = tabManager
         self.theme = theme
+        self.windowUUID = windowUUID
         setupWallpapers()
     }
 
@@ -220,7 +226,7 @@ private extension WallpaperSettingsViewModel {
                 let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
                 let action = WallpaperAction(
                     wallpaperConfiguration: wallpaperConfig,
-                    windowUUID: .unavailable,
+                    windowUUID: windowUUID,
                     actionType: WallpaperActionType.wallpaperSelected
                 )
                 store.dispatch(action)
