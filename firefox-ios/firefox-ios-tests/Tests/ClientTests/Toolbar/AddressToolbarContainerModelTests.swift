@@ -109,6 +109,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createBasicToolbarState() -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
+                            toolbarLayout: .baseline,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: nil),
                             navigationToolbar: createBasicNavigationBarState(),
@@ -127,6 +128,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
+                            toolbarLayout: .baseline,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: searchEngine),
                             navigationToolbar: createBasicNavigationBarState(),
