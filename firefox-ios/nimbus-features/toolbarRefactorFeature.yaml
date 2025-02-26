@@ -27,7 +27,7 @@ features:
       layout:
         description: >
           The type of layout of the toolbars.
-        type: Option<LayoutType>
+        type: Option<ToolbarLayoutType>
         default: baseline
         
     defaults:
@@ -47,7 +47,7 @@ features:
           layout: baseline
 
 enums:
-  LayoutType:
+  ToolbarLayoutType:
     description: The type of toolbar layout.
     variants:
       baseline:
