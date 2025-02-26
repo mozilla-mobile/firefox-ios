@@ -9,7 +9,7 @@ enum AppIcon: CaseIterable {
     case regular
 
     /// The old app icon before the iOS 18 light/dark/tinted update. Has a purple dark background in all modes.
-    case legacy
+    case darkPurple
 
     /// An artsy app icon of a person hugging the Firefox logo. Has a light orange background in all modes.
     case hug
@@ -19,8 +19,8 @@ enum AppIcon: CaseIterable {
         switch self {
         case .regular:
             return .Settings.AppIconSelection.AppIconNames.Regular
-        case .legacy:
-            return .Settings.AppIconSelection.AppIconNames.Legacy
+        case .darkPurple:
+            return .Settings.AppIconSelection.AppIconNames.DarkPurple
         case .hug:
             return .Settings.AppIconSelection.AppIconNames.Hug
         }
@@ -31,8 +31,8 @@ enum AppIcon: CaseIterable {
         switch self {
         case .regular:
             return "appIconAlternate_default"
-        case .legacy:
-            return "appIconAlternate_legacy"
+        case .darkPurple:
+            return "appIconAlternate_darkPurple"
         case .hug:
             return "appIconAlternate_hug"
         }
@@ -43,8 +43,8 @@ enum AppIcon: CaseIterable {
         switch self {
         case .regular:
             return nil // Setting the alternative app icon to nil restore the default app icon asset.
-        case .legacy:
-            return "AppIcon_Alt_Legacy"
+        case .darkPurple:
+            return "AppIcon_Alt_DarkPurple"
         case .hug:
             return "AppIcon_Alt_Hug"
         }

@@ -2485,11 +2485,11 @@ extension String {
                     value: "Default",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
 
-                public static let Legacy = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Legacy.Title.v136",
+                public static let DarkPurple = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
                     tableName: "AppIconSelection",
-                    value: "Legacy",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the legacy Firefox for iOS icon with a dark purple background.")
+                    value: "Dark Purple",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background.")
 
                 public static let Hug = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
