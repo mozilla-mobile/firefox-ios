@@ -393,8 +393,8 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         if !iPad() {
-            let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
-            XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+            let numTab = app.buttons.element(boundBy: 3).label
+            XCTAssertEqual(Int(numTab), tabsTrayCell.count)
         } else {
             XCTAssertEqual(tabsTrayCell.count, 2)
             XCTAssertTrue(app.buttons.elementContainingText("2").exists)
@@ -407,9 +407,8 @@ class TopTabsTest: BaseTestCase {
         app.buttons["Undo"].waitAndTap()
         // Only the latest tab closed is restored
         if !iPad() {
-            let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
             let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-            XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+            XCTAssertEqual(1, tabsTrayCell.count)
         }
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
@@ -429,7 +428,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
         for _ in 0...3 {
-            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].waitAndTap()
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossCircleFillLarge"].waitAndTap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
             waitForElementsToExist(
                 [
@@ -438,7 +437,7 @@ class TopTabsTest: BaseTestCase {
                 ]
             )
         }
-        app.collectionViews.buttons["crossLarge"].waitAndTap()
+        app.collectionViews.buttons["crossCircleFillLarge"].waitAndTap()
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
