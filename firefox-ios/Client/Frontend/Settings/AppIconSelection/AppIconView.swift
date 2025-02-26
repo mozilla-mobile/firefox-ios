@@ -39,6 +39,13 @@ struct AppIconView: View, ThemeApplicable {
                : .Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel
     }
 
+    var selectionAccessibilityHint: String {
+        return .localizedStringWithFormat(
+            .Settings.AppIconSelection.Accessibility.AppIconSelectionHint,
+            appIcon.displayName
+        )
+    }
+
     var body: some View {
         guard let image = UIImage(named: appIcon.imageSetAssetName) else {
             return EmptyView()
@@ -52,6 +59,7 @@ struct AppIconView: View, ThemeApplicable {
                         .tint(themeColors.actionPrimary.color)
                         .accessibilityLabel(selectionImageAccessibilityLabel)
 
+                    // swiftlint:disable:next accessibility_label_for_image
                     Image(uiImage: image)
                         .resizable()
                         .frame(width: UX.appIconSize, height: UX.appIconSize)
@@ -62,7 +70,6 @@ struct AppIconView: View, ThemeApplicable {
                                 .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
                         )
                         .padding(.trailing, UX.itemPadding)
-                        .accessibilityLabel(appIcon.displayName)
 
                     Text(appIcon.displayName)
                         .tint(themeColors.textPrimary.color)
@@ -72,6 +79,7 @@ struct AppIconView: View, ThemeApplicable {
                 .padding(.all, UX.itemPadding)
             }
             .background(Color.clear)
+            .accessibilityHint(selectionAccessibilityHint)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

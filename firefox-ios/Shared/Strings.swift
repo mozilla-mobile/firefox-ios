@@ -2490,14 +2490,20 @@ extension String {
                 public static let AppIconSelectedLabel = MZLocalizedString(
                     key: "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136",
                     tableName: "AppIconSelection",
-                    value: "Selected app icon",
+                    value: "Selected",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option.")
 
                 public static let AppIconUnselectedLabel = MZLocalizedString(
                     key: "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136",
                     tableName: "AppIconSelection",
-                    value: "Unselected app icon",
+                    value: "Deselected",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option.")
+
+                public static let AppIconSelectionHint = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136",
+                    tableName: "AppIconSelection",
+                    value: "Select the %@ app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name.")
             }
         }
 
