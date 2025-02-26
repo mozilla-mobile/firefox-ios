@@ -60,9 +60,14 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
+        /* Ecosia: Make sure url is set even if cell is re-used with same url (was causing MOB-3212)
         guard let siteURLString = viewModel.siteURLString,
               let siteURL = URL(string: siteURLString, invalidCharacters: false),
               canMakeRequest(with: siteURLString)
+        else { return }
+         */
+        guard let siteURLString = viewModel.siteURLString,
+              let siteURL = URL(string: siteURLString, invalidCharacters: false)
         else { return }
 
         // If a new request is being made on an existing image it is likely a cell or view being reused.
