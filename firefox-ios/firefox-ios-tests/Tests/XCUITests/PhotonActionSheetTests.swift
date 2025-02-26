@@ -33,9 +33,6 @@ class PhotonActionSheetTests: BaseTestCase {
         cell.press(forDuration: 2)
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         // Check that it has been unpinned
-        /* FIXME: Adding a workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
-         * We will wait for the pinned icon on the example.com tile to disappear (max 8 seconds polling)
-         */
         if #available(iOS 17, *) {
             mozWaitForElementToNotExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
@@ -43,36 +40,6 @@ class PhotonActionSheetTests: BaseTestCase {
         }
 
         mozWaitForElementToNotExist(cell)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2322067
-    // Smoketest
-    func testShareOptionIsShown() {
-        // Temporarily disabled until url bar redesign work FXIOS-8172
-//        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-//        waitUntilPageLoad()
-//        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-//        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-//
-//        // Wait to see the Share options sheet
-//        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2322667
-    func testSendToDeviceFromPageOptionsMenu() {
-        // User not logged in
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        // Temporarily disabled until url bar redesign work FXIOS-8172
-        /*
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        mozWaitForElementToExist(app.cells["Send Link to Device"], timeout: 10)
-        app.cells["Send Link to Device"].tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
-        XCTAssertTrue(app.staticTexts["Please open Firefox, go to Settings and sign in to continue."].exists)
-        */
     }
 
     private func openNewShareSheet() {

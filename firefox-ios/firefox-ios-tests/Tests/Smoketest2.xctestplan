@@ -102,7 +102,6 @@
         "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",
-        "PhotonActionSheetTests\/testSendToDeviceFromPageOptionsMenu()",
         "PhotonActionSheetTests\/testShareSheetOpenAndCancel()",
         "PhotonActionSheetTests\/testShareSheetSendToDevice()",
         "PocketTest",
