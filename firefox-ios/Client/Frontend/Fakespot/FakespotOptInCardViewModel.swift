@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 import Common
 import Shared
-import ComponentLibrary
 
 struct FakespotOptInCardViewModel {
     private struct UX {

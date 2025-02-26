@@ -12,9 +12,7 @@ import SnapKit
 import Account
 import MobileCoreServices
 import Common
-import ComponentLibrary
 import Redux
-import ToolbarKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData

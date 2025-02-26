@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class PrivateModeButton: ToggleButton, PrivateModeUI {
     override init(frame: CGRect) {

@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Shared
 
 /// Top site UI class, used in the homepage top site section
 struct TopSiteConfiguration: Hashable, Equatable {

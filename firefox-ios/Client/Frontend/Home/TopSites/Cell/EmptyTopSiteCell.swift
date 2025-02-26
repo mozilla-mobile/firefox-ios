@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {

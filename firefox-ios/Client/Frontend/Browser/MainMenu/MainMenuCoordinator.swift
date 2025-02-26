@@ -4,8 +4,6 @@
 
 import Common
 import Foundation
-import MenuKit
-import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
     func editBookmarkForCurrentTab()

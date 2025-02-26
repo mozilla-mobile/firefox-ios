@@ -4,8 +4,6 @@
 
 import Common
 import Storage
-import Shared
-import Redux
 import SiteImageView
 
 import enum MozillaAppServices.VisitType

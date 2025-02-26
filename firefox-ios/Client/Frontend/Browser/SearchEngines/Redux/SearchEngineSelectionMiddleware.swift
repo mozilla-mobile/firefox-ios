@@ -4,7 +4,6 @@
 
 import Common
 import Redux
-import ToolbarKit
 
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
