@@ -90,7 +90,6 @@ class SettingsCoordinator: BaseCoordinator,
         }
     }
 
-    // TODO: Check this
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .addresses:
