@@ -13,7 +13,7 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
          windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
-        self.title = .Settings.Browsing.Title
+        self.title = .Settings.AutofillAndPassword.Title
     }
 
     required init?(coder aDecoder: NSCoder) {

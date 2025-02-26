@@ -792,7 +792,7 @@ struct AccessibilityIdentifiers {
         }
         
         struct AutofillsPasswords {
-            static let title = "autofillsPasswordsSettings"
+            static let title = "AutofillsPasswordsSettings"
         }
 
         struct Passwords {
