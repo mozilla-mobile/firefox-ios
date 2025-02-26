@@ -20,7 +20,7 @@ private extension Double? {
     }
 }
 
-public extension Int32? {
+extension Int32? {
     func toInt64() -> Int64? {
         guard let self = self else { return nil }
         return Int64(self)
