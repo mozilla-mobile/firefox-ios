@@ -62,7 +62,7 @@ struct AppIconView: View, ThemeApplicable {
                                 .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
                         )
                         .padding(.trailing, UX.itemPadding)
-                        .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
+                        .accessibilityLabel(appIcon.displayName)
 
                     Text(appIcon.displayName)
                         .tint(themeColors.textPrimary.color)
