@@ -4,7 +4,6 @@
 
 import SwiftUI
 import Common
-import Shared
 
 struct AppIconSelectionView: View, ThemeApplicable {
     private let windowUUID: WindowUUID

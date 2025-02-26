@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class SettingsLoadingView: UIView, ThemeApplicable {
     var searchBarHeight: CGFloat = 0 {

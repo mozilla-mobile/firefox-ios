@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 import WebKit
 
 protocol FindInPageHelperDelegate: AnyObject {

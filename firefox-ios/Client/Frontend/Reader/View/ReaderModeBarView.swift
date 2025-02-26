@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 enum ReaderModeBarButtonType {
     case markAsRead
