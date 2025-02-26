@@ -39,7 +39,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         switch action.actionType {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            guard let toolbarPosition = action.toolbarPosition else { return }
+            guard let toolbarPosition = action.toolbarPosition,
+                  let toolbarLayout = action.toolbarLayout
+            else { return }
 
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
@@ -47,6 +49,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
+                toolbarLayout: toolbarLayout,
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),

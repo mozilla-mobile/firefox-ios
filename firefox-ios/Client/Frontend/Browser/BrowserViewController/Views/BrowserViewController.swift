@@ -637,8 +637,10 @@ class BrowserViewController: UIViewController,
                                   screen: .browserViewController)
         store.dispatch(action)
 
+        let toolbarConfig = FxNimbus.shared.features.toolbarRefactorFeature.value()
         let browserAction = GeneralBrowserMiddlewareAction(
             toolbarPosition: searchBarPosition,
+            toolbarLayout: toolbarConfig.layout,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
         store.dispatch(browserAction)

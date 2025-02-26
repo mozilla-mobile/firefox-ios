@@ -67,13 +67,16 @@ enum GeneralBrowserActionType: ActionType {
 class GeneralBrowserMiddlewareAction: Action {
     let scrollOffset: CGPoint?
     let toolbarPosition: SearchBarPosition?
+    let toolbarLayout: ToolbarLayoutType?
 
     init(scrollOffset: CGPoint? = nil,
          toolbarPosition: SearchBarPosition? = nil,
+         toolbarLayout: ToolbarLayoutType? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.scrollOffset = scrollOffset
         self.toolbarPosition = toolbarPosition
+        self.toolbarLayout = toolbarLayout
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
