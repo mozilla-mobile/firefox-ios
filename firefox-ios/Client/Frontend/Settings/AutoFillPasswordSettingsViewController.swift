@@ -6,9 +6,6 @@ import Common
 import Shared
 import Glean
 
-protocol AutofillPasswordDelegate: AnyObject {
-}
-
 class AutoFillPasswordSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     weak var parentCoordinator: PrivacySettingsDelegate?
 
@@ -41,20 +38,4 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
 
         return [SettingSection(children: sectionItems)]
     }
-}
-
-extension AutoFillPasswordSettingsViewController: PrivacySettingsDelegate {
-    func pressedAddressAutofill() {}
-
-    func pressedCreditCard() {}
-
-    func pressedClearPrivateData() {}
-
-    func pressedContentBlocker() {}
-
-    func pressedPasswords() {}
-
-    func pressedNotifications() {}
-
-    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {}
 }

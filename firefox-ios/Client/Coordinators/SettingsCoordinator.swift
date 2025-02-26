@@ -267,6 +267,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedAutoFillsPasswords() {
         let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        viewController.parentCoordinator = self
         router.push(viewController)
     }
 
