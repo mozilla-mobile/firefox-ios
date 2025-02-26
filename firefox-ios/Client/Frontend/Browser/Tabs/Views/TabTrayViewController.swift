@@ -545,7 +545,7 @@ class TabTrayViewController: UIViewController,
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
-        if isTabTrayUIExperimentsEnabled {
+        if isTabTrayUIExperimentsEnabled, !isRegularLayout {
             NSLayoutConstraint.activate([
                 panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
