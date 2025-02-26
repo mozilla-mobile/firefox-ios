@@ -34,40 +34,38 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     var body: some View {
-        Group {
-            if let image = UIImage(named: appIcon.imageSetAssetName) {
-                Button(action: { setAppIcon(appIcon) }) {
-                    HStack {
-                        Image(systemName: selectionImageIdentifier)
-                            .padding(.trailing, UX.itemPadding)
-                            .tint(themeColors.actionPrimary.color)
-                            .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
+        guard let image = UIImage(named: appIcon.imageSetAssetName) else {
+            return EmptyView()
+        }
 
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(width: UX.appIconSize, height: UX.appIconSize)
-                            .cornerRadius(UX.cornerRadius)
-                            .overlay(
-                                // Add rounded border
-                                RoundedRectangle(cornerRadius: UX.cornerRadius)
-                                    .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
-                            )
-                            .padding(.trailing, UX.itemPadding)
-                            .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
+        return Group {
+            Button(action: { setAppIcon(appIcon) }) {
+                HStack {
+                    Image(systemName: selectionImageIdentifier)
+                        .padding(.trailing, UX.itemPadding)
+                        .tint(themeColors.actionPrimary.color)
+                        .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
 
-                        Text(appIcon.displayName)
-                            .tint(themeColors.textPrimary.color)
+                    Image(uiImage: image)
+                        .resizable()
+                        .frame(width: UX.appIconSize, height: UX.appIconSize)
+                        .cornerRadius(UX.cornerRadius)
+                        .overlay(
+                            // Add rounded border
+                            RoundedRectangle(cornerRadius: UX.cornerRadius)
+                                .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
+                        )
+                        .padding(.trailing, UX.itemPadding)
+                        .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
 
-                        Spacer()
-                    }
-                    .padding(.all, UX.itemPadding)
+                    Text(appIcon.displayName)
+                        .tint(themeColors.textPrimary.color)
+
+                    Spacer()
                 }
-                .background(Color.clear)
-            } else {
-                // TODO FXIOS-11475 Add placeholder image and FXIOS-11471 image accessibility label strings
-                Text("No image")
-                    .tint(themeColors.layer1.color)
+                .padding(.all, UX.itemPadding)
             }
+            .background(Color.clear)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
