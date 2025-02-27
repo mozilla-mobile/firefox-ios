@@ -94,10 +94,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettingsFromBrowserTab()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         // Save a login and check that it appears on the list from BrowserTabMenu
-        app.buttons["Back"].waitAndTap()
-        navigator.nowAt(SettingsScreen)
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].waitAndTap()
+        navigator.goto(HomePanelsScreen)
         navigator.nowAt(HomePanelsScreen)
 
         saveLogin(givenUrl: testLoginPage)
@@ -111,11 +108,7 @@ class LoginTest: BaseTestCase {
         // I can't reproduce the issue manually. The issue occurs only during test automation.
         if #available(iOS 16, *) {
             // Check to see how it works with multiple entries in the list- in this case, two for now
-            app.buttons["Settings"].waitAndTap()
-            navigator.nowAt(SettingsScreen)
-            waitForExistence(app.buttons["Done"])
-            app.buttons["Done"].waitAndTap()
-
+            navigator.goto(HomePanelsScreen)
             navigator.nowAt(HomePanelsScreen)
             saveLogin(givenUrl: testSecondLoginPage)
             openLoginsSettings()
