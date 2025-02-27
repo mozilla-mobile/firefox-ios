@@ -4,6 +4,7 @@
 
 import Common
 import UIKit
+import ComponentLibrary
 
 class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
     private struct UX {
@@ -12,6 +13,7 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         static let labelsSpacing: CGFloat = 3
         static let negativeLabelsSpacing: CGFloat = -5
         static let minimumHeight: CGFloat = 44
+        static let learnMoreInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     }
 
     private lazy var labelsStackView: UIStackView = .build { stackView in
@@ -31,13 +33,8 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         label.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
-    public lazy var learnMoreButton: UIButton = .build { [weak self] button in
+    public lazy var learnMoreButton: LinkButton = .build { [weak self] button in
         button.addTarget(self, action: #selector(self?.learnMoreTapped), for: .touchUpInside)
-        button.titleLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
-        button.contentHorizontalAlignment = .leading
-        button.titleLabel?.numberOfLines = 0
-        button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.lineBreakMode = .byWordWrapping
     }
 
     var learnMoreDidTap: (() -> Void)?
@@ -47,10 +44,16 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         setupLayout()
     }
 
-    func configure(title: String, subtitle: String, learnMoreText: String, theme: Theme) {
+    func configure(title: String, subtitle: String, learnMoreText: String, a11yId: String?, theme: Theme) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
-        learnMoreButton.setTitle(learnMoreText, for: .normal)
+        let learnMoreButtonViewModel = LinkButtonViewModel(
+            title: learnMoreText,
+            a11yIdentifier: a11yId ?? "",
+            font: FXFontStyles.Regular.caption1.scaledFont(),
+            contentInsets: UX.learnMoreInsets
+        )
+        learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
     }
 
     func setAccessibilities(traits: UIAccessibilityTraits, identifier: String) {
@@ -69,8 +72,13 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         contentView.addSubview(learnMoreButton)
         labelsStackView.addArrangedSubview(titleLabel)
         labelsStackView.addArrangedSubview(subtitleLabel)
-        let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-        let learnMoreButtonBottomMargin = isAccessibilityCategory ? -UX.verticalMargin : 0
+
+        let bottomConstraint = learnMoreButton.bottomAnchor.constraint(
+            equalTo: contentView.bottomAnchor,
+            constant: -UX.verticalMargin
+        )
+        bottomConstraint.priority = .defaultLow
+
         NSLayoutConstraint.activate([
             labelsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.verticalMargin),
             labelsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
@@ -78,8 +86,7 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
 
             learnMoreButton.topAnchor.constraint(equalTo: labelsStackView.bottomAnchor, constant: UX.labelsSpacing),
             learnMoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
-            learnMoreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                    constant: learnMoreButtonBottomMargin),
+            bottomConstraint,
             learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
             learnMoreButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.minimumHeight)
         ])
@@ -102,6 +109,6 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         super.applyTheme(theme: theme)
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
-        learnMoreButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        learnMoreButton.applyTheme(theme: theme)
     }
 }

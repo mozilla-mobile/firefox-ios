@@ -7,19 +7,17 @@ import Foundation
 import Glean
 import Shared
 
-final class SendDataSetting: Setting, FeatureFlaggable {
-    private let prefKey: String?
-    private let prefs: Prefs?
+final class SendDataSetting: BoolSetting {
     private let titleText: String
     private let subtitleText: String
     private let learnMoreText: String
     private let learnMoreURL: URL?
     private let a11yId: String?
+    private let learnMoreA11yId: String?
     private let defaultValue: Bool?
     private let featureFlagName: NimbusFeatureFlagID?
 
     private weak var settingsDelegate: SupportSettingsDelegate?
-    var shouldSendData: ((Bool) -> Void)?
 
     override var url: URL? { return learnMoreURL }
     override var accessibilityIdentifier: String? { return a11yId }
@@ -33,22 +31,24 @@ final class SendDataSetting: Setting, FeatureFlaggable {
         learnMoreText: String,
         learnMoreURL: URL?,
         a11yId: String?,
+        learnMoreA11yId: String?,
         settingsDelegate: SupportSettingsDelegate?,
         featureFlagName: NimbusFeatureFlagID? = nil,
         enabled: Bool = true,
         isStudiesCase: Bool = false
     ) {
-        self.prefs = prefs
-        self.prefKey = prefKey
         self.defaultValue = defaultValue
         self.titleText = titleText
         self.subtitleText = subtitleText
         self.learnMoreText = learnMoreText
         self.learnMoreURL = learnMoreURL
         self.a11yId = a11yId
+        self.learnMoreA11yId = learnMoreA11yId
         self.settingsDelegate = settingsDelegate
         self.featureFlagName = featureFlagName
-        super.init(title: NSAttributedString(string: titleText), enabled: enabled)
+        super.init(prefs: prefs,
+                   defaultValue: defaultValue,
+                   attributedTitleText: NSAttributedString(string: titleText))
 
         if isStudiesCase {
             let sendUsageDataPref = prefs?.boolForKey(AppConstants.prefSendUsageData) ?? true
@@ -62,13 +62,6 @@ final class SendDataSetting: Setting, FeatureFlaggable {
         }
     }
 
-    public lazy var control: PaddedSwitch = {
-        let control = PaddedSwitch()
-        control.switchView.accessibilityIdentifier = prefKey
-        control.switchView.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        return control
-    }()
-
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
 
@@ -76,6 +69,7 @@ final class SendDataSetting: Setting, FeatureFlaggable {
             title: titleText,
             subtitle: subtitleText,
             learnMoreText: learnMoreText,
+            a11yId: learnMoreA11yId,
             theme: theme
         )
 
@@ -103,24 +97,6 @@ final class SendDataSetting: Setting, FeatureFlaggable {
         }
     }
 
-    @objc
-    func switchValueChanged(_ control: UISwitch) {
-        writeBool(control)
-        shouldSendData?(control.isOn)
-        if let featureFlagName = featureFlagName {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .change,
-                                         object: .setting,
-                                         extras: ["pref": featureFlagName.rawValue as Any,
-                                                  "to": control.isOn])
-        } else {
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .change,
-                                         object: .setting,
-                                         extras: ["pref": prefKey as Any, "to": control.isOn])
-        }
-    }
-
     func updateSetting(for isUsageEnabled: Bool) {
         guard !isUsageEnabled else {
             // Note: switch should be enabled only when telemetry usage is enabled
@@ -136,24 +112,5 @@ final class SendDataSetting: Setting, FeatureFlaggable {
         control.toggleSwitch(to: false)
         writeBool(control.switchView)
         Experiments.setStudiesSetting(false)
-    }
-
-    // These methods allow a subclass to control how the pref is saved
-    func displayBool(_ control: UISwitch) {
-        if let featureFlagName = featureFlagName {
-            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
-        } else {
-            guard let key = prefKey, let defaultValue = defaultValue else { return }
-            control.isOn = prefs?.boolForKey(key) ?? defaultValue
-        }
-    }
-
-    func writeBool(_ control: UISwitch) {
-        if let featureFlagName = featureFlagName {
-            featureFlags.set(feature: featureFlagName, to: control.isOn)
-        } else {
-            guard let key = prefKey else { return }
-            prefs?.setBool(control.isOn, forKey: key)
-        }
     }
 }

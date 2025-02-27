@@ -93,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - View lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.register(cellType: ThemedLearnMoreTableViewCell.self)
         setupNavigationBar()
         configureAccessibilityIdentifiers()
     }
@@ -199,10 +199,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             learnMoreText: .StudiesSettingLinkV2,
             learnMoreURL: SupportUtils.URLForTopic("ios-studies"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.studiesTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.studiesLearnMoreButton,
             settingsDelegate: parentCoordinator,
             isStudiesCase: true
         )
-        studiesSetting.shouldSendData = {
+        studiesSetting.settingDidChange = {
             Experiments.setStudiesSetting($0)
         }
 
@@ -215,10 +216,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             learnMoreText: .SendTechnicalDataSettingLinkV2,
             learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataLearnMoreButton,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.shouldSendData = { [weak self] value in
+        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
             guard let self, let profile = self.profile else { return }
             TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
             studiesSetting.updateSetting(for: value)
@@ -234,9 +236,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             learnMoreText: .SendDailyUsagePingSettingLinkV2,
             learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingLearnMoreButton,
             settingsDelegate: parentCoordinator
         )
-        sendDailyUsagePingSettings.shouldSendData = { [weak self] value in
+        sendDailyUsagePingSettings.settingDidChange = { [weak self] value in
             if value {
                 self?.gleanUsageReportingMetricsService.start()
             } else {
@@ -254,6 +257,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             learnMoreText: .SendCrashReportsSettingLinkV2,
             learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsLearnMoreButton,
             settingsDelegate: parentCoordinator
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
