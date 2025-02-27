@@ -34,6 +34,11 @@ class BrowserViewControllerTests: XCTestCase {
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
         DependencyHelperMock().reset()
+        profile = nil
+        tabManager = nil
+        browserViewController = nil
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
+        Glean.shared.resetGlean(clearStores: true)
         super.tearDown()
     }
 
