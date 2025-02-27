@@ -430,7 +430,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
-    @MainActor
     private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
