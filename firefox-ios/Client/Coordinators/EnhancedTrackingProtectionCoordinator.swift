@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Shared
 
 protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator)

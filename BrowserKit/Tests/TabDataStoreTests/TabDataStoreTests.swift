@@ -4,7 +4,6 @@
 
 import XCTest
 @testable import TabDataStore
-import Common
 
 final class TabDataStoreTests: XCTestCase {
     private var mockFileManager: TabFileManagerMock!

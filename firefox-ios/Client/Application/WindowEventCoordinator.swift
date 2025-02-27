@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Shared
 
 /// Events related to multiple window support on iPad. These events are
 /// always associated with one window in particular, but are typically of
