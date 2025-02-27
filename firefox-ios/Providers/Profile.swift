@@ -15,6 +15,7 @@ import Storage
 import AuthenticationServices
 
 import class MozillaAppServices.MZKeychainWrapper
+import class MozillaAppServices.RemoteSettingsService
 import enum MozillaAppServices.Level
 import enum MozillaAppServices.SyncReason
 import enum MozillaAppServices.VisitType
@@ -25,6 +26,7 @@ import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
+import struct MozillaAppServices.RemoteSettingsConfig2
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -94,6 +96,7 @@ protocol Profile: AnyObject {
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
     var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
+    var remoteSettingsService: RemoteSettingsService? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -675,6 +678,17 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath)
     }()
 
+    lazy var remoteSettingsService: RemoteSettingsService? = {
+        do {
+            return try RemoteSettingsService(storageDir: directory, config: RemoteSettingsConfig2())
+        } catch {
+            logger.log("Failed to specify RemoteSettingsService",
+                       level: .warning,
+                       category: .storage)
+            return nil
+        }
+    }()
+
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
             let cacheFileURL = try FileManager.default.url(
@@ -683,10 +697,14 @@ open class BrowserProfile: Profile {
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            return try RustFirefoxSuggest(
-                dataPath: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("suggest-data.db").path,
-                cachePath: cacheFileURL.path
-            )
+            if let rs_service = remoteSettingsService {
+                return try RustFirefoxSuggest(
+                    dataPath: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("suggest-data.db").path,
+                    cachePath: cacheFileURL.path,
+                    remoteSettingsService: rs_service
+                )
+            }
+            return nil
         } catch {
             logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
                        level: .warning,

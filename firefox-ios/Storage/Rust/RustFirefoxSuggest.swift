@@ -5,6 +5,7 @@
 import Foundation
 
 @preconcurrency import class MozillaAppServices.SuggestStore
+import class MozillaAppServices.RemoteSettingsService
 import class MozillaAppServices.SuggestStoreBuilder
 import class MozillaAppServices.Viaduct
 import enum MozillaAppServices.SuggestionProvider
@@ -42,13 +43,15 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
     private let writerQueue = DispatchQueue(label: "RustFirefoxSuggest.writer")
     private let readerQueue = DispatchQueue(label: "RustFirefoxSuggest.reader")
 
-    public init(dataPath: String, cachePath: String, remoteSettingsServer: RemoteSettingsServer? = nil) throws {
+    public init(dataPath: String, cachePath: String, remoteSettingsServer: RemoteSettingsServer? = nil, remoteSettingsService: RemoteSettingsService) throws {
         var builder = SuggestStoreBuilder()
             .dataPath(path: dataPath)
 
         if let remoteSettingsServer {
             builder = builder.remoteSettingsServer(server: remoteSettingsServer)
         }
+
+        builder = builder.remoteSettingsService(rsService: remoteSettingsService)
 
         store = try builder.build()
     }
