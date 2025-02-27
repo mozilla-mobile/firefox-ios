@@ -10,7 +10,7 @@ public enum WallpaperSettingsError: Error {
     case itemNotFound
 }
 
-class WallpaperSettingsViewModel {
+class WallpaperSettingsViewModel: FeatureFlaggable {
     typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
 
@@ -36,9 +36,6 @@ class WallpaperSettingsViewModel {
         }
     }
 
-    private var theme: Theme
-    private var wallpaperManager: WallpaperManagerInterface
-    private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManager
     var sectionLayout: WallpaperSettingsLayout = .compact // We use the compact layout as default
     var selectedIndexPath: IndexPath?
@@ -47,12 +44,21 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         tabManager: TabManager,
-         theme: Theme) {
+    private var theme: Theme
+    private var wallpaperManager: WallpaperManagerInterface
+    private var wallpaperCollections = [WallpaperCollection]()
+    private let windowUUID: WindowUUID
+
+    init(
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
+        tabManager: TabManager,
+        theme: Theme,
+        windowUUID: WindowUUID
+    ) {
         self.wallpaperManager = wallpaperManager
         self.tabManager = tabManager
         self.theme = theme
+        self.windowUUID = windowUUID
         setupWallpapers()
     }
 
@@ -205,7 +211,7 @@ private extension WallpaperSettingsViewModel {
                                 in collection: WallpaperCollection,
                                 completion: @escaping (Result<Void, Error>) -> Void) {
         wallpaperManager.setCurrentWallpaper(to: wallpaper) { [weak self] result in
-            guard let extra = self?.telemetryMetadata(for: wallpaper, in: collection) else {
+            guard let self else {
                 completion(result)
                 return
             }
@@ -213,9 +219,22 @@ private extension WallpaperSettingsViewModel {
                                          method: .tap,
                                          object: .wallpaperSettings,
                                          value: .wallpaperSelected,
-                                         extras: extra)
+                                         extras: self.telemetryMetadata(for: wallpaper, in: collection))
 
-           completion(result)
+            // TODO: FXIOS-11486 Move interface for setting wallpaper into Wallpaper middleware
+            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+                let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
+                // We are passing the wallpaperConfiguration here even though right now it is not being used
+                // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
+                // manager logic to the middlware.
+                let action = WallpaperAction(
+                    wallpaperConfiguration: wallpaperConfig,
+                    windowUUID: windowUUID,
+                    actionType: WallpaperActionType.wallpaperSelected
+                )
+                store.dispatch(action)
+            }
+            completion(result)
         }
     }
 

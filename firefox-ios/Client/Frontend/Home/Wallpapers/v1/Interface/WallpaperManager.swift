@@ -26,7 +26,7 @@ protocol WallpaperManagerInterface {
 }
 
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
+class WallpaperManager: WallpaperManagerInterface {
     enum ThumbnailFilter {
         case none
         case thumbnailsAvailable
@@ -110,15 +110,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         do {
             let storageUtility = WallpaperStorageUtility()
             try storageUtility.store(wallpaper)
-            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-                let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
-                let action = WallpaperAction(
-                    wallpaperConfiguration: wallpaperConfig,
-                    windowUUID: .unavailable,
-                    actionType: WallpaperMiddlewareActionType.wallpaperDidChange
-                )
-                store.dispatch(action)
-            }
             NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             completion(.success(()))
         } catch {
