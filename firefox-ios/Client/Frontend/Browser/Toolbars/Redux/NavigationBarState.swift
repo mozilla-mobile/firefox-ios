@@ -40,6 +40,13 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
+    private static let shareAction = ToolbarActionConfiguration(
+        actionType: .share,
+        iconName: StandardImageIdentifiers.Large.share,
+        isEnabled: true,
+        a11yLabel: .TabLocationShareAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   actions: [],
@@ -167,7 +174,6 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Navigation Toolbar Actions
-
     private static func navigationActions(
         action: ToolbarAction,
         navigationBarState: NavigationBarState)
@@ -176,6 +182,9 @@ struct NavigationBarState: StateType, Equatable {
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
+
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
@@ -196,10 +205,20 @@ struct NavigationBarState: StateType, Equatable {
         actions = [
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
-            middleAction,
-            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(showWarningBadge: showWarningBadge)
+            middleAction
         ]
+
+        switch layout {
+        case .version1:
+            actions.append(menuAction(showWarningBadge: showWarningBadge))
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+        case .version2:
+            actions.append(shareAction)
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+        default:
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+            actions.append(menuAction(showWarningBadge: showWarningBadge))
+        }
 
         return actions
     }
