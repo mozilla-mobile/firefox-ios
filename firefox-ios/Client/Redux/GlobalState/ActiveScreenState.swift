@@ -5,7 +5,6 @@
 import Foundation
 import Redux
 import Common
-import ToolbarKit
 
 enum AppScreenState: Equatable {
     case browserViewController(BrowserViewControllerState)
