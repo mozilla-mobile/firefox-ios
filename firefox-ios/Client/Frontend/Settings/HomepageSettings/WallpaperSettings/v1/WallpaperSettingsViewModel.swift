@@ -224,6 +224,9 @@ private extension WallpaperSettingsViewModel {
             // TODO: FXIOS-11486 Move interface for setting wallpaper into Wallpaper middleware
             if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
                 let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
+                // We are passing the wallpaperConfiguration here even though right now it is not being used
+                // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
+                // manager logic to the middlware.
                 let action = WallpaperAction(
                     wallpaperConfiguration: wallpaperConfig,
                     windowUUID: windowUUID,
