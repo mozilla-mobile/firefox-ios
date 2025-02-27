@@ -18,9 +18,9 @@ public class BrowserAddressToolbar: UIView,
                                     UIDragInteractionDelegate {
     private enum UX {
         static let verticalEdgeSpace: CGFloat = 8
-        static let horizontalSpace: CGFloat = 8
-        static let cornerRadius: CGFloat = 8
-        static let dividerWidth: CGFloat = 4
+        static let horizontalSpace: CGFloat = 16
+        static let cornerRadius: CGFloat = 12
+        static let dividerWidth: CGFloat = 0
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 44, height: 44)
@@ -138,17 +138,17 @@ public class BrowserAddressToolbar: UIView,
         addSubview(toolbarTopBorderView)
         addSubview(toolbarBottomBorderView)
 
+        locationContainer.addSubview(navigationActionStack)
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
 
-        toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
         toolbarContainerView.addSubview(browserActionStack)
 
-        leadingLocationContainerConstraint = navigationActionStack.trailingAnchor.constraint(
-            equalTo: locationContainer.leadingAnchor,
-            constant: -UX.horizontalSpace)
+        leadingLocationContainerConstraint = locationContainer.leadingAnchor.constraint(
+            equalTo: toolbarContainerView.leadingAnchor,
+            constant: UX.horizontalSpace)
         leadingLocationContainerConstraint?.isActive = true
 
         leadingBrowserActionConstraint = browserActionStack.leadingAnchor.constraint(
@@ -167,7 +167,7 @@ public class BrowserAddressToolbar: UIView,
         toolbarBottomBorderHeightConstraint?.isActive = true
 
         leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
-            equalTo: toolbarContainerView.leadingAnchor)
+            equalTo: locationContainer.leadingAnchor)
         leadingNavigationActionStackConstraint?.isActive = true
 
         trailingBrowserActionStackConstraint = browserActionStack.trailingAnchor.constraint(
@@ -195,11 +195,12 @@ public class BrowserAddressToolbar: UIView,
 
             navigationActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             navigationActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+            navigationActionStack.trailingAnchor.constraint(equalTo: locationView.leadingAnchor),
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
-            locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
+            locationView.leadingAnchor.constraint(equalTo: navigationActionStack.trailingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             locationView.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
@@ -285,7 +286,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
-        leadingNavigationActionStackConstraint?.constant = leading
+//        leadingNavigationActionStackConstraint?.constant = leading
         trailingBrowserActionStackConstraint?.constant = -trailing
     }
 
@@ -348,10 +349,10 @@ public class BrowserAddressToolbar: UIView,
         let hasBrowserActions = !browserActionStack.arrangedSubviews.isEmpty
         leadingBrowserActionConstraint?.constant = hasBrowserActions ? UX.horizontalSpace : 0
 
-        // Navigation action spacing
-        let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
-        let isRegular = traitCollection.horizontalSizeClass == .regular
-        leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
+//        // Navigation action spacing
+//        let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
+//        let isRegular = traitCollection.horizontalSizeClass == .regular
+//        leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? UX.horizontalSpace : 0
 
         // Page action spacing
         let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
