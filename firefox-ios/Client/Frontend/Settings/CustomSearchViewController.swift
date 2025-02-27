@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Storage
 import SiteImageView
 
 class CustomSearchError: MaybeErrorType {

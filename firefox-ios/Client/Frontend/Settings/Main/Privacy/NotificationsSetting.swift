@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 class NotificationsSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?

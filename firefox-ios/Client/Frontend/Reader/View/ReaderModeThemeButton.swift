@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class ReaderModeThemeButton: UIButton {
     var readerModeTheme: ReaderModeTheme?

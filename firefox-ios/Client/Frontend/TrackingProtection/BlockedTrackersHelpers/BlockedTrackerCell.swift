@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Shared
 
 class BlockedTrackerCell: UITableViewCell,
                           ReusableCell {

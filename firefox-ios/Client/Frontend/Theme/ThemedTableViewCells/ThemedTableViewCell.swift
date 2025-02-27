@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     var viewModel: ThemedTableViewCellViewModel?
