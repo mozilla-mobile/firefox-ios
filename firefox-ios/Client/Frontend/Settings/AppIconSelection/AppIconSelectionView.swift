@@ -8,6 +8,7 @@ import Common
 struct AppIconSelectionView: View, ThemeApplicable {
     private let windowUUID: WindowUUID
     private let logger: Logger
+    private let telemetry: AppIconSelectionTelemetry
 
     struct UX {
         static let listPadding: CGFloat = 20
@@ -23,8 +24,13 @@ struct AppIconSelectionView: View, ThemeApplicable {
     var themeManager
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
-    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+    init(
+        windowUUID: WindowUUID,
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.windowUUID = windowUUID
+        self.telemetry = AppIconSelectionTelemetry(gleanWrapper: gleanWrapper)
         self.logger = logger
     }
 
@@ -72,8 +78,6 @@ struct AppIconSelectionView: View, ThemeApplicable {
     private func setAppIcon(to appIcon: AppIcon) {
         guard UIApplication.shared.supportsAlternateIcons else { return }
 
-        // TODO FXIOS-11473 Add telemetry
-
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
@@ -81,6 +85,8 @@ struct AppIconSelectionView: View, ThemeApplicable {
                 // TODO FXIOS-11474 Handle the error with an alert to the user
                 return
             }
+
+            telemetry.selectedIcon(appIcon: appIcon)
 
             self.currentAppIcon = appIcon
         }
