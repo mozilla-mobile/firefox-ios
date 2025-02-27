@@ -463,7 +463,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     func restoreTabs(_ forced: Bool = false) {
         if isDeeplinkOptimizationRefactorEnabled {
-            // Deeplinks happens before tab restoration, so we should a tab already present in the tabs list
+            // Deeplinks happens before tab restoration, so we should have a tab already present in the tabs list
             // if the application was opened from a deeplink.
             deeplinkTab = tabs.popLast()
         }
@@ -678,9 +678,14 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
         for tabData in filteredTabs {
             let newTab = configureNewTab(with: tabData)
-            guard deeplinkTab == nil else { continue }
-            if windowData.activeTabId == tabData.id {
-                tabToSelect = newTab
+            if isDeeplinkOptimizationRefactorEnabled {
+                if deeplinkTab == nil, windowData.activeTabId == tabData.id {
+                    tabToSelect = newTab
+                }
+            } else {
+                if windowData.activeTabId == tabData.id {
+                    tabToSelect = newTab
+                }
             }
         }
 
@@ -692,15 +697,15 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
-        if isDeeplinkOptimizationRefactorEnabled {
-            if let deeplinkTab, deeplinkTab.url?.absoluteString == tabData.siteUrl {
-                newTab = deeplinkTab
-                let data = tabSessionStore.fetchTabSession(tabID: tabData.id)
-                newTab.webView?.interactionState = data
-                tabs.append(newTab)
-            } else {
-                newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-            }
+        if isDeeplinkOptimizationRefactorEnabled,
+           let deeplinkTab,
+           deeplinkTab.url?.absoluteString == tabData.siteUrl {
+            // if the deeplink tab has the same url of a tab data then use the deeplink tab for the restore
+            // in order to prevent a duplicate tab
+            newTab = deeplinkTab
+            let data = tabSessionStore.fetchTabSession(tabID: tabData.id)
+            newTab.webView?.interactionState = data
+            tabs.append(newTab)
         } else {
             newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
         }
@@ -731,17 +736,17 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
-        if isDeeplinkOptimizationRefactorEnabled {
-            if let deeplinkTab {
-                if let index = tabs.firstIndex(of: deeplinkTab) {
-                    selectedIndex = index
-                } else {
-                    tabs.append(deeplinkTab)
-                    selectedIndex = tabs.count - 1
-                }
-                self.deeplinkTab = nil
-                return
+        if isDeeplinkOptimizationRefactorEnabled, let deeplinkTab {
+            if let index = tabs.firstIndex(of: deeplinkTab) {
+                selectedIndex = index
+            } else {
+                // the deeplink tab has already been selected via `selectTab` before tab restoration so
+                // it just need to be appended to the tabs array
+                tabs.append(deeplinkTab)
+                selectedIndex = tabs.count - 1
             }
+            self.deeplinkTab = nil
+            return
         }
         if let tabToSelect {
             selectTab(tabToSelect)
