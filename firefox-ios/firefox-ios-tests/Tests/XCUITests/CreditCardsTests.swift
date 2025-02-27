@@ -193,7 +193,7 @@ class CreditCardsTests: BaseTestCase {
         // Enable the "Save and Fill Payment Methods" toggle
         app.switches.element(boundBy: 1).waitAndTap()
         XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as? String, "1")
-        app.buttons["Settings"].waitAndTap()
+        app.buttons["Back"].waitAndTap()
         navigator.nowAt(SettingsScreen)
         app.buttons["Done"].waitAndTap()
         cardNumber.waitAndTap()

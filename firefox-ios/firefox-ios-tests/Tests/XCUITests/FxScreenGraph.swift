@@ -599,7 +599,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title], to: AutofillPasswordSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
         screenState.tap(
@@ -1076,6 +1075,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(AutofillPasswordSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
         
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Address.title], to: AddressesSettings)
         

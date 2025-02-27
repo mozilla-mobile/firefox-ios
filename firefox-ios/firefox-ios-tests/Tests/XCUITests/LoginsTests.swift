@@ -94,7 +94,7 @@ class LoginTest: BaseTestCase {
         openLoginsSettingsFromBrowserTab()
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         // Save a login and check that it appears on the list from BrowserTabMenu
-        app.buttons["Settings"].waitAndTap()
+        app.buttons["Back"].waitAndTap()
         navigator.nowAt(SettingsScreen)
         waitForExistence(app.buttons["Done"])
         app.buttons["Done"].waitAndTap()
