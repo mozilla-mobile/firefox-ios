@@ -22,9 +22,9 @@ public enum AppEvent: AppEventType {
     case accountManagerInitialized
     case browserIsReady
 
-    // Events: Open URL startup time record
-    case recordStartupTimeOpenURLComplete
-    case recordStartupTimeOpenURLCancelled
+    // Events: Open Deeplink startup time record
+    case recordStartupTimeOpenDeeplinkComplete
+    case recordStartupTimeOpenDeeplinkCancelled
 
     // Activities: Profile Syncing
     case profileSyncing

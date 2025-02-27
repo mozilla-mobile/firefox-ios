@@ -242,6 +242,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
 
+    var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -755,6 +759,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
+        enqueueTabRestoration()
 
         Task(priority: .background) {
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
@@ -1000,11 +1005,32 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
+    private func enqueueTabRestoration() {
+        guard isDeeplinkOptimizationRefactorEnabled else { return }
+        // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
+        // has ended. If there is no deeplink then restore when the startup time record cancellation has been
+        // signaled.
+
+        // Enqueues the actions only if the opposite action where not signaled, this happen when the app
+        // handles a deeplink when was already opened
+        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        tabManager.restoreTabs()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            tabManager.restoreTabs()
+        }
 
         switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
@@ -1030,7 +1056,9 @@ class BrowserViewController: UIViewController,
 
         prepareURLOnboardingContextualHint()
 
-        browserDelegate?.browserHasLoaded()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            browserDelegate?.browserHasLoaded()
+        }
         AppEventQueue.signal(event: .browserIsReady)
     }
 
@@ -2610,33 +2638,26 @@ class BrowserViewController: UIViewController,
         } else if let legacyUrlBar {
             urlBar(legacyUrlBar, didSubmitText: query)
         }
-        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
                 isPrivate: isPrivate
             )
-            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
