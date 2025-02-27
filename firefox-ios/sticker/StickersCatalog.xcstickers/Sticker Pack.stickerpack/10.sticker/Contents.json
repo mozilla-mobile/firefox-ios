@@ -4,7 +4,7 @@
     "version" : 1
   },
   "properties" : {
-    "accessibility-label" : "Hot dog",
+    "accessibility-label" : "",
     "filename" : "10.png"
   }
 }
