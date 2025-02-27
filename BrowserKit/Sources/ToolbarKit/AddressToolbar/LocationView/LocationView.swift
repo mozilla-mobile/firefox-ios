@@ -163,7 +163,6 @@ final class LocationView: UIView,
     }
 
     private func setupLayout() {
-
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
