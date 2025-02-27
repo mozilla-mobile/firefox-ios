@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Storage
 
 class EmbeddedNavController {
     weak var parent: UIViewController?

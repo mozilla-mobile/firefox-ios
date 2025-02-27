@@ -5,7 +5,6 @@
 import Foundation
 import Redux
 import Common
-import Shared
 
 final class TrackingProtectionMiddleware {
     private let telemetryWrapper = TrackingProtectionTelemetry()

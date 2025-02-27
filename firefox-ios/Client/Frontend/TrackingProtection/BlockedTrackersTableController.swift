@@ -5,7 +5,6 @@
 import Foundation
 import Common
 import Shared
-import SiteImageView
 import ComponentLibrary
 
 struct BlockedTrackerItem: Hashable {

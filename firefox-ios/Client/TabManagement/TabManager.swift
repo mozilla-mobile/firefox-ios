@@ -5,8 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Storage
-import Shared
 
 enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"

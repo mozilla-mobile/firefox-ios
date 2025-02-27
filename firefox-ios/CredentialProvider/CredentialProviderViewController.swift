@@ -7,7 +7,6 @@ import LocalAuthentication
 
 import Shared
 import Storage
-import Sync
 
 protocol CredentialProviderViewProtocol: AnyObject {
     var extensionContext: ASCredentialProviderExtensionContext { get }

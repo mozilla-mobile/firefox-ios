@@ -4,8 +4,6 @@
 
 import Foundation
 import Redux
-import Shared
-import Common
 
 final class TrackingProtectionAction: Action { }
 
