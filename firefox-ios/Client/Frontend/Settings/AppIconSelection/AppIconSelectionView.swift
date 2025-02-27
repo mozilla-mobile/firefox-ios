@@ -78,6 +78,9 @@ struct AppIconSelectionView: View, ThemeApplicable {
     private func setAppIcon(to appIcon: AppIcon) {
         guard UIApplication.shared.supportsAlternateIcons else { return }
 
+        // Don't reselect the current icon
+        guard appIcon != currentAppIcon else { return }
+
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
