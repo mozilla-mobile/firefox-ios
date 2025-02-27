@@ -14,7 +14,8 @@ final class LocationView: UIView,
     private enum UX {
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
-        static let iconContainerCornerRadius: CGFloat = 8
+        static let iconContainerCornerRadius: CGFloat = 12
+        static let iconContainerSearchEngineLeadingSpace: CGFloat = 0
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
@@ -162,6 +163,7 @@ final class LocationView: UIView,
     }
 
     private func setupLayout() {
+
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
@@ -287,7 +289,7 @@ final class LocationView: UIView,
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
-        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
+        iconContainerStackViewLeadingConstraint?.constant = UX.iconContainerSearchEngineLeadingSpace
         updateGradient()
     }
 

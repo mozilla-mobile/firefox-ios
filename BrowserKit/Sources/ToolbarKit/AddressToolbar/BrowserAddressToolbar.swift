@@ -200,9 +200,10 @@ public class BrowserAddressToolbar: UIView,
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
-            locationView.leadingAnchor.constraint(equalTo: navigationActionStack.trailingAnchor),
+            locationView.leadingAnchor.constraint(greaterThanOrEqualTo: navigationActionStack.trailingAnchor),
+            locationView.centerXAnchor.constraint(equalTo: centerXAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
-            locationView.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
+            locationView.trailingAnchor.constraint(lessThanOrEqualTo: locationDividerView.leadingAnchor),
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             locationDividerView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
