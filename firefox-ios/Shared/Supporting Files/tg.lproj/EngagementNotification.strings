@@ -1,0 +1,15 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Чизе муҳимро дар атрофи худ пайдо кунед. Ё чизе шавқоварро пайдо кунед.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Ҷустуҷӯи аввалини худро оғоз кунед";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Тамошобинӣ дар Интернет бе пайгирӣ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Сомонаҳоро бе ягон куки ё таърихи нигоҳдошташуда дар «%@» тамошо кунед.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Тамошобинии хусусиро озмоед";
+

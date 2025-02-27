@@ -1,0 +1,87 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Шумо мутмаин ҳастед?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Бекор кардан";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Пок кардани ҷустуҷӯ";
+
+/* Copy password text selection menu item */
+"Copy" = "Нусха бардоштан";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Санаи %@ эҷод карда шуд";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Нест кардан";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Бекор кардан";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Тоза кардан";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Шумо ин амалро бекор карда наметавонед.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ин амал ниҳонвожаро аз ҳамаи дастгоҳҳои ҳамоҳангшудаи шумо тоза мекунад.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Ниҳонвожаро тоза мекунед?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Бекор кардани тамоми интихоб";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Ворид шудан ба «Реҷаи ҷустуҷӯ»";
+
+/* Hide password text selection menu item */
+"Hide" = "Пинҳон кардан";
+
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "Ниҳонвожа тоза карда шуд";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Воридшавиҳо бебозгашт нест карда мешаванд.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Воридшавиҳо аз ҳамаи дастгоҳҳои пайвастшуда тоза карда мешаванд.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Санаи %@ тағйир дода шуд";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Ягон воридшавӣ ёфт нашуд";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Ягон ниҳонвожа ёфт нашуд";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Кушоед ва пур намоед";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Ниҳонвожа";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Нишон додан";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Ҷустуҷӯ";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Сатри дархости ҷустуҷӯ";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Ҷустуҷӯ";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Ҳамаро интихоб кардан";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Номи корбар";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Сомона";
+

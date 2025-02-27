@@ -157,3 +157,6 @@
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "സാങ്കേതിയും ഇടപാടുനീയ ദത്ത അയയ്ക്കുക";
 
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "ഉപയോഗനിബന്ധനകള്‍";
+

@@ -10,6 +10,33 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Apakah ulasan ini dapat diandalkan? Periksa sekarang untuk melihat peringkat yang disesuaikan.";
 
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "Yang lain lagi untuk dipertimbangkan";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Berdasarkan ulasan yang andal";
+
+/* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
+"Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ dari 5 bintang";
+
+/* Title of the adjusted rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Title.v120" = "Peringkat yang disesuaikan";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "Paham";
+
+/* Title of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Title.v120" = "Analisis Sudah Mutakhir";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Competitiveness.Title.v120" = "Daya Saing";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "Tampilkan Lebih Sedikit";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "Tampilkan Lebih Banyak";
+
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
 "Shopping.HighlightsCard.Packaging.Title.v120" = "Pengemasan";
 
@@ -69,4 +96,37 @@
 
 /* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Memeriksa kualitas tinjauan (%@)";
+
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Kami akan memiliki info tentang ulasan produk ini dalam waktu 24 jam. Silakan periksa kembali.";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "Jangan sekarang";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Ketentuan penggunaan %@";
+
+/* Title of the reliability card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityCardTitle.v120" = "Seberapa andalkah ulasan ini?";
+
+/* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "Campuran ulasan yang dapat diandalkan dan tidak dapat diandalkan";
+
+/* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Ulasan yang tidak dapat diandalkan";
+
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*Peringkat yang disesuaikan* hanya didasarkan pada ulasan yang kami yakini dapat diandalkan.";
+
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Mati";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Nyala";
+
+/* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Matikan Pemeriksa Ulasan";
+
+/* Beta label for the header of the Shopping Experience (Fakespot) sheet */
+"Shopping.Sheet.Beta.Title.v120" = "BETA";
 

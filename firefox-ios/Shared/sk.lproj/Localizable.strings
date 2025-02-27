@@ -290,7 +290,7 @@
 "DownloadsPanel.Delete.Title" = "Odstrániť";
 
 /* Title for the Downloads Panel empty state. */
-"DownloadsPanel.EmptyState.Title" = "Stiahnuté súbory sa objavia tu.";
+"DownloadsPanel.EmptyState.Title" = "Tu sa zobrazia stiahnuté súbory.";
 
 /* Action button for sharing downloaded files in the Downloads panel. */
 "DownloadsPanel.Share.Title" = "Zdieľať";
@@ -842,7 +842,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Tieto cookies slúžia na vaše sledovanie naprieč webovými stránkami a na zber údajov o tom, čo na internete robíte. Používajú ich tretie strany, ako sú reklamné či analytické spoločnosti.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Ťažba kryptomien používa výpočtový výkon vášho počítača na získavanie digitálnych mien. Bežiace skripty vybíjajú vašu batériu, spomaľujú váš počítač a zvyšujú váš účet za elektrinu.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Ťažba kryptomien používa výpočtový výkon vášho zariadenia na získavanie digitálnych mien. Bežiace skripty vybíjajú vašu batériu, spomaľujú zariadenie a zvyšujú váš účet za elektrinu.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Každý používateľ môže mať odlišné nastavenie prehliadača a počítača. Zberom údajov o nastaveniach možno vytvoriť unikátny odtlačok, ktorý potom môže slúžiť na vaše sledovanie.";
@@ -1007,7 +1007,7 @@
 "ScanQRCode.View.Title" = "Skenovanie QR kódu";
 
 /* Open search section of settings */
-"Search" = "Hľadať";
+"Search" = "Vyhľadávanie";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Zadajte vyhľadávanie alebo adresu";
@@ -1139,10 +1139,10 @@
 "Settings.AddCustomEngine.TitlePlaceholder" = "Vyhľadávací modul";
 
 /* The title for URL Field */
-"Settings.AddCustomEngine.URLLabel" = "URL";
+"Settings.AddCustomEngine.URLLabel" = "Adresa URL";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (nahraďte s %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "Adresa URL (hľadaný text nahraďte znakmi %s)";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blokovať otváranie externých aplikácií";
@@ -1370,10 +1370,10 @@
 "Settings.LoginsAndPasswordsTitle" = "Prihlasovacie mená a heslá";
 
 /* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "Vlastná URL";
+"Settings.NewTab.CustomURL" = "Vlastná adresa URL";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Zobraziť prázdnu stránku";
+"Settings.NewTab.Option.BlankPage" = "Prázdna stránka";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.Custom" = "Vlastná";
@@ -1451,7 +1451,7 @@
 "Settings.ShowLinkPreviews.StatusV2" = "Pri dlhom stlačení odkazu";
 
 /* Title of setting to enable link previews when long-pressing links. */
-"Settings.ShowLinkPreviews.Title" = "Zobraziť náhľad odkazu";
+"Settings.ShowLinkPreviews.Title" = "Zobrazovať náhľady odkazov";
 
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "Zobraziť v ponuke aplikácie";
