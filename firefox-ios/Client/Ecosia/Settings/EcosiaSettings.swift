@@ -69,7 +69,7 @@ final class SafeSearchSettings: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(FilterController(windowUUID: windowUUID), animated: true)
+        navigationController?.pushViewController(FilterController(style: .insetGrouped, windowUUID: windowUUID), animated: true)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {

@@ -11,30 +11,12 @@ private let items: [(AdultFilter, String)] = [
     (.moderate, .localized(.moderate)),
     (.off, .localized(.off))]
 
-// TODO: Can we use ThemedTableViewController?
-final class FilterController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
-    private weak var table: UITableView!
+final class FilterController: ThemedTableViewController {
 
     private let identifier = "filter"
     static var current: String? {
         items.first(where: { $0.0 == User.shared.adultFilter }).map { $0.1 }
     }
-
-    required init?(coder: NSCoder) { nil }
-    init(windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
-        super.init()
-    }
-
-    // MARK: - Themeable Properties
-
-    let windowUUID: WindowUUID?
-    var currentWindowUUID: Common.WindowUUID? { return windowUUID }
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - View Life Cycle
 
@@ -44,49 +26,44 @@ final class FilterController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.title = .localized(.safeSearch)
         navigationItem.largeTitleDisplayMode = .never
 
-        let table = UITableView(frame: .zero, style: .insetGrouped)
-        table.translatesAutoresizingMaskIntoConstraints = false
-        table.delegate = self
-        table.dataSource = self
-        table.tableFooterView = .init()
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    }
 
-        view.addSubview(table)
-        self.table = table
-
-        table.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        table.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        table.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        table.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         applyTheme()
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         items.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt: IndexPath) -> UITableViewCell {
-        let cell = table.dequeueReusableCell(withIdentifier: identifier) ?? ThemedTableViewCell(style: .default, reuseIdentifier: identifier)
+    override func tableView(_ tableView: UITableView, cellForRowAt: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier) ?? ThemedTableViewCell(style: .default, reuseIdentifier: identifier)
         cell.textLabel!.text = items[cellForRowAt.row].1
         cell.accessoryType = User.shared.adultFilter == items[cellForRowAt.row].0 ? .checkmark : .none
         return cell
     }
 
-    func tableView(_: UITableView, didSelectRowAt: IndexPath) {
+    override func tableView(_: UITableView, didSelectRowAt: IndexPath) {
         User.shared.adultFilter = items[didSelectRowAt.row].0
-        table.reloadData()
+        tableView.reloadData()
     }
 
-    func applyTheme() {
+    override func applyTheme() {
+        super.applyTheme()
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        table.visibleCells.forEach {
+        tableView.visibleCells.forEach {
             ($0 as? Themeable)?.applyTheme()
             ($0 as? ThemeApplicable)?.applyTheme(theme: theme)
         }
 
         view.backgroundColor = theme.colors.ecosia.ntpBackground
-        table.tintColor = theme.colors.ecosia.brandPrimary
-        table.separatorColor = theme.colors.ecosia.borderDecorative
-        table.backgroundColor = theme.colors.ecosia.ntpBackground
+        tableView.tintColor = theme.colors.ecosia.brandPrimary
+        tableView.separatorColor = theme.colors.ecosia.borderDecorative
+        tableView.backgroundColor = theme.colors.ecosia.ntpBackground
     }
 }
