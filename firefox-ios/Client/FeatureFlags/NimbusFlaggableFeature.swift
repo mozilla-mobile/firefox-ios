@@ -61,7 +61,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appIconSelection,
+        case    .tabTrayUIExperiments,
+                .appIconSelection,
                 .bookmarksRefactor,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
