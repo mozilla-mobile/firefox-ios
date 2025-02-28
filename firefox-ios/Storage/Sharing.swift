@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
 
 // A small structure to encapsulate all the possible data that we can get
 // from an application sharing a web page or a URL.

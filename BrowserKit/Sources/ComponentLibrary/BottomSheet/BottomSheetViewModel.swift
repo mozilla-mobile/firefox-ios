@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import Common
 
 /// The view model used to configure a `BottomSheetViewController`
 public struct BottomSheetViewModel {

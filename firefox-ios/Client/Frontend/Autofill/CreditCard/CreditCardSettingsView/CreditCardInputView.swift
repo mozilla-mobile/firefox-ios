@@ -4,9 +4,7 @@
 
 import Common
 import Foundation
-import Storage
 import SwiftUI
-import Shared
 
 import struct MozillaAppServices.CreditCard
 

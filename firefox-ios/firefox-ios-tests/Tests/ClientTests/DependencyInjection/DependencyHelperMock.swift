@@ -3,9 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Shared
 import Storage
-import TabDataStore
 @testable import Client
 
 class DependencyHelperMock {

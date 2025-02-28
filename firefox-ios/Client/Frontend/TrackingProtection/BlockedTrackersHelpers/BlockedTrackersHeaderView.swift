@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Shared
 
 class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
                                  ReusableCell {

@@ -4,7 +4,6 @@
 
 import Common
 import SwiftUI
-import Shared
 
 // MARK: - AddressAutofillToggle
 

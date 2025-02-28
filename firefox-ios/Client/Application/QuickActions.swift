@@ -4,8 +4,6 @@
 
 import Foundation
 import Common
-import Storage
-import Shared
 
 // MARK: - ShortcutType
 enum ShortcutType: String {

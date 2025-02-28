@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 /// Custom UIBarButtonItem with an autofill accessory view.
 ///

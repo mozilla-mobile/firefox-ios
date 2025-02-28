@@ -5,7 +5,6 @@
 import Common
 import ComponentLibrary
 import Foundation
-import Shared
 
 /// The ``OnboardingCardDelegate`` is responsible for handling a variety of
 /// functions relating to onboarding actions taken by the user that are

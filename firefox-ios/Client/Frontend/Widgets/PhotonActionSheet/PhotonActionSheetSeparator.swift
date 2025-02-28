@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 // MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {

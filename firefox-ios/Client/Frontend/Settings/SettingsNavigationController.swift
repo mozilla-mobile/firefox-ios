@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 class ThemedNavigationController: DismissableNavigationViewController, Themeable {
     var themeManager: ThemeManager

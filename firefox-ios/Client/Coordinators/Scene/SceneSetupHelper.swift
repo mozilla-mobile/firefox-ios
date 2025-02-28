@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class BrowserWindow: UIWindow {
     let uuid: WindowUUID

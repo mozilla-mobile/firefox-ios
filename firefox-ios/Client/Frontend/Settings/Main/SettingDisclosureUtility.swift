@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 struct SettingDisclosureUtility {
     static func buildDisclosureIndicator(theme: Theme) -> UIImageView {

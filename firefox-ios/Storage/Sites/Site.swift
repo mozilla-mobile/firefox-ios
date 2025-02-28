@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
 import SiteImageView
 
 public struct Site: Identifiable, Hashable, Equatable, Codable, CustomStringConvertible, CustomDebugStringConvertible {

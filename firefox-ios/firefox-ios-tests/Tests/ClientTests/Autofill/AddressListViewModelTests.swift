@@ -4,7 +4,6 @@
 
 import Combine
 import MozillaAppServices
-import Storage
 import XCTest
 import Common
 

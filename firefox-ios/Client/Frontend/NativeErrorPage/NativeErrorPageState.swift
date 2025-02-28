@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
-import Shared
 import Common
 
 struct NativeErrorPageState: ScreenState, Equatable {

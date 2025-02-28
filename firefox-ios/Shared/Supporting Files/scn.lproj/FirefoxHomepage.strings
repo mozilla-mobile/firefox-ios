@@ -1,5 +1,5 @@
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
-"FirefoxHomepage.FeltDeletion.Link.v122" = "Cancillasti i dati dâ navicazzioni privata";
+"FirefoxHomepage.FeltDeletion.Link.v122" = "Scancillasti i dati dâ navicazzioni privata";
 
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
 "FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ scancella i to viscotta, a crunuluggìa e i dati dî siti quannu chiuji tutti i schedi privati.";

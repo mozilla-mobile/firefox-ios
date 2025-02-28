@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
