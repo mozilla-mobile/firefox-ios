@@ -159,6 +159,3 @@ nimbus:
   notification_emails:
     - chumphreys@mozilla.com
     - project-nimbus@mozilla.com
-  metadata:
-    follows_collection_enabled: false
-    include_info_sections: false

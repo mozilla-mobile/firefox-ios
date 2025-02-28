@@ -126,7 +126,6 @@ class RecordedNimbusContext: RecordedContext {
             daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
         )
 
-        GleanMetrics.Pings.shared.nimbus.setEnabled(enabled: true)
         GleanMetrics.NimbusSystem.recordedNimbusContext.set(
             GleanMetrics.NimbusSystem.RecordedNimbusContextObject(
                 isFirstRun: isFirstRun,
