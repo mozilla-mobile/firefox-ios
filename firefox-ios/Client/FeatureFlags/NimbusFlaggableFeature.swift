@@ -45,6 +45,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case ratingPromptFeature
     case reduxSearchSettings
     case reportSiteIssue
+    case searchEngineConsolidation
     case searchHighlights
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
@@ -146,6 +147,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
+                .searchEngineConsolidation,
                 .searchHighlights,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
