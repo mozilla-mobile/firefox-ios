@@ -15,6 +15,7 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
     }
 
     enum TabItem: Hashable {
+        case inactiveTabHeader
         case inactiveTab(InactiveTabsModel)
         case tab(TabModel)
     }
@@ -35,4 +36,10 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
 
         apply(snapshot, animatingDifferences: true)
     }
+}
+
+struct InactiveTabHeaderModel: Hashable {
+    var id: String
+    let title: String
+    var state: ExpandButtonState?
 }
