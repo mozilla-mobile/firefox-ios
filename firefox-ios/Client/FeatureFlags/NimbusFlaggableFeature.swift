@@ -72,6 +72,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
