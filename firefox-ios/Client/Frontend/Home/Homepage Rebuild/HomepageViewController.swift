@@ -48,6 +48,7 @@ final class HomepageViewController: UIViewController,
 
     private let jumpBackInContextualHintViewController: ContextualHintViewController
     private let syncTabContextualHintViewController: ContextualHintViewController
+    // TODO: FXIOS-11504: Move this to state + add comments on what this is + why we use it
     private let isZeroSearch: Bool
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
