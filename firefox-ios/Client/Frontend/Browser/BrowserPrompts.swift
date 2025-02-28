@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import WebKit
-import Shared
 
 @objc
 protocol JSPromptAlertControllerDelegate: AnyObject {

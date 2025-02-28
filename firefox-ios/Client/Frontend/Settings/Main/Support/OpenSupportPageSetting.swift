@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 /// Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {

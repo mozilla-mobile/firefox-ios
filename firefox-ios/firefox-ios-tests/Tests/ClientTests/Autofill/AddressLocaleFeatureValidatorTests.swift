@@ -4,7 +4,6 @@
 
 import Foundation
 import XCTest
-import Common
 
 @testable import Client
 

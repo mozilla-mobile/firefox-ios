@@ -5,7 +5,6 @@
 import Foundation
 import Common
 import Shared
-import Storage
 
 protocol HistoryCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func showRecentlyClosedTab()

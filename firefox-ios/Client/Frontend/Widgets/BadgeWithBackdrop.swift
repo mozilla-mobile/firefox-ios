@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
 class BadgeWithBackdrop: ThemeApplicable {

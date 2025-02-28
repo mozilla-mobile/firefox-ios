@@ -5,7 +5,6 @@
 import Shared
 import Glean
 import Common
-import ComponentLibrary
 
 import enum MozillaAppServices.VisitType
 

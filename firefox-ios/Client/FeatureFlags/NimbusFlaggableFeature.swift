@@ -18,6 +18,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case darkReader
+    case deeplinkOptimizationRefactor
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -71,6 +72,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
@@ -121,6 +123,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .darkReader,
+                .deeplinkOptimizationRefactor,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,

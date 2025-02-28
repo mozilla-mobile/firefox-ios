@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 import Redux
 import SwiftUI
 
@@ -147,7 +146,8 @@ class SettingsCoordinator: BaseCoordinator,
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
                     tabManager: tabManager,
-                    theme: themeManager.getCurrentTheme(for: windowUUID)
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    windowUUID: windowUUID
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
                 wallpaperVC.settingsDelegate = self
@@ -325,7 +325,7 @@ class SettingsCoordinator: BaseCoordinator,
                 windowUUID: windowUUID
             )
         )
-        viewController.title = "App Icon" // TODO FXIOS-11471 strings
+        viewController.title = .Settings.AppIconSelection.ScreenTitle
         router.push(viewController)
     }
 

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import SiteImageView
 
 public struct PinnedSiteInfo: Equatable, Codable, Hashable {
     public let isGooglePinnedTile: Bool // Used for telemetry
