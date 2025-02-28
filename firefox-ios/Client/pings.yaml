@@ -150,7 +150,7 @@ usage-deletion-request:
 nimbus:
   description: |
     This ping is submitted by Nimbus code after the enrollment workflow has completed.
-  include_client_id: false
+  include_client_id: true
   send_if_empty: true
   bugs:
     - https://mozilla-hub.atlassian.net/browse/EXP-5154
