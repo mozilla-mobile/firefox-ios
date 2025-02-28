@@ -155,7 +155,7 @@ class TabDisplayView: UIView,
 
             switch sectionItem {
             case .inactiveTabHeader(let inactiveTabHeader)
-                guard let cell = collectionView.dequeueReusableCell(
+                return UICollectionViewCell()
             case .inactiveTab(let inactiveTab):
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: InactiveTabsCell.cellIdentifier,
