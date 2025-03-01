@@ -53,26 +53,16 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { context in
+            let context: ActivityViewContext<DownloadLiveActivityAttributes>
             // Using Rectangle instead of EmptyView because the hitbox
             // of the empty view is too small (likely non existent),
             // meaning we'd never be redirected to the downloads panel
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        } dynamicIsland: { _ in
+        } dynamicIsland: { context in
             DynamicIsland {
-                DynamicIslandExpandedRegion(.center) {
-                    EmptyView()
-                }
-                DynamicIslandExpandedRegion(.bottom) {
-                    EmptyView()
-                }
-                DynamicIslandExpandedRegion(.leading) {
-                    EmptyView()
-                }
-                DynamicIslandExpandedRegion(.trailing) {
-                    EmptyView()
-                }
+                expandedContent(context: context)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
@@ -82,4 +72,48 @@ struct DownloadLiveActivity: Widget {
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
     }
+}
+
+
+
+@available(iOSApplicationExtension 16.1, *)
+@DynamicIslandExpandedContentBuilder
+private func expandedContent(context: ActivityViewContext<DownloadLiveActivityAttributes>) -> DynamicIslandExpandedContent<some View> {
+        DynamicIslandExpandedRegion(.leading) {
+            Image("./Assets/faviconFox")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+        }
+        
+        DynamicIslandExpandedRegion(.trailing) {
+            ZStack {
+                // Progress Circle
+                Circle()
+                    .stroke(Color.textOnDark.opacity(0.5), lineWidth: 6)
+                    .frame(width: 44, height: 44)
+                        
+                // Progress Indicator
+                Circle()
+                    .trim(from: CGFloat(context.state.totalBytesDownloaded), to: CGFloat(context.state.totalBytesExpected))
+                    .stroke(Color.textOnDark, lineWidth: 6)
+                    .frame(width: 44, height: 44)
+                    .rotationEffect(Angle(degrees: 270))
+                
+                // Stop Button
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: 24, height: 24)
+                    .overlay(
+                        Rectangle()
+                            .fill(Color.textOnDark)
+                            .frame(width: 12, height: 12)
+                    )
+            }
+        }
+        
+        DynamicIslandExpandedRegion(.bottom) {
+            Text("Downloading ...").font(.system(size: 17, weight: .bold))
+            Text("\(context.state.totalBytesDownloaded) of \(context.state.totalBytesExpected)").font(.system(size: 15))
+        }
+    
 }
