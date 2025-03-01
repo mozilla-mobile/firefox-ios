@@ -5,7 +5,7 @@
 import Kingfisher
 import UIKit
 
-/// Caches images for specific `SiteImageType`s. 
+/// Caches images for specific `SiteImageType`s.
 /// - Note: Different `SiteImageType`s will return different images. The type is appended to the cache key.
 protocol SiteImageCache {
     /// Retrieves an image from the cache depending on the type.

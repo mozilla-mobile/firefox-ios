@@ -83,7 +83,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
                 faviconImageModel.siteResource = .remoteURL(url: faviconURL)
             }
 
-            // If this resource is in the bundle (as with Home screen SuggestedSites), cache its associated URL. 
+            // If this resource is in the bundle (as with Home screen SuggestedSites), cache its associated URL.
             // - Note:  This is a small optimization for when a SuggestedSite is actually visited and/or bookmarked by a user
             //           and the `SiteImageModel` isn't generated from a Home tile `Site` type.
             if case let .bundleAsset(_, resourceURL) = faviconImageModel.siteResource {

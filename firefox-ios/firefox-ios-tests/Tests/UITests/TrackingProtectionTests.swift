@@ -42,7 +42,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         register(self, forTabEvents: .didChangeContentBlocking)
     }
-    
+
     func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
         tester().waitForAnimationsToFinish(withTimeout: 3)
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
@@ -58,7 +58,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         tester().tapView(withAccessibilityLabel: "OK")
         }
 
-    
+
     func tabDidChangeContentBlocking(_ tab: Tab) {
         stats = tab.contentBlocker!.stats
 

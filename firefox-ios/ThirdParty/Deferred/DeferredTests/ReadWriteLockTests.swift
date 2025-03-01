@@ -58,7 +58,7 @@ class ReadWriteLockTests: XCTestCase {
 
         queue = dispatch_queue_create("ReadWriteLockTests", DISPATCH_QUEUE_CONCURRENT)
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
@@ -147,7 +147,7 @@ class ReadWriteLockTests: XCTestCase {
             for i in 32 ..< 64 {
                 startReader(i)
             }
-            
+
             waitForExpectationsWithTimeout(5, handler: nil)
         }
     }

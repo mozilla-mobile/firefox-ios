@@ -427,7 +427,7 @@ class LegacyHomepageViewController:
     @objc
     private func dismissKeyboard() {
         /* homepage and error page, both are "internal" url, making
-           topsites on homepage inaccessible from error page 
+           topsites on homepage inaccessible from error page
            when address bar is selected hence using "about/home".
         */
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(AboutHomeHandler.path)") ?? false {

@@ -21,7 +21,7 @@ class ProfileTest: XCTestCase {
         super.setUp()
         continueAfterFailure = false
 
-        // Setup mock profile 
+        // Setup mock profile
         profile = MockProfile(databasePrefix: "profile-test")
     }
 

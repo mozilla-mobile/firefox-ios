@@ -16,15 +16,15 @@ protocol TopSitesManagerInterface {
     func fetchSponsoredSites() async -> [Site]
 
     /// Returns a list of top sites used to show the user
-    /// 
+    ///
     /// Top sites are composed of pinned sites, history, sponsored tiles and google top site.
     /// In terms of space, pinned tiles has precedence over the Google tile,
     /// which has precedence over sponsored and frecency tiles.
-    /// 
+    ///
     /// From a user perspective, Google top site is always first (from left to right),
     /// then comes the sponsored tiles, pinned sites and then frecency top sites.
     /// We only add Google or sponsored tiles if number of pinned tiles doesn't exceed the available number shown of tiles.
-    /// 
+    ///
     /// - Parameters:
     ///   - otherSites: Contains the user's pinned sites, history, and default suggested sites.
     ///   - sponsoredSites: Contains the sponsored sites.

@@ -13,7 +13,7 @@ protocol Coordinator: AnyObject {
 
     /// Determines whether this coordinator can be dismissed or not, in some cases the coordinator
     /// cannot be dismissed for example due to state saving.
-    /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while 
+    /// This isn't ideal for this pattern, but was deemed necessary to keep existing behavior while
     /// moving away from previous pattern. By default, all coordinators should be dismissable.
     var isDismissable: Bool { get }
 

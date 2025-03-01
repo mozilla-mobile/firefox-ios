@@ -46,7 +46,7 @@ class WKSecurityOriginMock: WKSecurityOrigin {
     var overridenPort: Int!
 
     class func new(_ url: URL?) -> WKSecurityOriginMock {
-        // Dynamically allocate a WKSecurityOriginMock instance because 
+        // Dynamically allocate a WKSecurityOriginMock instance because
         // the initializer for WKSecurityOrigin is unavailable
         //  https://github.com/WebKit/WebKit/blob/52222cf447b7215dd9bcddee659884f704001827/Source/WebKit/UIProcess/API/Cocoa/WKSecurityOrigin.h#L40
         guard let instance = self.perform(NSSelectorFromString("alloc"))?.takeUnretainedValue()

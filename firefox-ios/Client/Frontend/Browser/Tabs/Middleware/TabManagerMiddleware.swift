@@ -224,7 +224,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
     /// normalTabsCountText and if syncAccount is enabled
-    /// 
+    ///
     /// - Parameter panelType: The selected panelType
     /// - Returns: Initial state of TabTrayModel
     private func getTabTrayModel(for panelType: TabTrayPanelType, window: WindowUUID) -> TabTrayModel {
