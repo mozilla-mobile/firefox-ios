@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
-
-@testable import Client
+import Foundation
 
 /// A mock Store used to test redux middlewares.
 ///

@@ -3,9 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
-import Shared
 import Common
-import ComponentLibrary
 
 struct AddressAutoFillBottomSheetView: View {
     let windowUUID: WindowUUID

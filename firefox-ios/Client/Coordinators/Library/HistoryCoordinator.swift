@@ -5,13 +5,9 @@
 import Foundation
 import Common
 import Shared
-import Storage
 
 protocol HistoryCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func showRecentlyClosedTab()
-
-    /// Shows table view controller with searched sites grouped.
-    func showSearchGroupedItems(_ items: ASGroup<Site>)
 }
 
 class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
@@ -61,16 +57,6 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         controller.libraryPanelDelegate = parentCoordinator
         controller.recentlyClosedTabsDelegate = parentCoordinator
         router.push(controller)
-    }
-
-    func showSearchGroupedItems(_ items: ASGroup<Site>) {
-        let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: items, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel,
-                                                             profile: profile,
-                                                             windowUUID: windowUUID)
-        asGroupListVC.libraryPanelDelegate = parentCoordinator
-        asGroupListVC.title = items.displayTitle
-        router.push(asGroupListVC)
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {

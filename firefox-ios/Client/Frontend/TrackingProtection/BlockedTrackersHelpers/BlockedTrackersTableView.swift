@@ -5,7 +5,6 @@
 import Foundation
 import UIKit
 import Common
-import Shared
 
 class BlockedTrackersTableView: UITableView,
                                 UITableViewDelegate {

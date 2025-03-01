@@ -11,12 +11,14 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
+    case appIconSelection
     case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
     case darkReader
+    case deeplinkOptimizationRefactor
     case fakespotBackInStock
     case fakespotFeature
     case fakespotProductAds
@@ -40,7 +42,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
-    case pullToRefreshRefactor
     case ratingPromptFeature
     case reduxSearchSettings
     case reportSiteIssue
@@ -50,6 +51,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case unifiedAds
     case unifiedSearch
+    case tabTrayUIExperiments
     case toolbarRefactor
     case toolbarOneTapNewTab
     case toolbarNavigationHint
@@ -60,7 +62,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .bookmarksRefactor,
+        case    .appIconSelection,
+                .bookmarksRefactor,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -69,6 +72,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
@@ -111,13 +115,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .sentFromFirefox:
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
-        case .contextualHintForToolbar,
+        case .appIconSelection,
+                .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .accountSettingsRedux,
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
                 .darkReader,
+                .deeplinkOptimizationRefactor,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
@@ -135,7 +141,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
-                .pullToRefreshRefactor,
                 .ratingPromptFeature,
                 .reduxSearchSettings,
                 .reportSiteIssue,
@@ -146,6 +151,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
+                .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
                 .toolbarNavigationHint,

@@ -9,6 +9,8 @@ import Shared
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
+                                    UIPopoverPresentationControllerDelegate,
+                                    UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
@@ -44,6 +46,10 @@ final class HomepageViewController: UIViewController,
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
+    private let jumpBackInContextualHintViewController: ContextualHintViewController
+    private let syncTabContextualHintViewController: ContextualHintViewController
+    // TODO: FXIOS-11504: Move this to state + add comments on what this is + why we use it
+    private let isZeroSearch: Bool
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -62,7 +68,9 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         isZeroSearch: Bool,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -72,10 +80,31 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.isZeroSearch = isZeroSearch
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+
+        // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
+        let jumpBackInContextualViewProvider = ContextualHintViewProvider(
+            forHintType: .jumpBackIn,
+            with: profile
+        )
+        self.jumpBackInContextualHintViewController = ContextualHintViewController(
+            with: jumpBackInContextualViewProvider,
+            windowUUID: windowUUID
+        )
+
+        let syncTabContextualViewProvider = ContextualHintViewProvider(
+            forHintType: .jumpBackInSyncedTab,
+            with: profile
+        )
+        self.syncTabContextualHintViewController = ContextualHintViewController(
+            with: syncTabContextualViewProvider,
+            windowUUID: windowUUID
+        )
+
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -106,6 +135,11 @@ final class HomepageViewController: UIViewController,
         notificationCenter.removeObserver(self)
     }
 
+    func stopCFRsTimer() {
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
+    }
+
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +150,7 @@ final class HomepageViewController: UIViewController,
 
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
                 showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.initialize
@@ -127,11 +162,17 @@ final class HomepageViewController: UIViewController,
         addTapGestureRecognizerToDismissKeyboard()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopCFRsTimer()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         wallpaperView.updateImageForOrientationChange()
         store.dispatch(
             HomepageAction(
+                numberOfTopSitesPerRow: numberOfTilesPerRow(for: size.width),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillTransition
             )
@@ -230,9 +271,9 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
+
         dataSource?.updateSnapshot(
             state: state,
-            numberOfCellsPerRow: numberOfTilesPerRow(for: availableWidth),
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
@@ -432,13 +473,14 @@ final class HomepageViewController: UIViewController,
             syncedTabCell.configure(
                 configuration: config,
                 theme: currentTheme,
-                onTapShowAllAction: {
-                    // TODO: FXIOS-11229 - Handle actions
+                onTapShowAllAction: { [weak self] in
+                    self?.navigateToTabTray(with: .syncedTabs)
                 },
-                onOpenSyncedTabAction: { _ in
-                    // TODO: FXIOS-11229 - Handle actions
+                onOpenSyncedTabAction: { [weak self] url in
+                    self?.navigateToNewTab(with: url)
                 }
             )
+            prepareSyncedTabContextualHint(onCell: syncedTabCell)
             return syncedTabCell
 
         case .bookmark(let item):
@@ -535,11 +577,12 @@ final class HomepageViewController: UIViewController,
             sectionLabelCell.configure(
                 state: homepageState.jumpBackInState.sectionHeaderState,
                 moreButtonAction: { [weak self] _ in
-                    self?.navigateToTabTray()
+                    self?.navigateToTabTray(with: .tabs)
                 },
                 textColor: textColor,
                 theme: currentTheme
             )
+            prepareJumpBackInContextualHint(onView: sectionLabelCell)
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
@@ -637,7 +680,11 @@ final class HomepageViewController: UIViewController,
     private func navigateToPocketLearnMore() {
         store.dispatch(
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.link, url: homepageState.pocketState.footerURL),
+                navigationDestination: NavigationDestination(
+                    .link,
+                    url: homepageState.pocketState.footerURL,
+                    visitType: .link
+                ),
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
             )
@@ -660,14 +707,21 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func navigateToTabTray() {
-        store.dispatch(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.tabTray),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
-            )
+    private func navigateToTabTray(with type: TabTrayPanelType) {
+        dispatchNavigationBrowserAction(
+            with: NavigationDestination(.tabTray(type)),
+            actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
         )
+    }
+
+    private func navigateToNewTab(with url: URL) {
+        let destination = NavigationDestination(
+            .newTab,
+            url: url,
+            isPrivate: false,
+            selectNewTab: true
+        )
+        self.dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
     }
 
     private func navigateToBookmarksPanel() {
@@ -709,6 +763,14 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+        case .jumpBackIn(let config):
+            store.dispatch(
+                JumpBackInAction(
+                    tab: config.tab,
+                    windowUUID: self.windowUUID,
+                    actionType: JumpBackInActionType.tapOnCell
+                )
+            )
         case .bookmark(let config):
             let destination = NavigationDestination(
                 .link,
@@ -718,27 +780,92 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocket(let story):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(.link, url: story.url),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: story.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .pocketDiscover(let item):
-            store.dispatch(
-                NavigationBrowserAction(
-                    navigationDestination: NavigationDestination(
-                        .link,
-                        url: item.url
-                    ),
-                    windowUUID: self.windowUUID,
-                    actionType: NavigationBrowserActionType.tapOnCell
-                )
+            let destination = NavigationDestination(
+                .link,
+                url: item.url,
+                visitType: .link
             )
+            dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         default:
             return
         }
+    }
+
+    // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
+    func popoverPresentationController(
+        _ popoverPresentationController: UIPopoverPresentationController,
+        willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>,
+        in view: AutoreleasingUnsafeMutablePointer<UIView>
+    ) {
+        // Do not dismiss if the popover is a CFR when device is rotated
+        guard !jumpBackInContextualHintViewController.isPresenting &&
+                !syncTabContextualHintViewController.isPresenting else { return }
+        popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
+    }
+
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return true
+    }
+
+    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+        guard jumpBackInContextualHintViewController.shouldPresentHint(),
+              dataSource?.snapshot().sectionIdentifiers.contains(.messageCard) == nil
+        else { return }
+
+        jumpBackInContextualHintViewController.configure(
+            anchor: headerView.titleLabel,
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                guard let self else { return }
+                self.presentContextualHint(with: self.jumpBackInContextualHintViewController)
+            },
+            overlayState: overlayManager)
+    }
+
+    private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
+        guard syncTabContextualHintViewController.shouldPresentHint() else {
+            syncTabContextualHintViewController.unconfigure()
+            return
+        }
+
+        syncTabContextualHintViewController.configure(
+            anchor: cell.getContextualHintAnchor(),
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                guard let self else { return }
+                self.presentContextualHint(with: self.syncTabContextualHintViewController)
+            },
+            overlayState: overlayManager)
+    }
+
+    private var canModalBePresented: Bool {
+        return presentedViewController == nil && isZeroSearch
+    }
+
+    @objc
+    private func presentContextualHint(with contextualHintViewController: ContextualHintViewController) {
+        guard canModalBePresented else { return }
+        contextualHintViewController.isPresenting = true
+        present(contextualHintViewController, animated: true, completion: nil)
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
+    }
+
+    // MARK: UIAdaptivePresentationControllerDelegate
+    /// Prevents popovers from becoming modals on iPhone
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
+        .none
     }
 
     // MARK: - Notifiable

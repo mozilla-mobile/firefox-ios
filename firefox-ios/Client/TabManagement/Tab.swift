@@ -185,12 +185,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return webView?.estimatedProgress ?? 0
     }
 
-    var backList: [WKBackForwardListItem]? {
+    private var backList: [WKBackForwardListItem]? {
         return webView?.backForwardList.backList
-    }
-
-    var forwardList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.forwardList
     }
 
     var historyList: [URL] {
@@ -216,6 +212,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var displayTitle: String {
         if self.isFxHomeTab {
             return .LegacyAppMenu.AppMenuOpenHomePageTitleString
+        }
+
+        if let url, url.isFileURL {
+            // return the file name
+            return url.lastPathComponent
         }
 
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
@@ -686,6 +687,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     @discardableResult
     func loadRequest(_ request: URLRequest) -> WKNavigation? {
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload(forceReload: false)
+        }
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -708,9 +712,17 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func stop() {
         webView?.stopLoading()
+        if isPDFRefactorEnabled {
+            cancelTemporaryDocumentDownload()
+        }
     }
 
     func reload(bypassCache: Bool = false) {
+        if isPDFRefactorEnabled {
+            if cancelTemporaryDocumentDownload() {
+                return
+            }
+        }
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
             let request = URLRequest(url: page, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
@@ -958,16 +970,20 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     // MARK: - Temporary Document handling - PDF Refactor
 
-    /// Returns true if the download was cancelled
+    /// Returns true if the download was cancelled.
+    ///
+    /// `forceReload` forces the reload of the page when a document is downloading.
+    ///  After download cancellation reload the page to ensure clean state.
     @discardableResult
-    private func cancelTemporaryDocumentDownload() -> Bool {
+    private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
 
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
             self.temporaryDocument = nil
-
-            webView?.removeDocumentLoadingView()
+            if forceReload {
+                reload()
+            }
             return true
         }
         return false
@@ -989,6 +1005,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func enqueueDocument(_ document: TemporaryDocument) {
         temporaryDocument = document
+
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
@@ -1021,7 +1038,6 @@ extension Tab: UIGestureRecognizerDelegate {
     @objc
     func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
-
         if sender.state == .ended, sender.velocity(in: webView).x > 150 {
             TelemetryWrapper.recordEvent(
                 category: .action,
@@ -1150,16 +1166,11 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
-    private struct UX {
-        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
-    }
-
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
-    private var documentLoadingView: TemporaryDocumentLoadingView?
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1255,7 +1266,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     // MARK: - PullRefresh
 
     func addPullRefresh(onReload: @escaping () -> Void) {
-        guard !scrollView.isZooming else { return }
+        guard !scrollView.isZooming, scrollView.frame != .zero else { return }
         guard pullRefresh == nil else {
             pullRefresh?.startObservingContentScroll()
             return
@@ -1289,37 +1300,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
         pullRefresh?.applyTheme(theme: theme)
-        documentLoadingView?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
-        }
-    }
-
-    // MARK: - Document loading handling
-
-    func showDocumentLoadingView() {
-        guard documentLoadingView == nil else { return }
-        let documentLoadingView = TemporaryDocumentLoadingView(frame: bounds)
-        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(documentLoadingView)
-        NSLayoutConstraint.activate([
-            documentLoadingView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            documentLoadingView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            documentLoadingView.topAnchor.constraint(equalTo: topAnchor),
-            documentLoadingView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-        documentLoadingView.animateLoadingAppearanceIfNeeded()
-        self.documentLoadingView = documentLoadingView
-    }
-
-    func removeDocumentLoadingView() {
-        guard let documentLoadingView else { return }
-        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
-            documentLoadingView.alpha = 0.0
-        } completion: { _ in
-            documentLoadingView.removeFromSuperview()
-            self.documentLoadingView = nil
         }
     }
 }

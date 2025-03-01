@@ -4,7 +4,6 @@
 
 import Common
 import ComponentLibrary
-import Shared
 import UIKit
 
 class OnboardingInstructionPopupViewController: UIViewController, Themeable {

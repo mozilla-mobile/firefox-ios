@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "appIconAlternate_legacy.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

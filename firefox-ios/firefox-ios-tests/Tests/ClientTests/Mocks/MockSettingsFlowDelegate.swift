@@ -11,7 +11,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
                                 PrivacySettingsDelegate,
                                 AccountSettingsDelegate,
                                 AboutSettingsDelegate,
-                                SupportSettingsDelegate {
+                                SupportSettingsDelegate,
+                                BrowsingSettingsDelegate {
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
@@ -53,9 +54,9 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     // MARK: GeneralSettingsDelegate
 
-    func pressedHome() {}
+    func pressedCustomizeAppIcon() {}
 
-    func pressedMailApp() {}
+    func pressedHome() {}
 
     func pressedNewTab() {}
 
@@ -65,9 +66,15 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedToolbar() {}
 
-    func pressedTabs() {}
-
     func pressedTheme() {}
+
+    func pressedBrowsing() {}
+
+    // MARK: BrowsingSettingsDelegate
+
+    func pressedMailApp() {}
+
+    func pressedAutoPlay() {}
 
     // MARK: PrivacySettingsDelegate
 

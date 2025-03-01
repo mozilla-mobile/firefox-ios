@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Storage
 
 protocol PocketStoriesProviding {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>

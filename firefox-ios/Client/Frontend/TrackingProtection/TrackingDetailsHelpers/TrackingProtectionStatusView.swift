@@ -5,8 +5,6 @@
 import Foundation
 import UIKit
 import Common
-import Shared
-import ComponentLibrary
 
 class TrackingProtectionStatusView: UIView {
     private struct UX {

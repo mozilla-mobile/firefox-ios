@@ -229,6 +229,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         return ToolbarState(
             windowUUID: windowUUID,
             toolbarPosition: toolbarState.toolbarPosition,
+            toolbarLayout: toolbarState.toolbarLayout,
             isPrivateMode: toolbarState.isPrivateMode,
             addressToolbar: toolbarState.addressToolbar,
             navigationToolbar: toolbarState.navigationToolbar,

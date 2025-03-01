@@ -121,6 +121,9 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Ativar as notificações";
 
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "Política de privacidade";
+
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Motor de pesquisa predefinido";
 
@@ -204,4 +207,7 @@
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Enviar dados técnicos e de interação";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Termos de utilização";
 

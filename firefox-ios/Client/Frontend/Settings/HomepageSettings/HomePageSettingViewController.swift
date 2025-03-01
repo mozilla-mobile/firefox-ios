@@ -135,7 +135,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let jumpBackInSetting = BoolSetting(
             with: .jumpBackIn,
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
-        )
+        ) { value in
+            store.dispatch(
+                JumpBackInAction(
+                    isEnabled: value,
+                    windowUUID: self.windowUUID,
+                    actionType: JumpBackInActionType.toggleShowSectionSetting
+                )
+            )
+        }
 
         let historyHighlightsSetting = BoolSetting(
             with: .historyHighlights,
@@ -342,9 +350,12 @@ extension HomePageSettingViewController {
             guard wallpaperManager.canSettingsBeShown else { return }
 
             let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
-            let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
-                                                       tabManager: tabManager,
-                                                       theme: theme)
+            let viewModel = WallpaperSettingsViewModel(
+                wallpaperManager: wallpaperManager,
+                tabManager: tabManager,
+                theme: theme,
+                windowUUID: settings.windowUUID
+            )
             let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
             wallpaperVC.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(wallpaperVC, animated: true)

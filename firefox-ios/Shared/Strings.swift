@@ -2109,14 +2109,6 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
-        public struct SectionTitles {
-            public static let TabsTitle = MZLocalizedString(
-                key: "Settings.Tabs.Title",
-                tableName: nil,
-                value: "Tabs",
-                comment: "In the settings menu, this is the title for the Tabs customization section option")
-        }
-
         public struct Homepage {
             public struct Current {
                 public static let Description = MZLocalizedString(
@@ -2377,6 +2369,33 @@ extension String {
                 comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
         }
 
+        public struct Browsing {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Browsing.Title.v137",
+                tableName: "Settings",
+                value: "Browsing",
+                comment: "In the settings menu, in the General section, this is the title for Browsing customization section."
+            )
+            public static let Tabs = MZLocalizedString(
+                key: "Settings.Browsing.Tabs.v137",
+                tableName: "Settings",
+                value: "Tabs",
+                comment: "This is the title for Tabs customization under the Browsing settings section."
+            )
+            public static let Links = MZLocalizedString(
+                key: "Settings.Browsing.Links.v137",
+                tableName: "Settings",
+                value: "Links",
+                comment: "This is the title for Links customization under the Browsing settings section."
+            )
+            public static let Media = MZLocalizedString(
+                key: "Settings.Browsing.Media.v137",
+                tableName: "Settings",
+                value: "Media",
+                comment: "This is the title for Media customization under the Browsing settings section."
+            )
+        }
+
         public struct Notifications {
             public static let Title = MZLocalizedString(
                 key: "Settings.Notifications.Title.v112",
@@ -2444,6 +2463,102 @@ extension String {
                 tableName: nil,
                 value: "Bottom",
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
+        }
+
+        public struct AppIconSelection {
+            public static let SettingsOptionName = MZLocalizedString(
+                key: "Settings.AppIconSelection.SettingsOptionName.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the Settings screen, the name of the row that opens app icon selection options.")
+
+            public static let ScreenTitle = MZLocalizedString(
+                key: "Settings.AppIconSelection.ScreenTitle.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
+
+            public struct Errors {
+                public static let SelectErrorMessage = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorMessage.v136",
+                    tableName: "AppIconSelection",
+                    value: "Sorry, there was an error setting your app icon.",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon.")
+
+                public static let SelectErrorConfirmation = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136",
+                    tableName: "AppIconSelection",
+                    value: "OK",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred.")
+            }
+
+            public struct AppIconNames {
+                public static let Regular = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Regular.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Default",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
+
+                public static let DarkPurple = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Dark Purple",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background.")
+
+                public static let Hug = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Hug",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+            }
+
+            public struct Accessibility {
+                public static let AppIconSelectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Selected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option.")
+
+                public static let AppIconUnselectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Deselected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option.")
+
+                public static let AppIconSelectionHint = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136",
+                    tableName: "AppIconSelection",
+                    value: "Select the %@ app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name.")
+            }
+        }
+
+        public struct Autoplay {
+            public static let Autoplay = MZLocalizedString(
+                key: "Settings.Autoplay.SettingsTitle.v137",
+                tableName: "Settings",
+                value: "Autoplay",
+                comment: "In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour.")
+            public static let AllowAudioAndVideo = MZLocalizedString(
+                key: "Settings.Autoplay.AllowAudioAndVideo.v137",
+                tableName: "Settings",
+                value: "Allow Audio and Video",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay.")
+            public static let BlockAudio = MZLocalizedString(
+                key: "Settings.Autoplay.BlockAudio.v137",
+                tableName: "Settings",
+                value: "Block Audio",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying.")
+            public static let BlockAudioAndVideo = MZLocalizedString(
+                key: "Settings.Autoplay.BlockAudioAndVideo.v137",
+                tableName: "Settings",
+                value: "Block Audio and Video",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
+            public static let Footer = MZLocalizedString(
+                key: "Settings.Autoplay.Footer.v137",
+                tableName: "Settings",
+                value: "Autoplay settings will only apply to newly opened tabs. Changes cannot be applied to existing tabs unless the application is restarted.",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
         }
 
         public struct Toggle {
@@ -2713,8 +2828,14 @@ extension String {
         public static let DocumentLoadingLabel = MZLocalizedString(
             key: "WebView.DocumentLoadingLabel.v137",
             tableName: "WebView",
-            value: "Loading ...",
+            value: "Loading…",
             comment: "The label shown while loading a document in the web view's custom document loading UI"
+        )
+        public static let DocumentLoadingAccessibilityLabel = MZLocalizedString(
+            key: "WebView.DocumentLoadingAccessibilityLabel.v137",
+            tableName: "WebView",
+            value: "Loading Document",
+            comment: "The accessibility label read when loading a document in the web view's custom document loading UI."
         )
     }
 }
@@ -4298,6 +4419,16 @@ extension String {
                     tableName: "MainMenu",
                     value: "Zoom",
                     comment: "On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool.")
+                public static let ZoomNegativeSymbol = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137",
+                    tableName: "MainMenu",
+                    value: "-",
+                    comment: "This string is for the Zoom tool, when Zoom value is negative. (-50%)")
+                public static let ZoomPositiveSymbol = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.Zoom.PositiveSymbol.v137",
+                    tableName: "MainMenu",
+                    value: "+",
+                    comment: "This string is for the Zoom tool, when Zoom value is positive. (+125%)")
                 public static let ReaderViewOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReaderView.On.Title.v131",
                     tableName: "MainMenu",
@@ -4313,6 +4444,18 @@ extension String {
                     tableName: "MainMenu",
                     value: "Reader View",
                     comment: "On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool.")
+
+                public static let WebsiteDarkModeOn = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn on Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode on in the application.")
+                public static let WebsiteDarkModeOff = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn off Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
+
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
                     tableName: "MainMenu",
@@ -6009,6 +6152,31 @@ extension String {
         tableName: nil,
         value: "Theme",
         comment: "Title in main app settings for Theme settings")
+    public static let SettingsAppearanceTitle = MZLocalizedString(
+        key: "Settings.Appearance.Title.v137",
+        tableName: nil,
+        value: "Appearance",
+        comment: "Title in main app settings for Appearance settings")
+    public static let BrowserThemeSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.BrowserTheme.SectionHeader.v137",
+        tableName: nil,
+        value: "Browser Theme",
+        comment: "Browser theme settings section title in Appearance settings")
+    public static let WebsiteAppearanceSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteAppearance.SectionHeader.v137",
+        tableName: nil,
+        value: "Website Appearance",
+        comment: "Website Appearance settings section title in Appearance settings")
+    public static let WebsiteDarkModeToggleTitle = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkModeToggle.Title.v137",
+        tableName: nil,
+        value: "Website Dark Mode",
+        comment: "Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off.")
+    public static let WebsiteDarkModeDescription = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkMode.Description.v137",
+        tableName: nil,
+        value: "Gives websites a dark appearance. Some sites might not look right.",
+        comment: "Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature.")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,
@@ -6774,6 +6942,18 @@ extension String {
             tableName: "Toolbar",
             value: "Tabs open",
             comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
+        public static let TabsButtonLargeContentTitle = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
+            tableName: "Toolbar",
+            value: "Tabs open: %@",
+            comment: "Large content title for the tabs button in the toolbar, specifying the number of tabs open. The placeholder is getting replaced with the number of open tabs.")
+
+        public static let TabsButtonOverflowLargeContentTitle = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.OverflowLargeContentTitle.v137",
+            tableName: "Toolbar",
+            value: "Tabs open: 99+",
+            comment: "Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open.")
 
         public static let MenuButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Menu.Button.A11y.Label.v135",
@@ -7801,6 +7981,11 @@ extension String {
                 tableName: "SocialShare",
                 value: "%1$@ Sent from %2$@ 🦊 %3$@",
                 comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
+            public static let TabsTitle = MZLocalizedString(
+                key: "Settings.Tabs.Title",
+                tableName: nil,
+                value: "Tabs",
+                comment: "In the settings menu, this is the title for the Tabs customization section option")
         }
     }
 }

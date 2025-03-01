@@ -233,7 +233,7 @@
 "Shopping.Sheet.Title.v120" = "核查评价";
 
 /* Text for body of error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Description.v120" = "请检查网络连接，然后尝试重新加载此页面。";
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "请检查网络连接，然后尝试重新载入此页面。";
 
 /* Title for error card displayed to the user when the device is disconnected from the network. */
 "Shopping.WarningCard.CheckNoConnection.Title.v120" = "无网络连接";

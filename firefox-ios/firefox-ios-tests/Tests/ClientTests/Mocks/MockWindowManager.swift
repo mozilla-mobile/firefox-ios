@@ -9,11 +9,17 @@ import Common
 
 final class MockWindowManager: WindowManager {
     private let wrappedManager: WindowManagerImplementation
+    private let tabManager: MockTabManager
 
     var closePrivateTabsMultiActionCalled = 0
+    var storeTabsMultiWindowActionCalled = false
 
-    init(wrappedManager: WindowManagerImplementation) {
+    init(
+        wrappedManager: WindowManagerImplementation,
+        tabManager: MockTabManager = MockTabManager()
+    ) {
         self.wrappedManager = wrappedManager
+        self.tabManager = tabManager
     }
 
     // MARK: - WindowManager Protocol
@@ -27,7 +33,7 @@ final class MockWindowManager: WindowManager {
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
-        return MockTabManager()
+        return tabManager
     }
 
     func allWindowTabManagers() -> [TabManager] {
@@ -54,6 +60,8 @@ final class MockWindowManager: WindowManager {
         switch action {
         case .closeAllPrivateTabs:
             closePrivateTabsMultiActionCalled += 1
+        case .storeTabs:
+            storeTabsMultiWindowActionCalled = true
         default:
             break
         }

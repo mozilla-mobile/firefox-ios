@@ -217,6 +217,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             guard let self, let profile = self.profile else { return }
             TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
             studiesSetting.updateSetting(for: value)
+            tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -309,71 +310,33 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getGeneralSettings() -> [SettingSection] {
         var generalSettings: [Setting] = [
+            BrowsingSetting(settings: self, settingsDelegate: parentCoordinator),
             SearchSetting(settings: self, settingsDelegate: parentCoordinator),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
-            OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
-            ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
-            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
+            ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
-        if let profile {
-            generalSettings += [
-                BlockPopupSetting(prefs: profile.prefs),
-                NoImageModeSetting(profile: profile)
-            ]
-        }
 
         if isSearchBarLocationFeatureEnabled, let profile {
-            generalSettings.insert(
-                SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator),
-                at: 5
+            generalSettings.append(
+                SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
             )
         }
 
-        let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
-        if inactiveTabsAreBuildActive {
-            generalSettings.insert(
-                TabsSetting(
+        // For enrolled users whose devices support alternate app icons, add the App Icon setting
+        if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
+           UIApplication.shared.supportsAlternateIcons {
+            generalSettings.append(
+                AppIconSetting(
                     theme: themeManager.getCurrentTheme(for: windowUUID),
                     settingsDelegate: parentCoordinator
-                ),
-                at: 3
+                )
             )
         }
 
-        if let profile {
-            let offerToOpenCopiedLinksSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: "showClipboardBar",
-                defaultValue: false,
-                titleText: .SettingsOfferClipboardBarTitle,
-                statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
-            )
-
-            let showLinksPreviewSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-                defaultValue: true,
-                titleText: .SettingsShowLinkPreviewsTitle,
-                statusText: .SettingsShowLinkPreviewsStatus
-            )
-
-            let blockOpeningExternalAppsSettings = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.BlockOpeningExternalApps,
-                defaultValue: false,
-                titleText: .SettingsBlockOpeningExternalAppsTitle
-            )
-
-            generalSettings += [
-                offerToOpenCopiedLinksSettings,
-                showLinksPreviewSettings,
-                blockOpeningExternalAppsSettings
-            ]
-        }
+        generalSettings += [
+            SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
+        ]
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                children: generalSettings)]
@@ -501,7 +464,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
 
-        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 

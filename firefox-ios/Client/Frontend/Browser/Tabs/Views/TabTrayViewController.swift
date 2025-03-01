@@ -24,7 +24,8 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             FeatureFlaggable {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -36,6 +37,8 @@ class TabTrayViewController: UIViewController,
             static let undoDuration = DispatchTimeInterval.seconds(3)
         }
         static let fixedSpaceWidth: CGFloat = 32
+        static let segmentedControlTopSpacing: CGFloat = 8
+        static let segmentedControlHorizontalSpacing: CGFloat = 16
     }
 
     // MARK: Theme
@@ -50,6 +53,10 @@ class TabTrayViewController: UIViewController,
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+    }
 
     // MARK: - Redux state
     var tabTrayState: TabTrayState
@@ -177,10 +184,20 @@ class TabTrayViewController: UIViewController,
         return [deleteButton, flexibleSpace, newTabButton]
     }()
 
+    private lazy var experimentBottomToolbarItems: [UIBarButtonItem] = {
+        return [deleteButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
+    }()
+
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
         guard hasSyncableAccount else { return [] }
 
         return [flexibleSpace, syncTabButton]
+    }()
+
+    private lazy var experimentBottomToolbarItemsForSync: [UIBarButtonItem] = {
+        guard hasSyncableAccount else { return [flexibleSpace, doneButton] }
+
+        return [syncTabButton, flexibleSpace, doneButton]
     }()
 
     private var rightBarButtonItemsForSync: [UIBarButtonItem] {
@@ -253,8 +270,13 @@ class TabTrayViewController: UIViewController,
         switch layout {
         case .compact:
             navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItems = [doneButton]
             navigationItem.titleView = nil
+            if isTabTrayUIExperimentsEnabled {
+                navigationController?.setNavigationBarHidden(true, animated: false)
+                navigationItem.rightBarButtonItems = nil
+            } else {
+                navigationItem.rightBarButtonItems = [doneButton]
+            }
         case .regular:
             navigationItem.titleView = segmentedControl
         }
@@ -303,6 +325,7 @@ class TabTrayViewController: UIViewController,
 
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
+            tabTrayState.showCloseConfirmation = false
         }
 
         if let toastType = tabTrayState.toastType {
@@ -348,24 +371,43 @@ class TabTrayViewController: UIViewController,
     private func setupForiPhone() {
         navigationItem.titleView = nil
         updateTitle()
-        view.addSubview(navigationToolbar)
         view.addSubviews(containerView)
-        navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
+        if isTabTrayUIExperimentsEnabled {
+            containerView.addSubview(segmentedControl)
+            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: view.topAnchor),
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-        NSLayoutConstraint.activate([
-            navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
+                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                          constant: UX.segmentedControlHorizontalSpacing),
+                segmentedControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                           constant: -UX.segmentedControlHorizontalSpacing)
+            ])
+        } else {
+            view.addSubview(navigationToolbar)
+            navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
 
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+            NSLayoutConstraint.activate([
+                navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                navigationToolbar.bottomAnchor.constraint(equalTo: containerView.topAnchor).priority(.defaultLow),
+
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+        }
     }
 
     private func updateTitle() {
-        navigationItem.title = tabTrayState.navigationTitle
+        if !isTabTrayUIExperimentsEnabled {
+            navigationItem.title = tabTrayState.navigationTitle
+        }
     }
 
     private func setupForiPad() {
@@ -392,7 +434,14 @@ class TabTrayViewController: UIViewController,
             return
         }
 
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
+        var toolbarItems: [UIBarButtonItem]
+        if isTabTrayUIExperimentsEnabled {
+            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+        } else {
+            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        }
+
         setToolbarItems(toolbarItems, animated: true)
     }
 
@@ -496,12 +545,22 @@ class TabTrayViewController: UIViewController,
         panel.endAppearanceTransition()
         panel.view.translatesAutoresizingMaskIntoConstraints = false
 
-        NSLayoutConstraint.activate([
-            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        if isTabTrayUIExperimentsEnabled, !isRegularLayout {
+            NSLayoutConstraint.activate([
+                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                panel.view.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor,
+                                                   constant: -UX.segmentedControlTopSpacing),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                panel.view.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+            ])
+        }
 
         panel.didMove(toParent: self)
         updateTitle()

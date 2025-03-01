@@ -7,8 +7,6 @@
 import Common
 import Glean
 import Shared
-import Account
-import Sync
 import Storage
 
 protocol TelemetryWrapperProtocol {
@@ -262,7 +260,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Show clipboard bar
-        if let showClipboardBar = prefs.boolForKey("showClipboardBar") {
+        if let showClipboardBar = prefs.boolForKey(PrefsKeys.ShowClipboardBar) {
             GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
         } else {
             GleanMetrics.Preferences.showClipboardBar.set(false)

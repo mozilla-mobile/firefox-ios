@@ -599,7 +599,7 @@
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Scancella";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
-"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Cancillari tutti i siti di %@?";
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Scancillari tutti i siti di %@?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Scancella a crunuluggìa (macari chiḍḍa sincrunizzata di autri dispusitivi), i viscotta e autri dati di navicazzioni.";
@@ -1001,7 +1001,7 @@
 "ScanQRCode.InvalidDataError.Message" = "I dati nun sunnu vàliti";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Vai nne ‘Mpustazzioni’ > ‘Firefox’. Dùnaci u pirmisu a Firefox di accèdiri â fotucàmmira.";
+"ScanQRCode.PermissionError.Message.v100" = "Vai nne ‘Mpustazzioni’ > ‘Firefox’. Dùnaci u pirmissu a Firefox di accèdiri â fotucàmmira.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scanziuna còdici QR";

@@ -6,9 +6,7 @@ import Common
 import UIKit
 import XCTest
 import Shared
-import Storage
 import WebKit
-@testable import Client
 
 class ClientTests: XCTestCase {
     func testSyncUA() {

@@ -36,11 +36,13 @@ final class TabNumberButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func configure(element: ToolbarElement) {
+    override func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         super.configure(element: element)
 
-        guard let numberOfTabs = element.numberOfTabs else { return }
-        updateTabCount(numberOfTabs)
+        guard let numberOfTabs = element.numberOfTabs, let largeContentTitle = element.largeContentTitle else { return }
+        updateTabCount(numberOfTabs, largeContentTitle: largeContentTitle)
     }
 
     override func tintColorDidChange() {
@@ -56,11 +58,12 @@ final class TabNumberButton: ToolbarButton {
         countLabel.textColor = configuration?.baseForegroundColor
     }
 
-    private func updateTabCount(_ count: Int) {
+    private func updateTabCount(_ count: Int, largeContentTitle: String) {
         let count = max(count, 1)
         let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol
         countLabel.text = countToBe
         accessibilityValue = countToBe
+        self.largeContentTitle = largeContentTitle
     }
 
     // MARK: - Layout

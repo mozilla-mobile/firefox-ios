@@ -19,14 +19,6 @@ class WKEngineSession: NSObject,
                        AdsTelemetryScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate?
-    weak var findInPageDelegate: FindInPageHelperDelegate? {
-        didSet {
-            let script = contentScriptManager.scripts[FindInPageContentScript.name()]
-            guard let findInPage = script as? FindInPageContentScript else { return }
-            findInPage.delegate = findInPageDelegate
-        }
-    }
-
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
@@ -63,8 +55,6 @@ class WKEngineSession: NSObject,
         self.navigationHandler = navigationHandler
         self.uiHandler = uiHandler
         super.init()
-
-        self.setupObservers()
 
         self.metadataFetcher.delegate = self
         navigationHandler.session = self
@@ -167,13 +157,13 @@ class WKEngineSession: NSObject,
         webView.engineScrollView?.setContentOffset(CGPoint.zero, animated: true)
     }
 
-    func findInPage(text: String, function: FindInPageFunction) {
-        let sanitizedInput = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function.rawValue)(\"\(sanitizedInput)\")")
-    }
-
-    func findInPageDone() {
-        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
+    @available(iOS 16.0, *)
+    func showFindInPage(withSearchText searchText: String?) {
+        if let findInteraction = webView.findInteraction {
+            logger.log("Will show find in page", level: .debug, category: .webview)
+            findInteraction.searchText = searchText ?? ""
+            findInteraction.presentFindNavigator(showingReplace: false)
+        }
     }
 
     func goToHistory(index: Int) {
@@ -190,11 +180,7 @@ class WKEngineSession: NSObject,
 
     func close() {
         contentScriptManager.uninstall(session: self)
-        webView.removeAllUserScripts()
-        removeObservers()
-        webView.navigationDelegate = nil
-        webView.uiDelegate = nil
-        webView.delegate = nil
+        webView.close()
         webView.removeFromSuperview()
 
         metadataFetcher.delegate = nil
@@ -245,91 +231,6 @@ class WKEngineSession: NSObject,
         webView.setValue(newZoom, forKey: zoomKey)
     }
 
-    // MARK: Observe values
-
-    private func setupObservers() {
-        WKEngineKVOConstants.allCases.forEach {
-            webView.addObserver(
-                self,
-                forKeyPath: $0.rawValue,
-                options: .new,
-                context: nil
-            )
-        }
-    }
-
-    private func removeObservers() {
-        WKEngineKVOConstants.allCases.forEach {
-            webView.removeObserver(self, forKeyPath: $0.rawValue)
-        }
-    }
-
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        guard let keyPath, let path = WKEngineKVOConstants(rawValue: keyPath) else {
-            logger.log("Unhandled KVO key: \(keyPath ?? "nil")", level: .debug, category: .webview)
-            return
-        }
-
-        // Will be used as needed when we start using the engine session
-        switch path {
-        case .canGoBack:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
-                                              canGoForward: webView.canGoForward)
-        case .canGoForward:
-            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack,
-                                              canGoForward: webView.canGoForward)
-        case .contentSize:
-            // TODO: FXIOS-8086 - Handle view port in WebEngine
-            break
-        case .estimatedProgress:
-            delegate?.onProgress(progress: webView.estimatedProgress)
-        case .loading:
-            guard let loading = change?[.newKey] as? Bool else { break }
-            delegate?.onLoadingStateChange(loading: loading)
-        case .title:
-            guard let title = webView.title else { break }
-            handleTitleChange(title: title)
-        case .URL:
-            handleURLChange()
-        case .hasOnlySecureContent:
-            handleHasOnlySecureContentChanged(webView.hasOnlySecureContent)
-        }
-    }
-
-    private func handleHasOnlySecureContentChanged(_ value: Bool) {
-        delegate?.onHasOnlySecureContentChanged(secure: value)
-    }
-
-    private func handleTitleChange(title: String) {
-        // Ensure that the title actually changed to prevent repeated calls to onTitleChange
-        if !title.isEmpty {
-            sessionData.title = title
-            delegate?.onTitleChange(title: title)
-        }
-
-        // TODO: FXIOS-8273 - Add telemetry integration in WebEngine and first telemetry call
-        // TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
-    }
-
-    private func handleURLChange() {
-        // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
-        if sessionData.url?.absoluteString == EngineConstants.aboutBlank
-            && webView.url == nil { return }
-
-        // To prevent spoofing, only change the URL immediately if the new URL is on
-        // the same origin as the current URL. Otherwise, do nothing and wait for
-        // didCommitNavigation to confirm the page load.
-        guard sessionData.url?.origin == webView.url?.origin else { return }
-
-        // Update session data, inform delegate, fetch metadata
-        commitURLChange()
-    }
-
     // MARK: - SessionHandler
 
     func commitURLChange() {
@@ -353,9 +254,6 @@ class WKEngineSession: NSObject,
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(FindInPageContentScript(),
-                                              name: FindInPageContentScript.name(),
-                                              forSession: self)
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
@@ -373,6 +271,79 @@ class WKEngineSession: NSObject,
 
     func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView {
         return delegate?.onWillDisplayAccessoryView() ?? .default
+    }
+
+    func webViewPropertyChanged(_ property: WKEngineWebViewProperty) {
+        switch property {
+        case .loading(let isLoading):
+            setupLoadingSpinnerFor(webView, isLoading: isLoading)
+            delegate?.onLoadingStateChange(loading: isLoading)
+        case .estimatedProgress(let progress):
+            if let url = webView.url, !WKInternalURL.isValid(url: url) {
+                delegate?.onProgress(progress: progress)
+            } else {
+                delegate?.onHideProgressBar()
+            }
+        case .URL:
+            handleURLChange()
+        case .title(let title):
+            handleTitleChange(title: title)
+        case .canGoBack(let canGoBack):
+            delegate?.onNavigationStateChange(canGoBack: canGoBack, canGoForward: webView.canGoForward)
+        case .canGoForward(let canGoForward):
+            delegate?.onNavigationStateChange(canGoBack: webView.canGoBack, canGoForward: canGoForward)
+        case .contentSize:
+            // TODO: FXIOS-8086 - Handle view port in WebEngine
+            break
+        case .hasOnlySecureContent(let hasOnlySecureContent):
+            handleHasOnlySecureContentChanged(hasOnlySecureContent)
+        }
+    }
+
+    // MARK: - WebView Properties Change
+
+    private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        sessionData.hasOnlySecureContent = value
+        delegate?.onHasOnlySecureContentChanged(secure: value)
+    }
+
+    private func handleTitleChange(title: String) {
+        // Ensure that the title actually changed to prevent repeated calls to onTitleChange
+        if !title.isEmpty, title != sessionData.title {
+            sessionData.title = title
+            delegate?.onTitleChange(title: title)
+        }
+    }
+
+    private func setupLoadingSpinnerFor(_ webView: WKEngineWebView, isLoading: Bool) {
+        if isLoading {
+            webView.engineScrollView?.refreshControl?.beginRefreshing()
+        } else {
+            webView.engineScrollView?.refreshControl?.endRefreshing()
+        }
+    }
+
+    private func handleURLChange() {
+        // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
+        if sessionData.url?.absoluteString == EngineConstants.aboutBlank
+            && webView.url == nil { return }
+
+        // Ensure we do have a URL from that observer
+        guard let url = webView.url else { return }
+
+        // Security safety check (Bugzilla #1933079)
+        if let internalURL = WKInternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
+            webView.load(URLRequest(url: URL(string: EngineConstants.aboutBlank)!))
+            return
+        }
+
+        // To prevent spoofing, only change the URL immediately if the new URL is on
+        // the same origin as the current URL. Otherwise, do nothing and wait for
+        // didCommitNavigation to confirm the page load.
+        guard sessionData.url?.origin == webView.url?.origin else { return }
+
+        // Update session data, inform delegate, fetch metadata
+        commitURLChange()
     }
 
     // MARK: - MetadataFetcherDelegate

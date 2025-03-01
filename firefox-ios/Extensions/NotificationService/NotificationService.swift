@@ -5,8 +5,6 @@
 import Common
 import Account
 import Shared
-import Storage
-import Sync
 import UserNotifications
 
 import class MozillaAppServices.Viaduct
@@ -172,7 +170,7 @@ class SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        #if MOZ_CHANNEL_BETA || DEBUG
+        #if MOZ_CHANNEL_beta || DEBUG
             presentNotification(
                 title: .SentTab_NoTabArrivingNotification_title,
                 body: "DEBUG: Account Verified"
@@ -187,7 +185,7 @@ class SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        #if MOZ_CHANNEL_BETA || DEBUG
+        #if MOZ_CHANNEL_beta || DEBUG
             presentNotification(
                 title: .SentTab_NoTabArrivingNotification_title,
                 body: "DEBUG: " + debugInfo

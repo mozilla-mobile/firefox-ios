@@ -5,9 +5,48 @@
 import WidgetKit
 import ActivityKit
 import SwiftUI
+import Foundation
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
+        struct Download: Codable, Hashable {
+            var id: UUID
+            var fileName: String
+            var hasContentEncoding: Bool?
+
+            var totalBytesExpected: Int64?
+            var bytesDownloaded: Int64
+            var isComplete: Bool
+        }
+        var downloads: [Download]
+
+        var completedDownloads: Int {
+            downloads.filter { $0.isComplete }.count
+        }
+
+        var totalDownloads: Int {
+            downloads.count
+        }
+
+        var totalBytesDownloaded: Int64 {
+            // we ignore bytes downloaded for downloads without bytes expected to ensure we don't report invalid progress
+            // to the user (i.e. 50MB of 20MB downloaded).
+            downloads
+                .filter { $0.hasContentEncoding == false && $0.totalBytesExpected != nil }
+                .compactMap { $0.bytesDownloaded }
+                .reduce(0, +)
+        }
+
+        var totalBytesExpected: Int64 {
+            downloads
+                .filter { $0.hasContentEncoding == false }
+                .compactMap { $0.totalBytesExpected }
+                .reduce(0, +)
+        }
+
+        var totalProgress: Double {
+            totalBytesExpected == 0 ? 0 : Double(totalBytesDownloaded) / Double(totalBytesExpected)
+        }
     }
 }
 

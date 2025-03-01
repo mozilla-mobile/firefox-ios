@@ -5,7 +5,6 @@
 import Foundation
 import Common
 import Storage
-import Shared
 import WebKit
 import ComponentLibrary
 

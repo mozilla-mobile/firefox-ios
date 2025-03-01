@@ -3,8 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
-import SiteImageView
 
 public struct SuggestedSiteInfo: Equatable, Codable, Hashable {
     public let trackingId: Int

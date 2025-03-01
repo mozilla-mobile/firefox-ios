@@ -107,7 +107,7 @@ enum Route: Equatable {
         case mailto
         case newTab = "newtab"
         case search
-        case tabs
+        case browser
         case theme
         case toolbar
         case topSites

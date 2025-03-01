@@ -101,16 +101,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     }
 
     private func startRecordingStartupOpenURLTime() {
-        shareTelemetry.recordOpenURLTime()
+        shareTelemetry.recordOpenDeeplinkTime()
         var recordCompleteToken: ActionToken?
         var recordCancelledToken: ActionToken?
-        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLComplete) { [weak self] in
-            self?.shareTelemetry.sendOpenURLTimeRecord()
+        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
+            self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
             guard let recordCancelledToken, let recordCompleteToken  else { return }
             AppEventQueue.cancelAction(token: recordCancelledToken)
             AppEventQueue.cancelAction(token: recordCompleteToken)
         }
-        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenURLCancelled) { [weak self] in
+        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkCancelled) { [weak self] in
             self?.shareTelemetry.cancelOpenURLTimeRecord()
             guard let recordCancelledToken, let recordCompleteToken  else { return }
             AppEventQueue.cancelAction(token: recordCancelledToken)
@@ -270,7 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     private func fixSimulatorDevBuild(_ application: UIApplication) {
         // Corrects an issue for development when running Fennec target in
         // the simulator after having run unit tests locally.
-        #if targetEnvironment(simulator) && MOZ_CHANNEL_FENNEC
+        #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
         let key = "_FennecLaunchedUnitTestDelegate"
         guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool, flagSet else { return }
         // Private API. This code is not present in release builds.

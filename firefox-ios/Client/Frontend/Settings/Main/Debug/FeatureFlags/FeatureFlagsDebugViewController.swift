@@ -27,6 +27,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
+                    with: .tabTrayUIExperiments,
+                    titleText: format(string: "Enable Tab Tray UI Experiment"),
+                    statusText: format(string: "Toggle to use the new tab tray UI")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .bookmarksRefactor,
                     titleText: format(string: "Enable Bookmarks Redesign"),
                     statusText: format(string: "Toggle to use the new bookmarks design")

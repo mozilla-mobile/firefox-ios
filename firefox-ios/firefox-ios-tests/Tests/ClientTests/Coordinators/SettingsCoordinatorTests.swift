@@ -143,10 +143,10 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testTabsSettingsRoute_showsTabsSettingsPage() throws {
         let subject = createSubject()
 
-        subject.start(with: .tabs)
+        subject.start(with: .browser)
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
+        XCTAssertTrue(mockRouter.pushedViewController is BrowsingSettingsViewController)
     }
 
     func testToolbarSettingsRoute_showsToolbarSettingsPage() throws {
@@ -327,15 +327,6 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is HomePageSettingViewController)
     }
 
-    func testGeneralSettingsDelegate_pushedMailApp() {
-        let subject = createSubject()
-
-        subject.pressedMailApp()
-
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is OpenWithSettingsViewController)
-    }
-
     func testGeneralSettingsDelegate_pushedNewTab() {
         let subject = createSubject()
 
@@ -372,15 +363,6 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is SearchBarSettingsViewController)
     }
 
-    func testGeneralSettingsDelegate_pushedTabs() {
-        let subject = createSubject()
-
-        subject.pressedTabs()
-
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is TabsSettingsViewController)
-    }
-
     func testGeneralSettingsDelegate_pushedTheme() {
         let subject = createSubject()
 
@@ -388,6 +370,17 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
+    }
+
+    // MARK: - BrowsingSettingsDelegate
+
+    func testBrowsingSettingsDelegate_pushedMailApp() {
+        let subject = createSubject()
+
+        subject.pressedMailApp()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is OpenWithSettingsViewController)
     }
 
     // MARK: - PrivacySettingsDelegate

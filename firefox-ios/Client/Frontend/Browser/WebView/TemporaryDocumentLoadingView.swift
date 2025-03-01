@@ -32,6 +32,8 @@ class TemporaryDocumentLoadingView: UIView, ThemeApplicable {
 
     private let loadingLabel: UILabel = .build { view in
         view.text = .WebView.DocumentLoadingLabel
+        view.accessibilityLabel = .WebView.DocumentLoadingAccessibilityLabel
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.documentLoadingLabel
         view.font = FXFontStyles.Regular.footnote.scaledFont()
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
     }

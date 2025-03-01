@@ -28,6 +28,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.tabManager = mockTabManager
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        setIsDeeplinkOptimizationRefactorEnabled(false)
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
         self.overlayModeManager = MockOverlayModeManager()
@@ -444,6 +445,35 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.first is ContextMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is PhotonActionSheet)
+    }
+
+    func testShowLoadingDocument() {
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+
+        let loadingView = subject.webviewController?.view.subviews.first {
+            $0 is TemporaryDocumentLoadingView
+        }
+        XCTAssertNotNil(loadingView)
+    }
+
+    func testRemoveDocumentLoading() {
+        let expectation = expectation(description: "Remove Document loading is done ")
+        let subject = createSubject()
+
+        subject.show(webView: WKWebView())
+        subject.showDocumentLoading()
+        subject.removeDocumentLoading {
+            let loadingView = subject.webviewController?.view.subviews.first {
+                $0 is TemporaryDocumentLoadingView
+            }
+            XCTAssertNil(loadingView)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation])
     }
 
     // MARK: - ParentCoordinatorDelegate
@@ -1269,6 +1299,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
     }
 
     // MARK: - Mock Server

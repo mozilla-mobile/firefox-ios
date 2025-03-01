@@ -32,6 +32,12 @@ public final class HeaderView: UIView, ThemeApplicable {
         stack.spacing = UX.headerLabelDistance
     }
 
+    private lazy var headerIconsContainer: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.axis = .horizontal
+        stack.spacing = UX.horizontalMargin
+    }
+
     private var favicon: FaviconImageView = .build { favicon in
         favicon.manuallySetImage(
             UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
@@ -49,7 +55,9 @@ public final class HeaderView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var warningIconView: UIImageView = .build()
+    private lazy var warningIconView: UIImageView = .build { view in
+        view.contentMode = .scaleAspectFit
+    }
 
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
@@ -67,6 +75,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     private let horizontalLine: UIView = .build()
 
     private var viewConstraints: [NSLayoutConstraint] = []
+    private var headerIconsContainerHeight: NSLayoutConstraint?
 
     init() {
         super.init(frame: .zero)
@@ -80,7 +89,9 @@ public final class HeaderView: UIView, ThemeApplicable {
     private func setupViews() {
         headerLabelsContainer.addArrangedSubview(titleLabel)
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
-        addSubviews(iconMask, favicon, headerLabelsContainer, mainButton, closeButton, warningIconView, horizontalLine)
+        headerIconsContainer.addArrangedSubview(warningIconView)
+        headerIconsContainer.addArrangedSubview(closeButton)
+        addSubviews(iconMask, favicon, headerLabelsContainer, mainButton, headerIconsContainer, horizontalLine)
         warningIconView.isHidden = true
     }
 
@@ -90,6 +101,9 @@ public final class HeaderView: UIView, ThemeApplicable {
         closeButton.removeConstraints(closeButton.constraints)
         warningIconView.removeConstraints(warningIconView.constraints)
         iconMask.removeConstraints(iconMask.constraints)
+        if let headerIconsContainerHeight {
+            headerIconsContainer.removeConstraint(headerIconsContainerHeight)
+        }
         viewConstraints.removeAll()
         let favIconPadding = (UX.maskFaviconImageSize / 2) - (UX.smallFaviconImageSize / 2)
         let favIconLeadingConstant = isWebsiteIcon ? UX.horizontalMargin : UX.horizontalMargin + favIconPadding
@@ -112,12 +126,11 @@ public final class HeaderView: UIView, ThemeApplicable {
                 constant: UX.siteDomainLabelsHorizontalSpacing
             ),
             headerLabelsContainer.trailingAnchor.constraint(
-                equalTo: warningIconView.leadingAnchor,
+                equalTo: headerIconsContainer.leadingAnchor,
                 constant: -UX.horizontalMargin
             ),
 
-            warningIconView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.horizontalMargin),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
+            headerIconsContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -142,6 +155,9 @@ public final class HeaderView: UIView, ThemeApplicable {
         viewConstraints.append(closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes))
         closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
 
+        headerIconsContainerHeight = headerIconsContainer.heightAnchor.constraint(equalToConstant: closeButtonSizes)
+        if let headerIconsContainerHeight { viewConstraints.append(headerIconsContainerHeight) }
+
         let warningIconSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.warningIconSize
         viewConstraints.append(warningIconView.heightAnchor.constraint(equalToConstant: warningIconSizes))
         viewConstraints.append(warningIconView.widthAnchor.constraint(equalToConstant: warningIconSizes))
@@ -153,12 +169,10 @@ public final class HeaderView: UIView, ThemeApplicable {
 
         if isAccessibilityCategory {
             viewConstraints.append(favicon.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
-            viewConstraints.append(closeButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
-            viewConstraints.append(warningIconView.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
+            viewConstraints.append(headerIconsContainer.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
         } else {
             viewConstraints.append(favicon.centerYAnchor.constraint(equalTo: centerYAnchor))
-            viewConstraints.append(closeButton.centerYAnchor.constraint(equalTo: centerYAnchor))
-            viewConstraints.append(warningIconView.centerYAnchor.constraint(equalTo: centerYAnchor))
+            viewConstraints.append(headerIconsContainer.centerYAnchor.constraint(equalTo: centerYAnchor))
         }
         NSLayoutConstraint.activate(viewConstraints)
     }

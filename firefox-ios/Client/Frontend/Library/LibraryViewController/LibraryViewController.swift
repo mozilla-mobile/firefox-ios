@@ -266,7 +266,7 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     private func topLeftButtonSetup() {
         let panelState = getCurrentPanelState()
         switch panelState {
-        case .bookmarks(state: .inFolder),
+        case .bookmarks(state: .inFolder), .bookmarks(state: .transitioning),
              .history(state: .inFolder):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
                 .imageFlippedForRightToLeftLayoutDirection()
@@ -297,6 +297,30 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
+    }
+
+    // MARK: - Toolbar Button Actions
+    @objc
+    func topLeftButtonAction() {
+        guard let navController = children.first as? UINavigationController,
+              getCurrentPanelState() != .bookmarks(state: .transitioning) else {
+            return
+        }
+
+        navController.popViewController(animated: true)
+        let panel = getCurrentPanel()
+        panel?.handleLeftTopButton()
+    }
+
+    @objc
+    func topRightButtonAction() {
+        guard let panel = getCurrentPanel() else { return }
+
+        if panel.shouldDismissOnDone() {
+            dismiss(animated: true, completion: nil)
+        }
+
+        panel.handleRightTopButton()
     }
 
     private func getCurrentPanelState() -> LibraryPanelMainState {

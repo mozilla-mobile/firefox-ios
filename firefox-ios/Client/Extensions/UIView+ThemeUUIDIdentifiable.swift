@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 extension UIView: Common.ThemeUUIDIdentifiable {
     /// Convenience that allows most UIViews to automatically reference their parent window UUID.

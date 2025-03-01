@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Shared
-import Storage
 import UIKit
 
 protocol PhotonActionSheetProtocol {

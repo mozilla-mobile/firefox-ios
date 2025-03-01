@@ -104,33 +104,14 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertNil(tab.webView?.scrollView.refreshControl)
     }
 
-    func testDidSetTab_addsUIRefreshControllToScrollView() {
-        let subject = createSubject(isPullRefreshRefactorEnabled: false)
-        setupTabScroll(with: subject)
-
-        let pullRefreshView = tab.webView?.scrollView.subviews.first(where: {
-            $0 is PullRefreshView
-        })
-
-        XCTAssertNotNil(tab.webView?.scrollView.refreshControl)
-        XCTAssertNil(pullRefreshView)
-    }
-
-    func testDidSetTab_setsTabOnLoadingClosure_whenPullRefreshFeatureEnabled() {
+    func testDidSetTab_setsTabOnLoadingClosure() {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
         XCTAssertNotNil(tab.onLoading)
     }
 
-    func testDidSetTab_tabHasNilOnLoadingClosure_whenPullRefreshFeatureDisabled() {
-        let subject = createSubject(isPullRefreshRefactorEnabled: false)
-        setupTabScroll(with: subject)
-
-        XCTAssertNil(tab.onLoading)
-    }
-
-    func testScrollViewWillBeginZooming_removesPullRefresh_whenPullRefreshFeatureEnabled() throws {
+    func testScrollViewWillBeginZooming_removesPullRefresh() throws {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
@@ -141,17 +122,7 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertNil(pullRefresh)
     }
 
-    func testScrollViewWillBeginZooming_removesUIRefreshControll_whenPullRefreshFeatureDisabled() throws {
-        let subject = createSubject(isPullRefreshRefactorEnabled: false)
-        setupTabScroll(with: subject)
-
-        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
-        subject.scrollViewWillBeginZooming(scrollView, with: nil)
-
-        XCTAssertNil(scrollView.refreshControl)
-    }
-
-    func testScrollViewDidEndZooming_addsPullRefresh_whenPullRefreshFeatureEnabled() throws {
+    func testScrollViewDidEndZooming_addsPullRefresh() throws {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
@@ -163,28 +134,18 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertNotNil(pullRefresh)
     }
 
-    func testScrollViewDidEndZooming_addsUIRefreshControll_whenPullRefreshFeatureDisabled() throws {
-        let subject = createSubject(isPullRefreshRefactorEnabled: false)
-        setupTabScroll(with: subject)
-
-        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
-        subject.scrollViewDidEndZooming(scrollView, with: nil, atScale: 0)
-
-        XCTAssertNotNil(scrollView.refreshControl)
-    }
-
     private func setupTabScroll(with subject: TabScrollingController) {
         tab.createWebview(configuration: .init())
+        tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab
         subject.header = header
     }
 
-    private func createSubject(isPullRefreshRefactorEnabled: Bool = true) -> TabScrollingController {
-        return TabScrollingController(
-            windowUUID: .XCTestDefaultUUID,
-            isPullToRefreshRefactorEnabled: isPullRefreshRefactorEnabled
-        )
+    private func createSubject() -> TabScrollingController {
+        let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }

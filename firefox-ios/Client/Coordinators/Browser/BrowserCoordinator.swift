@@ -8,7 +8,6 @@ import WebKit
 import Shared
 import Storage
 import Redux
-import TabDataStore
 import PDFKit
 
 import enum MozillaAppServices.VisitType
@@ -31,7 +30,8 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider {
+                          BookmarksRefactorFeatureFlagProvider,
+                          FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
@@ -50,6 +50,9 @@ class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
 
     override var isDismissable: Bool { false }
 
@@ -145,6 +148,7 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
+            isZeroSearch: isZeroSearch,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
@@ -221,7 +225,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView)
+            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -231,14 +235,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func browserHasLoaded() {
-        browserIsReady = true
-        logger.log("Browser has loaded", level: .info, category: .coordinator)
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            browserIsReady = true
+            logger.log("Browser has loaded", level: .info, category: .coordinator)
 
-        if let savedRoute {
-            logger.log("Find and handle route called after browserHasLoaded",
-                       level: .info,
-                       category: .coordinator)
-            findAndHandle(route: savedRoute)
+            if let savedRoute {
+                logger.log("Find and handle route called after browserHasLoaded",
+                           level: .info,
+                           category: .coordinator)
+                findAndHandle(route: savedRoute)
+            }
         }
     }
 
@@ -281,13 +287,15 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard browserIsReady, !tabManager.isRestoringTabs else {
-            let readyMessage = "browser is ready? \(browserIsReady)"
-            let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
-            logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                       level: .info,
-                       category: .coordinator)
-            return false
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            guard browserIsReady, !tabManager.isRestoringTabs else {
+                let readyMessage = "browser is ready? \(browserIsReady)"
+                let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
+                logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
+                           level: .info,
+                           category: .coordinator)
+                return false
+            }
         }
 
         switch route {
@@ -299,11 +307,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard browserIsReady, !tabManager.isRestoringTabs else {
-            logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
-                       level: .info,
-                       category: .coordinator)
-            return
+        if !isDeeplinkOptimiziationRefactorEnabled {
+            guard browserIsReady, !tabManager.isRestoringTabs else {
+                logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
+                           level: .info,
+                           category: .coordinator)
+                return
+            }
         }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
@@ -568,8 +578,9 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    func editLatestBookmark() {
-        browserViewController.openBookmarkEditPanel()
+    func editBookmarkForCurrentTab() {
+        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
+        browserViewController.openBookmarkEditPanel(urlString: urlString)
     }
 
     func showFindInPage() {
@@ -613,6 +624,9 @@ class BrowserCoordinator: BaseCoordinator,
                 if FileManager.default.fileExists(atPath: outputURL.path) {
                     let url = URL(fileURLWithPath: outputURL.path)
                     let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    if let popover = controller.popoverPresentationController {
+                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+                    }
                     self?.present(controller)
                 }
             case .failure(let error):
@@ -976,7 +990,12 @@ class BrowserCoordinator: BaseCoordinator,
         }
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
+        let modalPresentationStyle: UIModalPresentationStyle
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+            modalPresentationStyle = .fullScreen
+        } else {
+            modalPresentationStyle = isPad ? .fullScreen: .formSheet
+        }
         navigationController.modalPresentationStyle = modalPresentationStyle
 
         let tabTrayCoordinator = TabTrayCoordinator(
@@ -1006,6 +1025,14 @@ class BrowserCoordinator: BaseCoordinator,
         backForwardListVC.tabManager = tabManager
         backForwardListVC.modalPresentationStyle = .overCurrentContext
         present(backForwardListVC)
+    }
+
+    func showDocumentLoading() {
+        webviewController?.showDocumentLoadingView()
+    }
+
+    func removeDocumentLoading(completion: (() -> Void)? = nil) {
+        webviewController?.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey

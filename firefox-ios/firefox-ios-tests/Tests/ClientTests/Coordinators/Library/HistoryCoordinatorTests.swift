@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Storage
 @testable import Client
 
 final class HistoryCoordinatorTests: XCTestCase {
@@ -39,15 +38,6 @@ final class HistoryCoordinatorTests: XCTestCase {
         subject.showRecentlyClosedTab()
 
         XCTAssertTrue(router.pushedViewController is RecentlyClosedTabsPanel)
-        XCTAssertEqual(router.pushCalled, 1)
-    }
-
-    func testShowSearchGroupedItems() {
-        let subject = createSubject()
-
-        subject.showSearchGroupedItems(ASGroup(searchTerm: "", groupedItems: [], timestamp: .zero))
-
-        XCTAssertTrue(router.pushedViewController is SearchGroupedItemsViewController)
         XCTAssertEqual(router.pushCalled, 1)
     }
 

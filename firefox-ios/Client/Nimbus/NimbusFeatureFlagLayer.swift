@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
+        case .appIconSelection:
+            return checkAppIconSelectionSetting(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -32,6 +35,9 @@ final class NimbusFeatureFlagLayer {
 
         case .darkReader:
             return checkDarkReaderFeature(from: nimbus)
+
+        case .deeplinkOptimizationRefactor:
+            return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
@@ -97,9 +103,6 @@ final class NimbusFeatureFlagLayer {
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
-        case .pullToRefreshRefactor:
-            return checkPullToRefreshFeature(from: nimbus)
-
         case .ratingPromptFeature:
             return checkRatingPromptFeature(from: nimbus)
 
@@ -126,6 +129,9 @@ final class NimbusFeatureFlagLayer {
 
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
+
+        case .tabTrayUIExperiments:
+            return checkTabTrayUIExperiments(from: nimbus)
 
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
@@ -228,6 +234,11 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
+    }
+
+    private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.enabled
     }
 
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
@@ -358,10 +369,6 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
-    private func checkPullToRefreshFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.pullToRefreshRefactorFeature.value().enabled
-    }
-
     private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.ratingPromptFeature.value().enabled
     }
@@ -372,9 +379,19 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
+    private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.appIconSelectionFeature.value()
+        return config.enabled
+    }
+
     private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.darkReaderFeature.value()
         return config.status
+    }
+
+    private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
+        return config.enabled
     }
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {

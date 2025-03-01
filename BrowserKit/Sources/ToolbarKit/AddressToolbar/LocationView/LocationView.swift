@@ -214,9 +214,18 @@ final class LocationView: UIView,
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
-        // hide the leading "..." by moving them behind the lock icon
-        if shouldAdjustForOverflow {
+        func handleOverflowAdjustment() {
+            // Hide the leading "..." by moving them behind the lock icon.
             updateURLTextFieldLeadingConstraint(constant: -dotWidth)
+            if lockIconImageName == nil {
+                // This is the case when we are in reader mode and the lock icon is not visible.
+                updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+                iconContainerStackViewLeadingConstraint?.constant = 0
+            }
+        }
+
+        if shouldAdjustForOverflow {
+            handleOverflowAdjustment()
         } else if shouldAdjustForNonEmpty {
             updateURLTextFieldLeadingConstraint()
         } else {
@@ -255,6 +264,8 @@ final class LocationView: UIView,
             lockIconButton.alpha = 0
             shouldShowLockIcon = false
         } else if isURLTextFieldEmpty {
+            shouldShowLockIcon = false
+        } else if lockIconImageName == nil {
             shouldShowLockIcon = false
         } else {
             shouldShowLockIcon = true

@@ -6,7 +6,6 @@
 import Foundation
 import XCTest
 import WebKit
-import Shared
 import Common
 import Storage
 

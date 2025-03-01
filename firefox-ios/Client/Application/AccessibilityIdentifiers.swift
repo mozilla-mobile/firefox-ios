@@ -63,6 +63,10 @@ struct AccessibilityIdentifiers {
         struct ToolbarButtons {
             static let qrCode = "Toolbar.QRCode.button"
         }
+
+        struct WebView {
+            static let documentLoadingLabel = "WebView.documentLoadingLabel"
+        }
     }
 
     struct ContextualHints {
@@ -550,8 +554,13 @@ struct AccessibilityIdentifiers {
     }
 
     struct Settings {
+        static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct AppIconSelection {
+            static let settingsRowTitle = "AppIconSelectionTitle"
+        }
 
         struct DefaultBrowser {
             static let defaultBrowser = "DefaultBrowserSettings"
@@ -702,6 +711,10 @@ struct AccessibilityIdentifiers {
             static let title = "showClipboardBar"
         }
 
+        struct BlockExternal {
+            static let title = "blockOpeningExternalApps"
+        }
+
         struct ShowLink {
             static let title = "showLinkPreviews"
         }
@@ -758,18 +771,16 @@ struct AccessibilityIdentifiers {
             static let title = "SiriSettings"
         }
 
-        struct StudiesToggle {
-            static let title = "StudiesToggle"
+        struct Browsing {
+            static let title = "BrowsingSettings"
+            static let tabs = "TABS"
+            static let inactiveTabsSwitch = "Inactive Tabs"
+            static let blockPopUps = "blockPopups"
+            static let autoPlay = "AutoplaySettings"
         }
 
-        struct Tabs {
-            static let title = "TabsSetting"
-
-            struct Customize {
-                static let title = "CUSTOMIZE TAB TRAY"
-                static let inactiveTabsSwitch = "Inactive Tabs"
-                static let doneButton = "Done"
-            }
+        struct StudiesToggle {
+            static let title = "StudiesToggle"
         }
 
         struct Theme {
@@ -797,6 +808,12 @@ struct AccessibilityIdentifiers {
         struct TrackingProtection {
             static let basic = "Settings.TrackingProtectionOption.BlockListBasic"
             static let strict = "Settings.TrackingProtectionOption.BlockListStrict"
+        }
+
+        struct Autoplay {
+            static let allowAudioAndVideo = "AllowAudioAndVideo"
+            static let blockAudio = "BlockAudio"
+            static let blockAudioAndVideo = "BlockAudioAndVideo"
         }
     }
 
