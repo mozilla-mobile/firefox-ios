@@ -46,9 +46,9 @@ struct SimpleToast: ThemeApplicable {
 
         NSLayoutConstraint.activate([
             heightConstraint,
-            containerView.leadingAnchor.constraint(equalTo: bottomContainer.leadingAnchor,
+            containerView.leadingAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.leadingAnchor,
                                                    constant: Toast.UX.toastSidePadding),
-            containerView.trailingAnchor.constraint(equalTo: bottomContainer.trailingAnchor,
+            containerView.trailingAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.trailingAnchor,
                                                     constant: -Toast.UX.toastSidePadding),
             containerView.bottomAnchor.constraint(equalTo: bottomContainer.safeAreaLayoutGuide.bottomAnchor,
                                                   constant: bottomConstraintPadding),
