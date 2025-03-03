@@ -44,6 +44,7 @@ class DefaultTemporaryDocument: NSObject,
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
+    private var localFileURL: URL?
 
     private let mimeType: String?
     private(set) var filename: String
