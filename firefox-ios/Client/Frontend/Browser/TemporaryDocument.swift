@@ -44,7 +44,6 @@ class DefaultTemporaryDocument: NSObject,
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
-    private var localFileURL: URL?
 
     private let mimeType: String?
     private(set) var filename: String
@@ -196,7 +195,7 @@ class DefaultTemporaryDocument: NSObject,
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         invalidateSession()
         guard let url = storeTempDownloadFile(at: location) else {
-            onDownload?(nil)
+            onDownloadError?()
             return
         }
         ensureMainThread { [weak self] in
@@ -208,7 +207,7 @@ class DefaultTemporaryDocument: NSObject,
         guard let error else { return }
         logger.log("Error downloading temp document: \(error)", level: .debug, category: .webview)
 
-        currentDownloadTask = nil
+        invalidateSession()
         ensureMainThread {
             self.onDownloadError?()
         }

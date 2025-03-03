@@ -977,10 +977,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     @discardableResult
     private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
-
+        self.temporaryDocument = nil
         if temporaryDocument.isDownloading {
             temporaryDocument.invalidateSession()
-            self.temporaryDocument = nil
             if forceReload {
                 reload()
             }
