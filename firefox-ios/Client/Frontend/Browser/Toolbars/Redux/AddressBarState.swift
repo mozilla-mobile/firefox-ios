@@ -840,6 +840,8 @@ struct AddressBarState: StateType, Equatable {
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
         if isEditing {
             // back caret when in edit mode
@@ -854,6 +856,12 @@ struct AddressBarState: StateType, Equatable {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
             }
+
+            if layout == .version1 {
+                actions.append(shareAction)
+            }
+        } else if isShowingNavigationToolbar, layout == .version1 {
+            actions.append(shareAction)
         }
 
         return actions
