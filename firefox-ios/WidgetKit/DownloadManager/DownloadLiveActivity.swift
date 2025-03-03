@@ -53,7 +53,7 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { LiveDownload in
             // Using Rectangle instead of EmptyView because the hitbox
             // of the empty view is too small (likely non existent),
             // meaning we'd never be redirected to the downloads panel
@@ -74,10 +74,10 @@ struct DownloadLiveActivity: Widget {
                             .frame(width: 40, height: 40)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Downloading []")
+                        Text("Downloading \(LiveDownload.state.downloads[0].fileName)")
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(Color("widgetLabelColors"))
-                        Text("[] of []")
+                        Text("\(String(format: "%.1f", Double(LiveDownload.state.totalBytesDownloaded) / 1000000)) MB of \(String(format: "%.1f", Double(LiveDownload.state.totalBytesExpected) / 1000000)) MB")
                             .font(.system(size: 15))
                             .opacity(0.8)
                             .foregroundColor(Color("widgetLabelColors"))
@@ -89,7 +89,12 @@ struct DownloadLiveActivity: Widget {
                             .foregroundColor(Color("widgetLabelColors"))
                             .opacity(0.3)
                         Circle()
-                            .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
+                            .trim(from: 0.0, to: min(
+                                    Double(LiveDownload.state.totalBytesDownloaded) /
+                                    Double(LiveDownload.state.totalBytesExpected),
+                                    1.0
+                                   )
+                                )
                             .stroke(style: StrokeStyle(lineWidth: 4))
                             .rotationEffect(.degrees(270.0))
                             .animation(.linear, value: 0.5)
