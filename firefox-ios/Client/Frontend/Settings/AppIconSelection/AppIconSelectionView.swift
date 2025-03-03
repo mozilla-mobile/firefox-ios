@@ -89,7 +89,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                 return
             }
 
-            telemetry.selectedIcon(appIcon: appIcon)
+            telemetry.selectedIcon(appIcon, previousIcon: self.currentAppIcon)
 
             self.currentAppIcon = appIcon
         }

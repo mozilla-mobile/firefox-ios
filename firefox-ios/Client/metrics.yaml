@@ -1545,10 +1545,16 @@ settings.app_icon:
     description: |
       Records when the user changes their app icon in the app settings.
     extra_keys:
-      name:
+      new_name:
         type: string
         description: |
-          The name of the app icon the user has selected.
+          The name of the new app icon the user has selected. Options
+          are listed in the AppIcon enumeration.
+      old_name:
+        type: string
+        description: |
+          The name of the app icon the user had previously selected.
+          Returns "unknown" if the previous icon had an invalid name.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11473
     data_reviews:

@@ -12,8 +12,12 @@ struct AppIconSelectionTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func selectedIcon(appIcon: AppIcon) {
-        let extra = GleanMetrics.SettingsAppIcon.SelectedExtra(name: appIcon.displayName)
+    func selectedIcon(_ selectedIcon: AppIcon, previousIcon: AppIcon?) {
+        // We log app icon names by their English enum value rather than localized display names
+        let extra = GleanMetrics.SettingsAppIcon.SelectedExtra(
+            newName: selectedIcon.telemetryName,
+            oldName: previousIcon?.telemetryName ?? "unknown"
+        )
         gleanWrapper.recordEvent(for: GleanMetrics.SettingsAppIcon.selected, extras: extra)
     }
 }
