@@ -8,13 +8,10 @@ import Glean
 import Shared
 
 final class SendDataSetting: BoolSetting {
-    private let titleText: String
-    private let subtitleText: String
     private let learnMoreText: String
     private let learnMoreURL: URL?
     private let a11yId: String?
     private let learnMoreA11yId: String?
-    private let defaultValue: Bool?
     private let featureFlagName: NimbusFeatureFlagID?
 
     private weak var settingsDelegate: SupportSettingsDelegate?
@@ -37,9 +34,6 @@ final class SendDataSetting: BoolSetting {
         enabled: Bool = true,
         isStudiesCase: Bool = false
     ) {
-        self.defaultValue = defaultValue
-        self.titleText = titleText
-        self.subtitleText = subtitleText
         self.learnMoreText = learnMoreText
         self.learnMoreURL = learnMoreURL
         self.a11yId = a11yId
@@ -48,7 +42,8 @@ final class SendDataSetting: BoolSetting {
         self.featureFlagName = featureFlagName
         super.init(prefs: prefs,
                    defaultValue: defaultValue,
-                   attributedTitleText: NSAttributedString(string: titleText))
+                   attributedTitleText: NSAttributedString(string: titleText),
+                   attributedStatusText: NSAttributedString(string: subtitleText))
 
         if isStudiesCase {
             let sendUsageDataPref = prefs?.boolForKey(AppConstants.prefSendUsageData) ?? true
@@ -64,10 +59,11 @@ final class SendDataSetting: BoolSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
+        guard let title = title?.string, let subtitle = status?.string else { return }
 
         cell.configure(
-            title: titleText,
-            subtitle: subtitleText,
+            title: title,
+            subtitle: subtitle,
             learnMoreText: learnMoreText,
             a11yId: learnMoreA11yId,
             theme: theme
@@ -79,7 +75,7 @@ final class SendDataSetting: BoolSetting {
         )
 
         displayBool(control.switchView)
-        control.switchView.accessibilityLabel = "\(titleText), \(subtitleText)"
+        control.switchView.accessibilityLabel = "\(title), \(subtitle)"
         if let accessibilityIdentifier {
             cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
         }
@@ -93,7 +89,7 @@ final class SendDataSetting: BoolSetting {
 
         cell.learnMoreDidTap = { [weak self] in
             guard let self else { return }
-            self.settingsDelegate?.askedToOpen(url: url, withTitle: NSAttributedString(string: self.titleText))
+            self.settingsDelegate?.askedToOpen(url: url, withTitle: NSAttributedString(string: title))
         }
     }
 

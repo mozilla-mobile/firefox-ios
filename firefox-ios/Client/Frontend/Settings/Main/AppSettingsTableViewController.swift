@@ -56,10 +56,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
     weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Data Settings
-    private var sendTechnicalDataSetting: Setting?
-    private var sendCrashReportsSetting: Setting?
-    private var sendDailyUsagePingSetting: Setting?
-    private var studiesToggleSetting: Setting?
+    private var sendTechnicalDataSetting: SendDataSetting?
+    private var sendCrashReportsSetting: SendDataSetting?
+    private var sendDailyUsagePingSetting: SendDataSetting?
+    private var studiesToggleSetting: SendDataSetting?
 
     // MARK: - Initializers
     init(
