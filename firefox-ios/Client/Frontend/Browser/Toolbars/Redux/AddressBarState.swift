@@ -27,13 +27,6 @@ struct AddressBarState: StateType, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
-    private static let qrCodeScanAction = ToolbarActionConfiguration(
-        actionType: .qrCode,
-        iconName: StandardImageIdentifiers.Large.qrCode,
-        isEnabled: true,
-        a11yLabel: .QRCode.ToolbarButtonA11yLabel,
-        a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
-
     private static let shareAction = ToolbarActionConfiguration(
         actionType: .share,
         iconName: StandardImageIdentifiers.Large.share,
@@ -228,7 +221,7 @@ struct AddressBarState: StateType, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: [ToolbarActionConfiguration](),
-            pageActions: [qrCodeScanAction],
+            pageActions: [ToolbarActionConfiguration](),
             browserActions: [tabsAction(), menuAction()],
             borderPosition: borderPosition,
             url: nil,
