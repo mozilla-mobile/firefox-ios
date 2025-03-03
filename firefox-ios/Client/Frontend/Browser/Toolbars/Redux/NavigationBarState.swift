@@ -204,15 +204,16 @@ struct NavigationBarState: StateType, Equatable {
 
         actions = [
             backAction(enabled: canGoBack),
-            forwardAction(enabled: canGoForward),
-            middleAction
+            forwardAction(enabled: canGoForward)
         ]
 
         switch layout {
         case .version1:
+            actions.append(newTabAction)
             actions.append(menuAction(showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
         default:
+            actions.append(middleAction)
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
             actions.append(menuAction(showWarningBadge: showWarningBadge))
         }
@@ -225,7 +226,6 @@ struct NavigationBarState: StateType, Equatable {
                                               canShowDataClearanceAction: Bool,
                                               isNewTabFeatureEnabled: Bool)
     -> ToolbarActionConfiguration {
-        // WT ToDo
         let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
         let isNewTabEnabled = isNewTabFeatureEnabled
         let middleActionForWebpage = canShowDataClearanceAction ?
