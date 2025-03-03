@@ -11,28 +11,36 @@ final class SettingsTelemetryTests: XCTestCase {
     // For telemetry extras
     let optionIdentifierKey = "option"
 
+    var mockGleanWrapper: MockGleanWrapper!
+
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+
+        mockGleanWrapper = MockGleanWrapper()
     }
 
-    func testSelectedIcon() throws {
+    func testTappedAppIconSetting_firesOptionSelected() throws {
         let subject = createSubject()
-        let option = SettingsTelemetry.MainMenuOption.AppIcon
+        let expectedOption = SettingsTelemetry.MainMenuOption.AppIcon
+        let expectedMetricType = type(of: GleanMetrics.SettingsMainMenu.optionSelected)
 
         subject.tappedAppIconSetting()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMainMenu.optionSelected)
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.SettingsMainMenu.OptionSelectedExtra
+        )
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?.first as? EventMetricType<GleanMetrics.SettingsMainMenu.OptionSelectedExtra>
+        )
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.SettingsMainMenu.optionSelected.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?[optionIdentifierKey], option.rawValue)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.option, expectedOption.rawValue)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func createSubject() -> SettingsTelemetry {
-        return SettingsTelemetry()
+        return SettingsTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }
