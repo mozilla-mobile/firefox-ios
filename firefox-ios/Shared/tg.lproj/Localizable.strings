@@ -1070,6 +1070,9 @@
 "SendTo.NavBar.Title" = "Фиристодани варақа";
 
 /* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Лутфан браузенри «Firefox»-ро кушоед, ба «Танзимот» гузаред ва барои идомаи раванд ворид шавед.";
+
+/* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Шумо ба ҳисоби «Firefox»-и худ ворид нашудаед.";
 
 /* Navigation bar button to Send the current page to a device */
@@ -1122,6 +1125,21 @@
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "Нишонии «URL»";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "Нишонии «URL» (Дархостро бо «%s» иваз намоед)";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Мавзуи браузер";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Намуди зоҳирӣ";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Намуди зоҳирии сомона";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Реҷаи торики сомона";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Манъ кардани кушоиши барномаҳои беруна";
@@ -1188,6 +1206,9 @@
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Иваз кардани реҷа";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "Вобаста аз равшании экран ба таври худкор иваз карда шавад";
 
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Ба таври худкор";
@@ -1558,6 +1579,9 @@
 /* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Tab.ShowTabTray.KeyCodeTitle" = "Намоиш додани ҳамаи варақаҳо";
 
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Ҳудуди варақаҳо аз %1$@ то %2$@ аз %3$@ дар умум";
+
 /* Accessibility label for the Tabs Tray view. */
 "Tabs Tray" = "Лавҳачаи варақаҳо";
 
@@ -1669,6 +1693,12 @@
 /* The title of the error displayed when changing wallpaper fails. */
 "Wallpaper.Change.Error.Title.v106" = "Тасвири замина иваз карда нашуд";
 
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Ҳангоми боргирӣ чизе нодуруст иҷро шуд.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Тасвири замина боргирӣ карда нашуд";
+
 /* An action for the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Error.Dismiss.v106" = "Бекор кардан";
 
@@ -1680,6 +1710,9 @@
 
 /* See http://mzl.la/1LXbDOL */
 "Welcome to your Reading List" = "Хуш омадед ба «Рӯйхати хониши» шумо";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Бале, ҳамин чиз душворӣ меорад.";
 
 /* Tile title for Wikipedia */
 "Wikipedia" = "Wikipedia";

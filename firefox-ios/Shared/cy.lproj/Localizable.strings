@@ -1144,6 +1144,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Newid yr Ymholiad gyda %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Thema Porwr";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Gwedd";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Gwedd Gwefan";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Yn rhoi gwedd dywyll i wefannau. Efallai na fydd rhai gwefannau yn edrych yn iawn.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Modd Tywyll Gwefan";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Rhwystro Agor Apiau Allanol";
 

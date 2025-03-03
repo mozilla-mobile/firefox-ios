@@ -1144,6 +1144,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URLa (ordezkatu bilaketa %s ikurrarekin)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Nabigatzailearen itxura";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Itxura";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Webgunearen itxura";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Eman webguneei itxura iluna. Zenbait webgune agian ez dira ondo ikusiko.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Webguneen modu iluna";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blokeatu kanpoko aplikazioak irekitzea";
 

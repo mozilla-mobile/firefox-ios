@@ -115,6 +115,9 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "То ҳол дар бораи ин тақризҳо ягон маълумот нест";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Бо интихоб кардани имкони «Ҳа, озмоед» шумо бо ҳамин шартҳо розӣ мешавед:";
+
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
 "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Пеш аз хариди маҳсул, дар «%1$@» аз назар гузаронед, ки то чӣ андоза тақризҳо дар бораи ин маҳсул боэътимод мебошанд. Абзори тафтиши тақризҳо ҳамчун хусусияти озмоишӣ аз тарафи «%2$@» ба браузер дарунсохт карда шудааст.";
 
@@ -128,7 +131,7 @@
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Маълумоти бештар";
 
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
-"Shopping.OptInCard.MainButton.Title.v120" = "Бале, кӯшиш кунед";
+"Shopping.OptInCard.MainButton.Title.v120" = "Ҳа, озмоед";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Огоҳномаи махфияти «%@»";
@@ -196,11 +199,17 @@
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Баркушодани лавҳаи танзимот";
 
+/* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Барои иваз кардани танзим ду маротиба пахш кунед.";
+
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.SettingsCard.Footer.Action.v120" = "Абзори тафтиши тақризҳо аз ҷониби «%1$@» (%2$@) таҳия карда шудааст";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Танзимот";
+
+/* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
+"Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Намоиши маҳсулоте, ки аз ҷониби «%@» тавсия дода шудаанд";
 
 /* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Ғайрифаъол";

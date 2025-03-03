@@ -1144,6 +1144,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Slóð (skipta út leitarskilyrði fyrir %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Vafraþema";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Útlit";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Útlit vefsvæðis";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Gefur vefsvæðum dökkt yfirbragð. Sum vefsvæði líta kannski ekki rétt út.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Dökkur hamur vefsvæðis";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Loka á opnun utanaðkomandi forrita";
 
