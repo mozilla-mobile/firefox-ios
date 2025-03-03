@@ -795,10 +795,14 @@ extension BrowserViewController: WKNavigationDelegate {
                                    context: nil)
             }
             tempPDF.onDownloadStarted = {
+                self?.scrollController.showToolbars(animated: true)
                 self?.observeValue(forKeyPath: KVOConstants.loading.rawValue,
                                    of: webView,
                                    change: [.newKey: true],
                                    context: nil)
+            }
+            tempPDF.onDownloadError = {
+                self?.navigationHandler?.removeDocumentLoading()
             }
             tab?.enqueueDocument(tempPDF)
         }

@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import Common
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
@@ -38,7 +39,8 @@ class DefaultTemporaryDocument: NSObject,
 
     private var onDownload: ((URL?) -> Void)?
     var onDownloadProgressUpdate: ((Double) -> Void)?
-    var onDownloadStarted: (() -> Void)?
+    var onDownloadStarted: VoidReturnCallback?
+    var onDownloadError: VoidReturnCallback?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
@@ -46,6 +48,7 @@ class DefaultTemporaryDocument: NSObject,
 
     private let mimeType: String?
     private(set) var filename: String
+    private let logger: Logger
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
@@ -56,11 +59,14 @@ class DefaultTemporaryDocument: NSObject,
         request: URLRequest,
         mimeType: String? = nil,
         cookies: [HTTPCookie] = [],
-        session: URLSession? = nil
+        session: URLSession? = nil,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.filename = filename ?? "unknown"
         self.mimeType = mimeType
+        self.logger = logger
+
         super.init()
 
         if let session {
@@ -72,11 +78,13 @@ class DefaultTemporaryDocument: NSObject,
         preflightResponse: URLResponse,
         request: URLRequest,
         mimeType: String? = nil,
-        session: URLSession? = nil
+        session: URLSession? = nil,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
         self.mimeType = mimeType
+        self.logger = logger
 
         super.init()
 
@@ -186,20 +194,23 @@ class DefaultTemporaryDocument: NSObject,
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        invalidateSession()
         guard let url = storeTempDownloadFile(at: location) else {
             onDownload?(nil)
             return
         }
-        invalidateSession()
         ensureMainThread { [weak self] in
             self?.onDownload?(url)
         }
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        guard let error else { return }
+        logger.log("Error downloading temp document: \(error)", level: .debug, category: .webview)
+
         currentDownloadTask = nil
-        ensureMainThread { [weak self] in
-            self?.onDownload?(nil)
+        ensureMainThread {
+            self.onDownloadError?()
         }
     }
 
