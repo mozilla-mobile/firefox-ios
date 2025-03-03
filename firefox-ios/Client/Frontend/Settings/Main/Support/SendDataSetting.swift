@@ -41,6 +41,7 @@ final class SendDataSetting: BoolSetting {
         self.settingsDelegate = settingsDelegate
         self.featureFlagName = featureFlagName
         super.init(prefs: prefs,
+                   prefKey: prefKey,
                    defaultValue: defaultValue,
                    attributedTitleText: NSAttributedString(string: titleText),
                    attributedStatusText: NSAttributedString(string: subtitleText))
@@ -94,6 +95,8 @@ final class SendDataSetting: BoolSetting {
     }
 
     func updateSetting(for isUsageEnabled: Bool) {
+        enabled = isUsageEnabled
+
         guard !isUsageEnabled else {
             // Note: switch should be enabled only when telemetry usage is enabled
             control.setSwitchTappable(to: true)
