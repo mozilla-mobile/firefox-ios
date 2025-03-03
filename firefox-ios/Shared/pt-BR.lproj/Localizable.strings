@@ -1144,6 +1144,12 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (substituir a consulta por %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Tema do navegador";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Aparência";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Bloquear abertura de aplicativos externos";
 

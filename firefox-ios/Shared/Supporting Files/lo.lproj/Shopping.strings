@@ -49,6 +49,30 @@
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "ກວດເບິງດຽວນີ້";
 
+/* Title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.Title.v120" = "ຂໍ້ມູນໃໝ່ເພື່ອກວດສອບ";
+
+/* Title for info card when no information is available at the moment */
+"Shopping.InfoCard.NoInfoAvailableRightNow.Title.v120" = "ບໍ່ມີຂໍ້ມູນໃນຕອນນີ້";
+
+/* Description for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Description.v120" = "ເມື່ອຜະລິດຕະພັນນີ້ມີການທົບທວນຄືນເພີ່ມເຕີມ, ພວກເຮົາຈະສາມາດກວດສອບຄຸນນະພາບຂອງພວກມັນໄດ້.";
+
+/* Title for info card when there are not enough reviews for a product */
+"Shopping.InfoCard.NotEnoughReviews.Title.v120" = "ຍັງບໍ່ມີການກວດຄືນພຽງພໍ";
+
+/* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
+"Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "ພວກເຮົາຄວນຈະມີຂໍ້ມູນກ່ຽວກັບການກວດຄືນຂອງຜະລິດຕະພັນນີ້ພາຍໃນ 24 ຊົ່ວໂມງ. ກະລຸນາກວດເບິ່ງຄືນ.";
+
+/* Text for the body label, to check the reliability of a product. */
+"Shopping.NoAnalysisCard.BodyLabel.Title.v120" = "ເພື່ອຮູ້ວ່າການທົບທວນຄືນຂອງຜະລິດຕະພັນນີ້ມີຄວາມຫນ້າເຊື່ອຖື ຫຼື ບໍ່, ໃຫ້ກວດເບິ່ງຄຸນນະພາບການທົບທວນຄືນ. ມັນໃຊ້ເວລາພຽງແຕ່ປະມານ 60 ວິນາທີ.";
+
+/* Title for card displayed when a shopping product has not been analysed yet. */
+"Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "ບໍ່ມີຂໍ້ມູນກ່ຽວກັບການກວດຄືນເຫຼົ່ານີ້ເທື່ອ";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "ໂດຍການເລືອກ “ແມ່ນແລ້ວ, ລອງມັນ” ແມ່ນຖືວ່າທ່ານຍອມຮັບໃນລາຍການເຫຼົ່ານີ້:";
+
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
 "Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "ເບິ່ງວ່າການ review ຜະລິດຕະພັນທີ່ເຊື່ອຖືໄດ້ແນວໃດຢູ່ໃນ %1$@ ກ່ອນທີ່ທ່ານຈະຊື້. Review Checker, ຄຸນສົມບັດທົດລອງຈາກ %2$@, ຖືກສ້າງຂຶ້ນໃນ browser.";
 
@@ -78,6 +102,9 @@
 
 /* Description of the reliability rating 'C' displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityRating.C.Description.v120" = "ການປະສົມປະສານຂອງການ review ທີ່ຫນ້າເຊື່ອຖື ແລະ ບໍ່ຫນ້າເຊື່ອຖື";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "ການຕັ້ງຄ່າ";
 
 /* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
 "Shopping.Sheet.Close.AccessibilityLabel.v121" = "ປິດໂຕກວດສອບ";

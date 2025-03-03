@@ -58,6 +58,30 @@
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "പണം കൊടുക്കൽ മുറകൾ";
 
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "ശബ്ദവും ദൃശ്യവും അനുവദിക്കുക";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
+"Settings.Autoplay.BlockAudio.v137" = "ഒച്ച തടയുക";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "ഒച്ചയും കാഴ്ചയും തടയുക";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
+"Settings.Autoplay.SettingsTitle.v137" = "തന്നെതാനെ പ്ലേ ചെയ്യുക";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "കണ്ണികള്‍";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "മാദ്ധ്യമം";
+
+/* This is the title for Tabs customization under the Browsing settings section. */
+"Settings.Browsing.Tabs.v137" = "ടാബുകള്‍";
+
+/* In the settings menu, in the General section, this is the title for Browsing customization section. */
+"Settings.Browsing.Title.v137" = "തിരച്ചിൽ";
+
 /* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v135" = "കൂടുതൽ അറിയുക.";
 
@@ -100,6 +124,9 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "അറിയിപ്പുകൾ തുടങ്ങി വയ്ക്കുക";
 
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "സ്വകാര്യത അറിയിപ്പു്";
+
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "തനതുതിരച്ചിൽയന്ത്രം";
 
@@ -138,6 +165,9 @@
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "സമന്വയിപ്പിച്ച ടാബുകൾ തിരയുക";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "ഗോളാന്തരവലയിൽ നിന്നുള്ള നിർദ്ദേശങ്ങൾ";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "കൂടുതല്‍ അറിയുക";
