@@ -40,13 +40,6 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
-    private static let shareAction = ToolbarActionConfiguration(
-        actionType: .share,
-        iconName: StandardImageIdentifiers.Large.share,
-        isEnabled: true,
-        a11yLabel: .TabLocationShareAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
-
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   actions: [],
