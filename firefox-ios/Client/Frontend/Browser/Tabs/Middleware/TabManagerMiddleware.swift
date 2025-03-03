@@ -392,7 +392,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                        windowUUID: uuid,
                                                        actionType: GeneralBrowserActionType.showToast)
                 store.dispatch(toastAction)
-                addNewTab(uuid: uuid)
+                addNewTabIfPrivate(uuid: uuid)
             } else {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
@@ -487,7 +487,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
-                    addNewTab(uuid: uuid)
+                    addNewTabIfPrivate(uuid: uuid)
                 }
             }
         }
@@ -500,7 +500,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     }
 
     /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
-    private func addNewTab(uuid: WindowUUID) {
+    private func addNewTabIfPrivate(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             tabManager.addTab(nil, isPrivate: false)
