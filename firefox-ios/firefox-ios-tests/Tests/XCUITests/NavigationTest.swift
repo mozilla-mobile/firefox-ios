@@ -490,7 +490,7 @@ class NavigationTest: BaseTestCase {
         }
         numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"])
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).staticTexts["Example Domains"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
