@@ -11,28 +11,40 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
     // For telemetry extras
     let nameIdentifierKey = "name"
 
+    var mockGleanWrapper: MockGleanWrapper!
+
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+
+        mockGleanWrapper = MockGleanWrapper()
     }
 
-    func testSelectedIcon() throws {
+    func testSelectedIcon_firesSelected() throws {
+        // The event and event extras type under test
+        let event = GleanMetrics.SettingsAppIcon.selected
+        typealias EventExtrasType = GleanMetrics.SettingsAppIcon.SelectedExtra
+
         let subject = createSubject()
-        let appIcon = AppIcon.darkPurple
+        let expectedAppIcon = AppIcon.darkPurple
+        let expectedMetricType = type(of: event)
 
-        subject.selectedIcon(appIcon: appIcon)
+        subject.selectedIcon(appIcon: expectedAppIcon)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsAppIcon.selected)
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? EventExtrasType
+        )
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>
+        )
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        let resultValue = try XCTUnwrap(GleanMetrics.SettingsAppIcon.selected.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?[nameIdentifierKey], appIcon.displayName)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.name, expectedAppIcon.displayName)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func createSubject() -> AppIconSelectionTelemetry {
-        return AppIconSelectionTelemetry()
+        return AppIconSelectionTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }

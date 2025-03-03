@@ -20,17 +20,21 @@ final class SettingsTelemetryTests: XCTestCase {
     }
 
     func testTappedAppIconSetting_firesOptionSelected() throws {
+        // The event and event extras type under test
+        let event = GleanMetrics.SettingsMainMenu.optionSelected
+        typealias EventExtrasType = GleanMetrics.SettingsMainMenu.OptionSelectedExtra
+
         let subject = createSubject()
         let expectedOption = SettingsTelemetry.MainMenuOption.AppIcon
-        let expectedMetricType = type(of: GleanMetrics.SettingsMainMenu.optionSelected)
+        let expectedMetricType = type(of: event)
 
         subject.tappedAppIconSetting()
 
         let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras as? GleanMetrics.SettingsMainMenu.OptionSelectedExtra
+            mockGleanWrapper.savedExtras as? EventExtrasType
         )
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents?.first as? EventMetricType<GleanMetrics.SettingsMainMenu.OptionSelectedExtra>
+            mockGleanWrapper.savedEvents?.first as? EventMetricType<EventExtrasType>
         )
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
