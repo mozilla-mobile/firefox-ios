@@ -320,9 +320,11 @@ class BookmarksTests: BaseTestCase {
         // Delete the Bookmark added, check it is removed
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
         app.buttons["Delete"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-       // mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+
+        // Forces an update of the a11y tree, resolving https://mozilla-hub.atlassian.net/browse/MTE-4244
+        app.tables["Bookmarks List"].swipeDown()
+
+        mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
