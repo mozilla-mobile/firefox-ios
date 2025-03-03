@@ -505,15 +505,6 @@ class TabTrayViewController: UIViewController,
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
-<<<<<<< HEAD
-                [
-                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                   constant: Toast.UX.toastSidePadding),
-                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                    constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-                ]
-=======
                 if self.isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
                     [
                         toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
@@ -532,7 +523,7 @@ class TabTrayViewController: UIViewController,
                         toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                     ]
                 }
->>>>>>> main
+
             }
             shownToast = toast
         } else {
