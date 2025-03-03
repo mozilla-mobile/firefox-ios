@@ -1062,7 +1062,9 @@ extension URLBarView: ThemeApplicable {
         backgroundColor = theme.colors.ecosia.backgroundPrimary
         line.backgroundColor = theme.colors.ecosia.barSeparator
 
+        /* Ecosia: Remove color for non-active location border state
         locationBorderColor = theme.colors.borderPrimary
+         */
         /* Ecosia: Take into account overlay mode for `locationView` background
         locationView.backgroundColor = theme.colors.layer3
         locationContainer.backgroundColor = theme.colors.layer3
