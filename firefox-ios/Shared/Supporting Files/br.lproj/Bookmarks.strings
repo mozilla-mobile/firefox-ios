@@ -1,3 +1,9 @@
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Goullo eo an teuliad-mañ";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "N’eus tamm sined ebet c’hoazh";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Pep tra";
 
@@ -13,6 +19,12 @@
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Embann ar sined";
 
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "SINEDOÙ AN URZHIATAER";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "Enrollañ";
+
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
 "Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Enrollañ e";
 
@@ -21,6 +33,12 @@
 
 /* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
 "Bookmarks.Menu.EditFolder.v131" = "Embann an teuliad";
+
+/* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "Dibarzhioù ouzhpenn";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "Enrollañ er “Sinedoù”";
 
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "Embann";

@@ -1144,6 +1144,15 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (byt ut søkjestreng med %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Nettlesartema";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Utsjånad";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Utsjånaden på nettstaden";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blokker opning av eksterne appar";
 

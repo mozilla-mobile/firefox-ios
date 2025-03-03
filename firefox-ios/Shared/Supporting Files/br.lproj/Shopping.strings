@@ -37,6 +37,9 @@
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Shipping.Title.v120" = "Kas";
 
+/* Title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Title.v120" = "Poentoù pouezus an alioù diwezhañ";
+
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "N’hallet ket gwiriañ an alioù-mañ";
 

@@ -1,3 +1,12 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Барои имконоти бештар ду маротиба пахш карда, доред";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Пайвастшавӣ бехатар нест. Муҳофизати такмилёфта аз пайгирӣ хомӯш аст.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Пайвастшавӣ бехатар аст. Муҳофизати такмилёфта аз пайгирӣ хомӯш аст.";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Пайвастшавӣ бехатар нест";
 
