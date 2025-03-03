@@ -212,9 +212,6 @@ struct NavigationBarState: StateType, Equatable {
         case .version1:
             actions.append(menuAction(showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
-        case .version2:
-            actions.append(shareAction)
-            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
         default:
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
             actions.append(menuAction(showWarningBadge: showWarningBadge))
