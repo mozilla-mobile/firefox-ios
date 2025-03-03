@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Redux
 
 class WallpaperBackgroundView: UIView {
     // MARK: - UI Elements

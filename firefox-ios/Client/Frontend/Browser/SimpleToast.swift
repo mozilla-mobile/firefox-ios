@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 struct SimpleToast: ThemeApplicable {
     struct UX {

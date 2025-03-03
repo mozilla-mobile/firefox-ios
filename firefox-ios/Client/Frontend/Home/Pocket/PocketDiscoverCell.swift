@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section

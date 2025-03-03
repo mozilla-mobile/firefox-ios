@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // Protocol for each section view model in Firefox Home page view controller
 protocol HomepageViewModelProtocol {

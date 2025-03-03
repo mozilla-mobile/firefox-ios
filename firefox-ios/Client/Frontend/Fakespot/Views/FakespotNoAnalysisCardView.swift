@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 import ComponentLibrary
 
 struct FakespotNoAnalysisCardViewModel {
