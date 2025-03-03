@@ -248,14 +248,7 @@ class HomePageSettingsUITests: BaseTestCase {
         )
         app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
         // Tab tray is open with recently open tab
-        if !iPad() {
-            mozWaitForElementToExist(
-                app.otherElements
-                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-                    .staticTexts[urlExampleLabel])
-        } else {
-            mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
-        }
+        mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
         app.buttons["Done"].waitAndTap()
         // Validation for when Jump In section is not displayed
         navigator.nowAt(NewTabScreen)

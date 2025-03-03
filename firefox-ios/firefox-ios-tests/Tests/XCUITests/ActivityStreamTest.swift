@@ -4,6 +4,7 @@
 
 import XCTest
 import Shared
+import Common
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
@@ -102,7 +103,7 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        app.collectionViews.buttons["crossLarge"].waitAndTap()
+        app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)

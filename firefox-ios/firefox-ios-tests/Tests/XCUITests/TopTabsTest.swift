@@ -104,9 +104,9 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         } else {
-            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -337,17 +337,11 @@ class TopTabsTest: BaseTestCase {
         // Scroll down to view all open tabs thumbnails
         navigator.goto(TabTray)
         app.swipeUp()
-        if !iPad() {
-            let navBarTabTray = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
-            let navBarTabTrayButton = app.segmentedControls[navBarTabTray].buttons.firstMatch
-            mozWaitForElementToExist(navBarTabTrayButton)
-            let tabsOpenTabTray: String = navBarTabTrayButton.label
-            XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
-        } else {
-            let navBarTabTrayButton = app.segmentedControls["Open Tabs"].buttons.firstMatch
-            mozWaitForElementToExist(navBarTabTrayButton)
-            XCTAssertTrue(navBarTabTrayButton.label.hasSuffix(numTab!))
-        }
+        let navBarTabTray = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+        let navBarTabTrayButton = app.segmentedControls[navBarTabTray].buttons.firstMatch
+        mozWaitForElementToExist(navBarTabTrayButton)
+        let tabsOpenTabTray: String = navBarTabTrayButton.label
+        XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
         let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         // Go to a tab that is below the fold of the scrollable “Open Tabs” view
         if !iPad() {
@@ -427,8 +421,9 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
+        let crossCircleFillLarge = StandardImageIdentifiers.Large.crossCircleFill
         for _ in 0...3 {
-            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossCircleFillLarge"].waitAndTap()
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[crossCircleFillLarge].waitAndTap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
             waitForElementsToExist(
                 [
@@ -437,7 +432,7 @@ class TopTabsTest: BaseTestCase {
                 ]
             )
         }
-        app.collectionViews.buttons["crossCircleFillLarge"].waitAndTap()
+        app.collectionViews.buttons[crossCircleFillLarge].waitAndTap()
         waitForElementsToExist(
             [
                 app.buttons["Undo"],
