@@ -25,10 +25,11 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
         typealias EventExtrasType = GleanMetrics.SettingsAppIcon.SelectedExtra
 
         let subject = createSubject()
-        let expectedAppIcon = AppIcon.darkPurple
+        let expectedNewAppIcon = AppIcon.darkPurple
+        let expectedOldAppIcon = AppIcon.hug
         let expectedMetricType = type(of: event)
 
-        subject.selectedIcon(appIcon: expectedAppIcon)
+        subject.selectedIcon(expectedNewAppIcon, previousIcon: expectedOldAppIcon)
 
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras as? EventExtrasType
@@ -40,7 +41,8 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.name, expectedAppIcon.displayName)
+        XCTAssertEqual(savedExtras.newName, expectedNewAppIcon.telemetryName)
+        XCTAssertEqual(savedExtras.oldName, expectedOldAppIcon.telemetryName)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
