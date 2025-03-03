@@ -875,17 +875,10 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
+        guard !isEditing else { return actions }
+
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-
-        let showQrCodeButton = showQRPageAction ?? addressBarState.showQRPageAction
-
-        guard !showQrCodeButton else {
-            // On homepage we only show the QR code button
-            return [qrCodeScanAction]
-        }
-
-        guard !isEditing else { return actions }
 
         switch readerModeState {
         case .active, .available:
@@ -906,8 +899,6 @@ struct AddressBarState: StateType, Equatable {
             actions.append(readerModeAction)
         default: break
         }
-
-        actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
