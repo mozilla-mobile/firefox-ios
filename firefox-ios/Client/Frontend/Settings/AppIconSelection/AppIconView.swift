@@ -59,43 +59,41 @@ struct AppIconView: View, ThemeApplicable {
 
     @ViewBuilder private var subView: some View {
         if let image = UIImage(named: appIcon.imageSetAssetName) {
-            buttonGroup(for: image)
+            button(for: image)
         } else {
             EmptyView()
         }
     }
 
-    private func buttonGroup(for image: UIImage) -> some View {
-        Group {
-            Button(action: { setAppIcon(appIcon) }) {
-                HStack {
-                    Image(systemName: selectionImageIdentifier)
-                        .padding(.trailing, UX.itemPadding)
-                        .tint(themeColors.actionPrimary.color)
-                        .accessibilityLabel(selectionImageAccessibilityLabel)
+    private func button(for image: UIImage) -> some View {
+        Button(action: { setAppIcon(appIcon) }) {
+            HStack {
+                Image(systemName: selectionImageIdentifier)
+                    .padding(.trailing, UX.itemPadding)
+                    .tint(themeColors.actionPrimary.color)
+                    .accessibilityLabel(selectionImageAccessibilityLabel)
 
-                    // swiftlint:disable:next accessibility_label_for_image
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(width: UX.appIconSize, height: UX.appIconSize)
-                        .cornerRadius(UX.cornerRadius)
-                        .overlay(
-                            // Add rounded border
-                            RoundedRectangle(cornerRadius: UX.cornerRadius)
-                                .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
-                        )
-                        .padding(.trailing, UX.itemPadding)
+                // swiftlint:disable:next accessibility_label_for_image
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: UX.appIconSize, height: UX.appIconSize)
+                    .cornerRadius(UX.cornerRadius)
+                    .overlay(
+                        // Add rounded border
+                        RoundedRectangle(cornerRadius: UX.cornerRadius)
+                            .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
+                    )
+                    .padding(.trailing, UX.itemPadding)
 
-                    Text(appIcon.displayName)
-                        .tint(themeColors.textPrimary.color)
+                Text(appIcon.displayName)
+                    .tint(themeColors.textPrimary.color)
 
-                    Spacer()
-                }
-                .padding(.all, UX.itemPadding)
+                Spacer()
             }
-            .background(Color.clear)
-            .accessibilityHint(selectionAccessibilityHint)
+            .padding(.all, UX.itemPadding)
         }
+        .background(Color.clear)
+        .accessibilityHint(selectionAccessibilityHint)
     }
 
     func applyTheme(theme: Theme) {
