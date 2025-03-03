@@ -8,7 +8,6 @@ import UIKit
 import Shared
 import Redux
 import MenuKit
-import SiteImageView
 
 class MainMenuViewController: UIViewController,
                               UIAdaptivePresentationControllerDelegate,

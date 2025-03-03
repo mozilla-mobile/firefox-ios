@@ -405,7 +405,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        if !isTabTrayUIExperimentsEnabled {
+        if !isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
             navigationItem.title = tabTrayState.navigationTitle
         }
     }
@@ -505,6 +505,7 @@ class TabTrayViewController: UIViewController,
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
+<<<<<<< HEAD
                 [
                     toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                    constant: Toast.UX.toastSidePadding),
@@ -512,6 +513,26 @@ class TabTrayViewController: UIViewController,
                                                     constant: -Toast.UX.toastSidePadding),
                     toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                 ]
+=======
+                if self.isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
+                    [
+                        toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                       constant: Toast.UX.toastSidePadding),
+                        toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                        constant: -Toast.UX.toastSidePadding),
+                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor,
+                                                      constant: -UX.segmentedControlTopSpacing)
+                    ]
+                } else {
+                    [
+                        toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                                                       constant: Toast.UX.toastSidePadding),
+                        toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                                                        constant: -Toast.UX.toastSidePadding),
+                        toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                    ]
+                }
+>>>>>>> main
             }
             shownToast = toast
         } else {

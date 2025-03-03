@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Shared
 
 // Top site UI class, used in the home top site section
 final class TopSite: FeatureFlaggable {

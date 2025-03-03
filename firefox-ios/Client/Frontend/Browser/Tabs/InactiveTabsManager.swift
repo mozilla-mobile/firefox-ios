@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
 
 protocol InactiveTabsManagerProtocol {
     /// Returns inactive normal (non-private) tabs filtered from the given tabs array.
