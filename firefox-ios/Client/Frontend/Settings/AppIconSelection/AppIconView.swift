@@ -47,11 +47,26 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     var body: some View {
-        guard let image = UIImage(named: appIcon.imageSetAssetName) else {
-            return EmptyView()
+        subView
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
 
-        return Group {
+    @ViewBuilder private var subView: some View {
+        if let image = UIImage(named: appIcon.imageSetAssetName) {
+            buttonGroup(for: image)
+        } else {
+            EmptyView()
+        }
+    }
+
+    private func buttonGroup(for image: UIImage) -> some View {
+        Group {
             Button(action: { setAppIcon(appIcon) }) {
                 HStack {
                     Image(systemName: selectionImageIdentifier)
@@ -80,13 +95,6 @@ struct AppIconView: View, ThemeApplicable {
             }
             .background(Color.clear)
             .accessibilityHint(selectionAccessibilityHint)
-        }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
