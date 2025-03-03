@@ -523,7 +523,6 @@ class TabTrayViewController: UIViewController,
                         toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
                     ]
                 }
-
             }
             shownToast = toast
         } else {
