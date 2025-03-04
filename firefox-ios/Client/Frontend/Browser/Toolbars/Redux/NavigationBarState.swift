@@ -228,7 +228,7 @@ struct NavigationBarState: StateType, Equatable {
         enabled: Bool,
         layout: ToolbarLayoutStyle?)
     -> ToolbarActionConfiguration {
-        var iconName: String
+        let iconName: String
         switch layout {
         case .version1:
             iconName = StandardImageIdentifiers.Large.chevronLeft
@@ -250,7 +250,7 @@ struct NavigationBarState: StateType, Equatable {
         enabled: Bool,
         layout: ToolbarLayoutStyle?)
     -> ToolbarActionConfiguration {
-        var iconName: String
+        let iconName: String
         switch layout {
         case .version1:
             iconName = StandardImageIdentifiers.Large.chevronRight
