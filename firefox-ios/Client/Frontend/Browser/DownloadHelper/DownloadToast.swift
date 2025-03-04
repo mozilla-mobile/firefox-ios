@@ -100,7 +100,8 @@ class DownloadToast: Toast, DownloadProgressDelegate {
             return descriptionText
         }
 
-        let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText, downloadProgressManager.downloads.count)
+        let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText,
+                                          downloadProgressManager.downloads.count)
 
         return String(
             format: .DownloadMultipleFilesAndProgressToastDescriptionText,

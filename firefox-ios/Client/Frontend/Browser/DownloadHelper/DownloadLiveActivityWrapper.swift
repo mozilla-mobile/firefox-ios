@@ -47,7 +47,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
         Task {
             await downloadLiveActivity?.end(using: contentState,
-                                           dismissalPolicy: .after(.now.addingTimeInterval(afterSeconds)))
+                                            dismissalPolicy: .after(.now.addingTimeInterval(afterSeconds)))
         }
     }
 
