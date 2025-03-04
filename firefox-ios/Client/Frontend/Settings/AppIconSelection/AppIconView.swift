@@ -66,7 +66,9 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     private func button(for image: UIImage) -> some View {
-        Button(action: { setAppIcon(appIcon) }) {
+        Button(action: {
+            setAppIcon(appIcon)
+        }) {
             HStack {
                 Image(systemName: selectionImageIdentifier)
                     .padding(.trailing, UX.itemPadding)
