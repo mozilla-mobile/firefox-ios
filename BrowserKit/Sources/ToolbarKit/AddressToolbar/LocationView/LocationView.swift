@@ -203,9 +203,8 @@ final class LocationView: UIView,
         iconContainerStackViewLeadingConstraint?.isActive = true
 
         containerViewConstrains = [
-            containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-            containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ]
 
         NSLayoutConstraint.activate(containerViewConstrains)
