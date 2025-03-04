@@ -254,8 +254,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         let tab = tabs[index]
 
         DispatchQueue.main.async { [weak self] in
-            self?.removeTab(tab, flushToDisk: true)
-            self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+            guard let self else { return }
+            self.removeTab(tab, flushToDisk: true)
+
+            // Update selected tab only if tabs array is not empty
+            if !self.tabs.isEmpty { self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index) }
             completion?()
         }
 
