@@ -61,7 +61,9 @@ final class LocationView: UIView,
     private lazy var safeListedURLImageColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
+    private lazy var containerView: UIView = .build()
 
+    private var containerViewConstrains: [NSLayoutConstraint] = []
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
     private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
@@ -123,7 +125,11 @@ final class LocationView: UIView,
         return urlTextField.resignFirstResponder()
     }
 
-    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
+    func configure(_ config: LocationViewConfiguration,
+                   delegate: LocationViewDelegate,
+                   isUnifiedSearchEnabled: Bool,
+                   shouldCenterLocationTextField: Bool) {
+        layoutContainerView(config, isURLTextFieldCentered: shouldCenterLocationTextField)
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -141,6 +147,24 @@ final class LocationView: UIView,
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
         onLongPress = config.onLongPress
+    }
+
+    private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
+        NSLayoutConstraint.deactivate(containerViewConstrains)
+        containerViewConstrains.removeAll()
+        if config.isEditing || !isURLTextFieldCentered {
+            containerViewConstrains = [
+                containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            ]
+        } else {
+            containerViewConstrains = [
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+            ]
+        }
+        NSLayoutConstraint.activate(containerViewConstrains)
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -162,27 +186,37 @@ final class LocationView: UIView,
     }
 
     private func setupLayout() {
-        addSubviews(urlTextField, iconContainerStackView, gradientView)
+        addSubview(containerView)
+        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
 
-        urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor)
+        urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         urlTextFieldTrailingConstraint?.isActive = true
 
-        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
+        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(
+            equalTo: containerView.leadingAnchor
+        )
         iconContainerStackViewLeadingConstraint?.isActive = true
 
+        containerViewConstrains = [
+            containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+            containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ]
+
+        NSLayoutConstraint.activate(containerViewConstrains)
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
             gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
             gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
 
-            urlTextField.topAnchor.constraint(equalTo: topAnchor),
-            urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            urlTextField.topAnchor.constraint(equalTo: containerView.topAnchor),
+            urlTextField.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -192,8 +226,11 @@ final class LocationView: UIView,
             lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
             lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
 
-            iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
-            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            iconContainerStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            iconContainerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 

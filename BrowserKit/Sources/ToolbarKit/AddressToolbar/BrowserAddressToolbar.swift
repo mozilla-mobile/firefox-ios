@@ -66,15 +66,16 @@ public class BrowserAddressToolbar: UIView,
     private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
-    private var previousLocationViewConfiguration: LocationViewConfiguration?
+    private var previousConfiguration: AddressToolbarConfiguration?
     public var isUnifiedSearchEnabled = false {
         didSet {
-            guard let previousLocationViewConfiguration, oldValue != isUnifiedSearchEnabled else { return }
+            guard let previousConfiguration, oldValue != isUnifiedSearchEnabled else { return }
 
             locationView.configure(
-                previousLocationViewConfiguration,
+                previousConfiguration.locationViewConfiguration,
                 delegate: self,
-                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                shouldCenterLocationTextField: previousConfiguration.uxConfiguration.shouldCenterLocationText
             )
         }
     }
@@ -99,7 +100,7 @@ public class BrowserAddressToolbar: UIView,
                           animated: Bool) {
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        self.previousLocationViewConfiguration = config.locationViewConfiguration
+        self.previousConfiguration = config
         configureUX(config: config.uxConfiguration)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
@@ -114,7 +115,8 @@ public class BrowserAddressToolbar: UIView,
         locationView.configure(
             config.locationViewConfiguration,
             delegate: self,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            shouldCenterLocationTextField: config.uxConfiguration.shouldCenterLocationText
         )
         droppableUrl = config.locationViewConfiguration.droppableUrl
     }
