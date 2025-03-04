@@ -56,10 +56,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
     weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Data Settings
-    private var sendTechnicalDataSetting: BoolSetting?
-    private var sendCrashReportsSetting: BoolSetting?
-    private var sendDailyUsagePingSetting: BoolSetting?
-    private var studiesToggleSetting: BoolSetting?
+    private var sendTechnicalDataSetting: SendDataSetting?
+    private var sendCrashReportsSetting: SendDataSetting?
+    private var sendDailyUsagePingSetting: SendDataSetting?
+    private var studiesToggleSetting: SendDataSetting?
 
     // MARK: - Initializers
     init(
@@ -93,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - View lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.register(cellType: ThemedLearnMoreTableViewCell.self)
         setupNavigationBar()
         configureAccessibilityIdentifiers()
     }
@@ -190,49 +190,57 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func setupDataSettings() {
         guard let profile else { return }
 
-        let studiesSetting = StudiesToggleSetting(
+        let studiesSetting = SendDataSetting(
             prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            prefKey: AppConstants.prefStudiesToggle,
+            defaultValue: true,
+            titleText: .StudiesSettingTitleV2,
+            subtitleText: .StudiesSettingMessageV2,
+            learnMoreText: .StudiesSettingLinkV2,
+            learnMoreURL: SupportUtils.URLForTopic("ios-studies"),
+            a11yId: AccessibilityIdentifiers.Settings.SendData.studiesTitle,
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.studiesLearnMoreButton,
             settingsDelegate: parentCoordinator,
-            title: .StudiesSettingTitleV2,
-            message: .StudiesSettingMessageV2,
-            linkedText: .StudiesSettingLinkV2
+            isStudiesCase: true
         )
+        studiesSetting.settingDidChange = {
+            Experiments.setStudiesSetting($0)
+        }
 
         let sendTechnicalDataSettings = SendDataSetting(
             prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator,
-            title: .SendTechnicalDataSettingTitleV2,
-            message: String(format: .SendTechnicalDataSettingMessageV2, AppName.shortName.rawValue),
-            linkedText: .SendTechnicalDataSettingLinkV2,
             prefKey: AppConstants.prefSendUsageData,
+            defaultValue: true,
+            titleText: .SendTechnicalDataSettingTitleV2,
+            subtitleText: String(format: .SendTechnicalDataSettingMessageV2, AppName.shortName.rawValue),
+            learnMoreText: .SendTechnicalDataSettingLinkV2,
+            learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
-            learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataLearnMoreButton,
+            settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.shouldSendData = { [weak self] value in
+        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
             guard let self, let profile = self.profile else { return }
             TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
             studiesSetting.updateSetting(for: value)
+            tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
         let sendDailyUsagePingSettings = SendDataSetting(
             prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator,
-            title: .SendDailyUsagePingSettingTitle,
-            message: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
-            linkedText: .SendDailyUsagePingSettingLinkV2,
             prefKey: AppConstants.prefSendDailyUsagePing,
+            defaultValue: true,
+            titleText: .SendDailyUsagePingSettingTitle,
+            subtitleText: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
+            learnMoreText: .SendDailyUsagePingSettingLinkV2,
+            learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
-            learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile")
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingLearnMoreButton,
+            settingsDelegate: parentCoordinator
         )
-        sendDailyUsagePingSettings.shouldSendData = { [weak self] value in
+        sendDailyUsagePingSettings.settingDidChange = { [weak self] value in
             if value {
                 self?.gleanUsageReportingMetricsService.start()
             } else {
@@ -243,15 +251,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let sendCrashReportsSettings = SendDataSetting(
             prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator,
-            title: .SendCrashReportsSettingTitle,
-            message: String(format: .SendCrashReportsSettingMessageV2, MozillaName.shortName.rawValue),
-            linkedText: .SendCrashReportsSettingLinkV2,
             prefKey: AppConstants.prefSendCrashReports,
+            defaultValue: true,
+            titleText: .SendCrashReportsSettingTitle,
+            subtitleText: String(format: .SendCrashReportsSettingMessageV2, MozillaName.shortName.rawValue),
+            learnMoreText: .SendCrashReportsSettingLinkV2,
+            learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports"),
             a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
-            learnMoreURL: SupportUtils.URLForTopic("ios-crash-reports")
+            learnMoreA11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsLearnMoreButton,
+            settingsDelegate: parentCoordinator
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
@@ -343,19 +351,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
-        privacySettings.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
-        }
-
-        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
-        if autofillAddressStatus, let profile {
-            privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
-                                                          profile: profile,
-                                                          settingsDelegate: parentCoordinator))
-        }
+        privacySettings.append(AutofillPasswordSetting(settings: self, settingsDelegate: parentCoordinator))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 

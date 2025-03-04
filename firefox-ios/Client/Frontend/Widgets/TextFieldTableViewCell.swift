@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String)

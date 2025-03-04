@@ -30,13 +30,6 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         super.init()
     }
 
-    fileprivate lazy var topDomains: [String]? = {
-        guard let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        else { return nil }
-
-        return try? String(contentsOfFile: filePath).components(separatedBy: "\n")
-    }()
-
     fileprivate func getBookmarksAsSites(
         matchingSearchQuery query: String,
         limit: UInt,
@@ -159,16 +152,6 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
             if let completion = completionForURL(site.url) {
                 autocompleteView.setAutocompleteSuggestion(completion)
                 return
-            }
-        }
-
-        // If there are no search history matches, try matching one of the Alexa top domains.
-        if let topDomains = topDomains {
-            for domain in topDomains {
-                if let completion = completionForDomain(domain) {
-                    autocompleteView.setAutocompleteSuggestion(completion)
-                    return
-                }
             }
         }
     }

@@ -4,7 +4,6 @@
 
 import SwiftUI
 import Common
-import Shared
 
 struct AppIconSelectionView: View, ThemeApplicable {
     private let windowUUID: WindowUUID
@@ -17,6 +16,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     @State private var currentAppIcon = AppIcon.initFromSystem()
+    @State private var isShowingErrorAlert = false
 
     // MARK: - Theming
     // FIXME FXIOS-11472 Improve our SwiftUI theming
@@ -41,6 +41,15 @@ struct AppIconSelectionView: View, ThemeApplicable {
                             windowUUID: windowUUID,
                             setAppIcon: setAppIcon
                         )
+                        .alert(isPresented: $isShowingErrorAlert) {
+                            Alert(
+                                title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
+                                message: nil,
+                                dismissButton: .default(
+                                    Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
+                                )
+                            )
+                        }
                     }
                 }
                 .background(themeColors.layer2.color)
@@ -79,7 +88,8 @@ struct AppIconSelectionView: View, ThemeApplicable {
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
-                // TODO FXIOS-11474 Handle the error with an alert to the user
+                isShowingErrorAlert = true
+
                 return
             }
 

@@ -6,8 +6,6 @@ import XCTest
 import Shared
 import Storage
 
-@testable import Client
-
 class ClosedTabsStoreTests: XCTestCase {
     func testStoreHasNoTabsAtInit() {
         let store = createStore()

@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Shared
 
 struct BlockedTrackersTableModel {
     let topLevelDomain: String

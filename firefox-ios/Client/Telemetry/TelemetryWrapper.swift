@@ -7,8 +7,6 @@
 import Common
 import Glean
 import Shared
-import Account
-import Sync
 import Storage
 
 protocol TelemetryWrapperProtocol {

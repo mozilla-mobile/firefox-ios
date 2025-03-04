@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import MenuKit
 import Redux
 
 final class SearchEngineSelectionAction: Action {

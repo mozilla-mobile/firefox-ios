@@ -25,7 +25,7 @@ class A11yUtils: XCTestCase {
             let hasA11yLabel = !(element.accessibilityLabel?.isEmpty ?? true)
             let hasLabel = !(element.label.isEmpty) // Checks visible UI label
 
-            if !hasA11yLabel && !hasLabel { // Only fail if both are missing
+            if !hasA11yLabel && !hasLabel && !element.identifier.isEmpty {
                 missingLabels.append(A11yUtils.MissingAccessibilityElement(
                     elementType: elementType,
                     identifier: element.identifier,

@@ -486,11 +486,15 @@ class NavigationTest: BaseTestCase {
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
-            app.buttons["privateModeLarge"].waitAndTap()
+            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/25093
+            // Waiting is needed before switching to private tab in order to display the expected domain
+            sleep(3)
+            // workaround end
+            app.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         }
         numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"])
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).staticTexts["Example Domains"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774

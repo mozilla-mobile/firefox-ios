@@ -13,7 +13,7 @@ protocol RemoteTabsEmptyViewDelegate: AnyObject {
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-class RemoteTabsEmptyView: UIView, ThemeApplicable {
+class RemoteTabsEmptyView: UIView, RemoteTabsEmptyViewProtocol {
     struct UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24

@@ -6,9 +6,9 @@ import Foundation
 import WebKit
 
 class HistoryTests: KIFTestCase {
-    
+
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
+
     fileprivate var webRoot: String!
 
     override func setUp() {
@@ -47,7 +47,7 @@ class HistoryTests: KIFTestCase {
         // Wait until the dialog shows up
         tester().waitForAnimationsToFinish()
         tester().waitForView(withAccessibilityLabel: "Page 2")
-        
+
         tester().waitForView(withAccessibilityLabel: "Page 1")
         tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=2")
 
@@ -78,7 +78,7 @@ class HistoryTests: KIFTestCase {
         let firstIndexPath = IndexPath(row: 4, section: 1)
         let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: a11y.tableView)
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
-     
+
         if !BrowserUtils.iPad() {
             tester().tapView(withAccessibilityLabel: "Delete")
         }

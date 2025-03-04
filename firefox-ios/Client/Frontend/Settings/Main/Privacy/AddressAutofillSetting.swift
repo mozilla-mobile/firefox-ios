@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // MARK: - AddressAutofillSetting
 class AddressAutofillSetting: Setting {

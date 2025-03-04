@@ -330,7 +330,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     // Update border to hide for bottom toolbars when microsurvey is shown,
     // so that it appears to belong to the app and harder to spoof
-    // 
+    //
     // Border Requirement:
     //  - When survey is shown and address bar is at top, hide border in between survey and nav toolbar
     //  - When survey is shown and address bar is at bottom, hide borders for address and nav toolbar

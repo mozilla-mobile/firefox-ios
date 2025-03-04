@@ -2396,6 +2396,15 @@ extension String {
             )
         }
 
+        public struct AutofillAndPassword {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AutofillAndPassword.Title.v137",
+                tableName: "Settings",
+                value: "Autofills & Passwords",
+                comment: "In the settings menu, in the General section, this is the title for Autofills & Passwords customization section."
+            )
+        }
+
         public struct Notifications {
             public static let Title = MZLocalizedString(
                 key: "Settings.Notifications.Title.v112",
@@ -2463,6 +2472,74 @@ extension String {
                 tableName: nil,
                 value: "Bottom",
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
+        }
+
+        public struct AppIconSelection {
+            public static let SettingsOptionName = MZLocalizedString(
+                key: "Settings.AppIconSelection.SettingsOptionName.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the Settings screen, the name of the row that opens app icon selection options.")
+
+            public static let ScreenTitle = MZLocalizedString(
+                key: "Settings.AppIconSelection.ScreenTitle.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
+
+            public struct Errors {
+                public static let SelectErrorMessage = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorMessage.v136",
+                    tableName: "AppIconSelection",
+                    value: "Sorry, there was an error setting your app icon.",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon.")
+
+                public static let SelectErrorConfirmation = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136",
+                    tableName: "AppIconSelection",
+                    value: "OK",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred.")
+            }
+
+            public struct AppIconNames {
+                public static let Regular = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Regular.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Default",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
+
+                public static let DarkPurple = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Dark Purple",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background.")
+
+                public static let Hug = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Hug",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+            }
+
+            public struct Accessibility {
+                public static let AppIconSelectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Selected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option.")
+
+                public static let AppIconUnselectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Deselected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option.")
+
+                public static let AppIconSelectionHint = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136",
+                    tableName: "AppIconSelection",
+                    value: "Select the %@ app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name.")
+            }
         }
 
         public struct Autoplay {

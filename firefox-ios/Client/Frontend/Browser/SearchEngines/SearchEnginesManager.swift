@@ -7,6 +7,12 @@ import Common
 import Shared
 import Storage
 
+struct SearchEngineConsolidationFlagManager {
+    static var isSECEnabled: Bool {
+        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.searchEngineConsolidation, checking: .buildOnly)
+    }
+}
+
 protocol SearchEnginesManagerProvider {
     var defaultEngine: OpenSearchEngine? { get }
     var orderedEngines: [OpenSearchEngine] { get }

@@ -4,7 +4,6 @@
 
 import Foundation
 @testable import TabDataStore
-import Common
 
 class TabFileManagerMock: TabFileManager {
     var primaryDirectoryURL: URL?

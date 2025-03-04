@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 class PrivacyPolicySetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?

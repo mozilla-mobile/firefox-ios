@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Бекор кардан";
+
+/* The button that clears private data. */
+"OK" = "ХУБ";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Ин амал тамоми маълумоти шахсии шуморо пок месозад. Ин амал бекор карда намешавад.";
+

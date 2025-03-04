@@ -4,7 +4,6 @@
 
 import Common
 import Storage
-import Shared
 
 protocol LibraryPanelContextMenu {
     var windowUUID: WindowUUID { get }

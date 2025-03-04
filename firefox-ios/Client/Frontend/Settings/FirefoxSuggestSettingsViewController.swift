@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 import UIKit
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.

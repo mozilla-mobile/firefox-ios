@@ -91,6 +91,7 @@ let package = Package(
             dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
             resources: [
                 .copy("Resources/mozilla.ico"),
+                .copy("Resources/inf-nan.svg"),
                 .copy("Resources/hackernews.svg")
             ]
         ),

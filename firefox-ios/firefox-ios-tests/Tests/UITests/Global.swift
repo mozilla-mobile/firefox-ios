@@ -225,7 +225,7 @@ class BrowserUtils {
 
     class func resetToAboutHomeKIF(_ tester: KIFUITestActor) {
         tester.tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.Toolbar.tabsButton)
-        
+
         // if in private mode, close all tabs
         tester.tapView(withAccessibilityLabel: "privateModeLarge")
 
@@ -251,13 +251,13 @@ class BrowserUtils {
             tester.tapView(withAccessibilityIdentifier: "startBrowsingButtonSyncView")
         }
     }
-    
+
     class func enterUrlAddressBar(_ tester: KIFUITestActor, typeUrl: String) {
         tester.tapView(withAccessibilityIdentifier: "url")
         tester.enterText(intoCurrentFirstResponder: typeUrl)
         tester.enterText(intoCurrentFirstResponder: "\n")
     }
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }

@@ -146,10 +146,10 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "Navigazione veloce e sicura";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Proseguendo, accetti le %@.";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Proseguendo, accetti le %@";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
-"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Condizioni di utilizzo del servizio di %@";
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "condizioni di utilizzo del servizio di %@";
 
 /* Title for the Terms of Service screen in the onboarding process. Placeholder is for app name. */
 "Onboarding.TermsOfService.Title.v135" = "Benvenuto in %@";

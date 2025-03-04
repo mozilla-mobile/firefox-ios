@@ -1,0 +1,24 @@
+/* (No Comment) */
+"New Private Tab" = "Варақаи хусусии нав";
+
+/* (No Comment) */
+"New Tab" = "Варақаи нав";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Браузери «Firefox» барои тасвирбардорӣ кардани рамзҳои «QR», гирифтани акс ва видео камераи шуморо истифода мебарад.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Браузери «Firefox» барои пайдо кардани дастрасӣ ба ниҳонвожаҳои нигоҳдошташуда ва тарзҳои пардохт, низоми «Face ID»-ро талаб мекунад.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Сомонаҳое, ки шумо тамошо мекунед, метавонанд ҷойгиршавии шуморо талаб кунанд.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Браузери «Firefox» барои сабт ва бор кардани аудио микрофони шуморо истифода мебарад.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Ин ба шумо барои нигоҳдории аксҳо имкон медиҳад.";
+
+/* (No Comment) */
+"Scan QR Code" = "Рамзи QR-ро аксбардорӣ намоед";
+

@@ -39,14 +39,15 @@ class TabManagerTests: XCTestCase {
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
+        setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        super.tearDown()
     }
 
     func testRecentlyAccessedNormalTabs() {
@@ -173,47 +174,147 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Restore tabs
 
-    func testRestoreTabs() async throws {
-        throw XCTSkip("Needs to fix restore test")
-        //        let subject = createSubject()
-        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-        //                                                     isPrimary: true,
-        //                                                     activeTabId: UUID(),
-        //                                                     tabData: getMockTabData(count: 4))
-        //
-        //        subject.restoreTabs()
-        //        try await Task.sleep(nanoseconds: sleepTime * 5)
-        //        XCTAssertEqual(subject.tabs.count, 4)
-        //        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
+    @MainActor
+    func testRestoreTabs() {
+        // Needed to ensure AppEventQueue is not fired from a previous test case with the same WindowUUID
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 4))
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, 4)
+            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
+            expectation.fulfill()
+        }
+        wait(for: [expectation])
     }
 
-    func testRestoreTabsForced() async throws {
-        throw XCTSkip("Needs to fix restore test")
-        //        let subject = createSubject()
-        //        addTabs(to: subject, count: 5)
-        //        XCTAssertEqual(subject.tabs.count, 5)
-        //
-        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-        //                                                     isPrimary: true,
-        //                                                     activeTabId: UUID(),
-        //                                                     tabData: getMockTabData(count: 3))
-        //        subject.restoreTabs(true)
-        //        try await Task.sleep(nanoseconds: sleepTime * 3)
-        //        XCTAssertEqual(subject.tabs.count, 3)
-        //        XCTAssertEqual(mockTabStore.fetchWindowDataCalledCount, 1)
+    @MainActor
+    func testRestoreTabsForced() {
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        let subject = createSubject(tabs: generateTabs(count: 5), windowUUID: testUUID)
+
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: UUID(),
+                                                     tabData: getMockTabData(count: 3))
+        subject.restoreTabs(true)
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, 3)
+            XCTAssertEqual(self.mockTabStore.fetchWindowDataCalledCount, 1)
+            expectation.fulfill()
+        }
+        wait(for: [expectation])
     }
 
-    func testRestoreScreenshotsForTabs() async throws {
-        throw XCTSkip("Needs to fix restore test")
-        //        let subject = createSubject()
-        //        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-        //                                                     isPrimary: true,
-        //                                                     activeTabId: UUID(),
-        //                                                     tabData: getMockTabData(count: 2))
-        //
-        //        subject.restoreTabs()
-        //        try await Task.sleep(nanoseconds: sleepTime * 10)
-        //        XCTAssertEqual(mockDiskImageStore.getImageForKeyCallCount, 2)
+    @MainActor
+    func testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        let tabs = generateTabs(count: 1)
+        let deeplinkTab = try XCTUnwrap(tabs.first)
+        let subject = createSubject(tabs: tabs, windowUUID: testUUID)
+        let tabData = getMockTabData(count: 4)
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: tabData
+        )
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            // Tabs count has to be same as restoration data, since deeplink tab has same of URL of a restored tab.
+            XCTAssertEqual(subject.tabs.count, tabData.count)
+            XCTAssertEqual(subject.selectedTab, deeplinkTab)
+            expectation.fulfill()
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_whenDeeplinkTabNil_selectsPreviousSelectedTabData() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+
+        let tabData = getMockTabData(count: 4)
+        let previouslySelectedTabData = try XCTUnwrap(tabData.last)
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: previouslySelectedTabData.id,
+            tabData: tabData
+        )
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, tabData.count)
+            XCTAssertEqual(subject.selectedTab?.tabUUID, previouslySelectedTabData.id.uuidString)
+            expectation.fulfill()
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_whenDeeplinkTabNotNil_selectsDeeplinkTab() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        let deeplinkTab = Tab(profile: mockProfile, windowUUID: testUUID)
+        let subject = createSubject(tabs: [deeplinkTab], windowUUID: testUUID)
+
+        let tabData = getMockTabData(count: 4)
+        let previouslySelectedTabData = try XCTUnwrap(tabData.last)
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: previouslySelectedTabData.id,
+            tabData: tabData
+        )
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            XCTAssertEqual(subject.tabs.count, tabData.count + 1)
+            XCTAssertEqual(subject.selectedTab, deeplinkTab)
+            expectation.fulfill()
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_whenDeeplinkTabPresent() {
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        // Simulate deeplink tab
+        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        tab.url = URL(string: "https://example.com")
+        let subject = createSubject(tabs: [tab], windowUUID: testUUID)
+
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: getMockTabData(count: 4)
+        )
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            // Tabs count has to be the sum of deeplink and restored tabs, since the deeplink tab is not present in
+            // the restored once.
+            XCTAssertEqual(subject.tabs.count, 5)
+            expectation.fulfill()
+        }
+
+        subject.restoreTabs()
+        wait(for: [expectation])
     }
 
     // MARK: - Save tabs
@@ -1495,17 +1596,23 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Helper methods
 
-    private func createSubject(tabs: [Tab] = []) -> TabManagerImplementation {
+    private func createSubject(tabs: [Tab] = [], windowUUID: WindowUUID? = nil) -> TabManagerImplementation {
         let subject = TabManagerImplementation(
             profile: mockProfile,
             imageStore: mockDiskImageStore,
-            uuid: ReservedWindowUUID(uuid: tabWindowUUID, isNew: false),
+            uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID, isNew: false),
             tabDataStore: mockTabStore,
             tabSessionStore: mockSessionStore,
             tabs: tabs
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
     }
 
     enum TabType {
@@ -1529,7 +1636,7 @@ class TabManagerTests: XCTestCase {
                 tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID)
             }
 
-            tab.url = URL(string: "https://mozilla.com?item=\(i)")!
+            tab.url = testURL(count: i)
             tabs.append(tab)
         }
 
@@ -1538,10 +1645,10 @@ class TabManagerTests: XCTestCase {
 
     private func getMockTabData(count: Int) -> [TabData] {
         var tabData = [TabData]()
-        for _ in 0..<count {
+        for i in 0..<count {
             let tab = TabData(id: UUID(),
                               title: "Firefox",
-                              siteUrl: "www.firefox.com",
+                              siteUrl: testURL(count: i).absoluteString,
                               faviconURL: "",
                               isPrivate: false,
                               lastUsedTime: Date(),
@@ -1550,6 +1657,11 @@ class TabManagerTests: XCTestCase {
             tabData.append(tab)
         }
         return tabData
+    }
+
+    /// Generate a test URL given a count that is used as query parameter to get diversified URLs
+    private func testURL(count: Int) -> URL {
+        return URL(string: "https://mozilla.com?item=\(count)")!
     }
 
     private func setupForFindRightOrLeftTab_mixedTypes() -> TabManagerImplementation {

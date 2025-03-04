@@ -24,6 +24,11 @@ features:
           Enables the unified search feature.
         type: Boolean
         default: false
+      swiping_tabs:
+        description: >
+          Enables swipe gestures to switch between browser tabs.
+        type: Boolean
+        default: false
       layout:
         description: >
           The type of layout of the toolbars.
@@ -37,6 +42,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: false
+          swiping_tabs: false
           layout: baseline
       - channel: developer
         value:
@@ -44,6 +50,7 @@ features:
           unified_search: false
           one_tap_new_tab: false
           navigation_hint: true
+          swiping_tabs: false
           layout: baseline
 
 enums:
@@ -53,6 +60,4 @@ enums:
       baseline:
         description: The default layout of the toolbars.
       version1:
-        description: Shows the share and tabs button in the navigation toolbar. The menu button is displayed in the address toolbar.
-      version2:
-        description: Shows the tabs and menu button in the navigation toolbar. The share button is displayed in the address toolbar.
+        description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.

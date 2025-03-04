@@ -5,7 +5,6 @@
 import Foundation
 import Redux
 import Common
-import Shared
 
 class FeltPrivacyMiddleware {
     var privacyStateManager: ThemeManager
