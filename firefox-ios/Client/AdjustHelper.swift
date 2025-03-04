@@ -73,7 +73,7 @@
 //        return config
 //    }
 //
-//    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data 
+//    /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data
 //    /// then we only do one ping to get the attribution and turn it off (i.e. we only enable it if we
 //    /// have not seen the attribution data yet).
 //    private var shouldEnable: Bool {

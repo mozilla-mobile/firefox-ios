@@ -427,14 +427,24 @@ class AddressesTests: BaseTestCase {
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         waitForElementsToExist(
             [
-                table.cells[settingsQuery.Logins.title],
-                table.cells[settingsQuery.CreditCards.title],
-                table.cells[settingsQuery.Address.title],
+                table.cells[settingsQuery.AutofillsPasswords.title],
                 table.cells[settingsQuery.ClearData.title],
                 app.switches[settingsQuery.ClosePrivateTabs.title],
                 table.cells[settingsQuery.ContentBlocker.title],
                 table.cells[settingsQuery.Notifications.title],
                 table.cells[settingsQuery.PrivacyPolicy.title]
+            ]
+        )
+    }
+
+    private func validateAutofillPasswordOptions() {
+        let table = app.tables.element(boundBy: 0)
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        waitForElementsToExist(
+            [
+                table.cells[settingsQuery.Logins.title],
+                table.cells[settingsQuery.CreditCards.title],
+                table.cells[settingsQuery.Address.title]
             ]
         )
     }

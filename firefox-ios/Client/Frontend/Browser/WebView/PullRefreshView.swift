@@ -196,7 +196,7 @@ class PullRefreshView: UIView,
     ///
     /// The calculation is pure empirical.
     /// It compares the smaller scroll view dimension with the blink threshold that is also
-    /// the limit above a pull refresh can happen. 
+    /// the limit above a pull refresh can happen.
     /// That dimension is divided by 4.0 because on small devices those dimension becomes comparable
     /// and a shrink factor is needed otherwise pull to refresh wouldn't be possible,
     /// since the content offset of the scroll view wouldn't be enough to go above the threshold.

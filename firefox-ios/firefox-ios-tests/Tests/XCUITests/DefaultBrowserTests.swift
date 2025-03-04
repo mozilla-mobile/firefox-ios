@@ -20,7 +20,7 @@ class DefaultBrowserTests: BaseTestCase {
         mozWaitForElementToExist(iOS_Settings.tables.cells.element(boundBy: 1), timeout: 5)
         iOS_Settings.tables.cells.element(boundBy: 2).tap()
         iOS_Settings.tables.staticTexts.element(boundBy: 0).tap()
-        
+
         // Return to the browser
         app.activate()
 

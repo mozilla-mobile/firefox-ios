@@ -385,6 +385,15 @@ final class SettingsCoordinatorTests: XCTestCase {
 
     // MARK: - PrivacySettingsDelegate
 
+    func testAutofillPasswordSettingsRoute_pushAutofillPassword() throws {
+        let subject = createSubject()
+
+        subject.pressedAutoFillsPasswords()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is AutoFillPasswordSettingsViewController)
+    }
+
     func testPrivacySettingsDelegate_handleCreditCardRoute() {
         let subject = createSubject()
         subject.settingsViewController = mockSettingsVC
