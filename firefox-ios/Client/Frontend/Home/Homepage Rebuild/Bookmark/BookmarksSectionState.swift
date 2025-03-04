@@ -48,7 +48,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
         return BookmarksSectionState(
             windowUUID: state.windowUUID,
             bookmarks: [
-                BookmarkState(
+                BookmarkConfiguration(
                     site: Site.createBasicSite(
                         url: "www.mozilla.org",
                         title: "Bookmarks Title"

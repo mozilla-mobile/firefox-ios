@@ -46,7 +46,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
         // TODO: FXIOS-11225 Update state from middleware
         return JumpBackInSectionState(
             windowUUID: state.windowUUID,
-            jumpBackInTabs: [JumpBackInTabState(
+            jumpBackInTabs: [JumpBackInTabConfiguration(
                 titleText: "JumpBack In Title",
                 descriptionText: "JumpBack In Description",
                 siteURL: "www.mozilla.com"

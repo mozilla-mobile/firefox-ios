@@ -6,20 +6,15 @@ enum ToolbarLayoutStyle: String {
     /// The default layout of the toolbars.
     case baseline
 
-    /// Shows the share and tabs button in the navigation toolbar. The menu button
-    /// is displayed in the address toolbar.
+    /// Shows the add new tab, menu and tabs button in the navigation toolbar. The
+    /// share button is displayed in the address toolbar.
     case version1
-
-    /// Shows the tabs and menu button in the navigation toolbar. The share button
-    /// is displayed in the address toolbar.
-    case version2
 
     static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle? {
         guard let type else { return .baseline }
         switch type {
         case .baseline: return .baseline
         case .version1: return .version1
-        case .version2: return .version2
         }
     }
 }
