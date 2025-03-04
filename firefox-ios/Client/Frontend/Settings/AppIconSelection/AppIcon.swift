@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum AppIcon: CaseIterable {
+enum AppIcon: String, CaseIterable {
     /// The default system app icon.
     case regular
 
@@ -26,6 +26,10 @@ enum AppIcon: CaseIterable {
         }
     }
 
+    var telemetryName: String {
+        return self.rawValue
+    }
+
     /// The name of the image set asset type. `UIImage`s can only be rendered from image sets, not app icon sets.
     var imageSetAssetName: String {
         switch self {
@@ -42,7 +46,7 @@ enum AppIcon: CaseIterable {
     var appIconAssetName: String? {
         switch self {
         case .regular:
-            return nil // Setting the alternative app icon to nil restore the default app icon asset.
+            return nil // Setting the alternative app icon to nil will restore the default app icon asset
         case .darkPurple:
             return "AppIcon_Alt_DarkPurple"
         case .hug:
