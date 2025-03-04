@@ -10,12 +10,12 @@ final class UsageProfileManager {
         static let profileId = "profileId"
         static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
     }
-    
+
     static func unsetUsageProfileId() {
         UserDefaults.standard.removeObject(forKey: Constants.profileId)
         GleanMetrics.Usage.profileId.set(Constants.canaryUUID)
     }
-    
+
     static func checkAndSetUsageProfileId() {
         if let uuidString = UserDefaults.standard.string(forKey: Constants.profileId),
            let uuid = UUID(uuidString: uuidString) {

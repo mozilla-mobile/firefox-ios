@@ -129,7 +129,7 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.removeTabsButton")
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
-        
+
       }
 
     override func tearDown() {
