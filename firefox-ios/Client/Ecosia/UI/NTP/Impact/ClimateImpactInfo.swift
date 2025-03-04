@@ -62,7 +62,7 @@ enum ClimateImpactInfo: Equatable {
         case .totalTrees:
             return .init(named: "hand")
         case .totalInvested:
-            return .init(named: "financialReports")
+            return .init(named: "financialReports", in: .ecosia, with: nil)
         }
     }
 

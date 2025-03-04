@@ -13,6 +13,7 @@ import Shared
 import SiteImageView
 import Storage
 import UIKit
+import Ecosia
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
 class TopSiteItemCell: UICollectionViewCell, ReusableCell {
@@ -125,29 +126,34 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
                    theme: Theme,
                    textColor: UIColor?) {
         homeTopSite = topSite
-        titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
-
-        let siteURLString = topSite.site.url
-        var imageResource: SiteResource?
-
-        if let site = topSite.site as? SponsoredTile,
-           let url = URL(string: site.imageURL, invalidCharacters: false) {
-            imageResource = .remoteURL(url: url)
-        } else if let site = topSite.site as? PinnedSite {
-            imageResource = site.faviconResource
-        } else if let site = topSite.site as? SuggestedSite {
-            imageResource = site.faviconResource
-        }
-
-        let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
-                                              siteResource: imageResource,
-                                              faviconCornerRadius: UX.iconCornerRadius)
-        imageView.setFavicon(viewModel)
         self.textColor = textColor
 
-        configurePinnedSite(topSite)
+        let siteURLString = topSite.site.url
 
+        if let defaultSuggestedSite = DefaultSuggestedSites.EcosiaDefaultSuggestedSite.fromURL(siteURLString) {
+            titleLabel.text = defaultSuggestedSite.localizedTitle
+            imageView.image = .init(named: defaultSuggestedSite.faviconName, in: .ecosia, with: nil)
+        } else {
+            titleLabel.text = topSite.title
+            var imageResource: SiteResource?
+
+            if let site = topSite.site as? SponsoredTile,
+               let url = URL(string: site.imageURL, invalidCharacters: false) {
+                imageResource = .remoteURL(url: url)
+            } else if let site = topSite.site as? PinnedSite {
+                imageResource = site.faviconResource
+            } else if let site = topSite.site as? SuggestedSite {
+                imageResource = site.faviconResource
+            }
+
+            let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
+                                                  siteResource: imageResource,
+                                                  faviconCornerRadius: UX.iconCornerRadius)
+            imageView.setFavicon(viewModel)
+        }
+
+        configurePinnedSite(topSite)
         applyTheme(theme: theme)
     }
 

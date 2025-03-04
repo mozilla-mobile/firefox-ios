@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Ecosia
 
 final class WelcomeTourRow: UIView, ThemeApplicable {
     let image: String
@@ -41,7 +42,7 @@ final class WelcomeTourRow: UIView, ThemeApplicable {
         stack.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
         stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
 
-        let imageView = UIImageView(image: .init(named: image))
+        let imageView = UIImageView(image: .init(named: image, in: .ecosia, with: nil))
         imageView.heightAnchor.constraint(equalToConstant: 33).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 33).isActive = true
         stack.addArrangedSubview(imageView)

@@ -133,40 +133,10 @@ open class DefaultSuggestedSites {
         ]
     ]
      */
-    private static let financialReportsURL = Ecosia.Environment.current.urlProvider.financialReports
-    private static let privacyURL = Ecosia.Environment.current.urlProvider.privacy
-    private static let treesURL = Ecosia.Environment.current.urlProvider.trees
     public static let sites = [
-            SuggestedSite(
-                url: financialReportsURL.absoluteString,
-                title: Bundle.ecosia.localizedString(forKey: "Financial reports",
-                                                     value: "",
-                                                     table: "Ecosia"),
-                trackingId: 901,
-                faviconResource: .bundleAsset(
-                    name: "financialReports",
-                    forRemoteResource: financialReportsURL)
-            ),
-            SuggestedSite(
-                url: privacyURL.absoluteString,
-                title: Bundle.ecosia.localizedString(forKey: "Privacy",
-                                                     value: "",
-                                                     table: "Ecosia"),
-                trackingId: 902,
-                faviconResource: .bundleAsset(
-                    name: "privacy",
-                    forRemoteResource: privacyURL)
-            ),
-            SuggestedSite(
-                url: treesURL.absoluteString,
-                title: Bundle.ecosia.localizedString(forKey: "Trees update",
-                                                     value: "",
-                                                     table: "Ecosia"),
-                trackingId: 903,
-                faviconResource: .bundleAsset(
-                    name: "treesUpdate",
-                    forRemoteResource: treesURL)
-            )
+        EcosiaDefaultSuggestedSite.financialReports.asSuggestedSite(),
+        EcosiaDefaultSuggestedSite.privacy.asSuggestedSite(),
+        EcosiaDefaultSuggestedSite.treesUpdate.asSuggestedSite()
     ]
 
     public static func defaultSites() -> [Site] {
@@ -184,5 +154,67 @@ open class DefaultSuggestedSites {
         } ?? []
          */
         sites
+    }
+}
+
+/*
+ Ecosia: We add the default suggested sites representation with an helper enum.
+ This enum provides a structured way to define and retrieve default suggested sites
+ based on their URL.
+ It's an handy way to define and retrieve default suggested sites in a type-safe way.
+ We use the fromUrl to get a suggested site and perform some logic especially within the
+ Client/Ecosia/Frontend/Home/TopSites/Cell/EcosiaTopSiteItemCell.swift to assign the correct
+ tile's title and icon based on the URL.
+ */
+public extension DefaultSuggestedSites {
+
+    enum EcosiaDefaultSuggestedSite: String, CaseIterable {
+
+        case financialReports = "Financial reports"
+        case privacy = "Privacy"
+        case treesUpdate = "Trees update"
+
+        var url: String {
+            switch self {
+            case .financialReports:
+                return Ecosia.Environment.current.urlProvider.financialReports.absoluteString
+            case .privacy:
+                return Ecosia.Environment.current.urlProvider.privacy.absoluteString
+            case .treesUpdate:
+                return Ecosia.Environment.current.urlProvider.trees.absoluteString
+            }
+        }
+
+        var trackingId: Int {
+            switch self {
+            case .financialReports: return 901
+            case .privacy: return 902
+            case .treesUpdate: return 903
+            }
+        }
+
+        public var faviconName: String {
+            switch self {
+            case .financialReports: return "financialReports"
+            case .privacy: return "privacy"
+            case .treesUpdate: return "treesUpdate"
+            }
+        }
+
+        var faviconResource: SiteResource {
+            .bundleAsset(name: faviconName, forRemoteResource: URL(string: url)!)
+        }
+
+        public var localizedTitle: String {
+            return Bundle.ecosia.localizedString(forKey: self.rawValue, value: "", table: "Ecosia")
+        }
+
+        public static func fromURL(_ url: String) -> EcosiaDefaultSuggestedSite? {
+            return Self.allCases.first { $0.url == url }
+        }
+
+        func asSuggestedSite() -> SuggestedSite {
+            SuggestedSite(url: url, title: localizedTitle, trackingId: trackingId, faviconResource: faviconResource)
+        }
     }
 }
