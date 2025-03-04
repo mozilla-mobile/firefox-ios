@@ -57,8 +57,13 @@ class WebsiteDataManagementViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        listenForThemeChange(view)
+        applyTheme()
+    }
+
+    private func setupView() {
         title = .SettingsWebsiteDataTitle
-        navigationController?.setToolbarHidden(true, animated: false)
 
         let tableView = UITableView()
         tableView.dataSource = self
@@ -126,19 +131,12 @@ class WebsiteDataManagementViewController: UIViewController,
         searchController.searchBar.delegate = self
         searchController.searchBar.barStyle = currentTheme().type.getBarStyle()
 
+        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         self.searchController = searchController
         self.tableView = tableView
 
         definesPresentationContext = true
-
-        listenForThemeChange(view)
-        applyTheme()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        unfoldSearchbar()
     }
 
     func tableView(
@@ -338,12 +336,6 @@ class WebsiteDataManagementViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
-    }
-
-    private func unfoldSearchbar() {
-        guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height,
-              let tableView else { return }
-        tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)
     }
 
     func applyTheme() {
