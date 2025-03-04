@@ -575,57 +575,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             break
         }
     }
-
-    // MARK: - WindowSimpleTabsProvider
-
-<<<<<<< HEAD
-=======
-    // The main frame JSContext is available, and DOM parsing has begun.
-    // Do not execute JS at this point that requires running prior to DOM parsing.
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation?) {
-        guard let tab = self[webView] else { return }
-
-        if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
-        }
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if InternalURL(url) != nil {
-                return
-            }
-
-            if let title = webView.title, selectedTab?.webView == webView {
-                selectedTab?.lastTitle = title
-                delegates.forEach { $0.get()?.tabManagerTabDidFinishLoading() }
-            }
-
-            storeChanges()
-        }
-    }
-
-    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
-    /// then we immediately reload it.
-    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if let tab = selectedTab, tab.webView == webView {
-            tab.consecutiveCrashes += 1
-
-            // Only automatically attempt to reload the crashed
-            // tab three times before giving up.
-            if tab.consecutiveCrashes < 3 {
-                webView.reload()
-            } else {
-                tab.consecutiveCrashes = 0
-            }
-        }
-    }
 }
 
 // MARK: - WindowSimpleTabsProvider
-extension TabManagerImplementation: WindowSimpleTabsProvider {
->>>>>>> 02e6c00f5 (Bugfix [Tab Optimization Phase 1] FXIOS-10990 Tab Title Shows Wrong Text (#24673))
+extension TabManagerImplementation {
     func windowSimpleTabs() -> [TabUUID: SimpleTab] {
         // FIXME possibly also related FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
         let windowData = WindowData(id: windowUUID,
