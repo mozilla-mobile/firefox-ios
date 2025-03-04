@@ -505,7 +505,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
             app.buttons["Delete"].waitAndTap()
         }
-        
+
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in

@@ -41,7 +41,7 @@ class ShoppingProduct: FeatureFlaggable, Equatable {
     /// - Note: The `nimbusFakespotFeatureLayer` and `client` parameters are optional and have default values,
     ///         which means you can omit them when calling this initializer in most cases.
     ///
-    /// - Important: Make sure to provide a valid `url`. If the URL is invalid or the server cannot be reached, 
+    /// - Important: Make sure to provide a valid `url`. If the URL is invalid or the server cannot be reached,
     ///              the product information may not be fetched successfully.
     init(
         url: URL,

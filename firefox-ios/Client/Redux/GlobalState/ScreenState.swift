@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-/// Defines the state related to a screen used `AppState` reducer to 
+/// Defines the state related to a screen used `AppState` reducer to
 /// retrieve the state for a specific screen. All ScreenStates should
 /// have the capability of being associated with a specific window,
 /// to ensure screens can be displayed across multiple windows on iPad.

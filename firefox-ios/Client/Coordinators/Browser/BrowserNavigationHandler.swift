@@ -12,11 +12,11 @@ import enum MozillaAppServices.VisitType
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
-    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed. 
+    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed.
     /// This closure takes no parameters and returns no value.
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)?)
 
-    /// Asks to show a enhancedTrackingProtection page, can be a general 
+    /// Asks to show a enhancedTrackingProtection page, can be a general
     /// enhancedTrackingProtection page or a child page
     func showEnhancedTrackingProtection(sourceView: UIView)
 
@@ -62,7 +62,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func dismissFakespotSidebar(sidebarContainer: SidebarEnabledViewProtocol, parentViewController: UIViewController)
 
     /// Initiates the update of the Fakespot sidebar for analyzing the authenticity of a product's reviews.
-    /// - Parameter productURL: The URL of the product for which the reviews will be analyzed. 
+    /// - Parameter productURL: The URL of the product for which the reviews will be analyzed.
     /// - Parameter sidebarContainer: The view that contains the sidebar.
     /// - Parameter parentViewController: The view controller that the Fakespot flow is a child of.
     func updateFakespotSidebar(productURL: URL,
@@ -76,7 +76,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView)
 
-    /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials 
+    /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials
     /// to autofill login forms on the specified web page.
     func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType)
 

@@ -129,7 +129,7 @@ class WKEngineSession: NSObject,
             return
         }
 
-        // Reloads the current webpage, and performs end-to-end revalidation of the content 
+        // Reloads the current webpage, and performs end-to-end revalidation of the content
         // using cache-validating conditionals, if possible.
         if webView.reloadFromOrigin() != nil {
             logger.log("Reloaded webview from origin", level: .debug, category: .webview)

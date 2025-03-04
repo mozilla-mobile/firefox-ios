@@ -785,7 +785,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nBuild:
     steps:
     - activate-ssh-key@4.1.1:
@@ -880,7 +880,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4.1.1:
@@ -925,7 +925,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -974,6 +974,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1096,6 +1100,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_BETA_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1189,6 +1197,10 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2170,4 +2182,4 @@ trigger_map:
 meta:
   bitrise.io:
     stack: osx-xcode-16.2.x
-    machine_type_id: g2-m1.8core
+    machine_type_id: g2.mac.large
