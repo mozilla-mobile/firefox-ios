@@ -89,19 +89,13 @@ struct DownloadLiveActivity: Widget {
                             .foregroundColor(Color("widgetLabelColors"))
                             .opacity(0.3)
                         Circle()
-                            .trim(from: 0.0, to: min(
-                                    Double(LiveDownload.state.totalBytesDownloaded) /
-                                    Double(LiveDownload.state.totalBytesExpected),
-                                    1.0
-                                   )
-                                )
+                            .trim(from: 0.0, to: min(LiveDownload.state.totalProgress, 1.0))
                             .stroke(style: StrokeStyle(lineWidth: 4))
                             .rotationEffect(.degrees(270.0))
                             .animation(.linear, value: 0.5)
                             .foregroundColor(Color("widgetLabelColors"))
-                        RoundedRectangle(cornerSize: CGSize(width: 2, height: 2))
-                            .frame(width: 12, height: 12)
-                            .foregroundColor(Color("widgetLabelColors"))
+                        Image("mediaStop")
+                            .frame(width: 20, height: 20)
                     }
                     .frame(width: 44, height: 44)
                 }
