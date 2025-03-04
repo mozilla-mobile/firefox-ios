@@ -613,26 +613,30 @@ class BrowserCoordinator: BaseCoordinator,
 
     func presentSavePDFController() {
         guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
-        webView.createPDF { [weak self] result in
-            switch result {
-            case .success(let data):
-                guard let pdf = PDFDocument(data: data),
-                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
-                    return
-                }
-                pdf.write(to: outputURL)
-                if FileManager.default.fileExists(atPath: outputURL.path) {
-                    let url = URL(fileURLWithPath: outputURL.path)
-                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                    if let popover = controller.popoverPresentationController {
-                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+        if let url = webView.url, url.lastPathComponent.lowercased().contains(".pdf") {
+            showShareSheetForCurrentlySelectedTab()
+        } else {
+            webView.createPDF { [weak self] result in
+                switch result {
+                case .success(let data):
+                    guard let pdf = PDFDocument(data: data),
+                          let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
+                        return
                     }
-                    self?.present(controller)
+                    pdf.write(to: outputURL)
+                    if FileManager.default.fileExists(atPath: outputURL.path) {
+                        let url = URL(fileURLWithPath: outputURL.path)
+                        let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                        if let popover = controller.popoverPresentationController {
+                            popover.sourceView = self?.browserViewController.addressToolbarContainer
+                        }
+                        self?.present(controller)
+                    }
+                case .failure(let error):
+                    self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                     level: .debug,
+                                     category: .webview)
                 }
-            case .failure(let error):
-                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
-                                 level: .debug,
-                                 category: .webview)
             }
         }
     }
