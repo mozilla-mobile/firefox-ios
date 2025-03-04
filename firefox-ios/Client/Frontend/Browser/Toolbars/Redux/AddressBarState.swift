@@ -843,8 +843,8 @@ struct AddressBarState: StateType, Equatable {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
             let canGoBack = action.canGoBack ?? toolbarState.canGoBack
             let canGoForward = action.canGoForward ?? toolbarState.canGoForward
-            actions.append(backAction(enabled: canGoBack))
-            actions.append(forwardAction(enabled: canGoForward))
+            actions.append(backAction(enabled: canGoBack, layout: layout))
+            actions.append(forwardAction(enabled: canGoForward, layout: layout))
 
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
@@ -969,10 +969,21 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
-    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
+    private static func backAction(
+        enabled: Bool,
+        layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Large.chevronLeft
+        default:
+            iconName = StandardImageIdentifiers.Large.back
+        }
+
         return ToolbarActionConfiguration(
             actionType: .back,
-            iconName: StandardImageIdentifiers.Large.back,
+            iconName: iconName,
             isFlippedForRTL: true,
             isEnabled: enabled,
             contextualHintType: ContextualHintType.navigation.rawValue,
@@ -980,10 +991,21 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
+    private static func forwardAction(
+        enabled: Bool,
+        layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Large.chevronRight
+        default:
+            iconName = StandardImageIdentifiers.Large.forward
+        }
+
         return ToolbarActionConfiguration(
             actionType: .forward,
-            iconName: StandardImageIdentifiers.Large.forward,
+            iconName: iconName,
             isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
