@@ -23,7 +23,7 @@ struct HomepageHeaderCellViewModel {
 
     func switchMode() {
         action()
-        homepageTelemetry.sendHomepageTappedTelemetry(enteringPrivateMode: !isPrivate)
+        homepageTelemetry.sendMaskToggleTappedTelemetry(enteringPrivateMode: !isPrivate)
     }
 }
 
