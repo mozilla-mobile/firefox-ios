@@ -49,6 +49,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -60,6 +61,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -137,6 +139,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -198,6 +201,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -240,6 +244,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )
@@ -273,6 +278,7 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: true,
             overlayManager: overlayModeManager,
             toastContainer: UIView()
         )

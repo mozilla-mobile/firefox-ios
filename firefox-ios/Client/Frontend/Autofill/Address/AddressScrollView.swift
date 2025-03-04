@@ -4,7 +4,6 @@
 
 import SwiftUI
 import Common
-import Shared
 
 // MARK: - AddressScrollView
 

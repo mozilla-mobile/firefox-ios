@@ -5,7 +5,6 @@
 import Foundation
 import UIKit
 import Common
-import MenuKit
 
 // FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
 // MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.

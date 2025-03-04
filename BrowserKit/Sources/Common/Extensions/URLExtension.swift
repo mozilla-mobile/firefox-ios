@@ -85,7 +85,7 @@ extension URL {
     /// Extracts the subdomain and host from a given URL string and appends a dot to the subdomain.
     ///
     /// This function takes a URL string as input and returns a tuple containing the subdomain and the normalized host.
-    /// If the URL string does not contain a subdomain, the function returns `nil` for the subdomain. 
+    /// If the URL string does not contain a subdomain, the function returns `nil` for the subdomain.
     /// If a subdomain is present, it is returned with a trailing dot.
     ///
     /// - Parameter urlString: The URL string to extract the subdomain and host from.

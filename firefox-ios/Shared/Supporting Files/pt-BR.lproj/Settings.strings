@@ -77,7 +77,7 @@
 "Settings.CrashReports.Message.v135" = "Relatórios de falhas nos permitem diagnosticar e corrigir problemas com o navegador.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v136" = "Isto nos ajuda a diagnosticar e corrigir problemas com o navegador.";
+"Settings.CrashReports.Message.v136" = "Ajudar a diagnosticar e corrigir problemas com o navegador.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Enviar relatórios de falhas automaticamente";
@@ -89,7 +89,7 @@
 "Settings.DailyUsagePing.Link.v136" = "Saiba mais";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
-"Settings.DailyUsagePing.Message.v135" = "Isto ajuda a %@ a estimar o número de usuários ativos.";
+"Settings.DailyUsagePing.Message.v135" = "Ajudar a %@ a estimar o número de usuários ativos.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
 "Settings.DailyUsagePing.Title.v135" = "Ping de uso diário";
@@ -120,6 +120,9 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Ativar notificações";
+
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "Aviso de privacidade";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Mecanismo de pesquisa padrão";
@@ -173,7 +176,7 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Sugestões da web";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Apoie o %@ com sugestões patrocinadas ocasionais";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Apoiar o %@ com sugestões patrocinadas eventuais";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Sugestões de patrocinadores";
@@ -182,7 +185,7 @@
 "Settings.Studies.Link.v136" = "Saiba mais";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Message.v136" = "Experimente recursos e ideias antes de ser liberados para todos.";
+"Settings.Studies.Message.v136" = "Experimentar recursos e ideias antes de ser liberados para todos.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalar e executar estudos";
@@ -204,4 +207,7 @@
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Enviar dados técnicos e de interação";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Termos de uso";
 

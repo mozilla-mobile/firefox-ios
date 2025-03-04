@@ -8,7 +8,6 @@ import WebKit
 import Shared
 import Storage
 import Redux
-import TabDataStore
 import PDFKit
 
 import enum MozillaAppServices.VisitType
@@ -149,6 +148,7 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
+            isZeroSearch: isZeroSearch,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer

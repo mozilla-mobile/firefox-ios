@@ -107,7 +107,7 @@
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "გამორთული გაქვთ %1$@-შეტყობინებები. ჩართეთ მოწყობილობის პარამეტრებიდან Settings > Notifications > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
-"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "გაეცანით სასარგებლო შესაძლებლობებსა რჩევებს, თუ როგორ გამოიყენოთ %@ სრულყოფილად.";
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "გაეცანით სასარგებლო შესაძლებლობებსა რჩევებს, რომ მეტად სრულყოფილად გამოიყენოთ %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "რჩევები და შესაძლებლობები";
@@ -173,7 +173,7 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "შემოთავაზებები ვებსივრციდან";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "თანადგომისთვის იხილეთ დამკვეთის შემოთავაზებები, %@ დროდადრო რომ გაჩვენებთ";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "თანადგომისთვის იხილეთ დამკვეთის შემოთავაზებები, %@ დროდადრო რომ მოგაწვდით";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "შემოთავაზებები დამკვეთისგან";
@@ -182,10 +182,10 @@
 "Settings.Studies.Link.v136" = "ვრცლად";
 
 /* A short description that explains that Mozilla is running studies */
-"Settings.Studies.Message.v136" = "გამოცადეთ ჯერ კიდევ ჩანაფიქრის დონეზე მყოფი შესაძლებლობები, სანამ ყველა იხილავს.";
+"Settings.Studies.Message.v136" = "გამოცადეთ შესაძლებლობები ჯერ კიდევ ჩანაფიქრის დონეზე, სანამ ყველასთვის ხილული გახდება.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Title.v136" = "ჩადგამს და გაუშვებს კვლევებს";
+"Settings.Studies.Title.v136" = "კვლევების ჩამატება და გაშვება";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "ვრცლად.";

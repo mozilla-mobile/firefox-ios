@@ -167,7 +167,7 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
             table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
             table.cells[settingsQuery.SendData.sendCrashReportsTitle],
-            table.cells[settingsQuery.StudiesToggle.title],
+            table.cells[settingsQuery.SendData.studiesTitle],
             table.cells[settingsQuery.Version.title],
             table.cells[settingsQuery.Help.title],
             table.cells[settingsQuery.RateOnAppStore.title],

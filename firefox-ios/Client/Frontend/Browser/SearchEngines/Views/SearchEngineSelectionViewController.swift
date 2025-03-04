@@ -3,9 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import ComponentLibrary
 import UIKit
-import Shared
 import Redux
 import UnifiedSearchKit
 

@@ -324,7 +324,7 @@ private class SQLiteDBStatement {
             sqlite3_finalize(self.pointer)
         }
     }
-    
+
     func makeUtf8CString(from str: String) -> UnsafeMutablePointer<Int8> {
         let count = str.utf8CString.count
         let result: UnsafeMutableBufferPointer<Int8> = UnsafeMutableBufferPointer<Int8>.allocate(capacity: count)

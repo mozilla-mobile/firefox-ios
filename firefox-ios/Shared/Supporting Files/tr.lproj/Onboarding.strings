@@ -137,7 +137,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Cihazınız, donanım yapılandırmanız ve %1$@ uygulamasını nasıl kullandığınızla ilgili veriler tüm kullanıcılarımız için özellikleri, performansı ve kararlılığı iyileştirmemize yardımcı olur. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Teknik verileri ve etkileşim verilerini %@’ya gönderin";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Teknik verileri ve etkileşim verilerini %@’ya gönder";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. Placeholder is for the app name. */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "%@ tarayıcısını iyileştirmemize yardım edin";
@@ -146,7 +146,7 @@
 "Onboarding.TermsOfService.Subtitle.v136" = "Hızlı ve güvenli web gezintisi";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page */
-"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Devam ettiğinizde %@’nı kabul etmiş sayılırsınız";
+"Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Devam ettiğinizde %@’nı kabul etmiş sayılırsınız.";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name. */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ Kullanım Koşulları";
@@ -155,7 +155,7 @@
 "Onboarding.TermsOfService.Title.v135" = "%@ tarayıcısına hoş geldiniz";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. Placeholder is for the app name. */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ Kullanım Koşulları.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ Kullanım Koşulları";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klasik duvar kâğıdı";

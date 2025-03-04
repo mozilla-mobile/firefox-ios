@@ -43,6 +43,7 @@ struct WallpaperState: ScreenState, Equatable {
 }
 
 struct WallpaperConfiguration: Equatable {
+    var id: String?
     var landscapeImage: UIImage?
     var portraitImage: UIImage?
     var textColor: UIColor?
@@ -51,6 +52,7 @@ struct WallpaperConfiguration: Equatable {
     var hasImage: Bool
 
     init(
+        id: String? = nil,
         landscapeImage: UIImage? = nil,
         portraitImage: UIImage? = nil,
         textColor: UIColor? = nil,
@@ -58,6 +60,7 @@ struct WallpaperConfiguration: Equatable {
         logoTextColor: UIColor? = nil,
         hasImage: Bool = false
     ) {
+        self.id = id
         self.landscapeImage = landscapeImage
         self.portraitImage = portraitImage
         self.textColor = textColor
@@ -68,6 +71,7 @@ struct WallpaperConfiguration: Equatable {
 
     init(wallpaper: Wallpaper) {
         self.init(
+            id: wallpaper.id,
             landscapeImage: wallpaper.landscape,
             portraitImage: wallpaper.portrait,
             textColor: wallpaper.textColor,

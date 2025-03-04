@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // Header view model for the Firefox Normal Homepage
 class HomepageHeaderViewModel {

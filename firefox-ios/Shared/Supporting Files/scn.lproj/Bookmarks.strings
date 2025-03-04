@@ -23,7 +23,7 @@
 "Bookmarks.Menu.DeleteBookmark.v132" = "Scancella u nzingalibbru";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
-"Bookmarks.Menu.DeletedBookmark.v131" = "Cancillasti “%@”";
+"Bookmarks.Menu.DeletedBookmark.v131" = "Scancillasti “%@”";
 
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
 "Bookmarks.Menu.DeleteFolder.v131" = "Scancella a carpetta";

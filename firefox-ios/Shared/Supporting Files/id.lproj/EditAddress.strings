@@ -82,8 +82,14 @@
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
 "Addresses.EditAddress.AutofillAddressState.v129" = "Negara Bagian";
 
+/* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
+"Addresses.EditAddress.AutofillAddressSuburb.v129" = "Pinggiran kota";
+
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "Telepon";
+
+/* Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component. */
+"Addresses.EditAddress.AutofillAddressTownland.v129" = "Kota kecil";
 
 /* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Desa atau Kotapraja";

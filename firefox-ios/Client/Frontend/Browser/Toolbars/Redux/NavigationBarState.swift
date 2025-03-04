@@ -4,7 +4,6 @@
 
 import Common
 import Redux
-import ToolbarKit
 
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID

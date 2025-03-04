@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Shared
 import SiteImageView
 
 class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {

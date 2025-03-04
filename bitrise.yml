@@ -785,7 +785,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nBuild:
     steps:
     - activate-ssh-key@4.1.1:
@@ -880,7 +880,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4.1.1:
@@ -925,7 +925,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -2148,17 +2148,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '137.0'
+    BITRISE_RELEASE_VERSION: '138.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '137.0'
+    BITRISE_BETA_VERSION: '138.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v137
+- push_branch: release/v138
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test
@@ -2170,4 +2170,4 @@ trigger_map:
 meta:
   bitrise.io:
     stack: osx-xcode-16.2.x
-    machine_type_id: g2-m1.8core
+    machine_type_id: g2.mac.large

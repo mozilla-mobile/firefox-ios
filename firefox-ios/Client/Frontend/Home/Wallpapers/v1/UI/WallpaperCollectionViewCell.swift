@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
     private struct UX {

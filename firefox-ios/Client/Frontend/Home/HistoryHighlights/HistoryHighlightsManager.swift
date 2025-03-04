@@ -88,7 +88,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
     /// Fetches HistoryHighlight from A~S, and then filters currently open
     /// tabs against history highlights in order to avoid duplicated items. Then,
-    /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
+    /// if `shouldGroupHighlights` is set to true, applies group logic and finally,
     /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`
     /// to return the top nine results alternating between them.
     ///
@@ -161,9 +161,9 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
     /// Collate `HistoryHighlight` groups and individual `HistoryHighlight` items, such that
     /// the resulting array alternates between them, starting with individual highlights.
-    /// Because groups could be nil, the `HighlightItem` array gets initialized with the 
+    /// Because groups could be nil, the `HighlightItem` array gets initialized with the
     /// `HistoryHighlight` array and, if not `nil`, groups are then inserted in the odd index
-    /// of the array. In case the individual items are done, the rest of the group array gets 
+    /// of the array. In case the individual items are done, the rest of the group array gets
     /// appended to the result array.
     ///
     /// - Parameters:
