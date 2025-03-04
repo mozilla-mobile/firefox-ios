@@ -14,6 +14,8 @@ import MobileCoreServices
 import Common
 import Redux
 import WebEngine
+import WidgetKit
+import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -110,6 +112,13 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    var downloadProgressManager: DownloadProgressManager?
+
+    var _downloadLiveActivityWrapper: Any?
+    @available(iOS 16.2, *)
+    var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
+        return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+    }
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?

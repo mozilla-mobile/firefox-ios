@@ -12,7 +12,6 @@ import Shared
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
         struct Download: Codable, Hashable {
-            var id: UUID
             var fileName: String
             var hasContentEncoding: Bool?
 
