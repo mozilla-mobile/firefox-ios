@@ -11,31 +11,48 @@ extension BrowserViewController: DownloadQueueDelegate {
         let uuid = windowUUID
         guard download.originWindow == uuid else { return }
 
-        // If no other download toast is shown, create a new download toast and show it.
-        guard let downloadToast = self.downloadToast else {
-            let downloadToast = DownloadToast(download: download,
-                                              theme: currentTheme(),
-                                              completion: { buttonPressed in
-                // When this toast is dismissed, be sure to clear this so that any
-                // subsequent downloads cause a new toast to be created.
-                self.downloadToast = nil
-
-                // Handle download cancellation
-                if buttonPressed, !downloadQueue.isEmpty {
-                    downloadQueue.cancelAll(for: uuid)
-
-                    SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                    bottomContainer: self.contentContainer,
-                                                    theme: self.currentTheme())
-                }
-            })
-
-            show(toast: downloadToast, duration: nil)
+        if let downloadProgressManager = self.downloadProgressManager {
+            // Otherwise, just add this download to the existing download toast.
+            downloadProgressManager.addDownload(download)
             return
         }
+        let downloadProgressManager = DownloadProgressManager(downloads: [download])
+        self.downloadProgressManager = downloadProgressManager
+        let downloadToast = DownloadToast(downloadProgressManager: downloadProgressManager,
+                                          theme: currentTheme(),
+                                          completion: { buttonPressed in self.stopDownload(buttonPressed: buttonPressed) })
 
-        // Otherwise, just add this download to the existing download toast.
-        downloadToast.addDownload(download)
+        downloadProgressManager.delegates.append(downloadToast)
+
+        if #available(iOS 16.2, *) {
+            let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
+            downloadProgressManager.delegates.append(downloadLiveActivityWrapper)
+            self._downloadLiveActivityWrapper = downloadLiveActivityWrapper
+            guard downloadLiveActivityWrapper.start() else {
+                self._downloadLiveActivityWrapper = nil
+                return
+            }
+        }
+        show(toast: downloadToast, duration: nil)
+    }
+
+    func stopDownload(buttonPressed: Bool) {
+        // When this toast is dismissed, be sure to clear this so that any
+        // subsequent downloads cause a new toast to be created.
+        self.downloadToast = nil
+        if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
+            downloadLiveActivityWrapper.end(afterSeconds: 0)
+        }
+        self.downloadProgressManager = nil
+
+        // Handle download cancellation
+        if buttonPressed, !downloadQueue.isEmpty {
+            downloadQueue.cancelAll(for: windowUUID)
+
+            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                            bottomContainer: self.contentContainer,
+                                            theme: self.currentTheme())
+        }
     }
 
     func downloadQueue(
@@ -43,19 +60,25 @@ extension BrowserViewController: DownloadQueueDelegate {
         didDownloadCombinedBytes combinedBytesDownloaded: Int64,
         combinedTotalBytesExpected: Int64?
     ) {
-        downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
+        downloadProgressManager?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {}
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,
-              let download = downloadToast.downloads.first,
+              let downloadProgressManager = self.downloadProgressManager,
+              let download = downloadProgressManager.downloads.first,
               download.originWindow == windowUUID
         else { return }
 
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
+            if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
+                downloadLiveActivityWrapper.end(afterSeconds: 2)
+                self._downloadLiveActivityWrapper = nil
+            }
+            self.downloadProgressManager = nil
 
             // We only care about download errors specific to our window's downloads
             if error == nil {
