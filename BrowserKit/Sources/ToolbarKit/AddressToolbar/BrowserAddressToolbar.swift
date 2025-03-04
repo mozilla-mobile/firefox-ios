@@ -75,6 +75,7 @@ public class BrowserAddressToolbar: UIView,
                 previousConfiguration.locationViewConfiguration,
                 delegate: self,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                iconContainerCornerRadius: previousConfiguration.uxConfiguration.addressBarCornerRadius,
                 shouldCenterLocationTextField: previousConfiguration.uxConfiguration.shouldCenterLocationText
             )
         }
@@ -111,13 +112,14 @@ public class BrowserAddressToolbar: UIView,
     public func configure(config: AddressToolbarConfiguration, isUnifiedSearchEnabled: Bool, animated: Bool) {
         updateBorder(borderPosition: config.borderPosition)
 
-        updateActions(config: config, animated: animated)
         locationView.configure(
             config.locationViewConfiguration,
             delegate: self,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+            iconContainerCornerRadius: config.uxConfiguration.addressBarCornerRadius,
             shouldCenterLocationTextField: config.uxConfiguration.shouldCenterLocationText
         )
+        updateActions(config: config, animated: animated)
         droppableUrl = config.locationViewConfiguration.droppableUrl
     }
 
@@ -125,28 +127,56 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.layer.cornerRadius = config.addressBarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
 
+        navigationActionStack.removeFromSuperview()
         if config.shouldIncludeNavigationActionsInAddressBar {
-            navigationActionStack.removeFromSuperview()
-            locationContainer.addSubview(navigationActionStack)
-            leadingLocationContainerConstraint?.isActive = false
-            leadingLocationContainerConstraint = locationContainer.leadingAnchor.constraint(
-                equalTo: toolbarContainerView.leadingAnchor,
-                constant: UX.horizontalSpace
-            )
-            leadingLocationContainerConstraint?.isActive = true
-
-            leadingNavigationActionStackConstraint?.isActive = false
-            leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor
-                .constraint(equalTo: locationContainer.leadingAnchor)
-            leadingNavigationActionStackConstraint?.isActive = true
-
-            leadingLocationViewConstraint?.isActive = false
-            trailingNavigationActionStackConstraint?.isActive = false
-
-            trailingNavigationActionStackConstraint = navigationActionStack.trailingAnchor
-                .constraint(equalTo: locationView.leadingAnchor)
-            trailingNavigationActionStackConstraint?.isActive = true
+            configureNavigationStackOnLocationContainer()
+        } else {
+            configureNavigationStackOnToolbarContainer()
         }
+    }
+
+    private func configureNavigationStackOnLocationContainer() {
+        locationContainer.addSubview(navigationActionStack)
+
+        leadingLocationContainerConstraint?.isActive = false
+        leadingLocationContainerConstraint = locationContainer.leadingAnchor.constraint(
+            equalTo: toolbarContainerView.leadingAnchor,
+            constant: UX.horizontalSpace
+        )
+        leadingLocationContainerConstraint?.isActive = true
+
+        leadingLocationViewConstraint?.isActive = false
+        leadingLocationViewConstraint = locationView.leadingAnchor.constraint(equalTo: navigationActionStack.trailingAnchor)
+        leadingLocationViewConstraint?.isActive = true
+
+        leadingNavigationActionStackConstraint?.isActive = false
+        leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor
+            .constraint(equalTo: locationContainer.leadingAnchor)
+        leadingNavigationActionStackConstraint?.isActive = true
+
+        trailingNavigationActionStackConstraint?.isActive = false
+        trailingNavigationActionStackConstraint = navigationActionStack.trailingAnchor
+            .constraint(equalTo: locationView.leadingAnchor)
+        trailingNavigationActionStackConstraint?.isActive = true
+    }
+
+    private func configureNavigationStackOnToolbarContainer() {
+        toolbarContainerView.addSubview(navigationActionStack)
+
+        leadingNavigationActionStackConstraint?.isActive = false
+        leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
+            equalTo: toolbarContainerView.leadingAnchor)
+        leadingNavigationActionStackConstraint?.isActive = true
+
+        leadingLocationContainerConstraint?.isActive = false
+        leadingLocationContainerConstraint = navigationActionStack.trailingAnchor.constraint(
+            equalTo: locationContainer.leadingAnchor,
+            constant: -UX.horizontalSpace)
+        leadingLocationContainerConstraint?.isActive = true
+
+        leadingLocationViewConstraint?.isActive = false
+        leadingLocationViewConstraint = locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor)
+        leadingLocationViewConstraint?.isActive = true
     }
 
     public func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -171,14 +201,8 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
 
-        toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
         toolbarContainerView.addSubview(browserActionStack)
-
-        leadingLocationContainerConstraint = navigationActionStack.trailingAnchor.constraint(
-            equalTo: locationContainer.leadingAnchor,
-            constant: -UX.horizontalSpace)
-        leadingLocationContainerConstraint?.isActive = true
 
         leadingBrowserActionConstraint = browserActionStack.leadingAnchor.constraint(
             equalTo: locationContainer.trailingAnchor,
@@ -195,10 +219,6 @@ public class BrowserAddressToolbar: UIView,
         toolbarTopBorderHeightConstraint?.isActive = true
         toolbarBottomBorderHeightConstraint?.isActive = true
 
-        leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
-            equalTo: toolbarContainerView.leadingAnchor)
-        leadingNavigationActionStackConstraint?.isActive = true
-
         trailingBrowserActionStackConstraint = browserActionStack.trailingAnchor.constraint(
             equalTo: toolbarContainerView.trailingAnchor)
         trailingBrowserActionStackConstraint?.isActive = true
@@ -206,8 +226,7 @@ public class BrowserAddressToolbar: UIView,
         locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
         locationContainerHeightConstraint?.isActive = true
 
-        leadingLocationViewConstraint = locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor)
-        leadingLocationViewConstraint?.isActive = true
+        configureNavigationStackOnToolbarContainer()
 
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
