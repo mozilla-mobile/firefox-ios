@@ -350,7 +350,11 @@ final class LocationView: UIView,
         let configurationIsEditing = config.isEditing
         isEditing = configurationIsEditing
 
-        urlTextField.placeholder = config.urlTextFieldPlaceholder
+        if !isEditing && config.url != nil {
+            urlTextField.placeholder = nil
+        } else {
+            urlTextField.placeholder = config.urlTextFieldPlaceholder
+        }
         urlAbsolutePath = config.url?.absoluteString
 
         let shouldShowKeyboard = configurationIsEditing && config.shouldShowKeyboard
@@ -524,6 +528,9 @@ final class LocationView: UIView,
         // `attributedText` property is set to nil to remove all formatting and truncation set before.
         textField.attributedText = nil
         textField.text = searchText
+        if !(searchText?.isEmpty ?? false) {
+            textField.placeholder = nil
+        }
 
         delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
