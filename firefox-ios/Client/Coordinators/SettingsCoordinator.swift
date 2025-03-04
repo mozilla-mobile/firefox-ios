@@ -264,6 +264,12 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: PrivacySettingsDelegate
 
+    func pressedAutoFillsPasswords() {
+        let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        viewController.parentCoordinator = self
+        router.push(viewController)
+    }
+
     func pressedAddressAutofill() {
         let viewModel = AddressAutofillSettingsViewModel(
             profile: profile,
