@@ -673,7 +673,7 @@ WKNavigationTypeFormResubmitted,
 WKNavigationTypeOther = -1,
 */
 
-// Enums in Swift aren't implicitly defaulted to Int, and Uniffi doesn't 
+// Enums in Swift aren't implicitly defaulted to Int, and Uniffi doesn't
 // provide an easy way to define the enum type we should remove this once
 // https://github.com/mozilla/uniffi-rs/issues/1792 is implemented
 extension VisitType {

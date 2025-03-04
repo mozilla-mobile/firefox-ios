@@ -102,7 +102,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         } else {
             let firstIndexPath = IndexPath(row: 0, section: 0)
             let list = tester().waitForView(withAccessibilityIdentifier: "ReadingTable") as? UITableView
-            
+
             let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "ReadingTable")
             tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
             tester().tapView(withAccessibilityLabel: "Remove")

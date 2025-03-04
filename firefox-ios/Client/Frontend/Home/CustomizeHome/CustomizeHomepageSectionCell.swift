@@ -5,7 +5,6 @@
 import Common
 import ComponentLibrary
 import UIKit
-import Shared
 
 class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons

@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 // Convenience protocol to have a blur on a collection view cell
 // Currently used on the homepage cells

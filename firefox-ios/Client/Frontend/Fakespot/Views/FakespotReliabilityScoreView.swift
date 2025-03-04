@@ -5,7 +5,6 @@
 import UIKit
 import Common
 import Shared
-import ComponentLibrary
 
 final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     private struct UX {

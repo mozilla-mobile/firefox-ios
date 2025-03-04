@@ -8,7 +8,7 @@ import UIKit
 final class UnitTestAppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Remove any cached scene configurations to ensure that 
+        // Remove any cached scene configurations to ensure that
         // TestingAppDelegate.application(_:configurationForConnecting:options:) is called
         // and TestingSceneDelegate will be used when running unit tests.
         // NOTE: THIS IS PRIVATE API AND MAY BREAK IN THE FUTURE!

@@ -4,7 +4,6 @@
 
 import Common
 import Redux
-import Shared
 
 /// State for the message cell that is used in the homepage view
 struct MessageCardState: StateType, Equatable, Hashable {

@@ -3416,7 +3416,7 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements 
+    // Also implements
     // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
         switch contextualHintType {

@@ -140,7 +140,7 @@ class SettingTest: BaseTestCase {
 
         // Now in Safari
         let safariLabel = safariapp.textFields["Address"]
-        // iPad Safari cannot access the URL bar. 
+        // iPad Safari cannot access the URL bar.
         // Let's ensure that Safari exists at the very least.
         waitForExistence(safariapp)
         if !iPad() {

@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 protocol MessageSurfaceProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
