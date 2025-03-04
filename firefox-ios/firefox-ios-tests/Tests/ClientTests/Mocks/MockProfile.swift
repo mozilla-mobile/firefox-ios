@@ -13,6 +13,7 @@ import XCTest
 
 import enum MozillaAppServices.SyncReason
 import struct MozillaAppServices.SyncResult
+import class MozillaAppServices.RemoteSettingsService
 
 public typealias ClientSyncManager = Client.SyncManager
 
@@ -113,6 +114,7 @@ open class MockProfile: Client.Profile {
     public var files: FileAccessor
     public var syncManager: ClientSyncManager?
     public var firefoxSuggest: RustFirefoxSuggestProtocol?
+    public var remoteSettingsService: RemoteSettingsService?
 
     fileprivate let name = "mockaccount"
 
@@ -123,6 +125,7 @@ open class MockProfile: Client.Profile {
     init(
         databasePrefix: String = "mock",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
+        remoteSettingService: RemoteSettingsService? = nil,
         injectedPinnedSites: MockablePinnedSites? = nil
     ) {
         files = MockFiles()

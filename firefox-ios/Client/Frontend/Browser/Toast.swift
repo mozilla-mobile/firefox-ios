@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import Shared
 
 class Toast: UIView, ThemeApplicable, Notifiable {
     struct UX {

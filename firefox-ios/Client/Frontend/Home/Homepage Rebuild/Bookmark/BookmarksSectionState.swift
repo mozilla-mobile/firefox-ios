@@ -5,7 +5,6 @@
 import Common
 import Redux
 import Shared
-import Storage
 
 /// State for the bookmark section that is used in the homepage view
 struct BookmarksSectionState: StateType, Equatable, Hashable {

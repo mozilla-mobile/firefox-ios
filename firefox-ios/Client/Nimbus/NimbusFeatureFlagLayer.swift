@@ -112,6 +112,9 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
+        case .searchEngineConsolidation:
+            return checkSearchEngineConsolidationFeature(from: nimbus)
+
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature(from: nimbus)
 
@@ -309,6 +312,11 @@ final class NimbusFeatureFlagLayer {
             default: return false
             }
         }
+
+    private func checkSearchEngineConsolidationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.searchEngineConsolidationFeature.value()
+        return config.enabled
+    }
 
     private func checkSplashScreenFeature(
         for featureID: NimbusFeatureFlagID,

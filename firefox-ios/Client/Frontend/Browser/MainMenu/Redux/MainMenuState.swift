@@ -4,7 +4,6 @@
 
 import Common
 import MenuKit
-import Shared
 import Redux
 
 struct AccountData: Equatable {

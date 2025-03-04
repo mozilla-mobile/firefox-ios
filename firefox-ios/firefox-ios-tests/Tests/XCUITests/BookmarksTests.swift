@@ -60,14 +60,7 @@ class BookmarksTests: BaseTestCase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        if iPad() {
-            app.collectionViews
-                .cells["Example Domain"].children(matching: .other)
-                .element.children(matching: .other)
-                .element.waitAndTap()
-        } else {
-            app.cells.staticTexts["Example Domain"].waitAndTap()
-        }
+        app.cells.staticTexts["Example Domain"].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
@@ -455,9 +448,6 @@ class BookmarksTests: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         navigator.goto(TabTray)
-        if !iPad() {
-            mozWaitForElementToExist(app.segmentedControls.buttons["Private"])
-        }
         // Tap to "Remove bookmark"
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)

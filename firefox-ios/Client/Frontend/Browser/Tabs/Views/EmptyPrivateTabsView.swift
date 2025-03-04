@@ -13,7 +13,7 @@ protocol EmptyPrivateTabsViewDelegate: AnyObject {
 }
 
 // View we display when there are no private tabs created
-class EmptyPrivateTabsView: UIView {
+class EmptyPrivateTabsView: UIView, EmptyPrivateTabView {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
@@ -124,7 +124,7 @@ class EmptyPrivateTabsView: UIView {
         ])
     }
 
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
         learnMoreButton.applyTheme(theme: theme)

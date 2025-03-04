@@ -75,13 +75,13 @@ extension String {
         return boldString
     }
 
-    /// Creates an attributed string with a base style and highlights a specific part of the 
+    /// Creates an attributed string with a base style and highlights a specific part of the
     /// string with a different style.
     ///
     /// - Parameters:
     ///   - style: The dictionary of attributes applied to the entire string. Defaults to `nil`.
     ///   - highlightedText: The substring to be highlighted with a different style.
-    ///   - highlightedTextStyle: The dictionary of attributes applied specifically to the highlighted text. 
+    ///   - highlightedTextStyle: The dictionary of attributes applied specifically to the highlighted text.
     ///   Defaults to `nil`.
     /// - Returns: An `NSAttributedString` with the specified parts styled differently.
     ///

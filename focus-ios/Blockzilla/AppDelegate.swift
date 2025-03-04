@@ -340,7 +340,7 @@ extension AppDelegate {
         }
         return environment
     }
-    
+
     private var releaseName: String {
         return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
     }

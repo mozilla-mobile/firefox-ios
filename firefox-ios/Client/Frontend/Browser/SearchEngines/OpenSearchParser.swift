@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
 import Fuzi
 
 /// OpenSearch XML parser.
@@ -84,7 +83,7 @@ class OpenSearchParser {
                             return nil
                         }
 
-                        // Ref: FXIOS-4547 required us to change partner code (pc) for Bing search on iPad 
+                        // Ref: FXIOS-4547 required us to change partner code (pc) for Bing search on iPad
                         if name == "pc", shortName == "Bing", userInterfaceIdiom == .pad {
                             value = "MOZL"
                         }

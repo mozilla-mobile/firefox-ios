@@ -14,4 +14,5 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedToolbar()
     func pressedTheme()
     func pressedBrowsing()
+    func pressedAutoFillsPasswords()
 }

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 
 /*
-    
+
  |----------------|
  |              X |
  |Title Multiline |
@@ -22,7 +22,7 @@ import Shared
  |----------------|
  |    [Button]    | (Bottom View)
  |----------------|
- 
+
  */
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable, Themeable {

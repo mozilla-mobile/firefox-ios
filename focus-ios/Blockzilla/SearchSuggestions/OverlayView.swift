@@ -247,14 +247,14 @@ class OverlayView: UIView {
     }
 
     /**
-     
+
      Localize and style 'phrase' text for use as a button title.
-     
+
      - Parameter phrase: The phrase text for a button title
      - Parameter localizedStringFormat: The localization format string to apply
-     
+
      - Returns: An NSAttributedString with `phrase` localized and styled appropriately.
-     
+
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.primaryText])

@@ -75,7 +75,7 @@ protocol TabManager: AnyObject {
 
     /// Get inactive tabs from the list of tabs based on the time condition to be considered inactive.
     /// Replaces LegacyInactiveTabModel and related classes
-    /// 
+    ///
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
