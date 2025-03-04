@@ -785,7 +785,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nBuild:
     steps:
     - activate-ssh-key@4.1.1:
@@ -880,7 +880,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4.1.1:
@@ -925,7 +925,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
@@ -2170,4 +2170,4 @@ trigger_map:
 meta:
   bitrise.io:
     stack: osx-xcode-16.2.x
-    machine_type_id: g2-m1.8core
+    machine_type_id: g2.mac.large
