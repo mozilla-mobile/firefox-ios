@@ -17,6 +17,7 @@ import AuthenticationServices
 import class MozillaAppServices.MZKeychainWrapper
 import class MozillaAppServices.RemoteSettingsService
 import enum MozillaAppServices.Level
+import enum MozillaAppServices.RemoteSettingsServer
 import enum MozillaAppServices.SyncReason
 import enum MozillaAppServices.VisitType
 import func MozillaAppServices.setLogger
@@ -680,10 +681,17 @@ open class BrowserProfile: Profile {
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
-            return try RemoteSettingsService(storageDir: directory, config: RemoteSettingsConfig2())
+            let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+            return try RemoteSettingsService(
+                storageDir: URL(
+                    fileURLWithPath: directory,
+                    isDirectory: true
+                ).appendingPathComponent("remote-settings").path,
+                config: RemoteSettingsConfig2(server: server)
+            )
         } catch {
-            logger.log("Failed to specify RemoteSettingsService",
-                       level: .warning,
+            logger.log("Failed to instantiate RemoteSettingsService",
+                       level: .fatal,
                        category: .storage)
             return nil
         }
@@ -697,11 +705,14 @@ open class BrowserProfile: Profile {
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            if let rs_service = remoteSettingsService {
+            if let rsService = remoteSettingsService {
                 return try RustFirefoxSuggest(
-                    dataPath: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("suggest-data.db").path,
+                    dataPath: URL(
+                        fileURLWithPath: directory,
+                        isDirectory: true
+                    ).appendingPathComponent("suggest-data.db").path,
                     cachePath: cacheFileURL.path,
-                    remoteSettingsService: rs_service
+                    remoteSettingsService: rsService
                 )
             }
             return nil

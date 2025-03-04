@@ -43,7 +43,12 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
     private let writerQueue = DispatchQueue(label: "RustFirefoxSuggest.writer")
     private let readerQueue = DispatchQueue(label: "RustFirefoxSuggest.reader")
 
-    public init(dataPath: String, cachePath: String, remoteSettingsServer: RemoteSettingsServer? = nil, remoteSettingsService: RemoteSettingsService) throws {
+    public init(
+        dataPath: String,
+        cachePath: String,
+        remoteSettingsServer: RemoteSettingsServer? = nil,
+        remoteSettingsService: RemoteSettingsService
+    ) throws {
         var builder = SuggestStoreBuilder()
             .dataPath(path: dataPath)
 
