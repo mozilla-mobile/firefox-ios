@@ -74,8 +74,8 @@ public class BrowserAddressToolbar: UIView,
                 previousConfiguration.locationViewConfiguration,
                 delegate: self,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                iconContainerCornerRadius: previousConfiguration.uxConfiguration.addressBarCornerRadius,
-                shouldCenterLocationTextField: previousConfiguration.uxConfiguration.shouldCenterLocationText
+                iconContainerCornerRadius: previousConfiguration.uxConfiguration.toolbarCornerRadius,
+                shouldCenterLocationTextField: previousConfiguration.uxConfiguration.isLocationTextCentered
             )
         }
     }
@@ -115,18 +115,18 @@ public class BrowserAddressToolbar: UIView,
             config.locationViewConfiguration,
             delegate: self,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            iconContainerCornerRadius: config.uxConfiguration.addressBarCornerRadius,
-            shouldCenterLocationTextField: config.uxConfiguration.shouldCenterLocationText
+            iconContainerCornerRadius: config.uxConfiguration.toolbarCornerRadius,
+            shouldCenterLocationTextField: config.uxConfiguration.isLocationTextCentered
         )
         updateActions(config: config, animated: animated)
         droppableUrl = config.locationViewConfiguration.droppableUrl
     }
 
     private func configureUX(config: AddressToolbarUXConfiguration) {
-        locationContainer.layer.cornerRadius = config.addressBarCornerRadius
+        locationContainer.layer.cornerRadius = config.toolbarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
 
-        if config.shouldIncludeNavigationActionsInAddressBar {
+        if config.isNavigationActionsInsideLocationView {
             guard navigationActionStack.superview != locationContainer else { return }
             navigationActionStack.removeFromSuperview()
             configureNavigationStackOnLocationContainer()
@@ -250,9 +250,6 @@ public class BrowserAddressToolbar: UIView,
             toolbarBottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbarBottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            navigationActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
-            navigationActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
-
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
@@ -343,7 +340,7 @@ public class BrowserAddressToolbar: UIView,
     private func updateSpacing(uxConfig: AddressToolbarUXConfiguration,
                                leading: CGFloat,
                                trailing: CGFloat) {
-        if uxConfig.shouldIncludeNavigationActionsInAddressBar {
+        if uxConfig.isNavigationActionsInsideLocationView {
             leadingNavigationActionStackConstraint?.constant = 0
             leadingLocationContainerConstraint?.constant = trailing
         } else {
@@ -414,7 +411,7 @@ public class BrowserAddressToolbar: UIView,
         // Navigation action spacing
         let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
         let isRegular = traitCollection.horizontalSizeClass == .regular
-        if !uxConfig.shouldIncludeNavigationActionsInAddressBar {
+        if !uxConfig.isNavigationActionsInsideLocationView {
             leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
         }
 

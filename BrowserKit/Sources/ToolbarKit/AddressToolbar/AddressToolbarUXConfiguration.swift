@@ -5,22 +5,24 @@
 import Foundation
 
 public struct AddressToolbarUXConfiguration {
-    let addressBarCornerRadius: CGFloat
+    let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
-    let shouldIncludeNavigationActionsInAddressBar: Bool
-    let shouldCenterLocationText: Bool
+    /// Wether navigations actions are included inside the Location container view.
+    /// When the actions are included they get the same background and rounding of the Location container view.
+    let isNavigationActionsInsideLocationView: Bool
+    let isLocationTextCentered: Bool
 
     public static let experiment = AddressToolbarUXConfiguration(
-        addressBarCornerRadius: 12.0,
+        toolbarCornerRadius: 12.0,
         browserActionsAddressBarDividerWidth: 0.0,
-        shouldIncludeNavigationActionsInAddressBar: true,
-        shouldCenterLocationText: true
+        isNavigationActionsInsideLocationView: true,
+        isLocationTextCentered: true
     )
 
     public static let `default` = AddressToolbarUXConfiguration(
-        addressBarCornerRadius: 8.0,
+        toolbarCornerRadius: 8.0,
         browserActionsAddressBarDividerWidth: 4.0,
-        shouldIncludeNavigationActionsInAddressBar: false,
-        shouldCenterLocationText: false
+        isNavigationActionsInsideLocationView: false,
+        isLocationTextCentered: false
     )
 }
