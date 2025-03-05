@@ -182,7 +182,6 @@ final class LocationView: UIView,
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradient()
-        updateURLTextFieldLeadingConstraintBasedOnState()
     }
 
     private func setupLayout() {
@@ -243,7 +242,10 @@ final class LocationView: UIView,
     private func updateGradient() {
         let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !isEditing
         gradientView.isHidden = !showGradientForLongURL
-        gradientLayer.frame = gradientView.bounds
+        // Use the containerView height since gradient's view height could be still not updated here
+        // This can avoid to call containerView.layoutIfNeeded() which is an expensive call.
+        let gradientLayerSize = CGSize(width: gradientView.bounds.width, height: containerView.frame.height)
+        gradientLayer.frame = CGRect(origin: gradientView.bounds.origin, size: gradientLayerSize)
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
@@ -331,7 +333,7 @@ final class LocationView: UIView,
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
-        updateURLTextFieldLeadingConstraint()
+        updateURLTextFieldLeadingConstraintBasedOnState()
 
         let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
 
