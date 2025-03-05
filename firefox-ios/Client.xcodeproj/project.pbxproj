@@ -25852,7 +25852,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8AEDFE832C9DAB9C00821359 /* FennecTesting.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple AppIcon_Alt_BlueGradient AppIcon_Alt_OrangeGradient";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -26615,7 +26615,7 @@
 		E448FC9E1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple AppIcon_Alt_BlueGradient AppIcon_Alt_OrangeGradient";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -26897,7 +26897,7 @@
 		E6DCC2061DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple AppIcon_Alt_BlueGradient AppIcon_Alt_OrangeGradient";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -27183,7 +27183,7 @@
 		E6FCC42A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple AppIcon_Alt_BlueGradient AppIcon_Alt_OrangeGradient";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -27690,7 +27690,7 @@
 		F84B21DE1A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Hug AppIcon_Alt_DarkPurple AppIcon_Alt_BlueGradient AppIcon_Alt_OrangeGradient";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
