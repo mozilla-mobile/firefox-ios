@@ -681,14 +681,19 @@ open class BrowserProfile: Profile {
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
-            let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            return try RemoteSettingsService(
-                storageDir: URL(
-                    fileURLWithPath: directory,
-                    isDirectory: true
-                ).appendingPathComponent("remote-settings").path,
-                config: RemoteSettingsConfig2(server: server)
-            )
+            // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+            // Default to Prod for now; this will be revisited soon.
+            // Related: https://mozilla.slack.com/archives/C05VCNPLFFT/p1741183526964339
+            let server = RemoteSettingsServer.prod
+
+            let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
+            let path = url.path
+
+            // Create the remote settings directory if needed
+            if !FileManager.default.fileExists(atPath: path) {
+                try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            }
+            return try RemoteSettingsService(storageDir: path, config: RemoteSettingsConfig2(server: server))
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,
