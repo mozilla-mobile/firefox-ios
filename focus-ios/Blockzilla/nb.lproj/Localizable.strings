@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettigheter";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Vilkår for bruk";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blokker sporere for bedre personvern";
 
@@ -274,8 +277,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Blokker innholds-sporere";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Dette hjelper Mozilla med å beregne aktive brukere.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ping for daglig bruk";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Mørkt";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Dette hjelper oss med å diagnostisere og fikse problemer med nettleseren.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ sender det du skriver i adressefeltet til din søkemotor";
@@ -381,6 +393,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Sosialt";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Send inn krasjrapporter automatisk";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Bruk «Face ID» for å låse opp appen";
