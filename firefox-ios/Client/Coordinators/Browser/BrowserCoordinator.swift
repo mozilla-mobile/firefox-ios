@@ -613,29 +613,31 @@ class BrowserCoordinator: BaseCoordinator,
 
     func presentSavePDFController() {
         guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
-        if let url = webView.url, url.lastPathComponent.lowercased().contains(".pdf") {
+        if let selectedTab = browserViewController.tabManager.selectedTab,
+           selectedTab.mimeType == MIMEType.PDF {
             showShareSheetForCurrentlySelectedTab()
         } else {
             webView.createPDF { [weak self] result in
+                guard let self else { return }
                 switch result {
                 case .success(let data):
                     guard let pdf = PDFDocument(data: data),
                           let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
                         return
                     }
-                    pdf.write(to: outputURL)
-                    if FileManager.default.fileExists(atPath: outputURL.path) {
-                        let url = URL(fileURLWithPath: outputURL.path)
-                        let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                        if let popover = controller.popoverPresentationController {
-                            popover.sourceView = self?.browserViewController.addressToolbarContainer
-                        }
-                        self?.present(controller)
-                    }
+                    startShareSheetCoordinator(
+                        shareType: .file(url: outputURL),
+                        shareMessage: nil,
+                        sourceView: self.browserViewController.addressToolbarContainer,
+                        sourceRect: nil,
+                        toastContainer: self.browserViewController.contentContainer,
+                        popoverArrowDirection: .any
+                    )
                 case .failure(let error):
-                    self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
-                                     level: .debug,
-                                     category: .webview)
+                    // TODO: FXIOS-11542 [iOS Menu Redesign] - Handle saveAsPDF Menu option, error case
+                    self.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                    level: .debug,
+                                    category: .webview)
                 }
             }
         }
