@@ -32,6 +32,7 @@ class SettingsCoordinator: BaseCoordinator,
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    private let settingsTelemetry: SettingsTelemetry
 
     init(
         router: Router,
@@ -39,13 +40,15 @@ class SettingsCoordinator: BaseCoordinator,
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve()
+        gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.wallpaperManager = wallpaperManager
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
+        self.settingsTelemetry = SettingsTelemetry(gleanWrapper: gleanWrapper)
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -264,6 +267,12 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: PrivacySettingsDelegate
 
+    func pressedAutoFillsPasswords() {
+        let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        viewController.parentCoordinator = self
+        router.push(viewController)
+    }
+
     func pressedAddressAutofill() {
         let viewModel = AddressAutofillSettingsViewModel(
             profile: profile,
@@ -320,6 +329,8 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: GeneralSettingsDelegate
 
     func pressedCustomizeAppIcon() {
+        settingsTelemetry.tappedAppIconSetting()
+
         let viewController = UIHostingController(
             rootView: AppIconSelectionView(
                 windowUUID: windowUUID

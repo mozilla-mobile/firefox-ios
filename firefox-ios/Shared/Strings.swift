@@ -2396,6 +2396,15 @@ extension String {
             )
         }
 
+        public struct AutofillAndPassword {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AutofillAndPassword.Title.v137",
+                tableName: "Settings",
+                value: "Autofills & Passwords",
+                comment: "In the settings menu, in the General section, this is the title for Autofills & Passwords customization section."
+            )
+        }
+
         public struct Notifications {
             public static let Title = MZLocalizedString(
                 key: "Settings.Notifications.Title.v112",
