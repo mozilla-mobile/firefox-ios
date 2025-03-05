@@ -714,8 +714,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        /// SFSafariViewController only accepts http(s) URLs.
-        /// Passing calendar blobs for instance will cause the app to crash.
+        /// FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
+        /// This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
+        /// In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
         if let url = responseURL,
            ["http", "https"].contains(url.scheme),
            tabManager[webView]?.mimeType == MIMEType.Calendar {
