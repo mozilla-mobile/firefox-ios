@@ -905,7 +905,7 @@ struct AddressBarState: StateType, Equatable {
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
         if layout == .baseline {
-            actions.append(shareAction)
+			actions.append(shareAction)
         }
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
