@@ -77,7 +77,8 @@ let middlewares = [
     PocketMiddleware().pocketSectionProvider,
     NativeErrorPageMiddleware().nativeErrorPageProvider,
     WallpaperMiddleware().wallpaperProvider,
-    BookmarksMiddleware().bookmarksProvider
+    BookmarksMiddleware().bookmarksProvider,
+    HomepageMiddleware().homepageProvider
 ]
 
 // In order for us to mock and test the middlewares easier,
