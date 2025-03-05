@@ -100,7 +100,7 @@ struct OnboardingConstants {
     }
     
     struct Layout {
-        static let logoSize: CGSize = CGSize(width: 150, height: 150)
+        static let logoSize = CGSize(width: 150, height: 150)
         static let buttonCornerRadius: CGFloat = 12
     }
 }
