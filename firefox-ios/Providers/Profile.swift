@@ -682,7 +682,7 @@ open class BrowserProfile: Profile {
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
             // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            // Default to Prod for now; this will be revisited soon.
+            // [FXIOS-11550] Default to Prod for now; this will be revisited soon.
             // Related: https://mozilla.slack.com/archives/C05VCNPLFFT/p1741183526964339
             let server = RemoteSettingsServer.prod
 
