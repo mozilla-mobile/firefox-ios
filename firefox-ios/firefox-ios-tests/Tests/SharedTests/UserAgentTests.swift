@@ -4,7 +4,6 @@
 
 import XCTest
 @testable import Shared
-import Common
 
 final class UserAgentTests: XCTestCase {
     func testGetUserAgentDesktop_withListedDomain_returnProperUserAgent() {

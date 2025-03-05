@@ -4,7 +4,6 @@
 @testable import Client
 import XCTest
 
-import Common
 import Foundation
 import Shared
 import StoreKit

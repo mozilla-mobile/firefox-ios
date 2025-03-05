@@ -6,8 +6,19 @@ import Foundation
 import Glean
 
 struct HomepageTelemetry {
-    func sendHomepageTappedTelemetry(enteringPrivateMode: Bool) {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
+    func sendMaskToggleTappedTelemetry(enteringPrivateMode: Bool) {
         let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
-        GleanMetrics.Homepage.privateModeToggle.record(isPrivateModeExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: isPrivateModeExtra)
+    }
+
+    // MARK: - Customize Homepage
+    func sendTapOnCustomizeHomepageTelemetry() {
+        gleanWrapper.incrementCounter(for: GleanMetrics.FirefoxHomePage.customizeHomepageButton)
     }
 }
