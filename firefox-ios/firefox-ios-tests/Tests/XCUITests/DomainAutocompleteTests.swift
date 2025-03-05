@@ -181,21 +181,21 @@ class DomainAutocompleteTests: BaseTestCase {
     func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("a")
-        mozWaitForValueContains(urlBarAddress, value: ".com")
+        mozWaitForValueContains(urlBarAddress, value: "a")
         let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "a", "Wrong autocompletion")
 
         app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("an")
-        mozWaitForValueContains(urlBarAddress, value: ".com")
+        mozWaitForValueContains(urlBarAddress, value: "an")
         let value2 = urlBarAddress.value
-        XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, "an", "Wrong autocompletion")
 
         app.buttons["Clear text"].waitAndTap()
         urlBarAddress.typeText("anc")
-        mozWaitForValueContains(urlBarAddress, value: ".com")
+        mozWaitForValueContains(urlBarAddress, value: "anc")
         let value3 = urlBarAddress.value
-        XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
+        XCTAssertEqual(value3 as? String, "anc", "Wrong autocompletion")
     }
 
     // Test mixed case autocompletion.
