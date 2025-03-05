@@ -130,23 +130,24 @@ class ButtonToast: Toast {
         guard let buttonText = buttonText else { return }
 
         roundedButton.setTitle(buttonText, for: [])
-        roundedButton.translatesAutoresizingMaskIntoConstraints = false
+        roundedButton.configuration = UIButton.Configuration.plain()
+        roundedButton.configuration?.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.buttonPadding,
+            leading: UX.buttonPadding,
+            bottom: UX.buttonPadding,
+            trailing: UX.buttonPadding
+        )
 
-        toastView.addSubview(roundedButton)
+        stackView.addSubview(roundedButton)
 
         roundedButton.addAction(UIAction { [weak self] _ in
             self?.buttonPressed()
         }, for: .touchUpInside)
 
         NSLayoutConstraint.activate([
-            // Minimum size constraints
-            roundedButton.heightAnchor.constraint(greaterThanOrEqualTo: roundedButton.titleLabel!.heightAnchor,
-                                                  constant: UX.buttonPadding),
-            roundedButton.widthAnchor.constraint(greaterThanOrEqualTo: roundedButton.titleLabel!.widthAnchor,
-                                                 constant: UX.buttonPadding),
-
             // Position constraints 
             roundedButton.leadingAnchor.constraint(equalTo: labelStackView.leadingAnchor),
+            roundedButton.trailingAnchor.constraint(greaterThanOrEqualTo: toastView.leadingAnchor, constant: -UX.spacing),
             roundedButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: UX.spacing),
             roundedButton.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing)
         ])
@@ -163,16 +164,8 @@ class ButtonToast: Toast {
     }
 
     override func adjustLayoutForA11ySizeCategory() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        if contentSizeCategory.isAccessibilityCategory {
-            // Description label changes with progress and if this isn't clipped the height of the
-            // toast changes continually while loading
-            descriptionLabel.numberOfLines = 0
-            descriptionLabel.lineBreakMode = .byTruncatingTail
-        } else {
-            descriptionLabel.numberOfLines = 0
-            descriptionLabel.lineBreakMode = .byWordWrapping
-        }
+        descriptionLabel.numberOfLines = 3
+        descriptionLabel.lineBreakMode = .byTruncatingTail
 
         setNeedsLayout()
     }
