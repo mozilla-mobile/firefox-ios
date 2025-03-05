@@ -85,11 +85,22 @@ export class FormStateManager {
       const rootElementId = lazy.FormAutofillUtils.getElementIdentifier(root);
       this.#formHandlerByRootId.set(rootElementId, handler);
       this.#formHandlerByRootElement.set(root, handler);
-      handler.form.elements.forEach(ele =>
-        this.#formHandlerByElement.set(ele, handler)
-      );
     }
     return handler;
+  }
+
+  removeFormHandlerByElementEntries(handler) {
+    handler.form.elements.forEach(element =>
+      this.#formHandlerByElement.delete(element)
+    );
+  }
+
+  addFormHandlerByElementEntries(handler) {
+    handler.form.elements.forEach(element => {
+      if (!this.#formHandlerByElement.has(element, handler)) {
+        this.#formHandlerByElement.set(element, handler);
+      }
+    });
   }
 }
 
