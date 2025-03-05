@@ -74,8 +74,8 @@ public class BrowserAddressToolbar: UIView,
                 previousConfiguration.locationViewConfiguration,
                 delegate: self,
                 isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                iconContainerCornerRadius: previousConfiguration.uxConfiguration.toolbarCornerRadius,
-                shouldCenterLocationTextField: previousConfiguration.uxConfiguration.isLocationTextCentered
+                toolbarCornerRadius: previousConfiguration.uxConfiguration.toolbarCornerRadius,
+                isLocationTextCentered: previousConfiguration.uxConfiguration.isLocationTextCentered
             )
         }
     }
@@ -115,8 +115,8 @@ public class BrowserAddressToolbar: UIView,
             config.locationViewConfiguration,
             delegate: self,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            iconContainerCornerRadius: config.uxConfiguration.toolbarCornerRadius,
-            shouldCenterLocationTextField: config.uxConfiguration.isLocationTextCentered
+            toolbarCornerRadius: config.uxConfiguration.toolbarCornerRadius,
+            isLocationTextCentered: config.uxConfiguration.isLocationTextCentered
         )
         updateActions(config: config, animated: animated)
         droppableUrl = config.locationViewConfiguration.droppableUrl

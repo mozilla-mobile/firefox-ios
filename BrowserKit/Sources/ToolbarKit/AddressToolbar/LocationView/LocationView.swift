@@ -125,8 +125,8 @@ final class LocationView: UIView,
     func configure(_ config: LocationViewConfiguration,
                    delegate: LocationViewDelegate,
                    isUnifiedSearchEnabled: Bool,
-                   iconContainerCornerRadius: CGFloat,
-                   shouldCenterLocationTextField: Bool) {
+                   toolbarCornerRadius: CGFloat,
+                   isLocationTextCentered: Bool) {
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -139,20 +139,20 @@ final class LocationView: UIView,
         configureURLTextField(config)
         configureA11y(config)
         formatAndTruncateURLTextField()
-        iconContainerBackgroundView.layer.cornerRadius = iconContainerCornerRadius
-        updateIconContainer(isURLTextFieldCentered: shouldCenterLocationTextField)
+        iconContainerBackgroundView.layer.cornerRadius = toolbarCornerRadius
+        updateIconContainer(isURLTextFieldCentered: isLocationTextCentered)
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
         onLongPress = config.onLongPress
 
-        layoutContainerView(config, isURLTextFieldCentered: shouldCenterLocationTextField)
+        layoutContainerView(config, isURLTextFieldCentered: isLocationTextCentered)
     }
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
-        containerViewConstrains.removeAll()
         if config.isEditing || !isURLTextFieldCentered {
+            // leading alignment configuration or trailing for right to left layouts
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -351,6 +351,7 @@ final class LocationView: UIView,
         isEditing = configurationIsEditing
 
         if !isEditing && config.url != nil {
+            // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil
         } else {
             urlTextField.placeholder = config.urlTextFieldPlaceholder
@@ -528,9 +529,6 @@ final class LocationView: UIView,
         // `attributedText` property is set to nil to remove all formatting and truncation set before.
         textField.attributedText = nil
         textField.text = searchText
-        if !(searchText?.isEmpty ?? false) {
-            textField.placeholder = nil
-        }
 
         delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
