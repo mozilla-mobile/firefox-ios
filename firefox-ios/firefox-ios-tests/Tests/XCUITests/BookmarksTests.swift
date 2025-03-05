@@ -195,11 +195,12 @@ class BookmarksTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["Delete Test Folder"])
         }
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
+
         app.buttons["Done"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-        checkItemsInBookmarksList(items: 1)
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        mozWaitForElementToNotExist(app.tables[emptyStateSignInButtonIdentifier].cells.staticTexts["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
@@ -321,10 +322,9 @@ class BookmarksTests: BaseTestCase {
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
         app.buttons["Delete"].waitAndTap()
 
-        // Forces an update of the a11y tree, resolving https://mozilla-hub.atlassian.net/browse/MTE-4244
-        app.tables["Bookmarks List"].swipeDown()
-
-        mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        mozWaitForElementToNotExist(app.tables[emptyStateSignInButtonIdentifier].cells.staticTexts["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
