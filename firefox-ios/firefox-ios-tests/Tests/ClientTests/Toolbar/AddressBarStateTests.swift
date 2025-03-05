@@ -62,8 +62,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions, [])
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -120,8 +119,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
@@ -252,8 +250,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -279,8 +276,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -380,8 +376,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -570,8 +565,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.isEmptySearch)
@@ -591,8 +585,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
