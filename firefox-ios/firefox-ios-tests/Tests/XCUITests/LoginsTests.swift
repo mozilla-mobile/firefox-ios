@@ -66,8 +66,9 @@ class LoginTest: BaseTestCase {
             ]
         )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
-        app.buttons["Settings"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
+        navigator.goto(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
