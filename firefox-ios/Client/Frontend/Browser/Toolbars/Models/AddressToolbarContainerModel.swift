@@ -11,6 +11,7 @@ final class AddressToolbarContainerModel: Equatable {
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
 
+    let toolbarLayoutStyle: ToolbarLayoutStyle
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineName: String
     let searchEngineImage: UIImage
@@ -33,6 +34,11 @@ final class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let uxConfiguration: AddressToolbarUXConfiguration = if toolbarLayoutStyle == .version1 {
+            .experiment
+        } else {
+            .default
+        }
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -81,6 +87,7 @@ final class AddressToolbarContainerModel: Equatable {
             pageActions: pageActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
+            uxConfiguration: uxConfiguration,
             shouldAnimate: shouldAnimate)
     }
 
@@ -117,6 +124,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
+        self.toolbarLayoutStyle = state.toolbarLayout
     }
 
     func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {

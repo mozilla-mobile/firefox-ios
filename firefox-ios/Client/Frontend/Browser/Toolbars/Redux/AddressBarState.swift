@@ -899,7 +899,16 @@ struct AddressBarState: StateType, Equatable {
         default: break
         }
 
+<<<<<<< HEAD
         actions.append(shareAction)
+=======
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+
+        if layout == .baseline {
+			actions.append(shareAction)
+        }
+>>>>>>> 475177032 (Add [Toolbar experiment] FXIOS new ux configuration for new experiments (#25122))
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
