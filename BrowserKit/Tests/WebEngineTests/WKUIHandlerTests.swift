@@ -12,8 +12,11 @@ final class WKUIHandlerTests: XCTestCase {
         let delegate = MockEngineSessionDelegate()
         let subject = createSubject(delegate: delegate, isActive: true)
 
+        let expectation = expectation(description: "Wait for the decision handler to be called")
+
         let decisionHandler = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .prompt)
+            expectation.fulfill()
         }
         subject.webView(MockWKWebView(),
                         requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
@@ -21,14 +24,16 @@ final class WKUIHandlerTests: XCTestCase {
                         type: .cameraAndMicrophone,
                         decisionHandler: decisionHandler
         )
-        sleep(1)
+        wait(for: [expectation])
     }
 
     func testRequestMediaCaptureIsActiveFalse() {
         let subject = createSubject(delegate: MockEngineSessionDelegate(), isActive: false)
+        let expectation = expectation(description: "Wait for the decision handler to be called")
 
         let decisionHandler = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .deny)
+            expectation.fulfill()
         }
         subject.webView(MockWKWebView(),
                         requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
@@ -36,16 +41,18 @@ final class WKUIHandlerTests: XCTestCase {
                         type: .cameraAndMicrophone,
                         decisionHandler: decisionHandler
         )
-        sleep(1)
+        wait(for: [expectation])
     }
 
     func testRequestMediaCaptureDelegateReturnsFalse() {
         let delegate = MockEngineSessionDelegate()
         delegate.hasMediaCapturePermission = false
         let subject = createSubject(delegate: delegate, isActive: true)
+        let expectation = expectation(description: "Wait for the decision handler to be called")
 
         let decisionHandler = { (decision: WKPermissionDecision) in
             XCTAssertEqual(decision, .deny)
+            expectation.fulfill()
         }
         subject.webView(MockWKWebView(),
                         requestMediaCapturePermissionFor: MockWKSecurityOrigin.new(nil),
@@ -53,7 +60,7 @@ final class WKUIHandlerTests: XCTestCase {
                         type: .cameraAndMicrophone,
                         decisionHandler: decisionHandler
         )
-        sleep(1)
+        wait(for: [expectation])
     }
 
     func createSubject(delegate: EngineSessionDelegate, isActive: Bool = false) -> WKUIHandler {
