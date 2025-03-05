@@ -868,10 +868,17 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard !isEditing else { return actions }
-
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
+
+        let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
+
+        guard !hasEmptySearchField else {
+            // When the search field is empty we show no actions
+            return actions
+        }
+
+        guard !isEditing else { return actions }
 
         switch readerModeState {
         case .active, .available:
