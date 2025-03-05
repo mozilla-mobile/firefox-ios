@@ -110,8 +110,7 @@ internal extension OnboardingViewModel {
             doneButton: "Done"
         ),
         isTosEnabled: true,
-        dismissAction: {
-        },
+        dismissAction: {},
         telemetry: { _ in }
     )
 }
