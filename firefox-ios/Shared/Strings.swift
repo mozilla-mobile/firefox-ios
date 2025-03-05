@@ -7759,17 +7759,17 @@ extension String {
     public struct LiveActivity {
         public struct Downloads {
             public static let FileNameText = MZLocalizedString(
-                key: "LiveActivity.Downloads.FileNameText.v137",
+                key: "LiveActivity.Downloads.FileNameText.v138",
                 tableName: "LiveActivity",
                 value: "Downloading “%@”",
                 comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the filename of the file being downloaded (e.g. Downloading “MyFile.pdf”)")
             public static let FileCountText = MZLocalizedString(
-                key: "LiveActivity.Downloads.FileCountText.v137",
+                key: "LiveActivity.Downloads.FileCountText.v138",
                 tableName: "LiveActivity",
                 value: "Downloading Files: %@",
                 comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the count of multiple files (e.g. Downloading Files: 2).")
             public static let FileProgressText = MZLocalizedString(
-                key: "LiveActivity.Downloads.FileProgressText.v137",
+                key: "LiveActivity.Downloads.FileProgressText.v138",
                 tableName: "LiveActivity",
                 value: "%1$@ of %2$@",
                 comment: "Displayed during a download in Live Activity or Dynamic Island to show the current progress of the file(s) download. The placeholders %1$@ and %2$@ represent the downloaded size and the total size of the file(s), respectively. (e.g. 10 MB of 200 MB).")
