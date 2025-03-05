@@ -876,12 +876,10 @@ struct AddressBarState: StateType, Equatable {
 
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
 
-        guard !hasEmptySearchField else {
-            // When the search field is empty we show no actions
-            return actions
-        }
-
-        guard !isEditing else { return actions }
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+              !hasEmptySearchField, // When the search field is empty we show no actions
+              !isEditing
+        else { return actions }
 
         switch readerModeState {
         case .active, .available:
@@ -901,6 +899,13 @@ struct AddressBarState: StateType, Equatable {
                 a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
             actions.append(readerModeAction)
         default: break
+        }
+
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+
+        if layout == .baseline {
+            actions.append(shareAction)
         }
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
