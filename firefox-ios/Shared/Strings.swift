@@ -2514,11 +2514,71 @@ extension String {
                     value: "Dark Purple",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background.")
 
+                public static let Blue = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Blue.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Blue",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
+
+                public static let BlueGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.BlueGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Blue Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue gradient background.")
+
+                public static let Green = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Green.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Green",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background.")
+
                 public static let Hug = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
                     tableName: "AppIconSelection",
                     value: "Hug",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+
+                public static let Lazy = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Lazy",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+
+                public static let OrangeGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Lazy.OrangeGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Orange Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with an orange gradient background.")
+
+                public static let Pink = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pink.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pink",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
+
+                public static let Pixelated = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pixelated",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+
+                public static let Pride = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pride",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+
+                public static let RedGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Lazy.RedGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Red Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red gradient background.")
+
+                public static let Retro = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Retro.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Retro",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon.")
             }
 
             public struct Accessibility {
@@ -7760,6 +7820,29 @@ extension String {
             tableName: "PasswordGenerator",
             value: "Use strong password",
             comment: "When a user is in the process of creating an account, they have the option to generate a password. The popup displaying the generated password to the user is available by clicking a keyboard accessory button with this label.")
+    }
+}
+
+// MARK: - Live Activity
+extension String {
+    public struct LiveActivity {
+        public struct Downloads {
+            public static let FileNameText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileNameText.v138",
+                tableName: "LiveActivity",
+                value: "Downloading “%@”",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the filename of the file being downloaded (e.g. Downloading “MyFile.pdf”)")
+            public static let FileCountText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileCountText.v138",
+                tableName: "LiveActivity",
+                value: "Downloading Files: %@",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the count of multiple files (e.g. Downloading Files: 2).")
+            public static let FileProgressText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileProgressText.v138",
+                tableName: "LiveActivity",
+                value: "%1$@ of %2$@",
+                comment: "Displayed during a download in Live Activity or Dynamic Island to show the current progress of the file(s) download. The placeholders %1$@ and %2$@ represent the downloaded size and the total size of the file(s), respectively. (e.g. 10 MB of 200 MB).")
+        }
     }
 }
 

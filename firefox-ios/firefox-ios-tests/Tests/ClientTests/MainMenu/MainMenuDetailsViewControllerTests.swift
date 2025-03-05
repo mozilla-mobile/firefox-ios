@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import MenuKit
 import XCTest
 
 @testable import Client
