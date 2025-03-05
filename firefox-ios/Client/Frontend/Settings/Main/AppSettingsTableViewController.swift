@@ -351,19 +351,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getPrivacySettings() -> [SettingSection] {
         var privacySettings = [Setting]()
-        privacySettings.append(PasswordManagerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        if autofillCreditCardStatus {
-            privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
-        }
-
-        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
-        if autofillAddressStatus, let profile {
-            privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
-                                                          profile: profile,
-                                                          settingsDelegate: parentCoordinator))
-        }
+        privacySettings.append(AutofillPasswordSetting(settings: self, settingsDelegate: parentCoordinator))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
