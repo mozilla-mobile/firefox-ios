@@ -158,11 +158,10 @@ final class LocationView: UIView,
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
         } else {
-            let centerXOffset = iconContainerStackView.frame.width / 4
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-                containerView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -centerXOffset)
+                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
         }
         NSLayoutConstraint.activate(containerViewConstrains)

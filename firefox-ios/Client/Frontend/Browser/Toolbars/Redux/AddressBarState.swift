@@ -854,6 +854,8 @@ struct AddressBarState: StateType, Equatable {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
             }
+        } else {
+            actions.append(shareAction)
         }
 
         return actions
@@ -899,7 +901,7 @@ struct AddressBarState: StateType, Equatable {
         default: break
         }
 
-        actions.append(shareAction)
+//        actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
