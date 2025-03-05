@@ -836,6 +836,9 @@ struct AddressBarState: StateType, Equatable {
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
+        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+
         if isEditing {
             // back caret when in edit mode
             actions.append(cancelEditAction)
@@ -850,10 +853,10 @@ struct AddressBarState: StateType, Equatable {
                 actions.append(dataClearanceAction)
             }
 
-            if layout == .version1 {
+            if !isHomepage, layout == .version1 {
                 actions.append(shareAction)
             }
-        } else if isShowingNavigationToolbar, layout == .version1 {
+        } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
             actions.append(shareAction)
         }
 
