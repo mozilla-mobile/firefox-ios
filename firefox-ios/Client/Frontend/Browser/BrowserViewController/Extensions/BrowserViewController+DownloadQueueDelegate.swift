@@ -59,29 +59,35 @@ extension BrowserViewController: DownloadQueueDelegate {
 
             // We only care about download errors specific to our window's downloads
             if error == nil {
-                let viewModel = ButtonToastViewModel(labelText: download.filename,
-                                                     imageName: StandardImageIdentifiers.Large.checkmark,
-                                                     buttonText: .DownloadsButtonTitle)
-                let downloadCompleteToast = ButtonToast(viewModel: viewModel,
-                                                        theme: self.currentTheme(),
-                                                        completion: { buttonPressed in
-                    guard buttonPressed else { return }
-
-                    self.showLibrary(panel: .downloads)
-                    TelemetryWrapper.recordEvent(
-                        category: .action,
-                        method: .view,
-                        object: .downloadsPanel,
-                        value: .downloadCompleteToast
-                    )
-                })
-
-                self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
+                self.showDownloadCompletedToast(filename: download.filename)
             } else {
                 SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
                                                 bottomContainer: self.contentContainer,
                                                 theme: self.currentTheme())
             }
         }
+    }
+
+    func showDownloadCompletedToast(filename: String) {
+        let viewModel = ButtonToastViewModel(labelText: filename,
+                                             imageName: StandardImageIdentifiers.Large.checkmark,
+                                             buttonText: .DownloadsButtonTitle)
+        let downloadCompleteToast = ButtonToast(viewModel: viewModel,
+                                                theme: self.currentTheme(),
+                                                completion: { buttonPressed in
+            guard buttonPressed else { return }
+
+            self.showLibrary(panel: .downloads)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .view,
+                object: .downloadsPanel,
+                value: .downloadCompleteToast
+            )
+        })
+
+        self.show(toast: downloadCompleteToast,
+//                  afterWaiting: DispatchTimeInterval.seconds(1),
+                  duration: DispatchTimeInterval.seconds(5))
     }
 }
