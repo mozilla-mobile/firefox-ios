@@ -87,7 +87,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         })
 
         self.show(toast: downloadCompleteToast,
-//                  afterWaiting: DispatchTimeInterval.seconds(1),
-                  duration: DispatchTimeInterval.seconds(5))
+                  afterWaiting: UX.downloadToastDelay,
+                  duration: UX.downloadToastDuration)
     }
 }

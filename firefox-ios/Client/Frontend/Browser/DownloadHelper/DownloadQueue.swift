@@ -121,7 +121,6 @@ class DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
-        print("YRD --- bytesDownloaded \(bytesDownloaded)")
         let uuid = download.originWindow
         var progress = downloadProgress[uuid] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
         progress.bytesDownloaded += bytesDownloaded
