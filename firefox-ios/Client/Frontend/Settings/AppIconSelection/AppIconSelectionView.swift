@@ -38,40 +38,26 @@ struct AppIconSelectionView: View, ThemeApplicable {
     var body: some View {
         NavigationView {
             // Note: Once we drop iOS 15 support we can use a List and properly set background colors / insetGrouped style
-            ScrollView {
-                VStack(spacing: 0) {
-                    VStack(spacing: 0) {
-                        ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
-                            AppIconView(
-                                appIcon: appIcon,
-                                isSelected: appIcon == currentAppIcon,
-                                windowUUID: windowUUID,
-                                setAppIcon: setAppIcon
-                            )
-                            .alert(isPresented: $isShowingErrorAlert) {
-                                Alert(
-                                    title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
-                                    message: nil,
-                                    dismissButton: .default(
-                                        Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
-                                    )
-                                )
-                            }
-                        }
-                    }
-                    .background(themeColors.layer2.color)
-                    .cornerRadius(UX.cornerRadius)
-                    .overlay(
-                        // Add rounded border
-                        RoundedRectangle(cornerRadius: UX.cornerRadius)
-                            .stroke(themeColors.borderPrimary.color, lineWidth: UX.islandBorderWidth)
+            List {
+                ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
+                    AppIconView(
+                        appIcon: appIcon,
+                        isSelected: appIcon == currentAppIcon,
+                        windowUUID: windowUUID,
+                        setAppIcon: setAppIcon
                     )
-
-                    Spacer()
-                }
-                .padding(.all, UX.listPadding)
+                }.listRowBackground(themeColors.layer2.color)
             }
-            .background(themeColors.layer1.color)
+            .listStyle(.insetGrouped)
+            .alert(isPresented: $isShowingErrorAlert) {
+                Alert(
+                    title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
+                    message: nil,
+                    dismissButton: .default(
+                        Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
+                    )
+                )
+            }
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }

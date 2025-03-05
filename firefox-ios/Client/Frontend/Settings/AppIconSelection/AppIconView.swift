@@ -72,9 +72,8 @@ struct AppIconView: View, ThemeApplicable {
             HStack {
                 Image(systemName: selectionImageIdentifier)
                     .padding(.trailing, UX.itemPadding)
-                    .tint(themeColors.actionPrimary.color)
+                    .foregroundStyle(themeColors.actionPrimary.color)
                     .accessibilityLabel(selectionImageAccessibilityLabel)
-
                 // swiftlint:disable:next accessibility_label_for_image
                 Image(uiImage: image)
                     .resizable()
@@ -86,15 +85,12 @@ struct AppIconView: View, ThemeApplicable {
                             .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
                     )
                     .padding(.trailing, UX.itemPadding)
-
                 Text(appIcon.displayName)
-                    .tint(themeColors.textPrimary.color)
-
+                    .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
             }
             .padding(.all, UX.itemPadding)
         }
-        .background(Color.clear)
         .accessibilityHint(selectionAccessibilityHint)
     }
 
