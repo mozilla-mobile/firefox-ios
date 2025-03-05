@@ -99,6 +99,7 @@ final class LocationView: UIView,
         let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
         urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
+    private var isURLTextFieldCentered = false
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -127,6 +128,7 @@ final class LocationView: UIView,
                    isUnifiedSearchEnabled: Bool,
                    toolbarCornerRadius: CGFloat,
                    isLocationTextCentered: Bool) {
+        isURLTextFieldCentered = isLocationTextCentered
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -139,20 +141,20 @@ final class LocationView: UIView,
         configureURLTextField(config)
         configureA11y(config)
         formatAndTruncateURLTextField()
-        iconContainerBackgroundView.layer.cornerRadius = toolbarCornerRadius
-        updateIconContainer(isURLTextFieldCentered: isLocationTextCentered)
+        updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
+                            isURLTextFieldCentered: isURLTextFieldCentered)
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
         onLongPress = config.onLongPress
 
-        layoutContainerView(config, isURLTextFieldCentered: isLocationTextCentered)
+        layoutContainerView(config, isURLTextFieldCentered: isURLTextFieldCentered)
     }
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
         if config.isEditing || !isURLTextFieldCentered {
-            // leading alignment configuration or trailing for right to left layouts
+            // leading alignment configuration
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -279,7 +281,9 @@ final class LocationView: UIView,
         iconContainerStackView.removeAllArrangedViews()
     }
 
-    private func updateIconContainer(isURLTextFieldCentered: Bool) {
+    private func updateIconContainer(iconContainerCornerRadius: CGFloat,
+                                     isURLTextFieldCentered: Bool) {
+        iconContainerBackgroundView.layer.cornerRadius = iconContainerCornerRadius
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
             urlTextFieldTrailingConstraint?.constant = 0
@@ -525,7 +529,7 @@ final class LocationView: UIView,
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         guard !isEditing else { return }
-        updateUIForSearchEngineDisplay(isURLTextFieldCentered: containerViewConstrains.count == 3)
+        updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
         let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
         // `attributedText` property is set to nil to remove all formatting and truncation set before.

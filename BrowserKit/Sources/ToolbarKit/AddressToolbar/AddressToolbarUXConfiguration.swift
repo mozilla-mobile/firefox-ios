@@ -7,7 +7,7 @@ import Foundation
 public struct AddressToolbarUXConfiguration {
     let toolbarCornerRadius: CGFloat
     let browserActionsAddressBarDividerWidth: CGFloat
-    /// Wether navigations actions are included inside the Location container view.
+    /// Whether navigations actions are included inside the Location container view.
     /// When the actions are included they get the same background and rounding of the Location container view.
     let isNavigationActionsInsideLocationView: Bool
     let isLocationTextCentered: Bool

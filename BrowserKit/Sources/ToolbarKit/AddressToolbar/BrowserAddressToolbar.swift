@@ -129,15 +129,15 @@ public class BrowserAddressToolbar: UIView,
         if config.isNavigationActionsInsideLocationView {
             guard navigationActionStack.superview != locationContainer else { return }
             navigationActionStack.removeFromSuperview()
-            configureNavigationStackOnLocationContainer()
+            constraintNavigationStackToLocationContainer()
         } else {
             guard navigationActionStack.superview != toolbarContainerView else { return }
             navigationActionStack.removeFromSuperview()
-            configureNavigationStackOnToolbarContainer()
+            constraintNavigationStackToToolbarContainer()
         }
     }
 
-    private func configureNavigationStackOnLocationContainer() {
+    private func constraintNavigationStackToLocationContainer() {
         NSLayoutConstraint.deactivate(navigationStackConstrains)
         locationContainer.addSubview(navigationActionStack)
 
@@ -162,7 +162,7 @@ public class BrowserAddressToolbar: UIView,
         NSLayoutConstraint.activate(navigationStackConstrains)
     }
 
-    private func configureNavigationStackOnToolbarContainer() {
+    private func constraintNavigationStackToToolbarContainer() {
         NSLayoutConstraint.deactivate(navigationStackConstrains)
         toolbarContainerView.addSubview(navigationActionStack)
 
@@ -232,7 +232,7 @@ public class BrowserAddressToolbar: UIView,
         locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
         locationContainerHeightConstraint?.isActive = true
 
-        configureNavigationStackOnToolbarContainer()
+        constraintNavigationStackToToolbarContainer()
 
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
