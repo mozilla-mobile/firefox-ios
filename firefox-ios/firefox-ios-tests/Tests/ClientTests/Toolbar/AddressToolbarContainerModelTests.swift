@@ -98,7 +98,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                isLoading: false,
                                readerModeState: nil,
                                didStartTyping: false,
-                               showQRPageAction: true,
+                               isEmptySearch: true,
                                alternativeSearchEngine: withSearchEngine)
     }
 

@@ -42,7 +42,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(initialState.isLoading)
         XCTAssertNil(initialState.readerModeState)
         XCTAssertFalse(initialState.didStartTyping)
-        XCTAssertTrue(initialState.showQRPageAction)
+        XCTAssertTrue(initialState.isEmptySearch)
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
@@ -62,8 +62,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions, [])
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -80,7 +79,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isLoading)
         XCTAssertNil(newState.readerModeState)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertTrue(newState.showQRPageAction)
+        XCTAssertTrue(newState.isEmptySearch)
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
@@ -120,8 +119,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
@@ -252,8 +250,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -279,8 +276,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -359,7 +355,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.isEmptySearch)
     }
 
     func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
@@ -380,8 +376,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 1)
         XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
@@ -392,7 +387,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertTrue(newState.showQRPageAction)
+        XCTAssertTrue(newState.isEmptySearch)
     }
 
     func test_didStartEditingUrlAction_withWebsite_returnsExpectedState() {
@@ -425,7 +420,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.isEmptySearch)
     }
 
     func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
@@ -501,7 +496,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.isEmptySearch)
     }
 
     func test_didSetTextInLocationViewAction_returnsExpectedState() {
@@ -534,7 +529,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
-        XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.isEmptySearch)
 }
 
     func test_hideKeyboardAction_returnsExpectedState() {
@@ -570,11 +565,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
-        XCTAssertTrue(newState.showQRPageAction)
+        XCTAssertTrue(newState.isEmptySearch)
     }
 
     func test_didDeleteSearchTermAction_returnsExpectedState() {
@@ -591,12 +585,11 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.pageActions.count, 1)
-        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+        XCTAssertEqual(newState.pageActions.count, 0)
 
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
-        XCTAssertTrue(newState.showQRPageAction)
+        XCTAssertTrue(newState.isEmptySearch)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
@@ -616,7 +609,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.pageActions.count, 0)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
-        XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.isEmptySearch)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
