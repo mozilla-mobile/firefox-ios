@@ -6,10 +6,11 @@ import UIKit
 import Onboarding
 import SwiftUI
 
-class TestOnboarding: OnboardingEventsHandling {
+class TestOnboarding: OnboardingEventsHandling {    
     @Published var route: Onboarding.ToolTipRoute?
     var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
     func send(_ action: Onboarding.Action) {}
+    func dismissTooltip(route: Onboarding.ToolTipRoute) {}
 }
 
 class OnboardingFactory {
@@ -52,6 +53,17 @@ class OnboardingFactory {
                     secondSubtitle: .defaultBrowserOnboardingViewSecondSubtitleV2,
                     topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
                     bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
+                tosConfig: .init(
+                    title: .termsOfServiceTitle,
+                    subtitle: .termsOfServiceSubtitle,
+                    termsText: String(format: .termsOfServiceText, String.termsLinkText),
+                    privacyText: String(format: .privacyNoticeText, String.privacyLinkText),
+                    termsLinkText: .termsLinkText,
+                    privacyLinkText: .privacyLinkText,
+                    buttonText: .termsOfServiceButtonText,
+                    doneButton: .doneButtonText
+                ),
+                isTosEnabled: true,
                 dismissAction: dismissAction,
                 telemetry: { action in
                     switch action {
@@ -69,6 +81,13 @@ class OnboardingFactory {
                         telemetry(.defaultBrowserSkip)
                     case .defaultBrowserAppeared:
                         telemetry(.defaultBrowserAppeared)
+                    // Add telemetry
+                    case .onAcceptAndContinueTapped:
+                        break
+                    case .openTermsOfUse:
+                        break
+                    case .openPrivacyNotice:
+                        break
                     }
                 })
             let controller = PortraitHostingController(rootView: OnboardingView(viewModel: onboardingViewModel))
@@ -116,4 +135,44 @@ fileprivate extension String {
     static let defaultBrowserOnboardingViewSecondSubtitleV2 = String(format: NSLocalizedString("Onboarding.DefaultBrowser.SecondSubtitle.V2", value: "Make %@ your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
     static let defaultBrowserOnboardingViewTopButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the default browser onboarding screen version 2.")
     static let defaultBrowserOnboardingViewBottomButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2.")
+    static let termsOfServiceTitle = NSLocalizedString(
+        "Onboarding.TermsOfService.Title",
+        value: String(format: "Welcome to %@", AppInfo.productName),
+        comment: "Title for the Terms of Service screen during onboarding. %@ is the name of the app (Focus/Klar)."
+    )
+    static let termsOfServiceSubtitle = NSLocalizedString(
+        "Onboarding.TermsOfService.Subtitle",
+        value: "Fast. Private. No distractions.",
+        comment: "Subtitle for the Terms of Service screen during onboarding."
+    )
+    static let termsOfServiceText = NSLocalizedString(
+        "Onboarding.TermsOfService.Text",
+        value: "By continuing, you agree to %@.",
+        comment: "Text that describes the agreement to the Firefox Terms of Use. %@ will be replaced with the clickable link text, Firefox Terms of Use which is separately localized."
+        )
+    static let termsLinkText = NSLocalizedString(
+        "Onboarding.TermsOfService.LinkText",
+        value: "Firefox Terms of Use",
+        comment: "Text for the Terms of Use link."
+    )
+    static let privacyNoticeText = NSLocalizedString(
+        "Onboarding.PrivacyNotice.Text",
+        value: "Firefox cares about your privacy. Read more in %@.",
+        comment: "Text that describes Firefox's commitment to privacy. %@ will be replaced with the clickable link text, Privacy Notice which is separately localized."
+        )
+    static let privacyLinkText = NSLocalizedString(
+        "Onboarding.PrivacyNotice.LinkText",
+        value: "Privacy Notice",
+        comment: "Text for the Privacy Notice link."
+    )
+    static let termsOfServiceButtonText = NSLocalizedString(
+        "Onboarding.TermsOfService.ButtonText",
+        value: "Agree and Continue",
+        comment: "Text for the agreement button in the Terms of Service screen."
+    )
+    static let doneButtonText = NSLocalizedString(
+        "Onboarding.TermsOfService.Done.ButtonText",
+        value: "Done",
+        comment: "Button text for dismissing the Privacy Policy and Terms of Service WebView."
+    )
 }

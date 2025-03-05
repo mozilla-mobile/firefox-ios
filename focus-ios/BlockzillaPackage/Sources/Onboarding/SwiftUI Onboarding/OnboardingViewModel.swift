@@ -5,6 +5,7 @@
 import SwiftUI
 
 enum Screen: CaseIterable {
+    case tos
     case getStarted
     case `default`
 }
@@ -18,20 +19,37 @@ public class OnboardingViewModel: ObservableObject {
         case defaultBrowserSettingsTapped
         case defaultBrowserSkip
         case defaultBrowserAppeared
+        // Terms Of Service
+        case onAcceptAndContinueTapped
+        case openTermsOfUse(URL)
+        case openPrivacyNotice(URL)
     }
 
     public let config: GetStartedOnboardingViewConfig
     public let defaultBrowserConfig: DefaultBrowserViewConfig
+    public let tosConfig: TermsOfServiceConfig
     public let dismissAction: () -> Void
     public let telemetry: (Action) -> Void
+    let isTosEnabled: Bool
 
     @Published var activeScreen = Screen.getStarted
+    @Published var privacyPolicyURL: URL?
 
-    public init(config: GetStartedOnboardingViewConfig, defaultBrowserConfig: DefaultBrowserViewConfig, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingViewModel.Action) -> Void) {
+    public init(
+        config: GetStartedOnboardingViewConfig,
+        defaultBrowserConfig: DefaultBrowserViewConfig,
+        tosConfig: TermsOfServiceConfig,
+        isTosEnabled: Bool,
+        dismissAction: @escaping () -> Void,
+        telemetry: @escaping (OnboardingViewModel.Action) -> Void
+    ) {
         self.config = config
         self.defaultBrowserConfig = defaultBrowserConfig
+        self.tosConfig = tosConfig
+        self.isTosEnabled = isTosEnabled
         self.dismissAction = dismissAction
         self.telemetry = telemetry
+        self.activeScreen = isTosEnabled ? .tos : .getStarted
     }
 
     func open(_ screen: Screen) {
@@ -55,6 +73,18 @@ public class OnboardingViewModel: ObservableObject {
             dismissAction()
         case .defaultBrowserAppeared:
             break
+        case .onAcceptAndContinueTapped:
+            withAnimation(.easeInOut(duration: 5)) {
+                activeScreen = .default
+            }
+        case let .openTermsOfUse(url):
+            privacyPolicyURL = url
+        case let .openPrivacyNotice(url):
+            privacyPolicyURL = url
         }
     }
+}
+
+extension URL: @retroactive Identifiable {
+    public var id: String { absoluteString }
 }
