@@ -739,6 +739,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 self.present(safariVC, animated: true, completion: nil)
             }))
             present(alert, animated: true)
+            decisionHandler(.cancel)
+            return
         }
 
         // Check if this response should be downloaded
