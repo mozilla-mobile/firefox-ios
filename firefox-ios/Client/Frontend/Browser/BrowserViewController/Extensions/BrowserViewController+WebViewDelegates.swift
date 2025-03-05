@@ -713,7 +713,12 @@ extension BrowserViewController: WKNavigationDelegate {
             // We don't have a temporary document, fallthrough
         }
 
-        if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar {
+        /// FIXME(FXIOS-11543): Before FXIOS-11256 all calendar type requests were forwarded to SFSafariViewController.
+        /// This, however, led to the app crashing sometimes since SFSafariViewController only expects http(s) urls.
+        /// In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
+        if let url = responseURL,
+           ["http", "https"].contains(url.scheme),
+           tabManager[webView]?.mimeType == MIMEType.Calendar {
             let alertMessage: String
             if let baseDomain = url.baseDomain {
                 alertMessage = String(format: .Alerts.AddToCalendar.Body, baseDomain)
@@ -733,6 +738,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 self.present(safariVC, animated: true, completion: nil)
             }))
             present(alert, animated: true)
+            decisionHandler(.cancel)
+            return
         }
 
         // Check if this response should be downloaded
