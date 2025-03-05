@@ -423,15 +423,7 @@ class TodayWidgetTests: BaseTestCase {
         // Tap outside the alert to dismiss it
         mozWaitForElementToExist(newPrivateSearch)
         coordinate.tap()
-        // Terminate the app to start a fresh session
-        app.terminate()
-        // Reopen and check the Private Tab widget
         tapOnWidget(widgetType: "Private Tab")
-        // Handle different UI behavior on iPad and iPhone
-        if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
-            app.buttons["CloseButton"].waitAndTap()
-        }
         // Verify the presence of Private Mode message
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
         // Verify private mode toggle is on
@@ -497,19 +489,13 @@ class TodayWidgetTests: BaseTestCase {
         coordinate.tap()
         // Copy the string to the clipboard
         UIPasteboard.general.string = copiedString
-        app.terminate()
-        // Reopen and interact with the Copied Link widget
         tapOnWidget(widgetType: "Copied Link")
         // Handle paste alert
         if #available(iOS 16, *) {
             mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
             springboard.alerts.buttons["Allow Paste"].waitAndTap()
         }
-        // Handle iPad/iPhone UI differences
-        if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
-            app.buttons["CloseButton"].waitAndTap()
-        }
+
         // Verify the copied string is in the URL field
         mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
         mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
@@ -564,7 +550,6 @@ class TodayWidgetTests: BaseTestCase {
             throw XCTSkip("iOS 16 is required")
         }
         XCUIDevice.shared.press(.home)
-        app.terminate()
         goToTodayWidgetPage()
         // Remove Firefox Widget if it already exists
         if checkPresenceFirefoxWidget() {
@@ -589,10 +574,7 @@ class TodayWidgetTests: BaseTestCase {
         springboard.buttons.matching(NSPredicate(
             format: "label CONTAINS[c] %@", "Private Tab")
         ).element.firstMatch.waitAndTap()
-        if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
-            app.buttons["CloseButton"].waitAndTap()
-        }
+
         // Verify the presence of Private Mode message
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
         // Verify private mode toggle is on
@@ -615,7 +597,7 @@ class TodayWidgetTests: BaseTestCase {
         let copiedString = "mozilla.org"
         UIPasteboard.general.string = copiedString
         XCUIDevice.shared.press(.home)
-        app.terminate()
+
         goToTodayWidgetPage()
         // Remove Firefox Widget if it already exists
         if checkPresenceFirefoxWidget() {
@@ -643,10 +625,7 @@ class TodayWidgetTests: BaseTestCase {
         mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
         springboard.alerts.buttons["Allow Paste"].waitAndTap()
         // Verify the copied string is in the URL field
-        if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
-            app.buttons["CloseButton"].waitAndTap()
-        }
+        
         mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
         mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
         guard let urlField = urlBarAddress.value as? String else {
