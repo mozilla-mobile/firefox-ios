@@ -625,7 +625,6 @@ class TodayWidgetTests: BaseTestCase {
         mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
         springboard.alerts.buttons["Allow Paste"].waitAndTap()
         // Verify the copied string is in the URL field
-        
         mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
         mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
         guard let urlField = urlBarAddress.value as? String else {
