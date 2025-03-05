@@ -5,8 +5,6 @@
 import XCTest
 import Foundation
 
-@testable import Client
-
 final class ClientSyncManagerTests: XCTestCase {
     private var sut: ClientSyncManagerSpy!
     private let engine = "creditcards"

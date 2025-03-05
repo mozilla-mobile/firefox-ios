@@ -8,7 +8,6 @@ import MozillaAppServices
 import XCTest
 
 @testable import Client
-@testable import Shared
 
 class RecordedNimbusContextTests: XCTestCase {
     override func setUp() {

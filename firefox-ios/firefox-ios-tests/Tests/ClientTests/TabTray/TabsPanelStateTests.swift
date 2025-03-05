@@ -4,8 +4,6 @@
 
 import Common
 import Redux
-import Storage
-import Shared
 import XCTest
 
 @testable import Client

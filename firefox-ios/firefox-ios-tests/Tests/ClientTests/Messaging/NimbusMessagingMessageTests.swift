@@ -6,7 +6,6 @@ import XCTest
 
 import Common
 import Foundation
-import Shared
 
 @testable import Client
 
