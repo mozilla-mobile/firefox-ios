@@ -4,7 +4,6 @@
 
 @testable import Client
 import Sync
-import Storage
 import Shared
 import XCTest
 

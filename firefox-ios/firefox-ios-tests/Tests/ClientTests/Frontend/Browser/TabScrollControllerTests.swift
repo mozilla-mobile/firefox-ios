@@ -5,7 +5,6 @@
 import XCTest
 import WebKit
 import Common
-import Shared
 @testable import Client
 
 final class TabScrollControllerTests: XCTestCase {

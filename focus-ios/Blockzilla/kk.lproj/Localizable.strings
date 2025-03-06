@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Құқықтарыңыз";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Қолдану шарттары";
+
 /* Label on About screen */
 "About.safariBullet1" = "Жекелікті арттыру үшін трекерлерді блоктаңыз";
 

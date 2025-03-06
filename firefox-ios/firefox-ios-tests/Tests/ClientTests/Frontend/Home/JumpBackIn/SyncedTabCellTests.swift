@@ -4,7 +4,6 @@
 
 @testable import Client
 import Common
-import Shared
 import XCTest
 
 class SyncedTabCellTests: XCTestCase {

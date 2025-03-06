@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Vaše práva";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Podmínky použití";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blokujte sledovací prvky pro zvýšení soukromí";
 
