@@ -35,7 +35,7 @@ class BrowserViewController: UIViewController,
                              FeatureFlaggable {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
-        static let downloadToastDelay = DispatchTimeInterval.seconds(1)
+        static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
     }
 

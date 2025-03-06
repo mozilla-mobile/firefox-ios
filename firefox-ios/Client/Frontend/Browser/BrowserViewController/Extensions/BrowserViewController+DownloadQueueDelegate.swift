@@ -13,24 +13,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
-            let downloadToast = DownloadToast(download: download,
-                                              theme: currentTheme(),
-                                              completion: { buttonPressed in
-                // When this toast is dismissed, be sure to clear this so that any
-                // subsequent downloads cause a new toast to be created.
-                self.downloadToast = nil
-
-                // Handle download cancellation
-                if buttonPressed, !downloadQueue.isEmpty {
-                    downloadQueue.cancelAll(for: uuid)
-
-                    SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                    bottomContainer: self.contentContainer,
-                                                    theme: self.currentTheme())
-                }
-            })
-
-            show(toast: downloadToast, duration: nil)
+            presentDownloadProgressToast(download: download, windowUUID: uuid)
             return
         }
 
@@ -46,7 +29,17 @@ extension BrowserViewController: DownloadQueueDelegate {
         downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {}
+    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
+        guard let downloadToast = self.downloadToast,
+              let download = downloadToast.downloads.first,
+              download.originWindow == windowUUID, downloadQueue.isEmpty
+        else { return }
+
+        DispatchQueue.main.async { [weak self] in
+                downloadToast.dismiss(false)
+                self?.presentDownloadCompletedToast(filename: download.filename)
+        }
+    }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,
@@ -54,13 +47,11 @@ extension BrowserViewController: DownloadQueueDelegate {
               download.originWindow == windowUUID
         else { return }
 
+        // We only care about download errors specific to our window's downloads
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
 
-            // We only care about download errors specific to our window's downloads
-            if error == nil {
-                self.showDownloadCompletedToast(filename: download.filename)
-            } else {
+            if error != nil {
                 SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
                                                 bottomContainer: self.contentContainer,
                                                 theme: self.currentTheme())
@@ -68,7 +59,28 @@ extension BrowserViewController: DownloadQueueDelegate {
         }
     }
 
-    func showDownloadCompletedToast(filename: String) {
+    func presentDownloadProgressToast(download: Download, windowUUID: WindowUUID) {
+        let downloadToast = DownloadToast(download: download,
+                                          theme: currentTheme(),
+                                          completion: { buttonPressed in
+            // When this toast is dismissed, be sure to clear this so that any
+            // subsequent downloads cause a new toast to be created.
+            self.downloadToast = nil
+
+            // Handle download cancellation
+            if buttonPressed, !self.downloadQueue.isEmpty {
+                self.downloadQueue.cancelAll(for: windowUUID)
+
+                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                bottomContainer: self.contentContainer,
+                                                theme: self.currentTheme())
+            }
+        })
+
+        show(toast: downloadToast, duration: nil)
+    }
+
+    func presentDownloadCompletedToast(filename: String) {
         let viewModel = ButtonToastViewModel(labelText: filename,
                                              imageName: StandardImageIdentifiers.Large.checkmark,
                                              buttonText: .DownloadsButtonTitle)
