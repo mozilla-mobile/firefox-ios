@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
 import XCTest
 
@@ -66,8 +65,9 @@ class LoginTest: BaseTestCase {
             ]
         )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
-        app.buttons["Settings"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
+        navigator.goto(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)

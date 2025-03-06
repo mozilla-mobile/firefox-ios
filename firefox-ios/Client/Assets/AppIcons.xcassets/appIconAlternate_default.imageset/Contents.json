@@ -3,16 +3,6 @@
     {
       "filename" : "appIconAlternate_default.png",
       "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "appIconAlternate_default 2.png",
-      "idiom" : "universal"
     }
   ],
   "info" : {

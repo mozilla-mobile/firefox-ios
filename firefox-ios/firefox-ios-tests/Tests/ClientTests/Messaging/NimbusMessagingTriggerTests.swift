@@ -7,7 +7,6 @@ import XCTest
 import Common
 import Foundation
 import MozillaAppServices
-import Shared
 
 @testable import Client
 

@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Az Ön jogai";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Felhasználási feltételek";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blokkolja a követőket a nagyobb adatvédelem érdekében";
 

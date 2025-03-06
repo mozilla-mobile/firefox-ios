@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-@testable import Client
 
 class MockDispatchGroup: DispatchGroupInterface {
     func enter() {}
