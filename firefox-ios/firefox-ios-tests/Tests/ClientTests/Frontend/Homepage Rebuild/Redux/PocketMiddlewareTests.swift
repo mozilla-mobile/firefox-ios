@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Glean
 import Redux
 import XCTest
 
@@ -9,16 +10,19 @@ import XCTest
 
 final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     let pocketManager = MockPocketManager()
+    var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
         super.setUp()
+        mockGleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
+        mockGleanWrapper = nil
         resetStore()
         super.tearDown()
     }
@@ -68,9 +72,106 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
     }
 
+    func test_tapOnHomepagePocketCellAction_sendTelemetryData() throws {
+        let subject = createSubject(pocketManager: pocketManager)
+        let config = OpenPocketTelemetryConfig(isZeroSearch: false, position: 0)
+        let action = PocketAction(
+            telemetryConfig: config,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: PocketActionType.tapOnHomepagePocketCell
+        )
+        subject.pocketSectionProvider(AppState(), action)
+
+        let firstSavedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? LabeledMetricType<CounterMetricType>
+        )
+        let expectedFirstMetricType = type(of: GleanMetrics.Pocket.openStoryOrigin)
+        let firstResultMetricType = type(of: firstSavedMetric)
+        let debugMessage = TelemetryDebugMessage(
+            expectedMetric: expectedFirstMetricType,
+            resultMetric: firstResultMetricType
+        )
+
+        let secondSavedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[1] as? LabeledMetricType<CounterMetricType>)
+        let expectedSecondMetricType = type(of: GleanMetrics.Pocket.openStoryPosition)
+        let secondResultMetricType = type(of: secondSavedMetric)
+        let secondDebugMessage = TelemetryDebugMessage(
+            expectedMetric: expectedSecondMetricType,
+            resultMetric: secondResultMetricType
+        )
+
+        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 2)
+        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 2)
+        XCTAssert(firstResultMetricType == expectedFirstMetricType, debugMessage.text)
+        XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
+    }
+
+    func test_tapOnHomepagePocketCell_doesNotSendTelemetryData() throws {
+        let subject = createSubject(pocketManager: pocketManager)
+        let action = PocketAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: PocketActionType.tapOnHomepagePocketCell
+        )
+        subject.pocketSectionProvider(AppState(), action)
+
+        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
+    }
+
+    func test_viewedSectionAction_sendTelemetryData() throws {
+        let subject = createSubject(pocketManager: pocketManager)
+        let action = PocketAction(windowUUID: .XCTestDefaultUUID, actionType: PocketActionType.viewedSection)
+
+        subject.pocketSectionProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? CounterMetricType)
+        let expectedMetricType = type(of: GleanMetrics.Pocket.sectionImpressions)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
+        let subject = createSubject(pocketManager: pocketManager)
+        let action = ContextMenuAction(
+            section: .pocket(nil),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
+        )
+        subject.pocketSectionProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.Pocket.openInPrivateTab)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
+        let subject = createSubject(pocketManager: pocketManager)
+        let action = ContextMenuAction(
+            section: .topSites(4),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
+        )
+        subject.pocketSectionProvider(AppState(), action)
+
+        XCTAssertEqual(mockGleanWrapper.savedEvents?.count, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+    }
+
     // MARK: - Helpers
     private func createSubject(pocketManager: MockPocketManager) -> PocketMiddleware {
-        return PocketMiddleware(pocketManager: pocketManager)
+        return PocketMiddleware(
+            pocketManager: pocketManager,
+            homepageTelemetry: HomepageTelemetry(
+                gleanWrapper: mockGleanWrapper
+            )
+        )
     }
 
     // MARK: StoreTestUtility

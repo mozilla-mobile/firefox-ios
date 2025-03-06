@@ -6,18 +6,26 @@ import Common
 import Foundation
 import Redux
 
+struct OpenPocketTelemetryConfig {
+    let isZeroSearch: Bool
+    let position: Int
+}
+
 final class PocketAction: Action {
-    var pocketStories: [PocketStoryConfiguration]?
-    var isEnabled: Bool?
+    let pocketStories: [PocketStoryConfiguration]?
+    let isEnabled: Bool?
+    let telemetryConfig: OpenPocketTelemetryConfig?
 
     init(
         pocketStories: [PocketStoryConfiguration]? = nil,
         isEnabled: Bool? = nil,
+        telemetryConfig: OpenPocketTelemetryConfig? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.pocketStories = pocketStories
         self.isEnabled = isEnabled
+        self.telemetryConfig = telemetryConfig
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -25,6 +33,8 @@ final class PocketAction: Action {
 enum PocketActionType: ActionType {
     case enteredForeground
     case toggleShowSectionSetting
+    case tapOnHomepagePocketCell
+    case viewedSection
 }
 
 enum PocketMiddlewareActionType: ActionType {
