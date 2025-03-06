@@ -36,7 +36,6 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     var body: some View {
-        NavigationView {
             // Note: Once we drop iOS 15 support we can use a List and properly set background colors / insetGrouped style
             List {
                 ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
@@ -65,8 +64,6 @@ struct AppIconSelectionView: View, ThemeApplicable {
                 guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
-        }
-        .navigationViewStyle(StackNavigationViewStyle()) // Don't display as navigation detail on iPad
     }
 
     func applyTheme(theme: Theme) {
