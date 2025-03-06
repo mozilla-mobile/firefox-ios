@@ -93,7 +93,7 @@ workflows:
             ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0.4.0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        timeout: 600
+        timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -1354,7 +1354,7 @@ workflows:
             GCLOUD_OUTPUT=$($HOME/sdk/google-cloud-sdk/bin/gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
-                --device=model=iphone13pro,version=15.7 \
+                --device=model=iphone15pro,version=18.0 \
                 --device=model=iphone8,version=16.6 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \

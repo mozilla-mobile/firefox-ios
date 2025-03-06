@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "I to diritti";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Tèrmini di sirbizzu";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blocca i trazzatura pi na megghiu privatizza";
 

@@ -4,7 +4,6 @@
 
 import Foundation
 import XCTest
-import Shared
 @testable import Client
 
 struct MockFxAUrls {

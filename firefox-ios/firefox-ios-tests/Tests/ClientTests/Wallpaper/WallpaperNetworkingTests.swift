@@ -5,8 +5,6 @@
 import Foundation
 import XCTest
 
-@testable import Client
-
 class WallpaperNetworkingTests: XCTestCase {
     var networking: NetworkingMock!
 

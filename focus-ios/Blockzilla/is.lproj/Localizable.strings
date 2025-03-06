@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Réttindi þín";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Notkunarskilmálar";
+
 /* Label on About screen */
 "About.safariBullet1" = "Loka á rekjara fyrir aukna gagnaleynd";
 
