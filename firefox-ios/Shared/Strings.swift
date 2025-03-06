@@ -2519,6 +2519,51 @@ extension String {
                     tableName: "AppIconSelection",
                     value: "Hug",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+<<<<<<< HEAD
+=======
+
+                public static let Lazy = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Lazy",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+
+                public static let OrangeGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.OrangeGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Orange Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with an orange gradient background.")
+
+                public static let Pink = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pink.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pink",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
+
+                public static let Pixelated = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pixelated",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+
+                public static let Pride = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pride",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+
+                public static let RedGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.RedGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Red Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red gradient background.")
+
+                public static let Retro = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Retro.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Retro",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon.")
+>>>>>>> bdba9310e ( Add FXIOS-11520 [App Icon 2025] Adjust localized string key for alternative gradient icons (#25168))
             }
 
             public struct Accessibility {
