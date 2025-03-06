@@ -66,19 +66,15 @@ final class AnalyticsSpy: Analytics {
     }
 
     var introDisplayingPageCalled: Property.OnboardingPage?
-    var introDisplayingIndexCalled: Int?
-    override func introDisplaying(page: Property.OnboardingPage?, at index: Int) {
+    override func introDisplaying(page: Property.OnboardingPage?) {
         introDisplayingPageCalled = page
-        introDisplayingIndexCalled = index
     }
 
     var introClickLabelCalled: Label.Onboarding?
     var introClickPageCalled: Property.OnboardingPage?
-    var introClickIndexCalled: Int?
-    override func introClick(_ label: Label.Onboarding, page: Property.OnboardingPage?, index: Int) {
+    override func introClick(_ label: Label.Onboarding, page: Property.OnboardingPage?) {
         introClickLabelCalled = label
         introClickPageCalled = page
-        introClickIndexCalled = index
     }
 
     var navigationActionCalled: Action?
@@ -379,7 +375,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Arrange
         let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introDisplayingPageCalled)
-        XCTAssertNil(analyticsSpy.introDisplayingIndexCalled)
 
         // Act
         welcome.loadViewIfNeeded()
@@ -387,7 +382,6 @@ final class AnalyticsSpyTests: XCTestCase {
 
         // Assert
         XCTAssertEqual(analyticsSpy.introDisplayingPageCalled, .start, "Analytics should track intro displaying page as .start.")
-        XCTAssertEqual(analyticsSpy.introDisplayingIndexCalled, 0, "Analytics should track intro displaying index as 0.")
     }
 
     func testWelcomeGetStartedTracksIntroClickNext() {
@@ -395,7 +389,6 @@ final class AnalyticsSpyTests: XCTestCase {
         let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
-        XCTAssertNil(analyticsSpy.introClickIndexCalled)
 
         // Act
         welcome.getStarted()
@@ -403,7 +396,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Assert
         XCTAssertEqual(analyticsSpy.introClickLabelCalled, .next, "Analytics should track intro click label as .next.")
         XCTAssertEqual(analyticsSpy.introClickPageCalled, .start, "Analytics should track intro click page as .start.")
-        XCTAssertEqual(analyticsSpy.introClickIndexCalled, 0, "Analytics should track intro click index as 0.")
     }
 
     func testWelcomeSkipTracksIntroClickSkip() {
@@ -411,7 +403,6 @@ final class AnalyticsSpyTests: XCTestCase {
         let welcome = makeWelcome()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
-        XCTAssertNil(analyticsSpy.introClickIndexCalled)
 
         // Act
         welcome.skip()
@@ -419,7 +410,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Assert
         XCTAssertEqual(analyticsSpy.introClickLabelCalled, .skip, "Analytics should track intro click label as .skip.")
         XCTAssertEqual(analyticsSpy.introClickPageCalled, .start, "Analytics should track intro click page as .start.")
-        XCTAssertEqual(analyticsSpy.introClickIndexCalled, 0, "Analytics should track intro click index as 0.")
     }
 
     // MARK: - Onboarding / Welcome Tour Tests
@@ -428,7 +418,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Arrange
         let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introDisplayingPageCalled)
-        XCTAssertNil(analyticsSpy.introDisplayingIndexCalled)
 
         // Act
         welcomeTour.loadViewIfNeeded()
@@ -436,7 +425,6 @@ final class AnalyticsSpyTests: XCTestCase {
 
         // Assert
         XCTAssertEqual(analyticsSpy.introDisplayingPageCalled, .greenSearch, "Analytics should track intro displaying page as .greenSearch.")
-        XCTAssertEqual(analyticsSpy.introDisplayingIndexCalled, 1, "Analytics should track intro displaying index as 1.")
     }
 
     func testWelcomeTourNextTracksIntroClickNext() {
@@ -444,7 +432,6 @@ final class AnalyticsSpyTests: XCTestCase {
         let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
-        XCTAssertNil(analyticsSpy.introClickIndexCalled)
 
         // Act
         welcomeTour.loadViewIfNeeded()
@@ -454,7 +441,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Assert
         XCTAssertEqual(analyticsSpy.introClickLabelCalled, .next, "Analytics should track intro click label as .next.")
         XCTAssertEqual(analyticsSpy.introClickPageCalled, .greenSearch, "Analytics should track intro click page as .greenSearch.")
-        XCTAssertEqual(analyticsSpy.introClickIndexCalled, 1, "Analytics should track intro click index as 1.")
     }
 
     func testWelcomeTourSkipTracksIntroClickSkip() {
@@ -462,7 +448,6 @@ final class AnalyticsSpyTests: XCTestCase {
         let welcomeTour = makeWelcomeTour()
         XCTAssertNil(analyticsSpy.introClickLabelCalled)
         XCTAssertNil(analyticsSpy.introClickPageCalled)
-        XCTAssertNil(analyticsSpy.introClickIndexCalled)
 
         // Act
         welcomeTour.loadViewIfNeeded()
@@ -472,7 +457,6 @@ final class AnalyticsSpyTests: XCTestCase {
         // Assert
         XCTAssertEqual(analyticsSpy.introClickLabelCalled, .skip, "Analytics should track intro click label as .skip.")
         XCTAssertEqual(analyticsSpy.introClickPageCalled, .greenSearch, "Analytics should track intro click page as .greenSearch.")
-        XCTAssertEqual(analyticsSpy.introClickIndexCalled, 1, "Analytics should track intro click index as 1.")
     }
 
     func testWelcomeTourTracksAnalyticsForAllPages() {
@@ -490,7 +474,6 @@ final class AnalyticsSpyTests: XCTestCase {
         for (index, page) in pages.enumerated() {
             // Reset analyticsSpy properties
             analyticsSpy.introDisplayingPageCalled = nil
-            analyticsSpy.introDisplayingIndexCalled = nil
 
             if index < pages.count - 1 {
                 // Act
@@ -499,13 +482,11 @@ final class AnalyticsSpyTests: XCTestCase {
                 // Assert
                 XCTAssertEqual(analyticsSpy.introClickLabelCalled, .next, "Analytics should track intro click label as .next.")
                 XCTAssertEqual(analyticsSpy.introClickPageCalled, page, "Analytics should track intro click page as \(page).")
-                XCTAssertEqual(analyticsSpy.introClickIndexCalled, index + 1, "Analytics should track intro click index as \(index + 1).")
             }
 
             // Reset analyticsSpy properties
             analyticsSpy.introClickLabelCalled = nil
             analyticsSpy.introClickPageCalled = nil
-            analyticsSpy.introClickIndexCalled = nil
         }
     }
 
