@@ -255,7 +255,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
         DispatchQueue.main.async { [weak self] in
             self?.removeTab(tab, flushToDisk: true)
-            self?.updateSelectedTabAfterRemovalOf(tab, isFromTabTray: false, deletedIndex: index)
+            self?.updateSelectedTabAfterRemovalOf(
+                tab,
+                shouldAddNewTab: UIDevice.current.userInterfaceIdiom != .pad,
+                deletedIndex: index
+            )
             completion?()
         }
 
@@ -537,7 +541,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         return selectedTab ?? addTab()
     }
 
-    private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, isFromTabTray: Bool = true, deletedIndex: Int) {
+    private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, shouldAddNewTab: Bool = true, deletedIndex: Int) {
         // If the currently selected tab has been deleted, try to select the next most reasonable tab.
         if deletedIndex == selectedIndex {
             // First, check if the user has closed the last viable tab of the current browsing mode: private or normal.
@@ -551,8 +555,8 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                 if removedTab.isPrivate,
                    let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
                     selectTab(mostRecentActiveTab, previous: removedTab)
-                // This call is necessary only when tab is closed from the Tab Tray
-                } else if isFromTabTray {
+                // This call is NOT necessary for iPads and when tab is closed by pressing X button
+                } else if shouldAddNewTab {
                     selectTab(addTab(), previous: removedTab)
                 }
                 return
