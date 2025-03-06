@@ -269,4 +269,12 @@ class DownloadToast: Toast {
     override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         // Intentional NOOP to override superclass behaviour for dismissing the toast.
     }
+
+    override func dismiss(_ buttonPressed: Bool) {
+        // Delay toast dismiss to handle download of small files
+        // where the toast is presented and dismiss right away
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            super.dismiss(buttonPressed)
+        }
+    }
 }
