@@ -612,17 +612,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentSavePDFController() {
-        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
-        if let selectedTab = browserViewController.tabManager.selectedTab,
-           selectedTab.mimeType == MIMEType.PDF {
+        guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
+        if selectedTab.mimeType == MIMEType.PDF {
             showShareSheetForCurrentlySelectedTab()
         } else {
-            webView.createPDF { [weak self] result in
+            selectedTab.webView?.createPDF { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .success(let data):
                     guard let pdf = PDFDocument(data: data),
-                          let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
+                          let outputURL = pdf.createOutputURL(withFileName: selectedTab.webView?.title ?? "") else {
                         return
                     }
                     startShareSheetCoordinator(
