@@ -16,11 +16,17 @@
 /* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.MoreButton.Title.v120" = "കൂടുതൽ കാണിക്കുക";
 
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet, specifically focusing on the quality, design, and condition of the product's packaging. This may include details about the box, protective materials, presentation, and overall packaging experience. */
+"Shopping.HighlightsCard.Packaging.Title.v120" = "കെട്ടം";
+
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Price.Title.v120" = "വില";
 
 /* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
 "Shopping.HighlightsCard.Quality.Title.v120" = "ഗുണനിലവാരം";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Shipping.Title.v120" = "വിതരണം";
 
 /* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
 "Shopping.InfoCard.InfoComingSoon.Title.v121" = "വിവരം ഉടൻ വരുന്നു";
