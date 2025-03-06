@@ -98,7 +98,7 @@ class LegacyHomepageViewController:
         )
         self.syncTabContextualHintViewController =
         ContextualHintViewController(with: syncTabContextualViewProvider, windowUUID: tabManager.windowUUID)
-        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
+        self.contextMenuHelper = HomepageContextMenuHelper(profile: profile, viewModel: viewModel, toastContainer: toastContainer)
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter

@@ -29,24 +29,30 @@ enum BookmarkAction {
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
-                                 BookmarksRefactorFeatureFlagProvider {
+                                 BookmarksRefactorFeatureFlagProvider,
+                                 CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
+    private let profile: Profile
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
     private let bookmarksSaver: BookmarksSaver
+    let bookmarksHandler: BookmarksHandler
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
     private let bookmarksTelemetry = BookmarksTelemetry()
 
     init(
+        profile: Profile,
         viewModel: HomepageViewModel,
         toastContainer: UIView,
         bookmarksSaver: BookmarksSaver? = nil
     ) {
+        self.profile = profile
         self.viewModel = viewModel
         self.toastContainer = toastContainer
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: viewModel.profile)
+        self.bookmarksHandler = profile.places
     }
 
     func presentContextMenu(for site: Site,
@@ -203,8 +209,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            // We don't need to do anything after this call completes
-            _ = self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
+
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url).uponQueue(.main)  { result in
+                guard result.isSuccess else { return }
+                self.removeBookmarkShortcut()
+            }
 
             self.delegate?.homePanelDidRequestBookmarkToast(urlString: site.url, action: .remove)
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .activityStream)
