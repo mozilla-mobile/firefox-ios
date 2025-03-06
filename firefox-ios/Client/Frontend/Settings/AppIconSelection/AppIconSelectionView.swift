@@ -36,6 +36,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     var body: some View {
+        VStack {
             List {
                 ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
                     AppIconView(
@@ -63,6 +64,8 @@ struct AppIconSelectionView: View, ThemeApplicable {
                 guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
+        }
+        .background(themeColors.layer1.color)
     }
 
     func applyTheme(theme: Theme) {
