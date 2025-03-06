@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "ແຕະສອງເທື່ອຄ້າງໄວ້ສຳລັບທາງເລືອກເພີ່ມເຕີມ";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "ການເຊື່ອມຕໍ່ບໍ່ປອດໄພ";
 
@@ -12,4 +15,10 @@
 
 /* Accessibility label for the share button in url bar */
 "TabLocation.Share.A11y.Label.v119" = "ແບ່ງປັນຫນ້ານີ້";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "ແບ່ງປັນ";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "ກວດສອບການກວດສອບ";
 

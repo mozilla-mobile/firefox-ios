@@ -1141,6 +1141,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "כתובת (יש להחליף את שאילתת החיפוש עם ‎%s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "ערכת הנושא של הדפדפן";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "מראה";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "מראה האתר";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "נותן לאתרים מראה ככה. ייתכן שחלק מהאתרים לא ייראו כמו שצריך.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "מצב כהה לאתרים";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "חסימה של פתיחת יישומונים חיצוניים";
 

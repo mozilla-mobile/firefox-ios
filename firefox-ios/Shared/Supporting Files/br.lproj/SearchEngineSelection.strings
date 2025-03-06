@@ -1,0 +1,3 @@
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button. */
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133" = "Serriñ";
+
