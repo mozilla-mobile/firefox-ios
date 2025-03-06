@@ -13,6 +13,12 @@ class RecordedNimbusContextTests: XCTestCase {
     override func setUp() {
         Glean.shared.enableTestingMode()
         Glean.shared.resetGlean(clearStores: true)
+        super.setUp()
+    }
+
+    override func tearDown() {
+        Glean.shared.resetGlean(clearStores: true)
+        super.tearDown()
     }
 
     /**
