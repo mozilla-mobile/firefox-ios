@@ -200,7 +200,9 @@ class BookmarksTests: BaseTestCase {
 
         // Check that the bookmark was deleted by ensuring an element of the empty state is visible
         let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         mozWaitForElementToNotExist(app.tables[emptyStateSignInButtonIdentifier].cells.staticTexts["Example Domain"])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
@@ -324,7 +326,9 @@ class BookmarksTests: BaseTestCase {
 
         // Check that the bookmark was deleted by ensuring an element of the empty state is visible
         let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         mozWaitForElementToNotExist(app.tables[emptyStateSignInButtonIdentifier].cells.staticTexts["Example Domain"])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
