@@ -209,8 +209,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-
-            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url).uponQueue(.main)  { result in
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.removeBookmarkShortcut()
             }
