@@ -54,13 +54,13 @@ class OnboardingFactory {
                     topButtonTitle: .defaultBrowserOnboardingViewTopButtonTitleV2,
                     bottomButtonTitle: .defaultBrowserOnboardingViewBottomButtonTitleV2),
                 tosConfig: .init(
-                    title: .termsOfServiceTitle,
-                    subtitle: .termsOfServiceSubtitle,
-                    termsText: String(format: .termsOfServiceText, String.termsLinkText),
+                    title: .termsOfUseTitle,
+                    subtitle: .termsOfUseSubtitle,
+                    termsText: String(format: .termsOfUseText, String.termsLinkText),
                     privacyText: String(format: .privacyNoticeText, String.privacyLinkText),
                     termsLinkText: .termsLinkText,
                     privacyLinkText: .privacyLinkText,
-                    buttonText: .termsOfServiceButtonText,
+                    buttonText: .termsOfUseButtonText,
                     doneButton: .doneButtonText
                 ),
                 isTosEnabled: true,
@@ -135,23 +135,23 @@ fileprivate extension String {
     static let defaultBrowserOnboardingViewSecondSubtitleV2 = String(format: NSLocalizedString("Onboarding.DefaultBrowser.SecondSubtitle.V2", value: "Make %@ your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
     static let defaultBrowserOnboardingViewTopButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the default browser onboarding screen version 2.")
     static let defaultBrowserOnboardingViewBottomButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2.")
-    static let termsOfServiceTitle = NSLocalizedString(
-        "Onboarding.TermsOfService.Title",
+    static let termsOfUseTitle = NSLocalizedString(
+        "Onboarding.TermsOfUse.Title",
         value: String(format: "Welcome to %@", AppInfo.productName),
-        comment: "Title for the Terms of Service screen during onboarding. %@ is the name of the app (Focus/Klar)."
+        comment: "Title for the Terms of Use screen during onboarding. %@ is the name of the app (Focus/Klar)."
     )
-    static let termsOfServiceSubtitle = NSLocalizedString(
-        "Onboarding.TermsOfService.Subtitle",
+    static let termsOfUseSubtitle = NSLocalizedString(
+        "Onboarding.TermsOfUse.Subtitle",
         value: "Fast. Private. No distractions.",
-        comment: "Subtitle for the Terms of Service screen during onboarding."
+        comment: "Subtitle for the Terms of Use screen during onboarding."
     )
-    static let termsOfServiceText = NSLocalizedString(
-        "Onboarding.TermsOfService.Text",
+    static let termsOfUseText = NSLocalizedString(
+        "Onboarding.TermsOfUse.Text",
         value: "By continuing, you agree to %@.",
         comment: "Text that describes the agreement to the Firefox Terms of Use. %@ will be replaced with the clickable link text, Firefox Terms of Use which is separately localized."
-        )
+    )
     static let termsLinkText = NSLocalizedString(
-        "Onboarding.TermsOfService.LinkText",
+        "Onboarding.TermsOfUse.LinkText",
         value: "Firefox Terms of Use",
         comment: "Text for the Terms of Use link."
     )
@@ -159,20 +159,20 @@ fileprivate extension String {
         "Onboarding.PrivacyNotice.Text",
         value: "Firefox cares about your privacy. Read more in %@.",
         comment: "Text that describes Firefox's commitment to privacy. %@ will be replaced with the clickable link text, Privacy Notice which is separately localized."
-        )
+    )
     static let privacyLinkText = NSLocalizedString(
         "Onboarding.PrivacyNotice.LinkText",
         value: "Privacy Notice",
         comment: "Text for the Privacy Notice link."
     )
-    static let termsOfServiceButtonText = NSLocalizedString(
-        "Onboarding.TermsOfService.ButtonText",
+    static let termsOfUseButtonText = NSLocalizedString(
+        "Onboarding.TermsOfUse.ButtonText",
         value: "Agree and Continue",
-        comment: "Text for the agreement button in the Terms of Service screen."
+        comment: "Text for the agreement button in the Terms of Use screen."
     )
     static let doneButtonText = NSLocalizedString(
-        "Onboarding.TermsOfService.Done.ButtonText",
+        "Onboarding.TermsOfUse.Done.ButtonText",
         value: "Done",
-        comment: "Button text for dismissing the Privacy Policy and Terms of Service WebView."
+        comment: "Button text for dismissing the Privacy Policy and Terms of Use WebView."
     )
 }
