@@ -47,7 +47,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                     )
                 }.listRowBackground(themeColors.layer2.color)
             }
-            .listStyle(.insetGrouped)
+            .listStyle(.plain)
             .alert(isPresented: $isShowingErrorAlert) {
                 Alert(
                     title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
@@ -76,18 +76,23 @@ struct AppIconSelectionView: View, ThemeApplicable {
         // Don't reselect the current icon
         guard appIcon != currentAppIcon else { return }
 
+        // Optimistically update the UI since there's a slight delay in setting the alternate app icon
+        let previousIcon = self.currentAppIcon
+        self.currentAppIcon = appIcon
+
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
                 isShowingErrorAlert = true
 
+                // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
+                self.currentAppIcon = previousIcon
+
                 return
             }
 
             telemetry.selectedIcon(appIcon, previousIcon: self.currentAppIcon)
-
-            self.currentAppIcon = appIcon
         }
     }
 }

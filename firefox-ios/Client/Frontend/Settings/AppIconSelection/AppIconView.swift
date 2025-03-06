@@ -19,18 +19,16 @@ struct AppIconView: View, ThemeApplicable {
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     struct UX {
-        static let checkedCircleImageIdentifier = "checkmark.circle.fill"
-        static let uncheckedCircleImageIdentifier = "circle"
+        static let checkmarkImageIdentifier = "checkmark"
         static let cornerRadius: CGFloat = 10
-        static let itemPadding: CGFloat = 10
+        static let itemPaddingHorizontal: CGFloat = 10
+        static let itemPaddingVertical: CGFloat = 2
         static let appIconSize: CGFloat = 50
         static let appIconBorderWidth: CGFloat = 1
     }
 
     var selectionImageIdentifier: String {
-        return isSelected
-               ? UX.checkedCircleImageIdentifier
-               : UX.uncheckedCircleImageIdentifier
+        return UX.checkmarkImageIdentifier
     }
 
     var selectionImageAccessibilityLabel: String {
@@ -70,10 +68,6 @@ struct AppIconView: View, ThemeApplicable {
             setAppIcon(appIcon)
         }) {
             HStack {
-                Image(systemName: selectionImageIdentifier)
-                    .padding(.trailing, UX.itemPadding)
-                    .foregroundStyle(themeColors.actionPrimary.color)
-                    .accessibilityLabel(selectionImageAccessibilityLabel)
                 // swiftlint:disable:next accessibility_label_for_image
                 Image(uiImage: image)
                     .resizable()
@@ -84,12 +78,18 @@ struct AppIconView: View, ThemeApplicable {
                         RoundedRectangle(cornerRadius: UX.cornerRadius)
                             .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
                     )
-                    .padding(.trailing, UX.itemPadding)
+                    .padding(.trailing, UX.itemPaddingHorizontal)
                 Text(appIcon.displayName)
                     .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
+                if isSelected {
+                    Image(systemName: selectionImageIdentifier)
+                        .foregroundStyle(themeColors.actionPrimary.color)
+                        .accessibilityLabel(selectionImageAccessibilityLabel)
+                }
             }
-            .padding(.all, UX.itemPadding)
+            .padding(.horizontal, UX.itemPaddingHorizontal)
+            .padding(.vertical, UX.itemPaddingVertical)
         }
         .accessibilityHint(selectionAccessibilityHint)
     }
