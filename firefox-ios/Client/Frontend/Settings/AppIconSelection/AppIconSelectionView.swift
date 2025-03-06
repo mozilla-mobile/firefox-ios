@@ -36,7 +36,6 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     var body: some View {
-            // Note: Once we drop iOS 15 support we can use a List and properly set background colors / insetGrouped style
             List {
                 ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
                     AppIconView(
