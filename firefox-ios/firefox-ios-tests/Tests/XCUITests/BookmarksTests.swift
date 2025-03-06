@@ -195,11 +195,14 @@ class BookmarksTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["Delete Test Folder"])
         }
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
+
         app.buttons["Done"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-        checkItemsInBookmarksList(items: 1)
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
@@ -320,9 +323,12 @@ class BookmarksTests: BaseTestCase {
         // Delete the Bookmark added, check it is removed
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
         app.buttons["Delete"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-       // mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
