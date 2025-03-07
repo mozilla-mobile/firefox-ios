@@ -70,9 +70,7 @@ final class LocationView: UIView,
 
     // MARK: - Search Engine / Lock Image
     private lazy var iconContainerStackView: UIStackView = .build { view in
-        view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
     }
 
     private lazy var iconContainerBackgroundView: UIView = .build()
@@ -327,7 +325,9 @@ final class LocationView: UIView,
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        if !isURLTextFieldCentered || isEditing {
+            iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        }
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         iconContainerStackViewLeadingConstraint?.constant = isURLTextFieldCentered ? 0.0 : UX.horizontalSpace
         updateGradient()
