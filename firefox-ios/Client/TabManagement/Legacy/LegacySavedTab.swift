@@ -5,9 +5,6 @@
 import Foundation
 import Shared
 
-// TODO Ecosia Upgrade: Do we still want the logic to restore tabs? [MOB-3166]
-// https://github.com/ecosia/ios-browser/commit/5e5ab45a1c9c61eb3c863c269292c787c6bfee7e
-
 class LegacySavedTab: Codable {
     var isSelected: Bool
     var title: String?

@@ -8,10 +8,6 @@ import Storage
 import Common
 import Shared
 import WebKit
-import Ecosia
-
-// Ecosia: Used to get last visited sites
-import struct MozillaAppServices.VisitTransitionSet
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
@@ -113,16 +109,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         tabs = [Tab]()
         Task {
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
-            var windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
-
-            // TODO Ecosia Upgrade: Do we want to keep this? [MOB-3166]
-            /* Ecosia: Upgrading from v9.x to v10.0.0 caused an issue where migrated URLs were blank.
-            await buildTabRestore(window: await self.tabDataStore.fetchWindowData())
-             */
-            if shouldRestoreMigratedv10TabsMissingUrl {
-                windowData = await restoreMigratedv10TabsMissingUrlIfNeeded(window: windowData)
-            }
-
+            let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
@@ -583,80 +570,5 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                     activeTabId: self.selectedTabUUID ?? UUID(),
                                     tabData: self.generateTabDataForSaving())
         return SimpleTab.convertToSimpleTabs(windowData.tabData)
-    }
-}
-
-extension TabManagerImplementation {
-    /// Ecosia: Get last visited sites from Places DB.
-    /// - Parameter count: How many sites should be fetched.
-    /// - Returns: Array of fetched sites.
-    private func fetchLastVisitedSitesFromDB(count: Int) async -> [Site] {
-        do {
-            let sites = try await withCheckedThrowingContinuation { continuation in
-                profile.places.getSitesWithBound(
-                    limit: count,
-                    offset: 0,
-                    excludedTypes: VisitTransitionSet(0)
-                ).upon { result in
-                    if let successValue = result.successValue {
-                        continuation.resume(returning: successValue.asArray())
-                    } else {
-                        continuation.resume(returning: [])
-                    }
-                }
-            }
-            return sites
-        } catch {
-            return []
-        }
-    }
-
-    private static let restoreMigratedv10TabsMissingUrlKey = "restoreMigratedv10TabsMissingUrl"
-    private var shouldRestoreMigratedv10TabsMissingUrl: Bool {
-        !UserDefaults.standard.bool(forKey: Self.restoreMigratedv10TabsMissingUrlKey)
-    }
-    /// Fix tabs that where migrated from v9.x to v10.0.0 by fetching from last visited sites instead.
-    /// This should be removed after there are no significant number of users on v10.0.0.
-    /// - Parameter window: Window to be updated.
-    /// - Returns: Updated window.
-    private func restoreMigratedv10TabsMissingUrlIfNeeded(window: WindowData?) async -> WindowData? {
-        defer {
-            UserDefaults.standard.setValue(true, forKey: Self.restoreMigratedv10TabsMissingUrlKey)
-        }
-        // We only want to run it if the user just upgraded to the version containing this restoration code.
-        // Otherwise it means the user is a fresh install and we just mark it as restoration done.
-        guard EcosiaInstallType.get() == .upgrade else {
-            return window
-        }
-        // We only restore if there are actually any tabs with empty url.
-        guard let window = window,
-              window.tabData.contains(where: { $0.siteUrl.isEmpty }) else {
-            return window
-        }
-        let sites = await fetchLastVisitedSitesFromDB(count: 1000)
-        var restoredTabs = [TabData]()
-        window.tabData.forEach { tab in
-            var restoredUrl = tab.siteUrl
-            if restoredUrl.isEmpty {
-                restoredUrl = sites.first(where: { $0.title == tab.title })?.url ?? ""
-                // If we don't have a URL and the tab has no title, it means it should be the homepage (or at least that's better than blank)
-                if restoredUrl.isEmpty && (tab.title ?? "").isEmpty {
-                    restoredUrl = URL.homepageUrlString
-                }
-            }
-            restoredTabs.append(
-                .init(id: tab.id,
-                      title: tab.title,
-                      siteUrl: restoredUrl,
-                      faviconURL: tab.faviconURL,
-                      isPrivate: tab.isPrivate,
-                      lastUsedTime: tab.lastUsedTime,
-                      createdAtTime: tab.createdAtTime,
-                      tabGroupData: tab.tabGroupData)
-            )
-        }
-        return WindowData(id: window.id,
-                          activeTabId: window.activeTabId,
-                          tabData: restoredTabs)
     }
 }
