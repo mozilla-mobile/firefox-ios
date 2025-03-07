@@ -95,3 +95,17 @@ enum TabPanelMiddlewareActionType: ActionType {
     case showToast
     case scrollToTab
 }
+
+final class ScreenshotAction: Action {
+    let tab: Tab
+
+    init(windowUUID: WindowUUID, tab: Tab, actionType: any ActionType) {
+        self.tab = tab
+        super.init(windowUUID: windowUUID, actionType: actionType)
+    }
+}
+
+enum ScreenshotActionType: ActionType {
+    case screenshotTaken
+}
+
