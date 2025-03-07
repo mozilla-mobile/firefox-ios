@@ -89,8 +89,7 @@ class GleanLifecycleObserver {
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
-        
-        
+
         // Handle the case where the app is already in the foreground when the observer is started
         handleForegroundEvent()
     }
