@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {

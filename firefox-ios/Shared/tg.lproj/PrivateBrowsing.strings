@@ -1,0 +1,33 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Пӯшидани варақаҳои хусусӣ";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Кушодан дар варақаи хусусии нав";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Браузери «Firefox» ягон таърих ё кукиҳои шуморо дар хотир намедорад, аммо хатбаракҳои нав нигоҳ дошта мешаванд.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Маълумоти бештар";
+
+/* Toggled OFF accessibility value */
+"Off" = "Ғайрифаъол";
+
+/* Toggled ON accessibility value */
+"On" = "Фаъол";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Тамошокунии хусусӣ";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Реҷаи хусусӣ";
+
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Тамошобинии хусусӣ";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Реҷаи хусусиро фаъол ё хомӯш мекунад";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Ҳангоми баромад аз реҷаи «Тамошокунии хусусӣ»";
+

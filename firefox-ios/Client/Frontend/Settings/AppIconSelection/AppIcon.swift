@@ -4,12 +4,12 @@
 
 import Foundation
 
-enum AppIcon: CaseIterable {
+enum AppIcon: String, CaseIterable {
     /// The default system app icon.
     case regular
 
     /// The old app icon before the iOS 18 light/dark/tinted update. Has a purple dark background in all modes.
-    case legacy
+    case darkPurple
 
     /// An artsy app icon of a person hugging the Firefox logo. Has a light orange background in all modes.
     case hug
@@ -18,12 +18,16 @@ enum AppIcon: CaseIterable {
     var displayName: String {
         switch self {
         case .regular:
-            return "Default"
-        case .legacy:
-            return "Legacy"
+            return .Settings.AppIconSelection.AppIconNames.Regular
+        case .darkPurple:
+            return .Settings.AppIconSelection.AppIconNames.DarkPurple
         case .hug:
-            return "Hug"
+            return .Settings.AppIconSelection.AppIconNames.Hug
         }
+    }
+
+    var telemetryName: String {
+        return self.rawValue
     }
 
     /// The name of the image set asset type. `UIImage`s can only be rendered from image sets, not app icon sets.
@@ -31,8 +35,8 @@ enum AppIcon: CaseIterable {
         switch self {
         case .regular:
             return "appIconAlternate_default"
-        case .legacy:
-            return "appIconAlternate_legacy"
+        case .darkPurple:
+            return "appIconAlternate_darkPurple"
         case .hug:
             return "appIconAlternate_hug"
         }
@@ -42,9 +46,9 @@ enum AppIcon: CaseIterable {
     var appIconAssetName: String? {
         switch self {
         case .regular:
-            return nil // Setting the alternative app icon to nil restore the default app icon asset.
-        case .legacy:
-            return "AppIcon_Alt_Legacy"
+            return nil // Setting the alternative app icon to nil will restore the default app icon asset
+        case .darkPurple:
+            return "AppIcon_Alt_DarkPurple"
         case .hug:
             return "AppIcon_Alt_Hug"
         }

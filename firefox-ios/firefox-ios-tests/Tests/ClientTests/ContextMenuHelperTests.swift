@@ -4,7 +4,6 @@
 
 import Common
 import Glean
-import Shared
 import XCTest
 
 @testable import Client

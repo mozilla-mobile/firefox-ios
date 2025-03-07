@@ -3,8 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Shared
-import Storage
 import Common
 import UIKit
 @testable import Client

@@ -1,0 +1,6 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "Valgt";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136" = "Velg %@ app-ikonet";
+

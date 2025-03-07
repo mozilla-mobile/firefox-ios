@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 /// Customize button is always present at the bottom of the page
 class CustomizeHomepageSectionViewModel {

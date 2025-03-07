@@ -733,6 +733,11 @@ struct AccessibilityIdentifiers {
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"
+            static let studiesTitle = "StudiesToggle"
+            static let sendTechnicalDataLearnMoreButton = "SendTechnicalDataLearnMoreButton"
+            static let sendCrashReportsLearnMoreButton = "SendCrashReportsLearnMoreButton"
+            static let sendDailyUsagePingLearnMoreButton = "SendDailyUsagePingLearnMoreButton"
+            static let studiesLearnMoreButton = "StudiesLearnMoreButton"
         }
 
         struct PrivacyPolicy {
@@ -779,16 +784,16 @@ struct AccessibilityIdentifiers {
             static let autoPlay = "AutoplaySettings"
         }
 
-        struct StudiesToggle {
-            static let title = "StudiesToggle"
-        }
-
         struct Theme {
             static let title = "DisplayThemeOption"
         }
 
         struct BlockImages {
             static let title = "Block Images"
+        }
+
+        struct AutofillsPasswords {
+            static let title = "AutofillsPasswordsSettings"
         }
 
         struct Passwords {

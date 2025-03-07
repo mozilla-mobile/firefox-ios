@@ -44,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "გასუფთავება";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლით %@-ზე შესაძლოა, შესული ანგარიშიდან გამოხვიდეთ და საყიდლების კალათები დაგიცარიელდეთ.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლით %@ დაგატოვებინებთ შესულ ანგარიშებს და შესაძლოა, საყიდლების კალათებიც დაგიცარიელდეთ.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლა";

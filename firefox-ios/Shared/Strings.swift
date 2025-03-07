@@ -2396,6 +2396,15 @@ extension String {
             )
         }
 
+        public struct AutofillAndPassword {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AutofillAndPassword.Title.v137",
+                tableName: "Settings",
+                value: "Autofills & Passwords",
+                comment: "In the settings menu, in the General section, this is the title for Autofills & Passwords customization section."
+            )
+        }
+
         public struct Notifications {
             public static let Title = MZLocalizedString(
                 key: "Settings.Notifications.Title.v112",
@@ -2463,6 +2472,134 @@ extension String {
                 tableName: nil,
                 value: "Bottom",
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
+        }
+
+        public struct AppIconSelection {
+            public static let SettingsOptionName = MZLocalizedString(
+                key: "Settings.AppIconSelection.SettingsOptionName.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the Settings screen, the name of the row that opens app icon selection options.")
+
+            public static let ScreenTitle = MZLocalizedString(
+                key: "Settings.AppIconSelection.ScreenTitle.v136",
+                tableName: "AppIconSelection",
+                value: "App Icon",
+                comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen.")
+
+            public struct Errors {
+                public static let SelectErrorMessage = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorMessage.v136",
+                    tableName: "AppIconSelection",
+                    value: "Sorry, there was an error setting your app icon.",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon.")
+
+                public static let SelectErrorConfirmation = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136",
+                    tableName: "AppIconSelection",
+                    value: "OK",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the label for the button to acknowledge that an error setting the app icon has occurred.")
+            }
+
+            public struct AppIconNames {
+                public static let Regular = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Regular.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Default",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon.")
+
+                public static let DarkPurple = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Dark Purple",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background.")
+
+                public static let Blue = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Blue.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Blue",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
+
+                public static let BlueGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.BlueGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Blue Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue gradient background.")
+
+                public static let Green = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Green.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Green",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a green background.")
+
+                public static let Hug = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Hug.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Hug",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo.")
+
+                public static let Lazy = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Lazy.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Lazy",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
+
+                public static let OrangeGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.OrangeGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Orange Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with an orange gradient background.")
+
+                public static let Pink = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pink.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pink",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a pink background.")
+
+                public static let Pixelated = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pixelated",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a pixelated version of the regular Firefox for iOS app icon.")
+
+                public static let Pride = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Pride",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+
+                public static let RedGradient = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.RedGradient.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Red Gradient",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red gradient background.")
+
+                public static let Retro = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Retro.Title.v136",
+                    tableName: "AppIconSelection",
+                    value: "Retro",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon.")
+            }
+
+            public struct Accessibility {
+                public static let AppIconSelectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Selected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option.")
+
+                public static let AppIconUnselectedLabel = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136",
+                    tableName: "AppIconSelection",
+                    value: "Deselected",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option.")
+
+                public static let AppIconSelectionHint = MZLocalizedString(
+                    key: "Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136",
+                    tableName: "AppIconSelection",
+                    value: "Select the %@ app icon",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name.")
+            }
         }
 
         public struct Autoplay {
@@ -4376,6 +4513,18 @@ extension String {
                     tableName: "MainMenu",
                     value: "Reader View",
                     comment: "On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool.")
+
+                public static let WebsiteDarkModeOn = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn on Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode on in the application.")
+                public static let WebsiteDarkModeOff = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137",
+                    tableName: "MainMenu",
+                    value: "Turn off Website Dark Mode",
+                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
+
                 public static let NightModeOn = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.NightMode.On.Title.v131",
                     tableName: "MainMenu",
@@ -6072,6 +6221,31 @@ extension String {
         tableName: nil,
         value: "Theme",
         comment: "Title in main app settings for Theme settings")
+    public static let SettingsAppearanceTitle = MZLocalizedString(
+        key: "Settings.Appearance.Title.v137",
+        tableName: nil,
+        value: "Appearance",
+        comment: "Title in main app settings for Appearance settings")
+    public static let BrowserThemeSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.BrowserTheme.SectionHeader.v137",
+        tableName: nil,
+        value: "Browser Theme",
+        comment: "Browser theme settings section title in Appearance settings")
+    public static let WebsiteAppearanceSectionHeader = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteAppearance.SectionHeader.v137",
+        tableName: nil,
+        value: "Website Appearance",
+        comment: "Website Appearance settings section title in Appearance settings")
+    public static let WebsiteDarkModeToggleTitle = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkModeToggle.Title.v137",
+        tableName: nil,
+        value: "Website Dark Mode",
+        comment: "Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off.")
+    public static let WebsiteDarkModeDescription = MZLocalizedString(
+        key: "Settings.Appearance.WebsiteDarkMode.Description.v137",
+        tableName: nil,
+        value: "Gives websites a dark appearance. Some sites might not look right.",
+        comment: "Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature.")
     public static let DisplayThemeBrightnessThresholdSectionHeader = MZLocalizedString(
         key: "Settings.DisplayTheme.BrightnessThreshold.SectionHeader",
         tableName: nil,
@@ -7646,6 +7820,29 @@ extension String {
             tableName: "PasswordGenerator",
             value: "Use strong password",
             comment: "When a user is in the process of creating an account, they have the option to generate a password. The popup displaying the generated password to the user is available by clicking a keyboard accessory button with this label.")
+    }
+}
+
+// MARK: - Live Activity
+extension String {
+    public struct LiveActivity {
+        public struct Downloads {
+            public static let FileNameText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileNameText.v138",
+                tableName: "LiveActivity",
+                value: "Downloading “%@”",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the filename of the file being downloaded (e.g. Downloading “MyFile.pdf”)")
+            public static let FileCountText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileCountText.v138",
+                tableName: "LiveActivity",
+                value: "Downloading Files: %@",
+                comment: "Displayed during a download in Live Activity or Dynamic Island. The %@ placeholder represents the count of multiple files (e.g. Downloading Files: 2).")
+            public static let FileProgressText = MZLocalizedString(
+                key: "LiveActivity.Downloads.FileProgressText.v138",
+                tableName: "LiveActivity",
+                value: "%1$@ of %2$@",
+                comment: "Displayed during a download in Live Activity or Dynamic Island to show the current progress of the file(s) download. The placeholders %1$@ and %2$@ represent the downloaded size and the total size of the file(s), respectively. (e.g. 10 MB of 200 MB).")
+        }
     }
 }
 

@@ -1,5 +1,50 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "ຈັດການທີ່ຢູ່";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "ທີ່ຢູ່ສຳລັບ %@";
+
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "ທີ່ຢູ່ທີ່ບັນທຶກໄວ້";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "ບັນທຶກທີ່ຢູ່ໃສ່ %@";
+
+/* Description text for the content unavailable view informing users they can create or add new addresses. */
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "ບັນທຶກຂໍ້ມູນຂອງທ່ານຢ່າງປອດໄພເພື່ອເຂົ້າເຖິງມັນໄດ້ໄວໃນພາຍຫຼັງ.";
+
+/* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
+"Addresses.Settings.Switch.Description.v124" = "ລວມມີເບີໂທລະສັບ ແລະ ທີ່ຢູ່ອີເມວ";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.Switch.Title.v124" = "ບັນທຶກ ແລະ ຕື່ມທີ່ຢູ່";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "ໃຊ້ທີ່ຢູ່ທີ່ບັນທຶກໄວ້";
+
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "ເພີ່ມບັດ";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "ບັນທຶກຂໍ້ມູນບັດຂອງທ່ານໄວ້ຢ່າງປອດໄພເພື່ອຈ່າຍເງິນໄດ້ໄວຂຶ້ນໃນຄັ້ງຕໍ່ໄປ.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "ບັນທຶກບັດໃສ່ %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, ອອກໃຫ້ %2$@, ລົງທ້າຍດ້ວຍ %3$@, ໝົດອາຍຸ %4$@";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v122" = "ບໍ່ແມ່ນຕອນນີ້";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.RememberThisCard.v122" = "ຕ້ອງການບັນທຶກບັດນີ້ຢ່າງປອດໄພ ຫລື ບໍ?";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v122" = "ອັບເດດບັດບໍ?";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.Yes.v122" = "ອັບເດດ";
 
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
 "CreditCards.Settings.Done.v114" = "ສຳເລັດ";
@@ -7,11 +52,47 @@
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "ຈັດການບັດ";
 
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseASavedCard.v122" = "ໃຊ້ບັດທີ່ບັນທຶກໄວ້";
+
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "ໃຊ້ບັດທີ່ບັນທຶກໄວ້";
 
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "ບັນຊີ";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v126" = "ທີ່ຢູ່";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v122" = "ວິທີການຊໍາລະເງິນ";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v135" = "ບົດລາຍງານການຂັດຂ້ອງອະນຸຍາດໃຫ້ພວກເຮົາວິນິດໄສ ແລະ ແກ້ໄຂບັນຫາກັບຕົວທ່ອງເວັບ.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "ນີ້ຈະຊ່ວຍໃຫ້ພວກເຮົາວິນິດໄສ ແລະ ແກ້ໄຂບັນຫາກັບຕົວທ່ອງເວັບ.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "ສົ່ງລາຍງານການຂັດຂ້ອງໂດຍອັດຕະໂນມັດ";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla. */
+"Settings.DailyUsagePing.Message.v135" = "ອັນນີ້ຊ່ວຍໃຫ້ %@ ຄາດຄະເນຜູ້ໃຊ້ທີ່ເຄື່ອນໄຫວຢູ່.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "ການ​ນໍາ​ໃຊ້​ປະ​ຈໍາ​ວັນ Ping​";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ບັນຊີ";
@@ -40,6 +121,60 @@
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "ເປີດການແຈ້ງເຕືອນ";
 
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "ເຄື່ອງມືການຄົ້ນຫາເລີ່ມຕົ້ນ";
+
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "ສຶກສາເພີ່ມເຕີມກ່ຽວກັບ Firefox Suggest";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "ເຄື່ອງການຄົ້ນຫາທາງເລືອກ";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "ເຄື່ອງມືການຄົ້ນຫາເລີ່ມຕົ້ນ";
+
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "ຄໍາແນະນໍາຈາກເຄື່ອງມືຄົ້ນຫາ";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "ສະແດງໃນພາກສ່ວນທີ່ເປັນສ່ວນຕົວ";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "ສະແດງຄຳແນະນຳການຄົ້ນຫາ";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "ແຖບທີ່ຢູ່ - ແນະນໍາ Firefox";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "ສຶກສາເພີ່ມເຕີມກ່ຽວກັບການແນະນຳ Firefox";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "ຄຳແນະນຳຈາກສະປອນເຊີ";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name. */
+"Settings.TechnicalData.Message.v135" = "%1$@ ພະຍາຍາມເກັບເອົາແຕ່ສິ່ງທີ່ພວກເຮົາຕ້ອງການເພື່ອສະໜອງ ແລະ ປັບປຸງ %2$@ ສໍາລັບທຸກຄົນ.";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name. */
+"Settings.TechnicalData.Message.v136" = "ຂໍ້​ມູນ​ກ່ຽວ​ກັບ​ອຸ​ປະ​ກອນ​ຂອງ​ທ່ານ​, ການ​ຕັ້ງ​ຄ່າ​ຮາດ​ແວ​, ແລະ ​ການ​ນໍາ​ໃຊ້​ຊ່ວຍ​ໃຫ້​ພວກ​ເຮົາ​ປັບ​ປຸງ %@ ຄຸນ​ນະ​ສົມ​ບັດ​, ປະ​ສິດ​ທິ​ພາບ​ ແລະ​ ຄວາມ​ສະຖຽນ.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v135" = "ຂໍ້ມູນດ້ານເຕັກນິກ ແລະ ການໂຕ້ຕອບ";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "ເງື່ອນໄຂການນໍາໃຊ້";
 

@@ -4,11 +4,11 @@
 
 import SwiftUI
 import Common
-import Shared
 
 struct AppIconSelectionView: View, ThemeApplicable {
     private let windowUUID: WindowUUID
     private let logger: Logger
+    private let telemetry: AppIconSelectionTelemetry
 
     struct UX {
         static let listPadding: CGFloat = 20
@@ -17,6 +17,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     @State private var currentAppIcon = AppIcon.initFromSystem()
+    @State private var isShowingErrorAlert = false
 
     // MARK: - Theming
     // FIXME FXIOS-11472 Improve our SwiftUI theming
@@ -24,8 +25,13 @@ struct AppIconSelectionView: View, ThemeApplicable {
     var themeManager
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
-    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+    init(
+        windowUUID: WindowUUID,
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.windowUUID = windowUUID
+        self.telemetry = AppIconSelectionTelemetry(gleanWrapper: gleanWrapper)
         self.logger = logger
     }
 
@@ -41,6 +47,15 @@ struct AppIconSelectionView: View, ThemeApplicable {
                             windowUUID: windowUUID,
                             setAppIcon: setAppIcon
                         )
+                        .alert(isPresented: $isShowingErrorAlert) {
+                            Alert(
+                                title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
+                                message: nil,
+                                dismissButton: .default(
+                                    Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
+                                )
+                            )
+                        }
                     }
                 }
                 .background(themeColors.layer2.color)
@@ -73,15 +88,19 @@ struct AppIconSelectionView: View, ThemeApplicable {
     private func setAppIcon(to appIcon: AppIcon) {
         guard UIApplication.shared.supportsAlternateIcons else { return }
 
-        // TODO FXIOS-11473 Add telemetry
+        // Don't reselect the current icon
+        guard appIcon != currentAppIcon else { return }
 
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
-                // TODO FXIOS-11474 Handle the error with an alert to the user
+                isShowingErrorAlert = true
+
                 return
             }
+
+            telemetry.selectedIcon(appIcon, previousIcon: self.currentAppIcon)
 
             self.currentAppIcon = appIcon
         }

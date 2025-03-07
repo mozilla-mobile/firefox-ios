@@ -32,7 +32,7 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText("password", intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        
+
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().waitForView(withAccessibilityLabel: "Save login \(username) for \(self.webRoot!)?")
 
@@ -53,7 +53,7 @@ class LoginInputTests: KIFTestCase {
         tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().wait(forTimeInterval: 1)
         tester().waitForAnimationsToFinish(withTimeout: 3)
-        
+
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.SaveLoginAlert.saveButton)
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")

@@ -4,7 +4,6 @@
 
 import Common
 import Redux
-import TabDataStore
 import Shared
 import Storage
 
@@ -224,7 +223,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
     /// normalTabsCountText and if syncAccount is enabled
-    /// 
+    ///
     /// - Parameter panelType: The selected panelType
     /// - Returns: Initial state of TabTrayModel
     private func getTabTrayModel(for panelType: TabTrayPanelType, window: WindowUUID) -> TabTrayModel {
@@ -369,9 +368,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
-        Task {
+        Task { @MainActor in
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
-            await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
+            triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
@@ -392,6 +391,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                        windowUUID: uuid,
                                                        actionType: GeneralBrowserActionType.showToast)
                 store.dispatch(toastAction)
+                addNewTabIfPrivate(uuid: uuid)
             } else {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
@@ -426,7 +426,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
-    @MainActor
     private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -487,6 +486,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
+                    addNewTabIfPrivate(uuid: uuid)
                 }
             }
         }
@@ -495,6 +495,14 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
+        }
+    }
+
+    /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
+    private func addNewTabIfPrivate(uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
+            tabManager.addTab(nil, isPrivate: false)
         }
     }
 

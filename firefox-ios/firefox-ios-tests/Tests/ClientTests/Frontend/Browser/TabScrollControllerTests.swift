@@ -5,7 +5,6 @@
 import XCTest
 import WebKit
 import Common
-import Shared
 @testable import Client
 
 final class TabScrollControllerTests: XCTestCase {
@@ -136,6 +135,7 @@ final class TabScrollControllerTests: XCTestCase {
 
     private func setupTabScroll(with subject: TabScrollingController) {
         tab.createWebview(configuration: .init())
+        tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab
@@ -143,6 +143,8 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     private func createSubject() -> TabScrollingController {
-        return TabScrollingController(windowUUID: .XCTestDefaultUUID)
+        let subject = TabScrollingController(windowUUID: .XCTestDefaultUUID)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }

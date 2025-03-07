@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Glean
-import Shared
 
 import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
@@ -20,7 +19,7 @@ private extension Double? {
     }
 }
 
-private extension Int32? {
+extension Int32? {
     func toInt64() -> Int64? {
         guard let self = self else { return nil }
         return Int64(self)
@@ -141,6 +140,7 @@ class RecordedNimbusContext: RecordedContext {
                 isDefaultBrowser: isDefaultBrowser
             )
         )
+        GleanMetrics.Pings.shared.nimbus.submit()
         logger.log("record end", level: .debug, category: .experiments)
     }
 

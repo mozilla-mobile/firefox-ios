@@ -392,7 +392,7 @@
 "fxa.signin.ready-to-scan" = "準備好了，開始掃描！";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "改用電子郵件";
+"fxa.signin.use-email-instead" = "改以接收電子郵件來登入";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "立刻同步";
@@ -893,7 +893,7 @@
 "Oops! Firefox crashed" = "喔喔，Firefox 發生錯誤";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "點選標題列出現的書本圖示，即可將該頁面於閱讀畫面開啟。";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "點選標題列出現的書本圖示，即可用閱讀畫面開啟該頁面。";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "開啟設定";
@@ -1143,6 +1143,21 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "網址（使用 %s 取代查詢字串）";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "瀏覽器佈景主題";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "外觀";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "網站外觀";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "讓網站使用暗色外觀，有些網站可能會看起來怪怪的。";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "網站暗色模式";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "不使用外部應用程式開啟";

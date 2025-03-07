@@ -198,6 +198,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
+            isZeroSearch: true,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),

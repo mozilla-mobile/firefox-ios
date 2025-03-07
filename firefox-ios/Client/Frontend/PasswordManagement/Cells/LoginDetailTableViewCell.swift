@@ -4,8 +4,6 @@
 
 import Common
 import UIKit
-import Storage
-import Shared
 
 protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)

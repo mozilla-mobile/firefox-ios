@@ -5,7 +5,6 @@
 import BackgroundTasks
 import Common
 import Foundation
-import Shared
 import Storage
 
 /// A background utility that downloads and stores new Firefox Suggest

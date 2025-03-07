@@ -33,48 +33,68 @@ struct AppIconView: View, ThemeApplicable {
                : UX.uncheckedCircleImageIdentifier
     }
 
+    var selectionImageAccessibilityLabel: String {
+        return isSelected
+               ? .Settings.AppIconSelection.Accessibility.AppIconSelectedLabel
+               : .Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel
+    }
+
+    var selectionAccessibilityHint: String {
+        return .localizedStringWithFormat(
+            .Settings.AppIconSelection.Accessibility.AppIconSelectionHint,
+            appIcon.displayName
+        )
+    }
+
     var body: some View {
-        Group {
-            if let image = UIImage(named: appIcon.imageSetAssetName) {
-                Button(action: { setAppIcon(appIcon) }) {
-                    HStack {
-                        Image(systemName: selectionImageIdentifier)
-                            .padding(.trailing, UX.itemPadding)
-                            .tint(themeColors.actionPrimary.color)
-                            .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
-
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(width: UX.appIconSize, height: UX.appIconSize)
-                            .cornerRadius(UX.cornerRadius)
-                            .overlay(
-                                // Add rounded border
-                                RoundedRectangle(cornerRadius: UX.cornerRadius)
-                                    .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
-                            )
-                            .padding(.trailing, UX.itemPadding)
-                            .accessibilityLabel("TODO") // TODO FXIOS-11471 strings
-
-                        Text(appIcon.displayName)
-                            .tint(themeColors.textPrimary.color)
-
-                        Spacer()
-                    }
-                    .padding(.all, UX.itemPadding)
-                }
-                .background(Color.clear)
-            } else {
-                // TODO FXIOS-11475 Add placeholder image and FXIOS-11471 image accessibility label strings
-                Text("No image")
-                    .tint(themeColors.layer1.color)
-            }
-        }
+        subView
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    @ViewBuilder private var subView: some View {
+        if let image = UIImage(named: appIcon.imageSetAssetName) {
+            buttonGroup(for: image)
+        } else {
+            EmptyView()
+        }
+    }
+
+    private func buttonGroup(for image: UIImage) -> some View {
+        Group {
+            Button(action: { setAppIcon(appIcon) }) {
+                HStack {
+                    Image(systemName: selectionImageIdentifier)
+                        .padding(.trailing, UX.itemPadding)
+                        .tint(themeColors.actionPrimary.color)
+                        .accessibilityLabel(selectionImageAccessibilityLabel)
+
+                    // swiftlint:disable:next accessibility_label_for_image
+                    Image(uiImage: image)
+                        .resizable()
+                        .frame(width: UX.appIconSize, height: UX.appIconSize)
+                        .cornerRadius(UX.cornerRadius)
+                        .overlay(
+                            // Add rounded border
+                            RoundedRectangle(cornerRadius: UX.cornerRadius)
+                                .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
+                        )
+                        .padding(.trailing, UX.itemPadding)
+
+                    Text(appIcon.displayName)
+                        .tint(themeColors.textPrimary.color)
+
+                    Spacer()
+                }
+                .padding(.all, UX.itemPadding)
+            }
+            .background(Color.clear)
+            .accessibilityHint(selectionAccessibilityHint)
         }
     }
 

@@ -1,0 +1,9 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
+"Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "Koyu mor";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
+"Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "Sarılma";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
+"Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "Varsayılan";
+

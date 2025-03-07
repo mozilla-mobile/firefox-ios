@@ -222,7 +222,7 @@ struct ContextMenuState {
             allowIconScaling: true
         ) { _ in
             dispatchOpenNewTabAction(siteURL: siteURL, isPrivate: true)
-            // TODO: FXIOS-10171 - Add telemetry
+            dispatchContextMenuActionForSection(actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab)
         }.items
     }
 
@@ -325,6 +325,16 @@ struct ContextMenuState {
         store.dispatch(
             ContextMenuAction(
                 site: site,
+                windowUUID: windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
+    private func dispatchContextMenuActionForSection(actionType: ActionType) {
+        store.dispatch(
+            ContextMenuAction(
+                section: configuration.homepageSection,
                 windowUUID: windowUUID,
                 actionType: actionType
             )

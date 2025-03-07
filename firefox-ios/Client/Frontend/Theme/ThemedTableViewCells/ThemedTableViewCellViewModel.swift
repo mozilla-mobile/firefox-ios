@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 enum ThemedTableViewCellType {
     case standard, actionPrimary, destructive, disabled

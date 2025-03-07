@@ -1144,6 +1144,18 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (erstatt søkestreng med %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Nettlesertema";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Utseende";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Utseende på nettstedet";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Gir nettsider et mørkt utseende. Noen nettsteder ser kanskje ikke riktig ut.";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blokker åpning av eksterne apper";
 

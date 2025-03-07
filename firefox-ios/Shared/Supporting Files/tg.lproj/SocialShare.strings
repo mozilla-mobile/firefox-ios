@@ -1,0 +1,17 @@
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Илова кардани пайванди боргирии «%1$@» ба воситаҳои мубодила дар «%2$@»";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ Аз «%2$@» 🦊 фиристода шуд. Браузери мобилиро кӯшиш кунед: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nАз «%2$@» 🦊 фиристода шуд. Браузери мобилиро кӯшиш кунед: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ Аз %2$@ 🦊 %3$@ фиристода шуд";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. The '
+' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"SentFromFirefox.SocialShare.ShareMessageB.Title.v137" = "%1$@\n\nАз %2$@ 🦊 %3$@ фиристода шуд";
+

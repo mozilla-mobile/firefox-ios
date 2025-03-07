@@ -58,7 +58,7 @@ public final class EventQueue<QueueEventType: Hashable> {
     /// particular action; if so, any subsequent calls to this function will _not_ enqueue
     /// that action again if it is already pending execution. This provides a convenience
     /// for de-duplicating calls that might accidentally enqueue the same action twice.
-    /// 
+    ///
     /// - Parameters:
     ///   - events: the dependent events.
     ///   - token: an optional UUID that identifies the specific work being enqueued. If

@@ -599,7 +599,7 @@
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Scancella";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
-"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Cancillari tutti i siti di %@?";
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Scancillari tutti i siti di %@?";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Scancella a crunuluggìa (macari chiḍḍa sincrunizzata di autri dispusitivi), i viscotta e autri dati di navicazzioni.";
@@ -1001,7 +1001,7 @@
 "ScanQRCode.InvalidDataError.Message" = "I dati nun sunnu vàliti";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Vai nne ‘Mpustazzioni’ > ‘Firefox’. Dùnaci u pirmisu a Firefox di accèdiri â fotucàmmira.";
+"ScanQRCode.PermissionError.Message.v100" = "Vai nne ‘Mpustazzioni’ > ‘Firefox’. Dùnaci u pirmissu a Firefox di accèdiri â fotucàmmira.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Scanziuna còdici QR";
@@ -1143,6 +1143,21 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (metti %s unni cc'è a risciduta)";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Tema dû navicaturi";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Aspettu";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Aspettu dî siti";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Ci duna n'aspettu scuru ê siti. Po èssiri chi certi siti nun si vìdinu boni.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Mudalità scura pî siti";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blocca a graputa di app di fora";

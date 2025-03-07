@@ -89,7 +89,7 @@
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Ver certificado";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ está fora de serviço. Sugerimos reativar as proteções.";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "O %@ não está te protegendo. Sugerimos reativar as proteções.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Você desativou proteções";

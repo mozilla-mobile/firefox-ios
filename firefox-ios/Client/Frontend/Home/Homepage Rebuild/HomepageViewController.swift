@@ -9,6 +9,8 @@ import Shared
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
+                                    UIPopoverPresentationControllerDelegate,
+                                    UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
@@ -44,6 +46,10 @@ final class HomepageViewController: UIViewController,
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
 
+    private let jumpBackInContextualHintViewController: ContextualHintViewController
+    private let syncTabContextualHintViewController: ContextualHintViewController
+    // TODO: FXIOS-11504: Move this to state + add comments on what this is + why we use it
+    private let isZeroSearch: Bool
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
 
@@ -62,7 +68,9 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         isZeroSearch: Bool,
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -72,10 +80,31 @@ final class HomepageViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.isZeroSearch = isZeroSearch
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+
+        // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
+        let jumpBackInContextualViewProvider = ContextualHintViewProvider(
+            forHintType: .jumpBackIn,
+            with: profile
+        )
+        self.jumpBackInContextualHintViewController = ContextualHintViewController(
+            with: jumpBackInContextualViewProvider,
+            windowUUID: windowUUID
+        )
+
+        let syncTabContextualViewProvider = ContextualHintViewProvider(
+            forHintType: .jumpBackInSyncedTab,
+            with: profile
+        )
+        self.syncTabContextualHintViewController = ContextualHintViewController(
+            with: syncTabContextualViewProvider,
+            windowUUID: windowUUID
+        )
+
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -106,6 +135,11 @@ final class HomepageViewController: UIViewController,
         notificationCenter.removeObserver(self)
     }
 
+    func stopCFRsTimer() {
+        jumpBackInContextualHintViewController.stopTimer()
+        syncTabContextualHintViewController.stopTimer()
+    }
+
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,6 +160,11 @@ final class HomepageViewController: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopCFRsTimer()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -441,6 +480,7 @@ final class HomepageViewController: UIViewController,
                     self?.navigateToNewTab(with: url)
                 }
             )
+            prepareSyncedTabContextualHint(onCell: syncedTabCell)
             return syncedTabCell
 
         case .bookmark(let item):
@@ -542,6 +582,7 @@ final class HomepageViewController: UIViewController,
                 textColor: textColor,
                 theme: currentTheme
             )
+            prepareJumpBackInContextualHint(onView: sectionLabelCell)
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
@@ -703,6 +744,17 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
+        let config = OpenPocketTelemetryConfig(isZeroSearch: isZeroSearch, position: index)
+        store.dispatch(
+            PocketAction(
+                telemetryConfig: config,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -745,6 +797,7 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+            dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
         case .pocketDiscover(let item):
             let destination = NavigationDestination(
                 .link,
@@ -755,6 +808,76 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
+    func popoverPresentationController(
+        _ popoverPresentationController: UIPopoverPresentationController,
+        willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>,
+        in view: AutoreleasingUnsafeMutablePointer<UIView>
+    ) {
+        // Do not dismiss if the popover is a CFR when device is rotated
+        guard !jumpBackInContextualHintViewController.isPresenting &&
+                !syncTabContextualHintViewController.isPresenting else { return }
+        popoverPresentationController.presentedViewController.dismiss(animated: false, completion: nil)
+    }
+
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return true
+    }
+
+    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+        guard jumpBackInContextualHintViewController.shouldPresentHint(),
+              dataSource?.snapshot().sectionIdentifiers.contains(.messageCard) == nil
+        else { return }
+
+        jumpBackInContextualHintViewController.configure(
+            anchor: headerView.titleLabel,
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                guard let self else { return }
+                self.presentContextualHint(with: self.jumpBackInContextualHintViewController)
+            },
+            overlayState: overlayManager)
+    }
+
+    private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
+        guard syncTabContextualHintViewController.shouldPresentHint() else {
+            syncTabContextualHintViewController.unconfigure()
+            return
+        }
+
+        syncTabContextualHintViewController.configure(
+            anchor: cell.getContextualHintAnchor(),
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in
+                guard let self else { return }
+                self.presentContextualHint(with: self.syncTabContextualHintViewController)
+            },
+            overlayState: overlayManager)
+    }
+
+    private var canModalBePresented: Bool {
+        return presentedViewController == nil && isZeroSearch
+    }
+
+    @objc
+    private func presentContextualHint(with contextualHintViewController: ContextualHintViewController) {
+        guard canModalBePresented else { return }
+        contextualHintViewController.isPresenting = true
+        present(contextualHintViewController, animated: true, completion: nil)
+        UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
+    }
+
+    // MARK: UIAdaptivePresentationControllerDelegate
+    /// Prevents popovers from becoming modals on iPhone
+    func adaptivePresentationStyle(
+        for controller: UIPresentationController,
+        traitCollection: UITraitCollection
+    ) -> UIModalPresentationStyle {
+        .none
     }
 
     // MARK: - Notifiable

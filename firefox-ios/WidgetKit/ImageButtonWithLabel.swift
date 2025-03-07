@@ -72,6 +72,7 @@ struct ImageButtonWithLabel: View {
                                 endPoint: .topTrailing
                             )
                         )
+                        .widgetAccentableCompat()
                 }
 
                 VStack(alignment: .center, spacing: 50.0) {

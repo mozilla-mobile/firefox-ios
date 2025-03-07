@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "ສິດທິຂອງທ່ານ";
 
+/* Label for row in About screen */
+"About.rowTerms" = "ເງື່ອນໄຂການນໍາໃຊ້";
+
 /* Label on About screen */
 "About.safariBullet1" = "ບັອກຕົວຕິດຕາມເພື່ອປັບປຸງຄວາມເປັນສ່ວນຕົວຂື້ນ";
 

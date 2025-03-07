@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
 import Common
 
 class ThemedTableViewController: UITableViewController, Themeable, InjectedThemeUUIDIdentifiable {
@@ -35,7 +34,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     }
 
     /// Dequeues a ThemedTableViewCell for the provided IndexPath.
-    /// 
+    ///
     /// This method could be overridden by subclasses, if subclasses of ThemedTableViewCell are needed to be dequeued.
     /// In order to deque subclasses of ThemedTableViewCell they must be registered in the table view.
     func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {

@@ -6,7 +6,6 @@ import Common
 import ComponentLibrary
 import Foundation
 import UIKit
-import Shared
 
 class ContextualHintViewController: UIViewController,
                                     OnViewDismissable,

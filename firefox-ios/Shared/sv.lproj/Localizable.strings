@@ -839,7 +839,7 @@
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Webbplatser kan ladda externa annonser, videor och annat innehåll som innehåller dolda spårare. Om du blockerar detta kan webbplatser ladda snabbare, men vissa knappar, formulär och inloggningsfält kanske inte fungerar.";
 
 /* Description of cross-site trackers. */
-"Menu.TrackingProtectionDescription.CrossSiteNew" = "Dessa kakor följer dig från sida till sida för att samla in data om vad du gör online. De anges av tredje part som annonsörer och analysföretag.";
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "Dessa kakor följer dig från webbplats till webbplats för att samla in data om vad du gör online. De ställs in av tredje part som annonsörer och analysföretag.";
 
 /* Description of cryptominers. */
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Kryptogrävare använder ditt systems datakraft för att utvinna digitala pengar. Kryptogrävar-skript tömmer ditt batteri, slöar ner din dator och kan öka energiräkningen.";
@@ -848,7 +848,7 @@
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Inställningarna i din webbläsare och dator är unika. Fingeravtrycksspårare samlar in en mängd av dessa unika inställningar för att skapa en profil om dig, som kan användas för att spåra dig när du surfar.";
 
 /* Description of social network trackers. */
-"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociala nätverk placerar spårare på andra webbplatser för att skapa en mer fullständig och riktad profil för dig. Att blockera dessa spårare minskar hur mycket sociala medieföretag kan se vad du gör online.";
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociala nätverk placerar spårare på andra webbplatser för att skapa en mer komplett och målinriktad profil av dig. Blockering av dessa spårare minskar hur mycket sociala medieföretag kan se vad du gör online.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingeravtrycksspårare";
@@ -1144,6 +1144,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ersätt fråga med %s)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Tema för webbläsare";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Utseende";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Webbplatsens utseende";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Ger webbplatser ett mörkt utseende. Vissa webbplatser kanske inte ser rätt ut.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Webbplats i mörkt läge";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blockera öppning av externa appar";
 
@@ -1223,7 +1238,7 @@
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "Systemtema";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Använd systemets ljust/mörkt läge";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Använd systemets ljusa/mörka läge";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "Temaväljare";

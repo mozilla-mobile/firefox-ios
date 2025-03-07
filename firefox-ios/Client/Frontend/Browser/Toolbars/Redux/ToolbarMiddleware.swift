@@ -39,14 +39,18 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         switch action.actionType {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            guard let toolbarPosition = action.toolbarPosition else { return }
+            guard let toolbarPosition = action.toolbarPosition
+            else { return }
 
+            let toolbarConfig = FxNimbus.shared.features.toolbarRefactorFeature.value()
+            let toolbarLayout = ToolbarLayoutStyle.style(from: toolbarConfig.layout)
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
 
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
+                toolbarLayout: toolbarLayout,
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
@@ -326,7 +330,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     // Update border to hide for bottom toolbars when microsurvey is shown,
     // so that it appears to belong to the app and harder to spoof
-    // 
+    //
     // Border Requirement:
     //  - When survey is shown and address bar is at top, hide border in between survey and nav toolbar
     //  - When survey is shown and address bar is at bottom, hide borders for address and nav toolbar

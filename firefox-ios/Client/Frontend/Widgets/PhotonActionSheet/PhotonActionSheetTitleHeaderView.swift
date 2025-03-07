@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 // MARK: - PhotonActionSheetTitleHeaderView
 class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {

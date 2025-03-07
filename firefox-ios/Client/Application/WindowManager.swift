@@ -9,7 +9,7 @@ import TabDataStore
 import WidgetKit
 
 /// Defines various actions in the app which are performed for all open iPad
-/// windows. These can be routed through the WindowManager 
+/// windows. These can be routed through the WindowManager
 enum MultiWindowAction {
     /// Signals that we should store tabs (for all windows) on the default Profile.
     case storeTabs
@@ -60,7 +60,7 @@ protocol WindowManager {
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
-    /// any one event is always associated with one window in specific. 
+    /// any one event is always associated with one window in specific.
     /// - Parameter event: the event that occurred and any associated metadata.
     /// - Parameter windowUUID: the UUID of the window triggering the event.
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)

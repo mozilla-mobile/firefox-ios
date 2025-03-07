@@ -350,9 +350,12 @@ extension HomePageSettingViewController {
             guard wallpaperManager.canSettingsBeShown else { return }
 
             let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
-            let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
-                                                       tabManager: tabManager,
-                                                       theme: theme)
+            let viewModel = WallpaperSettingsViewModel(
+                wallpaperManager: wallpaperManager,
+                tabManager: tabManager,
+                theme: theme,
+                windowUUID: settings.windowUUID
+            )
             let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
             wallpaperVC.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(wallpaperVC, animated: true)

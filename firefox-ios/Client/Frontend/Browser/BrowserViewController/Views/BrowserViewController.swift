@@ -12,9 +12,7 @@ import SnapKit
 import Account
 import MobileCoreServices
 import Common
-import ComponentLibrary
 import Redux
-import ToolbarKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -240,6 +238,10 @@ class BrowserViewController: UIViewController,
 
     var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
+    var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -755,6 +757,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
+        enqueueTabRestoration()
 
         Task(priority: .background) {
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
@@ -1000,11 +1003,32 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContainer)
     }
 
+    private func enqueueTabRestoration() {
+        guard isDeeplinkOptimizationRefactorEnabled else { return }
+        // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
+        // has ended. If there is no deeplink then restore when the startup time record cancellation has been
+        // signaled.
+
+        // Enqueues the actions only if the opposite action where not signaled, this happen when the app
+        // handles a deeplink when was already opened
+        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
+            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
+                self?.tabManager.restoreTabs()
+            }
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-        tabManager.restoreTabs()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            tabManager.restoreTabs()
+        }
 
         switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
@@ -1030,7 +1054,9 @@ class BrowserViewController: UIViewController,
 
         prepareURLOnboardingContextualHint()
 
-        browserDelegate?.browserHasLoaded()
+        if !isDeeplinkOptimizationRefactorEnabled {
+            browserDelegate?.browserHasLoaded()
+        }
         AppEventQueue.signal(event: .browserIsReady)
     }
 
@@ -1951,8 +1977,9 @@ class BrowserViewController: UIViewController,
             guard let tabURLOrigin = tab.url?.origin,
                   let urlOrigin = url.origin,
                   tabURLOrigin == urlOrigin else {
-                if let urlOrigin = url.origin {
-                    tab.url = URL(string: urlOrigin)!
+                if let urlOrigin = url.origin,
+                   let newTabURL = URL(string: urlOrigin) {
+                    tab.url = newTabURL
                 }
                 return
             }
@@ -2610,33 +2637,26 @@ class BrowserViewController: UIViewController,
         } else if let legacyUrlBar {
             urlBar(legacyUrlBar, didSubmitText: query)
         }
-        AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             openBlankNewTab(
                 focusLocationField: options?.contains(.focusLocationField) == true,
                 isPrivate: isPrivate
             )
-            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
     func handle(url: URL?, tabId: String, isPrivate: Bool = false) {
         cancelEditMode()
         if let url {
-            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate) {
-                AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
-            }
+            switchToTabForURLOrOpen(url, uuid: tabId, isPrivate: isPrivate)
         } else {
             openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-            AppEventQueue.signal(event: .recordStartupTimeOpenURLComplete)
         }
     }
 
@@ -2712,9 +2732,9 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
+        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
-        switchToPrivacyMode(isPrivate: isPrivate)
         return tab
     }
 
@@ -3397,7 +3417,7 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements 
+    // Also implements
     // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
         switch contextualHintType {
@@ -4138,9 +4158,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
                 toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]

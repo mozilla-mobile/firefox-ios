@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
 import Common
 
 /// The history panel has a fixed first section and cells. In this case, we'll only need some

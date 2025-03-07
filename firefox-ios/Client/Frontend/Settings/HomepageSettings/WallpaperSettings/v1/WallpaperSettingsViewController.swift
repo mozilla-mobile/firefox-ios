@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     private struct UX {
@@ -234,9 +233,9 @@ private extension WallpaperSettingsViewController {
                         delay: Toast.UX.toastDelayBefore,
                         duration: Toast.UX.toastDismissAfter) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
                 toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
             ]

@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Τα δικαιώματά σας";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Όροι χρήσης";
+
 /* Label on About screen */
 "About.safariBullet1" = "Φραγή ιχνηλατών για περισσότερο απόρρητο";
 

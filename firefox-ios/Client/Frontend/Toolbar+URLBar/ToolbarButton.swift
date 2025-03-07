@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Shared
 
 class ToolbarButton: UIButton {
     // MARK: - Variables
