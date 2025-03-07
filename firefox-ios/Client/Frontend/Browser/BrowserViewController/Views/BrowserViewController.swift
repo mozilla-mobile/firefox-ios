@@ -1943,8 +1943,9 @@ class BrowserViewController: UIViewController,
             guard let tabURLOrigin = tab.url?.origin,
                   let urlOrigin = url.origin,
                   tabURLOrigin == urlOrigin else {
-                if let urlOrigin = url.origin {
-                    tab.url = URL(string: urlOrigin)!
+                if let urlOrigin = url.origin,
+                   let newTabURL = URL(string: urlOrigin) {
+                    tab.url = newTabURL
                 }
                 return
             }
