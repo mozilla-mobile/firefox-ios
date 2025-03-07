@@ -105,6 +105,8 @@ final class LocationView: UIView,
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
+        // Add a tap gesture recognizer to make the entire view tapable.
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder)))
     }
 
     required init?(coder: NSCoder) {
