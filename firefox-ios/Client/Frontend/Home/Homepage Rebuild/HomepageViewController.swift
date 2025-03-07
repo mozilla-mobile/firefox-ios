@@ -755,6 +755,22 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
+        let config = TopSitesTelemetryConfig(
+            isZeroSearch: isZeroSearch,
+            position: index,
+            tileType: tileType,
+            url: urlString
+        )
+        store.dispatch(
+            TopSitesAction(
+                telemetryConfig: config,
+                windowUUID: self.windowUUID,
+                actionType: TopSitesActionType.tapOnHomepageTopSitesCell
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -774,6 +790,12 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+            dispatchOpenTopSitesAction(
+                at: indexPath.item,
+                tileType: state.getTelemetrySiteType,
+                urlString: state.site.url
+            )
+
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(

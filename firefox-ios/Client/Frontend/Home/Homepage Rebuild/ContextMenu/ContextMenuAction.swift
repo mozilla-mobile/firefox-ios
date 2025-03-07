@@ -28,4 +28,6 @@ enum ContextMenuActionType: ActionType {
     case tappedOnRemoveTopSite
     case tappedOnPinTopSite
     case tappedOnUnpinTopSite
+    case tappedOnSponsoredAction
+    case tappedOnSettingsAction
 }
