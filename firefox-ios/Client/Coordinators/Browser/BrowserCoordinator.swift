@@ -134,17 +134,6 @@ class BrowserCoordinator: BaseCoordinator,
         legacyHomepageViewController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
-
-        // Ecosia: show any of the insighful sheets if needed
-        // Workaround for time of experiment
-        // -> delay of 0.5s to wait for animations and dismissals to finish
-        if inline, !User.shared.firstTime {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                self?.browserViewController.presentInsightfulSheetsIfNeeded()
-                // Ecosia: at this stage, we consider it a safe place where storing the current version
-                EcosiaInstallType.evaluateCurrentEcosiaInstallType(storeUpgradeVersion: true)
-            }
-        }
     }
 
     func showHomepage() {
@@ -1060,5 +1049,68 @@ class BrowserCoordinator: BaseCoordinator,
         if rootVC === expectedCoordinator.router.rootViewController {
             action(expectedCoordinator)
         }
+    }
+}
+
+// Ecosia: BrowserCoordinator extention that implements the overlay card logic
+extension BrowserCoordinator {
+
+    func showPendingOverlayCard(inline: Bool) {
+        if inline,
+           !User.shared.firstTime {
+            // -> delay of 0.5s to wait for animations and dismissals to finish
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.presentInsightfulSheetsIfNeeded()
+                // At this stage, we consider it a safe place where storing the current version
+                EcosiaInstallType.evaluateCurrentEcosiaInstallType(storeUpgradeVersion: true)
+            }
+        }
+    }
+
+    private func presentInsightfulSheetsIfNeeded() {
+        let shouldShowLoadingScreen = User.shared.referrals.pendingClaim != nil
+        // If not on homepage or if there's a pending referral claim, do nothing
+        guard isHomePage(), !shouldShowLoadingScreen else { return }
+        // Get first function that returns `true` for a cards needs presenting.
+        _ = presentableCards.first(where: { $0() })
+    }
+
+    private var shouldShowDefaultBrowserPromo: Bool {
+        browserViewController.profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil &&
+        DefaultBrowser.minPromoSearches <= User.shared.searchCount
+    }
+
+    private var presentableCards: [() -> Bool] {
+        [
+            presentDefaultBrowserPromoIfNeeded,
+            presentWhatsNewPageIfNeeded
+        ]
+    }
+
+    private var shouldShowWhatsNewPageScreen: Bool { browserViewController.whatsNewDataProvider.shouldShowWhatsNewPage }
+
+    private func isHomePage() -> Bool {
+        browserViewController.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+    }
+
+    @discardableResult
+    private func presentDefaultBrowserPromoIfNeeded() -> Bool {
+        guard shouldShowDefaultBrowserPromo else { return false }
+
+        if #available(iOS 14, *) {
+            let defaultPromo = DefaultBrowser(windowUUID: windowUUID, delegate: browserViewController)
+            present(defaultPromo, animated: true)
+        } else {
+            profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        }
+        return true
+    }
+
+    @discardableResult
+    private func presentWhatsNewPageIfNeeded() -> Bool {
+        guard shouldShowWhatsNewPageScreen else { return false }
+        let viewModel = WhatsNewViewModel(provider: browserViewController.whatsNewDataProvider)
+        WhatsNewViewController.presentOn(browserViewController, viewModel: viewModel, windowUUID: windowUUID)
+        return true
     }
 }

@@ -39,4 +39,13 @@ protocol BrowserDelegate: AnyObject {
 
     /// Show the Error page to the user
     func showNativeErrorPage(overlayManager: OverlayModeManager)
+
+    /*
+     Ecosia: Add a new behavior that allows the browser to show
+     pending overlay cards on top of the Browser View if needed.
+     E.g. Default Browser Card
+     The `inline` param keeps companibility with the legacy homepage
+     showing method
+     */
+    func showPendingOverlayCard(inline: Bool)
 }

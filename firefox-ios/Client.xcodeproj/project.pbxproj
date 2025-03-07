@@ -106,7 +106,6 @@
 		12C11EA62D28291300E4DDBF /* AppSettingsTableViewController+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF2206E2B72B0530038157D /* AppSettingsTableViewController+Ecosia.swift */; };
 		12C11EA72D28291300E4DDBF /* ErrorPageHandler+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289462B07C8F000A8FCB3 /* ErrorPageHandler+Ecosia.swift */; };
 		12C11EA82D28291300E4DDBF /* HomepageViewController+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289482B07C8F000A8FCB3 /* HomepageViewController+Ecosia.swift */; };
-		12C11EA92D28291300E4DDBF /* BrowserCoordinator+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C11E9F2D2828C200E4DDBF /* BrowserCoordinator+Ecosia.swift */; };
 		12C11EAA2D28291300E4DDBF /* UIView+maskedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2894A2B07C8F000A8FCB3 /* UIView+maskedCorners.swift */; };
 		12C11EAB2D28291300E4DDBF /* NumberFormatter+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB2894C2B07C8F000A8FCB3 /* NumberFormatter+Ecosia.swift */; };
 		12C11EAC2D28291300E4DDBF /* UIFont+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB289452B07C8F000A8FCB3 /* UIFont+Ecosia.swift */; };
@@ -2401,7 +2400,6 @@
 		12C11E962D28279C00E4DDBF /* SeedCounterNTPExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedCounterNTPExperiment.swift; sourceTree = "<group>"; };
 		12C11E9C2D28289900E4DDBF /* UIButton+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ecosia.swift"; sourceTree = "<group>"; };
 		12C11E9D2D2828AA00E4DDBF /* SimpleToast+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimpleToast+Ecosia.swift"; sourceTree = "<group>"; };
-		12C11E9F2D2828C200E4DDBF /* BrowserCoordinator+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserCoordinator+Ecosia.swift"; sourceTree = "<group>"; };
 		12C11EA02D2828EA00E4DDBF /* DispatchQueueHelper+BuildChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueueHelper+BuildChannel.swift"; sourceTree = "<group>"; };
 		12C11F662D2C298600E4DDBF /* Ecosia.ShareTo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Ecosia.ShareTo.xcconfig; path = Configuration/Ecosia.ShareTo.xcconfig; sourceTree = "<group>"; };
 		12C11F672D2C299D00E4DDBF /* Ecosia.WidgetKit.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Ecosia.WidgetKit.xcconfig; path = Configuration/Ecosia.WidgetKit.xcconfig; sourceTree = "<group>"; };
@@ -10492,7 +10490,6 @@
 				2CB2894A2B07C8F000A8FCB3 /* UIView+maskedCorners.swift */,
 				2CB2894C2B07C8F000A8FCB3 /* NumberFormatter+Ecosia.swift */,
 				2CB2894D2B07C8F000A8FCB3 /* URL+Ecosia.swift */,
-				12C11E9F2D2828C200E4DDBF /* BrowserCoordinator+Ecosia.swift */,
 				2CF2206E2B72B0530038157D /* AppSettingsTableViewController+Ecosia.swift */,
 				12C11EA02D2828EA00E4DDBF /* DispatchQueueHelper+BuildChannel.swift */,
 			);
@@ -16903,7 +16900,6 @@
 				12C11EA62D28291300E4DDBF /* AppSettingsTableViewController+Ecosia.swift in Sources */,
 				12C11EA72D28291300E4DDBF /* ErrorPageHandler+Ecosia.swift in Sources */,
 				12C11EA82D28291300E4DDBF /* HomepageViewController+Ecosia.swift in Sources */,
-				12C11EA92D28291300E4DDBF /* BrowserCoordinator+Ecosia.swift in Sources */,
 				12C11EAA2D28291300E4DDBF /* UIView+maskedCorners.swift in Sources */,
 				12C11EAB2D28291300E4DDBF /* NumberFormatter+Ecosia.swift in Sources */,
 				12C11EAC2D28291300E4DDBF /* UIFont+Ecosia.swift in Sources */,

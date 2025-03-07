@@ -32,6 +32,9 @@ class TabsButton: UIButton, ThemeApplicable {
     private var theme: Theme?
      */
     private var theme: Theme? {
+        guard traitCollection.userInterfaceIdiom != .pad else {
+            return nil
+        }
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }

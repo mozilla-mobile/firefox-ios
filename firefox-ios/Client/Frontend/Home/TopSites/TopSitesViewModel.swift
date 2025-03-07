@@ -227,9 +227,6 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        // Ecosia: correctly assign the latest set `numberOfRows` and calculate based on all top sites
-        numberOfRows = topSitesDataAdaptor.numberOfRows
-        topSites = unfilteredTopSites
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         numberOfRows = topSitesDataAdaptor.numberOfRows
@@ -238,8 +235,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                                     numberOfRows: numberOfRows,
                                                                     interface: interface)
         numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
-        // Ecosia: Move topsite declaration up
-        // topSites = unfilteredTopSites
+        topSites = unfilteredTopSites
         if numberOfItems < unfilteredTopSites.count {
             let range = numberOfItems..<unfilteredTopSites.count
             topSites.removeSubrange(range)

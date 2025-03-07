@@ -1373,6 +1373,9 @@ class BrowserViewController: UIViewController,
                 overlayManager: overlayManager
             )
         }
+
+        // Ecosia: Let showOverlayCard() execute
+        browserDelegate?.showPendingOverlayCard(inline: inline)
     }
 
     func showEmbeddedWebview() {
