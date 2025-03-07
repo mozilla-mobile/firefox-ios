@@ -108,4 +108,3 @@ final class ScreenshotAction: Action {
 enum ScreenshotActionType: ActionType {
     case screenshotTaken
 }
-
