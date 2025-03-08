@@ -6,6 +6,8 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 import Foundation
+import Common
+import Shared
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
@@ -61,11 +63,10 @@ struct DownloadLiveActivity: Widget {
                 Rectangle()
                     .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
                     .foregroundStyle(LinearGradient(
-                            gradient: Gradient(colors: [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                        gradient: Gradient(colors: [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
                 HStack(spacing: 16) {
                     ZStack {
                         Image("faviconFox")
@@ -94,8 +95,15 @@ struct DownloadLiveActivity: Widget {
                             .rotationEffect(.degrees(270.0))
                             .animation(.linear, value: 0.5)
                             .foregroundColor(Color("widgetLabelColors"))
-                        Image("mediaStop")
-                            .frame(width: 20, height: 20)
+                        if LiveDownload.state.totalProgress == 1.0 {
+                            Image(StandardImageIdentifiers.Large.checkmark)
+                                .renderingMode(.template)
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(Color("widgetLabelColors"))
+                        } else {
+                            Image("mediaStop")
+                                .frame(width: 20, height: 20)
+                        }
                     }
                     .frame(width: 44, height: 44)
                 }
