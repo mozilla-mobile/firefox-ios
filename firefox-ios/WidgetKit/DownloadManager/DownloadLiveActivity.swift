@@ -1,7 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-
 import WidgetKit
 import ActivityKit
 import SwiftUI
@@ -59,7 +58,7 @@ struct DownloadLiveActivity: Widget {
             // meaning we'd never be redirected to the downloads panel
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        } dynamicIsland: { _ in
+        } dynamicIsland: { LiveDownload in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
                     EmptyView()
@@ -74,12 +73,60 @@ struct DownloadLiveActivity: Widget {
                     EmptyView()
                 }
             } compactLeading: {
-                EmptyView()
+                Image(systemName: "arrow.down.to.line")
+                    .foregroundStyle(.orange)
+                    .font(.system(size: 16, weight: .light))
             } compactTrailing: {
-                EmptyView()
+//                Text(
+//                    String(
+//                        format: "%.0f",
+//                        (Double(LiveDownload.state.totalBytesDownloaded) / Double(LiveDownload.state.totalBytesExpected)) * 100
+//                    )
+//                )//
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: 4)
+                        .foregroundColor(.gray)
+                        .opacity(0.3)
+                        .frame(width: 19, height: 19)
+                        .padding(.leading, 2)
+                    Circle()
+                    // 0.57 is a dummy value for how far along the download progress is
+                        .trim(from: 0.0, to: min(0.57, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: 4))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear, value: 0.57)
+                        .foregroundStyle(.orange)
+                        .frame(width: 19, height: 19)
+                        .padding(.leading, 2)
+                }
             } minimal: {
                 EmptyView()
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
+    }
+}
+
+func startDownloadLiveActivity() {
+    guard #available(iOS 16.2, *) else { return }
+
+    let attributes = DownloadLiveActivityAttributes()
+    let state = DownloadLiveActivityAttributes.ContentState(downloads: [DownloadLiveActivityAttributes.ContentState.Download(
+        id: UUID(),
+        fileName: "hello.py",
+        hasContentEncoding: true,
+        totalBytesExpected: 100000,
+        bytesDownloaded: 57000,
+        isComplete: false
+    )])
+
+    do {
+        _ = try Activity<DownloadLiveActivityAttributes>.request(
+            attributes: attributes,
+            content: .init(state: state, staleDate: nil),
+            pushType: nil
+        )
+    } catch {
+        print("Failed to start Live Activity: \(error.localizedDescription)")
     }
 }
