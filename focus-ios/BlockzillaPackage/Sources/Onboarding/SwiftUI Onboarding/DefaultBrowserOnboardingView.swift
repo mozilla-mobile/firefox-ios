@@ -26,11 +26,7 @@ struct DefaultBrowserOnboardingView: View {
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
-                Text(viewModel.defaultBrowserConfig.title)
-                    .bold()
-                    .font(.system(size: .titleSize))
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, .titleBottomPadding)
+                title
                 VStack(alignment: .leading) {
                     Text(viewModel.defaultBrowserConfig.firstSubtitle)
                         .padding(.bottom, .firstSubtitleBottomPadding)
