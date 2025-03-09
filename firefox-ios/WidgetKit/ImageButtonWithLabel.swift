@@ -83,7 +83,7 @@ struct ImageButtonWithLabel: View {
         }
     }
 
-    var background: some View {
+    private var background: some View {
         return ContainerRelativeShape()
             .fill(
                 LinearGradient(
