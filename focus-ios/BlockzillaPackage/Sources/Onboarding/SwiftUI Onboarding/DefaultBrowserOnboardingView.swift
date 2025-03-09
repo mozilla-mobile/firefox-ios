@@ -32,18 +32,7 @@ struct DefaultBrowserOnboardingView: View {
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
             topButton
-            Button(action: {
-                viewModel.send(.defaultBrowserSkip)
-            }, label: {
-                Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
-                    .foregroundColor(.black)
-                    .font(.body16Bold)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: .buttonHeight)
-                    .background(Color.secondOnboardingScreenBottomButton)
-                    .cornerRadius(.radius)
-            })
-            .padding(.bottom, .skipButtonPadding)
+            bottomButton
         }
         .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
