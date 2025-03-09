@@ -72,6 +72,14 @@ struct DefaultBrowserOnboardingView: View {
             viewModel.send(.defaultBrowserAppeared)
         }
     }
+
+    private var title: some View {
+        return Text(viewModel.defaultBrowserConfig.title)
+            .bold()
+            .font(.system(size: .titleSize))
+            .multilineTextAlignment(.center)
+            .padding(.bottom, .titleBottomPadding)
+    }
 }
 
 fileprivate extension CGFloat {
