@@ -123,7 +123,7 @@ struct ImageButtonWithLabel: View {
         }
     }
 
-    var icon: some View {
+    private var icon: some View {
         return HStack(alignment: .bottom) {
             Spacer()
             Image(decorative: "faviconFox")
