@@ -64,15 +64,7 @@ struct ImageButtonWithLabel: View {
         Link(destination: isSmall ? link.smallWidgetUrl : link.mediumWidgetUrl) {
             ZStack(alignment: .leading) {
                 if !isSmall {
-                    ContainerRelativeShape()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: link.backgroundColors),
-                                startPoint: .bottomLeading,
-                                endPoint: .topTrailing
-                            )
-                        )
-                        .widgetAccentableCompat()
+                    background
                 }
 
                 VStack(alignment: .center, spacing: 50.0) {
