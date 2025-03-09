@@ -95,7 +95,7 @@ struct ImageButtonWithLabel: View {
             .widgetAccentableCompat()
     }
 
-    var label: some View {
+    private var label: some View {
         return VStack(alignment: .leading) {
             if isSmall {
                 Text(link.label)
