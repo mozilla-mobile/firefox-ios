@@ -76,6 +76,15 @@ struct DefaultBrowserOnboardingView: View {
             .multilineTextAlignment(.center)
             .padding(.bottom, .titleBottomPadding)
     }
+
+    private var subtitle: some View {
+        return VStack(alignment: .leading) {
+            Text(viewModel.defaultBrowserConfig.firstSubtitle)
+                .padding(.bottom, .firstSubtitleBottomPadding)
+            Text(viewModel.defaultBrowserConfig.secondSubtitle)
+        }
+        .font(.body16)
+    }
 }
 
 fileprivate extension CGFloat {
