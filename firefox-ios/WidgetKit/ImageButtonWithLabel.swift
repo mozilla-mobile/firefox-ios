@@ -91,6 +91,18 @@ struct ImageButtonWithLabel: View {
         }
     }
 
+    var background: some View {
+        return ContainerRelativeShape()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: link.backgroundColors),
+                    startPoint: .bottomLeading,
+                    endPoint: .topTrailing
+                )
+            )
+            .widgetAccentableCompat()
+    }
+
     var label: some View {
         return VStack(alignment: .leading) {
             if isSmall {
