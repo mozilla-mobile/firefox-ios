@@ -31,17 +31,7 @@ struct DefaultBrowserOnboardingView: View {
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
-            Button(action: {
-                viewModel.send(.defaultBrowserSettingsTapped)
-            }, label: {
-                Text(viewModel.defaultBrowserConfig.topButtonTitle)
-                    .foregroundColor(.systemBackground)
-                    .font(.body16Bold)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: .buttonHeight)
-                    .background(Color.actionButton)
-                    .cornerRadius(.radius)
-            })
+            topButton
             Button(action: {
                 viewModel.send(.defaultBrowserSkip)
             }, label: {
