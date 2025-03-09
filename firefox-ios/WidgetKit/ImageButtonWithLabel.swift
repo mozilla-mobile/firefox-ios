@@ -82,12 +82,7 @@ struct ImageButtonWithLabel: View {
                         logo
                     }
                     if isSmall {
-                        HStack(alignment: .bottom) {
-                            Spacer()
-                            Image(decorative: "faviconFox")
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        }
+                        icon
                     }
                 }
                 .foregroundColor(Color("widgetLabelColors"))
