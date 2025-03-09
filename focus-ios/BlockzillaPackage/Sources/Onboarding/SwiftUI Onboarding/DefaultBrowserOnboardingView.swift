@@ -43,6 +43,14 @@ struct DefaultBrowserOnboardingView: View {
         }
     }
 
+    private var closeButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserCloseTapped)
+        }, label: {
+            Image.close
+        })
+    }
+
     private var title: some View {
         return Text(viewModel.defaultBrowserConfig.title)
             .bold()
