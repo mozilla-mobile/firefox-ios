@@ -123,5 +123,14 @@ struct ImageButtonWithLabel: View {
                 .frame(height: 24.0)
         }
     }
+
+    var icon: some View {
+        return HStack(alignment: .bottom) {
+            Spacer()
+            Image(decorative: "faviconFox")
+                .scaledToFit()
+                .frame(height: 24.0)
+        }
+    }
 }
 #endif
