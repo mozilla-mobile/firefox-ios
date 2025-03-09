@@ -84,6 +84,21 @@ struct DefaultBrowserOnboardingView: View {
                 .cornerRadius(.radius)
         })
     }
+
+    private var bottomButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserSkip)
+        }, label: {
+            Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
+                .foregroundColor(.black)
+                .font(.body16Bold)
+                .frame(maxWidth: .infinity)
+                .frame(height: .buttonHeight)
+                .background(Color.secondOnboardingScreenBottomButton)
+                .cornerRadius(.radius)
+        })
+        .padding(.bottom, .skipButtonPadding)
+    }
 }
 
 fileprivate extension CGFloat {
