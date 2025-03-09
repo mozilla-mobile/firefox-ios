@@ -79,15 +79,7 @@ struct ImageButtonWithLabel: View {
                     HStack(alignment: .top) {
                         label
                         Spacer()
-                        if link == .search && isSmall {
-                            Image(decorative: StandardImageIdentifiers.Large.search)
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        } else {
-                            Image(decorative: link.imageName)
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        }
+                        logo
                     }
                     if isSmall {
                         HStack(alignment: .bottom) {
