@@ -119,5 +119,17 @@ struct ImageButtonWithLabel: View {
             }
         }
     }
+
+    var logo: some View {
+        if link == .search && isSmall {
+            return Image(decorative: StandardImageIdentifiers.Large.search)
+                .scaledToFit()
+                .frame(height: 24.0)
+        } else {
+            return Image(decorative: link.imageName)
+                .scaledToFit()
+                .frame(height: 24.0)
+        }
+    }
 }
 #endif
