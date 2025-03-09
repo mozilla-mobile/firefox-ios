@@ -111,7 +111,7 @@ struct ImageButtonWithLabel: View {
         }
     }
 
-    var logo: some View {
+    private var logo: some View {
         if link == .search && isSmall {
             return Image(decorative: StandardImageIdentifiers.Large.search)
                 .scaledToFit()
