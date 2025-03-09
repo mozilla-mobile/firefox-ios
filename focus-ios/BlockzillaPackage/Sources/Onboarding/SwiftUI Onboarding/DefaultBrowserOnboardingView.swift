@@ -80,6 +80,20 @@ struct DefaultBrowserOnboardingView: View {
         }
         .font(.body16)
     }
+
+    private var topButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserSettingsTapped)
+        }, label: {
+            Text(viewModel.defaultBrowserConfig.topButtonTitle)
+                .foregroundColor(.systemBackground)
+                .font(.body16Bold)
+                .frame(maxWidth: .infinity)
+                .frame(height: .buttonHeight)
+                .background(Color.actionButton)
+                .cornerRadius(.radius)
+        })
+    }
 }
 
 fileprivate extension CGFloat {
