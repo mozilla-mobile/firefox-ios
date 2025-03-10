@@ -802,6 +802,7 @@ FormAutofillUtils = {
         sub_keys: subKeys,
         sub_names: subNames,
         sub_lnames: subLnames,
+        sub_isoids: subIsoids,
       } = metadata;
       if (!subKeys) {
         // Not all regions have sub_keys. e.g. DE
@@ -815,6 +816,7 @@ FormAutofillUtils = {
         let identifiedValue = this.identifyValue(
           subKeys,
           subNames,
+          subIsoids,
           val,
           collators
         );
@@ -896,6 +898,7 @@ FormAutofillUtils = {
           }
           // Apply sub_lnames if sub_names does not exist
           let names = dataset.sub_names || dataset.sub_lnames;
+          let isoids = dataset.sub_isoids;
 
           // Go through options one by one to find a match.
           // Also check if any option contain the address-level1 key.
@@ -907,12 +910,14 @@ FormAutofillUtils = {
             let optionValue = this.identifyValue(
               keys,
               names,
+              isoids,
               option.value,
               collators
             );
             let optionText = this.identifyValue(
               keys,
               names,
+              isoids,
               option.text,
               collators,
               true
@@ -1071,12 +1076,17 @@ FormAutofillUtils = {
    *
    * @param   {Array<string>} keys
    * @param   {Array<string>} names
+   * @param   {Array<string>} isoids
    * @param   {string} value
    * @param   {Array} collators
    * @param   {bool} inexactMatch
    * @returns {string}
    */
-  identifyValue(keys, names, value, collators, inexactMatch = false) {
+  identifyValue(keys, names, isoids, value, collators, inexactMatch = false) {
+    if (!value) {
+      return null;
+    }
+
     let resultKey = keys.find(key => this.strCompare(value, key, collators));
     if (resultKey) {
       return resultKey;
@@ -1087,11 +1097,15 @@ FormAutofillUtils = {
         ? this.strInclude(value, name, collators)
         : this.strCompare(value, name, collators)
     );
-    if (index !== -1) {
-      return keys[index];
+    if (index === -1) {
+      index = isoids.findIndex(isoid =>
+        inexactMatch
+          ? this.strInclude(value, isoid, collators)
+          : this.strCompare(value, isoid, collators)
+      );
     }
 
-    return null;
+    return index !== -1 ? keys[index] : null;
   },
 
   /**

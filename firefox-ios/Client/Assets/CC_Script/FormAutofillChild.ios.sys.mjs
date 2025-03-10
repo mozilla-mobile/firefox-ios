@@ -111,10 +111,6 @@ export class FormAutofillChild {
   onFocusIn(evt) {
     const element = evt.target;
 
-    if(element.shouldIgnoreAutofill) {
-      return;
-    }
-
     this.identifyFieldsWhenFocused(element);
 
     // Only ping swift if current field is either a cc or address field
