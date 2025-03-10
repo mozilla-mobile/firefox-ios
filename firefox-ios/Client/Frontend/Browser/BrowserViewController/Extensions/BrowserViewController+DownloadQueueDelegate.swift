@@ -15,7 +15,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadProgressManager.addDownload(download)
             return
         }
-        
+
         let downloadProgressManager = DownloadProgressManager(downloads: [download])
         self.downloadProgressManager = downloadProgressManager
         let downloadToast = DownloadToast(downloadProgressManager: downloadProgressManager,
