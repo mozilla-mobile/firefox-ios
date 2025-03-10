@@ -91,8 +91,8 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
-        if toolbarLayoutStyle == .version1, isEditing {
-            return UX.toolbarIsEditingLeadingPaddingVersion1
+        guard toolbarLayoutStyle == .baseline else {
+            return isEditing ? UX.toolbarIsEditingLeadingPaddingVersion1 : 0
         }
 
         if shouldDisplayCompact {
