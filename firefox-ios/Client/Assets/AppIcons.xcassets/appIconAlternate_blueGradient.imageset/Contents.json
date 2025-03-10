@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Hug-Icon-Light.png",
+      "filename" : "Blue-Gradient-Icon-Light.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Hug-Icon-Dark.png",
+      "filename" : "Blue-Gradient-Icon-Dark.png",
       "idiom" : "universal"
     }
   ],

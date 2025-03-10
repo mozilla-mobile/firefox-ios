@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Hug-Icon-Light.png",
+      "filename" : "Lazy-Icon-Light.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Hug-Icon-Dark.png",
+      "filename" : "Lazy-Icon-Dark.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "Hug-Icon-Tinted.png",
+      "filename" : "Lazy-Icon-Tinted.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
