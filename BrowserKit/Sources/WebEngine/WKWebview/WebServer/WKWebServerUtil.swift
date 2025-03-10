@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import GCDWebServers
 
 protocol WKWebServerUtil {
     func setUpWebServer()
@@ -14,7 +13,7 @@ class DefaultWKWebServerUtil: WKWebServerUtil {
     // TODO: FXIOS-11373 Handle Reader mode in WebEngine
     //    private var readerModeHander: ReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
-    private var logger: Logger
+    private let logger: Logger
 
     init(webServer: WKEngineWebServerProtocol = WKEngineWebServer.shared,
          logger: Logger = DefaultLogger.shared) {

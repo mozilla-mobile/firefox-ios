@@ -20,7 +20,7 @@ protocol WKEngineWebServerProtocol {
 class WKEngineWebServer: WKEngineWebServerProtocol {
     static let shared: WKEngineWebServerProtocol = WKEngineWebServer()
 
-    private var logger: Logger
+    private let logger: Logger
     private let server = GCDWebServer()
     private var base: String {
         return "http://localhost:\(server.port)"
