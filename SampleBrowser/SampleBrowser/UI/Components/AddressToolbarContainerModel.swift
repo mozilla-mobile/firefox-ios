@@ -23,6 +23,7 @@ struct AddressToolbarContainerModel {
             pageActions: pageActions,
             browserActions: browserActions,
             borderPosition: borderPosition,
+            uxConfiguration: AddressToolbarUXConfiguration.default,
             shouldAnimate: false)
     }
 

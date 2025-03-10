@@ -5,7 +5,6 @@
 import Common
 import XCTest
 import Shared
-import Common
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
