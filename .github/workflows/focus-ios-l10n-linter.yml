@@ -1,0 +1,59 @@
+name: 'Focus: reference string linter'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'focus-ios/**'
+      - '.github/workflows/focus-ios-l10n-linter.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'focus-ios/**'
+      - '.github/workflows/focus-ios-l10n-linter.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    strategy:
+      max-parallel: 4
+      matrix:
+        xcode:
+          - "16.2"
+    steps:
+      - name: Clone code repository
+        uses: actions/checkout@v4
+        with:
+          path: "code_repo"
+      - name: Clone l10n repository
+        uses: actions/checkout@v4
+        with:
+          repository: "mozilla-l10n/focusios-l10n"
+          path: "l10n_repo"
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: |
+          sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python dependencies
+        run: |
+          pip install -r l10n_repo/.github/scripts/requirements.txt
+      - name: Run checkout script
+        run: |
+          (cd code_repo && ./checkout.sh)
+      - name: Extract strings
+        run: |
+          (cd code_repo && ./focus-ios/focus-ios-tests/tools/export-strings.sh)
+      - name: Check reference locale
+        run: |
+          moz-xliff-lint --path code_repo/focus-ios/focusios-l10n/en-US --config code_repo/.github/l10n/linter_config_focus.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: focus-xliff-file
+          path: code_repo/focus-ios/focusios-l10n/en-US/*.xliff
+          if-no-files-found: ignore
