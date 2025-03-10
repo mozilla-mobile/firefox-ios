@@ -4,12 +4,23 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 public enum ThemeType: String {
     case light = "normal" // This needs to match the string used in the legacy system
     case dark
     case privateMode
     case nightMode
+
+    /// Returns the SwiftUI ColorScheme for this theme (e.g. to use for image asset selection).
+    public var colorScheme: ColorScheme {
+        switch self {
+        case .light:
+            return ColorScheme.light
+        case .dark, .nightMode, .privateMode:
+            return ColorScheme.dark
+        }
+    }
 
     public func getInterfaceStyle() -> UIUserInterfaceStyle {
         return switch self {
