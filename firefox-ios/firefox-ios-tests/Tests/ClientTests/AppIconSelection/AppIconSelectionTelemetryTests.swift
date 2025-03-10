@@ -26,7 +26,7 @@ final class AppIconSelectionTelemetryTests: XCTestCase {
 
         let subject = createSubject()
         let expectedNewAppIcon = AppIcon.darkPurple
-        let expectedOldAppIcon = AppIcon.hug
+        let expectedOldAppIcon = AppIcon.regular
         let expectedMetricType = type(of: event)
 
         subject.selectedIcon(expectedNewAppIcon, previousIcon: expectedOldAppIcon)
