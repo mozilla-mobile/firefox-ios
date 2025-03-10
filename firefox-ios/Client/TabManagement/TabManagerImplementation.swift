@@ -575,9 +575,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             break
         }
     }
+}
 
-    // MARK: - WindowSimpleTabsProvider
-
+// MARK: - WindowSimpleTabsProvider
+extension TabManagerImplementation {
     func windowSimpleTabs() -> [TabUUID: SimpleTab] {
         // FIXME possibly also related FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
         let windowData = WindowData(id: windowUUID,

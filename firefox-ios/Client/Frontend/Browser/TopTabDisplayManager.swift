@@ -699,6 +699,10 @@ extension TopTabDisplayManager: TabManagerDelegate {
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
     }
+
+    func tabManagerTabDidFinishLoading() {
+        refreshStore()
+    }
 }
 
 extension TopTabDisplayManager: Notifiable {
