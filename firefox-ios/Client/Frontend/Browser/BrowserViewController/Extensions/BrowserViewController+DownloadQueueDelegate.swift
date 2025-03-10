@@ -12,10 +12,10 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard download.originWindow == uuid else { return }
 
         if let downloadProgressManager = self.downloadProgressManager {
-            // Otherwise, just add this download to the existing download toast.
             downloadProgressManager.addDownload(download)
             return
         }
+        
         let downloadProgressManager = DownloadProgressManager(downloads: [download])
         self.downloadProgressManager = downloadProgressManager
         let downloadToast = DownloadToast(downloadProgressManager: downloadProgressManager,
@@ -24,7 +24,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
         downloadProgressManager.delegates.append(downloadToast)
 
-        if #available(iOS 16.2, *) {
+        if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
             downloadProgressManager.delegates.append(downloadLiveActivityWrapper)
             self._downloadLiveActivityWrapper = downloadLiveActivityWrapper
@@ -40,7 +40,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         // When this toast is dismissed, be sure to clear this so that any
         // subsequent downloads cause a new toast to be created.
         self.downloadToast = nil
-        if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
+        if #available(iOS 16.2, *),
+           featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+            let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(afterSeconds: 0)
         }
         self.downloadProgressManager = nil
