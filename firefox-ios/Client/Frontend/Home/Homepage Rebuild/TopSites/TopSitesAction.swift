@@ -5,21 +5,31 @@ import Common
 import Foundation
 import Redux
 
+struct TopSitesTelemetryConfig {
+    let isZeroSearch: Bool
+    let position: Int
+    let tileType: String
+    let url: String
+}
+
 final class TopSitesAction: Action {
-    var topSites: [TopSiteConfiguration]?
-    var numberOfRows: Int?
-    var isEnabled: Bool?
+    let topSites: [TopSiteConfiguration]?
+    let numberOfRows: Int?
+    let isEnabled: Bool?
+    let telemetryConfig: TopSitesTelemetryConfig?
 
     init(
         topSites: [TopSiteConfiguration]? = nil,
         numberOfRows: Int? = nil,
         isEnabled: Bool? = nil,
+        telemetryConfig: TopSitesTelemetryConfig? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.isEnabled = isEnabled
         self.topSites = topSites
         self.numberOfRows = numberOfRows
+        self.telemetryConfig = telemetryConfig
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -29,6 +39,7 @@ enum TopSitesActionType: ActionType {
     case updatedNumberOfRows
     case toggleShowSectionSetting
     case toggleShowSponsoredSettings
+    case tapOnHomepageTopSitesCell
 }
 
 enum TopSitesMiddlewareActionType: ActionType {
