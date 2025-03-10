@@ -23,7 +23,7 @@ struct DefaultBrowserOnboardingView: View {
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
                 title
-                subtitle
+                subtitles
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
@@ -55,7 +55,7 @@ struct DefaultBrowserOnboardingView: View {
             .padding(.bottom, .titleBottomPadding)
     }
 
-    private var subtitle: some View {
+    private var subtitles: some View {
         return VStack(alignment: .leading) {
             Text(viewModel.defaultBrowserConfig.firstSubtitle)
                 .padding(.bottom, .firstSubtitleBottomPadding)
