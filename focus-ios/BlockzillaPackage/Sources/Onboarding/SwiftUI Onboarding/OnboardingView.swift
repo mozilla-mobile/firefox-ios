@@ -15,13 +15,25 @@ public struct OnboardingView: View {
 
     public var body: some View {
         TabView(selection: $viewModel.activeScreen) {
-            GetStartedOnboardingView(viewModel: viewModel)
-                .tag(Screen.getStarted)
+            if viewModel.isTosEnabled {
+                TermsOfServiceView(viewModel: viewModel)
+                    .tag(Screen.tos)
+            } else {
+                GetStartedOnboardingView(viewModel: viewModel)
+                    .tag(Screen.getStarted)
+            }
             DefaultBrowserOnboardingView(viewModel: viewModel)
                 .tag(Screen.default)
         }
-        .tabViewStyle(.page(indexDisplayMode: .always))
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .ignoresSafeArea()
+        // Disable vertical scroll on the TabView
+        .onAppear(perform: {
+            UIScrollView.appearance().isScrollEnabled = false
+        })
+        .onDisappear(perform: {
+            UIScrollView.appearance().isScrollEnabled = true
+        })
     }
 
     func stylePageControl() {
