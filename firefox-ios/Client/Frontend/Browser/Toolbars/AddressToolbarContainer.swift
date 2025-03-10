@@ -240,7 +240,7 @@ final class AddressToolbarContainer: UIView,
 
             if newModel.toolbarLayoutStyle == .baseline, shouldSwitchToolbars {
                 switchToolbars()
-                guard model?.shouldSelectSearchTerm == false else { return }
+                guard model?.shouldSelectSearchTerm == false, model?.isEditing == true else { return }
                 store.dispatch(
                     ToolbarAction(
                         searchTerm: searchTerm,
