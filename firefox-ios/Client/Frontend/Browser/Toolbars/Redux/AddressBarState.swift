@@ -27,28 +27,6 @@ struct AddressBarState: StateType, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
-    private static let shareAction = ToolbarActionConfiguration(
-        actionType: .share,
-        iconName: StandardImageIdentifiers.Large.share,
-        isEnabled: true,
-        a11yLabel: .TabLocationShareAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
-
-    private static let stopLoadingAction = ToolbarActionConfiguration(
-        actionType: .stopLoading,
-        iconName: StandardImageIdentifiers.Large.cross,
-        isEnabled: true,
-        a11yLabel: .TabToolbarStopAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
-
-    private static let reloadAction = ToolbarActionConfiguration(
-        actionType: .reload,
-        iconName: StandardImageIdentifiers.Large.arrowClockwise,
-        isEnabled: true,
-        a11yLabel: .TabLocationReloadAccessibilityLabel,
-        a11yHint: .TabLocationReloadAccessibilityHint,
-        a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
-
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
@@ -854,10 +832,10 @@ struct AddressBarState: StateType, Equatable {
             }
 
             if !isHomepage, layout == .version1 {
-                actions.append(shareAction)
+                actions.append(shareAction(layout: layout))
             }
         } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
-            actions.append(shareAction)
+            actions.append(shareAction(layout: layout))
         }
 
         return actions
@@ -905,16 +883,16 @@ struct AddressBarState: StateType, Equatable {
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
         if layout == .baseline {
-			actions.append(shareAction)
+			actions.append(shareAction(layout: layout))
         }
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {
-            actions.append(stopLoadingAction)
+            actions.append(stopLoadingAction(layout: layout))
         } else if isLoading == false {
-            actions.append(reloadAction)
+            actions.append(reloadAction(layout: layout))
         }
 
         return actions
@@ -1025,5 +1003,60 @@ struct AddressBarState: StateType, Equatable {
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private static func shareAction(layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Medium.shareiOS
+        default:
+            iconName = StandardImageIdentifiers.Large.share
+        }
+
+        return ToolbarActionConfiguration(
+            actionType: .share,
+            iconName: iconName,
+            isEnabled: true,
+            a11yLabel: .TabLocationShareAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+    }
+
+    private static func reloadAction(layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Medium.arrowClockwise
+        default:
+            iconName = StandardImageIdentifiers.Large.arrowClockwise
+        }
+
+        return ToolbarActionConfiguration(
+            actionType: .reload,
+            iconName: iconName,
+            isEnabled: true,
+            a11yLabel: .TabLocationReloadAccessibilityLabel,
+            a11yHint: .TabLocationReloadAccessibilityHint,
+            a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+    }
+
+    private static func stopLoadingAction(layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Medium.cross
+        default:
+            iconName = StandardImageIdentifiers.Large.cross
+        }
+
+        return ToolbarActionConfiguration(
+            actionType: .stopLoading,
+            iconName: iconName,
+            isEnabled: true,
+            a11yLabel: .TabToolbarStopAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
     }
 }
