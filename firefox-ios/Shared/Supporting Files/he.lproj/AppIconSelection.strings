@@ -1,0 +1,24 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing the filled checkbox on the currently selected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectedLabel.v136" = "נבחר";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility hint describing what happens when you select an app icon row. The parameter is the app icon name. */
+"Settings.AppIconSelection.Accessibility.AppIconSelectionHint.v136" = "יש לבחור בסמל היישומון %@";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the accessibility label describing an unfilled checkbox for an unselected app icon option. */
+"Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel.v136" = "לא נבחר";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS icon with a dark purple background. */
+"Settings.AppIconSelection.AppIconNames.DarkPurple.Title.v136" = "סגול כהה";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a character hugging the Firefox logo. */
+"Settings.AppIconSelection.AppIconNames.Hug.Title.v136" = "חיבוק";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
+"Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "ברירת מחדל";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
+"Settings.AppIconSelection.ScreenTitle.v136" = "סמל היישומון";
+
+/* On the Settings screen, the name of the row that opens app icon selection options. */
+"Settings.AppIconSelection.SettingsOptionName.v136" = "סמל היישומון";
+

@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "您的权利";
 
+/* Label for row in About screen */
+"About.rowTerms" = "使用条款";
+
 /* Label on About screen */
 "About.safariBullet1" = "拦截跟踪器，加强隐私";
 
@@ -284,7 +287,7 @@
 "Settings.darkTheme" = "深色";
 
 /* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports.V2" = "我们可借助此信息来诊断和修复浏览器的问题。";
+"Settings.detailTextCrashReports.V2" = "此信息可帮助我们诊断和修复浏览器的问题。";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSearchSuggestion" = "%@ 会将您在地址栏中输入的内容发送至您的搜索引擎。";

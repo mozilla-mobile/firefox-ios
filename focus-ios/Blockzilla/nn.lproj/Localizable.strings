@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettar";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Brukarvilkår";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blokker sporfølgjarar for betre personvern";
 

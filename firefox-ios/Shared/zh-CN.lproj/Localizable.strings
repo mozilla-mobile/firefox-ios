@@ -1144,6 +1144,18 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "浏览器主题";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "外观";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "网站外观";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "网站深色模式";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "阻止打开外部应用";
 

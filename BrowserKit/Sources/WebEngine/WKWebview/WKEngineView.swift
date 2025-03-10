@@ -36,10 +36,12 @@ class WKEngineView: UIView, EngineView {
 
     private func remove(session: WKEngineSession) {
         session.webView.removeFromSuperview()
+        session.isActive = false
     }
 
     private func add(session: WKEngineSession) {
         self.session = session
+        session.isActive = true
         addSubview(session.webView)
 
         let webView = session.webView

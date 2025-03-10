@@ -1144,6 +1144,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (insere %s in loco del parolas a cercar)";
 
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Thema de navigator";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Apparentia";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Apparentia del sito web";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Da al sitos web un apparentia obscur. Alcun sitos poterea non apparer ben.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Sito web modicitate obscur";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Blocar apertura de apps externe";
 

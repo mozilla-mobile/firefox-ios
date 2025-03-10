@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Hak Anda";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Ketentuan Penggunaan";
+
 /* Label on About screen */
 "About.safariBullet1" = "Blokir pelacak untuk meningkatkan privasi";
 

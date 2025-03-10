@@ -160,6 +160,9 @@
 /* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.SelectorTitle.v114" = "Чакраҳои рангро кӯшиш намоед";
 
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. Placeholder is for app name. */
+"Onboarding.Wallpaper.Title.v114" = "Тасвири заминаи «%@»-ро интихоб намоед";
+
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
 "Onboarding.Welcome.Action.v114" = "Оғози кор";
 

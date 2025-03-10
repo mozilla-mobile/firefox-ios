@@ -568,15 +568,47 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(engineSessionDelegate.savedSearchSelection, expectedSelection)
     }
 
+    func testUIHandlerIsActiveSetTrue() {
+        let uiHandler = DefaultUIHandler()
+
+        let subject = createSubject(uiHandler: uiHandler)
+
+        subject?.isActive = true
+
+        XCTAssertTrue(uiHandler.isActive)
+    }
+
+    func testUIHandlerIsActiveSetFalse() {
+        let uiHandler = DefaultUIHandler()
+
+        let subject = createSubject(uiHandler: uiHandler)
+
+        subject?.isActive = true
+        subject?.isActive = false
+
+        XCTAssertFalse(uiHandler.isActive)
+    }
+
+    func testSettingEngineSessionDelegateSetsUIHandlerDelegate() {
+        let uiHandler = DefaultUIHandler()
+        let subject = createSubject(uiHandler: uiHandler)
+
+        subject?.delegate = engineSessionDelegate
+
+        XCTAssertNotNil(uiHandler.delegate)
+    }
+
     // MARK: Helper
 
     func createSubject(file: StaticString = #file,
-                       line: UInt = #line) -> WKEngineSession? {
+                       line: UInt = #line,
+                       uiHandler: WKUIHandler = DefaultUIHandler()) -> WKEngineSession? {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
                                             contentScriptManager: contentScriptManager,
-                                            metadataFetcher: metadataFetcher) else {
+                                            metadataFetcher: metadataFetcher,
+                                            uiHandler: uiHandler) else {
             return nil
         }
 

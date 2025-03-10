@@ -524,7 +524,7 @@
 "InactiveTabs.TabTray.CloseButtonTitle" = "എല്ലാ നിഷ്ക്രിയ ടാബുകളും അടയ്ക്കുക";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
-"Increase text size" = "പാഠത്തിന്റെ വലുപ്പം കൂട്ടുക";
+"Increase text size" = "എഴുത്തിന്റെ വലുപ്പം കൂട്ടുക";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ഇപ്പോള്‍";
@@ -1143,6 +1143,21 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "യുആര്‍എല്‍ (ക്വറിയെ %s കൊണ്ട് മാറ്റുക)";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "അന്വേഷിയന്ത്ര അലങ്കാരം";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "പുരംകാഴ്ച";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "വെബിട പുരംകാഴ്ച";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "വെബിടങ്ങളെ ഒരു കറുത്ത നിറം തരുകാറുണ്ടു്. ചില വെബിടങ്ങൾ ശരിയായി കാണപ്പെടണമെന്നില്ല.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "വെബിട ഇരുണ്ട പരി";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "ബാഹ്യ പ്രയോഗങ്ങളെ തുറക്കുന്നത് തടയുക";
