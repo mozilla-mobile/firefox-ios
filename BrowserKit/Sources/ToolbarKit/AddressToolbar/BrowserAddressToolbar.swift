@@ -341,7 +341,7 @@ public class BrowserAddressToolbar: UIView,
                                leading: CGFloat,
                                trailing: CGFloat) {
         if uxConfig.isNavigationActionsInsideLocationView {
-            leadingNavigationActionStackConstraint?.constant = 0
+            leadingNavigationActionStackConstraint?.constant = leading
             leadingLocationContainerConstraint?.constant = trailing
         } else {
             leadingNavigationActionStackConstraint?.constant = leading
@@ -396,10 +396,18 @@ public class BrowserAddressToolbar: UIView,
         buttons.forEach { button in
             stackView.addArrangedSubview(button)
 
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-            ])
+            if button.configuration?.title == nil {
+                NSLayoutConstraint.activate([
+                    button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                    button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+                ])
+            } else {
+                NSLayoutConstraint.activate([
+                    button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
+                    button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
+                ])
+                button.setContentCompressionResistancePriority(.required, for: .horizontal)
+            }
         }
     }
 

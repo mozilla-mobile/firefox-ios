@@ -14,6 +14,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
+        static let horizontalTextInset: CGFloat = 5
         static let badgeIconSize = CGSize(width: 20, height: 20)
         static let defaultMinimumPressDuration: TimeInterval = 0.5
         static let minimumPressDurationWithLargeContentViewer: TimeInterval = 1.5
@@ -22,6 +23,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorHighlighted: UIColor = .clear
     private var foregroundColorDisabled: UIColor = .clear
+    private var foregroundTitleColorNormal: UIColor = .clear
+    private var foregroundTitleColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
 
     private var badgeImageView: UIImageView?
@@ -32,6 +35,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var notificationCenter: NotificationProtocol?
     private var largeContentViewerInteraction: UILargeContentViewerInteraction?
 
+    private var isTextButton = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -40,6 +45,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
                                                                leading: UX.horizontalInset,
                                                                bottom: UX.verticalInset,
                                                                trailing: UX.horizontalInset)
+        titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     open func configure(
@@ -50,10 +56,11 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         configureLongPressGestureRecognizerIfNeeded(for: element, notificationCenter: notificationCenter)
         configureCustomA11yActionIfNeeded(for: element)
         isSelected = element.isSelected
+        isTextButton = element.title != nil
         self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
-        let action = UIAction(title: element.a11yLabel,
+        let action = UIAction(title: element.title ?? element.a11yLabel,
                               image: image,
                               handler: { [weak self] _ in
             guard let self else { return }
@@ -62,11 +69,26 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         })
 
         config.image = image
+        config.title = element.title
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = FXFontStyles.Regular.callout.scaledFont()
+            return outgoing
+        }
+
+        if config.title != nil {
+            config.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
+                                                           leading: UX.horizontalTextInset,
+                                                           bottom: UX.verticalInset,
+                                                           trailing: UX.horizontalTextInset)
+        }
+
         isEnabled = element.isEnabled
         isAccessibilityElement = true
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
+
         // Remove all existing actions for .touchUpInside before adding the new one
         // This ensures that we do not accumulate multiple actions for the same event,
         // which can cause the action to be called multiple times when the button is tapped.
@@ -108,13 +130,15 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
         switch state {
         case .highlighted:
-            updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
+            updatedConfiguration.baseForegroundColor = isTextButton ?
+                                                        foregroundTitleColorHighlighted :
+                                                        foregroundColorHighlighted
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = isSelected ?
-                                                       foregroundColorHighlighted :
-                                                       foregroundColorNormal
+            let iconButtonColor = isSelected ? foregroundColorHighlighted : foregroundColorNormal
+            let textButtonColor = isSelected ? foregroundTitleColorHighlighted : foregroundTitleColorNormal
+            updatedConfiguration.baseForegroundColor = isTextButton ? textButtonColor : iconButtonColor
         }
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
@@ -185,7 +209,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
-        let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
+        guard let iconName = element.iconName else { return nil }
+        let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 
@@ -235,6 +260,9 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         foregroundColorHighlighted = colors.actionPrimary
         foregroundColorDisabled = colors.iconDisabled
         backgroundColorNormal = .clear
+
+        foregroundTitleColorNormal = colors.textAccent
+        foregroundTitleColorHighlighted = colors.actionPrimaryHover
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
