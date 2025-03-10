@@ -126,7 +126,8 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        if iPad() {
+        if #available(iOS 17, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 17
+            || iPad() {
             urlBarAddress.waitAndTap()
             urlBarAddress.waitAndTap()
         } else {
