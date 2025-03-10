@@ -12,13 +12,14 @@ import Shared
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
-    var downloadProgressManager: DownloadProgressManager
+    weak var downloadProgressManager: DownloadProgressManager?
 
     init(downloadProgressManager: DownloadProgressManager) {
         self.downloadProgressManager = downloadProgressManager
     }
 
     func start() -> Bool {
+        guard let downloadProgressManager = self.downloadProgressManager else {return false}
         let attributes = DownloadLiveActivityAttributes()
 
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
@@ -37,12 +38,14 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     }
 
     func update() {
+        guard let downloadProgressManager = self.downloadProgressManager else {return}
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
         Task { await downloadLiveActivity?.update(using: contentState) }
     }
 
     func end(afterSeconds: Double) {
+        guard let downloadProgressManager = self.downloadProgressManager else {return}
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
         Task {
