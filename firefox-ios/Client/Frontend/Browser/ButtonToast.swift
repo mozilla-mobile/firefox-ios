@@ -161,7 +161,12 @@ class ButtonToast: Toast {
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
-        roundedButton.setTitleColor(theme.colors.textInverted, for: [])
+
+        if var buttonConfig = roundedButton.configuration {
+            buttonConfig.baseForegroundColor = theme.colors.textInverted
+            roundedButton.configuration = buttonConfig
+        }
+
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 
