@@ -27,10 +27,6 @@ struct AppIconView: View, ThemeApplicable {
         static let appIconBorderWidth: CGFloat = 1
     }
 
-    var selectionImageIdentifier: String {
-        return UX.checkmarkImageIdentifier
-    }
-
     var selectionImageAccessibilityLabel: String {
         return isSelected
                ? .Settings.AppIconSelection.Accessibility.AppIconSelectedLabel
@@ -83,7 +79,7 @@ struct AppIconView: View, ThemeApplicable {
                     .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
                 if isSelected {
-                    Image(systemName: selectionImageIdentifier)
+                    Image(systemName: UX.checkmarkImageIdentifier)
                         .foregroundStyle(themeColors.actionPrimary.color)
                         .accessibilityLabel(selectionImageAccessibilityLabel)
                 }
