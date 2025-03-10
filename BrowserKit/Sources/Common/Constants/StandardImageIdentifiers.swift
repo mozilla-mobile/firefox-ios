@@ -24,11 +24,13 @@ public struct StandardImageIdentifiers {
 
     // Icon size 20x20
     public struct Medium {
+        public static let arrowClockwise = "arrowClockwiseMedium"
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
         public static let crossCircleFill = "crossCircleFillMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
+        public static let shareiOS = "shareiOSMedium"
         public static let starFill = "starFillMedium"
         public static let starOneHalfFill = "starOneHalfFillMedium"
         public static let sun = "sunMedium"
