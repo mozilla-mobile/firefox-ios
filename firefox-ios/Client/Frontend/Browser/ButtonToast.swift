@@ -129,14 +129,16 @@ class ButtonToast: Toast {
     func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
         guard let buttonText = buttonText else { return }
 
-        roundedButton.setTitle(buttonText, for: [])
-        roundedButton.configuration = UIButton.Configuration.plain()
-        roundedButton.configuration?.contentInsets = NSDirectionalEdgeInsets(
+        var buttonConfiguration = UIButton.Configuration.plain()
+        buttonConfiguration.title = buttonText
+        buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(
             top: UX.buttonPadding,
             leading: UX.buttonPadding,
             bottom: UX.buttonPadding,
             trailing: UX.buttonPadding
         )
+
+        roundedButton.configuration = buttonConfiguration
 
         stackView.addSubview(roundedButton)
 
@@ -164,7 +166,7 @@ class ButtonToast: Toast {
     }
 
     override func adjustLayoutForA11ySizeCategory() {
-        descriptionLabel.numberOfLines = 3
+        descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byTruncatingTail
 
         setNeedsLayout()
