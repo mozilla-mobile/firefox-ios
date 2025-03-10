@@ -49,6 +49,7 @@ class ButtonToast: Toast {
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
+        label.lineBreakMode = .byTruncatingTail
     }
 
     private var roundedButton: UIButton = .build { button in
@@ -161,19 +162,12 @@ class ButtonToast: Toast {
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
-
-        if var buttonConfig = roundedButton.configuration {
-            buttonConfig.baseForegroundColor = theme.colors.textInverted
-            roundedButton.configuration = buttonConfig
-        }
+        roundedButton.configuration?.baseForegroundColor = theme.colors.textInverted
 
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 
     override func adjustLayoutForA11ySizeCategory() {
-        descriptionLabel.numberOfLines = 0
-        descriptionLabel.lineBreakMode = .byTruncatingTail
-
         setNeedsLayout()
     }
 
