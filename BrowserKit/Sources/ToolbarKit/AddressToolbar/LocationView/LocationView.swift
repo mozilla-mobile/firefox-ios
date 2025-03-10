@@ -35,7 +35,7 @@ final class LocationView: UIView,
         urlTextField.text?.isEmpty == true
     }
 
-    private var longPressRecognizer: UILongPressGestureRecognizer?
+    private var tapGestureRecognizer: UITapGestureRecognizer?
 
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
@@ -70,9 +70,7 @@ final class LocationView: UIView,
 
     // MARK: - Search Engine / Lock Image
     private lazy var iconContainerStackView: UIStackView = .build { view in
-        view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
     }
 
     private lazy var iconContainerBackgroundView: UIView = .build()
@@ -143,6 +141,7 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
+        handleTapGestureRecognizer()
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
@@ -327,7 +326,9 @@ final class LocationView: UIView,
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        if !isURLTextFieldCentered || isEditing {
+            iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        }
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         iconContainerStackViewLeadingConstraint?.constant = isURLTextFieldCentered ? 0.0 : UX.horizontalSpace
         updateGradient()
@@ -474,8 +475,20 @@ final class LocationView: UIView,
     // MARK: - Gesture Recognizers
     private func addLongPressGestureRecognizer() {
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        longPressRecognizer = gestureRecognizer
         urlTextField.addGestureRecognizer(gestureRecognizer)
+    }
+
+    private func handleTapGestureRecognizer() {
+        if isURLTextFieldCentered {
+            if tapGestureRecognizer == nil {
+                // Add a tap gesture recognizer to make the entire view tapable.
+                tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
+                addGestureRecognizer(tapGestureRecognizer!)
+            }
+        } else if let tapGestureRecognizer {
+            removeGestureRecognizer(tapGestureRecognizer)
+            self.tapGestureRecognizer = nil
+        }
     }
 
     // MARK: - Selectors
