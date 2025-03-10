@@ -110,6 +110,8 @@ internal extension OnboardingViewModel {
             doneButton: "Done"
         ),
         isTosEnabled: true,
+        termsURL: URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!,
+        privacyURL: URL(string: "https://www.mozilla.org/privacy/firefox-focus/")!,
         dismissAction: {},
         telemetry: { _ in }
     )

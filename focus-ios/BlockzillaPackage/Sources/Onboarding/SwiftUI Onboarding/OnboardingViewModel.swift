@@ -31,7 +31,8 @@ public class OnboardingViewModel: ObservableObject {
     public let dismissAction: () -> Void
     public let telemetry: (Action) -> Void
     let isTosEnabled: Bool
-
+    let termsURL: URL
+    let privacyURL: URL
     @Published var activeScreen = Screen.getStarted
     @Published var privacyPolicyURL: URL?
 
@@ -40,6 +41,8 @@ public class OnboardingViewModel: ObservableObject {
         defaultBrowserConfig: DefaultBrowserViewConfig,
         tosConfig: TermsOfServiceConfig,
         isTosEnabled: Bool,
+        termsURL: URL,
+        privacyURL: URL,
         dismissAction: @escaping () -> Void,
         telemetry: @escaping (OnboardingViewModel.Action) -> Void
     ) {
@@ -50,6 +53,8 @@ public class OnboardingViewModel: ObservableObject {
         self.dismissAction = dismissAction
         self.telemetry = telemetry
         self.activeScreen = isTosEnabled ? .tos : .getStarted
+        self.termsURL = termsURL
+        self.privacyURL = privacyURL
     }
 
     func open(_ screen: Screen) {

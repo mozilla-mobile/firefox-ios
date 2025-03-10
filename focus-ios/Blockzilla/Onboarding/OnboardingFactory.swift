@@ -64,6 +64,8 @@ class OnboardingFactory {
                     doneButton: .doneButtonText
                 ),
                 isTosEnabled: true,
+                termsURL: termsURL,
+                privacyURL: privacyURL,
                 dismissAction: dismissAction,
                 telemetry: { action in
                     switch action {
@@ -112,6 +114,22 @@ class OnboardingFactory {
             controller.modalPresentationStyle = .formSheet
             controller.isModalInPresentation = true
             return controller
+        }
+    }
+
+    static var termsURL: URL {
+        if AppInfo.isKlar {
+            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox-klar/")!
+        } else {
+            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!
+        }
+    }
+
+    static var privacyURL: URL {
+        if AppInfo.isKlar {
+            return URL(string: "https://www.mozilla.org/privacy/firefox-klar/")!
+        } else {
+            return URL(string: "https://www.mozilla.org/privacy/firefox-focus/")!
         }
     }
 }

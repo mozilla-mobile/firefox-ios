@@ -73,7 +73,7 @@ struct TermsOfServiceView: View {
         AttributedLinkText(
             fullText: viewModel.tosConfig.termsText,
             linkText: viewModel.tosConfig.termsLinkText,
-            url: URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")!,
+            url: viewModel.termsURL,
             linkAction: { url in viewModel.send(.openTermsOfUse(url)) }
         )
     }
@@ -82,7 +82,7 @@ struct TermsOfServiceView: View {
         AttributedLinkText(
             fullText: viewModel.tosConfig.privacyText,
             linkText: viewModel.tosConfig.privacyLinkText,
-            url: URL(string: "https://www.mozilla.org/privacy/firefox/")!,
+            url: viewModel.privacyURL,
             linkAction: { url in viewModel.send(.openPrivacyNotice(url)) }
         )
     }
