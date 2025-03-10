@@ -23,11 +23,13 @@ enum AppIcon: String, CaseIterable {
     /// A green version of the icon.
     case green
 
+    // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
+    // swiftlint:disable orphaned_doc_comment
     /// An artsy app icon of a person hugging the Firefox logo. Has a light orange background in all modes.
-    case hug
+//    case hug
 
     /// An artsy app icon which has a fox sleeping on the globe.
-    case lazy
+//    case lazy
 
     /// An orange version of the icon with a gradient background.
     case orangeGradient
@@ -36,16 +38,16 @@ enum AppIcon: String, CaseIterable {
     case pink
 
     /// A pixelated version of the regular app icon.
-    case pixelated
+//    case pixelated
 
     /// A pride fox logo.
-    case pride
+//    case pride
 
     /// A red version of the icon with a gradient background.
     case redGradient
 
     /// The retro Firefox app icon.
-    case retro
+//    case retro
 
     /// The name of the asset to display in the app selection.
     var displayName: String {
@@ -60,22 +62,22 @@ enum AppIcon: String, CaseIterable {
             return .Settings.AppIconSelection.AppIconNames.BlueGradient
         case .green:
             return .Settings.AppIconSelection.AppIconNames.Green
-        case .hug:
-            return .Settings.AppIconSelection.AppIconNames.Hug
-        case .lazy:
-            return .Settings.AppIconSelection.AppIconNames.Lazy
+//        case .hug:
+//            return .Settings.AppIconSelection.AppIconNames.Hug
+//        case .lazy:
+//            return .Settings.AppIconSelection.AppIconNames.Lazy
         case .orangeGradient:
             return .Settings.AppIconSelection.AppIconNames.OrangeGradient
         case .pink:
             return .Settings.AppIconSelection.AppIconNames.Pink
-        case .pixelated:
-            return .Settings.AppIconSelection.AppIconNames.Pixelated
-        case .pride:
-            return .Settings.AppIconSelection.AppIconNames.Pride
+//        case .pixelated:
+//            return .Settings.AppIconSelection.AppIconNames.Pixelated
+//        case .pride:
+//            return .Settings.AppIconSelection.AppIconNames.Pride
         case .redGradient:
             return .Settings.AppIconSelection.AppIconNames.RedGradient
-        case .retro:
-            return .Settings.AppIconSelection.AppIconNames.Retro
+//        case .retro:
+//            return .Settings.AppIconSelection.AppIconNames.Retro
         }
     }
 
@@ -96,22 +98,22 @@ enum AppIcon: String, CaseIterable {
             return "appIconAlternate_blueGradient"
         case .green:
             return "appIconAlternate_green"
-        case .hug:
-            return "appIconAlternate_hug"
-        case .lazy:
-            return "appIconAlternate_lazy"
+//        case .hug:
+//            return "appIconAlternate_hug"
+//        case .lazy:
+//            return "appIconAlternate_lazy"
         case .orangeGradient:
             return "appIconAlternate_orangeGradient"
         case .pink:
             return "appIconAlternate_pink"
-        case .pixelated:
-            return "appIconAlternate_pixelated"
-        case .pride:
-            return "appIconAlternate_pride"
+//        case .pixelated:
+//            return "appIconAlternate_pixelated"
+//        case .pride:
+//            return "appIconAlternate_pride"
         case .redGradient:
             return "appIconAlternate_redGradient"
-        case .retro:
-            return "appIconAlternate_retro"
+//        case .retro:
+//            return "appIconAlternate_retro"
         }
     }
 
@@ -128,22 +130,22 @@ enum AppIcon: String, CaseIterable {
             return "AppIcon_Alt_BlueGradient"
         case .green:
             return "AppIcon_Alt_Green"
-        case .hug:
-            return "AppIcon_Alt_Hug"
-        case .lazy:
-            return "AppIcon_Alt_Lazy"
+//        case .hug:
+//            return "AppIcon_Alt_Hug"
+//        case .lazy:
+//            return "AppIcon_Alt_Lazy"
         case .orangeGradient:
             return "AppIcon_Alt_OrangeGradient"
         case .pink:
             return "AppIcon_Alt_Pink"
-        case .pixelated:
-            return "AppIcon_Alt_Pixelated"
-        case .pride:
-            return "AppIcon_Alt_Pride"
+//        case .pixelated:
+//            return "AppIcon_Alt_Pixelated"
+//        case .pride:
+//            return "AppIcon_Alt_Pride"
         case .redGradient:
             return "AppIcon_Alt_RedGradient"
-        case .retro:
-            return "AppIcon_Alt_Retro"
+//        case .retro:
+//            return "AppIcon_Alt_Retro"
         }
     }
 
@@ -162,3 +164,4 @@ enum AppIcon: String, CaseIterable {
         }
     }
 }
+// swiftlint:enable orphaned_doc_comment
