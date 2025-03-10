@@ -15,7 +15,7 @@ struct DefaultBrowserOnboardingView: View {
         VStack {
             HStack {
                 Spacer()
-                closeButton
+                defaultBrowserCloseButton
             }
             Image.huggingFocus
                 .resizable()
@@ -39,7 +39,7 @@ struct DefaultBrowserOnboardingView: View {
         }
     }
 
-    private var closeButton: some View {
+    private var defaultBrowserCloseButton: some View {
         return Button(action: {
             viewModel.send(.defaultBrowserCloseTapped)
         }, label: {
