@@ -6,7 +6,7 @@ import Foundation
 
 class TelemetryManager {
     static let shared = TelemetryManager()
-    
+
     // Flag to disable/enable the telemetry feature
     let isTelemetryFeatureEnabled = false
 
@@ -21,7 +21,7 @@ class TelemetryManager {
         // Default to the value in UserDefaults if the feature is not globally disabled
         return Settings.getToggle(.sendAnonymousUsageData)
     }
-    
+
     var isNewTosEnabled: Bool {
         if let dailyUsagePing = Settings.getToggleIfAvailable(.dailyUsagePing) {
             // If dailyUsagePing is explicitly set, use its value

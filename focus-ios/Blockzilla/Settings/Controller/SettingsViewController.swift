@@ -39,7 +39,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 .general,
                 .privacy
                 ]
-            
+
             if TelemetryManager.shared.isTelemetryFeatureEnabled {
                 sections.append(contentsOf: [.studies, .usageData])
             }
@@ -579,7 +579,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tappedLearnMoreCrashReports() {
         tappedFooter(forSupportTopic: .mobileCrashReports)
     }
-    
+
     @objc
     func tappedLearnMoreDailyUsagePing() {
         tappedFooter(forSupportTopic: .usagePingSettingsMobile)

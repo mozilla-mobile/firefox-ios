@@ -4,8 +4,6 @@
 
 import Common
 import Storage
-import Shared
-import Redux
 import SiteImageView
 
 import enum MozillaAppServices.VisitType
@@ -37,7 +35,17 @@ class RemoteTabsTableViewController: UITableViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
-    private let emptyView: RemoteTabsEmptyView = .build()
+    private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+            let view = ExperimentRemoteTabsEmptyView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        } else {
+            let view = RemoteTabsEmptyView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }
+    }()
 
     private var closeTabRemoteDeviceId: String?
     private var closeTab: RemoteTab?
@@ -110,12 +118,12 @@ class RemoteTabsTableViewController: UITableViewController,
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
 
-        tableView.addSubview(emptyView)
+        view.addSubview(emptyView)
         NSLayoutConstraint.activate([
-            emptyView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
-            emptyView.topAnchor.constraint(equalTo: tableView.topAnchor),
-            emptyView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            emptyView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            emptyView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
         reloadUI()
@@ -166,9 +174,9 @@ class RemoteTabsTableViewController: UITableViewController,
 
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
                 toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
             ]

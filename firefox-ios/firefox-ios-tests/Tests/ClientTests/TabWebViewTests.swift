@@ -5,7 +5,6 @@
 @testable import Client
 
 import Common
-import Shared
 import XCTest
 import WebKit
 

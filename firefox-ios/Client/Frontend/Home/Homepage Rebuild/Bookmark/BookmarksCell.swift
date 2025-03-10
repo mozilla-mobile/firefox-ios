@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import SiteImageView
-import Shared
 
 /// A cell used in homepage's Bookmarks section.
 final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {

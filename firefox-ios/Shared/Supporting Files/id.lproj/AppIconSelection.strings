@@ -1,0 +1,9 @@
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the default Firefox for iOS icon. */
+"Settings.AppIconSelection.AppIconNames.Regular.Title.v136" = "Baku";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
+"Settings.AppIconSelection.ScreenTitle.v136" = "Ikon Aplikasi";
+
+/* On the Settings screen, the name of the row that opens app icon selection options. */
+"Settings.AppIconSelection.SettingsOptionName.v136" = "Ikon Aplikasi";
+

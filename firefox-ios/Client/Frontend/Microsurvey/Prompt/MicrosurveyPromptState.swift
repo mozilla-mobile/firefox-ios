@@ -4,7 +4,6 @@
 
 import Foundation
 import Redux
-import Shared
 import Common
 
 struct MicrosurveyPromptState: StateType, Equatable {

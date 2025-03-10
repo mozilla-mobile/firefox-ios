@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "თქვენი უფლებები";
 
+/* Label for row in About screen */
+"About.rowTerms" = "გამოყენების პირობები";
+
 /* Label on About screen */
 "About.safariBullet1" = "შეზღუდეთ თვალთვალი, მეტი პირადულობისთვის";
 

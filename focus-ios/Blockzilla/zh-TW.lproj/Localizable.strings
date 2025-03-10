@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "您的權利";
 
+/* Label for row in About screen */
+"About.rowTerms" = "使用條款";
+
 /* Label on About screen */
 "About.safariBullet1" = "封鎖追蹤器，加強隱私";
 

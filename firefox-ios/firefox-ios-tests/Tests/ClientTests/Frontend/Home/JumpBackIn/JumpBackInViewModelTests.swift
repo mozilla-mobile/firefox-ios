@@ -6,7 +6,6 @@
 import XCTest
 import WebKit
 import Storage
-import Shared
 import Common
 
 class JumpBackInViewModelTests: XCTestCase {

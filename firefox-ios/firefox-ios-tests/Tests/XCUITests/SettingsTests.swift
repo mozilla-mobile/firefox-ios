@@ -154,9 +154,7 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.Browsing.title],
             table.cells[settingsQuery.Theme.title],
             table.cells[settingsQuery.Siri.title],
-            table.cells[settingsQuery.Logins.title],
-            table.cells[settingsQuery.CreditCards.title],
-            table.cells[settingsQuery.Address.title],
+            table.cells[settingsQuery.AutofillsPasswords.title],
             table.cells[settingsQuery.ClearData.title],
             app.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title],
@@ -167,7 +165,7 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
             table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
             table.cells[settingsQuery.SendData.sendCrashReportsTitle],
-            table.cells[settingsQuery.StudiesToggle.title],
+            table.cells[settingsQuery.SendData.studiesTitle],
             table.cells[settingsQuery.Version.title],
             table.cells[settingsQuery.Help.title],
             table.cells[settingsQuery.RateOnAppStore.title],
@@ -206,6 +204,30 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.NoImageMode.title],
             app.switches[settingsQuery.ShowLink.title],
             app.switches[settingsQuery.BlockExternal.title]
+        ]
+
+        for i in settingsElements {
+            scrollToElement(i)
+            mozWaitForElementToExist(i)
+            XCTAssertTrue(i.isVisible())
+        }
+    }
+
+    func testAutofillPasswordSettingsOptionSubtitles() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        mozWaitForElementToExist(table)
+
+        // Navigate to the Browsing settings screen
+        navigator.goto(AutofillPasswordSettings)
+
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let settingsElements = [
+            table.cells[settingsQuery.Logins.title],
+            table.cells[settingsQuery.CreditCards.title],
+            table.cells[settingsQuery.Address.title]
         ]
 
         for i in settingsElements {

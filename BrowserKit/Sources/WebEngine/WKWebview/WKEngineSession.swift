@@ -18,7 +18,11 @@ class WKEngineSession: NSObject,
                        MetadataFetcherDelegate,
                        AdsTelemetryScriptDelegate,
                        SessionHandler {
-    weak var delegate: EngineSessionDelegate?
+    weak var delegate: EngineSessionDelegate? {
+        didSet {
+            uiHandler.delegate = delegate
+        }
+    }
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
@@ -29,6 +33,11 @@ class WKEngineSession: NSObject,
     private var contentBlockingSettings: WKContentBlockingSettings = []
     private let navigationHandler: WKNavigationHandler
     private let uiHandler: WKUIHandler
+    public var isActive = false {
+        didSet {
+            self.uiHandler.isActive = self.isActive
+        }
+    }
 
     init?(userScriptManager: WKUserScriptManager,
           telemetryProxy: EngineTelemetryProxy? = nil,
@@ -59,6 +68,7 @@ class WKEngineSession: NSObject,
         self.metadataFetcher.delegate = self
         navigationHandler.session = self
         uiHandler.delegate = delegate
+        uiHandler.isActive = isActive
         webView.uiDelegate = uiHandler
         webView.navigationDelegate = navigationHandler
         webView.delegate = self
@@ -129,7 +139,7 @@ class WKEngineSession: NSObject,
             return
         }
 
-        // Reloads the current webpage, and performs end-to-end revalidation of the content 
+        // Reloads the current webpage, and performs end-to-end revalidation of the content
         // using cache-validating conditionals, if possible.
         if webView.reloadFromOrigin() != nil {
             logger.log("Reloaded webview from origin", level: .debug, category: .webview)

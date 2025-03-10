@@ -1977,8 +1977,9 @@ class BrowserViewController: UIViewController,
             guard let tabURLOrigin = tab.url?.origin,
                   let urlOrigin = url.origin,
                   tabURLOrigin == urlOrigin else {
-                if let urlOrigin = url.origin {
-                    tab.url = URL(string: urlOrigin)!
+                if let urlOrigin = url.origin,
+                   let newTabURL = URL(string: urlOrigin) {
+                    tab.url = newTabURL
                 }
                 return
             }
@@ -3416,7 +3417,7 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements 
+    // Also implements
     // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
         switch contextualHintType {
@@ -4157,9 +4158,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
                 toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]

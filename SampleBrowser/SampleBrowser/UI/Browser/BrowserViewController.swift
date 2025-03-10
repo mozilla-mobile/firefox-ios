@@ -148,6 +148,10 @@ class BrowserViewController: UIViewController,
         engineSession.showFindInPage()
     }
 
+    func requestMediaCapturePermission() -> Bool {
+        return true
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {

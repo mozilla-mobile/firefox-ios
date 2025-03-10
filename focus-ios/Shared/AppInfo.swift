@@ -42,7 +42,7 @@ class AppInfo {
     static var shortProductName: String {
         return isKlar ? "Klar" : "Focus"
     }
-    
+
     public static var bundleIdentifier: String {
         guard let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String else {
             fatalError("CFBundleIdentifier not found in info.plist")

@@ -5,7 +5,6 @@
 @testable import Client
 
 import XCTest
-import Shared
 import Common
 
 class StartAtHomeHelperTests: XCTestCase {

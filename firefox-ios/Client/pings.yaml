@@ -146,3 +146,16 @@ usage-deletion-request:
     set_upload_enabled: |
       The ping was submitted due to the usage-reporting data preference changing from
       enabled to disabled.
+      
+nimbus:
+  description: |
+    This ping is submitted by Nimbus code after the enrollment workflow has completed.
+  include_client_id: true
+  send_if_empty: true
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/EXP-5154
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/24950
+  notification_emails:
+    - chumphreys@mozilla.com
+    - project-nimbus@mozilla.com

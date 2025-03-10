@@ -5,7 +5,6 @@
 import Foundation
 import Intents
 import IntentsUI
-import Shared
 
 class SiriShortcuts {
     enum activityType: String {

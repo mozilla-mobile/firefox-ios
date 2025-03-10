@@ -4,10 +4,7 @@
 
 import Foundation
 import XCTest
-import Shared
 import Common
-import Storage
-import TabDataStore
 @testable import Client
 
 class WindowManagerTests: XCTestCase {

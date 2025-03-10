@@ -744,6 +744,17 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
+        let config = OpenPocketTelemetryConfig(isZeroSearch: isZeroSearch, position: index)
+        store.dispatch(
+            PocketAction(
+                telemetryConfig: config,
+                windowUUID: self.windowUUID,
+                actionType: actionType
+            )
+        )
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -786,6 +797,7 @@ final class HomepageViewController: UIViewController,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
+            dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
         case .pocketDiscover(let item):
             let destination = NavigationDestination(
                 .link,

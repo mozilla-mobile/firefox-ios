@@ -126,7 +126,8 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        if iPad() {
+        if #available(iOS 17, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 17
+            || iPad() {
             urlBarAddress.waitAndTap()
             urlBarAddress.waitAndTap()
         } else {
@@ -427,16 +428,20 @@ class SearchTests: BaseTestCase {
     private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
+        let appendArrowBtn = app.tables.cells.buttons.matching(identifier: "appendUpLeftLarge")
         if isSwitchOn {
             mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Google Search"])
             XCTAssertTrue(app.staticTexts.elementContainingText("google").exists)
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
-            XCTAssertTrue(app.tables.cells.count >= 4)
+            XCTAssertTrue(appendArrowBtn.count == 3)
         } else {
             mozWaitForElementToNotExist(app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft])
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
             mozWaitForElementToExist(app.tables.cells.firstMatch)
-            XCTAssertTrue(app.tables.cells.count <= 3)
+            // If "Append Arrow buttons" are missing, then google search suggestions are missing
+            mozWaitForElementToNotExist(appendArrowBtn.element)
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts["g"])
         }
     }
 
