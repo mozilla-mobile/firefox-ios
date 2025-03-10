@@ -23,6 +23,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorHighlighted: UIColor = .clear
     private var foregroundColorDisabled: UIColor = .clear
+    private var foregroundTitleColorNormal: UIColor = .clear
+    private var foregroundTitleColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
 
     private var badgeImageView: UIImageView?
@@ -32,6 +34,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var onLongPress: ((UIButton) -> Void)?
     private var notificationCenter: NotificationProtocol?
     private var largeContentViewerInteraction: UILargeContentViewerInteraction?
+
+    private var isTextButton = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,6 +56,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         configureLongPressGestureRecognizerIfNeeded(for: element, notificationCenter: notificationCenter)
         configureCustomA11yActionIfNeeded(for: element)
         isSelected = element.isSelected
+        isTextButton = element.title != nil
         self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
@@ -125,13 +130,15 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
         switch state {
         case .highlighted:
-            updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
+            updatedConfiguration.baseForegroundColor = isTextButton ?
+                                                        foregroundTitleColorHighlighted :
+                                                        foregroundColorHighlighted
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = isSelected ?
-                                                       foregroundColorHighlighted :
-                                                       foregroundColorNormal
+            let iconButtonColor = isSelected ? foregroundColorHighlighted : foregroundColorNormal
+            let textButtonColor = isSelected ? foregroundTitleColorHighlighted : foregroundTitleColorNormal
+            updatedConfiguration.baseForegroundColor = isTextButton ? textButtonColor : iconButtonColor
         }
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
@@ -253,6 +260,9 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         foregroundColorHighlighted = colors.actionPrimary
         foregroundColorDisabled = colors.iconDisabled
         backgroundColorNormal = .clear
+
+        foregroundTitleColorNormal = colors.textAccent
+        foregroundTitleColorHighlighted = colors.actionPrimaryHover
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
