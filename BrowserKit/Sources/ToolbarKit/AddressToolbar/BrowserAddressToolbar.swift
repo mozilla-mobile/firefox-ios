@@ -406,6 +406,7 @@ public class BrowserAddressToolbar: UIView,
                     button.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.width),
                     button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.buttonSize.height),
                 ])
+                button.setContentCompressionResistancePriority(.required, for: .horizontal)
             }
         }
     }
