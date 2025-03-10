@@ -3638,7 +3638,7 @@ extension String {
         key: "Mobile Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        comment: "The legacy title of the folder that contains mobile bookmarks.")
     public static let BookmarksFolderTitleMobile = MZLocalizedString(
         key: "Bookmarks",
         tableName: "Storage",
@@ -3648,17 +3648,17 @@ extension String {
         key: "Bookmarks Menu",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the menu.")
     public static let BookmarksFolderTitleToolbar = MZLocalizedString(
         key: "Bookmarks Toolbar",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the toolbar.")
     public static let BookmarksFolderTitleUnsorted = MZLocalizedString(
         key: "Unsorted Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        comment: "The name of the folder that contains unsorted desktop bookmarks.")
 }
 
 // MARK: - Bookmark Management
