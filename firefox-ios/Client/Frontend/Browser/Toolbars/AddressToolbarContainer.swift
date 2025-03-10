@@ -249,6 +249,10 @@ final class AddressToolbarContainer: UIView,
                     )
                 )
             }
+
+            if newModel.toolbarLayoutStyle == .version1 {
+                self.maximumContentSizeCategory = .extraExtraExtraLarge
+            }
         }
     }
 
