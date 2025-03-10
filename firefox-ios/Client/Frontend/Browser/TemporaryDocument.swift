@@ -67,10 +67,10 @@ class DefaultTemporaryDocument: NSObject,
         self.logger = logger
 
         super.init()
-
-        if let session {
-            self.session = session
-        }
+        self.session = .shared
+//        if let session {
+//            self.session = session
+//        }
     }
 
     init(
@@ -86,10 +86,10 @@ class DefaultTemporaryDocument: NSObject,
         self.logger = logger
 
         super.init()
-
-        if let session {
-            self.session = session
-        }
+        self.session = .shared
+//        if let session {
+//            self.session = session
+//        }
     }
 
     /// Returns a modified request with Cookies header field
@@ -135,6 +135,7 @@ class DefaultTemporaryDocument: NSObject,
         }
         onDownload = completion
         currentDownloadTask = session.downloadTask(with: request)
+        currentDownloadTask?.delegate = self
         currentDownloadTask?.resume()
     }
 
@@ -208,6 +209,10 @@ class DefaultTemporaryDocument: NSObject,
         logger.log("Error downloading temp document: \(error)", level: .debug, category: .webview)
 
         invalidateSession()
+        if let error = error as? URLError, error.code == .networkConnectionLost {
+            self.onDownloadError?()
+            return
+        }
         ensureMainThread {
             self.onDownloadError?()
         }

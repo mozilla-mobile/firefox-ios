@@ -810,6 +810,23 @@ extension BrowserViewController: WKNavigationDelegate {
             }
             tempPDF.onDownloadError = {
                 self?.navigationHandler?.removeDocumentLoading()
+                // MARK: - TO Adjust 
+                guard let url = webView?.url,
+                      let webView,
+                    let windowUUID = tab?.windowUUID,
+                                                  let profile = self?.profile else { return }
+                if self?.isNativeErrorPageEnabled ?? false {
+                    let action = NativeErrorPageAction(networkError: NSError(domain: "", code: 0),
+                                                       windowUUID: windowUUID,
+                                                       actionType: NativeErrorPageActionType.receivedError
+                    )
+                    store.dispatch(action)
+                    webView.load(PrivilegedRequest(url: url) as URLRequest)
+                } else {
+                    ErrorPageHelper(certStore: profile.certStore).loadPage(NSError(domain: "", code: 0),
+                                                                           forUrl: url,
+                                                                           inWebView: webView)
+                }
             }
             tab?.enqueueDocument(tempPDF)
         }
