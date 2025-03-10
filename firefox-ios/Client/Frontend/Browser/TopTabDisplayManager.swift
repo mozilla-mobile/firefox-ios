@@ -324,17 +324,7 @@ class TopTabDisplayManager: NSObject {
         guard !isDragging else { return }
 
         getTabs { [weak self] tabsToDisplay in
-            guard let self else { return }
-            // If it is the last tab of regular mode we automatically create an new tab
-            if !self.isPrivate,
-               tabsToDisplay.count == 1 {
-                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
-                    self.tabManager.selectTab(self.tabManager.addTab())
-                }
-                return
-            }
-
-            self.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
+            self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }
 
