@@ -35,7 +35,7 @@ final class LocationView: UIView,
         urlTextField.text?.isEmpty == true
     }
 
-    private var longPressRecognizer: UILongPressGestureRecognizer?
+    private var tapGestureRecognizer: UITapGestureRecognizer?
 
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
@@ -105,8 +105,6 @@ final class LocationView: UIView,
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
-        // Add a tap gesture recognizer to make the entire view tapable.
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder)))
     }
 
     required init?(coder: NSCoder) {
@@ -143,6 +141,7 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
+        handleTapGestureRecognizer()
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
@@ -476,8 +475,20 @@ final class LocationView: UIView,
     // MARK: - Gesture Recognizers
     private func addLongPressGestureRecognizer() {
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        longPressRecognizer = gestureRecognizer
         urlTextField.addGestureRecognizer(gestureRecognizer)
+    }
+
+    private func handleTapGestureRecognizer() {
+        if isURLTextFieldCentered {
+            if tapGestureRecognizer == nil {
+                // Add a tap gesture recognizer to make the entire view tapable.
+                tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
+                addGestureRecognizer(tapGestureRecognizer!)
+            }
+        } else if let tapGestureRecognizer {
+            removeGestureRecognizer(tapGestureRecognizer)
+            self.tapGestureRecognizer = nil
+        }
     }
 
     // MARK: - Selectors
