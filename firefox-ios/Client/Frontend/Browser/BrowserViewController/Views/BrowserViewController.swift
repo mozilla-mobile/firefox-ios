@@ -33,8 +33,10 @@ class BrowserViewController: UIViewController,
                              BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable {
-    private enum UX {
-        static let ShowHeaderTapAreaHeight: CGFloat = 32
+    enum UX {
+        static let showHeaderTapAreaHeight: CGFloat = 32
+        static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
+        static let downloadToastDuration = DispatchTimeInterval.seconds(5)
     }
 
     /// Describes the state of the current search session. This state is used
@@ -1288,7 +1290,7 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.ShowHeaderTapAreaHeight)
+            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight)
         ])
 
         readerModeBar?.snp.remakeConstraints { make in
