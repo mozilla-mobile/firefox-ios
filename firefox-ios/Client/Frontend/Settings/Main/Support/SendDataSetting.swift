@@ -101,7 +101,7 @@ final class SendDataSetting: BoolSetting {
         // in which case, we would to make sure that users are opted out of experiments
         // Note: Switch should be enabled only when telemetry usage is enabled
         updateControlState(isEnabled: isUsageEnabled)
-        
+
         // Set experiments study setting based on usage enabled state
         // Special Case (EXP-4780, FXIOS-10534) disable Studies if usage data is disabled
         // and studies should be toggled back on after re-enabling Telemetry
