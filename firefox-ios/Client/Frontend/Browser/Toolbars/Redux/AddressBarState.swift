@@ -59,10 +59,10 @@ struct AddressBarState: StateType, Equatable {
 
     private static let cancelEditTextAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
-        actionLabel: .AddressToolbar.CancelEditButtonLabel,
+        actionLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
         isFlippedForRTL: true,
         isEnabled: true,
-        a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
+        a11yLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
     private static let newTabAction = ToolbarActionConfiguration(
