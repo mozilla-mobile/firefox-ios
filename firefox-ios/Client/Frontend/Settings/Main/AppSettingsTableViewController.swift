@@ -217,6 +217,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             guard let self, let profile = self.profile else { return }
             TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
             studiesSetting.updateSetting(for: value)
+            tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
