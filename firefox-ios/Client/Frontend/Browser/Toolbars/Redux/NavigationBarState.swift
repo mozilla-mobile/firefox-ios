@@ -86,21 +86,15 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder
+        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder,
+              let toolbarAction = action as? ToolbarAction
         else {
             return defaultState(from: state)
         }
 
-        let actions = [
-            backAction(enabled: false),
-            forwardAction(enabled: false),
-            searchAction,
-            tabsAction(),
-            menuAction()
-        ]
         return NavigationBarState(
             windowUUID: state.windowUUID,
-            actions: actions,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
             displayBorder: displayBorder
         )
     }
@@ -167,7 +161,6 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Navigation Toolbar Actions
-
     private static func navigationActions(
         action: ToolbarAction,
         navigationBarState: NavigationBarState)
@@ -176,6 +169,9 @@ struct NavigationBarState: StateType, Equatable {
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
+
+        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
+        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
 
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
@@ -194,12 +190,20 @@ struct NavigationBarState: StateType, Equatable {
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
         actions = [
-            backAction(enabled: canGoBack),
-            forwardAction(enabled: canGoForward),
-            middleAction,
-            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(showWarningBadge: showWarningBadge)
+            backAction(enabled: canGoBack, layout: layout),
+            forwardAction(enabled: canGoForward, layout: layout)
         ]
+
+        switch layout {
+        case .version1:
+            actions.append(newTabAction)
+            actions.append(menuAction(showWarningBadge: showWarningBadge))
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+        default:
+            actions.append(middleAction)
+            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+            actions.append(menuAction(showWarningBadge: showWarningBadge))
+        }
 
         return actions
     }
@@ -209,7 +213,6 @@ struct NavigationBarState: StateType, Equatable {
                                               canShowDataClearanceAction: Bool,
                                               isNewTabFeatureEnabled: Bool)
     -> ToolbarActionConfiguration {
-        // WT ToDo
         let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
         let isNewTabEnabled = isNewTabFeatureEnabled
         let middleActionForWebpage = canShowDataClearanceAction ?
@@ -221,10 +224,21 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Helper
-    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
+    private static func backAction(
+        enabled: Bool,
+        layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Large.chevronLeft
+        default:
+            iconName = StandardImageIdentifiers.Large.back
+        }
+
         return ToolbarActionConfiguration(
             actionType: .back,
-            iconName: StandardImageIdentifiers.Large.back,
+            iconName: iconName,
             isFlippedForRTL: true,
             isEnabled: enabled,
             contextualHintType: ContextualHintType.navigation.rawValue,
@@ -232,10 +246,21 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
+    private static func forwardAction(
+        enabled: Bool,
+        layout: ToolbarLayoutStyle?)
+    -> ToolbarActionConfiguration {
+        let iconName: String
+        switch layout {
+        case .version1:
+            iconName = StandardImageIdentifiers.Large.chevronRight
+        default:
+            iconName = StandardImageIdentifiers.Large.forward
+        }
+
         return ToolbarActionConfiguration(
             actionType: .forward,
-            iconName: StandardImageIdentifiers.Large.forward,
+            iconName: iconName,
             isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
