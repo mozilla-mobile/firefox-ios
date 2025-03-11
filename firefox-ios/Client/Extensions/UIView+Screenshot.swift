@@ -9,8 +9,11 @@ protocol Screenshotable {
 }
 
 extension UIView: Screenshotable {
-    /// Takes a screenshot of the view with the given aspect ratio.
-    /// An aspect ratio of 0 means capture the entire view.
+    /// Takes a screenshot of the view with a given quality
+    /// - Parameters:
+    ///   - quality: CGFloat that represents quality of the screenshot.
+    ///   The expected value is 0 to 1 and is defaulted to 1
+    /// - Returns: The image that represents the screenshot
     func screenshot(quality: CGFloat = 1) -> UIImage? {
         return screenshot(frame.size, offset: nil, quality: quality)
     }
