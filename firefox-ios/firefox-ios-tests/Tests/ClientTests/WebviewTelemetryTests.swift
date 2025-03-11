@@ -33,4 +33,3 @@ class WebviewTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGlean.cancelTimingCalled, 1, "Cancel timer should be called once")
     }
 }
-
