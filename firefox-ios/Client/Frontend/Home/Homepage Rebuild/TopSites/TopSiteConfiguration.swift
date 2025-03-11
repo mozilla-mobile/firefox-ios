@@ -64,7 +64,7 @@ struct TopSiteConfiguration: Hashable, Equatable {
         DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
-    func getTelemetrySiteType() -> String {
+    var getTelemetrySiteType: String {
         if isGooglePinnedTile {
             return "google"
         } else if isPinned {

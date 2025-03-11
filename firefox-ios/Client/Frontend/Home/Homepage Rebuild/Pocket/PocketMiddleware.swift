@@ -71,6 +71,6 @@ final class PocketMiddleware {
             )
             return
         }
-        self.homepageTelemetry.sendOpenInPrivateTabEvent()
+        self.homepageTelemetry.sendOpenInPrivateTabEventForPocket()
     }
 }
