@@ -191,6 +191,6 @@ fileprivate extension String {
     static let doneButtonText = NSLocalizedString(
         "Onboarding.TermsOfUse.Done.ButtonText",
         value: "Done",
-        comment: "Button text for dismissing the Privacy Policy and Terms of Use WebView."
+        comment: "Button label to dismiss the Privacy Policy and Terms of Use screen."
     )
 }
