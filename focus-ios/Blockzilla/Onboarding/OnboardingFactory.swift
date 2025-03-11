@@ -181,7 +181,7 @@ fileprivate extension String {
     static let privacyLinkText = NSLocalizedString(
         "Onboarding.PrivacyNotice.LinkText",
         value: "Privacy Notice",
-        comment: "Text for the Privacy Notice link."
+        comment: "Used as a text for the link in Onboarding.PrivacyNotice.Text."
     )
     static let termsOfUseButtonText = NSLocalizedString(
         "Onboarding.TermsOfUse.ButtonText",
