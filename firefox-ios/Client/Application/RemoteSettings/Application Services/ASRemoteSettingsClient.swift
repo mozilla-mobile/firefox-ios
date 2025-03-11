@@ -7,6 +7,44 @@ import Account
 import Common
 import Shared
 
+final class ASSearchEngineSelector {
+    private let engineSelector = SearchEngineSelector()
+    private let service: RemoteSettingsService
+
+    init(service: RemoteSettingsService) {
+        self.service = service
+    }
+
+    func fetchSearchEngines(locale: String,
+                            region: String,
+                            completion: @escaping ((RefinedSearchConfig?, Error?) -> Void)) {
+         do {
+             try engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
+
+             // TODO: What happens if the locale or region changes during app runtime?
+             let env = SearchUserEnvironment(locale: locale,
+                                             region: region,
+                                             updateChannel: SearchUpdateChannel.release,
+                                             distributionId: "",    // Confirmed with AS: leave empty, no distr on iOS
+                                             experiment: "",        // Confirmed with AS: leave empty
+                                             appName: .firefoxIos,
+                                             version: AppInfo.appVersion,
+                                             deviceType: UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone)
+
+
+             // TODO: Temporary synbc to make sure we're getting data
+             let profile: Profile = AppContainer.shared.resolve()
+             try? profile.remoteSettingsService?.sync()
+
+
+             let filtered = try engineSelector.filterEngineConfiguration(userEnvironment: env)
+             completion(filtered, nil)
+         } catch {
+             completion(nil, error)
+         }
+    }
+}
+
 enum ASRemoteSettingsEnvironment {
     case prod
     case development
@@ -29,18 +67,6 @@ enum ASRemoteSettingsEnvironment {
         return RemoteSettingsConfig2(server: self.server,
                                      bucketName: self.bucketName)
     }
-}
-
-enum ASRemoteSettingsCollection: String {
-    case searchConfigV2 = "search-config-v2"
-
-    var name: String { rawValue }
-}
-
-protocol ASRemoteSettingsClient {
-    associatedtype ASRecordType
-
-    func fetchData() -> [ASRecordType]?
 }
 
 final class ASRemoteSettingsContext {
@@ -93,44 +119,3 @@ final class ASRemoteSettingsContext {
     }
 }
 
-final class ASRemoteSettingsService {
-    // TODO: this should be private and we wrap just the APIs we need
-    let service: RemoteSettingsService
-
-    init?(environment: ASRemoteSettingsEnvironment) {
-        let configuration = environment.makeConfig()
-        do {
-            let service = try RemoteSettingsService(storageDir: ASRemoteSettingsContext().defaultStorageDirectory(),
-                                                    config: configuration)
-            self.service = service
-        } catch {
-            return nil
-        }
-    }
-}
-
-final class ASRemoteSettingsClientImplementation: ASRemoteSettingsClient {
-    private let logger: Logger
-    private var service: ASRemoteSettingsService
-    private var client: RemoteSettingsClient
-
-    init?(service: ASRemoteSettingsService,
-          collection: ASRemoteSettingsCollection,
-          logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-        self.service = service
-        let defaultContext = ASRemoteSettingsContext().default()
-        do {
-            let client = try service.service.makeClient(collectionName: collection.name,
-                                                        appContext: defaultContext)
-            self.client = client
-        } catch {
-            logger.log("Error configuring RS service/client. \(error)", level: .warning, category: .remoteSettings)
-            return nil
-        }
-    }
-
-    func fetchData() -> [RemoteSettingsRecord]? {
-        return client.getRecords(syncIfEmpty: false)
-    }
-}
