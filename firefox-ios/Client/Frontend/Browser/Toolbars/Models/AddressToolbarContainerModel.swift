@@ -144,6 +144,7 @@ final class AddressToolbarContainerModel: Equatable {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
