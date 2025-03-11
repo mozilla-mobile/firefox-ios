@@ -808,27 +808,28 @@ extension BrowserViewController: WKNavigationDelegate {
                                    change: [.newKey: true],
                                    context: nil)
             }
-            tempPDF.onDownloadError = {
+            tempPDF.onDownloadError = { error in
                 self?.navigationHandler?.removeDocumentLoading()
-                // MARK: - TO Adjust 
-                guard let url = webView?.url,
-                      let webView,
-                    let windowUUID = tab?.windowUUID,
-                                                  let profile = self?.profile else { return }
-                if self?.isNativeErrorPageEnabled ?? false {
-                    let action = NativeErrorPageAction(networkError: NSError(domain: "", code: 0),
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
-                    )
-                    store.dispatch(action)
-                    webView.load(PrivilegedRequest(url: url) as URLRequest)
-                } else {
-                    ErrorPageHelper(certStore: profile.certStore).loadPage(NSError(domain: "", code: 0),
-                                                                           forUrl: url,
-                                                                           inWebView: webView)
-                }
+                guard let error, let webView else { return }
+                self?.showErrorPage(webView: webView, error: error)
             }
             tab?.enqueueDocument(tempPDF)
+        }
+    }
+
+    private func showErrorPage(webView: WKWebView, error: Error) {
+        guard let url = webView.url else { return }
+        if isNativeErrorPageEnabled {
+            let action = NativeErrorPageAction(networkError: error as NSError,
+                                               windowUUID: windowUUID,
+                                               actionType: NativeErrorPageActionType.receivedError
+            )
+            store.dispatch(action)
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
+        } else {
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
+                                                                   forUrl: url,
+                                                                   inWebView: webView)
         }
     }
 

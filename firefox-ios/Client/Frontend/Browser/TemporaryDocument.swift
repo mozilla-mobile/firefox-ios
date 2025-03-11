@@ -18,28 +18,23 @@ protocol TemporaryDocument {
 
     func download(_ completion: @escaping (URL?) -> Void)
 
-    /// Invalidates the current download session if any and release all the resources.
-    func invalidateSession()
+    func cancelDownload()
+
+    func pauseResumeDownload()
 }
 
 class DefaultTemporaryDocument: NSObject,
                                 TemporaryDocument,
                                 FeatureFlaggable,
                                 URLSessionDownloadDelegate {
-    private lazy var session: URLSession = {
-        return URLSession(
-            configuration: .defaultMPTCP,
-            delegate: self,
-            delegateQueue: temporaryDocumentOperationQueue
-        )
-    }()
+    private let session: URLSession
     private let request: URLRequest
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
     var onDownloadProgressUpdate: ((Double) -> Void)?
     var onDownloadStarted: VoidReturnCallback?
-    var onDownloadError: VoidReturnCallback?
+    var onDownloadError: ((Error?) -> Void)?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }
@@ -58,38 +53,32 @@ class DefaultTemporaryDocument: NSObject,
         request: URLRequest,
         mimeType: String? = nil,
         cookies: [HTTPCookie] = [],
-        session: URLSession? = nil,
+        session: URLSession = .shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.filename = filename ?? "unknown"
         self.mimeType = mimeType
+        self.session = session
         self.logger = logger
 
         super.init()
-        self.session = .shared
-//        if let session {
-//            self.session = session
-//        }
     }
 
     init(
         preflightResponse: URLResponse,
         request: URLRequest,
         mimeType: String? = nil,
-        session: URLSession? = nil,
+        session: URLSession = .shared,
         logger: Logger = DefaultLogger.shared
     ) {
         self.request = request
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
         self.mimeType = mimeType
+        self.session = session
         self.logger = logger
 
         super.init()
-        self.session = .shared
-//        if let session {
-//            self.session = session
-//        }
     }
 
     /// Returns a modified request with Cookies header field
@@ -151,10 +140,21 @@ class DefaultTemporaryDocument: NSObject,
         return nil
     }
 
-    func invalidateSession() {
+    func cancelDownload() {
         currentDownloadTask?.cancel()
         currentDownloadTask = nil
-        session.invalidateAndCancel()
+    }
+
+    func pauseResumeDownload() {
+        guard let currentDownloadTask else { return }
+        switch currentDownloadTask.state {
+            case .running:
+                currentDownloadTask.suspend()
+            case .suspended:
+                currentDownloadTask.resume()
+            default:
+                break
+        }
     }
 
     private func storeTempDownloadFile(at url: URL) -> URL? {
@@ -194,9 +194,9 @@ class DefaultTemporaryDocument: NSObject,
     // MARK: - URLSessionDownloadDelegate
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        invalidateSession()
+        currentDownloadTask = nil
         guard let url = storeTempDownloadFile(at: location) else {
-            onDownloadError?()
+            onDownloadError?(nil)
             return
         }
         ensureMainThread { [weak self] in
@@ -205,16 +205,16 @@ class DefaultTemporaryDocument: NSObject,
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        currentDownloadTask = nil
         guard let error else { return }
         logger.log("Error downloading temp document: \(error)", level: .debug, category: .webview)
 
-        invalidateSession()
-        if let error = error as? URLError, error.code == .networkConnectionLost {
-            self.onDownloadError?()
-            return
-        }
         ensureMainThread {
-            self.onDownloadError?()
+            guard let error = error as? URLError, error.code != URLError(.cancelled).code else {
+                self.onDownloadError?(nil)
+                return
+            }
+            self.onDownloadError?(error)
         }
     }
 

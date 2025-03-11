@@ -881,6 +881,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
+        previous?.pauseResumeDocumentDownload()
 
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
@@ -929,6 +930,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatch(action)
 
+        tab.pauseResumeDocumentDownload()
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
 
