@@ -1240,6 +1240,7 @@
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		A977A0F62D77DADC00AFF253 /* DownloadCancellationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A977A0F52D77DA9C00AFF253 /* DownloadCancellationDelegate.swift */; };
 		AB03032B2AB47AF300DCD8EF /* FakespotOptInCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0303292AB47AF300DCD8EF /* FakespotOptInCardView.swift */; };
 		AB03032C2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032A2AB47AF300DCD8EF /* FakespotOptInCardViewModel.swift */; };
 		AB03032F2AB8561700DCD8EF /* FakespotOptInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB03032D2AB484B700DCD8EF /* FakespotOptInViewModelTests.swift */; };
@@ -8600,6 +8601,7 @@
 		A90841F19C3B4F44D309BF7A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
 		A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHelper.swift; sourceTree = "<group>"; };
 		A9334DD2B193109B1E0ABFD3 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		A977A0F52D77DA9C00AFF253 /* DownloadCancellationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCancellationDelegate.swift; sourceTree = "<group>"; };
 		A9794ED79D7510CD3674492E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		A983458C8926F8D4B3FDB503 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Storage.strings"; sourceTree = "<group>"; };
 		A99A45579536045560D367CE /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -13712,6 +13714,7 @@
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				A977A0F52D77DA9C00AFF253 /* DownloadCancellationDelegate.swift */,
 				5A2918C92B522326002B197E /* Actions */,
 				81122E1F2B2219AA003DD9F8 /* Views */,
 				81122E1E2B2219A0003DD9F8 /* State */,
@@ -17224,6 +17227,7 @@
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */,
+				A977A0F62D77DADC00AFF253 /* DownloadCancellationDelegate.swift in Sources */,
 				8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */,
 				8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */,
 				8ADED55E2D667A7700345293 /* BrowsingSetting.swift in Sources */,

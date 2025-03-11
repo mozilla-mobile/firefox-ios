@@ -5,7 +5,8 @@
 import Common
 import Foundation
 
-extension BrowserViewController: DownloadQueueDelegate {
+extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDelegate {
+
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID
@@ -15,20 +16,8 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard let downloadToast = self.downloadToast else {
             let downloadToast = DownloadToast(download: download,
                                               theme: currentTheme(),
-                                              completion: { buttonPressed in
-                // When this toast is dismissed, be sure to clear this so that any
-                // subsequent downloads cause a new toast to be created.
-                self.downloadToast = nil
-
-                // Handle download cancellation
-                if buttonPressed, !downloadQueue.isEmpty {
-                    downloadQueue.cancelAll(for: uuid)
-
-                    SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                    bottomContainer: self.contentContainer,
-                                                    theme: self.currentTheme())
-                }
-            })
+                                              onCancelDelegate: self
+            )
 
             show(toast: downloadToast, duration: nil)
             return
@@ -84,4 +73,17 @@ extension BrowserViewController: DownloadQueueDelegate {
             }
         }
     }
+
+    func onCancel() {
+        if !downloadQueue.isEmpty {
+            // cancel and remove download toast
+            self.downloadToast = nil
+            downloadQueue.cancelAll(for: windowUUID)
+            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                            bottomContainer: self.contentContainer,
+                                            theme: self.currentTheme())
+            // cancel and remove live activities
+        }
+    }
+
 }

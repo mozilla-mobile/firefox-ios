@@ -50,6 +50,8 @@ class DownloadToast: Toast {
     var progressWidthConstraint: NSLayoutConstraint?
 
     var downloads: [Download] = []
+    
+    var onCancelDelegate: DownloadCancellationDelegate?
 
     // Returns true if one or more downloads have encoded data (indicated via response `Content-Encoding` header).
     // If at least one download has encoded data, we cannot get a correct total estimate for all the downloads.
@@ -123,10 +125,10 @@ class DownloadToast: Toast {
 
     init(download: Download,
          theme: Theme,
-         completion: @escaping (_ buttonPressed: Bool) -> Void) {
+         onCancelDelegate: DownloadCancellationDelegate) {
         super.init(frame: .zero)
-
-        self.completionHandler = completion
+        
+        self.onCancelDelegate = onCancelDelegate
         self.clipsToBounds = true
 
         self.combinedTotalBytesExpected = download.totalBytesExpected
@@ -233,8 +235,8 @@ class DownloadToast: Toast {
         alert.addAction(UIAlertAction(title: .CancelDownloadDialogCancel,
                                       style: .default,
                                       handler: { action in
-            self.completionHandler?(true)
             self.dismiss(true)
+            self.onCancelDelegate?.onCancel()
             TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)
         }), accessibilityIdentifier: AccessibilityIdentifiers.Alert.cancelDownloadCancel)
 
