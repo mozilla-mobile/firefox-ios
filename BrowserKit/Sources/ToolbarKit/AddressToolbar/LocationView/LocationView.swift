@@ -143,7 +143,11 @@ final class LocationView: UIView,
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
-        handleGesture(&longPressGestureRecognizer, type: UILongPressGestureRecognizer.self, action: #selector(handleLongPress))
+        handleGesture(
+            &longPressGestureRecognizer,
+            type: UILongPressGestureRecognizer.self,
+            action: #selector(handleLongPress)
+        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
