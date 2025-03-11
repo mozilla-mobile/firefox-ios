@@ -26,6 +26,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
         static let tabViewFooterSpacing: CGFloat = 4
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1
     }
     // MARK: - Properties
 
@@ -88,6 +91,15 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         super.layoutSubviews()
         favicon.layer.cornerRadius = UX.faviconSize.height / 2
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
+
+        // Ensure background holder has bounds set
+        DispatchQueue.main.async {
+            self.backgroundHolder.layoutIfNeeded()
+            self.contentView.layer.shadowPath = UIBezierPath(
+                roundedRect: self.backgroundHolder.bounds,
+                cornerRadius: self.backgroundHolder.layer.cornerRadius
+            ).cgPath
+        }
     }
 
     // MARK: - Initializer
@@ -171,6 +183,14 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
+        setupShadow(theme: theme)
+    }
+
+    func setupShadow(theme: Theme) {
+        contentView.layer.shadowRadius = UX.shadowRadius
+        contentView.layer.shadowOffset = UX.shadowOffset
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = UX.shadowOpacity
     }
 
     // MARK: - Configuration
@@ -232,8 +252,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         // Reset any close animations.
         super.prepareForReuse()
         screenshotView.image = nil
-        backgroundHolder.transform = .identity
-        backgroundHolder.alpha = 1
         smallFaviconView.isHidden = true
         layer.shadowOffset = .zero
         layer.shadowPath = nil
