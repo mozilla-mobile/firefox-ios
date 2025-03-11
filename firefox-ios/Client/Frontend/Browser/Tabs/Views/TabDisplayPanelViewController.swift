@@ -131,7 +131,7 @@ class TabDisplayPanelViewController: UIViewController,
         ])
 
         if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty, isCompactLayout {
-            gradientLayer.locations = [0.0, 0.1]
+            gradientLayer.locations = [0.0, 0.02, 0.1]
             fadeView.layer.addSublayer(gradientLayer)
             view.addSubview(fadeView)
 
