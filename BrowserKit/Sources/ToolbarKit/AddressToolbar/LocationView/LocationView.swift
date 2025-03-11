@@ -36,6 +36,7 @@ final class LocationView: UIView,
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
+    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
@@ -141,7 +142,8 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
-        handleTapGestureRecognizer()
+        handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
+        handleGesture(&longPressGestureRecognizer, type: UILongPressGestureRecognizer.self, action: #selector(handleLongPress))
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
@@ -478,16 +480,20 @@ final class LocationView: UIView,
         urlTextField.addGestureRecognizer(gestureRecognizer)
     }
 
-    private func handleTapGestureRecognizer() {
+    private func handleGesture<T: UIGestureRecognizer>(
+        _ gesture: inout T?,
+        type: T.Type,
+        action: Selector
+    ) {
         if isURLTextFieldCentered {
-            if tapGestureRecognizer == nil {
-                // Add a tap gesture recognizer to make the entire view tapable.
-                tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(becomeFirstResponder))
-                addGestureRecognizer(tapGestureRecognizer!)
+            if gesture == nil {
+                let newGesture = type.init(target: self, action: action)
+                addGestureRecognizer(newGesture)
+                gesture = newGesture
             }
-        } else if let tapGestureRecognizer {
-            removeGestureRecognizer(tapGestureRecognizer)
-            self.tapGestureRecognizer = nil
+        } else if let existingGesture = gesture {
+            removeGestureRecognizer(existingGesture)
+            gesture = nil
         }
     }
 
