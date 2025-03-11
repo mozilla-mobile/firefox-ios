@@ -186,7 +186,7 @@ fileprivate extension String {
     static let termsOfUseButtonText = NSLocalizedString(
         "Onboarding.TermsOfUse.ButtonText",
         value: "Agree and Continue",
-        comment: "Text for the agreement button in the Terms of Use screen."
+        comment: "Label for the agreement button in the Terms of Use screen."
     )
     static let doneButtonText = NSLocalizedString(
         "Onboarding.TermsOfUse.Done.ButtonText",
