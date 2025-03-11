@@ -20,6 +20,8 @@
             "Pocket"
         ],
         "exclusions": [
+            "focus-ios.xliff:Onboarding.PrivacyNotice.Text",
+            "focus-ios.xliff:Onboarding.TermsOfUse.LinkText",
             "focus-ios.xliff:Onboarding.Title",
             "focus-ios.xliff:Open.Firefox",
             "focus-ios.xliff:ShareMenu.GetFirefox",
