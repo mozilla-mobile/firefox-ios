@@ -12,7 +12,7 @@ import SiteImageView
 class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
-        static let unselectedBorderWidth: CGFloat = 0.8
+        static let unselectedBorderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconSize = CGSize(width: 16, height: 16)
