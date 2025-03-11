@@ -22,8 +22,7 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
     }
 
     static func jsCallbackBuilder(_ enabled: Bool) -> String {
-        let isDarkReader = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.darkReader, checking: .buildOnly)
-        return "window.__firefox__.NightMode.setEnabled(\(enabled), \(isDarkReader))"
+        return "window.__firefox__.NightMode.setEnabled(\(enabled))"
     }
 
     func userContentController(
