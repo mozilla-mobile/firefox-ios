@@ -176,7 +176,7 @@ fileprivate extension String {
     static let privacyNoticeText = NSLocalizedString(
         "Onboarding.PrivacyNotice.Text",
         value: "Firefox cares about your privacy. Read more in %@.",
-        comment: "Text that describes Firefox's commitment to privacy. %@ will be replaced with the clickable link text, Privacy Notice which is separately localized."
+        comment: "Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text."
     )
     static let privacyLinkText = NSLocalizedString(
         "Onboarding.PrivacyNotice.LinkText",
