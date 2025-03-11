@@ -73,7 +73,6 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
             }
         }
     }
-
     func onCancel() {
         if !downloadQueue.isEmpty {
             // cancel and remove download toast
@@ -85,5 +84,4 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
             // cancel and remove live activities
         }
     }
-
 }
