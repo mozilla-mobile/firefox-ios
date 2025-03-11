@@ -36,40 +36,27 @@ struct AppIconSelectionView: View, ThemeApplicable {
     }
 
     var body: some View {
-        NavigationView {
-            // Note: Once we drop iOS 15 support we can use a List and properly set background colors / insetGrouped style
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
-                        AppIconView(
-                            appIcon: appIcon,
-                            isSelected: appIcon == currentAppIcon,
-                            windowUUID: windowUUID,
-                            setAppIcon: setAppIcon
-                        )
-                        .alert(isPresented: $isShowingErrorAlert) {
-                            Alert(
-                                title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
-                                message: nil,
-                                dismissButton: .default(
-                                    Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
-                                )
-                            )
-                        }
-                    }
-                }
-                .background(themeColors.layer2.color)
-                .cornerRadius(UX.cornerRadius)
-                .overlay(
-                    // Add rounded border
-                    RoundedRectangle(cornerRadius: UX.cornerRadius)
-                        .stroke(themeColors.borderPrimary.color, lineWidth: UX.islandBorderWidth)
-                )
-
-                Spacer()
+        VStack {
+            List {
+                ForEach(AppIcon.allCases, id: \.imageSetAssetName) { appIcon in
+                    AppIconView(
+                        appIcon: appIcon,
+                        isSelected: appIcon == currentAppIcon,
+                        windowUUID: windowUUID,
+                        setAppIcon: setAppIcon
+                    )
+                }.listRowBackground(themeColors.layer2.color)
             }
-            .padding(.all, UX.listPadding)
-            .background(themeColors.layer1.color)
+            .listStyle(.plain)
+            .alert(isPresented: $isShowingErrorAlert) {
+                Alert(
+                    title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
+                    message: nil,
+                    dismissButton: .default(
+                        Text(String.Settings.AppIconSelection.Errors.SelectErrorConfirmation)
+                    )
+                )
+            }
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
@@ -78,7 +65,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // Don't display as navigation detail on iPad
+        .background(themeColors.layer1.color)
     }
 
     func applyTheme(theme: Theme) {
@@ -91,18 +78,23 @@ struct AppIconSelectionView: View, ThemeApplicable {
         // Don't reselect the current icon
         guard appIcon != currentAppIcon else { return }
 
+        // Optimistically update the UI since there's a slight delay in setting the alternate app icon
+        let previousIcon = self.currentAppIcon
+        self.currentAppIcon = appIcon
+
         // If the user is resetting to the default app icon, we need to set the alternative icon to nil.
         UIApplication.shared.setAlternateIconName(appIcon.appIconAssetName) { error in
             guard error == nil else {
                 logger.log("Failed to set an alternative app icon [\(appIcon)]", level: .fatal, category: .appIcon)
                 isShowingErrorAlert = true
 
+                // Reset the app icon in the UI since we changed it optimistically to provide UI feedback
+                self.currentAppIcon = previousIcon
+
                 return
             }
 
             telemetry.selectedIcon(appIcon, previousIcon: self.currentAppIcon)
-
-            self.currentAppIcon = appIcon
         }
     }
 }
