@@ -8,33 +8,29 @@ import Glean
 import XCTest
 
 class WebviewTelemetryTests: XCTestCase {
+    var mockGlean: MockGleanWrapper!
+    var subject: WebViewLoadMeasurementTelemetry!
+
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+        mockGlean = MockGleanWrapper()
+        subject = WebViewLoadMeasurementTelemetry(gleanWrapper: mockGlean)
     }
 
-    func testLoadMeasurement() throws {
-        let subject = WebViewLoadMeasurementTelemetry()
-
+    func testLoadMeasurement() {
         subject.start()
         subject.stop()
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Webview.pageLoad.testGetValue())
-        XCTAssertEqual(1, resultValue.count, "Should have been measured once")
-        XCTAssertEqual(0, GleanMetrics.Webview.pageLoad.testGetNumRecordedErrors(.invalidValue))
+        XCTAssertEqual(mockGlean.startTimingCalled, 1, "Start timer should be called once")
+        XCTAssertEqual(mockGlean.stopAndAccumulateCalled, 1, "Stop and accumulate timer should be called once")
     }
 
     func testCancelLoadMeasurement() {
-        let subject = WebViewLoadMeasurementTelemetry()
-
         subject.start()
         subject.cancel()
 
-        XCTAssertNil(GleanMetrics.Webview.pageLoad.testGetValue(), "Should not have been measured")
-        XCTAssertEqual(0, GleanMetrics.Webview.pageLoad.testGetNumRecordedErrors(.invalidValue))
+        XCTAssertEqual(mockGlean.startTimingCalled, 1, "Start timer should be called once")
+        XCTAssertEqual(mockGlean.cancelTimingCalled, 1, "Cancel timer should be called once")
     }
 }
+
