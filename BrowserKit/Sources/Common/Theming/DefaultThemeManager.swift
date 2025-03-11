@@ -63,10 +63,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
 
-        self.userDefaults.register(defaults: [
-            ThemeKeys.systemThemeIsOn: true,
-            ThemeKeys.NightMode.isOn: false
-        ])
+        self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true])
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -143,7 +140,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Window specific functions
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
-        case .dark, .nightMode, .privateMode: return DarkTheme()
+        case .dark, .privateMode: return DarkTheme()
         case .light: return LightTheme()
         }
     }
@@ -183,7 +180,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
-        if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
@@ -196,8 +192,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return LightTheme()
         case .dark:
             return DarkTheme()
-        case .nightMode:
-            return NightModeTheme()
         case .privateMode:
             return PrivateModeTheme()
         }
