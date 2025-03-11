@@ -11,17 +11,6 @@ public struct DarkTheme: Theme {
     public init() {}
 }
 
-/// `NightModeTheme` is the same as `DarkTheme` but with a different `type`. This
-/// is because we want to be able to change theme types even when night mode
-/// is on, so, we have do differentiate between night mode's dark theme
-/// and a regular dark theme.
-public struct NightModeTheme: Theme {
-    public var type: ThemeType = .nightMode
-    public var colors: ThemeColourPalette = DarkColourPalette()
-
-    public init() {}
-}
-
 private struct DarkColourPalette: ThemeColourPalette {
     // MARK: - Layers
     var layer1: UIColor = FXColors.DarkGrey60
