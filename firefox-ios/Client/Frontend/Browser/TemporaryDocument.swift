@@ -148,12 +148,12 @@ class DefaultTemporaryDocument: NSObject,
     func pauseResumeDownload() {
         guard let currentDownloadTask else { return }
         switch currentDownloadTask.state {
-            case .running:
-                currentDownloadTask.suspend()
-            case .suspended:
-                currentDownloadTask.resume()
-            default:
-                break
+        case .running:
+            currentDownloadTask.suspend()
+        case .suspended:
+            currentDownloadTask.resume()
+        default:
+            break
         }
     }
 
