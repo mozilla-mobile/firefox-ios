@@ -156,7 +156,7 @@ fileprivate extension String {
     static let termsOfUseTitle = NSLocalizedString(
         "Onboarding.TermsOfUse.Title",
         value: String(format: "Welcome to %@", AppInfo.productName),
-        comment: "Title for the Terms of Use screen during onboarding. %@ is the name of the app (Focus/Klar)."
+        comment: "Title for the Terms of Use screen during onboarding. @ is the app name (for example “Firefox Focus” or ”Firefox Klar”)."
     )
     static let termsOfUseSubtitle = NSLocalizedString(
         "Onboarding.TermsOfUse.Subtitle",
