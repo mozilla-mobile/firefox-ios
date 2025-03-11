@@ -80,13 +80,15 @@ struct AppIconView: View, ThemeApplicable {
                 Image(uiImage: image)
                     .resizable()
                     .frame(width: UX.appIconSize, height: UX.appIconSize)
+                    // Note: Do not fallback to the current app theme, because the user can view settings in the private mode
+                    // theme, but app icons can only be Light or Dark
                     .background(
                         forceLightTheme
                         ? UX.appIconLightBackgroundColor
                         : UX.appIconDarkBackgroundColor
                     )
                     // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
-                    // NOTE: This fix does not work on iOS15 but it's a small user base
+                    // Note: This fix does not work on iOS15 but it's a small user base
                     .colorScheme(
                         forceLightTheme
                         ? ColorScheme.light
