@@ -15,7 +15,7 @@ final class TopSite: FeatureFlaggable {
     }
 
     var accessibilityLabel: String? {
-        return isSponsored ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
     }
 
     var isPinned: Bool {
@@ -69,5 +69,15 @@ final class TopSite: FeatureFlaggable {
         }
 
         return "history-based"
+    }
+}
+
+private extension TopSite {
+    var pinnedText: String {
+        return .FirefoxHomepage.Shortcuts.Pinned
+    }
+
+    var pinnedStatusTitle: String {
+        isPinned ? "\(pinnedText): \(title)" : title
     }
 }
