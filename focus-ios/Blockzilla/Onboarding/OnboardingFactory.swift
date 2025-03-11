@@ -166,7 +166,7 @@ fileprivate extension String {
     static let termsOfUseText = NSLocalizedString(
         "Onboarding.TermsOfUse.Text",
         value: "By continuing, you agree to %@.",
-        comment: "Text that describes the agreement to the Firefox Terms of Use. %@ will be replaced with the clickable link text, Firefox Terms of Use which is separately localized."
+        comment: "Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text."
     )
     static let termsLinkText = NSLocalizedString(
         "Onboarding.TermsOfUse.LinkText",
