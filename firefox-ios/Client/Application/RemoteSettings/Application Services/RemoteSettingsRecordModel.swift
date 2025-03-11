@@ -3,32 +3,36 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Common
 
 struct RemoteSettingsEngineIconRecordFields: Codable {
     let engineIdentifiers: [String]
     let imageSize: Int?
+
+    static func empty() -> Self {
+        return RemoteSettingsEngineIconRecordFields(engineIdentifiers: [], imageSize: nil)
+    }
 }
 
+/// Convenience wrapper model for AS search engine icon records fetched from Remote Settings
 struct RemoteSettingsEngineIconRecord {
     let id: String
     let engineIdentifiers: [String]
     let mimeType: String?
     let backingRecord: RemoteSettingsRecord
 
-    init(record: RemoteSettingsRecord) {
+    init(record: RemoteSettingsRecord, logger: Logger = DefaultLogger.shared) {
         self.id = record.id
-
 
         let iconRecordFields: RemoteSettingsEngineIconRecordFields = {
             if let fieldData = record.fields.data(using: .utf8) {
                 do {
                     return try JSONDecoder().decode(RemoteSettingsEngineIconRecordFields.self, from: fieldData)
                 } catch {
-                    print("DBG: Failed to decode JSON: \(error)")
-                    fatalError()
+                    logger.log("Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
                 }
             }
-            fatalError()
+            return RemoteSettingsEngineIconRecordFields.empty()
         }()
 
         self.engineIdentifiers = iconRecordFields.engineIdentifiers
