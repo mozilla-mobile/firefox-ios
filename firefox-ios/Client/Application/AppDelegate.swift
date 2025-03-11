@@ -10,6 +10,8 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
+import MozillaAppServices
+import Account
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
@@ -136,6 +138,79 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         logger.log("didFinishLaunchingWithOptions start",
                    level: .info,
                    category: .lifecycle)
+
+//        let testConfig = RemoteSettingsConfig2(server: .stage, bucketName: "main-preview")
+//                let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.path
+//                do {
+//                    let service = try RemoteSettingsService(storageDir: directory, config: testConfig)
+//                    // NOTE: this client creation MUST happen before sync() or the sync won't work
+//                    let client = try service.makeClient(collectionName: "search-config-icons")
+//                    let syncResults = try service.sync()
+//                    print("Sync results: \(syncResults)")
+//
+//                    let rec = client.getRecords()
+//                    print("Records result: \(String(describing: rec))")
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+
+//        let config: RemoteSettingsConfig2 = ASRemoteSettingsEnvironment.prod.makeConfig()
+//        do {
+//            let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.path
+//            let service = try RemoteSettingsService(storageDir: directory, config: config)
+//            let selector = SearchEngineSelector()
+//            try selector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
+//            try service.sync()
+//            let env = SearchUserEnvironment(locale: "en-US",
+//                                            region: "US",
+//                                            updateChannel: SearchUpdateChannel.release,
+//                                            distributionId: "test-ios-1234",
+//                                            experiment: "",
+//                                            appName: .firefoxIos,
+//                                            version: "136.0.0",
+//                                            deviceType: .smartphone)
+//            let filtered = try selector.filterEngineConfiguration(userEnvironment: env)
+//
+//            print("Records result: \(String(describing: filtered))")
+//        } catch {
+//            print("Error: \(error)")
+//        }
+
+
+//        let testConfig = RemoteSettingsConfig2(server: .prod, bucketName: "main")
+//                let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.path
+//                let testContext = RemoteSettingsContext(appName: "Firefox iOS",
+//                                                        appId: AppInfo.bundleIdentifier,
+//                                                        channel: "release",
+//                                                        appVersion: "136.0.0",
+//                                                        appBuild: nil,
+//                                                        architecture: nil,
+//                                                        deviceManufacturer: nil,
+//                                                        deviceModel: nil,
+//                                                        locale: "en-US",
+//                                                        os: "iOS",
+//                                                        osVersion: "17.6.1",
+//                                                        androidSdkVersion: nil,
+//                                                        debugTag: nil,
+//                                                        installationDate: nil,
+//                                                        homeDirectory: directory,
+//                                                        customTargetingAttributes: nil)
+
+//                do {
+//                    let service = try RemoteSettingsService(storageDir: directory, config: testConfig)
+//                    // NOTE: this client creation MUST happen before sync() or the sync won't work
+//                    let client = try service.makeClient(collectionName: "search-config-v2")
+//                    let syncResults = try service.sync()
+//                    print("Sync results: \(syncResults)")
+//
+//                    let rec = client.getRecords(syncIfEmpty: true)
+//                    print("Records result: \(String(describing: rec))")
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+
+
+
 
         // Fix iOS simulator builds for Fennec after running unit tests locally [FXIOS-10712]
         fixSimulatorDevBuild(application)

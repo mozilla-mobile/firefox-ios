@@ -22,6 +22,7 @@ class OpenSearchParser {
     }
 
     func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
+        print("DBG: file \(file) ID is: \(engineID)")
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: file)) else {
             return nil
         }

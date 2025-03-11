@@ -97,8 +97,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
         // the event in the startup sequence.
-        let defaultEngine = profile.searchEnginesManager.defaultEngine
-        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+        
+        //let defaultEngine = profile.searchEnginesManager.defaultEngine
+        //GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
         // Set the date that the app was last used as default browser
         if let timestamp = profile.prefs.timestampForKey(PrefsKeys.LastOpenedAsDefaultBrowser) {

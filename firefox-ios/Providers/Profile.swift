@@ -692,10 +692,11 @@ open class BrowserProfile: Profile {
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
-            // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            // [FXIOS-11550] Default to Prod for now; this will be revisited soon.
-            // Related: https://mozilla.slack.com/archives/C05VCNPLFFT/p1741183526964339
-            let server = RemoteSettingsServer.prod
+            let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+            let bucketName = (server == .prod ? "main" : "main-preview")
+            let config = RemoteSettingsConfig2(server: server,
+                                               bucketName: bucketName,
+                                               appContext: remoteSettingsAppContext())
 
             let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
             let path = url.path
@@ -704,9 +705,7 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(
-                storageDir: path,
-                config: RemoteSettingsConfig2(server: server, appContext: remoteSettingsAppContext()))
+            return try RemoteSettingsService(storageDir: path, config: config)
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,
