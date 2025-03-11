@@ -121,75 +121,70 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
 final class ASIconDataFetcher {
     let service: RemoteSettingsService
+    let logger: Logger
 
-    init(service: RemoteSettingsService) {
+    init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
+        self.logger = logger
     }
 
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
+        let client: RemoteSettingsClient
         do {
             // NOTE: this client creation MUST happen before sync() or the sync won't work
-            let client = try service.makeClient(collectionName: "search-config-icons")
+            client = try service.makeClient(collectionName: "search-config-icons")
 
             // TODO: TEMPORARY SYNC FOR TESTING TO MAKE SURE WE GET DATA
             let syncResults = try service.sync()
-            print("Sync results: \(syncResults)")
-
-            let records = client.getRecords()!
-            print("Records result: \(String(describing: records))")
-
-            let iconRecords: [RemoteSettingsEngineIconRecord] = records.map {
-                RemoteSettingsEngineIconRecord(record: $0)
-            }
-
-            // This is an O(nm) loop but should generally be an extremely small collection
-            // of search engines. For example for en-US we currently only get 7 records.
-            let mapped = engines.map { engine in
-                // TODO: match the engine identifier against the icon data and then getAttachments() for the raw data
-                // TODO: engine matching must also support wildcards and pattern matches
-
-                // Find the icon record that matches this engine
-                var maybeIconImage: UIImage?
-                let engineIdentifier = engine.identifier
-                for iconRecord in iconRecords {
-                    // TODO: [FXIOS-11605] We may have multiple icon records that match a single engine for
-                    // the different icon types. This is still TBD from AS team. If needed, implemenent client-side
-                    // filtering here to select the best icon.
-                    let iconIdentifiers = iconRecord.engineIdentifiers
-                    if iconIdentifiers.contains(engineIdentifier) {
-                        // This is the icon record we need. Fetch the image data.
-                        do {
-                            let data = try client.getAttachment(record: iconRecord.backingRecord)
-                            if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
-                                // TODO: SVGs must be rendered via 3rd party lib
-                            } else {
-                                if let img = UIImage(data: data) {
-                                    maybeIconImage = img
-                                    break
-                                }
-                            }
-                        } catch {
-                            // TODO: Log error
-                        }
-                    }
-                }
-
-                let iconImage = {
-                    guard maybeIconImage == nil else { return maybeIconImage! }
-                    // TODO: Log error
-                    // TODO: How do we handle this? Default icon? Blank icon?
-                    return UIImage()
-                }()
-
-                return (engine, iconImage)
-            }
-
-            completion(mapped)
         } catch {
-            print("Error: \(error)")
+            logger.log("AS client/service error: \(error)", level: .warning, category: .remoteSettings)
+            completion([])
+            return
         }
 
+        guard let records = client.getRecords() else { completion([]); return }
+        let iconRecords = records.map { RemoteSettingsEngineIconRecord(record: $0) }
+
+        // This is an O(nm) loop but should generally be an extremely small collection
+        // of search engines. For example for en-US we currently only get 7 records.
+        let mapped = engines.map { engine in
+            // TODO: engine matching must also support wildcards and pattern matches
+            // Find the icon record that matches this engine
+            var maybeIconImage: UIImage?
+            let engineIdentifier = engine.identifier
+            for iconRecord in iconRecords {
+                // TODO: [FXIOS-11605] We may have multiple icon records that match a single engine for
+                // the different icon types. This is still TBD from AS team. If needed, implemenent client-side
+                // filtering here to select the best icon.
+                let iconIdentifiers = iconRecord.engineIdentifiers
+                if iconIdentifiers.contains(engineIdentifier) {
+                    do {
+                        let data = try client.getAttachment(record: iconRecord.backingRecord)
+                        if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
+                            // TODO: SVGs must be rendered via 3rd party lib
+                        } else {
+                            if let img = UIImage(data: data) {
+                                maybeIconImage = img
+                                break
+                            }
+                        }
+                    } catch {
+                        logger.log("Error fetching engine icon attachment.", level: .warning, category: .remoteSettings)
+                    }
+                }
+            }
+
+            let iconImage = {
+                guard maybeIconImage == nil else { return maybeIconImage! }
+                logger.log("No icon available for search engine.", level: .warning, category: .remoteSettings)
+                return UIImage() // TODO: How do we handle this? Default icon? Blank icon?
+            }()
+
+            return (engine, iconImage)
+        }
+
+        completion(mapped)
     }
 }
 
@@ -207,7 +202,7 @@ struct ASSearchEngineUtilities {
                                          isCustomEngine: false)
         return converted
     }
-    
+
     static func convertASSearchURLToOpenSearchURL(_ searchURL: SearchEngineUrl?,
                                                   for engine: SearchEngineDefinition) -> String? {
         guard let searchURL else { return nil }
