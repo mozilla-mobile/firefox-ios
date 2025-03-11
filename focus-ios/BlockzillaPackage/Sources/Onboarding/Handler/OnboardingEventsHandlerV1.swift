@@ -60,4 +60,12 @@ public class OnboardingEventsHandlerV1: OnboardingEventsHandling {
             shownTips.insert(route)
         }
     }
+    
+    public func dismissTooltip(route: ToolTipRoute) {
+        shownTips.insert(route)
+        
+        if self.route == route {
+            self.route = nil
+        }
+    }
 }
