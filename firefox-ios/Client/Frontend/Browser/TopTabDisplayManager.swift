@@ -323,7 +323,7 @@ class TopTabDisplayManager: NSObject {
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
-        getTabs { [weak self] tabsToDisplay in
+        getTabs { [weak self] _ in
             self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }
