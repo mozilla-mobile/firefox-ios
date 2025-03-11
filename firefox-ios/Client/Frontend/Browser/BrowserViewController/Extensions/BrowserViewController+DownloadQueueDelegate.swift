@@ -6,7 +6,6 @@ import Common
 import Foundation
 
 extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDelegate {
-
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID

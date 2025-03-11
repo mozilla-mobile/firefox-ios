@@ -50,7 +50,7 @@ class DownloadToast: Toast {
     var progressWidthConstraint: NSLayoutConstraint?
 
     var downloads: [Download] = []
-    
+
     var onCancelDelegate: DownloadCancellationDelegate?
 
     // Returns true if one or more downloads have encoded data (indicated via response `Content-Encoding` header).
@@ -127,7 +127,7 @@ class DownloadToast: Toast {
          theme: Theme,
          onCancelDelegate: DownloadCancellationDelegate) {
         super.init(frame: .zero)
-        
+
         self.onCancelDelegate = onCancelDelegate
         self.clipsToBounds = true
 
