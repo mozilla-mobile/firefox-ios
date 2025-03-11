@@ -7064,6 +7064,12 @@ extension String {
             tableName: "AddressToolbar",
             value: "Privacy & Security Settings",
             comment: "Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings.")
+
+        public static let CancelEditButtonLabel = MZLocalizedString(
+            key: "AddressToolbar.CancelEdit.Label.v138",
+            tableName: "AddressToolbar",
+            value: "Cancel",
+            comment: "Label for button in the address toolbar, that cancels editing the address field when tapped.")
     }
 }
 
