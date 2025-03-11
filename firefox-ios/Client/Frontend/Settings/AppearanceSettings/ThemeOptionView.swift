@@ -23,16 +23,29 @@ struct ThemeOptionView: View {
         static let radioSize: CGFloat = 22
     }
 
-    let themeOption: ThemeSelectionView.ThemeOption
+    let theme: ThemeSelectionView.ThemeOption
 
     /// A flag indicating whether this option is currently selected.
     let isSelected: Bool
+
+    /// Callback executed when a new theme option is selected.
+    let onSelected: (() -> Void)?
 
     var body: some View {
         VStack(spacing: UX.spacing) {
             themeOptionVisual
             themeOptionLabel
             themeOptionRadioButton
+        }
+        .onTapGesture {
+            onSelected?()
+        }
+        .accessibilityElement()
+        .accessibilityLabel("\(theme.rawValue)")
+        .accessibilityValue("\(isSelected ? 1 : 0)")
+        .accessibilityAddTraits(traits)
+        .accessibilityAction {
+            onSelected?()
         }
     }
 
@@ -42,7 +55,7 @@ struct ThemeOptionView: View {
             .stroke(isSelected ? UX.selectedBorderColor : UX.unselectedBorderColor,
                     lineWidth: isSelected ? UX.selectedBorderWidth : UX.unselectedBorderWidth)
             .background(
-                themeOptionBackground(for: themeOption)
+                themeOptionBackground(for: theme)
                     .clipShape(RoundedRectangle(cornerRadius: UX.cornerRadius))
             )
             .frame(width: UX.optionWidth, height: UX.optionHeight)
@@ -50,7 +63,7 @@ struct ThemeOptionView: View {
 
     /// The text label displaying the theme option's name.
     private var themeOptionLabel: some View {
-        Text(themeOption.rawValue)
+        Text(theme.rawValue)
             .font(.caption)
             .foregroundColor(UX.textColor)
     }
@@ -82,6 +95,12 @@ struct ThemeOptionView: View {
             // Accessibility label is on the parent view on the whole ThemeOptionView
             .accessibility(hidden: true)
     }
+
+    var traits: AccessibilityTraits {
+        if #available(iOS 17.0, *) {
+            return [.isButton, .isToggle]
+        } else {
+            return [.isButton]
+        }
+    }
 }
-
-

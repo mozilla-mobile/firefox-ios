@@ -44,31 +44,14 @@ struct ThemeSelectionView: View {
     var body: some View {
         HStack(spacing: UX.spacing) {
             ForEach(ThemeOption.allCases, id: \.rawValue) { themeOption in
-                ThemeOptionView(theme: themeOption, isSelected: selectedThemeOption == themeOption)
-                    .onTapGesture {
-                            selectedThemeOption = themeOption
-                            onThemeSelected?(themeOption)
-                    }
-                    .accessibilityElement()
-                    .accessibilityLabel("\(themeOption.rawValue)")
-                    .accessibilityValue("\(selectedThemeOption == themeOption ? 1 : 0)")
-                    .accessibilityAddTraits(traits)
-                    .accessibilityAction {
-                        selectedThemeOption = themeOption
-                        onThemeSelected?(themeOption)
-                    }
+                ThemeOptionView(theme: themeOption, isSelected: selectedThemeOption == themeOption) {
+                    selectedThemeOption = themeOption
+                    onThemeSelected?(themeOption)
+                }
             }
         }
         .padding(.vertical, UX.sectionPadding)
         .frame(maxWidth: .infinity)
         .background(backgroundColor)
-    }
-
-    var traits: AccessibilityTraits {
-        if #available(iOS 17.0, *) {
-            return [.isButton, .isToggle]
-        } else {
-            return [.isButton]
-        }
     }
 }
