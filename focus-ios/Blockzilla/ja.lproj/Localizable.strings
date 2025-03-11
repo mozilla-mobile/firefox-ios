@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "あなたの権利";
 
+/* Label for row in About screen */
+"About.rowTerms" = "利用規約";
+
 /* Label on About screen */
 "About.safariBullet1" = "追跡をブロックしてプライバシーを保護します";
 

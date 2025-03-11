@@ -39,6 +39,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
+        profile.shutdown()
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil

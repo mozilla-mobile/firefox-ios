@@ -32,7 +32,8 @@ class BrowserViewController: UIViewController,
                              AddressToolbarContainerDelegate,
                              BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
-                             FeatureFlaggable {
+                             FeatureFlaggable,
+                             CanRemoveQuickActionBookmark {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
     }
@@ -282,6 +283,7 @@ class BrowserViewController: UIViewController,
     let downloadQueue: DownloadQueue
 
     private let bookmarksSaver: BookmarksSaver
+    let bookmarksHandler: BookmarksHandler
 
     var newTabSettings: NewTabPage {
         return NewTabAccessors.getNewTabPage(profile.prefs)
@@ -319,6 +321,7 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
+        self.bookmarksHandler = profile.places
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1775,6 +1778,7 @@ class BrowserViewController: UIViewController,
         profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
+            self.removeBookmarkShortcut()
         }
     }
 

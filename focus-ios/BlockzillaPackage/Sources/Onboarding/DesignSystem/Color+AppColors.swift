@@ -10,4 +10,5 @@ extension Color {
     static let secondOnboardingScreenBottomButton = Color(UIColor(named: "secondOnboardingScreenBottomButton", in: Bundle.module, compatibleWith: nil)!)
     static let secondOnboardingScreenText = Color(UIColor(named: "secondOnboardingScreenText", in: Bundle.module, compatibleWith: nil)!)
     static let systemBackground = Color(UIColor.systemBackground)
+    static let accent = Color("Accent", bundle: .module)
 }

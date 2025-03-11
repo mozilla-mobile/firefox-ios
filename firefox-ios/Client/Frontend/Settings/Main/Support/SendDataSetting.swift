@@ -48,8 +48,9 @@ final class SendDataSetting: BoolSetting {
 
         if isStudiesCase {
             let sendUsageDataPref = prefs?.boolForKey(AppConstants.prefSendUsageData) ?? true
-            // Special Case (EXP-4780) disable studies if usage data is disabled
-            updateSetting(for: sendUsageDataPref)
+            // Special Case (EXP-4780, FXIOS-10534) disable studies if usage data is disabled
+            // and studies should be toggled back on after re-enabling Telemetry
+            self.enabled = sendUsageDataPref
         } else {
             // We make sure to set this on initialization, in case the setting is turned off
             // in which case, we would to make sure that users are opted out of experiments
@@ -95,21 +96,22 @@ final class SendDataSetting: BoolSetting {
     }
 
     func updateSetting(for isUsageEnabled: Bool) {
-        enabled = isUsageEnabled
+        self.enabled = isUsageEnabled
+        // We make sure to set this on initialization, in case the setting is turned off
+        // in which case, we would to make sure that users are opted out of experiments
+        // Note: Switch should be enabled only when telemetry usage is enabled
+        updateControlState(isEnabled: isUsageEnabled)
 
-        guard !isUsageEnabled else {
-            // Note: switch should be enabled only when telemetry usage is enabled
-            control.setSwitchTappable(to: true)
-            // We make sure to set this on initialization, in case the setting is turned off
-            // in which case, we would to make sure that users are opted out of experiments
-            Experiments.setStudiesSetting(prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
-            return
-        }
+        // Set experiments study setting based on usage enabled state
+        // Special Case (EXP-4780, FXIOS-10534) disable Studies if usage data is disabled
+        // and studies should be toggled back on after re-enabling Telemetry
+        let studiesEnabled = isUsageEnabled && (prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+        Experiments.setStudiesSetting(studiesEnabled)
+    }
 
-        // Special Case (EXP-4780) disable Studies if usage data is disabled
-        control.setSwitchTappable(to: false)
-        control.toggleSwitch(to: false)
+    private func updateControlState(isEnabled: Bool) {
+        control.setSwitchTappable(to: isEnabled)
+        control.toggleSwitch(to: isEnabled)
         writeBool(control.switchView)
-        Experiments.setStudiesSetting(false)
     }
 }
