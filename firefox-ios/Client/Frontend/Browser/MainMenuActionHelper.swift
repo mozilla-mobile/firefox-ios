@@ -472,15 +472,18 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
-        let nightModeTitle: String = if nightModeEnabled {
-            .LegacyAppMenu.AppMenuTurnOffNightMode
-        } else {
-            .LegacyAppMenu.AppMenuTurnOnNightMode
-        }
+
+        let nightModeTitle: String = nightModeEnabled
+            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOn
+            : .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+
+        let nightModeIcon: String = nightModeEnabled
+            ? StandardImageIdentifiers.Large.nightModeFill
+            : StandardImageIdentifiers.Large.nightMode
 
         let nightMode = SingleActionViewModel(
             title: nightModeTitle,
-            iconString: StandardImageIdentifiers.Large.nightMode,
+            iconString: nightModeIcon,
             isEnabled: nightModeEnabled
         ) { _ in
             NightModeHelper.toggle()
