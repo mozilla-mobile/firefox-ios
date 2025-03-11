@@ -172,6 +172,21 @@ class TabManagerTests: XCTestCase {
         XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
     }
 
+    // MARK: - Document pause - restore
+
+    func testSelectTab_pauseCurrentDocumentDownload() throws {
+        let tabs = generateTabs(count: 2)
+        let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
+        let subject = createSubject(tabs: tabs)
+
+        let tab = try XCTUnwrap(tabs.first)
+        tab.enqueueDocument(document)
+
+        subject.selectTab(tabs[1], previous: tab)
+
+        XCTAssertEqual(document.pauseResumeDownloadCalled, 1)
+    }
+
     // MARK: - Restore tabs
 
     @MainActor
