@@ -153,7 +153,9 @@ final class ASIconDataFetcher {
                 var maybeIconImage: UIImage?
                 let engineIdentifier = engine.identifier
                 for iconRecord in iconRecords {
-
+                    // TODO: [FXIOS-11605] We may have multiple icon records that match a single engine for
+                    // the different icon types. This is still TBD from AS team. If needed, implemenent client-side
+                    // filtering here to select the best icon.
                     let iconIdentifiers = iconRecord.engineIdentifiers
                     if iconIdentifiers.contains(engineIdentifier) {
                         // This is the icon record we need. Fetch the image data.
@@ -195,9 +197,8 @@ struct ASSearchEngineUtilities {
     static func convertASToOpenSearch(_ engine: SearchEngineDefinition, image: UIImage) -> OpenSearchEngine {
         let engineID = engine.identifier
         let name = engine.name
-        // TODO: Fix me, use the `urls` and the params to generate search str
-        let searchTemplate = ""
-        let suggestTemplate = ""
+        let searchTemplate = convertASSearchURLToOpenSearchURL(engine.urls.search, for: engine) ?? ""
+        let suggestTemplate = convertASSearchURLToOpenSearchURL(engine.urls.suggestions, for: engine) ?? ""
         let converted = OpenSearchEngine(
             engineID: engineID,
             shortName: name,
@@ -207,5 +208,41 @@ struct ASSearchEngineUtilities {
             isCustomEngine: false
         )
         return converted
+    }
+
+    static func convertASSearchURLToOpenSearchURL(_ searchURL: SearchEngineUrl?,
+                                                  for engine: SearchEngineDefinition) -> String? {
+        guard let searchURL else { return nil }
+        if let searchArg = searchURL.searchTermParamName {
+            guard var components = URLComponents(string: searchURL.base) else { return nil }
+            components.queryItems =
+            searchURL.params.compactMap {
+                // From AS team:
+                // "If the enterpriseValue is specified, the parameter can be ignored for mobile and not added to
+                // the URL. If the experimentConfig is specified, and there is an active experiment which specifies
+                // a parameter of the same name, then the value of the parameter should be set to be the value from the
+                // experiment. If there's no matching experiment, the parameter is not added to the URL."
+                if $0.enterpriseValue != nil { return nil }
+                // For now, we are not supporting this on iOS. See above.
+                if $0.experimentConfig != nil { return nil }
+
+                let value: String
+                if $0.value == "{partnerCode}" {
+                    // TODO: [FXIOS-11583] Special-case Bing and other overrides here
+                    value = engine.partnerCode
+                } else {
+                    value = $0.value ?? ""
+                }
+                return URLQueryItem(name: $0.name, value: value)
+            } +
+            [URLQueryItem(name: searchArg, value: "{searchTerms}")]
+
+            return components.url?.absoluteString.removingPercentEncoding
+        } else {
+            // TODO: we seem to use {searchTerms} in existing XML but AS mentions {searchTerm} (no S)
+            // From API docs: "This may be skipped if `{searchTerm}` is included in the base."
+            // TODO: Handle search URLs already including {searchTerm} included in base
+            fatalError()
+        }
     }
 }
