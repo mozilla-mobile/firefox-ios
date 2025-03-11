@@ -42,7 +42,7 @@ struct ThemeOptionView: View {
             .stroke(isSelected ? UX.selectedBorderColor : UX.unselectedBorderColor,
                     lineWidth: isSelected ? UX.selectedBorderWidth : UX.unselectedBorderWidth)
             .background(
-                themeOptionBackground
+                themeOptionBackground(for: themeOption)
                     .clipShape(RoundedRectangle(cornerRadius: UX.cornerRadius))
             )
             .frame(width: UX.optionWidth, height: UX.optionHeight)
@@ -83,3 +83,5 @@ struct ThemeOptionView: View {
             .accessibility(hidden: true)
     }
 }
+
+
