@@ -118,19 +118,11 @@ class OnboardingFactory {
     }
 
     static var termsURL: URL {
-        if AppInfo.isKlar {
-            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox-klar/")!
-        } else {
-            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!
-        }
+        URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!
     }
 
     static var privacyURL: URL {
-        if AppInfo.isKlar {
-            return URL(string: "https://www.mozilla.org/privacy/firefox-klar/")!
-        } else {
-            return URL(string: "https://www.mozilla.org/privacy/firefox-focus/")!
-        }
+        URL(string: "https://www.mozilla.org/privacy/firefox-focus/")!
     }
 }
 
