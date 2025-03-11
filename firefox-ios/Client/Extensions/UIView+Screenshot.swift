@@ -4,9 +4,19 @@
 
 import UIKit
 
-extension UIView {
+protocol Screenshotable {
+    func screenshot(quality: CGFloat) -> UIImage?
+}
+
+extension UIView: Screenshotable {
+    /// Takes a screenshot of the view with the given aspect ratio.
+    /// An aspect ratio of 0 means capture the entire view.
+    func screenshot(quality: CGFloat = 1) -> UIImage? {
+        return screenshot(frame.size, offset: nil, quality: quality)
+    }
+
     /// Takes a screenshot of the view with the given size.
-    func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
+    private func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
         guard 0...1 ~= quality else { return nil }
 
         let offset = offset ?? .zero
@@ -17,28 +27,5 @@ extension UIView {
         UIGraphicsEndImageContext()
 
         return image
-    }
-
-    /// Takes a screenshot of the view with the given aspect ratio.
-    /// An aspect ratio of 0 means capture the entire view.
-    func screenshot(_ aspectRatio: CGFloat = 0, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
-        guard aspectRatio >= 0 else { return nil }
-
-        var size: CGSize
-        if aspectRatio > 0 {
-            size = CGSize()
-            let viewAspectRatio = frame.width / frame.height
-            if viewAspectRatio > aspectRatio {
-                size.height = frame.height
-                size.width = size.height * aspectRatio
-            } else {
-                size.width = frame.width
-                size.height = size.width / aspectRatio
-            }
-        } else {
-            size = frame.size
-        }
-
-        return screenshot(size, offset: offset, quality: quality)
     }
 }
