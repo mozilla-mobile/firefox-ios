@@ -62,7 +62,7 @@ jobs:
           swift run LocalizationTools --export --project-path "${start_folder}/code_repo/firefox-ios/Client.xcodeproj" --l10n-project-path "${start_folder}/l10n_repo" --locale en-US
       - name: Check reference locale
         run: |
-          moz-xliff-lint --path l10n_repo/en-US --config code_repo/.github/l10n/linter_config_ios.json
+          (cd code_repo && moz-xliff-lint --path ../l10n_repo/en-US --config .github/l10n/linter_config_ios.json)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
