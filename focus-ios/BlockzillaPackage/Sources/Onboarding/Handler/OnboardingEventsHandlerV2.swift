@@ -2,7 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Combine
+
+enum TooltipTracking {
+    case showOnce      // Original behavior - show once and never again
+    case showUntilDismissed  // New behavior - show until explicitly dismissed
+}
 
 public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
     private let setShownTips: (Set<ToolTipRoute>) -> Void
@@ -15,6 +20,20 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
             setShownTips(shownTips)
         }
     }
+    
+    private var tooltipTrackingTypes: [ToolTipRoute: TooltipTracking] = [
+        .onboarding(.v1): .showOnce,
+        .onboarding(.v2): .showUntilDismissed,
+        .trackingProtection: .showOnce,
+        .trackingProtectionShield(.v1): .showOnce,
+        .trackingProtectionShield(.v2): .showOnce,
+        .trash(.v1): .showOnce,
+        .trash(.v2): .showOnce,
+        .searchBar: .showOnce,
+        .widget: .showOnce,
+        .widgetTutorial: .showOnce,
+        .menu: .showOnce
+    ]
 
     public init(
         getShownTips: () -> Set<ToolTipRoute>,
@@ -53,9 +72,27 @@ public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
     }
 
     private func show(route: ToolTipRoute) {
-        if !shownTips.contains(route) {
-            self.route = route
-            shownTips.insert(route)
+        let trackingType = tooltipTrackingTypes[route] ?? .showOnce
+        
+        switch trackingType {
+        case .showOnce:
+            if !shownTips.contains(route) {
+                self.route = route
+                shownTips.insert(route)
+            }
+        case .showUntilDismissed:
+            // New behavior - only check if in set, don't insert until dismissed
+            if !shownTips.contains(route) {
+                self.route = route
+            }
+        }
+    }
+
+    public func dismissTooltip(route: ToolTipRoute) {
+        shownTips.insert(route)
+        
+        if self.route == route {
+            self.route = nil
         }
     }
 }
