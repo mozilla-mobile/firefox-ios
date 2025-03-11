@@ -33,9 +33,6 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .darkReader:
-            return checkDarkReaderFeature(from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -382,11 +379,6 @@ final class NimbusFeatureFlagLayer {
     private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appIconSelectionFeature.value()
         return config.enabled
-    }
-
-    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.darkReaderFeature.value()
-        return config.status
     }
 
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
