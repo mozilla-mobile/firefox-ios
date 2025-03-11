@@ -43,7 +43,7 @@ struct ThemeOptionView: View {
         .accessibilityElement()
         .accessibilityLabel("\(theme.rawValue)")
         .accessibilityValue("\(isSelected ? 1 : 0)")
-        .accessibilityAddTraits(traits)
+        .accessibilityAddTraits([.isButton])
         .accessibilityAction {
             onSelected?()
         }
@@ -94,13 +94,5 @@ struct ThemeOptionView: View {
             .scaledToFill()
             // Accessibility label is on the parent view on the whole ThemeOptionView
             .accessibility(hidden: true)
-    }
-
-    var traits: AccessibilityTraits {
-        if #available(iOS 17.0, *) {
-            return [.isButton, .isToggle]
-        } else {
-            return [.isButton]
-        }
     }
 }
