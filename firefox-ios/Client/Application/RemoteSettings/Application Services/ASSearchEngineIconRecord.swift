@@ -5,17 +5,8 @@
 import MozillaAppServices
 import Common
 
-struct RemoteSettingsEngineIconRecordFields: Codable {
-    let engineIdentifiers: [String]
-    let imageSize: Int?
-
-    static func empty() -> Self {
-        return RemoteSettingsEngineIconRecordFields(engineIdentifiers: [], imageSize: nil)
-    }
-}
-
 /// Convenience wrapper model for AS search engine icon records fetched from Remote Settings
-struct RemoteSettingsEngineIconRecord {
+struct ASSearchEngineIconRecord {
     let id: String
     let engineIdentifiers: [String]
     let mimeType: String?
@@ -24,19 +15,28 @@ struct RemoteSettingsEngineIconRecord {
     init(record: RemoteSettingsRecord, logger: Logger = DefaultLogger.shared) {
         self.id = record.id
 
-        let iconRecordFields: RemoteSettingsEngineIconRecordFields = {
+        let iconRecordFields: ASSearchEngineIconRecordFields = {
             if let fieldData = record.fields.data(using: .utf8) {
                 do {
-                    return try JSONDecoder().decode(RemoteSettingsEngineIconRecordFields.self, from: fieldData)
+                    return try JSONDecoder().decode(ASSearchEngineIconRecordFields.self, from: fieldData)
                 } catch {
                     logger.log("Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
                 }
             }
-            return RemoteSettingsEngineIconRecordFields.empty()
+            return ASSearchEngineIconRecordFields.empty()
         }()
 
         self.engineIdentifiers = iconRecordFields.engineIdentifiers
         self.mimeType = record.attachment?.mimetype
         self.backingRecord = record
+    }
+}
+
+struct ASSearchEngineIconRecordFields: Codable {
+    let engineIdentifiers: [String]
+    let imageSize: Int?
+
+    static func empty() -> Self {
+        return ASSearchEngineIconRecordFields(engineIdentifiers: [], imageSize: nil)
     }
 }
