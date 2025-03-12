@@ -130,20 +130,15 @@ final class ASIconDataFetcher {
 
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
-        let client: RemoteSettingsClient
-        do {
-            // NOTE: this client creation MUST happen before sync() or the sync won't work
-            client = try service.makeClient(collectionName: "search-config-icons")
+        // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
+        let collection: ASRemoteSettingsCollection = .searchEngineIcons
+        guard let client = collection.makeClient(service: service) else { completion([]); return }
 
-            // TODO: TEMPORARY SYNC FOR TESTING TO MAKE SURE WE GET DATA
-            let _ = try service.sync()
-        } catch {
-            logger.log("AS client/service error: \(error)", level: .warning, category: .remoteSettings)
-            completion([])
-            return
-        }
+        // TODO: TEMPORARY SYNC FOR TESTING TO MAKE SURE WE GET DATA
+        _ = try? service.sync()
 
         guard let records = client.getRecords() else { completion([]); return }
+        logger.log("Fetched \(records.count) search icon records", level: .info, category: .remoteSettings)
         let iconRecords = records.map { ASSearchEngineIconRecord(record: $0) }
 
         // This is an O(nm) loop but should generally be an extremely small collection
