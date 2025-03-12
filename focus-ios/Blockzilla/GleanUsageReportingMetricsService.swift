@@ -61,6 +61,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
 
 class GleanLifecycleObserver {
     let gleanUsageReportingApi: GleanUsageReportingApi
+    let profileIdentifier = ProfileIdentifier()
     private var isObserving = false
     private let notificationCenter: NotificationCenter
 
@@ -135,7 +136,7 @@ class GleanLifecycleObserver {
 }
 
 class GleanUsageReportingMetricsService {
-    private var lifecycleObserver: GleanLifecycleObserver
+    private(set) var lifecycleObserver: GleanLifecycleObserver
 
     init(
         lifecycleObserver: GleanLifecycleObserver = GleanLifecycleObserver()
@@ -145,7 +146,7 @@ class GleanUsageReportingMetricsService {
 
     func start() {
         lifecycleObserver.gleanUsageReportingApi.setEnabled(true)
-        checkAndSetUsageProfileId()
+        lifecycleObserver.profileIdentifier.checkAndSetProfileId()
         lifecycleObserver.startObserving()
     }
 
@@ -153,26 +154,6 @@ class GleanUsageReportingMetricsService {
         lifecycleObserver.gleanUsageReportingApi.setEnabled(false)
         lifecycleObserver.stopObserving()
         lifecycleObserver.gleanUsageReportingApi.requestDataDeletion()
-        unsetUsageProfileId()
-    }
-
-    struct Constants {
-        static let profileId = "profileId"
-        static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
-    }
-
-    func unsetUsageProfileId() {
-        UserDefaults.standard.removeObject(forKey: Constants.profileId)
-        GleanMetrics.Usage.profileId.set(Constants.canaryUUID)
-    }
-
-    func checkAndSetUsageProfileId() {
-        if let uuidString = UserDefaults.standard.string(forKey: Constants.profileId),
-           let uuid = UUID(uuidString: uuidString) {
-            GleanMetrics.Usage.profileId.set(uuid)
-        } else {
-            let uuid = GleanMetrics.Usage.profileId.generateAndSet()
-            UserDefaults.standard.set(uuid.uuidString, forKey: Constants.profileId)
-        }
+        lifecycleObserver.profileIdentifier.unsetUsageProfileId()
     }
 }

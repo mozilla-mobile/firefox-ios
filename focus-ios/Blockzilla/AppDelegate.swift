@@ -385,7 +385,7 @@ extension AppDelegate {
         if TelemetryManager.shared.isNewTosEnabled {
             gleanUsageReportingMetricsService.start()
         } else {
-            gleanUsageReportingMetricsService.unsetUsageProfileId()
+            gleanUsageReportingMetricsService.lifecycleObserver.profileIdentifier.unsetUsageProfileId()
         }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
