@@ -10,8 +10,6 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
-import MozillaAppServices
-import Account
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
