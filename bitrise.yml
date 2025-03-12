@@ -1437,7 +1437,7 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            DESTINATION="generic/platform=iOS"
+            DESTINATION="platform=iOS Simulator,name=iPhone 15 Pro,OS=18.0"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
 
