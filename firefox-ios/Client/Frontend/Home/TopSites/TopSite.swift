@@ -73,11 +73,14 @@ final class TopSite: FeatureFlaggable {
 }
 
 private extension TopSite {
-    var pinnedText: String {
-        return .FirefoxHomepage.Shortcuts.Pinned
+    var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
     }
 
     var pinnedStatusTitle: String {
-        isPinned ? "\(pinnedText): \(title)" : title
+        isPinned ? pinnedTitle : title
     }
 }

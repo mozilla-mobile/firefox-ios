@@ -80,11 +80,14 @@ struct TopSiteConfiguration: Hashable, Equatable {
 }
 
 private extension TopSiteConfiguration {
-    var pinnedText: String {
-        return .FirefoxHomepage.Shortcuts.Pinned
+    var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
     }
 
     var pinnedStatusTitle: String {
-        isPinned ? "\(pinnedText): \(title)" : title
+        return isPinned ? pinnedTitle : title
     }
 }
