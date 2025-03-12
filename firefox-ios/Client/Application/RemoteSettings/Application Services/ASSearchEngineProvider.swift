@@ -144,7 +144,7 @@ final class ASIconDataFetcher {
         }
 
         guard let records = client.getRecords() else { completion([]); return }
-        let iconRecords = records.map { RemoteSettingsEngineIconRecord(record: $0) }
+        let iconRecords = records.map { ASSearchEngineIconRecord(record: $0) }
 
         // This is an O(nm) loop but should generally be an extremely small collection
         // of search engines. For example for en-US we currently only get 7 records.
