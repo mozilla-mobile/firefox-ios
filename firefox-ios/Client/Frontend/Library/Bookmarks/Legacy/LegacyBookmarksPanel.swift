@@ -62,6 +62,8 @@ class LegacyBookmarksPanel: SiteTableViewController,
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            // Ecosia: Enable the Done button after closing the panel details
+            bottomRightButton.isEnabled = true
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
