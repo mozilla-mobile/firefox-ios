@@ -27,7 +27,7 @@ struct DefaultBrowserOnboardingView: View {
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
-            defaultBrowserSettingsButton
+            openSettingsButton
             skipOnboardingButton
         }
         .padding([.leading, .trailing], .viewPadding)
@@ -64,7 +64,7 @@ struct DefaultBrowserOnboardingView: View {
         .font(.body16)
     }
 
-    private var defaultBrowserSettingsButton: some View {
+    private var openSettingsButton: some View {
         return Button(action: {
             viewModel.send(.defaultBrowserSettingsTapped)
         }, label: {
