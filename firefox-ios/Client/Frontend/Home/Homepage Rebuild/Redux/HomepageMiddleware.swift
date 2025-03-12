@@ -15,6 +15,11 @@ final class HomepageMiddleware {
         switch action.actionType {
         case NavigationBrowserActionType.tapOnCustomizeHomepage:
             self.homepageTelemetry.sendTapOnCustomizeHomepageTelemetry()
+        case HomepageActionType.didSelectItem:
+            guard let itemName = (action as? HomepageAction)?.telemetryExtras?.itemName else {
+                return
+            }
+            self.homepageTelemetry.sendItemTappedTelemetryEvent(for: itemName)
         default:
             break
         }
