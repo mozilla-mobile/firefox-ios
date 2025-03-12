@@ -1177,7 +1177,7 @@ extension String {
                 key: "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139",
                 tableName: "FirefoxHomepage",
                 value: "Pinned: %@",
-                comment: "Accessiblity label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile."
+                comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. The placeholder will be replaced by the title of the website."
             )
         }
 
