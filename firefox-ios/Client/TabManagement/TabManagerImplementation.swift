@@ -20,7 +20,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEventHandler {
+class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     let windowUUID: WindowUUID
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -157,7 +157,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         super.init()
 
         GlobalTabEventHandlers.configure(with: profile)
-        register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
         setupNotifications(
@@ -875,7 +874,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     // MARK: - Select Tab
 
-    /// This function updates the _selectedIndex.
+    /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
@@ -1000,7 +999,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     // MARK: - TabEventHandler
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+    func tabDidSetScreenshot(_ tab: Tab) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
@@ -1015,7 +1014,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         guard let screenshot = tab.screenshot else { return }
 
         Task {
-            try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            do {
+                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            } catch {
+                logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
+            }
         }
     }
 
