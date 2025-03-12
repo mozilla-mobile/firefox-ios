@@ -56,9 +56,7 @@ struct DownloadLiveActivity: Widget {
                     // Using Rectangle instead of EmptyView because the hitbox
                     // of the empty view is too small (likely non existent),
                     // meaning we'd never be redirected to the downloads panel
-                    let progress = context.state.totalProgress
-                    let downloads = context.state.totalDownloads
-                    Text("Progress so far: \(progress), total downloads: \(downloads)")
+                    Rectangle()
                         .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         } dynamicIsland: { _ in
             DynamicIsland {
