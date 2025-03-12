@@ -393,22 +393,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
 
-<<<<<<< HEAD
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            } else {
-=======
                 if !isTabTrayExperimentEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
                 }
-                addNewTabIfPrivate(uuid: uuid)
             } else if !isTabTrayExperimentEnabled {
->>>>>>> 3d949a987 (Remove FXIOS-11602 [Tab tray UI experiment] No more toasts on tab tray (#25269))
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -500,21 +491,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
-                } else {
-<<<<<<< HEAD
+                } else if !isTabTrayExperimentEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
-=======
-                    if !isTabTrayExperimentEnabled {
-                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                               windowUUID: uuid,
-                                                               actionType: GeneralBrowserActionType.showToast)
-                        store.dispatch(toastAction)
-                    }
-                    addNewTabIfPrivate(uuid: uuid)
->>>>>>> 3d949a987 (Remove FXIOS-11602 [Tab tray UI experiment] No more toasts on tab tray (#25269))
                 }
             }
         }
