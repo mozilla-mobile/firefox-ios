@@ -1535,7 +1535,7 @@ workflows:
             TIMESTAMP=$(date "+%Y%m%d%H%M%S")
             RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
-            DEVICE_MODEL="iphone14pro" # if updating device model and version, also update firebase-performance.kind
+            DEVICE_MODEL="iphone15pro" # if updating device model and version, also update firebase-performance.kind
             DEVICE_VERSION="18.0"
             XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
