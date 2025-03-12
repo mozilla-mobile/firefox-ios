@@ -10,16 +10,19 @@ import Shared
 
 @available(iOS 16.2, *)
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
+    enum DurationToDismissal: Double {
+        case none = 0
+        case delayed = 2
+    }
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
-    weak var downloadProgressManager: DownloadProgressManager?
+    var downloadProgressManager: DownloadProgressManager
 
     init(downloadProgressManager: DownloadProgressManager) {
         self.downloadProgressManager = downloadProgressManager
     }
 
     func start() -> Bool {
-        guard let downloadProgressManager = self.downloadProgressManager else {return false}
         let attributes = DownloadLiveActivityAttributes()
 
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
@@ -37,13 +40,12 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         }
     }
 
-    func end(afterSeconds: Double) {
-        guard let downloadProgressManager = self.downloadProgressManager else {return}
+    func end(durationToDismissal: DurationToDismissal) {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
         Task {
             await downloadLiveActivity?.end(using: contentState,
-                                            dismissalPolicy: .after(.now.addingTimeInterval(afterSeconds)))
+                                            dismissalPolicy: .after(.now.addingTimeInterval(durationToDismissal.rawValue)))
         }
     }
 }
