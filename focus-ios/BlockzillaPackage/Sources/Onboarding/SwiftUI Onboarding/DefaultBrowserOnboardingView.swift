@@ -28,7 +28,7 @@ struct DefaultBrowserOnboardingView: View {
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
             defaultBrowserSettingsButton
-            defaultBrowserSkipButton
+            skipOnboardingButton
         }
         .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
@@ -78,7 +78,7 @@ struct DefaultBrowserOnboardingView: View {
         })
     }
 
-    private var defaultBrowserSkipButton: some View {
+    private var skipOnboardingButton: some View {
         return Button(action: {
             viewModel.send(.defaultBrowserSkip)
         }, label: {
