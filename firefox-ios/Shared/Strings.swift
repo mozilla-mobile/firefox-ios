@@ -1174,7 +1174,7 @@ extension String {
                 comment: "This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible.")
 
             public static let Pinned = MZLocalizedString(
-                key: "FirefoxHomepage.Shortcuts.Pinned.v136",
+                key: "FirefoxHomepage.Shortcuts.Pinned.v139",
                 tableName: "FirefoxHomepage",
                 value: "Pinned",
                 comment: "This string will be played in voice over for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. This is voice over only localization"

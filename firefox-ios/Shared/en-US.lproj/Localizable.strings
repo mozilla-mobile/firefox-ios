@@ -370,9 +370,6 @@
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Sponsored";
 
-/* This string will be played in voice over for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. This is voice over only localization */
-"FirefoxHomepage.Shortcuts.Pinned.v136" = "Pinned";
-
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Forward";
 
