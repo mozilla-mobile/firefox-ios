@@ -13,7 +13,7 @@ final class TopSite: FeatureFlaggable {
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
-    
+
     private var pinnedTitle: String {
         .localizedStringWithFormat(
             .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
