@@ -223,7 +223,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func normalizeString(_ string: String) -> String {
-        return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
+        return string.stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
     }
 
     // Reset the cursor to the end of the text field.
