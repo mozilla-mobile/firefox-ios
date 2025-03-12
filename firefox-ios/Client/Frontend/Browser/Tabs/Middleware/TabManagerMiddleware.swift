@@ -10,7 +10,8 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
+class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
+                            FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
@@ -373,26 +374,32 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
+            let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
+                                                                           checking: .buildOnly)
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
                                                        windowUUID: uuid,
                                                        actionType: TabPanelViewActionType.tabPanelDidLoad)
                 store.dispatch(didLoadAction)
 
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
+                if !isTabTrayExperimentEnabled {
+                    let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
+                                                               windowUUID: uuid,
+                                                               actionType: TabPanelMiddlewareActionType.showToast)
+                    store.dispatch(toastAction)
+                }
             } else if shouldDismiss {
                 let dismissAction = TabTrayAction(windowUUID: uuid,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
 
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            } else {
+                if !isTabTrayExperimentEnabled {
+                    let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
+                                                           windowUUID: uuid,
+                                                           actionType: GeneralBrowserActionType.showToast)
+                    store.dispatch(toastAction)
+                }
+            } else if !isTabTrayExperimentEnabled {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -477,12 +484,14 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                       actionType: TabPanelMiddlewareActionType.refreshTabs)
                 store.dispatch(action)
 
-                if tabsState.isPrivateMode {
+                let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
+                                                                               checking: .buildOnly)
+                if tabsState.isPrivateMode && !isTabTrayExperimentEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
-                } else {
+                } else if !isTabTrayExperimentEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
