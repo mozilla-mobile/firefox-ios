@@ -177,7 +177,7 @@ class TabManagerTests: XCTestCase {
 
     func testSelectTab_pauseCurrentDocumentDownload() throws {
         setIsPDFRefactorEnabled(true)
-        
+
         let tabs = generateTabs(count: 2)
         let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
         let subject = createSubject(tabs: tabs)
