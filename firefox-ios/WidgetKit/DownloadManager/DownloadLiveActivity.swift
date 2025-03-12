@@ -73,14 +73,20 @@ struct DownloadLiveActivity: Widget {
     }
 }
 
-@available(iOSApplicationExtension 16.1, *)
+@available(iOS 16.2, *)
 @DynamicIslandExpandedContentBuilder
 private func expandedContent
 (context: ActivityViewContext<DownloadLiveActivityAttributes>) -> DynamicIslandExpandedContent<some View> {
         DynamicIslandExpandedRegion(.leading) {
-            Image("./Assets/faviconFox")
-                        .resizable()
-                        .frame(width: 44, height: 44)
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.white)
+                    .frame(width: 50, height: 50)
+                Image("faviconFox")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 44, height: 44)
+            }.padding()
         }
         DynamicIslandExpandedRegion(.trailing) {
             ZStack {
@@ -90,23 +96,49 @@ private func expandedContent
                     .frame(width: 44, height: 44)
                 // Progress Indicator
                 Circle()
-                    .trim(from: CGFloat(context.state.totalBytesDownloaded), to: CGFloat(context.state.totalBytesExpected))
-                    .stroke(Color.white, lineWidth: 6)
-                    .frame(width: 44, height: 44)
-                    .rotationEffect(Angle(degrees: 270))
+                    .trim(from: 0.0, to: min(context.state.totalProgress, 1.0))
+                    .stroke(style: StrokeStyle(lineWidth: 6))
+                    .rotationEffect(.degrees(270.0))
+                    .animation(.linear, value: 0.5)
                 // Stop Button
-                Rectangle()
-                    .fill(Color.white)
+                Image("mediaStop")
+                    .resizable()
+                    .scaledToFit()
                     .frame(width: 24, height: 24)
-                    .overlay(
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 12, height: 12)
-                    )
-            }
+            }.frame(width: 44, height: 44)
+                .padding()
         }
-        DynamicIslandExpandedRegion(.bottom) {
-            Text("Downloading \(context.state.downloads)").font(.system(size: 17, weight: .bold))
-            Text("\(context.state.totalBytesDownloaded) of \(context.state.totalBytesExpected)").font(.system(size: 15))
+        DynamicIslandExpandedRegion(.center) {
+            Text("Downloading \(context.state.downloads[0].fileName)")
+                .font(.system(size: 17,
+                              weight: .bold))
+            Text("\(String(format: "%.1f", Double(context.state.totalBytesDownloaded) / 1000000)) MB of \(String(format: "%.1f", Double(context.state.totalBytesExpected) / 1000000)) MB")
+                                        .font(.system(size: 15))
+                                        .opacity(0.8)
+                                        .foregroundColor(Color("widgetLabelColors"))
         }
+}
+
+func startDownloadLiveActivity() {
+    guard #available(iOS 16.2, *) else { return }
+
+    let attributes = DownloadLiveActivityAttributes()
+    let state = DownloadLiveActivityAttributes.ContentState(downloads: [DownloadLiveActivityAttributes.ContentState.Download(
+        id: UUID(),
+        fileName: "yayyy",
+        hasContentEncoding: false,
+        totalBytesExpected: 2000000000,
+        bytesDownloaded: 50000000,
+        isComplete: false
+    )])
+
+    do {
+        _ = try Activity<DownloadLiveActivityAttributes>.request(
+            attributes: attributes,
+            content: .init(state: state, staleDate: nil),
+            pushType: nil
+        )
+    } catch {
+        print("Failed to start Live Activity: \(error.localizedDescription)")
+    }
 }
