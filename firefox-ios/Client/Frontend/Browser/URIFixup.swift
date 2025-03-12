@@ -31,12 +31,7 @@ class URIFixup {
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
         if !trimmed.contains(".") { return nil }
-
-        // Next check for invalid spaces. Escaped spaces are allowed in the
-        // path and onwards, so make sure any spaces are after both a "."
-        // (the host) and a "/" (start of the path).
-        if trimmed.contains(" ") && !trimmed.prefix(upTo: trimmed.firstIndex(of: " ")).contains(Regex("\..*/")) { return nil }
-
+        
         // If there is a ".", prepend "http://" and try again. Since this
         // is strictly an "http://" URL, we also require a host.
         if let url = punycodedURL("http://\(escaped)"), url.host != nil {
