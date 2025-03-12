@@ -92,14 +92,11 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         favicon.layer.cornerRadius = UX.faviconSize.height / 2
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
 
-        // Ensure background holder has bounds set
-        DispatchQueue.main.async {
-            self.backgroundHolder.layoutIfNeeded()
-            self.contentView.layer.shadowPath = UIBezierPath(
-                roundedRect: self.backgroundHolder.bounds,
-                cornerRadius: self.backgroundHolder.layer.cornerRadius
-            ).cgPath
-        }
+        backgroundHolder.layoutIfNeeded()
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: self.backgroundHolder.bounds,
+            cornerRadius: self.backgroundHolder.layer.cornerRadius
+        ).cgPath
     }
 
     // MARK: - Initializer
