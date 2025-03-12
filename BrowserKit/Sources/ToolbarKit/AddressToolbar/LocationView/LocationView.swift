@@ -402,10 +402,8 @@ final class LocationView: UIView,
 
         // Start overlay mode & select text when in edit mode with a search term
         if shouldShowKeyboard, config.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.text = text
-                self.urlTextField.selectAll(nil)
-            }
+            self.urlTextField.text = text
+            self.urlTextField.selectAll(nil)
         }
     }
 
