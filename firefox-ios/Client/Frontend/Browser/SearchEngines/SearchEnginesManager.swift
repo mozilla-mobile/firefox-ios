@@ -54,8 +54,14 @@ struct SearchEngineProviderFactory {
 class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
-    private let orderedEngineNamesPrefsKey = "search.orderedEngineNames"
-    private let disabledEngineNamesPrefsKey = "search.disabledEngineNames"
+
+    // Preference keys for old (pre-bundled XML-based) search engines
+    private let legacy_orderedEngineNamesPrefsKey = "search.orderedEngineNames"
+    private let legacy_disabledEngineNamesPrefsKey = "search.disabledEngineNames"
+
+    // Preference keys for new Application Services based search engines
+    // [TODO]
+
     private let customSearchEnginesFileName = "customEngines.plist"
     private var engineProvider: SearchEngineProvider
 
@@ -128,13 +134,13 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // The keys of this dictionary are used as a set.
     private lazy var disabledEngines: [String: Bool] = getDisabledEngines() {
         didSet {
-            self.prefs.setObject(Array(self.disabledEngines.keys), forKey: disabledEngineNamesPrefsKey)
+            self.prefs.setObject(Array(self.disabledEngines.keys), forKey: legacy_disabledEngineNamesPrefsKey)
         }
     }
 
     var orderedEngines: [OpenSearchEngine] {
         didSet {
-            self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: orderedEngineNamesPrefsKey)
+            self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
         }
     }
 
@@ -266,7 +272,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // MARK: - Private
 
     private func getDisabledEngines() -> [String: Bool] {
-        if let disabledEngines = prefs.stringArrayForKey(disabledEngineNamesPrefsKey) {
+        if let disabledEngines = prefs.stringArrayForKey(legacy_disabledEngineNamesPrefsKey) {
             var disabledEnginesDict = [String: Bool]()
             for engine in disabledEngines {
                 disabledEnginesDict[engine] = true
@@ -278,7 +284,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
-        let enginePrefs = prefs.stringArrayForKey(self.orderedEngineNamesPrefsKey)
+        let enginePrefs = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
         // TODO: [FXIOS-11502] Prefs handling needs further investigation for SEC.
         engineProvider.getOrderedEngines(customEngines: customEngines,
                                          orderedEngineNames: enginePrefs,
