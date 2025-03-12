@@ -136,7 +136,7 @@ final class ASIconDataFetcher {
             client = try service.makeClient(collectionName: "search-config-icons")
 
             // TODO: TEMPORARY SYNC FOR TESTING TO MAKE SURE WE GET DATA
-            let syncResults = try service.sync()
+            let _ = try service.sync()
         } catch {
             logger.log("AS client/service error: \(error)", level: .warning, category: .remoteSettings)
             completion([])
@@ -230,6 +230,7 @@ struct ASSearchEngineUtilities {
         if let searchArg = searchURL.searchTermParamName, !searchURL.base.contains("{searchTerm}") {
             queryItems.append(URLQueryItem(name: searchArg, value: "{searchTerms}"))
         }
+        components.queryItems = queryItems
 
         return components.url?.absoluteString.removingPercentEncoding
     }
