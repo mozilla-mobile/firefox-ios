@@ -34,9 +34,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? ScreenshotAction {
+            self.resolveScreenshotActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
+    }
+
+    private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
+        let manager = tabManager(for: action.windowUUID)
+        manager.tabDidSetScreenshot(action.tab)
+        triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
     private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
