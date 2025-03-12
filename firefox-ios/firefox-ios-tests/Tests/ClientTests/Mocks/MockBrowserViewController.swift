@@ -55,6 +55,12 @@ class MockBrowserViewController: BrowserViewController {
     var lastVisitType: VisitType?
     var isPrivate = false
 
+    var mockContentContainer = MockContentContainer()
+
+    override var contentContainer: ContentContainer {
+        return mockContentContainer
+    }
+
     override func switchToPrivacyMode(isPrivate: Bool) {
         switchToPrivacyModeCalled = true
         switchToPrivacyModeIsPrivate = isPrivate
@@ -143,5 +149,23 @@ class MockBrowserViewController: BrowserViewController {
         didSelectURLCalled = true
         lastOpenedURL = url
         lastVisitType = visitType
+    }
+}
+
+class MockContentContainer: ContentContainer {
+    var shouldHaveNativeErrorPage = false
+
+    override var contentView: Screenshotable? {
+        return MockScreenshotView()
+    }
+
+    override var hasNativeErrorPage: Bool {
+        return shouldHaveNativeErrorPage
+    }
+}
+
+class MockScreenshotView: Screenshotable {
+    func screenshot(quality: CGFloat) -> UIImage? {
+        return UIImage.checkmark
     }
 }
