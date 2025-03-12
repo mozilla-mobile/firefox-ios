@@ -25,11 +25,12 @@ extension BrowserViewController: DownloadQueueDelegate {
         if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
-            self._downloadLiveActivityWrapper = downloadLiveActivityWrapper
+            self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
-                self._downloadLiveActivityWrapper = nil
+                self.downloadLiveActivityWrapper = nil
                 return
             }
+            startRandomLiveActivity()
         }
         presentDownloadProgressToast(download: download, windowUUID: uuid)
     }
@@ -84,7 +85,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadToast.dismiss(false)
             if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self?._downloadLiveActivityWrapper = nil
+                self?.downloadLiveActivityWrapper = nil
             }
             self?.downloadProgressManager = nil
             self?.presentDownloadCompletedToast(filename: download.filename)
@@ -104,7 +105,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             if #available(iOS 16.2, *),
                let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self._downloadLiveActivityWrapper = nil
+                self.downloadLiveActivityWrapper = nil
             }
             self.downloadProgressManager = nil
 
