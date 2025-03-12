@@ -342,6 +342,10 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return currentTheme().type == .light ? .darkContent : .lightContent
+    }
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
