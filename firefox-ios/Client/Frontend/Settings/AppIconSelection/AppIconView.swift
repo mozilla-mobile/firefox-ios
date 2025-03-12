@@ -16,6 +16,7 @@ struct AppIconView: View, ThemeApplicable {
     // FIXME FXIOS-11472 Improve our SwiftUI theming
     @Environment(\.themeManager)
     var themeManager
+    @State var currentTheme: Theme = LightTheme()
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     struct UX {
@@ -25,6 +26,8 @@ struct AppIconView: View, ThemeApplicable {
         static let itemPaddingVertical: CGFloat = 2
         static let appIconSize: CGFloat = 50
         static let appIconBorderWidth: CGFloat = 1
+        static let appIconLightBackgroundColor = Color.white
+        static let appIconDarkBackgroundColor = UIColor(rgb: 33).color
     }
 
     var selectionImageAccessibilityLabel: String {
@@ -59,6 +62,15 @@ struct AppIconView: View, ThemeApplicable {
         }
     }
 
+    /// Devices prior to iOS 18 cannot change their icon display mode with their system settings
+    var forceLightTheme: Bool {
+        if #available(iOS 18, *) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     private func button(for image: UIImage) -> some View {
         Button(action: {
             setAppIcon(appIcon)
@@ -68,6 +80,20 @@ struct AppIconView: View, ThemeApplicable {
                 Image(uiImage: image)
                     .resizable()
                     .frame(width: UX.appIconSize, height: UX.appIconSize)
+                    // Note: Do not fallback to the current app theme, because the user can view settings in the private mode
+                    // theme, but app icons can only be Light or Dark
+                    .background(
+                        forceLightTheme
+                        ? UX.appIconLightBackgroundColor
+                        : UX.appIconDarkBackgroundColor
+                    )
+                    // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
+                    // Note: This fix does not work on iOS15 but it's a small user base
+                    .colorScheme(
+                        forceLightTheme
+                        ? ColorScheme.light
+                        : currentTheme.type.colorScheme
+                    )
                     .cornerRadius(UX.cornerRadius)
                     .overlay(
                         // Add rounded border
@@ -91,6 +117,7 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        self.currentTheme = theme
         self.themeColors = theme.colors
     }
 }
