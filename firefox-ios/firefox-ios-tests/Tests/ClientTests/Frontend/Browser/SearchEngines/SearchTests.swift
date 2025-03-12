@@ -39,6 +39,7 @@ class SearchTests: XCTestCase {
         // Check invalid URLs. These are passed along to the default search engine.
         checkInvalidURL("foobar")
         checkInvalidURL("foo bar")
+        checkInvalidURL("foo bar.")
         checkInvalidURL("mozilla. org")
         checkInvalidURL("123")
         checkInvalidURL("a/b")
