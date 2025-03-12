@@ -115,7 +115,7 @@ class BrowserViewController: UIViewController,
     var downloadProgressManager: DownloadProgressManager?
 
     private var _downloadLiveActivityWrapper: Any?
-    
+
     @available(iOS 16.2, *)
     var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
         get {

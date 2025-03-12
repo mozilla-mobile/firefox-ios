@@ -30,7 +30,6 @@ extension BrowserViewController: DownloadQueueDelegate {
                 self.downloadLiveActivityWrapper = nil
                 return
             }
-            startRandomLiveActivity()
         }
         presentDownloadProgressToast(download: download, windowUUID: uuid)
     }
