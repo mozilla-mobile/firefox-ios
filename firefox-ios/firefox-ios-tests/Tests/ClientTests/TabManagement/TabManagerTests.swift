@@ -354,7 +354,7 @@ class TabManagerTests: XCTestCase {
             return
         }
 
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        subject.tabDidSetScreenshot(tab)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
     }
@@ -366,7 +366,7 @@ class TabManagerTests: XCTestCase {
             return
         }
         tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        subject.tabDidSetScreenshot(tab)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
     }

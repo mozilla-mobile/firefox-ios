@@ -15,8 +15,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         static let unselectedBorderWidth: CGFloat = 0.8
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
-        static let faviconYOffset: CGFloat = 10.0
-        static let faviconSize: CGFloat = 20
+        static let faviconSize = CGSize(width: 16, height: 16)
+        static let fallbackFaviconSize = CGSize(width: 24, height: 24)
         static let closeButtonSize: CGFloat = 32
         static let textBoxHeight: CGFloat = 32
         static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 10,
@@ -26,10 +26,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
         static let tabViewFooterSpacing: CGFloat = 4
-
-        // Using the same sizes for fallback favicon as the top sites on the homepage
-        static let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
-        static let topSiteIconSize = TopSiteItemCell.UX.iconSize
     }
     // MARK: - Properties
 
@@ -39,7 +35,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
     var animator: SwipeAnimator?
     weak var delegate: TabCellDelegate?
 
-    private lazy var smallFaviconView: FaviconImageView = .build()
+    private lazy var smallFaviconView: FaviconImageView = .build { view in
+        view.isHidden = true
+    }
+
     private lazy var favicon: FaviconImageView = .build()
 
     // MARK: - UI
@@ -59,14 +58,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         view.clipsToBounds = true
     }
 
-    private lazy var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
-        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
-        view.isHidden = true
-    }
-
     private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
@@ -74,7 +65,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
 
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
     }
@@ -95,7 +86,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        favicon.layer.cornerRadius = UX.faviconSize / 2
+        favicon.layer.cornerRadius = UX.faviconSize.height / 2
+        smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
     }
 
     // MARK: - Initializer
@@ -112,8 +104,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         footerView.addArrangedSubview(favicon)
         footerView.addArrangedSubview(titleText)
 
-        faviconBG.addSubview(smallFaviconView)
-        backgroundHolder.addSubviews(screenshotView, faviconBG, closeButton)
+        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
@@ -201,14 +192,14 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
                 named: StandardImageIdentifiers.Large.globe
             )?.withRenderingMode(.alwaysTemplate)
             smallFaviconView.manuallySetImage(defaultImage ?? UIImage())
-            faviconBG.isHidden = false
+            smallFaviconView.isHidden = false
             screenshotView.image = nil
         } else if let tabScreenshot = tabModel.screenshot {
             // Use Tab screenshot when available
             screenshotView.image = tabScreenshot
         } else {
             // Favicon or letter image when tab screenshot isn't available
-            faviconBG.isHidden = false
+            smallFaviconView.isHidden = false
             screenshotView.image = nil
 
             if let tabURL = tabModel.url?.absoluteString {
@@ -243,7 +234,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
-        faviconBG.isHidden = true
+        smallFaviconView.isHidden = true
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
@@ -265,8 +256,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             footerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
 
-            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
-            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
+            favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
+            favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
@@ -281,15 +272,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
             screenshotView.trailingAnchor.constraint(equalTo: backgroundHolder.trailingAnchor),
             screenshotView.bottomAnchor.constraint(equalTo: backgroundHolder.bottomAnchor),
 
-            faviconBG.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor, constant: UX.faviconYOffset),
-            faviconBG.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
-            faviconBG.heightAnchor.constraint(equalToConstant: UX.imageBackgroundSize.height),
-            faviconBG.widthAnchor.constraint(equalToConstant: UX.imageBackgroundSize.width),
-
-            smallFaviconView.heightAnchor.constraint(equalToConstant: UX.topSiteIconSize.height),
-            smallFaviconView.widthAnchor.constraint(equalToConstant: UX.topSiteIconSize.width),
-            smallFaviconView.centerYAnchor.constraint(equalTo: faviconBG.centerYAnchor),
-            smallFaviconView.centerXAnchor.constraint(equalTo: faviconBG.centerXAnchor),
+            smallFaviconView.heightAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.height),
+            smallFaviconView.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
+            smallFaviconView.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor),
+            smallFaviconView.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
         ])
     }
 

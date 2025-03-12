@@ -189,7 +189,6 @@ class TopTabDisplayManager: NSObject {
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         tabManager.addDelegate(self)
-        register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
         getTabs { [weak self] tabsToDisplay in
             guard let self, !tabsToDisplay.isEmpty else { return }
