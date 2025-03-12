@@ -71,6 +71,20 @@ struct AppIconView: View, ThemeApplicable {
         }
     }
 
+    /// The expected default app icon background for iOS 18+ app icons with transparency
+    var appIconBackgroundColor: Color {
+        if forceLightTheme {
+            return UX.appIconLightBackgroundColor
+        } else {
+            switch currentTheme.type.colorScheme {
+            case .light:
+                return UX.appIconLightBackgroundColor
+            default:
+                return UX.appIconDarkBackgroundColor
+            }
+        }
+    }
+
     private func button(for image: UIImage) -> some View {
         Button(action: {
             setAppIcon(appIcon)
@@ -85,7 +99,7 @@ struct AppIconView: View, ThemeApplicable {
                     .background(
                         forceLightTheme
                         ? UX.appIconLightBackgroundColor
-                        : UX.appIconDarkBackgroundColor
+                        : appIconBackgroundColor
                     )
                     // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
                     // Note: This fix does not work on iOS15 but it's a small user base
