@@ -2566,7 +2566,7 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
                     tableName: "AppIconSelection",
                     value: "Pride",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo.")
 
                 public static let RedGradient = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.RedGradient.Title.v136",
