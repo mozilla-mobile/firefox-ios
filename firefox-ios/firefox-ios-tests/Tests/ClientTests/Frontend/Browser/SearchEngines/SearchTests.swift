@@ -34,6 +34,7 @@ class SearchTests: XCTestCase {
         checkValidURL("foo.bar", afterFixup: "http://foo.bar")
         checkValidURL(" foo.bar ", afterFixup: "http://foo.bar")
         checkValidURL("1.2.3", afterFixup: "http://1.2.3")
+        checkValidURL("foo.bar/foo bar", afterFixup: "http://foo.bar/foo%20bar")
 
         // Check invalid URLs. These are passed along to the default search engine.
         checkInvalidURL("foobar")
