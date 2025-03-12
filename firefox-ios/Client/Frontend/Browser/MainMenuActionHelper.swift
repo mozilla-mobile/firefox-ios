@@ -474,8 +474,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         let nightModeEnabled = NightModeHelper.isActivated()
 
         let nightModeTitle: String = nightModeEnabled
-            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOn
-            : .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+            : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
 
         let nightModeIcon: String = nightModeEnabled
             ? StandardImageIdentifiers.Large.nightModeFill

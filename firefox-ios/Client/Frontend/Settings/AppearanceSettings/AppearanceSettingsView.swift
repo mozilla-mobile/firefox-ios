@@ -29,6 +29,10 @@ struct AppearanceSettingsView: View {
         return Color(currentTheme?.colors.layer1 ?? UIColor.clear)
     }
 
+    private struct UX {
+        static let spacing: CGFloat = 24
+    }
+
     var body: some View {
         VStack {
             // Section for selecting the browser theme.
@@ -47,7 +51,7 @@ struct AppearanceSettingsView: View {
             }
             Spacer()
         }
-        .padding(.top, 24)
+        .padding(.top, UX.spacing)
         .frame(maxWidth: .infinity)
         .background(viewBackground)
         .onAppear {

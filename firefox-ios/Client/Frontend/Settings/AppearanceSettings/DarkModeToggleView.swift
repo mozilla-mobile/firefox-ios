@@ -12,7 +12,7 @@ struct DarkModeToggleView: View {
     @State var isEnabled = false
 
     /// Callback executed when the toggle value changes.
-    var onChange: ((Bool) -> Void)?
+    let onChange: ((Bool) -> Void)?
 
     var textColor: Color {
         return Color(theme?.colors.textPrimary ?? UIColor.clear)
