@@ -15,9 +15,17 @@ extension DownloadProgressDelegate {
     func updateCombinedTotalBytesExpected(value: Int64?) {}
 }
 
+class WeakDownloadProgressDelegate {
+    weak var delegate: DownloadProgressDelegate?
+
+    init(_ delegate: DownloadProgressDelegate) {
+        self.delegate = delegate
+    }
+}
+
 class DownloadProgressManager {
     var downloads: [Download] = []
-    var delegates: [DownloadProgressDelegate] = []
+    private var delegates: [WeakDownloadProgressDelegate] = []
 
     init(downloads: [Download]) {
         combinedTotalBytesExpected = 0
@@ -26,14 +34,18 @@ class DownloadProgressManager {
 
     var combinedBytesDownloaded: Int64 = 0 {
         didSet {
-            delegates.forEach({ $0.updateCombinedBytesDownloaded(value: self.combinedBytesDownloaded) })
+            delegates.forEach({ $0.delegate?.updateCombinedBytesDownloaded(value: self.combinedBytesDownloaded) })
         }
     }
 
     var combinedTotalBytesExpected: Int64? {
         didSet {
-            delegates.forEach({ $0.updateCombinedTotalBytesExpected(value: self.combinedTotalBytesExpected) })
+            delegates.forEach({ $0.delegate?.updateCombinedTotalBytesExpected(value: self.combinedTotalBytesExpected) })
         }
+    }
+
+    func addDelegate(delegate: DownloadProgressDelegate) {
+        delegates.append(WeakDownloadProgressDelegate(delegate))
     }
 
     func addDownload(_ download: Download) {

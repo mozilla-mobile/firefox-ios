@@ -21,7 +21,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
         if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
-            downloadProgressManager.delegates.append(downloadLiveActivityWrapper)
+            downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
             self._downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
                 self._downloadLiveActivityWrapper = nil
@@ -38,7 +38,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         if #available(iOS 16.2, *),
            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
-            downloadLiveActivityWrapper.end(afterSeconds: 0)
+            downloadLiveActivityWrapper.end(durationToDismissal: .none)
         }
         self.downloadProgressManager = nil
 
@@ -70,7 +70,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         DispatchQueue.main.async { [weak self] in
             downloadToast.dismiss(false)
             if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
-                downloadLiveActivityWrapper.end(afterSeconds: 2)
+                downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self?._downloadLiveActivityWrapper = nil
             }
             self?.downloadProgressManager = nil
@@ -90,7 +90,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadToast.dismiss(false)
             if #available(iOS 16.2, *),
                let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
-                downloadLiveActivityWrapper.end(afterSeconds: 2)
+                downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
                 self._downloadLiveActivityWrapper = nil
             }
             self.downloadProgressManager = nil
@@ -110,7 +110,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                                           completion: { buttonPressed in
             self.stopDownload(buttonPressed: buttonPressed)})
 
-        downloadProgressManager.delegates.append(downloadToast)
+        downloadProgressManager.addDelegate(delegate: downloadToast)
 
         show(toast: downloadToast, duration: nil)
     }

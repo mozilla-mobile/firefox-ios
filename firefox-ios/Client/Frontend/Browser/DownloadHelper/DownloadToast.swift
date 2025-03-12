@@ -49,14 +49,13 @@ class DownloadToast: Toast, DownloadProgressDelegate {
 
     var progressWidthConstraint: NSLayoutConstraint?
 
-    weak var downloadProgressManager: DownloadProgressManager?
+    var downloadProgressManager: DownloadProgressManager
 
     // Returns true if one or more downloads have encoded data (indicated via response `Content-Encoding` header).
     // If at least one download has encoded data, we cannot get a correct total estimate for all the downloads.
     // In that case, we do not show descriptive text. This will be improved in a later rework of the download manager.
     // FXIOS-9039
     var hasContentEncoding: Bool {
-        guard let downloadProgressManager = self.downloadProgressManager else {return false}
         return downloadProgressManager.downloads.contains(where: { $0.hasContentEncoding ?? false })
     }
 
@@ -78,7 +77,7 @@ class DownloadToast: Toast, DownloadProgressDelegate {
     }
 
     var descriptionText: String {
-        guard !hasContentEncoding, let downloadProgressManager = self.downloadProgressManager else {
+        guard !hasContentEncoding else {
             // We cannot get a correct estimate of encoded downloaded bytes (FXIOS-9039)
             return String()
         }
@@ -147,17 +146,17 @@ class DownloadToast: Toast, DownloadProgressDelegate {
 
     func updatePercent() {
         DispatchQueue.main.async {
-            guard !self.hasContentEncoding, let downloadProgressManager = self.downloadProgressManager else {
+            guard !self.hasContentEncoding else {
                 // We cannot get a correct estimate of encoded downloaded bytes (FXIOS-9039)
                 self.percent = nil
                 return
             }
 
-            guard let combinedTotalBytesExpected = downloadProgressManager.combinedTotalBytesExpected else {
+            guard let combinedTotalBytesExpected = self.downloadProgressManager.combinedTotalBytesExpected else {
                 self.percent = 0.0
                 return
             }
-            let combinedBytesDownloaded = downloadProgressManager.combinedBytesDownloaded
+            let combinedBytesDownloaded = self.downloadProgressManager.combinedBytesDownloaded
 
             self.percent = CGFloat(combinedBytesDownloaded) / CGFloat(combinedTotalBytesExpected)
         }
