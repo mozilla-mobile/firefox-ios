@@ -7584,6 +7584,7 @@
 		5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
 		5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDelegate.swift; sourceTree = "<group>"; };
 		5AFE480388201E6CE88C0EA7 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		5AFF989C2D8219F8008A0B79 /* version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = "<group>"; };
 		5B1F416DB7D06B66C9631289 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		5B3644F2BBE3D05767989153 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		5B3F4893A27CA0F3A655E93C /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Intro.strings"; sourceTree = "<group>"; };
@@ -14669,6 +14670,7 @@
 		E60961841B62B7E100DD640F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				5AFF989C2D8219F8008A0B79 /* version.xcconfig */,
 				8A2B1A5B28216C4C0061216B /* Common.xcconfig */,
 				8A2B1A5A28216C4C0061216B /* Debug.xcconfig */,
 				E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */,
@@ -15748,6 +15750,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B21DD1A090F8100AAB793 /* Build configuration list for PBXNativeTarget "Client" */;
 			buildPhases = (
+				5AFF989D2D821A27008A0B79 /* Update Version */,
 				C874A4E327F62C5B006F54E5 /* Swiftlint */,
 				5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */,
 				5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */,
@@ -16555,6 +16558,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+		};
+		5AFF989D2D821A27008A0B79 /* Update Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\nVERSION_FILE=\"${SRCROOT}/../version.txt\"\nXCCONFIG_FILE=\"${SRCROOT}/Client/version.xcconfig\"\n\n# Read version from file\nif [ -f \"$VERSION_FILE\" ]; then\n    VERSION_NUMBER=$(cat \"$VERSION_FILE\" | tr -d '[:space:]')\nelse\n    echo \"Error: version.txt not found!\"\n    exit 1\nfi\n\n# Update the xcconfig file with the version number\necho \"APP_VERSION = $VERSION_NUMBER\" > \"$XCCONFIG_FILE\"\n\necho \"Updated Version.xcconfig with version: $VERSION_NUMBER\"\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
