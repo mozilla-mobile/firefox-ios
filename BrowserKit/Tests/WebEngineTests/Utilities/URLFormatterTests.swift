@@ -90,6 +90,24 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertEqual(result?.absoluteString, "http://\(initialUrl)")
     }
 
+    func testGetURLGivenNoHttpsURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "foo.bar/foo%20bar")
+    }
+
+    func testGetURLGivenNoHttpsURLWithSpacePathThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }
+
     func testGetURLGivenDotURLThenValidURL() {
         let initialUrl = "1.2.3"
         let subject = DefaultURLFormatter()
