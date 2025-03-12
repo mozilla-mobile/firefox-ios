@@ -15,6 +15,10 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "A11yHomePageTests",
+        "A11yHomePageTests\/testA11yHomePageAccessibilityLabels()",
+        "A11yHomePageTests\/testA11yHomePageAudit()",
+        "A11yHomePageTests\/testA11yHomePageVoiceOverNavigation()",
         "A11yOnboardingTests",
         "A11yOnboardingTests\/testA11yFirstRunTour()",
         "A11ySearchTest",
@@ -22,10 +26,12 @@
         "A11yUtils",
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testLongTapOnTopSiteOptions()",
+        "ActivityStreamTest\/testShortcutsToggle()",
         "ActivityStreamTest\/testTopSites2Add()",
         "ActivityStreamTest\/testTopSitesRemoveAllExceptDefaultClearPrivateData()",
         "ActivityStreamTest\/testTopSitesRemoveAllExceptPinnedClearPrivateData()",
         "ActivityStreamTest\/testTopSitesShiftAfterRemovingOne()",
+        "ActivityStreamTest\/testsiteCanBeAddedToShortcuts()",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testAddNewAddressCityFilled()",
         "AddressesTests\/testAddNewAddressCountry()",

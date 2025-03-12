@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Shared
 
 /// Top site UI class, used in the homepage top site section
 struct TopSiteConfiguration: Hashable, Equatable {
@@ -65,7 +64,7 @@ struct TopSiteConfiguration: Hashable, Equatable {
         DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
-    func getTelemetrySiteType() -> String {
+    var getTelemetrySiteType: String {
         if isGooglePinnedTile {
             return "google"
         } else if isPinned {

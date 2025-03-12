@@ -7,9 +7,6 @@ import Foundation
 @testable import Client
 import XCTest
 import WebKit
-import Shared
-import Common
-import Storage
 
 class RemoteSettingsFetchConfigTests: XCTestCase {
     func testLoadValidRemoteSettingsFetchConfig() {

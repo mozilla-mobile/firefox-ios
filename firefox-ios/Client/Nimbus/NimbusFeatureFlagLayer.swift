@@ -33,9 +33,6 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .darkReader:
-            return checkDarkReaderFeature(from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -111,6 +108,9 @@ final class NimbusFeatureFlagLayer {
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
+
+        case .searchEngineConsolidation:
+            return checkSearchEngineConsolidationFeature(from: nimbus)
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature(from: nimbus)
@@ -310,6 +310,11 @@ final class NimbusFeatureFlagLayer {
             }
         }
 
+    private func checkSearchEngineConsolidationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.searchEngineConsolidationFeature.value()
+        return config.enabled
+    }
+
     private func checkSplashScreenFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -382,11 +387,6 @@ final class NimbusFeatureFlagLayer {
     private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appIconSelectionFeature.value()
         return config.enabled
-    }
-
-    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.darkReaderFeature.value()
-        return config.status
     }
 
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {

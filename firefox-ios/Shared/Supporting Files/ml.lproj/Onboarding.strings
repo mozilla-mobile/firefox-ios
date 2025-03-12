@@ -73,17 +73,29 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "തുടരുക";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "നിങ്ങളുടെ ഉപകരണങ്ങൾക്കിടയിൽ സുരക്ഷിതമായി ടാബുകൾ അയയ്ക്കുകയും %@-ൽ മറ്റ് സ്വകാര്യത സവിശേഷതകൾ കണ്ടെത്തുകയും ചെയ്യുക.";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "ഒഴിവാക്കുക";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "%@-ൽ സുരക്ഷിതമായി തുടരാൻ അറിയിപ്പുകൾ താങ്ങളെ സഹായിക്കുന്നു";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "അറിയിപ്പുകൾ തുടങ്ങി വയ്ക്കുക";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "താങ്ങൾ സമന്വയിപ്പിച്ചിരിക്കുമ്പോഴു് %@ താങ്ങളുടെ രഹസ്യവാക്കുകളും അടയാളക്കുറിപ്പുകളും മറ്റും രൂപമാറ്റി വയ്ക്കാരുണ്ടു്. ";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "പ്രവേശിക്കുക";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "ഒഴിവാക്കുക";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "താങ്ങൾ ഉപകരണങ്ങൾക്കിടയിൽ ചാടുമ്പോഴു്  രൂപമാറ്റം വരുത്തിയിരിക്കുക";
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v135" = "സമ്മതിച്ച് തുടരുക";
@@ -94,6 +106,9 @@
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "ക്രമീകരിക്കൂ";
 
+/* Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page */
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "താങ്ങളുടെ സ്വകാര്യതക്കു് %1$@ ശ്രദ്ധിക്കാറുണ്ടു്. ഞങ്ങളുടെ %2$@-ൽ കൂടുതൽ വായക്കുക.";
+
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "സ്വകാര്യതാ അറിയിപ്പ്.";
 
@@ -102,6 +117,9 @@
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "കൂടുതല്‍ അറിയുക";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "തകർച്ച റിപ്പോർട്ടുകൾ അന്വേഷിയന്ത്രത്തിന്റെ കൂടെയുള്ള എല്ലാ കുഴപ്പങ്ങളും കണ്ടെത്താനും പരിഹരിക്കാനും സഹായിക്കാറുണ്ടു്. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "തകർച്ച വിവരങ്ങൾ തന്നെതാന്നെ അയയ്ക്കുക";

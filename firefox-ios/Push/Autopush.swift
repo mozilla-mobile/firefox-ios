@@ -19,7 +19,7 @@ public protocol AutopushProtocol {
     ///  - Throws: If the underlying native call to update the push servers fails
     func updateToken(withDeviceToken deviceToken: Data) async throws
 
-    /// Creates a subscription with the `Autopush` servers with the given scope, 
+    /// Creates a subscription with the `Autopush` servers with the given scope,
     /// returns the subscription if it already exists
     ///
     ///  - Parameter scope: A consumer controlled string. When push notifications are decrypted,
@@ -47,7 +47,7 @@ public protocol AutopushProtocol {
     ///
     /// - Parameter payload: A map of String keys and String values representing payload as sent by the push servers
     ///
-    /// - Returns: `DecryptResponse`, which includes both the decrypted payload, 
+    /// - Returns: `DecryptResponse`, which includes both the decrypted payload,
     ///            and the scope the push notification was for
     /// - Throws: If the native push client was unable to decrypt the payload
     func decrypt(payload: [String: String]) async throws -> DecryptResponse

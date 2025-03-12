@@ -64,6 +64,8 @@ let AddressesSettings = "AutofillAddress"
 let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
+let AutofillPasswordSettings = "AutofillsPasswordsSettings"
+let Shortcuts = "Shortcuts"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -227,6 +229,7 @@ class Action {
 
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
+    static let SelectShortcuts = "TopSitesSettings"
 }
 
 @objcMembers
@@ -505,7 +508,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
             app.buttons["Delete"].waitAndTap()
         }
-        
+
     }
 
     map.addScreenState(MobileBookmarksAdd) { screenState in
@@ -598,9 +601,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
-        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Address.title], to: AddressesSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title], to: AutofillPasswordSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title],
@@ -763,6 +764,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
             app.tables.cells.switches["Bookmarks"].waitAndTap()
+        }
+
+        screenState.gesture(forAction: Action.SelectShortcuts) { userState in
+            let topSitesSetting = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+            app.tables.cells[topSitesSetting].waitAndTap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -1039,6 +1045,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(Shortcuts) { screenState in
+        let homePage = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+        screenState.tap(app.navigationBars.buttons[homePage], to: HomeSettings)
+    }
+
     map.addScreenState(FindInPage) { screenState in
         screenState.tap(app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton], to: BrowserTab)
     }
@@ -1071,6 +1082,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: 3),
             to: LibraryPanel_ReadingList
         )
+    }
+    
+    map.addScreenState(AutofillPasswordSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+        
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Address.title], to: AddressesSettings)
+        
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(LoginsSettings) { screenState in

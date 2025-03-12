@@ -8,20 +8,26 @@ import Redux
 import Storage
 
 final class ContextMenuAction: Action {
-    var site: Site?
+    let section: HomepageSection?
+    let site: Site?
 
     init(
+        section: HomepageSection? = nil,
         site: Site? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.section = section
         self.site = site
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum ContextMenuActionType: ActionType {
+    case tappedOnOpenNewPrivateTab
     case tappedOnRemoveTopSite
     case tappedOnPinTopSite
     case tappedOnUnpinTopSite
+    case tappedOnSponsoredAction
+    case tappedOnSettingsAction
 }

@@ -53,7 +53,7 @@ public struct Site: Identifiable, Hashable, Equatable, Codable, CustomStringConv
         id: Int? = nil,
         url: String,
         title: String,
-        isBookmarked: Bool? = nil,
+        isBookmarked: Bool? = false,
         faviconResource: SiteResource? = nil
     ) -> Site {
         var site = Site(id: id ?? UUID().hashValue, url: url, title: title, type: .basic)

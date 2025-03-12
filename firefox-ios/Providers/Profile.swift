@@ -15,7 +15,9 @@ import Storage
 import AuthenticationServices
 
 import class MozillaAppServices.MZKeychainWrapper
+import class MozillaAppServices.RemoteSettingsService
 import enum MozillaAppServices.Level
+import enum MozillaAppServices.RemoteSettingsServer
 import enum MozillaAppServices.SyncReason
 import enum MozillaAppServices.VisitType
 import func MozillaAppServices.setLogger
@@ -25,6 +27,7 @@ import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
+import struct MozillaAppServices.RemoteSettingsConfig2
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -94,6 +97,7 @@ protocol Profile: AnyObject {
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
     var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
+    var remoteSettingsService: RemoteSettingsService? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -675,6 +679,29 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath)
     }()
 
+    lazy var remoteSettingsService: RemoteSettingsService? = {
+        do {
+            // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+            // [FXIOS-11550] Default to Prod for now; this will be revisited soon.
+            // Related: https://mozilla.slack.com/archives/C05VCNPLFFT/p1741183526964339
+            let server = RemoteSettingsServer.prod
+
+            let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
+            let path = url.path
+
+            // Create the remote settings directory if needed
+            if !FileManager.default.fileExists(atPath: path) {
+                try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            }
+            return try RemoteSettingsService(storageDir: path, config: RemoteSettingsConfig2(server: server))
+        } catch {
+            logger.log("Failed to instantiate RemoteSettingsService",
+                       level: .fatal,
+                       category: .storage)
+            return nil
+        }
+    }()
+
     lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
             let cacheFileURL = try FileManager.default.url(
@@ -683,10 +710,17 @@ open class BrowserProfile: Profile {
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            return try RustFirefoxSuggest(
-                dataPath: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("suggest-data.db").path,
-                cachePath: cacheFileURL.path
-            )
+            if let rsService = remoteSettingsService {
+                return try RustFirefoxSuggest(
+                    dataPath: URL(
+                        fileURLWithPath: directory,
+                        isDirectory: true
+                    ).appendingPathComponent("suggest-data.db").path,
+                    cachePath: cacheFileURL.path,
+                    remoteSettingsService: rsService
+                )
+            }
+            return nil
         } catch {
             logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
                        level: .warning,

@@ -7,75 +7,111 @@ import Foundation
 import Glean
 import Shared
 
-class SendDataSetting: BoolSetting {
+final class SendDataSetting: BoolSetting {
+    private let learnMoreText: String
+    private let learnMoreURL: URL?
+    private let a11yId: String?
+    private let learnMoreA11yId: String?
+    private let featureFlagName: NimbusFeatureFlagID?
+
     private weak var settingsDelegate: SupportSettingsDelegate?
-    private var a11yId: String
-    private var learnMoreURL: URL?
 
-    var shouldSendData: ((Bool) -> Void)?
+    override var url: URL? { return learnMoreURL }
+    override var accessibilityIdentifier: String? { return a11yId }
 
-    init(prefs: Prefs,
-         delegate: SettingsDelegate?,
-         theme: Theme,
-         settingsDelegate: SupportSettingsDelegate?,
-         title: String,
-         message: String,
-         linkedText: String,
-         prefKey: String,
-         a11yId: String,
-         learnMoreURL: URL?) {
-        let statusText = NSMutableAttributedString()
-        statusText.append(
-            NSAttributedString(
-                string: message,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
-            )
-        )
-        statusText.append(
-            NSAttributedString(
-                string: "\n"
-            )
-        )
-        statusText.append(
-            NSAttributedString(
-                string: linkedText,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
-            )
-        )
-
-        self.a11yId = a11yId
+    init(
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool?,
+        titleText: String,
+        subtitleText: String,
+        learnMoreText: String,
+        learnMoreURL: URL?,
+        a11yId: String?,
+        learnMoreA11yId: String?,
+        settingsDelegate: SupportSettingsDelegate?,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        enabled: Bool = true,
+        isStudiesCase: Bool = false
+    ) {
+        self.learnMoreText = learnMoreText
         self.learnMoreURL = learnMoreURL
+        self.a11yId = a11yId
+        self.learnMoreA11yId = learnMoreA11yId
         self.settingsDelegate = settingsDelegate
-        super.init(
-            prefs: prefs,
-            prefKey: prefKey,
-            defaultValue: true,
-            attributedTitleText: NSAttributedString(string: title),
-            attributedStatusText: statusText
-        )
+        self.featureFlagName = featureFlagName
+        super.init(prefs: prefs,
+                   prefKey: prefKey,
+                   defaultValue: defaultValue,
+                   attributedTitleText: NSAttributedString(string: titleText),
+                   attributedStatusText: NSAttributedString(string: subtitleText))
 
-        setupSettingDidChange()
-
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
-    }
-
-    private func setupSettingDidChange() {
-        self.settingDidChange = { [weak self] value in
-            self?.shouldSendData?(value)
+        if isStudiesCase {
+            let sendUsageDataPref = prefs?.boolForKey(AppConstants.prefSendUsageData) ?? true
+            // Special Case (EXP-4780, FXIOS-10534) disable studies if usage data is disabled
+            // and studies should be toggled back on after re-enabling Telemetry
+            self.enabled = sendUsageDataPref
+        } else {
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            guard let key = prefKey else { return }
+            Experiments.setTelemetrySetting(prefs?.boolForKey(key) ?? true)
         }
     }
 
-    override var accessibilityIdentifier: String? {
-        return a11yId
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
+        guard let title = title?.string, let subtitle = status?.string else { return }
+
+        cell.configure(
+            title: title,
+            subtitle: subtitle,
+            learnMoreText: learnMoreText,
+            a11yId: learnMoreA11yId,
+            theme: theme
+        )
+
+        control.configureSwitch(
+            onTintColor: theme.colors.actionPrimary,
+            isEnabled: enabled
+        )
+
+        displayBool(control.switchView)
+        control.switchView.accessibilityLabel = "\(title), \(subtitle)"
+        if let accessibilityIdentifier {
+            cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
+        }
+
+        cell.accessoryView = control
+        cell.selectionStyle = .none
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
+
+        cell.learnMoreDidTap = { [weak self] in
+            guard let self else { return }
+            self.settingsDelegate?.askedToOpen(url: url, withTitle: NSAttributedString(string: title))
+        }
     }
 
-    override var url: URL? {
-        return learnMoreURL
+    func updateSetting(for isUsageEnabled: Bool) {
+        self.enabled = isUsageEnabled
+        // We make sure to set this on initialization, in case the setting is turned off
+        // in which case, we would to make sure that users are opted out of experiments
+        // Note: Switch should be enabled only when telemetry usage is enabled
+        updateControlState(isEnabled: isUsageEnabled)
+
+        // Set experiments study setting based on usage enabled state
+        // Special Case (EXP-4780, FXIOS-10534) disable Studies if usage data is disabled
+        // and studies should be toggled back on after re-enabling Telemetry
+        let studiesEnabled = isUsageEnabled && (prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+        Experiments.setStudiesSetting(studiesEnabled)
     }
 
-    override func onClick(_ navigationController: UINavigationController?) {
-        settingsDelegate?.askedToOpen(url: url, withTitle: title)
+    private func updateControlState(isEnabled: Bool) {
+        control.setSwitchTappable(to: isEnabled)
+        control.toggleSwitch(to: isEnabled)
+        writeBool(control.switchView)
     }
 }

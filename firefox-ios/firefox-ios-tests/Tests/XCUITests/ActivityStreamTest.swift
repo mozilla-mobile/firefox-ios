@@ -4,15 +4,13 @@
 
 import XCTest
 import Shared
+import Common
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
     "url": "www.mozilla.org",
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
-]
-let newTopSiteiOS15 = [
-    "bookmarkLabel": "Mozilla — Internet for people, not profit"
 ]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 
@@ -42,6 +40,7 @@ class ActivityStreamTest: BaseTestCase {
         XCUIDevice.shared.orientation = .portrait
         super.tearDown()
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2273342
     // Smoketest
     func testDefaultSites() throws {
@@ -62,6 +61,7 @@ class ActivityStreamTest: BaseTestCase {
             ]
         )
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2272218
     func testTopSites2Add() {
         if iPad() {
@@ -70,6 +70,7 @@ class ActivityStreamTest: BaseTestCase {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         waitForExistence(app.links.staticTexts["Internet for people, not profit — Mozilla (US)"], timeout: TIMEOUT_LONG)
@@ -90,6 +91,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup)
@@ -102,28 +104,16 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        app.collectionViews.buttons["crossLarge"].waitAndTap()
+        app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        } else {
-            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        }
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-        if #available(iOS 16, *) {
-            topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
-        } else {
-            topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!].press(forDuration: 1)
-        }
+        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Pin")
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        } else {
-            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        }
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -131,13 +121,10 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
-        } else {
-            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!])
-        }
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2272514
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
@@ -168,6 +155,7 @@ class ActivityStreamTest: BaseTestCase {
             "First top site does not match"
         )
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() throws {
@@ -190,6 +178,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                              value: "wikipedia.org")
     }
+
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -216,12 +205,14 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.firstMatch)
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
+
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         mozWaitForElementToExist(app.links[TopSites.itemCell])
         let numberOfTopSites = app.collectionViews.links.matching(identifier: TopSites.itemCell).count
         mozWaitForElementToExist(app.collectionViews.links.matching(identifier: TopSites.itemCell).firstMatch)
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2273339
     func testContextMenuInLandscape() {
         // For iPhone test is failing to find top sites in landscape
@@ -243,6 +234,7 @@ class ActivityStreamTest: BaseTestCase {
             XCUIDevice.shared.orientation = .portrait
         }
     }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2436086
     func testLongTapOnTopSiteOptions() {
         waitForExistence(app.links[TopSites.itemCell])
@@ -258,5 +250,59 @@ class ActivityStreamTest: BaseTestCase {
                 ContextMenuTable.cells.otherElements["crossLarge"]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2855325
+    func testsiteCanBeAddedToShortcuts() {
+        addWebsiteToShortcut(website: url_3)
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let cell = itemCell.staticTexts["Example Domain"]
+        mozWaitForElementToExist(cell)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2861436
+    func testShortcutsToggle() {
+        //  Go to customize homepage
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectShortcuts)
+        let shortCutSwitch = app.switches["TopSitesUserPrefsKey"]
+        mozWaitForElementToExist(shortCutSwitch)
+        let shortCutValue = shortCutSwitch.value!
+        // Shortcuts toggle is enabled by default
+        XCTAssertEqual(shortCutValue as? String, "1", "The shortcut switch is not on")
+        // Access a couple of websites and add them to shortcuts
+        navigator.nowAt(Shortcuts)
+        navigator.goto(HomeSettings)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(NewTabScreen)
+        addWebsiteToShortcut(website: url_3)
+        addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
+        // The shortcuts are displayed on homepage
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let firstWebsite = itemCell.staticTexts["Example Domain"]
+        let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
+        mozWaitForElementToExist(firstWebsite)
+        mozWaitForElementToExist(secondWebsite)
+        // Go to customize homepage and disable shortcuts toggle
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectShortcuts)
+        shortCutSwitch.waitAndTap()
+        navigator.nowAt(Shortcuts)
+        navigator.goto(HomeSettings)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(BrowserTab)
+        // The shortcuts are not displayed anymore on homepage
+        mozWaitForElementToNotExist(itemCell)
+        mozWaitForElementToNotExist(firstWebsite)
+        mozWaitForElementToNotExist(secondWebsite)
+    }
+
+    private func addWebsiteToShortcut(website: String) {
+        navigator.openURL(website)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.PinToTopSitesPAM)
+        navigator.performAction(Action.GoToHomePage)
     }
 }

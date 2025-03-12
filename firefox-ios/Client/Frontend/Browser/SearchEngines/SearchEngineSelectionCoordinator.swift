@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Shared
 
 protocol SearchEngineSelectionCoordinatorDelegate: AnyObject {
     func showSettings(at destination: Route.SettingsSection)

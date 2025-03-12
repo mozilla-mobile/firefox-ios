@@ -60,14 +60,7 @@ class BookmarksTests: BaseTestCase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        if iPad() {
-            app.collectionViews
-                .cells["Example Domain"].children(matching: .other)
-                .element.children(matching: .other)
-                .element.waitAndTap()
-        } else {
-            app.cells.staticTexts["Example Domain"].waitAndTap()
-        }
+        app.cells.staticTexts["Example Domain"].waitAndTap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
@@ -202,11 +195,14 @@ class BookmarksTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["Delete Test Folder"])
         }
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
+
         app.buttons["Done"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-        checkItemsInBookmarksList(items: 1)
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
@@ -327,9 +323,12 @@ class BookmarksTests: BaseTestCase {
         // Delete the Bookmark added, check it is removed
         app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
         app.buttons["Delete"].waitAndTap()
-        // https://mozilla-hub.atlassian.net/browse/MTE-4244
-        // The list is empty - investigation required
-       // mozWaitForElementToNotExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+
+        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
+        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
+        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
+        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
+        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
@@ -455,9 +454,6 @@ class BookmarksTests: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         navigator.goto(TabTray)
-        if !iPad() {
-            mozWaitForElementToExist(app.segmentedControls.buttons["Private"])
-        }
         // Tap to "Remove bookmark"
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)

@@ -13,6 +13,8 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WidgetKit
+import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -32,9 +34,12 @@ class BrowserViewController: UIViewController,
                              AddressToolbarContainerDelegate,
                              BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
-                             FeatureFlaggable {
-    private enum UX {
-        static let ShowHeaderTapAreaHeight: CGFloat = 32
+                             FeatureFlaggable,
+                             CanRemoveQuickActionBookmark {
+    enum UX {
+        static let showHeaderTapAreaHeight: CGFloat = 32
+        static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
+        static let downloadToastDuration = DispatchTimeInterval.seconds(5)
     }
 
     /// Describes the state of the current search session. This state is used
@@ -104,6 +109,13 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    var downloadProgressManager: DownloadProgressManager?
+
+    var _downloadLiveActivityWrapper: Any?
+    @available(iOS 16.2, *)
+    var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
+        return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+    }
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -281,6 +293,7 @@ class BrowserViewController: UIViewController,
     let downloadQueue: DownloadQueue
 
     private let bookmarksSaver: BookmarksSaver
+    let bookmarksHandler: BookmarksHandler
 
     var newTabSettings: NewTabPage {
         return NewTabAccessors.getNewTabPage(profile.prefs)
@@ -318,6 +331,7 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
+        self.bookmarksHandler = profile.places
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1288,7 +1302,7 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.ShowHeaderTapAreaHeight)
+            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight)
         ])
 
         readerModeBar?.snp.remakeConstraints { make in
@@ -1744,6 +1758,7 @@ class BrowserViewController: UIViewController,
         profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
+            self.removeBookmarkShortcut()
         }
     }
 
@@ -1977,8 +1992,9 @@ class BrowserViewController: UIViewController,
             guard let tabURLOrigin = tab.url?.origin,
                   let urlOrigin = url.origin,
                   tabURLOrigin == urlOrigin else {
-                if let urlOrigin = url.origin {
-                    tab.url = URL(string: urlOrigin)!
+                if let urlOrigin = url.origin,
+                   let newTabURL = URL(string: urlOrigin) {
+                    tab.url = newTabURL
                 }
                 return
             }
@@ -3416,7 +3432,7 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements 
+    // Also implements
     // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
         switch contextualHintType {
@@ -4157,9 +4173,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
                 toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]

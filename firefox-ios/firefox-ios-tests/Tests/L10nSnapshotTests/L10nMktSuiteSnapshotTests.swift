@@ -22,7 +22,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(TrackingProtectionSettings)
-        
+
        // Check the warning alert
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
         app.alerts.buttons.firstMatch.tap()
@@ -30,15 +30,15 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionStrictWarning-01")
         mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
     }
-    
+
     func testAwesemoBarWithResults() {
         navigator.openURL("firefox.com")
         sleep(2)
         waitUntilPageLoad()
-        
+
         navigator.openNewURL(urlString: "mozilla.com")
         sleep(2)
-        
+
         userState.url = "firefox"
         navigator.performAction(Action.SetURLByTyping)
         snapshot("Awesomebar-results-firefox")
@@ -52,7 +52,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
         app.switches["SystemThemeSwitchValue"].tap()
-    
+
         app.cells.staticTexts.element(boundBy: 6).tap()
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
@@ -69,20 +69,20 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         snapshot("PrivateBrowsingMode")
     }
-    
+
     func test5DefaultSearchEngine() {
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
         snapshot("SearchSuggestions")
-        
+
         // Disable Dark Mode
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
         app.switches["SystemThemeSwitchValue"].tap()
     }
-    
+
     func testSearchWidgets2() {
         // Set a url in the pasteboard
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -95,13 +95,13 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         navigator.openNewURL(urlString: "mozilla.org")
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
-        
+
         setupSnapshot(springboard)
         // Open the app and set it to background
         app.activate()
         sleep(1)
         XCUIDevice.shared.press(.home)
-        
+
         // Swipe Right to go to Widgets view
         let window = springboard.children(matching: .window).element(boundBy: 0)
         window.swipeRight()
@@ -109,7 +109,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         // Swipe Up to get to the Edit and Add Widget buttons
         // This line is needed the first time widgets view is open
         springboard.alerts.firstMatch.scrollViews.otherElements.buttons.element(boundBy: 0).tap()
-        
+
         let element = springboard.scrollViews["left-of-home-scroll-view"]
             .children(matching: .other)
             .element
@@ -138,13 +138,13 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
 
         // Dismiss the edit mode
         element.tap()
-            
+
         // Wait for the Search in Firefox widget and tap on it
         sleep(1)
         snapshot("Widget-01")
         // Tap on Edit and then on Add to Widget
         springboard.scrollViews["left-of-home-scroll-view"].otherElements.buttons.firstMatch.tap()
-        
+
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
         springboard.collectionViews
@@ -169,10 +169,10 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         element.tap()
         sleep(1)
         snapshot("Widget-02")
-        
+
         // Tap on Edit and then on Add to Widget
         springboard.scrollViews["left-of-home-scroll-view"].otherElements.buttons.firstMatch.tap()
-        
+
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
         springboard.collectionViews
@@ -188,7 +188,7 @@ class L10nMktSuiteSnapshotTests: L10nBaseSnapshotTests {
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
         springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
-        
+
         // Tap on Add widget button
         springboard.buttons.staticTexts.firstMatch.tap()
 

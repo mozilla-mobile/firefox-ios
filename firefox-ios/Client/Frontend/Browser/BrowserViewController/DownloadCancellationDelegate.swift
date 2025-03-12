@@ -5,5 +5,5 @@
 import Foundation
 
 protocol DownloadCancellationDelegate: AnyObject {
-    func onCancel()
+    func onCancel(buttonPressed: Bool)
 }

@@ -32,7 +32,7 @@ class LoginManagerTests: KIFTestCase {
 
         let firstIndexPath = IndexPath(row: 0, section: 1)
         let list = tester().waitForView(withAccessibilityIdentifier: AccessibilityIdentifiers.Settings.tableViewController) as? UITableView
-               
+
         let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: AccessibilityIdentifiers.Settings.tableViewController)
         tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.down)
 
@@ -212,7 +212,7 @@ class LoginManagerTests: KIFTestCase {
 
         let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         tester().tapRow(at: IndexPath(row: 1, section: 0), in: list2)
-        
+
         waitForMatcher(name: "Copy")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
@@ -608,15 +608,15 @@ class LoginManagerTests: KIFTestCase {
         // let firstCellBeforeRemoving = list.cellForRow(at: firstIndexPathBeforeRemoving)!
         // let firstCellLabelBeforeRemoving  = firstCellBeforeRemoving.textLabel?.text!
         // XCTAssertEqual(firstCellLabelBeforeRemoving, "http://a0.com")
-        
+
         let firstIndexPath = IndexPath(row: 0, section: 1)
         tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
 
         tester().waitForAnimationsToFinish()
-        
+
         let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         tester().tapRow(at: IndexPath(row: 5, section: 0), in: list2)
-        
+
         tester().waitForAnimationsToFinish()
         // Verify that we are looking at the nonsynced alert dialog
         tester().waitForView(withAccessibilityLabel: "Are you sure?")

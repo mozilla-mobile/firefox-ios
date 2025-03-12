@@ -86,6 +86,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
+        button.alpha = 0.5
     }
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -174,7 +175,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
 
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
-        closeButton.tintColor = theme.colors.indicatorActive
+        closeButton.tintColor = theme.colors.iconPrimary
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary

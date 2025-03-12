@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Storage
-import Shared
 import SiteImageView
 
 /// This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.

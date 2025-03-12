@@ -17,7 +17,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
-    case darkReader
     case deeplinkOptimizationRefactor
     case fakespotBackInStock
     case fakespotFeature
@@ -45,6 +44,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case ratingPromptFeature
     case reduxSearchSettings
     case reportSiteIssue
+    case searchEngineConsolidation
     case searchHighlights
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
@@ -122,7 +122,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .darkReader,
                 .deeplinkOptimizationRefactor,
                 .fakespotBackInStock,
                 .fakespotFeature,
@@ -146,6 +145,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .reportSiteIssue,
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
+                .searchEngineConsolidation,
                 .searchHighlights,
                 .sentFromFirefoxTreatmentA,
                 .splashScreen,
@@ -193,7 +193,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         return option
     }
 
-    /// Returns whether or not the feature's state was changed by using our Feature Flags debug setting. 
+    /// Returns whether or not the feature's state was changed by using our Feature Flags debug setting.
     /// If no preference exists, then the underlying Nimbus default is used. If a specific
     /// setting is used, then we should check for the debug key used.
     public func isDebugEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {

@@ -4,7 +4,6 @@
 
 import Common
 import ComponentLibrary
-import Shared
 import UIKit
 
 /// The Legacy Home Tab Banner is the card that appears at the top of the Firefox Homepage.

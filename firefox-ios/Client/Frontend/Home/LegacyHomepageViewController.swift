@@ -98,7 +98,11 @@ class LegacyHomepageViewController:
         )
         self.syncTabContextualHintViewController =
         ContextualHintViewController(with: syncTabContextualViewProvider, windowUUID: tabManager.windowUUID)
-        self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
+        self.contextMenuHelper = HomepageContextMenuHelper(
+            profile: profile,
+            viewModel: viewModel,
+            toastContainer: toastContainer
+        )
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -427,7 +431,7 @@ class LegacyHomepageViewController:
     @objc
     private func dismissKeyboard() {
         /* homepage and error page, both are "internal" url, making
-           topsites on homepage inaccessible from error page 
+           topsites on homepage inaccessible from error page
            when address bar is selected hence using "about/home".
         */
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(AboutHomeHandler.path)") ?? false {

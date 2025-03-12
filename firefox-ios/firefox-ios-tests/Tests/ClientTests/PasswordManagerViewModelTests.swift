@@ -4,7 +4,6 @@
 
 import Common
 import MozillaAppServices
-import Shared
 import Storage
 import XCTest
 import Glean

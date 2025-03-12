@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="160" height="160">
+	<g transform="translate(50, -20) rotate(30)">
+  	  <path d="m 80 20 a 50 50 0 1 0 50 50 h -50 z" fill="pink" stroke="black" stroke-width="2"/>
+	  <path d="M 1e-12,50 A1,1e-16 0 0 0 1e-7,50" fill="none"/>
+  	</g>
+</svg>

@@ -1144,6 +1144,12 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Adres (Sorgunun yerine %s gelecek)";
 
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Görünüm";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Web sitelerine koyu bir görünüm verir. Bazı siteler düzgün görünmeyebilir.";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Harici uygulamaları açmayı engelle";
 

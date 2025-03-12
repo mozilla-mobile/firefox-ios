@@ -8,33 +8,52 @@ import XCTest
 @testable import Client
 
 final class HomepageTelemetryTests: XCTestCase {
+    var gleanWrapper: MockGleanWrapper!
+
     override func setUp() {
-        super.setUp()// Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+        super.setUp()
+        gleanWrapper = MockGleanWrapper()
     }
 
     func testPrivateModeShortcutToggleTappedInNormalMode() throws {
-        let subject = HomepageTelemetry()
+        let subject = HomepageTelemetry(gleanWrapper: gleanWrapper)
 
-        subject.sendHomepageTappedTelemetry(enteringPrivateMode: true)
+        subject.sendMaskToggleTappedTelemetry(enteringPrivateMode: true)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Homepage.privateModeToggle)
+        let savedEvent = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.PrivateModeToggleExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Homepage.PrivateModeToggleExtra
+        )
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Homepage.privateModeToggle.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private_mode"], "true")
+        let expectedMetricType = type(of: GleanMetrics.Homepage.privateModeToggle)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.isPrivateMode, true)
     }
 
     func testPrivateModeShortcutToggleTappedInPrivateMode() throws {
-        let subject = HomepageTelemetry()
+        let subject = HomepageTelemetry(gleanWrapper: gleanWrapper)
 
-        subject.sendHomepageTappedTelemetry(enteringPrivateMode: false)
+        subject.sendMaskToggleTappedTelemetry(enteringPrivateMode: false)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Homepage.privateModeToggle)
+        let savedEvent = try XCTUnwrap(
+            gleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.PrivateModeToggleExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras as? GleanMetrics.Homepage.PrivateModeToggleExtra
+        )
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Homepage.privateModeToggle.testGetValue())
-        XCTAssertEqual(resultValue[0].extra?["is_private_mode"], "false")
+        let expectedMetricType = type(of: GleanMetrics.Homepage.privateModeToggle)
+        let resultMetricType = type(of: savedEvent)
+        let message = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssert(resultMetricType == expectedMetricType, message.text)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.isPrivateMode, false)
     }
 }
