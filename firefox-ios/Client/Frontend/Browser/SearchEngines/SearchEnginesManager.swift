@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-struct SearchEngineConsolidationFlagManager {
+struct SearchEngineFlagManager {
     static var isSECEnabled: Bool {
         // Currently hardcoding to false
         return true
@@ -27,7 +27,7 @@ protocol SearchEngineDelegate: AnyObject {
 
 struct SearchEngineProviderFactory {
     static var defaultSearchEngineProvider: SearchEngineProvider = {
-        let secEnabled = SearchEngineConsolidationFlagManager.isSECEnabled
+        let secEnabled = SearchEngineFlagManager.isSECEnabled
         return secEnabled ? ASSearchEngineProvider() : DefaultSearchEngineProvider()
     }()
 }
@@ -60,7 +60,8 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     private let legacy_disabledEngineNamesPrefsKey = "search.disabledEngineNames"
 
     // Preference keys for new Application Services based search engines
-    // [TODO]
+    private let orderedEngineIDsPrefsKey = "search.sec.orderedEngineIDs"
+    private let disabledEngineIDsPrefsKey = "search.sec.disabledEngineIDs"
 
     private let customSearchEnginesFileName = "customEngines.plist"
     private var engineProvider: SearchEngineProvider
@@ -134,13 +135,23 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // The keys of this dictionary are used as a set.
     private lazy var disabledEngines: [String: Bool] = getDisabledEngines() {
         didSet {
-            self.prefs.setObject(Array(self.disabledEngines.keys), forKey: legacy_disabledEngineNamesPrefsKey)
+            if SearchEngineFlagManager.isSECEnabled {
+                //TODO
+                fatalError()
+            } else {
+                self.prefs.setObject(Array(self.disabledEngines.keys), forKey: legacy_disabledEngineNamesPrefsKey)
+            }
         }
     }
 
     var orderedEngines: [OpenSearchEngine] {
         didSet {
-            self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
+            if SearchEngineFlagManager.isSECEnabled {
+                // TODO
+                fatalError()
+            } else {
+                self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
+            }
         }
     }
 
@@ -272,7 +283,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // MARK: - Private
 
     private func getDisabledEngines() -> [String: Bool] {
-        if let disabledEngines = prefs.stringArrayForKey(legacy_disabledEngineNamesPrefsKey) {
+        let prefsKey = SearchEngineFlagManager.isSECEnabled ?
+        disabledEngineIDsPrefsKey : legacy_disabledEngineNamesPrefsKey
+        if let disabledEngines = prefs.stringArrayForKey(prefsKey) {
             var disabledEnginesDict = [String: Bool]()
             for engine in disabledEngines {
                 disabledEnginesDict[engine] = true
