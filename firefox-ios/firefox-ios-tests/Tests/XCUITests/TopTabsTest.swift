@@ -124,7 +124,7 @@ class TopTabsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
-    func testCloseAllTabsUndo() {
+    func testCloseAllTabsUndo() throws {
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -146,27 +146,28 @@ class TopTabsTest: BaseTestCase {
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
-        // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-
-        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
-
-        mozWaitForElementToExist(
-            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        )
-        navigator.nowAt(BrowserTab)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        }
-
-        if iPad() {
-            navigator.goto(TabTray)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
-        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
+        throw XCTSkip("Skipping since the tab UI experiment doesn't have this toast anymore")
+//        // Close all tabs, undo it and check that the number of tabs is correct
+//        navigator.performAction(Action.AcceptRemovingAllTabs)
+//
+//        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
+//
+//        mozWaitForElementToExist(
+//            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+//        )
+//        navigator.nowAt(BrowserTab)
+//        if !iPad() {
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+//        }
+//
+//        if iPad() {
+//            navigator.goto(TabTray)
+//        } else {
+//            navigator.performAction(Action.CloseURLBarOpen)
+//        }
+//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+//
+//        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
