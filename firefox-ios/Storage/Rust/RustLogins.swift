@@ -202,7 +202,6 @@ public extension LoginEntry {
 public class RustLoginEncryptionKeys {
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
     let legacyKeychain = KeychainManager.legacyShared
-    let keychain = KeychainManager.shared
 
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"

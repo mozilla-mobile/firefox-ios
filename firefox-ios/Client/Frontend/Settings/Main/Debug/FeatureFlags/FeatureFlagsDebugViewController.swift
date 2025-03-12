@@ -145,7 +145,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 },
                 FeatureFlagsBoolSetting(
                     with: .useRustKeychain,
-                    titleText: format(string: "Enable Rust Keychain for Rust Components"),
+                    titleText: format(string: "Enable Rust Keychain"),
                     statusText: format(string: "Toggle to enable Rust Components rust keychain")
                 ) { [weak self] _ in
                     self?.reloadView()
