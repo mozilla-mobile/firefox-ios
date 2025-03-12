@@ -14,6 +14,17 @@ struct TopSiteConfiguration: Hashable, Equatable {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
 
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
+    }
+
+    private var pinnedStatusTitle: String {
+        return isPinned ? pinnedTitle : title
+    }
+
     var accessibilityLabel: String? {
         return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
     }
@@ -76,18 +87,5 @@ struct TopSiteConfiguration: Hashable, Equatable {
         }
 
         return "history-based"
-    }
-}
-
-private extension TopSiteConfiguration {
-    var pinnedTitle: String {
-        .localizedStringWithFormat(
-            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
-            title
-        )
-    }
-
-    var pinnedStatusTitle: String {
-        return isPinned ? pinnedTitle : title
     }
 }

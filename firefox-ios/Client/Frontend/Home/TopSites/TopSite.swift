@@ -13,6 +13,17 @@ final class TopSite: FeatureFlaggable {
     var sponsoredText: String {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
+    
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
+    }
+
+    private var pinnedStatusTitle: String {
+        isPinned ? pinnedTitle : title
+    }
 
     var accessibilityLabel: String? {
         return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
@@ -69,18 +80,5 @@ final class TopSite: FeatureFlaggable {
         }
 
         return "history-based"
-    }
-}
-
-private extension TopSite {
-    var pinnedTitle: String {
-        .localizedStringWithFormat(
-            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
-            title
-        )
-    }
-
-    var pinnedStatusTitle: String {
-        isPinned ? pinnedTitle : title
     }
 }
