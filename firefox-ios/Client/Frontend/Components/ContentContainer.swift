@@ -21,7 +21,7 @@ class ContentContainer: UIView {
     private var type: ContentType?
     private var contentController: ContentContainable?
 
-    var contentView: UIView? {
+    var contentView: Screenshotable? {
         return contentController?.view
     }
 

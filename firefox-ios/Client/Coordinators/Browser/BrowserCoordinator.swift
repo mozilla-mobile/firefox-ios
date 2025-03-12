@@ -1081,7 +1081,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 

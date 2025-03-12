@@ -162,4 +162,6 @@ class MockTabManager: TabManager {
     func removeAllInactiveTabs() async {}
 
     func undoCloseInactiveTabs() async {}
+
+    func tabDidSetScreenshot(_ tab: Client.Tab) {}
 }
