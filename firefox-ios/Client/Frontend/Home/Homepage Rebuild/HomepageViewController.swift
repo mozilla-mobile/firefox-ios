@@ -162,6 +162,12 @@ final class HomepageViewController: UIViewController,
         addTapGestureRecognizerToDismissKeyboard()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        /// Used as a trigger for showing a microsurvey based on viewing the homepage
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
