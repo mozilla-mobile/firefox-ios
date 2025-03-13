@@ -308,7 +308,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
-        let enginePrefs = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
+        let enginePrefs: [String]?
+        if isSECEnabled {
+            enginePrefs = prefs.stringArrayForKey(self.orderedEngineIDsPrefsKey)
+        } else {
+            enginePrefs = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
+        }
         // TODO: [FXIOS-11502] Prefs handling needs further investigation for SEC.
         engineProvider.getOrderedEngines(customEngines: customEngines,
                                          orderedEngineNames: enginePrefs,

@@ -43,8 +43,8 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             // (if the user changed locales or added a new engine); these engines
             // will be appended to the end of the list.
             let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
-                let index1 = orderedEngineNames.firstIndex(of: engine1.shortName)
-                let index2 = orderedEngineNames.firstIndex(of: engine2.shortName)
+                let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
+                let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
 
                 if index1 == nil && index2 == nil {
                     return engine1.shortName < engine2.shortName
