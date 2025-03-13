@@ -9,9 +9,9 @@ import Storage
 
 struct SearchEngineFlagManager {
     static var isSECEnabled: Bool {
-        // Currently hardcoding to false
-        return true
         // return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.searchEngineConsolidation, checking: .buildOnly)
+        // SEC always disabled (for now)
+        return false
     }
 }
 
