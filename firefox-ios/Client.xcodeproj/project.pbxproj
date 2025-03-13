@@ -187,6 +187,7 @@
 		1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */; };
 		1DCEC3F62D600C4400129966 /* ASSearchEngineIconRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC3F52D600C3D00129966 /* ASSearchEngineIconRecord.swift */; };
 		1DCEC4102D822F1A00129966 /* ASRemoteSettingsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC40F2D822F1500129966 /* ASRemoteSettingsCollection.swift */; };
+		1DCEC4122D8372E600129966 /* ASSearchEngineUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCEC4112D8372DD00129966 /* ASSearchEngineUtilities.swift */; };
 		1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
 		1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE3DB22AC34E1E0039363B /* TabCell.swift */; };
@@ -2695,6 +2696,7 @@
 		1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineProvider.swift; sourceTree = "<group>"; };
 		1DCEC3F52D600C3D00129966 /* ASSearchEngineIconRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineIconRecord.swift; sourceTree = "<group>"; };
 		1DCEC40F2D822F1500129966 /* ASRemoteSettingsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRemoteSettingsCollection.swift; sourceTree = "<group>"; };
+		1DCEC4112D8372DD00129966 /* ASSearchEngineUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEngineUtilities.swift; sourceTree = "<group>"; };
 		1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabErrorTelemetryHelper.swift; sourceTree = "<group>"; };
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		1DDE3DB22AC34E1E0039363B /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
@@ -10807,6 +10809,7 @@
 				1DCEC3F12D5D1FDD00129966 /* ASSearchEngineSelector.swift */,
 				1DCEC3F32D600ADC00129966 /* ASSearchEngineProvider.swift */,
 				1DCEC3F52D600C3D00129966 /* ASSearchEngineIconRecord.swift */,
+				1DCEC4112D8372DD00129966 /* ASSearchEngineUtilities.swift */,
 			);
 			path = "Application Services";
 			sourceTree = "<group>";
@@ -17668,6 +17671,7 @@
 				216A0D792A40E85A008077BA /* ThemeSettingsState.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */,
 				8AABB92D2C64F77000F1FE51 /* LoginProvider.swift in Sources */,
+				1DCEC4122D8372E600129966 /* ASSearchEngineUtilities.swift in Sources */,
 				21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */,
 				8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */,
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,

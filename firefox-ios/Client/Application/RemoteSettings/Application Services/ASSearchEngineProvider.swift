@@ -9,6 +9,8 @@ import Shared
 import Kingfisher
 import SwiftDraw
 
+/// Provides a Remote-Settings-based substitute for our DefaultSearchEngineProvider
+/// This is unused unless SEC (Search Engine Consolidation) experiment is enabled.
 final class ASSearchEngineProvider: SearchEngineProvider {
     let logger: Logger
 
@@ -107,7 +109,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
             // TODO: can we parallelize this? We need the search engines before we can use the icon data but the initial
             // icon fetch can be done concurrently with the search engine request
-            let iconFetch = ASIconDataFetcher(service: service)
+            let iconFetch = ASSearchEngineIconDataFetcher(service: service)
 
             iconFetch.populateEngineIconData(result.engines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []
@@ -120,7 +122,18 @@ final class ASSearchEngineProvider: SearchEngineProvider {
     }
 }
 
-final class ASIconDataFetcher {
+protocol ASSearchEngineIconDataFetcherProtocol {
+    /// Accepts a list of Search Engines models and populates them with the correct
+    /// icon data based on the Remote Settings `search-config-icon` records.
+    /// - Parameters:
+    ///   - engines: input engines that need icons.
+    ///   - completion: a list of paired engines and their associated icons.
+    func populateEngineIconData(_ engines: [SearchEngineDefinition],
+                                completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void)
+}
+
+/// Utility class for fetching search engine icon records from Remote Settings.
+final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol {
     let service: RemoteSettingsService
     let client: RemoteSettingsClient?
     let logger: Logger
@@ -186,53 +199,5 @@ final class ASIconDataFetcher {
             logger.log("Error fetching engine icon attachment.", level: .warning, category: .remoteSettings)
         }
         return nil
-    }
-}
-
-struct ASSearchEngineUtilities {
-    static func convertASToOpenSearch(_ engine: SearchEngineDefinition, image: UIImage) -> OpenSearchEngine {
-        let engineID = engine.identifier
-        let name = engine.name
-        let searchTemplate = convertASSearchURLToOpenSearchURL(engine.urls.search, for: engine) ?? ""
-        let suggestTemplate = convertASSearchURLToOpenSearchURL(engine.urls.suggestions, for: engine) ?? ""
-        let converted = OpenSearchEngine(engineID: engineID,
-                                         shortName: name,
-                                         image: image,
-                                         searchTemplate: searchTemplate,
-                                         suggestTemplate: suggestTemplate,
-                                         isCustomEngine: false)
-        return converted
-    }
-
-    static func convertASSearchURLToOpenSearchURL(_ searchURL: SearchEngineUrl?,
-                                                  for engine: SearchEngineDefinition) -> String? {
-        guard let searchURL else { return nil }
-        guard var components = URLComponents(string: searchURL.base) else { return nil }
-        var queryItems: [URLQueryItem] = searchURL.params.compactMap {
-            // From AS team:
-            // "If the enterpriseValue is specified, the parameter can be ignored for mobile and not added to
-            // the URL. If the experimentConfig is specified, and there is an active experiment which specifies
-            // a parameter of the same name, then the value of the parameter should be set to be the value from the
-            // experiment. If there's no matching experiment, the parameter is not added to the URL."
-            if $0.enterpriseValue != nil { return nil }
-            // For now, we are not supporting this on iOS. See above.
-            if $0.experimentConfig != nil { return nil }
-
-            let value: String
-            if $0.value == "{partnerCode}" {
-                // TODO: [FXIOS-11583] Special-case Bing and other overrides here
-                value = engine.partnerCode
-            } else {
-                value = $0.value ?? ""
-            }
-            return URLQueryItem(name: $0.name, value: value)
-        }
-        // From API docs: "This may be skipped if `{searchTerm}` is included in the base."
-        if let searchArg = searchURL.searchTermParamName, !searchURL.base.contains("{searchTerm}") {
-            queryItems.append(URLQueryItem(name: searchArg, value: "{searchTerms}"))
-        }
-        components.queryItems = queryItems
-
-        return components.url?.absoluteString.removingPercentEncoding
     }
 }
