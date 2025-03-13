@@ -69,6 +69,8 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     weak var delegate: SearchEngineDelegate?
     private var logger: Logger = DefaultLogger.shared
 
+    private lazy var isSECEnabled: Bool = { SearchEngineFlagManager.isSECEnabled }()
+
     init(prefs: Prefs,
          files: FileAccessor,
          engineProvider: SearchEngineProvider = SearchEngineProviderFactory.defaultSearchEngineProvider) {
@@ -135,9 +137,8 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // The keys of this dictionary are used as a set.
     private lazy var disabledEngines: [String: Bool] = getDisabledEngines() {
         didSet {
-            if SearchEngineFlagManager.isSECEnabled {
-                //TODO
-                fatalError()
+            if isSECEnabled {
+                self.prefs.setObject(Array(self.disabledEngines.keys), forKey: disabledEngineIDsPrefsKey)
             } else {
                 self.prefs.setObject(Array(self.disabledEngines.keys), forKey: legacy_disabledEngineNamesPrefsKey)
             }
@@ -146,9 +147,8 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
     var orderedEngines: [OpenSearchEngine] {
         didSet {
-            if SearchEngineFlagManager.isSECEnabled {
-                // TODO
-                fatalError()
+            if isSECEnabled {
+                self.prefs.setObject(self.orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
             } else {
                 self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
             }
@@ -235,11 +235,19 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
-        return disabledEngines.index(forKey: engine.shortName) == nil
+        if isSECEnabled {
+            return disabledEngines.index(forKey: engine.engineID) == nil
+        } else {
+            return disabledEngines.index(forKey: engine.shortName) == nil
+        }
     }
 
     func enableEngine(_ engine: OpenSearchEngine) {
-        disabledEngines.removeValue(forKey: engine.shortName)
+        if isSECEnabled {
+            disabledEngines.removeValue(forKey: engine.engineID)
+        } else {
+            disabledEngines.removeValue(forKey: engine.shortName)
+        }
     }
 
     func disableEngine(_ engine: OpenSearchEngine) {
@@ -247,7 +255,11 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             // Can't disable default engine.
             return
         }
-        disabledEngines[engine.shortName] = true
+        if isSECEnabled {
+            disabledEngines[engine.engineID] = true
+        } else {
+            disabledEngines[engine.shortName] = true
+        }
     }
 
     func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
@@ -283,8 +295,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // MARK: - Private
 
     private func getDisabledEngines() -> [String: Bool] {
-        let prefsKey = SearchEngineFlagManager.isSECEnabled ?
-        disabledEngineIDsPrefsKey : legacy_disabledEngineNamesPrefsKey
+        let prefsKey = isSECEnabled ? disabledEngineIDsPrefsKey : legacy_disabledEngineNamesPrefsKey
         if let disabledEngines = prefs.stringArrayForKey(prefsKey) {
             var disabledEnginesDict = [String: Bool]()
             for engine in disabledEngines {
