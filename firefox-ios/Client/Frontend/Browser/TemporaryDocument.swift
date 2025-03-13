@@ -23,6 +23,38 @@ protocol TemporaryDocument {
     func pauseResumeDownload()
 }
 
+class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
+    init(delegate: URLSessionDownloadDelegate?) {
+        self.delegate = delegate
+    }
+
+    weak var delegate: URLSessionDownloadDelegate?
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        delegate?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+        delegate?.urlSession?(session, task: task, didCompleteWithError: error)
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        delegate?.urlSession?(
+            session,
+            downloadTask: downloadTask,
+            didWriteData: bytesWritten,
+            totalBytesWritten: totalBytesWritten,
+            totalBytesExpectedToWrite: totalBytesExpectedToWrite
+        )
+    }
+}
+
 class DefaultTemporaryDocument: NSObject,
                                 TemporaryDocument,
                                 FeatureFlaggable,
@@ -124,7 +156,7 @@ class DefaultTemporaryDocument: NSObject,
         }
         onDownload = completion
         currentDownloadTask = session.downloadTask(with: request)
-        currentDownloadTask?.delegate = self
+        currentDownloadTask?.delegate = WeakURLSessionDelegate(delegate: self)
         currentDownloadTask?.resume()
     }
 
