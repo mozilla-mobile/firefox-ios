@@ -47,13 +47,6 @@ class AutocompleteTextField: UITextField,
     private var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    override var text: String? {
-        didSet {
-            super.text = text
-            self.textDidChange(self)
-        }
-    }
-
     override var accessibilityValue: String? {
         get {
             return (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
@@ -210,6 +203,7 @@ class AutocompleteTextField: UITextField,
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
+        textDidChange(self)
         hideCursor = false
         // Move the cursor to the end of the completion.
         if didRemoveCompletion {
@@ -230,6 +224,7 @@ class AutocompleteTextField: UITextField,
     @objc
     private func clear() {
         text = ""
+        textDidChange(self)
         removeCompletion()
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
     }
@@ -344,7 +339,7 @@ class AutocompleteTextField: UITextField,
     }
 
     func setTextWithoutSearching(_ text: String) {
-        super.text = text
+        self.text = text
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
     }
