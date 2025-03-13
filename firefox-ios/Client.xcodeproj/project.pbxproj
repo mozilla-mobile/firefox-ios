@@ -1328,6 +1328,7 @@
 		BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */; };
 		BCFF93F42AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */; };
 		BCFF93F62AB11A47005B5B71 /* RustFirefoxSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */; };
+		BD0D407A2D83124E00C38511 /* TabWebViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */; };
 		BD1C89CA2A1E3CE7000A4201 /* PocketFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */; };
 		BD2577982C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
 		BD2577992C9D85B5007B344C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2577972C9D85B5007B344C /* AnyHashable.swift */; };
@@ -8983,6 +8984,7 @@
 		BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettings.swift; sourceTree = "<group>"; };
 		BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettingsViewController.swift; sourceTree = "<group>"; };
 		BCFF93F52AB11A47005B5B71 /* RustFirefoxSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggestion.swift; sourceTree = "<group>"; };
+		BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewPreview.swift; sourceTree = "<group>"; };
 		BD1C89C92A1E3CE7000A4201 /* PocketFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketFooterView.swift; sourceTree = "<group>"; };
 		BD2577972C9D85B5007B344C /* AnyHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashable.swift; sourceTree = "<group>"; };
 		BD2A4E1791139257129D9DE2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -12327,6 +12329,7 @@
 				21BFEEF42A040EF40033048D /* TabMigrationUtility.swift */,
 				1DF116792BDB0FDA00521158 /* WindowTabsSyncCoordinator.swift */,
 				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
+				BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */,
 			);
 			path = TabManagement;
 			sourceTree = "<group>";
@@ -17321,6 +17324,7 @@
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */,
 				8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */,
+				BD0D407A2D83124E00C38511 /* TabWebViewPreview.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
 				B236204F2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
