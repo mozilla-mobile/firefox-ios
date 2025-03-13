@@ -165,9 +165,25 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                 // the different icon types. This is still TBD from AS team. If needed, implemenent client-side
                 // filtering here to select the best icon.
                 let iconIdentifiers = iconRecord.engineIdentifiers
-                if iconIdentifiers.contains(engineIdentifier) {
+                var matchFound = false
+                for ident in iconIdentifiers {
+                    if ident.hasSuffix("*") {
+                        // Per AS schema:
+                        // If an individual entry is suffixed with a star, matching is applied on a "starts with" basis.
+                        let iconIdent = ident.dropLast()
+                        if engineIdentifier.hasPrefix(iconIdent) {
+                            matchFound = true
+                            break
+                        }
+                    } else if ident == engineIdentifier {
+                        matchFound = true
+                        break
+                    }
+                }
+                if matchFound {
                     if let iconImage = fetchIcon(for: iconRecord) {
                         maybeIconImage = iconImage
+                        break
                     }
                 }
             }
