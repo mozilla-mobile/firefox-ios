@@ -203,7 +203,7 @@ class AutocompleteTextField: UITextField,
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
-        self.textDidChange(self)
+        textDidChange(self)
         hideCursor = false
         // Move the cursor to the end of the completion.
         if didRemoveCompletion {
@@ -224,6 +224,7 @@ class AutocompleteTextField: UITextField,
     @objc
     private func clear() {
         text = ""
+        textDidChange(self)
         removeCompletion()
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
     }
