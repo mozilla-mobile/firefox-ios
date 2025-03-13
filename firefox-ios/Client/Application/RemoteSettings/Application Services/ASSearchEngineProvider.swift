@@ -173,12 +173,11 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                         let iconIdent = ident.dropLast()
                         if engineIdentifier.hasPrefix(iconIdent) {
                             matchFound = true
-                            break
                         }
                     } else if ident == engineIdentifier {
                         matchFound = true
-                        break
                     }
+                    if matchFound { break }
                 }
                 if matchFound {
                     if let iconImage = fetchIcon(for: iconRecord) {
