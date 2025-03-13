@@ -145,10 +145,13 @@ fileprivate extension String {
     static let defaultBrowserOnboardingViewSecondSubtitleV2 = String(format: NSLocalizedString("Onboarding.DefaultBrowser.SecondSubtitle.V2", value: "Make %@ your default to protect your data with every link you open.", comment: "Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”)."), AppInfo.shortProductName)
     static let defaultBrowserOnboardingViewTopButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.TopButtonTitle.V2", value: "Set as Default Browser", comment: "Text for a label that indicates the title of the top button from the default browser onboarding screen version 2.")
     static let defaultBrowserOnboardingViewBottomButtonTitleV2 = NSLocalizedString("Onboarding.DefaultBrowser.BottomButtonTitle.V2", value: "Skip", comment: "Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2.")
-    static let termsOfUseTitle = NSLocalizedString(
-        "Onboarding.TermsOfUse.Title",
-        value: String(format: "Welcome to %@", AppInfo.productName),
-        comment: "Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”)."
+    static let termsOfUseTitle = String(
+        format: NSLocalizedString(
+            "Onboarding.TermsOfUse.Title",
+            value: "Welcome to %@",
+            comment: "Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”)."
+        ),
+        AppInfo.productName
     )
     static let termsOfUseSubtitle = NSLocalizedString(
         "Onboarding.TermsOfUse.Subtitle",
