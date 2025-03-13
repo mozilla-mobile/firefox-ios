@@ -11,7 +11,7 @@ class TabsSectionManager: FeatureFlaggable {
         static let cellAbsoluteHeight: CGFloat = 200
         static let experimentCellAbsoluteHeight: CGFloat = 220
         static let cardSpacing: CGFloat = 16
-        static let experimentCardSpacing: CGFloat = 32
+        static let experimentCardSpacing: CGFloat = 28
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25

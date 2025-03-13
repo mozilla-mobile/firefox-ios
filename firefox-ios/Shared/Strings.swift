@@ -2566,7 +2566,7 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
                     tableName: "AppIconSelection",
                     value: "Pride",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo.")
 
                 public static let RedGradient = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.RedGradient.Title.v136",
@@ -3638,7 +3638,7 @@ extension String {
         key: "Mobile Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        comment: "The legacy title of the folder that contains mobile bookmarks.")
     public static let BookmarksFolderTitleMobile = MZLocalizedString(
         key: "Bookmarks",
         tableName: "Storage",
@@ -3648,17 +3648,17 @@ extension String {
         key: "Bookmarks Menu",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the menu.")
     public static let BookmarksFolderTitleToolbar = MZLocalizedString(
         key: "Bookmarks Toolbar",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the toolbar.")
     public static let BookmarksFolderTitleUnsorted = MZLocalizedString(
         key: "Unsorted Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        comment: "The name of the folder that contains unsorted desktop bookmarks.")
 }
 
 // MARK: - Bookmark Management
@@ -7059,6 +7059,12 @@ extension String {
             tableName: "AddressToolbar",
             value: "Privacy & Security Settings",
             comment: "Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings.")
+
+        public static let CancelEditButtonLabel = MZLocalizedString(
+            key: "AddressToolbar.CancelEdit.Label.v138",
+            tableName: "AddressToolbar",
+            value: "Cancel",
+            comment: "Label for button in the address toolbar, that cancels editing the address field when tapped.")
     }
 }
 

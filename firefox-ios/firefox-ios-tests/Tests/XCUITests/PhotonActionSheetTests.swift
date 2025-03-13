@@ -46,14 +46,7 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
-
-        // Temporarily workaround for the url bar redesign work FXIOS-8172:
-        // Launch "Share" from the hamburger menu instead of the share icon from the
-        // awesome bar.
-        // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        navigator.goto(ToolsBrowserTabMenu)
-        app.cells[AccessibilityIdentifiers.MainMenu.share].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
 
         if #unavailable(iOS 16) {
             waitForElementsToExist(

@@ -139,9 +139,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.nowAt(BrowserTab)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()
@@ -167,8 +165,6 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        // Workaround
-        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()

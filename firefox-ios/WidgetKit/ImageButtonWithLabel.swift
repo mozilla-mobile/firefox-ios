@@ -64,55 +64,71 @@ struct ImageButtonWithLabel: View {
         Link(destination: isSmall ? link.smallWidgetUrl : link.mediumWidgetUrl) {
             ZStack(alignment: .leading) {
                 if !isSmall {
-                    ContainerRelativeShape()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: link.backgroundColors),
-                                startPoint: .bottomLeading,
-                                endPoint: .topTrailing
-                            )
-                        )
-                        .widgetAccentableCompat()
+                    background
                 }
 
                 VStack(alignment: .center, spacing: 50.0) {
                     HStack(alignment: .top) {
-                        VStack(alignment: .leading) {
-                            if isSmall {
-                                Text(link.label)
-                                    .font(.headline)
-                                    .minimumScaleFactor(0.75)
-                                    .layoutPriority(1000)
-                            } else {
-                                Text(link.label)
-                                    .font(.footnote)
-                                    .minimumScaleFactor(0.75)
-                                    .layoutPriority(1000)
-                            }
-                        }
+                        label
                         Spacer()
-                        if link == .search && isSmall {
-                            Image(decorative: StandardImageIdentifiers.Large.search)
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        } else {
-                            Image(decorative: link.imageName)
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        }
+                        logo
                     }
                     if isSmall {
-                        HStack(alignment: .bottom) {
-                            Spacer()
-                            Image(decorative: "faviconFox")
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        }
+                        icon
                     }
                 }
                 .foregroundColor(Color("widgetLabelColors"))
                 .padding([.horizontal, .vertical], paddingValue)
             }
+        }
+    }
+
+    private var background: some View {
+        return ContainerRelativeShape()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(colors: link.backgroundColors),
+                    startPoint: .bottomLeading,
+                    endPoint: .topTrailing
+                )
+            )
+            .widgetAccentableCompat()
+    }
+
+    private var label: some View {
+        return VStack(alignment: .leading) {
+            if isSmall {
+                Text(link.label)
+                    .font(.headline)
+                    .minimumScaleFactor(0.75)
+                    .layoutPriority(1000)
+            } else {
+                Text(link.label)
+                    .font(.footnote)
+                    .minimumScaleFactor(0.75)
+                    .layoutPriority(1000)
+            }
+        }
+    }
+
+    private var logo: some View {
+        if link == .search && isSmall {
+            return Image(decorative: StandardImageIdentifiers.Large.search)
+                .scaledToFit()
+                .frame(height: 24.0)
+        } else {
+            return Image(decorative: link.imageName)
+                .scaledToFit()
+                .frame(height: 24.0)
+        }
+    }
+
+    private var icon: some View {
+        return HStack(alignment: .bottom) {
+            Spacer()
+            Image(decorative: "faviconFox")
+                .scaledToFit()
+                .frame(height: 24.0)
         }
     }
 }

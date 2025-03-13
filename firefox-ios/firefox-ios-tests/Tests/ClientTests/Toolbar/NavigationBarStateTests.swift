@@ -208,43 +208,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    // MARK: Helper
-    func setupAppState(with initialToolbarState: ToolbarState) -> AppState {
-        return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
-                    .browserViewController(
-                        BrowserViewControllerState(
-                            windowUUID: windowUUID
-                        )
-                    ),
-                    .toolbar(initialToolbarState)
-                ]
-            )
-        )
-    }
-
-    func initialToolbarState(isShowingNavigationToolbar: Bool) -> ToolbarState {
-        let toolbarState = ToolbarState(windowUUID: windowUUID)
-        return ToolbarState(
-            windowUUID: windowUUID,
-            toolbarPosition: toolbarState.toolbarPosition,
-            toolbarLayout: toolbarState.toolbarLayout,
-            isPrivateMode: toolbarState.isPrivateMode,
-            addressToolbar: toolbarState.addressToolbar,
-            navigationToolbar: toolbarState.navigationToolbar,
-            isShowingNavigationToolbar: isShowingNavigationToolbar,
-            isShowingTopTabs: toolbarState.isShowingTopTabs,
-            canGoBack: toolbarState.canGoBack,
-            canGoForward: toolbarState.canGoForward,
-            numberOfTabs: toolbarState.numberOfTabs,
-            showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-            isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
-            canShowNavigationHint: toolbarState.canShowNavigationHint,
-            shouldAnimate: toolbarState.shouldAnimate)
-    }
-
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(

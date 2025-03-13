@@ -1,0 +1,31 @@
+{
+    "ellipsis": {
+        "enabled": true,
+        "exclusions": []
+    },
+    "placeables": {
+        "enabled": true,
+        "exclusions": []
+    },
+    "quotes": {
+        "enabled": true,
+        "exclusions": []
+    },
+    "brands": {
+        "enabled": true,
+        "brand_names": [
+            "Firefox",
+            "Focus",
+            "Klar",
+            "Pocket"
+        ],
+        "exclusions": [
+            "focus-ios.xliff:Onboarding.PrivacyNotice.Text",
+            "focus-ios.xliff:Onboarding.TermsOfUse.LinkText",
+            "focus-ios.xliff:Onboarding.Title",
+            "focus-ios.xliff:Open.Firefox",
+            "focus-ios.xliff:ShareMenu.GetFirefox",
+            "focus-ios.xliff:ShareMenu.ShareOpenFirefox"
+        ]
+    }
+}

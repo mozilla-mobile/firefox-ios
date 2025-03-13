@@ -32,9 +32,12 @@ class BrowserViewController: UIViewController,
                              AddressToolbarContainerDelegate,
                              BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
-                             FeatureFlaggable {
-    private enum UX {
-        static let ShowHeaderTapAreaHeight: CGFloat = 32
+                             FeatureFlaggable,
+                             CanRemoveQuickActionBookmark {
+    enum UX {
+        static let showHeaderTapAreaHeight: CGFloat = 32
+        static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
+        static let downloadToastDuration = DispatchTimeInterval.seconds(5)
     }
 
     /// Describes the state of the current search session. This state is used
@@ -281,6 +284,7 @@ class BrowserViewController: UIViewController,
     let downloadQueue: DownloadQueue
 
     private let bookmarksSaver: BookmarksSaver
+    let bookmarksHandler: BookmarksHandler
 
     var newTabSettings: NewTabPage {
         return NewTabAccessors.getNewTabPage(profile.prefs)
@@ -318,6 +322,7 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
+        self.bookmarksHandler = profile.places
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -530,7 +535,7 @@ class BrowserViewController: UIViewController,
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
         if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
@@ -1082,9 +1087,9 @@ class BrowserViewController: UIViewController,
         UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
-    func willNavigateAway() {
-        if let tab = tabManager.selectedTab {
-            screenshotHelper?.takeScreenshot(tab)
+    func willNavigateAway(from tab: Tab?) {
+        if let tab {
+            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -1288,7 +1293,7 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.ShowHeaderTapAreaHeight)
+            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight)
         ])
 
         readerModeBar?.snp.remakeConstraints { make in
@@ -1744,6 +1749,7 @@ class BrowserViewController: UIViewController,
         profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(urlString: urlString, title: title, action: .remove)
+            self.removeBookmarkShortcut()
         }
     }
 
@@ -2847,8 +2853,6 @@ class BrowserViewController: UIViewController,
 
         guard let webView = tab.webView else { return }
 
-        self.screenshotHelper?.takeScreenshot(tab)
-
         // when navigating in a tab, if the tab's mime type is pdf, we should:
         // - scroll to top
         // - set readermode state to unavailable
@@ -2894,7 +2898,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab)
+                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -4086,6 +4090,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if topTabsVisible {
+            /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
+            willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
         }
 

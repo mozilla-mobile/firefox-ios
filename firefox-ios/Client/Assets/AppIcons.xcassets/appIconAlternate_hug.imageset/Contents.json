@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "appIconAlternate_hug.png",
+      "filename" : "Hug-Icon-Light.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Hug-Icon-Dark.png",
       "idiom" : "universal"
     }
   ],

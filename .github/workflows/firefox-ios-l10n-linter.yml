@@ -1,0 +1,71 @@
+name: 'Firefox: reference string linter'
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'focus-ios/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'focus-ios/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    strategy:
+      max-parallel: 4
+      matrix:
+        xcode:
+          - "16.2"
+    steps:
+      - name: Clone code repository
+        uses: actions/checkout@v4
+        with:
+          path: "code_repo"
+      - name: Clone l10n repository
+        uses: actions/checkout@v4
+        with:
+          repository: "mozilla-l10n/firefoxios-l10n"
+          path: "l10n_repo"
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: |
+          sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python dependencies
+        run: |
+          pip install -r l10n_repo/.github/scripts/requirements.txt
+      - name: Run bootstrap script
+        run: |
+          # Unlink and re-link to prevent errors when GitHub macOS runner images
+          # install Python outside of brew.
+          brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
+          brew update
+          brew install node
+          pip3 install virtualenv
+          cd code_repo
+          sh ./bootstrap.sh
+      - name: Extract strings
+        run: |
+          start_folder="$PWD"
+
+          # Clone localization tools
+          git clone https://github.com/mozilla-mobile/LocalizationTools --depth 1
+
+          # Extract strings
+          cd LocalizationTools
+          swift run LocalizationTools --export --project-path "${start_folder}/code_repo/firefox-ios/Client.xcodeproj" --l10n-project-path "${start_folder}/l10n_repo" --locale en-US
+      - name: Check reference locale
+        run: |
+          (cd code_repo && moz-xliff-lint --path ../l10n_repo/en-US --config .github/l10n/linter_config_ios.json)
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-xliff-file
+          path: l10n_repo/en-US/*.xliff
+          if-no-files-found: ignore

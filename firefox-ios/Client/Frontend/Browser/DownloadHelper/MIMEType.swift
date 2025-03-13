@@ -38,7 +38,9 @@ struct MIMEType {
     private static let downloadableTypes: [String] = [
         MIMEType.PDF,
         MIMEType.OpenDocument,
-        MIMEType.MicrosoftWord
+        MIMEType.MicrosoftWord,
+        MIMEType.PNG,
+        MIMEType.JPEG
     ]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {

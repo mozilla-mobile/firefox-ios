@@ -20,7 +20,6 @@ include:
   - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/cleanupHistoryReenabled.yaml
   - nimbus-features/contextualHintFeature.yaml
-  - nimbus-features/darkReaderFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/fakespotFeature.yaml

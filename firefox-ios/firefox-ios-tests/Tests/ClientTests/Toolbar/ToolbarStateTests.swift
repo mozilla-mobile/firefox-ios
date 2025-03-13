@@ -166,7 +166,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarActionType.cancelEdit)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
@@ -181,7 +181,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarActionType.cancelEditOnHomepage)
         )
 
-        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 

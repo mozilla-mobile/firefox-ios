@@ -146,7 +146,9 @@ struct ContextMenuState {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             dispatchSettingsAction(section: .topSites)
-            // TODO: FXIOS-10171 - Add telemetry
+            store.dispatch(
+                ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSettingsAction)
+            )
         }).items
     }
 
@@ -164,7 +166,9 @@ struct ContextMenuState {
                 return
             }
             dispatchOpenNewTabAction(siteURL: url, isPrivate: false, selectNewTab: true)
-            // TODO: FXIOS-10171 - Add telemetry
+            store.dispatch(
+                ContextMenuAction(windowUUID: windowUUID, actionType: ContextMenuActionType.tappedOnSponsoredAction)
+            )
         }).items
     }
 

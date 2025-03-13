@@ -16,21 +16,18 @@ struct AppIconView: View, ThemeApplicable {
     // FIXME FXIOS-11472 Improve our SwiftUI theming
     @Environment(\.themeManager)
     var themeManager
+    @State var currentTheme: Theme = LightTheme()
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     struct UX {
-        static let checkedCircleImageIdentifier = "checkmark.circle.fill"
-        static let uncheckedCircleImageIdentifier = "circle"
+        static let checkmarkImageIdentifier = "checkmark"
         static let cornerRadius: CGFloat = 10
-        static let itemPadding: CGFloat = 10
+        static let itemPaddingHorizontal: CGFloat = 10
+        static let itemPaddingVertical: CGFloat = 2
         static let appIconSize: CGFloat = 50
         static let appIconBorderWidth: CGFloat = 1
-    }
-
-    var selectionImageIdentifier: String {
-        return isSelected
-               ? UX.checkedCircleImageIdentifier
-               : UX.uncheckedCircleImageIdentifier
+        static let appIconLightBackgroundColor = Color.white
+        static let appIconDarkBackgroundColor = UIColor(rgb: 33).color
     }
 
     var selectionImageAccessibilityLabel: String {
@@ -59,46 +56,68 @@ struct AppIconView: View, ThemeApplicable {
 
     @ViewBuilder private var subView: some View {
         if let image = UIImage(named: appIcon.imageSetAssetName) {
-            buttonGroup(for: image)
+            button(for: image)
         } else {
             EmptyView()
         }
     }
 
-    private func buttonGroup(for image: UIImage) -> some View {
-        Group {
-            Button(action: { setAppIcon(appIcon) }) {
-                HStack {
-                    Image(systemName: selectionImageIdentifier)
-                        .padding(.trailing, UX.itemPadding)
-                        .tint(themeColors.actionPrimary.color)
-                        .accessibilityLabel(selectionImageAccessibilityLabel)
-
-                    // swiftlint:disable:next accessibility_label_for_image
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(width: UX.appIconSize, height: UX.appIconSize)
-                        .cornerRadius(UX.cornerRadius)
-                        .overlay(
-                            // Add rounded border
-                            RoundedRectangle(cornerRadius: UX.cornerRadius)
-                                .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
-                        )
-                        .padding(.trailing, UX.itemPadding)
-
-                    Text(appIcon.displayName)
-                        .tint(themeColors.textPrimary.color)
-
-                    Spacer()
-                }
-                .padding(.all, UX.itemPadding)
-            }
-            .background(Color.clear)
-            .accessibilityHint(selectionAccessibilityHint)
+    /// Devices prior to iOS 18 cannot change their icon display mode with their system settings
+    var forceLightTheme: Bool {
+        if #available(iOS 18, *) {
+            return false
+        } else {
+            return true
         }
     }
 
+    private func button(for image: UIImage) -> some View {
+        Button(action: {
+            setAppIcon(appIcon)
+        }) {
+            HStack {
+                // swiftlint:disable:next accessibility_label_for_image
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: UX.appIconSize, height: UX.appIconSize)
+                    // Note: Do not fallback to the current app theme, because the user can view settings in the private mode
+                    // theme, but app icons can only be Light or Dark
+                    .background(
+                        forceLightTheme
+                        ? UX.appIconLightBackgroundColor
+                        : UX.appIconDarkBackgroundColor
+                    )
+                    // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
+                    // Note: This fix does not work on iOS15 but it's a small user base
+                    .colorScheme(
+                        forceLightTheme
+                        ? ColorScheme.light
+                        : currentTheme.type.colorScheme
+                    )
+                    .cornerRadius(UX.cornerRadius)
+                    .overlay(
+                        // Add rounded border
+                        RoundedRectangle(cornerRadius: UX.cornerRadius)
+                            .stroke(themeColors.borderPrimary.color, lineWidth: UX.appIconBorderWidth)
+                    )
+                    .padding(.trailing, UX.itemPaddingHorizontal)
+                Text(appIcon.displayName)
+                    .foregroundStyle(themeColors.textPrimary.color)
+                Spacer()
+                if isSelected {
+                    Image(systemName: UX.checkmarkImageIdentifier)
+                        .foregroundStyle(themeColors.actionPrimary.color)
+                        .accessibilityLabel(selectionImageAccessibilityLabel)
+                }
+            }
+            .padding(.horizontal, UX.itemPaddingHorizontal)
+            .padding(.vertical, UX.itemPaddingVertical)
+        }
+        .accessibilityHint(selectionAccessibilityHint)
+    }
+
     func applyTheme(theme: Theme) {
+        self.currentTheme = theme
         self.themeColors = theme.colors
     }
 }

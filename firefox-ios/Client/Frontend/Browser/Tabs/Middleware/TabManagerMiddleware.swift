@@ -9,7 +9,8 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
+class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
+                            FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
@@ -34,9 +35,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? ScreenshotAction {
+            self.resolveScreenshotActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
+    }
+
+    private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
+        let manager = tabManager(for: action.windowUUID)
+        manager.tabDidSetScreenshot(action.tab)
+        triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
     private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
@@ -372,27 +384,33 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
+            let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
+                                                                           checking: .buildOnly)
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
                                                        windowUUID: uuid,
                                                        actionType: TabPanelViewActionType.tabPanelDidLoad)
                 store.dispatch(didLoadAction)
 
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
+                if !isTabTrayExperimentEnabled {
+                    let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
+                                                               windowUUID: uuid,
+                                                               actionType: TabPanelMiddlewareActionType.showToast)
+                    store.dispatch(toastAction)
+                }
             } else if shouldDismiss {
                 let dismissAction = TabTrayAction(windowUUID: uuid,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
 
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
+                if !isTabTrayExperimentEnabled {
+                    let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
+                                                           windowUUID: uuid,
+                                                           actionType: GeneralBrowserActionType.showToast)
+                    store.dispatch(toastAction)
+                }
                 addNewTabIfPrivate(uuid: uuid)
-            } else {
+            } else if !isTabTrayExperimentEnabled {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -476,16 +494,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                       actionType: TabPanelMiddlewareActionType.refreshTabs)
                 store.dispatch(action)
 
-                if tabsState.isPrivateMode {
+                let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
+                                                                               checking: .buildOnly)
+                if tabsState.isPrivateMode && !isTabTrayExperimentEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
                 } else {
-                    let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                           windowUUID: uuid,
-                                                           actionType: GeneralBrowserActionType.showToast)
-                    store.dispatch(toastAction)
+                    if !isTabTrayExperimentEnabled {
+                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                               windowUUID: uuid,
+                                                               actionType: GeneralBrowserActionType.showToast)
+                        store.dispatch(toastAction)
+                    }
                     addNewTabIfPrivate(uuid: uuid)
                 }
             }

@@ -13,13 +13,8 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: async (enabled, shouldUseDarkReader = false) => {
-    // NOTE: We intend to do a phased rollout, hence why we are using a flag here
-    // to load DarkReader only for users who have opted in. Once we have rolled out to all users
-    // the flag `shouldUseDarkReader` and LegacyNightModeHelper.js can be removed.
-    const nightMode = shouldUseDarkReader
-      ? await import("./DarkReader.js")
-      : await import("./LegacyNightModeHelper.js");
+  value: async (enabled) => {
+    const nightMode = await import("./DarkReader.js");
     nightMode.setEnabled(enabled);
   },
 });

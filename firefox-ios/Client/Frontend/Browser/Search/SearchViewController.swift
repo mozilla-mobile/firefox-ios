@@ -378,21 +378,21 @@ class SearchViewController: SiteTableViewController,
         _ keyboardHelper: KeyboardHelper,
         keyboardWillShowWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper,
         keyboardWillHideWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper,
         keyboardWillChangeWithState state: KeyboardState
     ) {
-        animateSearchEnginesWithKeyboard(state)
+        layoutSearchEngineScrollView()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -402,18 +402,6 @@ class SearchViewController: SiteTableViewController,
             tableView.reloadData()
             layoutSearchEngineScrollViewContent()
         }, completion: nil)
-    }
-
-    private func animateSearchEnginesWithKeyboard(_ keyboardState: KeyboardState) {
-        layoutSearchEngineScrollView()
-
-        UIView.animate(
-            withDuration: keyboardState.animationDuration,
-            delay: 0,
-            options: [UIView.AnimationOptions(rawValue: UInt(keyboardState.animationCurve.rawValue << 16))],
-            animations: {
-                self.view.layoutIfNeeded()
-            })
     }
 
     private func getCachedTabs() {

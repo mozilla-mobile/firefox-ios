@@ -17,8 +17,36 @@ struct HomepageTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: isPrivateModeExtra)
     }
 
+    // MARK: - Top Sites
+    enum ContextMenuTelemetryActionType: String {
+        case remove, unpin, pin, settings, sponsoredSupport
+    }
+
+    func sendOpenInPrivateTabEventForTopSites() {
+        gleanWrapper.recordEvent(for: GleanMetrics.TopSites.openInPrivateTab)
+    }
+
+    func sendContextMenuOpenedEventForTopSites(for type: ContextMenuTelemetryActionType) {
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.contextualMenu,
+            extras: GleanMetrics.TopSites.ContextualMenuExtra(type: type.rawValue)
+        )
+    }
+
+    func sendTopSitesPressedEvent(position: Int, tileType: String, isZeroSearch: Bool) {
+        let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
+        gleanWrapper.recordLabel(
+            for: GleanMetrics.TopSites.pressedTileOrigin,
+            label: originExtra.rawValue
+        )
+        gleanWrapper.recordEvent(
+            for: GleanMetrics.TopSites.tilePressed,
+            extras: GleanMetrics.TopSites.TilePressedExtra(position: "\(position)", tileType: tileType)
+        )
+    }
+
     // MARK: - Pocket
-    func sendTapOnPocketStoryCounter(position: Int, isZeroSearch: Bool = false) {
+    func sendTapOnPocketStoryCounter(position: Int, isZeroSearch: Bool) {
         let originExtra: TelemetryWrapper.EventValue = isZeroSearch ? .fxHomepageOriginZeroSearch : .fxHomepageOriginOther
         gleanWrapper.recordLabel(for: GleanMetrics.Pocket.openStoryOrigin, label: originExtra.rawValue)
         gleanWrapper.recordLabel(for: GleanMetrics.Pocket.openStoryPosition, label: "position-\(position)")
@@ -28,7 +56,7 @@ struct HomepageTelemetry {
         gleanWrapper.incrementCounter(for: GleanMetrics.Pocket.sectionImpressions)
     }
 
-    func sendOpenInPrivateTabEvent() {
+    func sendOpenInPrivateTabEventForPocket() {
         gleanWrapper.recordEvent(for: GleanMetrics.Pocket.openInPrivateTab)
     }
 

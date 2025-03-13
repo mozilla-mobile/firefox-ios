@@ -398,7 +398,7 @@ class BrowserViewController: UIViewController {
             let dismissOnboarding = { [unowned self] in
                 UserDefaults.standard.set(true, forKey: OnboardingConstants.onboardingDidAppear)
                 urlBar.activateTextField()
-                onboardingEventsHandler.route = nil
+                onboardingEventsHandler.dismissTooltip(route: .onboarding(.v2))
                 onboardingEventsHandler.send(.enterHome)
             }
                 return OnboardingFactory.make(onboardingType: onboardingType, dismissAction: dismissOnboarding, telemetry: onboardingTelemetry.handle(event:))

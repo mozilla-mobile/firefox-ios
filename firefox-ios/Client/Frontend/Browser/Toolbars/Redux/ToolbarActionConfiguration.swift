@@ -25,7 +25,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     }
 
     var actionType: ActionType
-    var iconName: String
+    var actionLabel: String?
+    var iconName: String?
     var badgeImageName: String?
     var maskImageName: String?
     var numberOfTabs: Int?

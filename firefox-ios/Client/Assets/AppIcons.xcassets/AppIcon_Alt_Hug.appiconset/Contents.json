@@ -1,7 +1,31 @@
 {
   "images" : [
     {
-      "filename" : "appstore-icon-hug.png",
+      "filename" : "Hug-Icon-Light.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Hug-Icon-Dark.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "Hug-Icon-Tinted.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

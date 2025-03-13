@@ -25,6 +25,7 @@ class MockGleanWrapper: GleanWrapper {
     var submitPingCalled = 0
     var savedEvents: [Any]? = []
     var savedExtras: Any?
+    var savedLabel: Any?
     var savedPing: Any?
 
     var savedHandleDeeplinkUrl: URL?
@@ -64,6 +65,7 @@ class MockGleanWrapper: GleanWrapper {
     }
 
     func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+        savedLabel = label
         savedEvents?.append(metric)
         recordLabelCalled += 1
     }

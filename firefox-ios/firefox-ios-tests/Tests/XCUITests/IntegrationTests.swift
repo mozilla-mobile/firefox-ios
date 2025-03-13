@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
 
@@ -290,7 +291,6 @@ class IntegrationTests: BaseTestCase {
 
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
-        app.swipeDown()
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
 

@@ -65,6 +65,7 @@ let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
 let AutofillPasswordSettings = "AutofillsPasswordsSettings"
+let Shortcuts = "Shortcuts"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -228,6 +229,7 @@ class Action {
 
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
+    static let SelectShortcuts = "TopSitesSettings"
 }
 
 @objcMembers
@@ -764,6 +766,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables.cells.switches["Bookmarks"].waitAndTap()
         }
 
+        screenState.gesture(forAction: Action.SelectShortcuts) { userState in
+            let topSitesSetting = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage
+            app.tables.cells[topSitesSetting].waitAndTap()
+        }
+
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -1036,6 +1043,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(FxAccountManagementPage) { screenState in
         screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(Shortcuts) { screenState in
+        let homePage = AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar
+        screenState.tap(app.navigationBars.buttons[homePage], to: HomeSettings)
     }
 
     map.addScreenState(FindInPage) { screenState in

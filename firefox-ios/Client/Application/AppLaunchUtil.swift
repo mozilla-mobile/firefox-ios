@@ -8,6 +8,7 @@ import Shared
 import Storage
 import Account
 import Glean
+import MozillaAppServices
 
 class AppLaunchUtil {
     private var logger: Logger
@@ -80,6 +81,9 @@ class AppLaunchUtil {
         profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
                                                                                 checking: .buildOnly),
                               forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+
+        // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
+        MozillaAppServices.initialize()
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.

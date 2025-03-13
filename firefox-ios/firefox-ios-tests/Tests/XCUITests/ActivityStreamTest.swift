@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
-import Common
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
@@ -192,8 +192,6 @@ class ActivityStreamTest: BaseTestCase {
         app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
         // Check that two tabs are open and one of them is the default top site one
-        // Workaround needed after xcode 11.3 update Issue 5937
-        sleep(3)
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -250,5 +248,59 @@ class ActivityStreamTest: BaseTestCase {
                 ContextMenuTable.cells.otherElements["crossLarge"]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2855325
+    func testSiteCanBeAddedToShortcuts() {
+        addWebsiteToShortcut(website: url_3)
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let cell = itemCell.staticTexts["Example Domain"]
+        mozWaitForElementToExist(cell)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2861436
+    func testShortcutsToggle() {
+        //  Go to customize homepage
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectShortcuts)
+        let shortCutSwitch = app.switches["TopSitesUserPrefsKey"]
+        mozWaitForElementToExist(shortCutSwitch)
+        let shortCutValue = shortCutSwitch.value!
+        // Shortcuts toggle is enabled by default
+        XCTAssertEqual(shortCutValue as? String, "1", "The shortcut switch is not on")
+        // Access a couple of websites and add them to shortcuts
+        navigator.nowAt(Shortcuts)
+        navigator.goto(HomeSettings)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(NewTabScreen)
+        addWebsiteToShortcut(website: url_3)
+        addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
+        // The shortcuts are displayed on homepage
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let firstWebsite = itemCell.staticTexts["Example Domain"]
+        let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
+        mozWaitForElementToExist(firstWebsite)
+        mozWaitForElementToExist(secondWebsite)
+        // Go to customize homepage and disable shortcuts toggle
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectShortcuts)
+        shortCutSwitch.waitAndTap()
+        navigator.nowAt(Shortcuts)
+        navigator.goto(HomeSettings)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(BrowserTab)
+        // The shortcuts are not displayed anymore on homepage
+        mozWaitForElementToNotExist(itemCell)
+        mozWaitForElementToNotExist(firstWebsite)
+        mozWaitForElementToNotExist(secondWebsite)
+    }
+
+    private func addWebsiteToShortcut(website: String) {
+        navigator.openURL(website)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.PinToTopSitesPAM)
+        navigator.performAction(Action.GoToHomePage)
     }
 }

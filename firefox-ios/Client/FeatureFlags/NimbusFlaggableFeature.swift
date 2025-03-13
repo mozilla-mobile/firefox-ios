@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import UIKit
@@ -17,7 +18,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
-    case darkReader
     case deeplinkOptimizationRefactor
     case fakespotBackInStock
     case fakespotFeature
@@ -123,7 +123,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .darkReader,
                 .deeplinkOptimizationRefactor,
                 .fakespotBackInStock,
                 .fakespotFeature,
