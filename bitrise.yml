@@ -1470,7 +1470,7 @@ workflows:
                 exit 1
             fi
 
-            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
+            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-iphoneos" ]]; then
                 echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
                 echo "The files in $PRODUCTS_DIR are:"
                 ls -l "$PRODUCTS_DIR"
