@@ -482,7 +482,7 @@ open class BrowserProfile: Profile {
         isDirectory: true
     ).appendingPathComponent("autofill.db").path
 
-    lazy var autofill = RustAutofill(databasePath: autofillDbPath)
+    lazy var autofill = RustAutofill(databasePath: autofillDbPath, rustKeychainEnabled: rustKeychainEnabled)
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
     lazy var searchEnginesManager: SearchEnginesManager = {
@@ -768,36 +768,45 @@ open class BrowserProfile: Profile {
         let rustLoginsKeys = RustLoginEncryptionKeys()
         let rustAutofillKey = RustAutofillEncryptionKeys()
         var loginsKey: String?
-        let creditCardKey = legacyKeychain.string(forKey: rustAutofillKey.ccKeychainKey)
+        var loginsCanary: String?
+
+        var creditCardKey: String?
+        var creditCardCanary: String?
 
         if rustKeychainEnabled {
-            (loginsKey, _) = keychain.getLoginsKeyData()
+            (creditCardKey, creditCardCanary) = keychain.getCreditCardKeyData()
+            (loginsKey, loginsCanary) = keychain.getLoginsKeyData()
 
             // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
             // simply restore what is needed.
             keychain.removeAllKeys()
 
-            if let loginsKey = loginsKey {
-                keychain.setLoginsKey(loginsKey)
+            if let creditCardKey = creditCardKey, let creditCardCanary = creditCardCanary {
+                keychain.setCreditCardsKeyData(keyValue: creditCardKey, canaryValue: creditCardCanary)
+            }
+
+            if let loginsKey = loginsKey, let loginsCanary = loginsCanary {
+                keychain.setLoginsKeyData(keyValue: loginsKey, canaryValue: loginsCanary)
             }
         } else {
+            creditCardKey = legacyKeychain.string(forKey: rustAutofillKey.ccKeychainKey)
             loginsKey = legacyKeychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
 
             // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
             // simply restore what is needed.
             legacyKeychain.removeAllKeys()
 
+            if let creditCardKey = creditCardKey {
+                legacyKeychain.set(creditCardKey,
+                                   forKey: rustAutofillKey.ccKeychainKey,
+                                   withAccessibility: .afterFirstUnlock)
+            }
+
             if let loginsKey = loginsKey {
                 legacyKeychain.set(loginsKey,
                                    forKey: rustLoginsKeys.loginPerFieldKeychainKey,
                                    withAccessibility: .afterFirstUnlock)
             }
-        }
-
-        if let creditCardKey = creditCardKey {
-            legacyKeychain.set(creditCardKey,
-                               forKey: rustAutofillKey.ccKeychainKey,
-                               withAccessibility: .afterFirstUnlock)
         }
 
         // Tell any observers that our account has changed.
