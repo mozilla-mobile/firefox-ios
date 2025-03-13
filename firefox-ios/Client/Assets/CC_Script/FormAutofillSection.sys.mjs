@@ -372,6 +372,15 @@ export class FormAutofillSection {
     );
   }
 
+  onFilledOnFieldsUpdate(filledResult) {
+    lazy.AutofillTelemetry.recordFormInteractionEvent(
+      "filled_on_fields_update",
+      this.flowId,
+      this.fieldDetails,
+      filledResult
+    );
+  }
+
   onFilledModified(elementId) {
     const fieldDetail = this.getFieldDetailByElementId(elementId);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
