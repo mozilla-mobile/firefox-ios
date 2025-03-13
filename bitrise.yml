@@ -1441,17 +1441,17 @@ workflows:
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
 
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
-            xcodebuild build-for-testing -project "$PROJECT" \
-                -scheme "$SCHEME" \
-                -sdk "$SDK" \
-                -destination "$DESTINATION" \
-                -derivedDataPath "${DERIVED_DATA_DIR}"
-
-            LOG_FILE="/tmp/firebase_verify_build_artifacts.txt"
+            LOG_FILE="/tmp/firebase_all_the_things.txt"
             {
+                echo "-- build-for-testing --"
+                mkdir DerivedData
+                xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
+                xcodebuild build-for-testing -project "$PROJECT" \
+                    -scheme "$SCHEME" \
+                    -sdk "$SDK" \
+                    -destination "$DESTINATION" \
+                    -derivedDataPath "${DERIVED_DATA_DIR}"
+            
                 echo "-- verify build artifacts --"
             
                 if [[ ! -d "$PRODUCTS_DIR" ]]; then
