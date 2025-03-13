@@ -179,11 +179,9 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                     }
                     if matchFound { break }
                 }
-                if matchFound {
-                    if let iconImage = fetchIcon(for: iconRecord) {
-                        maybeIconImage = iconImage
-                        break
-                    }
+                if matchFound, let iconImage = fetchIcon(for: iconRecord) {
+                    maybeIconImage = iconImage
+                    break
                 }
             }
 
