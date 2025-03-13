@@ -15,8 +15,8 @@ struct AppIconView: View, ThemeApplicable {
     // MARK: - Theming
     // FIXME FXIOS-11472 Improve our SwiftUI theming
     @Environment(\.themeManager)
-    var themeManager
-    @State var currentTheme: Theme = LightTheme()
+    private var themeManager
+    @State private var currentTheme: Theme = LightTheme()
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     struct UX {
@@ -30,13 +30,13 @@ struct AppIconView: View, ThemeApplicable {
         static let appIconDarkBackgroundColor = UIColor(rgb: 33).color
     }
 
-    var selectionImageAccessibilityLabel: String {
+    private var selectionImageAccessibilityLabel: String {
         return isSelected
                ? .Settings.AppIconSelection.Accessibility.AppIconSelectedLabel
                : .Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel
     }
 
-    var selectionAccessibilityHint: String {
+    private var selectionAccessibilityHint: String {
         return .localizedStringWithFormat(
             .Settings.AppIconSelection.Accessibility.AppIconSelectionHint,
             appIcon.displayName
@@ -63,11 +63,25 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     /// Devices prior to iOS 18 cannot change their icon display mode with their system settings
-    var forceLightTheme: Bool {
+    private var forceLightTheme: Bool {
         if #available(iOS 18, *) {
             return false
         } else {
             return true
+        }
+    }
+
+    /// The expected default app icon background for iOS 18+ app icons with transparency
+    private var appIconBackgroundColor: Color {
+        if forceLightTheme {
+            return UX.appIconLightBackgroundColor
+        } else {
+            switch currentTheme.type.colorScheme {
+            case .light:
+                return UX.appIconLightBackgroundColor
+            default:
+                return UX.appIconDarkBackgroundColor
+            }
         }
     }
 
@@ -85,7 +99,7 @@ struct AppIconView: View, ThemeApplicable {
                     .background(
                         forceLightTheme
                         ? UX.appIconLightBackgroundColor
-                        : UX.appIconDarkBackgroundColor
+                        : appIconBackgroundColor
                     )
                     // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
                     // Note: This fix does not work on iOS15 but it's a small user base
