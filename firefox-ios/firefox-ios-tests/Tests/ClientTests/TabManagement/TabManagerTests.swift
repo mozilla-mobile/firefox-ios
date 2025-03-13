@@ -40,6 +40,7 @@ class TabManagerTests: XCTestCase {
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
         setIsDeeplinkOptimizationRefactorEnabled(false)
+        setIsPDFRefactorEnabled(false)
     }
 
     override func tearDown() {
@@ -170,6 +171,23 @@ class TabManagerTests: XCTestCase {
         }
 
         XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
+    }
+
+    // MARK: - Document pause - restore
+
+    func testSelectTab_pauseCurrentDocumentDownload() throws {
+        setIsPDFRefactorEnabled(true)
+
+        let tabs = generateTabs(count: 2)
+        let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
+        let subject = createSubject(tabs: tabs)
+
+        let tab = try XCTUnwrap(tabs.first)
+        tab.enqueueDocument(document)
+
+        subject.selectTab(tabs[1], previous: tab)
+
+        XCTAssertEqual(document.pauseResumeDownloadCalled, 1)
     }
 
     // MARK: - Restore tabs
@@ -1612,6 +1630,12 @@ class TabManagerTests: XCTestCase {
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
+    }
+
+    private func setIsPDFRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            return PdfRefactorFeature(enabled: enabled)
         }
     }
 
