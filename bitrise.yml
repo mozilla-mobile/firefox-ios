@@ -1450,34 +1450,42 @@ workflows:
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}"
 
-            echo "-- verify build artifacts --"
+            LOG_FILE="/tmp/firebase_verify_build_artifacts.txt"
+            {
+                echo "-- verify build artifacts --"
+            
+                if [[ ! -d "$PRODUCTS_DIR" ]]; then
+                    echo "Error: $PRODUCTS_DIR was not created. Check your build steps and try again."
+                    exit 1
+                fi
 
-            if [[ ! -d "$PRODUCTS_DIR" ]]; then
-                echo "Error: $PRODUCTS_DIR was not created. Check your build steps and try again."
-                exit 1
-            fi
+                if [[ -z $(find "$PRODUCTS_DIR" -type f -name "${TEST_PLAN}*.xctestrun") ]]; then
+                    echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
+                    echo "The files in $PRODUCTS_DIR are:"
+                    ls -l "$PRODUCTS_DIR"
+                    echo "The available test plans for this scheme, $SCHEME, are:"
+                    awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
+                        "${PROJECT}/xcshareddata/xcschemes/${SCHEME}.xcscheme" | \
+                        grep "reference" | \
+                        cut -d '"' -f 2 | \
+                        sed -n 's|container:Tests/\(.*\).xctestplan|\1|p'
+                    exit 1
+                fi
 
-            if [[ -z $(find "$PRODUCTS_DIR" -type f -name "${TEST_PLAN}*.xctestrun") ]]; then
-                echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
-                echo "The files in $PRODUCTS_DIR are:"
-                ls -l "$PRODUCTS_DIR"
-                echo "The available test plans for this scheme, $SCHEME, are:"
-                awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
-                    "${PROJECT}/xcshareddata/xcschemes/${SCHEME}.xcscheme" | \
-                    grep "reference" | \
-                    cut -d '"' -f 2 | \
-                    sed -n 's|container:Tests/\(.*\).xctestplan|\1|p'
-                exit 1
-            fi
-
-            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
-                echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
-                echo "The files in $PRODUCTS_DIR are:"
-                ls -l "$PRODUCTS_DIR"
-                echo "The available sdks in this environment are:"
-                xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
-                exit 1
-            fi
+                if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
+                    echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
+                    echo "The files in $PRODUCTS_DIR are:"
+                    ls -l "$PRODUCTS_DIR"
+                    echo "The available sdks in this environment are:"
+                    xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
+                    exit 1
+                fi
+            } &> "$LOG_FILE"
+            # Upload the log file as an artifact
+            envman add --key LOG_FILE_PATH --value "$LOG_FILE"
+    - deploy-to-bitrise-io@2.10.0:
+        inputs:
+        - deploy_path: "$LOG_FILE_PATH"
     - script@1.2.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
