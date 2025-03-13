@@ -1431,7 +1431,7 @@ workflows:
         inputs:
         - content: |
             #!/usr/bin/env bash
-            set -euxo pipefail
+            # set -euxo pipefail
 
             DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
@@ -1440,8 +1440,7 @@ workflows:
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
-
-            LOG_FILE="/tmp/firebase_all_the_things.txt"
+            
             {
                 echo "-- build-for-testing --"
                 mkdir DerivedData
@@ -1451,7 +1450,14 @@ workflows:
                     -sdk "$SDK" \
                     -destination "$DESTINATION" \
                     -derivedDataPath "${DERIVED_DATA_DIR}"
+            } &> ./firefox-buildlog.log
+
+            echo "Build finished!"
+            head ./firefox-buildlog.log
+            tail ./firefox-buildlog.log
             
+            LOG_FILE="/tmp/firebase_all_the_things.txt"
+            {
                 echo "-- verify build artifacts --"
             
                 if [[ ! -d "$PRODUCTS_DIR" ]]; then
@@ -1481,6 +1487,7 @@ workflows:
                     exit 1
                 fi
             } &> "$LOG_FILE"
+            
             # Upload the log file as an artifact
             envman add --key LOG_FILE_PATH --value "$LOG_FILE"
             echo "$LOG_FILE"
