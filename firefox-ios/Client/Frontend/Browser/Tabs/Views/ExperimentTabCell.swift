@@ -81,7 +81,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.crossCircleFill), for: [])
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.badgeMask), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
         var configuration = UIButton.Configuration.plain()
