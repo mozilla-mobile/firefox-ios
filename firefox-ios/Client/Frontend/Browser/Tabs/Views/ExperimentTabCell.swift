@@ -29,6 +29,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         static let shadowRadius: CGFloat = 4
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
+        static let thumbnailScreenshotHeight: CGFloat = 200
     }
     // MARK: - Properties
 
@@ -43,6 +44,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
     }
 
     private lazy var favicon: FaviconImageView = .build()
+    private lazy var faviconContainer: UIView = .build()
 
     // MARK: - UI
 
@@ -53,6 +55,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         stackView.alignment = .fill
         stackView.spacing = UX.tabViewFooterSpacing
         stackView.backgroundColor = .clear
+        stackView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var backgroundHolder: UIView = .build { view in
@@ -71,6 +75,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -80,7 +86,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
-        button.alpha = 0.5
+        button.alpha = 0.7
     }
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -110,8 +116,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         contentView.addSubview(backgroundHolder)
         contentView.addSubview(footerView)
 
-        footerView.addArrangedSubview(favicon)
+        footerView.addArrangedSubview(faviconContainer)
         footerView.addArrangedSubview(titleText)
+        faviconContainer.addSubview(favicon)
 
         backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton)
 
@@ -263,16 +270,22 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundHolder.bottomAnchor.constraint(equalTo: footerView.topAnchor,
-                                                     constant: -UX.tabViewFooterSpacing),
+            backgroundHolder.heightAnchor.constraint(equalToConstant: UX.thumbnailScreenshotHeight),
 
+            footerView.topAnchor.constraint(equalTo: backgroundHolder.bottomAnchor,
+                                            constant: UX.tabViewFooterSpacing),
             footerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             footerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
 
+            faviconContainer.topAnchor.constraint(lessThanOrEqualTo: favicon.topAnchor),
+            faviconContainer.bottomAnchor.constraint(greaterThanOrEqualTo: favicon.bottomAnchor),
+            faviconContainer.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
+            faviconContainer.trailingAnchor.constraint(equalTo: favicon.trailingAnchor),
             favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
