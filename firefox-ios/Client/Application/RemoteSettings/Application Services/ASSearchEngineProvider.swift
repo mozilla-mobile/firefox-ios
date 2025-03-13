@@ -35,9 +35,6 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 return
             }
 
-            // TODO: this sorting needs more thought. We should "migrate" the old preferences to
-            // a new storage solution that uses the identifiers not the shortName
-
             // We have a persisted order of engines, so try to use that order.
             // We may have found engines that weren't persisted in the ordered list
             // (if the user changed locales or added a new engine); these engines
@@ -121,23 +118,21 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
 final class ASIconDataFetcher {
     let service: RemoteSettingsService
+    let client: RemoteSettingsClient?
     let logger: Logger
 
     init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
+        let collection: ASRemoteSettingsCollection = .searchEngineIcons
+        self.client = collection.makeClient(service: service)
         self.logger = logger
     }
 
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
         // Reminder: client creation must happen before sync() or the sync won't pull data for that client's collection
-        let collection: ASRemoteSettingsCollection = .searchEngineIcons
-        guard let client = collection.makeClient(service: service) else { completion([]); return }
+        guard let client, let records = client.getRecords() else { completion([]); return }
 
-        // TODO: TEMPORARY SYNC FOR TESTING TO MAKE SURE WE GET DATA
-        _ = try? service.sync()
-
-        guard let records = client.getRecords() else { completion([]); return }
         logger.log("Fetched \(records.count) search icon records", level: .info, category: .remoteSettings)
         let iconRecords = records.map { ASSearchEngineIconRecord(record: $0) }
 
@@ -154,32 +149,39 @@ final class ASIconDataFetcher {
                 // filtering here to select the best icon.
                 let iconIdentifiers = iconRecord.engineIdentifiers
                 if iconIdentifiers.contains(engineIdentifier) {
-                    do {
-                        let data = try client.getAttachment(record: iconRecord.backingRecord)
-                        if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
-                            // TODO: SVGs must be rendered via 3rd party lib
-                        } else {
-                            if let img = UIImage(data: data) {
-                                maybeIconImage = img
-                                break
-                            }
-                        }
-                    } catch {
-                        logger.log("Error fetching engine icon attachment.", level: .warning, category: .remoteSettings)
+                    if let iconImage = fetchIcon(for: iconRecord) {
+                        maybeIconImage = iconImage
                     }
                 }
             }
 
             let iconImage = {
-                guard maybeIconImage == nil else { return maybeIconImage! }
-                logger.log("No icon available for search engine.", level: .warning, category: .remoteSettings)
-                return UIImage() // TODO: How do we handle this? Default icon? Blank icon?
+                guard let maybeIconImage else {
+                    logger.log("No icon available for search engine.", level: .warning, category: .remoteSettings)
+                    return UIImage() // TODO: How do we handle this? Default icon? Blank icon?
+                }
+                return maybeIconImage
             }()
 
             return (engine, iconImage)
         }
 
         completion(mapped)
+    }
+
+    private func fetchIcon(for iconRecord: ASSearchEngineIconRecord) -> UIImage? {
+        guard let client else { return nil }
+        do {
+            let data = try client.getAttachment(record: iconRecord.backingRecord)
+            if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
+                // TODO: SVGs must be rendered via 3rd party lib
+            } else {
+                return UIImage(data: data)
+            }
+        } catch {
+            logger.log("Error fetching engine icon attachment.", level: .warning, category: .remoteSettings)
+        }
+        return nil
     }
 }
 
