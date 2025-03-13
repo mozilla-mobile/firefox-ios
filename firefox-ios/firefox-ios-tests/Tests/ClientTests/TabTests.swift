@@ -83,6 +83,22 @@ class TabTests: XCTestCase {
         trackForMemoryLeaks(tab)
     }
 
+    func testIsDownloadingDocument_whenDocumentIsNil_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+
+        XCTAssertFalse(tab.isDownloadingDocument())
+    }
+
+    func testIsDownloadingDocument_whenDocumentIsDownloading_returnsTrue() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
+        document.isDownloading = true
+
+        tab.enqueueDocument(document)
+
+        XCTAssertTrue(tab.isDownloadingDocument())
+    }
+
     // MARK: - isActive, isInactive
 
     func testTabIsActive_within14Days() {
