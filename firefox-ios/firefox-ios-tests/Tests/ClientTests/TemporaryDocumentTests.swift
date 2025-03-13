@@ -25,7 +25,6 @@ final class TemporaryDocumentTests: XCTestCase {
         MockURLProtocol.data = nil
         let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
         try? FileManager.default.removeItem(at: tempFileURL)
-        mockURLSession.invalidateAndCancel()
         mockURLSession = nil
         super.tearDown()
     }
@@ -59,7 +58,6 @@ final class TemporaryDocumentTests: XCTestCase {
         }
         wait(for: [expectation])
 
-        subject.cancelDownload()
         subject = nil
     }
 
@@ -142,7 +140,6 @@ final class TemporaryDocumentTests: XCTestCase {
 
         wait(for: [expectation])
 
-        mockURLSession.invalidateAndCancel()
         subject = nil
     }
 

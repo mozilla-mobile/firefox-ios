@@ -29,7 +29,7 @@ class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
     }
 
     weak var delegate: URLSessionDownloadDelegate?
-    
+
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         delegate?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
     }
