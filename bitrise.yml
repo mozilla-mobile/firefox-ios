@@ -1484,6 +1484,7 @@ workflows:
             # Upload the log file as an artifact
             envman add --key LOG_FILE_PATH --value "$LOG_FILE"
     - deploy-to-bitrise-io@2.10.0:
+        is_always_run: true
         inputs:
         - deploy_path: "$LOG_FILE_PATH"
     - script@1.2.1:
