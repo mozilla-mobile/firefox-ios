@@ -6,6 +6,8 @@ import MozillaAppServices
 import Accounts
 import Common
 import Shared
+import Kingfisher
+import SwiftDraw
 
 final class ASSearchEngineProvider: SearchEngineProvider {
     let logger: Logger
@@ -176,7 +178,7 @@ final class ASIconDataFetcher {
         do {
             let data = try client.getAttachment(record: iconRecord.backingRecord)
             if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
-                // TODO: SVGs must be rendered via 3rd party lib
+                return SVG(data: data)?.rasterize()
             } else {
                 return UIImage(data: data)
             }
