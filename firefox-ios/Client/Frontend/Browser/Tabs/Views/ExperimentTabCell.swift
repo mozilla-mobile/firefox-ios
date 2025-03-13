@@ -25,6 +25,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
                                                                   trailing: 10)
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
+        static let closeButtonOverlaySpacing: CGFloat = 16
         static let tabViewFooterSpacing: CGFloat = 4
         static let shadowRadius: CGFloat = 4
         static let shadowOffset = CGSize(width: 0, height: 2)
@@ -89,6 +90,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         button.alpha = 0.5
     }
 
+    private lazy var closeButtonOverlay: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         favicon.layer.cornerRadius = UX.faviconSize.height / 2
@@ -116,7 +121,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         footerView.addArrangedSubview(titleText)
         faviconContainer.addSubview(favicon)
 
-        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton)
+        backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton, closeButtonOverlay)
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
@@ -179,6 +184,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.iconPrimary
+        closeButtonOverlay.tintColor = theme.colors.textInverted
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
@@ -300,6 +306,13 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             smallFaviconView.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
             smallFaviconView.centerYAnchor.constraint(equalTo: backgroundHolder.centerYAnchor),
             smallFaviconView.centerXAnchor.constraint(equalTo: backgroundHolder.centerXAnchor),
+
+            closeButtonOverlay.centerXAnchor.constraint(equalTo: closeButton.centerXAnchor),
+            closeButtonOverlay.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+            closeButtonOverlay.widthAnchor.constraint(equalTo: closeButton.widthAnchor,
+                                                      constant: -UX.closeButtonOverlaySpacing),
+            closeButtonOverlay.heightAnchor.constraint(equalTo: closeButton.heightAnchor,
+                                                       constant: -UX.closeButtonOverlaySpacing)
         ])
     }
 
