@@ -22,10 +22,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         .value()
         .creditCardAutofillStatus
 
+    private let rustKeychainEnabled = FxNimbus.shared
+        .features
+        .rustKeychainRefactor
+        .value()
+        .rustKeychainEnabled
+
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
-        creditCardAutofillEnabled: creditCardAutofillStatus
+        creditCardAutofillEnabled: creditCardAutofillStatus,
+        rustKeychainEnabled: rustKeychainEnabled
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)

@@ -199,27 +199,10 @@ public extension LoginEntry {
     }
 }
 
-public enum LoginEncryptionKeyError: Error {
-    case noKeyCreated
-    case illegalState
-    case dbRecordCountVerificationError(String)
-}
-
-/// Running tests on Bitrise code that reads/writes to keychain silently fails.
-/// SecItemAdd status: -34018 - A required entitlement isn't present.
-/// This should be removed if we ever have keychain support on our CI.
-class KeychainManager {
-    static var shared: MZKeychainWrapper = {
-        AppConstants.isRunningTest
-            ? MockMZKeychainWrapper.shared
-            : MZKeychainWrapper.sharedClientAppContainerKeychain
-    }()
-}
-
 public class RustLoginEncryptionKeys {
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
+    let legacyKeychain = KeychainManager.legacyShared
 
-    let keychain = KeychainManager.shared
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 
@@ -235,12 +218,12 @@ public class RustLoginEncryptionKeys {
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
 
             DispatchQueue.global(qos: .background).sync {
-                self.keychain.set(secret,
-                                  forKey: self.loginPerFieldKeychainKey,
-                                  withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-                self.keychain.set(canary,
-                                  forKey: self.canaryPhraseKey,
-                                  withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                legacyKeychain.set(secret,
+                                   forKey: loginPerFieldKeychainKey,
+                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                legacyKeychain.set(canary,
+                                   forKey: canaryPhraseKey,
+                                   withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             }
             return secret
         } catch let err as NSError {
@@ -322,6 +305,8 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
     let queue: DispatchQueue
     var storage: LoginsStorage?
+    let rustKeychain = KeychainManager.shared
+    var rustKeychainEnabled = false
 
     private(set) var isOpen = false
 
@@ -330,9 +315,11 @@ public class RustLogins: LoginsProtocol, KeyManager {
     private let logger: Logger
 
     public init(databasePath: String,
-                logger: Logger = DefaultLogger.shared) {
+                logger: Logger = DefaultLogger.shared,
+                rustKeychainEnabled: Bool = false) {
         self.perFieldDatabasePath = databasePath
         self.logger = logger
+        self.rustKeychainEnabled = rustKeychainEnabled
 
         queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
     }
@@ -849,7 +836,9 @@ public class RustLogins: LoginsProtocol, KeyManager {
             }
 
             do {
-                let key = try rustKeys.createAndStoreKey()
+                let key = self.rustKeychainEnabled ?
+                    try self.rustKeychain.createLoginsKeyData() :
+                    try rustKeys.createAndStoreKey()
                 completion(.success(key))
             } catch let error as NSError {
                 self.logger.log("Error creating logins encryption key",
@@ -865,8 +854,8 @@ public class RustLogins: LoginsProtocol, KeyManager {
         var keychainData: (String?, String?) = (nil, nil)
 
         DispatchQueue.global(qos: .background).sync {
-            let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
-            let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
+            let key = rustKeys.legacyKeychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
+            let encryptedCanaryPhrase = rustKeys.legacyKeychain.string(forKey: rustKeys.canaryPhraseKey)
             keychainData = (key, encryptedCanaryPhrase)
         }
 
@@ -875,7 +864,15 @@ public class RustLogins: LoginsProtocol, KeyManager {
 
     public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
         let rustKeys = RustLoginEncryptionKeys()
-        let (key, encryptedCanaryPhrase) = getKeychainData(rustKeys: rustKeys)
+        var key: String?
+        var encryptedCanaryPhrase: String?
+
+        if self.rustKeychainEnabled {
+            (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
+        } else {
+            (key, encryptedCanaryPhrase) = getKeychainData(rustKeys: rustKeys)
+        }
+
         switch(key, encryptedCanaryPhrase) {
         case (.some(key), .some(encryptedCanaryPhrase)):
                 self.handleExpectedKeyAction(rustKeys: rustKeys,
@@ -968,7 +965,9 @@ public class RustLogins: LoginsProtocol, KeyManager {
                 // There are no records in the database so we don't need to wipe any
                 // existing login records. We just need to create a new key.
                 do {
-                    let key = try rustKeys.createAndStoreKey()
+                    let key = self.rustKeychainEnabled ?
+                        try self.rustKeychain.createLoginsKeyData() :
+                        try rustKeys.createAndStoreKey()
                     completion(.success(key))
                 } catch let error as NSError {
                     completion(.failure(error))
@@ -1008,10 +1007,22 @@ public class RustLogins: LoginsProtocol, KeyManager {
     * ```
     */
     public func getKey() throws -> Data {
-        let rustKeys = RustLoginEncryptionKeys()
-        guard let keyData = rustKeys.keychain.data(forKey: rustKeys.loginPerFieldKeychainKey) else {
-            throw LoginsStoreError.MissingKey
+        if self.rustKeychainEnabled {
+            switch rustKeychain.queryKeychainForKey(key: rustKeychain.loginsKeyIdentifier) {
+            case .success(let result):
+                guard let data = result, let key = data.data(using: String.Encoding.utf8) else {
+                    throw LoginsStoreError.MissingKey
+                }
+                return key
+            case .failure:
+                throw LoginsStoreError.MissingKey
+            }
+        } else {
+            let rustKeys = RustLoginEncryptionKeys()
+            guard let keyData = rustKeys.legacyKeychain.data(forKey: rustKeys.loginPerFieldKeychainKey) else {
+                throw LoginsStoreError.MissingKey
+            }
+            return keyData
         }
-        return keyData
     }
 }

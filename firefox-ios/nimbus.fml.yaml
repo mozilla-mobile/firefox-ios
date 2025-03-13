@@ -41,6 +41,7 @@ include:
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
+  - nimbus-features/rustKeychainRefactor.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
