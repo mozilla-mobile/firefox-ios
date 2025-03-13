@@ -23,10 +23,10 @@ class PhotonActionSheetTests: BaseTestCase {
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
         if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
             // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.links["Example Domain"].images.element(boundBy: 1))
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
         }
 
         // Remove pin
