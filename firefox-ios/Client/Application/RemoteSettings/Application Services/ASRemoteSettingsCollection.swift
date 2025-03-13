@@ -7,7 +7,9 @@ import Common
 
 enum ASRemoteSettingsCollection: String {
     case searchEngineIcons = "search-config-icons"
+}
 
+extension ASRemoteSettingsCollection {
     func makeClient(service: RemoteSettingsService) -> RemoteSettingsClient? {
         do {
             return try service.makeClient(collectionName: rawValue)
