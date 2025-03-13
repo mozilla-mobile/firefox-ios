@@ -1172,6 +1172,13 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible.")
+
+            public static let PinnedAccessibilityLabel = MZLocalizedString(
+                key: "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139",
+                tableName: "FirefoxHomepage",
+                value: "Pinned: %@",
+                comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
+            )
         }
 
         public struct YourLibrary { }
