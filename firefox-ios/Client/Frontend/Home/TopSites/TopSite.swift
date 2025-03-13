@@ -14,8 +14,19 @@ final class TopSite: FeatureFlaggable {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
 
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
+    }
+
+    private var pinnedStatusTitle: String {
+        isPinned ? pinnedTitle : title
+    }
+
     var accessibilityLabel: String? {
-        return isSponsored ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
     }
 
     var isPinned: Bool {
