@@ -1448,7 +1448,7 @@ workflows:
                 -scheme "$SCHEME" \
                 -sdk "$SDK" \
                 -destination "$DESTINATION" \
-                -derivedDataPath "${DERIVED_DATA_DIR}"
+                -derivedDataPath "${DERIVED_DATA_DIR}" > xcodebuild.log # do not display lengthy output
 
             echo "-- verify build artifacts --"
 
