@@ -10,13 +10,15 @@ enum ASRemoteSettingsCollection: String {
 }
 
 extension ASRemoteSettingsCollection {
-    func makeClient(service: RemoteSettingsService) -> RemoteSettingsClient? {
+    /// Convenience. Creates a client using the default service.
+    /// - Returns: a Remote Settings client which can be used to fetch records from the backend.
+    func makeClient() -> RemoteSettingsClient? {
+        let profile: Profile = AppContainer.shared.resolve()
+        guard let service = profile.remoteSettingsService else { return nil }
         do {
             return try service.makeClient(collectionName: rawValue)
         } catch {
-            DefaultLogger.shared.log("Error creating Remote Settings client: \(error)",
-                                     level: .warning,
-                                     category: .remoteSettings)
+            DefaultLogger.shared.log("Error creating RS client: \(error)", level: .warning, category: .remoteSettings)
         }
         return nil
     }

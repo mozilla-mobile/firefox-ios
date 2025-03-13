@@ -17,6 +17,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            orderedEngineNames: [String]?,
                            completion: @escaping ([OpenSearchEngine]) -> Void) {
+        // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
+        // Eventually that class will be removed once we switch fully to consolidated search.
+
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
 
         // First load the unordered engines, based on the current locale and language
@@ -25,10 +28,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
 
-            // might not work to change the default.
             guard let orderedEngineNames = orderedEngineNames else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
-                DispatchQueue.main.async {
+                ensureMainThread {
                     completion(unorderedEngines)
                 }
 
@@ -55,7 +57,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 return index1! < index2!
             }
 
-            DispatchQueue.main.async {
+            ensureMainThread {
                 completion(orderedEngines)
             }
         })
@@ -72,7 +74,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         }
 
         let selector = ASSearchEngineSelector(service: service)
-        // TODO: [FXIOS-11553] Confirm localization and region standards that the A~S APIs are expecting
+        // TODO: [FXIOS-11553] Confirm localization and region standards that the AS APIs are expecting
         let localeCode = locale.identifier
         let region: String = {
             let systemRegion: String?
@@ -124,7 +126,7 @@ final class ASIconDataFetcher {
     init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
         let collection: ASRemoteSettingsCollection = .searchEngineIcons
-        self.client = collection.makeClient(service: service)
+        self.client = collection.makeClient()
         self.logger = logger
     }
 
