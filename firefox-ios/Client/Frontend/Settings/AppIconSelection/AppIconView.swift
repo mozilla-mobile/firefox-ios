@@ -119,9 +119,9 @@ struct AppIconView: View, ThemeApplicable {
                     .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
                 if isSelected {
+                    // swiftlint:disable:next accessibility_label_for_image
                     Image(systemName: UX.checkmarkImageIdentifier)
                         .foregroundStyle(themeColors.actionPrimary.color)
-                        .accessibilityLabel(selectionImageAccessibilityLabel)
                 }
             }
             .padding(.horizontal, UX.itemPaddingHorizontal)
