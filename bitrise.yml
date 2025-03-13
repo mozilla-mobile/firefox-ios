@@ -1442,19 +1442,13 @@ workflows:
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
 
             echo "-- build-for-testing --"
-            LOG_FILE="/tmp/firebase_build_log.txt"
-            {
-                mkdir DerivedData
-                xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
-                xcodebuild build-for-testing -project "$PROJECT" \
-                    -scheme "$SCHEME" \
-                    -sdk "$SDK" \
-                    -destination "$DESTINATION" \
-                    -derivedDataPath "${DERIVED_DATA_DIR}"
-            } 2>&1 | tee "$LOG_FILE"
-
-            # Upload the log file as an artifact
-            envman add --key LOG_FILE_PATH --value "$LOG_FILE"
+            mkdir DerivedData
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
+            xcodebuild build-for-testing -project "$PROJECT" \
+                -scheme "$SCHEME" \
+                -sdk "$SDK" \
+                -destination "$DESTINATION" \
+                -derivedDataPath "${DERIVED_DATA_DIR}"
 
             echo "-- verify build artifacts --"
 
@@ -1484,10 +1478,6 @@ workflows:
                 xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
                 exit 1
             fi
-    - deploy-to-bitrise-io@2.10.0:
-        is_always_run: true
-        inputs:
-            - deploy_path: "$LOG_FILE_PATH"
     - script@1.2.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
