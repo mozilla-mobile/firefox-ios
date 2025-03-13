@@ -47,6 +47,7 @@
         "AddressesTests\/testAutofillAddressesByTapingOrganizationField()",
         "AddressesTests\/testAutofillAddressesByTapingPhoneField()",
         "AddressesTests\/testAutofillAddressesByTapingStateField()",
+        "AddressesTests\/testAutofillOptionNotAvailableToggleOFF()",
         "AddressesTests\/testDeleteAddress()",
         "AddressesTests\/testDeleteAllAddresses()",
         "AddressesTests\/testToggleAddressOnOff()",
