@@ -1483,7 +1483,12 @@ workflows:
             } &> "$LOG_FILE"
             # Upload the log file as an artifact
             envman add --key LOG_FILE_PATH --value "$LOG_FILE"
+            echo "$LOG_FILE"
+            echo "$LOG_FILE_PATH"
+            head $LOG_FILE
+            tail $LOG_FILE
     - deploy-to-bitrise-io@2.10.0:
+        title: Upload build log
         is_always_run: true
         inputs:
         - deploy_path: "$LOG_FILE_PATH"
