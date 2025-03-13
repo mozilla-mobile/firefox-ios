@@ -59,29 +59,6 @@ class WebviewViewController: UIViewController,
         view.bringSubviewToFront(documentLoadingView)
     }
 
-    func showDocumentLoadingView() {
-        guard documentLoadingView == nil else { return }
-        let documentLoadingView = TemporaryDocumentLoadingView(frame: view.bounds)
-        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(documentLoadingView)
-        documentLoadingView.pinToSuperview()
-
-        documentLoadingView.animateLoadingAppearanceIfNeeded()
-        self.documentLoadingView = documentLoadingView
-        applyTheme()
-    }
-
-    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
-        guard let documentLoadingView else { return }
-        UIView.animate(withDuration: UX.documentLoadingViewAnimationDuration) {
-            documentLoadingView.alpha = 0.0
-        } completion: { _ in
-            documentLoadingView.removeFromSuperview()
-            self.documentLoadingView = nil
-            completion?()
-        }
-    }
-
     // MARK: - Themeable
 
     func applyTheme() {

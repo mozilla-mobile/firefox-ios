@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
+final class TemporaryDocumentTests: XCTestCase {
     private let filename = "TempPDF.pdf"
     private let request = URLRequest(url: URL(string: "https://example.com")!)
     private let mimeTypePDF = "application/pdf"
@@ -16,7 +16,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         super.setUp()
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self]
-        mockURLSession = URLSession(configuration: configuration, delegate: self, delegateQueue: .main)
+        mockURLSession = URLSession(configuration: configuration, delegate: nil, delegateQueue: .main)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
@@ -51,11 +51,13 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
 
         MockURLProtocol.response = { _, response in
             XCTAssertEqual(response.allHTTPHeaderFields?["Cookie"], "key=session=123")
-            expectation.fulfill()
         }
 
-        subject.download { _ in }
+        subject.download { _ in
+            expectation.fulfill()
+        }
         wait(for: [expectation])
+
         subject = nil
     }
 
@@ -83,14 +85,16 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         MockURLProtocol.data = Data()
         subject = createSubject(filename: filename, request: request, session: mockURLSession)
 
-        subject.download { url in
+        subject.download { [weak self] url in
             XCTAssertNotNil(url)
-            XCTAssertEqual(url?.lastPathComponent, self.filename)
+            XCTAssertEqual(url?.lastPathComponent, self?.filename)
             XCTAssertTrue(Thread.isMainThread)
             expectation.fulfill()
         }
 
         wait(for: [expectation])
+
+        subject.cancelDownload()
         subject = nil
     }
 
@@ -135,6 +139,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         )
 
         wait(for: [expectation])
+
         subject = nil
     }
 
@@ -163,18 +168,6 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
     }
 
-    // MARK: - URLSessionDownloadDelegate
-
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let subject else { return }
-        subject.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
-    }
-
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
-        guard let subject else { return }
-        subject.urlSession(session, task: task, didCompleteWithError: error)
-    }
-
     private func createSubject(
         filename: String?,
         request: URLRequest,
@@ -197,7 +190,7 @@ final class TemporaryDocumentTests: XCTestCase, URLSessionDownloadDelegate {
         response: URLResponse,
         request: URLRequest,
         mimeType: String? = nil,
-        session: URLSession = .shared
+        session: URLSession
     ) -> DefaultTemporaryDocument {
         let subject = DefaultTemporaryDocument(
             preflightResponse: response,

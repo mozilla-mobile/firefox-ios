@@ -977,10 +977,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     @discardableResult
     private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
-
+        self.temporaryDocument = nil
         if temporaryDocument.isDownloading {
-            temporaryDocument.invalidateSession()
-            self.temporaryDocument = nil
+            temporaryDocument.cancelDownload()
             if forceReload {
                 reload()
             }
@@ -1011,6 +1010,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             self?.webView?.load(URLRequest(url: url))
             self?.downloadedTemporaryDocs.append(url)
         }
+    }
+
+    func pauseResumeDocumentDownload() {
+        temporaryDocument?.pauseResumeDownload()
+    }
+
+    func isDownloadingDocument() -> Bool {
+        return temporaryDocument?.isDownloading ?? false
     }
 }
 
