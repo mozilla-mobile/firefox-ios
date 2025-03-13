@@ -24,8 +24,6 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         addressBar.layer.cornerRadius = UX.addressBarCornerRadius
     }
 
-
-
     // MARK: - Constraint Properties
     private var webViewTopConstraint: NSLayoutConstraint?
     private var webViewBottomConstraint: NSLayoutConstraint?
@@ -78,12 +76,14 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
             bottomStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor
+                .constraint(equalTo: bottomStackView.topAnchor)
         case .top:
             topStackView.addArrangedSubview(skeletonAddressBar)
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor
+                .constraint(equalTo: topStackView.bottomAnchor)
         }
 
         webViewTopConstraint?.isActive = true
