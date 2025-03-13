@@ -27,6 +27,7 @@
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testLongTapOnTopSiteOptions()",
         "ActivityStreamTest\/testShortcutsToggle()",
+        "ActivityStreamTest\/testSiteCanBeAddedToShortcuts()",
         "ActivityStreamTest\/testTopSites2Add()",
         "ActivityStreamTest\/testTopSitesRemoveAllExceptDefaultClearPrivateData()",
         "ActivityStreamTest\/testTopSitesRemoveAllExceptPinnedClearPrivateData()",
