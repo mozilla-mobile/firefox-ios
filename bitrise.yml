@@ -1436,7 +1436,7 @@ workflows:
             DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
-            SDK="iphoneos"
+            SDK="iphoneos18.2"
             DESTINATION="platform=iOS Simulator,name=iPhone 16,OS=18.0"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1487,7 +1487,7 @@ workflows:
 
             PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
             SCHEME="Fennec_Enterprise"
-            SDK="iphoneos"
+            SDK="iphoneos18.2"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip"
 
