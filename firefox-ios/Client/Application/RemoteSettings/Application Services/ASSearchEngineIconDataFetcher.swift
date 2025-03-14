@@ -4,7 +4,6 @@
 
 import MozillaAppServices
 import Common
-import Kingfisher
 import SwiftDraw
 
 protocol ASSearchEngineIconDataFetcherProtocol {
