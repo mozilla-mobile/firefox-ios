@@ -402,12 +402,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
                 }
-<<<<<<< HEAD
-            } else if !isTabTrayExperimentEnabled {
-=======
-                addNewTabIfPrivate(uuid: uuid)
             } else if !isTabTrayUIExperimentsEnabled {
->>>>>>> ea8fc3228 (Refactor FXIOS-11638 [Tab tray UI experiment] Make sure we disable any changes for iPad (#25354))
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -497,22 +492,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
-<<<<<<< HEAD
-                } else if !isTabTrayExperimentEnabled {
+                } else if !isTabTrayUIExperimentsEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
-=======
-                } else {
-                    if !isTabTrayUIExperimentsEnabled {
-                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                               windowUUID: uuid,
-                                                               actionType: GeneralBrowserActionType.showToast)
-                        store.dispatch(toastAction)
-                    }
-                    addNewTabIfPrivate(uuid: uuid)
->>>>>>> ea8fc3228 (Refactor FXIOS-11638 [Tab tray UI experiment] Make sure we disable any changes for iPad (#25354))
                 }
             }
         }
