@@ -39,8 +39,7 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
     static func toggle(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
-        let isActive = userDefaults.bool(forKey: NightModeKeys.Status)
-        setNightMode(userDefaults, enabled: !isActive)
+        setNightMode(userDefaults, enabled: !NightModeHelper.isActivated())
     }
 
     static func setNightMode(
