@@ -1437,7 +1437,7 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            XCODE_VERSION="18.2"
+            IOS_VERSION="18.2"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1447,7 +1447,7 @@ workflows:
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
             xcodebuild build-for-testing -project "$PROJECT" \
                 -scheme "$SCHEME" \
-                -sdk "$SDK$XCODE_VERSION" \
+                -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}"
 
@@ -1489,7 +1489,6 @@ workflows:
             PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            XCODE_VERSION="18.2"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip"
 
