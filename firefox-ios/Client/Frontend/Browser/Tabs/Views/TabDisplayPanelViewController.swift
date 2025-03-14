@@ -181,10 +181,10 @@ class TabDisplayPanelViewController: UIViewController,
 
         if isTabTrayUIExperimentsEnabled {
             gradientLayer.colors = [
-                currentTheme().colors.layer1.cgColor,
-                currentTheme().colors.layer1.cgColor,
-                currentTheme().colors.layer1.withAlphaComponent(0.95).cgColor,
-                currentTheme().colors.layer1.withAlphaComponent(0.0).cgColor
+                currentTheme().colors.layer3.cgColor,
+                currentTheme().colors.layer3.cgColor,
+                currentTheme().colors.layer3.withAlphaComponent(0.95).cgColor,
+                currentTheme().colors.layer3.withAlphaComponent(0.0).cgColor
             ]
         }
     }

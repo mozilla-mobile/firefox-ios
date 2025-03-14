@@ -104,7 +104,7 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+        app.collectionViews.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)

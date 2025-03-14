@@ -134,7 +134,7 @@ class JumpBackInTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
         }
-        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+        app.cells["Example Domain"].buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)

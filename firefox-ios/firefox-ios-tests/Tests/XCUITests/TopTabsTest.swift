@@ -104,9 +104,9 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         } else {
-            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+            app.otherElements.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -426,9 +426,9 @@ class TopTabsTest: BaseTestCase {
         // Tab tray UI experiment doesn't have toasts notifications anymore
         // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Close multiple tabs by pressing X button
-//        let crossCircleFillLarge = StandardImageIdentifiers.Large.crossCircleFill
+//        let closeButton = AccessibilityIdentifiers.TabTray.closeButton
 //        for _ in 0...3 {
-//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[crossCircleFillLarge].waitAndTap()
+//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[closeButton].waitAndTap()
 //            // A toast notification is displayed with the message "Tab Closed" and the Undo option
 //            waitForElementsToExist(
 //                [
@@ -437,7 +437,7 @@ class TopTabsTest: BaseTestCase {
 //                ]
 //            )
 //        }
-//        app.collectionViews.buttons[crossCircleFillLarge].waitAndTap()
+//        app.collectionViews.buttons[closeButton].waitAndTap()
 //        waitForElementsToExist(
 //            [
 //                app.buttons["Undo"],
