@@ -86,7 +86,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         var configuration = UIButton.Configuration.plain()
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
-        button.alpha = 0.7
+        button.alpha = 0.5
     }
 
     private var isTabTrayUIExperimentsEnabled: Bool {

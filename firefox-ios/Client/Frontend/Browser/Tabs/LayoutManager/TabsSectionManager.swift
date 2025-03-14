@@ -9,7 +9,7 @@ class TabsSectionManager: FeatureFlaggable {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
-        static let experimentCellEstimatedHeight: CGFloat = 240
+        static let experimentCellEstimatedHeight: CGFloat = 220
         static let cardSpacing: CGFloat = 16
         static let experimentCardSpacing: CGFloat = 28
         static let standardInset: CGFloat = 18
