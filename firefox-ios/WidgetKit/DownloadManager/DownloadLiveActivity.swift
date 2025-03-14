@@ -6,6 +6,8 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 import Foundation
+import Common
+import Shared
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
@@ -53,12 +55,60 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { LiveDownload in
             // Using Rectangle instead of EmptyView because the hitbox
             // of the empty view is too small (likely non existent),
             // meaning we'd never be redirected to the downloads panel
-            Rectangle()
-                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+            ZStack {
+                Rectangle()
+                    .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+                    .foregroundStyle(LinearGradient(
+                        gradient: Gradient(colors: [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
+                HStack(spacing: 16) {
+                    ZStack {
+                        Image("faviconFox")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Downloading \(LiveDownload.state.downloads[0].fileName)")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(Color("widgetLabelColors"))
+                        Text("\(String(format: "%.1f", Double(LiveDownload.state.totalBytesDownloaded) / 1000000)) MB of \(String(format: "%.1f", Double(LiveDownload.state.totalBytesExpected) / 1000000)) MB")
+                            .font(.system(size: 15))
+                            .opacity(0.8)
+                            .foregroundColor(Color("widgetLabelColors"))
+                    }
+                    Spacer()
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 4)
+                            .foregroundColor(Color("widgetLabelColors"))
+                            .opacity(0.3)
+                        Circle()
+                            .trim(from: 0.0, to: min(LiveDownload.state.totalProgress, 1.0))
+                            .stroke(style: StrokeStyle(lineWidth: 4))
+                            .rotationEffect(.degrees(270.0))
+                            .animation(.linear, value: 0.5)
+                            .foregroundColor(Color("widgetLabelColors"))
+                        if LiveDownload.state.totalProgress == 1.0 {
+                            Image(StandardImageIdentifiers.Large.checkmark)
+                                .renderingMode(.template)
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(Color("widgetLabelColors"))
+                        } else {
+                            Image("mediaStop")
+                                .frame(width: 20, height: 20)
+                        }
+                    }
+                    .frame(width: 44, height: 44)
+                }
+                .padding()
+            }
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
