@@ -536,8 +536,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                                                                     isPrivate: false))
 
         XCTAssertTrue(result)
-        XCTAssertFalse(mbvc.switchToPrivacyModeCalled)
-        XCTAssertFalse(mbvc.switchToPrivacyModeIsPrivate)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
         XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
         XCTAssertEqual(mbvc.switchToTabForURLOrOpenCount, 1)

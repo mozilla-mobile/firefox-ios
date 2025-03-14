@@ -9,8 +9,6 @@ import UIKit
 import enum MozillaAppServices.VisitType
 
 class MockBrowserViewController: BrowserViewController {
-    var switchToPrivacyModeCalled = false
-    var switchToPrivacyModeIsPrivate = false
     var switchToTabForURLOrOpenCalled = false
     var switchToTabForURLOrOpenURL: URL?
     var switchToTabForURLOrOpenUUID: String?
@@ -30,7 +28,6 @@ class MockBrowserViewController: BrowserViewController {
     var openURLInNewTabURL: URL?
     var openURLInNewTabIsPrivate = false
 
-    var switchToPrivacyModeCount = 0
     var switchToTabForURLOrOpenCount = 0
     var openBlankNewTabCount = 0
     var handleQueryCount = 0
@@ -58,12 +55,6 @@ class MockBrowserViewController: BrowserViewController {
 
     override var contentContainer: ContentContainer {
         return mockContentContainer
-    }
-
-    override func switchToPrivacyMode(isPrivate: Bool) {
-        switchToPrivacyModeCalled = true
-        switchToPrivacyModeIsPrivate = isPrivate
-        switchToPrivacyModeCount += 1
     }
 
     override func switchToTabForURLOrOpen(
