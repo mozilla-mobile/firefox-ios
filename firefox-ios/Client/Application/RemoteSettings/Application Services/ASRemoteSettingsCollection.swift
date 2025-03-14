@@ -5,6 +5,7 @@
 import MozillaAppServices
 import Common
 
+/// Defines a specific Remote Settings collection fetched through Application Services
 enum ASRemoteSettingsCollection: String {
     case searchEngineIcons = "search-config-icons"
 }
