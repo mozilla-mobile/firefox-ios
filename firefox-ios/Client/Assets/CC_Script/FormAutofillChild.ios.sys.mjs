@@ -111,7 +111,7 @@ export class FormAutofillChild {
   onFocusIn(evt) {
     const element = evt.target;
 
-    if(element.shouldIgnoreAutofill) {
+    if (element.shouldIgnoreAutofill) {
       return;
     }
 
