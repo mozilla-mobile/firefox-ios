@@ -24,6 +24,7 @@ class TabDisplayPanelViewController: UIViewController,
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     private lazy var layout: TabTrayLayoutType = {
@@ -44,7 +45,7 @@ class TabDisplayPanelViewController: UIViewController,
     }()
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabView = {
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if isTabTrayUIExperimentsEnabled {
             let view = ExperimentEmptyPrivateTabsView()
             view.translatesAutoresizingMaskIntoConstraints = false
             return view

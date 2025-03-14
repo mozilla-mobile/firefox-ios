@@ -31,6 +31,7 @@ class TabDisplayView: UIView,
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var shouldHideInactiveTabs: Bool {
