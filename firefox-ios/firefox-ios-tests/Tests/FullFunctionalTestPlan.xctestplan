@@ -45,6 +45,7 @@
         "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testAddressOptionIsAvailableInSettingsMenu()",
+        "AddressesTests\/testAutofillAddressesByTapingNameField()",
         "AddressesTests\/testAutofillOptionNotAvailableToggleOFF()",
         "AddressesTests\/testDeleteAddress()",
         "AddressesTests\/testRedirectToSettingsByTappingManageAddresses()",

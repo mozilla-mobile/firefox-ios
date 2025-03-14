@@ -349,6 +349,39 @@ class AddressesTests: BaseTestCase {
         addAddressAndReachAutofillForm(indexField: 8)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2548189
+    // Smoketest
+    func testAutofillAddressesByTapingNameField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 0)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549845
+    func testAutofillAddressesByTapingAddressField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 2)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549846
+    func testAutofillAddressesByTapingCityField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 3)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549848
+    func testAutofillAddressesByTapingPostalCodeField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 5)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2546298
     func testToggleAddressOnOff() throws {
         if #unavailable(iOS 16) {
