@@ -343,7 +343,12 @@ class BrowserViewController: UIViewController,
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return currentTheme().type == .light ? .darkContent : .lightContent
+        return switch currentTheme().type {
+        case .dark, .nightMode, .privateMode:
+                .lightContent
+        case .light:
+                .darkContent
+        }
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
