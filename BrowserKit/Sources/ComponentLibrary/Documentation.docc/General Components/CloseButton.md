@@ -4,7 +4,7 @@ The button which is used for closing a view, such as a bottom sheet, when the us
 
 ## Overview
 
-The `CloseButton` is a subclass of the `UIButton`. This means properties of the `UIButton` are accessible, but for easy convenience it's recommended to configure the button title, font and accessibility identifier through it's view model ``CloseButtonViewModel``. The button size shouldn't be adjusted and should be used as is.
+`CloseButton` is a subclass of `UIButton`. This means that the properties of `UIButton` are accessible, however it's recommended to configure the button title, font, and accessibility identifier through its view model ``CloseButtonViewModel``. The button size shouldn't be adjusted and should be used as is.
 
 ## Illustration
 

@@ -1,10 +1,10 @@
 # ``ComponentLibrary/ActionFooterView``
 
-A view which is used to contain footer information in form of a title and a link button.
+A view which is used to contain footer information in the form of a title and a link button.
 
 ## Overview
 
-The `ActionFooterView` is a subclass of the `UIView`. You should configure the action footer view content, accessibility identifiers and on tap action through it's view model ``ActionFooterViewModel``. 
+`ActionFooterView` is a subclass of `UIView`. You should configure the action footer view content, accessibility identifiers, and on tap action through its view model ``ActionFooterViewModel``. 
 
 ## Illustration
 

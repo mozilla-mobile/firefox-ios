@@ -4,7 +4,7 @@ The view which is used as a header for sheets, such as a bottom sheet, where som
 
 ## Overview
 
-The `HeaderView` is a subclass of the `UIView`. The view designed to serve as a header in a user interface. It displays a title, subtitle, favicon (icon), a main button and a close button. It also supports accessibility features and customizable theming. It can be used as a header for displaying information about a web page, user profile, or any other context that requires a title, subtitle, and action buttons.
+`HeaderView` is a subclass of `UIView`. The view is designed to serve as a header in a user interface. It displays a title, subtitle, favicon (icon), a main button, and a close button. It also supports accessibility features and customizable theming. It can be used as a header for displaying information about a web page, user profile, or any other context that requires a title, subtitle, and action buttons.
 
 ## Illustration
 
