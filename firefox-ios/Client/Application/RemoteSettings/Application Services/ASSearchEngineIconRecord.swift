@@ -16,12 +16,11 @@ struct ASSearchEngineIconRecord {
         self.id = record.id
 
         let iconRecordFields: ASSearchEngineIconRecordFields = {
-            if let fieldData = record.fields.data(using: .utf8) {
-                do {
-                    return try JSONDecoder().decode(ASSearchEngineIconRecordFields.self, from: fieldData)
-                } catch {
-                    logger.log("Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
-                }
+            guard let fieldData = record.fields.data(using: .utf8) else { return ASSearchEngineIconRecordFields.empty() }
+            do {
+                return try JSONDecoder().decode(ASSearchEngineIconRecordFields.self, from: fieldData)
+            } catch {
+                logger.log("Decoding search icon record JSON failed: \(error)", level: .debug, category: .remoteSettings)
             }
             return ASSearchEngineIconRecordFields.empty()
         }()
@@ -32,6 +31,7 @@ struct ASSearchEngineIconRecord {
     }
 }
 
+/// Convenience model for capturing JSON search engine identifiers from `search-config-icons` RS collection
 struct ASSearchEngineIconRecordFields: Codable {
     let engineIdentifiers: [String]
     let imageSize: Int?

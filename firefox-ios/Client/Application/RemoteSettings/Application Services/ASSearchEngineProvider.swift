@@ -10,11 +10,13 @@ import Shared
 /// Provides a Remote-Settings-based substitute for our DefaultSearchEngineProvider
 /// This is unused unless SEC (Search Engine Consolidation) experiment is enabled.
 final class ASSearchEngineProvider: SearchEngineProvider {
-    let logger: Logger
+    private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
     }
+
+    // MARK: - SearchEngineProvider
 
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            orderedEngineNames: [String]?,
@@ -29,13 +31,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
-
             guard let orderedEngineNames = orderedEngineNames else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
-                ensureMainThread {
-                    completion(unorderedEngines)
-                }
-
+                ensureMainThread { completion(unorderedEngines) }
                 return
             }
 
@@ -59,36 +57,29 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 return index1! < index2!
             }
 
-            ensureMainThread {
-                completion(orderedEngines)
-            }
+            ensureMainThread { completion(orderedEngines) }
         })
     }
+
+    // MARK: - Private Utilities
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
                                                possibleLanguageIdentifier: [String],
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let profile: Profile = AppContainer.shared.resolve()
         guard let service = profile.remoteSettingsService else {
-            logger.log("No service available for Remote Settings", level: .warning, category: .remoteSettings)
+            logger.log("Remote Settings service unavailable.", level: .warning, category: .remoteSettings)
             completion([])
             return
         }
 
         let selector = ASSearchEngineSelector(service: service)
+
         // TODO: [FXIOS-11553] Confirm localization and region standards that the AS APIs are expecting
         let localeCode = locale.identifier
-        let region: String = {
-            let systemRegion: String?
-            if #available(iOS 17, *) {
-                systemRegion = (locale as NSLocale).regionCode
-            } else {
-                systemRegion = (locale as NSLocale).countryCode
-            }
-            return systemRegion ?? localeCode.components(separatedBy: "-").last ?? "US"
-        }()
-
+        let region = regionCode(from: locale)
         let logger = self.logger
+
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
                 logger.log("Error fetching search engines via App Services: \(error)",
@@ -109,8 +100,8 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
             // TODO: can we parallelize this? We need the search engines before we can use the icon data but the initial
             // icon fetch can be done concurrently with the search engine request
-            let iconFetch = ASSearchEngineIconDataFetcher(service: service)
 
+            let iconFetch = ASSearchEngineIconDataFetcher(service: service)
             iconFetch.populateEngineIconData(filteredEngines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []
                 for (engine, iconImage) in enginesAndIcons {
@@ -119,5 +110,15 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 completion(openSearchEngines)
             }
         }
+    }
+
+    private func regionCode(from locale: Locale) -> String {
+        let systemRegion: String?
+        if #available(iOS 17, *) {
+            systemRegion = (locale as NSLocale).regionCode
+        } else {
+            systemRegion = (locale as NSLocale).countryCode
+        }
+        return systemRegion ?? locale.identifier.components(separatedBy: "-").last ?? "US"
     }
 }

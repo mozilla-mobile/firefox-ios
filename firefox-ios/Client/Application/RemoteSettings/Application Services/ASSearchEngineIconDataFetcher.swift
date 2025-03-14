@@ -25,10 +25,11 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
 
     init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
-        let collection: ASRemoteSettingsCollection = .searchEngineIcons
-        self.client = collection.makeClient()
+        self.client = ASRemoteSettingsCollection.searchEngineIcons.makeClient()
         self.logger = logger
     }
+
+    // MARK: - ASSearchEngineIconDataFetcherProtocol
 
     func populateEngineIconData(_ engines: [SearchEngineDefinition],
                                 completion: @escaping ([(SearchEngineDefinition, UIImage)]) -> Void) {
@@ -41,19 +42,16 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
         // This is an O(nm) loop but should generally be an extremely small collection
         // of search engines. For example for en-US we currently only get 7 records.
         let mapped = engines.map { engine in
-            // TODO: engine matching must also support wildcards and pattern matches
-            // Find the icon record that matches this engine
             var maybeIconImage: UIImage?
             let engineIdentifier = engine.identifier
+
             for iconRecord in iconRecords {
-                // TODO: [FXIOS-11605] We may have multiple icon records that match a single engine for
-                // the different icon types. This is still TBD from AS team. If needed, implemenent client-side
-                // filtering here to select the best icon.
+                // TODO: [FXIOS-11605] Client-side filtering of multiple icon records [?]. TBD.
                 let iconIdentifiers = iconRecord.engineIdentifiers
                 var matchFound = false
+
                 for ident in iconIdentifiers {
                     if ident.hasSuffix("*") {
-                        // Per AS schema:
                         // If an individual entry is suffixed with a star, matching is applied on a "starts with" basis.
                         let iconIdent = ident.dropLast()
                         if engineIdentifier.hasPrefix(iconIdent) {
@@ -64,6 +62,7 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
                     }
                     if matchFound { break }
                 }
+
                 if matchFound, let iconImage = fetchIcon(for: iconRecord) {
                     maybeIconImage = iconImage
                     break
@@ -83,6 +82,8 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
 
         completion(mapped)
     }
+
+    // MARK: - Private Utilities
 
     private func fetchIcon(for iconRecord: ASSearchEngineIconRecord) -> UIImage? {
         guard let client else { return nil }
