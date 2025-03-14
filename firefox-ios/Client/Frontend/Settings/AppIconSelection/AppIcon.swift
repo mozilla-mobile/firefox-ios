@@ -183,7 +183,7 @@ enum AppIcon: String, CaseIterable {
         case .midnight:
             return "appIconAlternate_gradient_midnight"
         case .northernLights:
-            return "appIconAlternate_gradient_northerLights"
+            return "appIconAlternate_gradient_northernLights"
 //        // MARK: Hand Drawn
 //        // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
 //        case .hug:

@@ -2579,7 +2579,7 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.Purple.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Purple",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a Purple background.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a purple background.")
 
                 public static let Red = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Red.Title.v137",
@@ -2627,7 +2627,7 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Blue Hour",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of purple fading to pink.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of blue fading to purple.")
 
                 public static let Twilight = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Twilight.Title.v137",
@@ -2644,7 +2644,7 @@ extension String {
                 public static let NorthernLights = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137",
                     tableName: "AppIconSelection",
-                    value: "NorthernLights",
+                    value: "Northern Lights",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of black fading to blue fading to green.")
             }
 
