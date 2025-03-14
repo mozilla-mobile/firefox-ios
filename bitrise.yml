@@ -1436,7 +1436,8 @@ workflows:
             DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
-            SDK="iphoneos18.2"
+            SDK="iphoneos"
+            XCODE_VERSION="18.2"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1446,7 +1447,7 @@ workflows:
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
             xcodebuild build-for-testing -project "$PROJECT" \
                 -scheme "$SCHEME" \
-                -sdk "$SDK" \
+                -sdk "$SDK$XCODE_VERSION" \
                 -destination "$DESTINATION" \
                 -derivedDataPath "${DERIVED_DATA_DIR}"
 
@@ -1470,7 +1471,7 @@ workflows:
                 exit 1
             fi
 
-            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-iphoneos" ]]; then
+            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
                 echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
                 echo "The files in $PRODUCTS_DIR are:"
                 ls -l "$PRODUCTS_DIR"
@@ -1487,14 +1488,15 @@ workflows:
 
             PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
             SCHEME="Fennec_Enterprise"
-            SDK="iphoneos18.2"
+            SDK="iphoneos"
+            XCODE_VERSION="18.2"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip"
 
             echo "-- create .zip artifact --"
             # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
             ls $PRODUCTS_DIR
-            ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-iphoneos" ${TEST_PLAN}*.xctestrun )
+            ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
             mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
     - cache-pull@2.7.2:
         inputs:
