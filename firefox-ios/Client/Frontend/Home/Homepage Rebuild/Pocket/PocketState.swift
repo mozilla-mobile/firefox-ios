@@ -25,7 +25,7 @@ struct SectionHeaderState: Equatable {
     }
 }
 
-struct PocketDiscoverState: Equatable, Hashable {
+struct PocketDiscoverConfiguration: Equatable, Hashable {
     var title: String
     var url: URL?
 }
@@ -33,11 +33,11 @@ struct PocketDiscoverState: Equatable, Hashable {
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let pocketData: [PocketStoryState]
+    let pocketData: [PocketStoryConfiguration]
     let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderState()
-    let pocketDiscoverItem = PocketDiscoverState(
+    let pocketDiscoverItem = PocketDiscoverConfiguration(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL
     )
@@ -57,7 +57,7 @@ struct PocketState: StateType, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryState],
+        pocketData: [PocketStoryConfiguration],
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID

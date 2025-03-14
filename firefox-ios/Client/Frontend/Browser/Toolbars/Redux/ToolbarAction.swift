@@ -8,6 +8,7 @@ import ToolbarKit
 
 final class ToolbarAction: Action {
     let toolbarPosition: SearchBarPosition?
+    let toolbarLayout: ToolbarLayoutStyle?
     let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
@@ -28,6 +29,7 @@ final class ToolbarAction: Action {
     let canShowDataClearanceAction: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
+         toolbarLayout: ToolbarLayoutStyle? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
@@ -49,6 +51,7 @@ final class ToolbarAction: Action {
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.toolbarPosition = toolbarPosition
+        self.toolbarLayout = toolbarLayout
         self.numberOfTabs = numberOfTabs
         self.url = url
         self.searchTerm = searchTerm
@@ -99,12 +102,12 @@ enum ToolbarActionType: ActionType {
 }
 
 class ToolbarMiddlewareAction: Action {
-    let buttonType: ToolbarActionState.ActionType?
+    let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
 
-    init(buttonType: ToolbarActionState.ActionType? = nil,
+    init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,

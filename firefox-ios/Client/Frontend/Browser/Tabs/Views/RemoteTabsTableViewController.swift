@@ -150,8 +150,8 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     private func configureEmptyView() {
-        guard let emptyState = state.showingEmptyState else { return }
-        emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
+        guard let emptyStateReason = state.showingEmptyState else { return }
+        emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel)
         emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 

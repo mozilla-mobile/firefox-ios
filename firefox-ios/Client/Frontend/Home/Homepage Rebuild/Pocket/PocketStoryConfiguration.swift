@@ -5,7 +5,7 @@
 import Foundation
 
 /// Converts the pocket story model to be presentable for the `PocketStandardCell` view
-class PocketStoryState: Equatable, Hashable {
+class PocketStoryConfiguration: Equatable, Hashable {
     private let story: PocketStory
 
     init(story: PocketStory) {
@@ -35,7 +35,7 @@ class PocketStoryState: Equatable, Hashable {
     }
 
     // MARK: - Equatable
-    static func == (lhs: PocketStoryState, rhs: PocketStoryState) -> Bool {
+    static func == (lhs: PocketStoryConfiguration, rhs: PocketStoryConfiguration) -> Bool {
         lhs.story == rhs.story
     }
 

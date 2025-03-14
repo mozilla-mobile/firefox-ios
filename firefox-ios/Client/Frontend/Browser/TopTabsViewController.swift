@@ -151,7 +151,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     }
 
     func refreshTabs() {
-        topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(forceReload: true)
     }
 
     deinit {
@@ -212,7 +212,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
     @objc
     func tabsTrayTapped() {
-        topTabDisplayManager.refreshStore(evenIfHidden: true)
+        topTabDisplayManager.refreshStore(forceReload: true)
         delegate?.topTabsDidPressTabs()
     }
 

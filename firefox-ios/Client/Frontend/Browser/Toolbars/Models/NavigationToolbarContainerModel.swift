@@ -11,8 +11,8 @@ struct NavigationToolbarContainerModel: Equatable {
     let displayBorder: Bool
     let windowUUID: WindowUUID
 
-    var navigationToolbarState: NavigationToolbarState {
-        return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
+    var navigationToolbarConfiguration: NavigationToolbarConfiguration {
+        return NavigationToolbarConfiguration(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
     init(state: ToolbarState, windowUUID: WindowUUID) {
@@ -21,12 +21,14 @@ struct NavigationToolbarContainerModel: Equatable {
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
+                largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,

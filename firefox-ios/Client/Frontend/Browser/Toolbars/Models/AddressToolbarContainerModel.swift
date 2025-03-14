@@ -11,6 +11,7 @@ final class AddressToolbarContainerModel: Equatable {
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
 
+    let toolbarLayoutStyle: ToolbarLayoutStyle
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineName: String
     let searchEngineImage: UIImage
@@ -27,18 +28,24 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
+    let shouldAnimate: Bool
 
     let windowUUID: UUID
 
-    var addressToolbarState: AddressToolbarState {
+    var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
+        let uxConfiguration: AddressToolbarUXConfiguration = if toolbarLayoutStyle == .version1 {
+            .experiment
+        } else {
+            .default
+        }
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
             droppableUrl = url
         }
 
-        let locationViewState = LocationViewState(
+        let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: String(
                 format: .AddressToolbar.SearchEngineA11yLabel,
@@ -74,12 +81,14 @@ final class AddressToolbarContainerModel: Equatable {
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
                 store.dispatch(action)
             })
-        return AddressToolbarState(
-            locationViewState: locationViewState,
+        return AddressToolbarConfiguration(
+            locationViewConfiguration: locationViewConfiguration,
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            borderPosition: borderPosition)
+            borderPosition: borderPosition,
+            uxConfiguration: uxConfiguration,
+            shouldAnimate: shouldAnimate)
     }
 
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
@@ -114,6 +123,8 @@ final class AddressToolbarContainerModel: Equatable {
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
+        self.shouldAnimate = state.shouldAnimate
+        self.toolbarLayoutStyle = state.toolbarLayout
     }
 
     func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
@@ -127,18 +138,20 @@ final class AddressToolbarContainerModel: Equatable {
         return query
     }
 
-    private static func mapActions(_ actions: [ToolbarActionState],
+    private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
+                largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,

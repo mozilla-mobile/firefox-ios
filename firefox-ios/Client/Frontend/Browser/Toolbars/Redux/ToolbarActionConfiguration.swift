@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ToolbarActionState: Equatable, FeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     enum ActionType {
         case back
         case forward
@@ -25,13 +25,15 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     }
 
     var actionType: ActionType
-    var iconName: String
+    var actionLabel: String?
+    var iconName: String?
     var badgeImageName: String?
     var maskImageName: String?
     var numberOfTabs: Int?
     var isFlippedForRTL = false
     var isEnabled: Bool
     var isSelected = false
+    var largeContentTitle: String?
     var contextualHintType: String?
     var a11yLabel: String
     var a11yHint: String?

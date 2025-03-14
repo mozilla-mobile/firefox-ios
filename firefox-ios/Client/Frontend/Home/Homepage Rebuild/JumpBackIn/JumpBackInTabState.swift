@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct JumpBackInTabState: Equatable, Hashable {
+struct JumpBackInTabConfiguration: Equatable, Hashable {
     let titleText: String
     let descriptionText: String
     let siteURL: String

@@ -6,12 +6,12 @@ import Foundation
 import Redux
 
 final class TopSitesAction: Action {
-    var topSites: [TopSiteState]?
+    var topSites: [TopSiteConfiguration]?
     var numberOfRows: Int?
     var isEnabled: Bool?
 
     init(
-        topSites: [TopSiteState]? = nil,
+        topSites: [TopSiteConfiguration]? = nil,
         numberOfRows: Int? = nil,
         isEnabled: Bool? = nil,
         windowUUID: WindowUUID,

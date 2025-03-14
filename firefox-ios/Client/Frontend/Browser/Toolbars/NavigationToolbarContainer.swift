@@ -74,7 +74,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
         if self.model != model {
             self.model = model
-            toolbar.configure(state: model.navigationToolbarState, toolbarDelegate: self)
+            toolbar.configure(config: model.navigationToolbarConfiguration, toolbarDelegate: self)
         }
     }
 

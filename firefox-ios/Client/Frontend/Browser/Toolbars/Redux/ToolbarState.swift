@@ -9,6 +9,7 @@ import ToolbarKit
 struct ToolbarState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
+    var toolbarLayout: ToolbarLayoutStyle
     var isPrivateMode: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
@@ -21,6 +22,7 @@ struct ToolbarState: ScreenState, Equatable {
     var isNewTabFeatureEnabled: Bool
     var canShowDataClearanceAction: Bool
     var canShowNavigationHint: Bool
+    var shouldAnimate: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = store.state.screenState(
@@ -34,6 +36,7 @@ struct ToolbarState: ScreenState, Equatable {
 
         self.init(windowUUID: toolbarState.windowUUID,
                   toolbarPosition: toolbarState.toolbarPosition,
+                  toolbarLayout: toolbarState.toolbarLayout,
                   isPrivateMode: toolbarState.isPrivateMode,
                   addressToolbar: toolbarState.addressToolbar,
                   navigationToolbar: toolbarState.navigationToolbar,
@@ -45,7 +48,8 @@ struct ToolbarState: ScreenState, Equatable {
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
                   isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                   canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
-                  canShowNavigationHint: toolbarState.canShowNavigationHint
+                  canShowNavigationHint: toolbarState.canShowNavigationHint,
+                  shouldAnimate: toolbarState.shouldAnimate
         )
     }
 
@@ -53,6 +57,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
+            toolbarLayout: .baseline,
             isPrivateMode: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
@@ -64,13 +69,15 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: false,
             isNewTabFeatureEnabled: false,
             canShowDataClearanceAction: false,
-            canShowNavigationHint: false
+            canShowNavigationHint: false,
+            shouldAnimate: false
         )
     }
 
     init(
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
+        toolbarLayout: ToolbarLayoutStyle,
         isPrivateMode: Bool,
         addressToolbar: AddressBarState,
         navigationToolbar: NavigationBarState,
@@ -82,10 +89,12 @@ struct ToolbarState: ScreenState, Equatable {
         showMenuWarningBadge: Bool,
         isNewTabFeatureEnabled: Bool,
         canShowDataClearanceAction: Bool,
-        canShowNavigationHint: Bool
+        canShowNavigationHint: Bool,
+        shouldAnimate: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
+        self.toolbarLayout = toolbarLayout
         self.isPrivateMode = isPrivateMode
         self.addressToolbar = addressToolbar
         self.navigationToolbar = navigationToolbar
@@ -98,6 +107,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.canShowNavigationHint = canShowNavigationHint
+        self.shouldAnimate = shouldAnimate
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -156,13 +166,15 @@ struct ToolbarState: ScreenState, Equatable {
 
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
-              let toolbarPosition = toolbarAction.toolbarPosition
+              let toolbarPosition = toolbarAction.toolbarPosition,
+              let toolbarLayout = toolbarAction.toolbarLayout
         else { return defaultState(from: state) }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: position,
+            toolbarLayout: toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -174,15 +186,20 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        let shouldAnimate = action.actionType as? ToolbarActionType == .urlDidChange ? true : state.shouldAnimate
+
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -194,7 +211,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: shouldAnimate
         )
     }
 
@@ -203,6 +221,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -214,7 +233,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -223,6 +243,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -234,7 +255,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -248,6 +270,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: position,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
@@ -259,7 +282,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -268,6 +292,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -279,7 +304,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -288,6 +314,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -299,7 +326,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -308,6 +336,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -319,7 +348,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -328,6 +358,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -339,7 +370,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: true
+            canShowNavigationHint: true,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -348,6 +380,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -359,7 +392,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: false
+            canShowNavigationHint: false,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -371,6 +405,7 @@ struct ToolbarState: ScreenState, Equatable {
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, searchEngineSelectionAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction),
@@ -382,7 +417,8 @@ struct ToolbarState: ScreenState, Equatable {
             showMenuWarningBadge: state.showMenuWarningBadge,
             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
             canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate
         )
     }
 
@@ -397,6 +433,7 @@ struct ToolbarState: ScreenState, Equatable {
     static func defaultState(from state: ToolbarState) -> ToolbarState {
         return ToolbarState(windowUUID: state.windowUUID,
                             toolbarPosition: state.toolbarPosition,
+                            toolbarLayout: state.toolbarLayout,
                             isPrivateMode: state.isPrivateMode,
                             addressToolbar: state.addressToolbar,
                             navigationToolbar: state.navigationToolbar,
@@ -408,6 +445,7 @@ struct ToolbarState: ScreenState, Equatable {
                             showMenuWarningBadge: state.showMenuWarningBadge,
                             isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
                             canShowDataClearanceAction: state.canShowDataClearanceAction,
-                            canShowNavigationHint: state.canShowNavigationHint)
+                            canShowNavigationHint: state.canShowNavigationHint,
+                            shouldAnimate: state.shouldAnimate)
     }
 }

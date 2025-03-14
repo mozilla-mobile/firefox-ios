@@ -244,7 +244,7 @@ class TopTabDisplayManager: NSObject {
             }
         }
 
-        refreshStore(evenIfHidden: false, shouldAnimate: true)
+        refreshStore(shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
         NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
@@ -252,7 +252,7 @@ class TopTabDisplayManager: NSObject {
                                         userInfo: tabManager.windowUUID.userInfo)
     }
 
-    func refreshStore(evenIfHidden: Bool = false,
+    func refreshStore(forceReload: Bool = false,
                       shouldAnimate: Bool = false,
                       completion: (() -> Void)? = nil) {
         operations.removeAll()
@@ -281,21 +281,27 @@ class TopTabDisplayManager: NSObject {
                 self.collectionView.reloadData()
             }
 
-            if evenIfHidden {
-                // reloadData() will reset the data for the collection view,
-                // but if called when offscreen it will not render properly,
-                // unless reloadItems is explicitly called on each item.
-                // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
-                // The cause of the blinking effect is unknown (and unusual).
-                var indexPaths = [IndexPath]()
-                for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
-                    indexPaths.append(IndexPath(item: i, section: 0))
-                }
-                self.collectionView.reloadItems(at: indexPaths)
+            if forceReload {
+                forceReloadCollectionView()
             }
 
             self.tabDisplayerDelegate?.focusSelectedTab()
             completion?()
+        }
+    }
+
+    // reloadData() will reset the data for the collection view,
+    // but if called when offscreen it will not render properly,
+    // unless reloadItems is explicitly called on each item.
+    // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
+    // The cause of the blinking effect is unknown (and unusual).
+    private func forceReloadCollectionView() {
+        var indexPaths = [IndexPath]()
+        for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
+            indexPaths.append(IndexPath(item: i, section: 0))
+        }
+        UIView.performWithoutAnimation {
+            self.collectionView.reloadItems(at: indexPaths)
         }
     }
 
