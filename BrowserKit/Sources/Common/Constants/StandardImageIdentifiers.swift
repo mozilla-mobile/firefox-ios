@@ -93,10 +93,16 @@ public struct StandardImageIdentifiers {
         public static let lightningFill = "lightningFillLarge"
         public static let link = "linkLarge"
         public static let location = "locationLarge"
+        /* Ecosia: Update lcok image everywhere on the app
         public static let lock = "lockLarge"
         public static let lockFill = "lockFillLarge"
         public static let lockSlash = "lockSlashLarge"
         public static let lockSlashFill = "lockSlashFillLarge"
+         */
+        public static let lock = "secureLock"
+        public static let lockFill = "secureLock"
+        public static let lockSlash = "unsecureLock"
+        public static let lockSlashFill = "unsecureLock"
         public static let login = "loginLarge"
         public static let logoFirefox = "logoFirefoxLarge"
         public static let nightMode = "nightModeLarge"
