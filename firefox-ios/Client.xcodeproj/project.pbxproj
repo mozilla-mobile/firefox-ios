@@ -16561,6 +16561,7 @@
 		};
 		5AFF989D2D821A27008A0B79 /* Update Version */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
