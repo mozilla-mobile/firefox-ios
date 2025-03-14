@@ -140,8 +140,8 @@ public final class EcosiaThemeManager: ThemeManager, Notifiable {
     // MARK: - Window specific functions
     public func windowNonspecificTheme() -> Theme {
         switch getUserManualTheme() {
-        case .dark, .nightMode, .privateMode: return DarkTheme()
-        case .light: return LightTheme()
+        case .dark, .nightMode, .privateMode: return EcosiaDarkTheme()
+        case .light: return EcosiaLightTheme()
         }
     }
 

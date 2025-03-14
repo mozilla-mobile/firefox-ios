@@ -122,7 +122,10 @@ public struct StandardImageIdentifiers {
         public static let readerView = "readerViewLarge"
         public static let readerViewFill = "readerViewFillLarge"
         public static let readingList = "readingListLarge"
+        /* Ecosia: Update `readingListAdd image everywhere on the app
         public static let readingListAdd = "readingListAddLarge"
+        */
+        public static let readingListAdd = "addToReadingListUpdate"
         public static let readingListSlashFill = "readingListSlashFillLarge"
         public static let save = "saveLarge"
         public static let search = "searchLarge"

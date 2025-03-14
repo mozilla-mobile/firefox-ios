@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Account
 import Common
+import Ecosia
 
 import class MozillaAppServices.Viaduct
 import enum MozillaAppServices.BookmarkRoots
@@ -150,21 +151,30 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareOpenInFirefox,
+                /* Ecosia: Update image iname
                 imageName: StandardImageIdentifiers.Large.logoFirefox,
+                 */
+                imageName: "atlas",
                 action: #selector(actionOpenInFirefoxNow),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareLoadInBackground,
-                imageName: StandardImageIdentifiers.Large.tabTray,
+                /* Ecosia: Update image iname
+                 imageName: StandardImageIdentifiers.Large.tabTray,
+                 */
+                imageName: "load",
                 action: #selector(actionLoadInBackground),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareBookmarkThisPage,
+                /* Ecosia: Update image iname
                 imageName: StandardImageIdentifiers.Large.bookmark,
+                 */
+                imageName: "bookmarkAdd",
                 action: #selector(actionBookmarkThisPage),
                 hasNavigation: false
             )
@@ -175,6 +185,7 @@ class ShareViewController: UIViewController {
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )
+            /* Ecosia: Remove Send To Device option as not offered
             makeSeparator(addTo: stackView)
             makeActionRow(
                 addTo: stackView,
@@ -183,6 +194,7 @@ class ShareViewController: UIViewController {
                 action: #selector(actionSendToDevice),
                 hasNavigation: true
             )
+             */
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
             makeActionRow(
@@ -305,7 +317,13 @@ class ShareViewController: UIViewController {
         heightConstraint.isActive = true
         actionRowHeights.append(heightConstraint)
 
+        /* Ecosia: Update UIImage gather
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
+         */
+        var icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
+        if let image = UIImage(named: imageName, in: .ecosia, with: nil)?.withRenderingMode(.alwaysTemplate) {
+            icon = UIImageView(image: image)
+        }
         icon.contentMode = .scaleAspectFit
         icon.tintColor = theme.colors.iconPrimary
         icon.translatesAutoresizingMaskIntoConstraints = false
@@ -398,7 +416,12 @@ class ShareViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.isTranslucent = false
+        // Ecosia: Assign specific Tint Color
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        /* Ecosia: Update Title View with Ecosia logo
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
+        */
+        navigationItem.titleView = UIImageView(image: .init(named: "iconLogo", in: .ecosia, with: nil))
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: .SendToCancelButton,

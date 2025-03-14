@@ -119,7 +119,7 @@ struct ImageButtonWithLabel: View {
                              .scaledToFit()
                              .frame(height: 24.0)
                             */
-                            Image(decorative: "searchLogo", bundle: .ecosia)
+                            Image(decorative: "iconLogo", bundle: .ecosia)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                                 .foregroundColor(link.iconColor)
