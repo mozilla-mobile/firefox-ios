@@ -37,6 +37,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
 
              let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
              // TODO: What happens if the locale or region changes during app runtime?
+             // TODO: [FXIOS-11553] Aspects of locale and region handling are still TBD.
              let env = SearchUserEnvironment(locale: locale,
                                              region: region,
                                              updateChannel: SearchUpdateChannel.release,
