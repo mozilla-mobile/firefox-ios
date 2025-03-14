@@ -968,6 +968,14 @@ class SettingsTableViewController: ThemedTableViewController {
                 return ThemedCenteredTableViewCell()
             }
             return cell
+        } else if setting as? SendDataSetting != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedLearnMoreTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedLearnMoreTableViewCell else {
+                return ThemedLearnMoreTableViewCell()
+            }
+            return cell
         } else if setting.style == .subtitle {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
