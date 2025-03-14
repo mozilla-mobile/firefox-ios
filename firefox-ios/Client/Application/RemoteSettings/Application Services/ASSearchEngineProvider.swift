@@ -92,13 +92,12 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
         let logger = self.logger
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
-            guard error == nil else {
-                logger.log("Error fetching search engines via App Services: \(error!)",
+            if let error {
+                logger.log("Error fetching search engines via App Services: \(error)",
                            level: .warning,
                            category: .remoteSettings)
-                completion([])
-                return
             }
+
             guard let result, !result.engines.isEmpty else {
                 logger.log("Search engine fetch returned empty results",
                            level: .warning,
@@ -107,11 +106,14 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 return
             }
 
+            // Per AS team, optional engines can be ignored. Currently only used on Android.
+            let filteredEngines = result.engines.filter { $0.optional == false }
+
             // TODO: can we parallelize this? We need the search engines before we can use the icon data but the initial
             // icon fetch can be done concurrently with the search engine request
             let iconFetch = ASSearchEngineIconDataFetcher(service: service)
 
-            iconFetch.populateEngineIconData(result.engines) { enginesAndIcons in
+            iconFetch.populateEngineIconData(filteredEngines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []
                 for (engine, iconImage) in enginesAndIcons {
                     openSearchEngines.append(ASSearchEngineUtilities.convertASToOpenSearch(engine, image: iconImage))
