@@ -119,7 +119,6 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         XCTAssertEqual(syncTab?.tab.URL, remoteClientTabs.last?.URL)
     }
 
-
     // MARK: Helpers
     private func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
@@ -144,8 +143,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         await delegate.waitForNewData()
     }
 
-    private func createTab(profile: MockProfile,
-                   urlString: String? = "www.website.com") -> Tab {
+    private func createTab(profile: MockProfile, urlString: String? = "www.website.com") -> Tab {
         let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {

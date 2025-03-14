@@ -8,7 +8,7 @@ import XCTest
 final class MockJumpBackInDelegate: JumpBackInDelegate {
     private var continuation: CheckedContinuation<Void, Never>?
     var didLoadNewDataCount = 0
-    
+
     func didLoadNewData() {
         didLoadNewDataCount += 1
         continuation?.resume()
