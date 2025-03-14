@@ -17,6 +17,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          bookmarksSaver: BookmarksSaver? = nil) {
@@ -374,15 +379,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
-            let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
-                                                                           checking: .buildOnly)
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
                                                        windowUUID: uuid,
                                                        actionType: TabPanelViewActionType.tabPanelDidLoad)
                 store.dispatch(didLoadAction)
 
-                if !isTabTrayExperimentEnabled {
+                if !isTabTrayUIExperimentsEnabled {
                     let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                                windowUUID: uuid,
                                                                actionType: TabPanelMiddlewareActionType.showToast)
@@ -393,13 +396,18 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
 
-                if !isTabTrayExperimentEnabled {
+                if !isTabTrayUIExperimentsEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
                 }
+<<<<<<< HEAD
             } else if !isTabTrayExperimentEnabled {
+=======
+                addNewTabIfPrivate(uuid: uuid)
+            } else if !isTabTrayUIExperimentsEnabled {
+>>>>>>> ea8fc3228 (Refactor FXIOS-11638 [Tab tray UI experiment] Make sure we disable any changes for iPad (#25354))
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -484,18 +492,27 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                       actionType: TabPanelMiddlewareActionType.refreshTabs)
                 store.dispatch(action)
 
-                let isTabTrayExperimentEnabled = featureFlags.isFeatureEnabled(.tabTrayUIExperiments,
-                                                                               checking: .buildOnly)
-                if tabsState.isPrivateMode && !isTabTrayExperimentEnabled {
+                if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
+<<<<<<< HEAD
                 } else if !isTabTrayExperimentEnabled {
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
+=======
+                } else {
+                    if !isTabTrayUIExperimentsEnabled {
+                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                               windowUUID: uuid,
+                                                               actionType: GeneralBrowserActionType.showToast)
+                        store.dispatch(toastAction)
+                    }
+                    addNewTabIfPrivate(uuid: uuid)
+>>>>>>> ea8fc3228 (Refactor FXIOS-11638 [Tab tray UI experiment] Make sure we disable any changes for iPad (#25354))
                 }
             }
         }

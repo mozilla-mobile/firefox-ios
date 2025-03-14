@@ -20,6 +20,7 @@ class TabsSectionManager: FeatureFlaggable {
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     static func leadingInset(traitCollection: UITraitCollection,

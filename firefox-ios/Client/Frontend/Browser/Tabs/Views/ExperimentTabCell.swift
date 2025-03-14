@@ -9,7 +9,7 @@ import Shared
 import SiteImageView
 
 /// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
-class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
+class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
@@ -87,10 +87,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         configuration.contentInsets = UX.closeButtonEdgeInset
         button.configuration = configuration
         button.alpha = 0.5
-    }
-
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
     }
 
     override func layoutSubviews() {
