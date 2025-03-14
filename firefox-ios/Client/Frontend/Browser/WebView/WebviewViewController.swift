@@ -9,31 +9,12 @@ import Common
 
 class WebviewViewController: UIViewController,
                              ContentContainable,
-                             ScreenshotableView,
-                             Themeable,
-                             InjectedThemeUUIDIdentifiable {
-    private struct UX {
-        static let documentLoadingViewAnimationDuration: CGFloat = 0.3
-    }
-    private var documentLoadingView: TemporaryDocumentLoadingView?
+                             ScreenshotableView {
     private var webView: WKWebView
     var contentType: ContentType = .webview
-    var themeManager: ThemeManager
-    var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
-    let windowUUID: WindowUUID
-    var currentWindowUUID: WindowUUID? {
-        return windowUUID
-    }
 
-    init(webView: WKWebView,
-         windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(webView: WKWebView) {
         self.webView = webView
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,7 +25,6 @@ class WebviewViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
-        listenForThemeChange(view)
     }
 
     private func setupWebView() {
@@ -55,15 +35,6 @@ class WebviewViewController: UIViewController,
     func update(webView: WKWebView) {
         self.webView = webView
         setupWebView()
-        guard let documentLoadingView else { return }
-        view.bringSubviewToFront(documentLoadingView)
-    }
-
-    // MARK: - Themeable
-
-    func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        documentLoadingView?.applyTheme(theme: theme)
     }
 
     // MARK: - ScreenshotableView

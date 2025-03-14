@@ -161,6 +161,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var canonicalURL: URL? {
+        if isPDFRefactorEnabled, temporaryDocument?.isDownloading ?? false {
+            return url
+        }
         if let string = pageMetadata?.siteURL,
            let siteURL = URL(string: string, invalidCharacters: false) {
             // If the canonical URL from the page metadata doesn't contain the
@@ -174,7 +177,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             return siteURL
         }
-        return self.url
+        return url
     }
 
     var loading: Bool {
@@ -981,7 +984,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         if temporaryDocument.isDownloading {
             temporaryDocument.cancelDownload()
             if forceReload {
-                reload()
+                // if the webView's url is the home page then bypass cache so to reload the homepage
+                // Otherwise the webView is restored causing the PDF to be reloaded again.
+                let isInternalURL = InternalURL(webView?.url) != nil
+                reload(bypassCache: isInternalURL)
             }
             return true
         }

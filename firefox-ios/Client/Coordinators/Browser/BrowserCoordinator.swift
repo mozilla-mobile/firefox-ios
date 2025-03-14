@@ -225,7 +225,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -1200,7 +1200,8 @@ class BrowserCoordinator: BaseCoordinator,
     private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument else {
+              let temporaryDocument = tab.temporaryDocument,
+              !temporaryDocument.isDownloading else {
             return shareType
         }
 
