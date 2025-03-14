@@ -2726,10 +2726,6 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
     }
 
-    func switchToPrivacyMode(isPrivate: Bool) {
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-    }
-
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
@@ -2776,7 +2772,6 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
         return tab
