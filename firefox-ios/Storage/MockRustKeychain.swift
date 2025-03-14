@@ -13,7 +13,6 @@ class MockRustKeychain: RustKeychain {
     private init() {
         super.init(serviceName: "Test")
     }
-
     override public func removeObject(key: String) {
         _ = storage.removeValue(forKey: key)
     }
@@ -22,12 +21,22 @@ class MockRustKeychain: RustKeychain {
         storage.removeAll()
     }
 
-    override public func setLoginsKey(_ value: String) {
-        storage[loginsKeyIdentifier] = value
+    override public func setLoginsKeyData(keyValue: String, canaryValue: String) {
+        storage[loginsKeyIdentifier] = keyValue
+        storage[loginsCanaryKeyIdentifier] = canaryValue
+    }
+
+    override public func setCreditCardsKeyData(keyValue: String, canaryValue: String) {
+        storage[creditCardKeyIdentifier] = keyValue
+        storage[creditCardCanaryKeyIdentifier] = canaryValue
     }
 
     override public func getLoginsKeyData() -> (String?, String?) {
         return (storage[loginsKeyIdentifier], storage[loginsCanaryKeyIdentifier])
+    }
+
+    override public func getCreditCardKeyData() -> (String?, String?) {
+        return (storage[creditCardKeyIdentifier], storage[creditCardCanaryKeyIdentifier])
     }
 
     override public class func wipeKeychain() {}
