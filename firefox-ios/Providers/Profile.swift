@@ -8,6 +8,7 @@
 // may have unintended negative consequences for App Extensions such as
 // increased startup times which may lead to termination by the OS.
 
+import Client
 import Common
 import Account
 import Shared
@@ -16,6 +17,7 @@ import AuthenticationServices
 
 import class MozillaAppServices.MZKeychainWrapper
 import class MozillaAppServices.RemoteSettingsService
+import struct MozillaAppServices.RemoteSettingsContext
 import enum MozillaAppServices.Level
 import enum MozillaAppServices.RemoteSettingsServer
 import enum MozillaAppServices.SyncReason
@@ -703,7 +705,10 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(storageDir: path, config: RemoteSettingsConfig2(server: server))
+            return try RemoteSettingsService(
+                storageDir: path,
+                config: RemoteSettingsConfig2(server: server, appContext:
+                RemoteSettingsUtils().remoteSettingsAppContext()))
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,

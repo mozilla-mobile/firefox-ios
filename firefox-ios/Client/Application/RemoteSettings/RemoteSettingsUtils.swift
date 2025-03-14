@@ -30,4 +30,42 @@ class RemoteSettingsUtils {
         }
         return nil
     }
+
+    func remoteSettingsAppContext() -> RemoteSettingsContext {
+        let encoder = JSONEncoder()
+        let appInfo = BrowserKitInformation.shared
+        let uiDevice = UIDevice.current
+        let formFactor = switch uiDevice.userInterfaceIdiom {
+        case .pad: "tablet"
+        case .mac: "desktop"
+        default: "phone"
+        }
+        var customTargetingAttributes: String?
+        let customTargetingAttributesData = try? encoder.encode([
+                "form_factor": formFactor,
+                "country": Locale.current.regionCode,
+        ])
+        if let data = customTargetingAttributesData {
+            customTargetingAttributes = String(
+                decoding: data,
+                as: UTF8.self)
+        }
+        return RemoteSettingsContext(
+            appName: "Firefox iOS",
+            appId: "org.mozilla.ios.Firefox",
+            channel: appInfo.buildChannel?.rawValue ?? "release",
+            appVersion: AppInfo.appVersion,
+            appBuild: AppInfo.buildNumber,
+            architecture: nil,
+            deviceManufacturer: "Apple",
+            deviceModel: DeviceInfo.deviceModel(),
+            locale: Locale.current.identifier,
+            os: "iOS",
+            osVersion: uiDevice.systemVersion,
+            androidSdkVersion: nil,
+            debugTag: nil,
+            installationDate: nil,
+            homeDirectory: nil,
+            customTargetingAttributes: customTargetingAttributes)
+    }
 }
