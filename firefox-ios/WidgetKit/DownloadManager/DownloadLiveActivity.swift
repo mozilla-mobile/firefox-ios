@@ -5,6 +5,8 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 import Foundation
+import Common
+import Shared
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
@@ -51,6 +53,14 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
+    struct UX {
+        static let downloadColor: UIColor = .orange
+        static let circleWidth: CGFloat = 17.5
+        static let lineWidth: CGFloat = 3.5
+        static let downloadIconSize: CGFloat = 19
+        static let downloadPaddingLeading: CGFloat = 2
+        static let downloadPaddingTrailing: CGFloat = 1
+    }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
             // Using Rectangle instead of EmptyView because the hitbox
@@ -73,33 +83,32 @@ struct DownloadLiveActivity: Widget {
                     EmptyView()
                 }
             } compactLeading: {
-                Image(systemName: "arrow.down.to.line")
+                Image(StandardImageIdentifiers.Large.download)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: UX.downloadIconSize, height: UX.downloadIconSize)
                     .foregroundStyle(.orange)
-                    .font(.system(size: 16, weight: .light))
+                    .padding([.leading, .trailing], 2)
             } compactTrailing: {
-//                Text(
-//                    String(
-//                        format: "%.0f",
-//                        (Double(LiveDownload.state.totalBytesDownloaded) / Double(LiveDownload.state.totalBytesExpected)) * 100
-//                    )
-//                )//
                 ZStack {
                     Circle()
-                        .stroke(lineWidth: 4)
+                        .stroke(lineWidth: UX.lineWidth)
                         .foregroundColor(.gray)
                         .opacity(0.3)
-                        .frame(width: 19, height: 19)
+                        .frame(width: UX.circleWidth, height: UX.circleWidth)
                         .padding(.leading, 2)
+                        .padding(.trailing, 1)
                     Circle()
-                    // 0.57 is a dummy value for how far along the download progress is
-                        .trim(from: 0.0, to: min(0.57, 1.0))
-                        .stroke(style: StrokeStyle(lineWidth: 4))
+                        .trim(from: 0.0, to: min(LiveDownload.state.totalProgress, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: UX.lineWidth))
                         .rotationEffect(.degrees(-90))
-                        .animation(.linear, value: 0.57)
+                        .animation(.linear, value: min(LiveDownload.state.totalProgress, 1.0))
                         .foregroundStyle(.orange)
-                        .frame(width: 19, height: 19)
-                        .padding(.leading, 2)
+                        .frame(width: UX.circleWidth, height: UX.circleWidth)
                 }
+                .padding(.leading, UX.downloadPaddingLeading)
+                .padding(.trailing, UX.downloadPaddingTrailing)
             } minimal: {
                 EmptyView()
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
@@ -107,26 +116,4 @@ struct DownloadLiveActivity: Widget {
     }
 }
 
-func startDownloadLiveActivity() {
-    guard #available(iOS 16.2, *) else { return }
 
-    let attributes = DownloadLiveActivityAttributes()
-    let state = DownloadLiveActivityAttributes.ContentState(downloads: [DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "hello.py",
-        hasContentEncoding: true,
-        totalBytesExpected: 100000,
-        bytesDownloaded: 57000,
-        isComplete: false
-    )])
-
-    do {
-        _ = try Activity<DownloadLiveActivityAttributes>.request(
-            attributes: attributes,
-            content: .init(state: state, staleDate: nil),
-            pushType: nil
-        )
-    } catch {
-        print("Failed to start Live Activity: \(error.localizedDescription)")
-    }
-}
