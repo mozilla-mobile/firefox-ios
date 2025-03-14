@@ -45,6 +45,10 @@ open class RustKeychain {
     public let loginsCanaryKeyIdentifier = "canaryPhrase"
     let loginsCanaryPhrase = "a string for checking validity of the key"
 
+    public let creditCardKeyIdentifier = "appservices.key.creditcard.perfield"
+    public let creditCardCanaryKeyIdentifier = "creditCardCanaryPhrase"
+    let creditCardCanaryPhrase = "a string for checking validity of the key"
+
     public static var sharedClientAppContainerKeychain: RustKeychain {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
 
@@ -85,12 +89,23 @@ open class RustKeychain {
         logErrorFromStatus(status, errMsg: "Failed to remove all keys")
     }
 
-    public func setLoginsKey(_ value: String) {
-        addOrUpdateKeychainKey(value, key: loginsKeyIdentifier)
+    public func setLoginsKeyData(keyValue: String, canaryValue: String) {
+        addOrUpdateKeychainKey(keyValue, key: loginsKeyIdentifier)
+        addOrUpdateKeychainKey(canaryValue, key: loginsCanaryKeyIdentifier)
+    }
+
+    public func setCreditCardsKeyData(keyValue: String, canaryValue: String) {
+        addOrUpdateKeychainKey(keyValue, key: creditCardKeyIdentifier)
+        addOrUpdateKeychainKey(canaryValue, key: creditCardCanaryKeyIdentifier)
     }
 
     public func getLoginsKeyData() -> (String?, String?) {
         return getEncryptionKeyData(keyIdentifier: loginsKeyIdentifier, canaryKeyIdentifier: loginsCanaryKeyIdentifier)
+    }
+
+    public func getCreditCardKeyData() -> (String?, String?) {
+        return getEncryptionKeyData(keyIdentifier: creditCardKeyIdentifier,
+                                    canaryKeyIdentifier: creditCardCanaryKeyIdentifier)
     }
 
     public class func wipeKeychain() {
@@ -118,6 +133,26 @@ open class RustKeychain {
                    level: .warning,
                    category: .storage,
                    description: "\(errorDomain) - \(err.descriptionValue): \(message)")
+    }
+
+    func createCreditCardsKeyData() throws -> String {
+        do {
+            return try createAndStoreKey(canaryPhrase: creditCardCanaryPhrase,
+                                         canaryIdentifier: creditCardCanaryKeyIdentifier,
+                                         keyIdentifier: creditCardKeyIdentifier)
+        } catch let err as NSError {
+            if let autofillStoreError = err as? AutofillApiError {
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while creating and storing credit card key")
+            } else {
+                logger.log("Unknown error while creating and storing credit card key",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
+            }
+        }
+        throw LoginEncryptionKeyError.noKeyCreated
     }
 
     func createLoginsKeyData() throws -> String {
