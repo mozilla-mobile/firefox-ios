@@ -7,13 +7,27 @@ import Account
 import Common
 import Shared
 
-final class ASSearchEngineSelector {
+/// Describes public API for search engine selector wrapper for Application Services.
+protocol ASSearchEngineSelectorProtocol {
+    /// Fetches search engines from Remote Settings based on the current locale and region.
+    /// - Parameters:
+    ///   - locale: the locale (e.g. 'en-US')
+    ///   - region: the region (e.g. 'US')
+    ///   - completion: a RefinedSearchConfig object describing the search engine results and/or an error.
+    func fetchSearchEngines(locale: String,
+                            region: String,
+                            completion: @escaping ((RefinedSearchConfig?, Error?) -> Void))
+}
+
+final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
     private let engineSelector = SearchEngineSelector()
     private let service: RemoteSettingsService
 
     init(service: RemoteSettingsService) {
         self.service = service
     }
+
+    // MARK: - ASSearchEngineSelectorProtocol
 
     func fetchSearchEngines(locale: String,
                             region: String,
