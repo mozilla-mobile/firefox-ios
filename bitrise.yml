@@ -1548,6 +1548,7 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
+                --xcode-version=16.2 \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
