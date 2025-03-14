@@ -157,8 +157,22 @@ class BrowserCoordinator: BaseCoordinator,
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
-        self.homepageViewController = homepageController
+        sendHomepageImpressionEvent()
+        homepageViewController = homepageController
         homepageController.scrollToTop()
+    }
+
+    /// Only send an impression event if homepage is embedded
+    /// and there does not exist another view above BVC
+    private func sendHomepageImpressionEvent() {
+        let hasHomepage = browserViewController.contentContainer.hasHomepage
+        guard hasHomepage, router.navigationController.presentedViewController == nil else { return }
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.homepageViewed
+            )
+        )
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
@@ -1141,6 +1155,9 @@ class BrowserCoordinator: BaseCoordinator,
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)
+
+        // [FXIOS-11156] Add homepage impression if applicable
+        sendHomepageImpressionEvent()
     }
 
     // MARK: - WindowEventCoordinator
