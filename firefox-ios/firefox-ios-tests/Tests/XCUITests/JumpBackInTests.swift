@@ -64,8 +64,9 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter tab is visible in the "Jump Back In" section
         scrollDown()
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
+        let jumpBackInItem = app.cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+        mozWaitForElementToExist(jumpBackInItem.firstMatch)
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
 
         // Open private browsing
         navigator.goto(TabTray)
@@ -83,9 +84,9 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter should be in "Jump Back In"
         scrollDown()
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
-        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
+        mozWaitForElementToExist(jumpBackInItem.firstMatch)
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
+        mozWaitForElementToNotExist(jumpBackInItem.staticTexts["YouTube"])
 
         // Visit "mozilla.org" and check the "Jump Back In" section
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
@@ -98,13 +99,13 @@ class JumpBackInTests: BaseTestCase {
 
         // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
-        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
+        mozWaitForElementToExist(jumpBackInItem.firstMatch)
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Example Domain"])
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
+        mozWaitForElementToNotExist(jumpBackInItem.staticTexts["YouTube"])
 
         // Tap on Twitter from "Jump Back In"
-        app.cells["JumpBackInCell"].staticTexts["Wikipedia"].firstMatch.waitAndTap()
+        jumpBackInItem.staticTexts["Wikipedia"].firstMatch.waitAndTap()
 
         // The view is switched to the twitter tab
         if let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
@@ -122,10 +123,10 @@ class JumpBackInTests: BaseTestCase {
 
         // Check the "Jump Back In Section"
         scrollDown()
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
+        mozWaitForElementToExist(jumpBackInItem.firstMatch)
 
         // Amazon is visible in "Jump Back In"
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Example Domain"])
 
         // Close the amazon tab
         navigator.goto(TabTray)
@@ -143,11 +144,11 @@ class JumpBackInTests: BaseTestCase {
 
         // The "Jump Back In" section is still here with twitter listed
         scrollDown()
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
+        mozWaitForElementToExist(jumpBackInItem.firstMatch)
         // FXIOS-5448 - Amazon should not be listed because we've closed the Amazon tab
         // mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
-        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
+        mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
+        mozWaitForElementToNotExist(jumpBackInItem.staticTexts["YouTube"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445811

@@ -145,7 +145,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
-
+            dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
             moveTab(state: state, moveTabData: moveTabData, uuid: action.windowUUID)
@@ -914,14 +914,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
-        case HomepageActionType.initialize, JumpBackInActionType.fetchLocalTabs:
-            store.dispatch(
-                TabManagerAction(
-                    recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
-                    windowUUID: action.windowUUID,
-                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
-                )
-            )
+        case HomepageActionType.initialize,
+            JumpBackInActionType.fetchLocalTabs,
+            TabTrayActionType.dismissTabTray:
+            dispatchRecentlyAccessedTabs(action: action)
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
                   let tab = jumpBackInAction.tab else { return }
@@ -1048,5 +1044,16 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func preserveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.preserveTabs()
+    }
+
+    /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
+    private func dispatchRecentlyAccessedTabs(action: Action) {
+        store.dispatch(
+            TabManagerAction(
+                recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
+                windowUUID: action.windowUUID,
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+            )
+        )
     }
 }
