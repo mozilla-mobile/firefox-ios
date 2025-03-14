@@ -150,6 +150,7 @@
         "TopTabsTest\/testAddTabFromContext()",
         "TopTabsTest\/testCloseAllTabs()",
         "TopTabsTest\/testCloseAllTabsPrivateMode()",
+        "TopTabsTest\/testCloseAllTabsUndo()",
         "TopTabsTest\/testCloseOneTab()",
         "TopTabsTest\/testOpenTabsViewCurrentTabThumbnail()",
         "TopTabsTest\/testSwitchBetweenTabs()",

@@ -379,33 +379,35 @@ class TopTabsTest: BaseTestCase {
     func testTabTrayCloseMultipleTabs() {
         navigator.nowAt(NewTabScreen)
         validateToastWhenClosingMultipleTabs()
+        // Tab tray UI experiment doesn't have toasts notifications anymore
+        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Choose to undo the action
-        app.buttons["Undo"].waitAndTap()
-        waitUntilPageLoad()
-        // Only the latest tab closed is restored
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-        if !iPad() {
-            let numTab = app.buttons.element(boundBy: 3).label
-            XCTAssertEqual(Int(numTab), tabsTrayCell.count)
-        } else {
-            XCTAssertEqual(tabsTrayCell.count, 2)
-            XCTAssertTrue(app.buttons.elementContainingText("2").exists)
-        }
-        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
-        // Repeat for private browsing mode
-        navigator.performAction(Action.TogglePrivateMode)
-        validateToastWhenClosingMultipleTabs()
-        // Choose to undo the action
-        app.buttons["Undo"].waitAndTap()
-        // Only the latest tab closed is restored
-        if !iPad() {
-            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-            XCTAssertEqual(1, tabsTrayCell.count)
-        }
-        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+//        app.buttons["Undo"].waitAndTap()
+//        waitUntilPageLoad()
+//        // Only the latest tab closed is restored
+//        navigator.nowAt(BrowserTab)
+//        waitForTabsButton()
+//        navigator.goto(TabTray)
+//        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+//        if !iPad() {
+//            let numTab = app.buttons.element(boundBy: 3).label
+//            XCTAssertEqual(Int(numTab), tabsTrayCell.count)
+//        } else {
+//            XCTAssertEqual(tabsTrayCell.count, 2)
+//            XCTAssertTrue(app.buttons.elementContainingText("2").exists)
+//        }
+//        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+//        // Repeat for private browsing mode
+//        navigator.performAction(Action.TogglePrivateMode)
+//        validateToastWhenClosingMultipleTabs()
+//        // Choose to undo the action
+//        app.buttons["Undo"].waitAndTap()
+//        // Only the latest tab closed is restored
+//        if !iPad() {
+//            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+//            XCTAssertEqual(1, tabsTrayCell.count)
+//        }
+//        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
     private func validateToastWhenClosingMultipleTabs() {
@@ -421,25 +423,27 @@ class TopTabsTest: BaseTestCase {
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
+        // Tab tray UI experiment doesn't have toasts notifications anymore
+        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Close multiple tabs by pressing X button
-        let crossCircleFillLarge = StandardImageIdentifiers.Large.crossCircleFill
-        for _ in 0...3 {
-            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[crossCircleFillLarge].waitAndTap()
-            // A toast notification is displayed with the message "Tab Closed" and the Undo option
-            waitForElementsToExist(
-                [
-                    app.buttons["Undo"],
-                    app.staticTexts["Tab Closed"]
-                ]
-            )
-        }
-        app.collectionViews.buttons[crossCircleFillLarge].waitAndTap()
-        waitForElementsToExist(
-            [
-                app.buttons["Undo"],
-                app.staticTexts["Tab Closed"]
-            ]
-        )
+//        let crossCircleFillLarge = StandardImageIdentifiers.Large.crossCircleFill
+//        for _ in 0...3 {
+//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[crossCircleFillLarge].waitAndTap()
+//            // A toast notification is displayed with the message "Tab Closed" and the Undo option
+//            waitForElementsToExist(
+//                [
+//                    app.buttons["Undo"],
+//                    app.staticTexts["Tab Closed"]
+//                ]
+//            )
+//        }
+//        app.collectionViews.buttons[crossCircleFillLarge].waitAndTap()
+//        waitForElementsToExist(
+//            [
+//                app.buttons["Undo"],
+//                app.staticTexts["Tab Closed"]
+//            ]
+//        )
     }
 
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {
@@ -454,7 +458,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         navigator.goto(TabTray)
         // Long press on the tab tray to open the context menu
-        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        // let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         app.otherElements["Tabs Tray"].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
         // Context menu opens
         waitForElementsToExist(
@@ -465,19 +469,21 @@ class TopTabsTest: BaseTestCase {
         )
         // Choose to close the tab
         app.buttons["Close Tab"].waitAndTap()
+        // Tab tray UI experiment doesn't have toasts notifications anymore
+        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // A toast notification is displayed with the message "Tab Closed" and the Undo option
-        waitForElementsToExist(
-            [
-                app.buttons["Undo"],
-                app.staticTexts["Tab Closed"]
-            ]
-        )
-        app.buttons["Undo"].waitAndTap()
-        mozWaitForElementToNotExist(app.buttons["Undo"])
-        mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
-        // The tab closed is restored
-        mozWaitForElementToExist(tabsTrayCell.element(boundBy: 3))
-        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+//        waitForElementsToExist(
+//            [
+//                app.buttons["Undo"],
+//                app.staticTexts["Tab Closed"]
+//            ]
+//        )
+//        app.buttons["Undo"].waitAndTap()
+//        mozWaitForElementToNotExist(app.buttons["Undo"])
+//        mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
+//        // The tab closed is restored
+//        mozWaitForElementToExist(tabsTrayCell.element(boundBy: 3))
+//        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
     }
 }
 
