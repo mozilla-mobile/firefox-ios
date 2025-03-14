@@ -1425,7 +1425,7 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-        - xcodebuild_options: CODE_SIGN_IDENTITY="iPhone Developer"
+        - xcodebuild_options: CODE_SIGN_IDENTITY="iPhone Developer" CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES DEVELOPMENT_TEAM=9G8J6YA743
     - deploy-to-bitrise-io@2.10.0: {}
     - script@1.2.1:
         title: Firebase Build for Testing Physical Devices
