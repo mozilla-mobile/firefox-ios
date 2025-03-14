@@ -1495,7 +1495,6 @@ workflows:
 
             echo "-- create .zip artifact --"
             # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
-            ls $PRODUCTS_DIR
             ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
             mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
     - cache-pull@2.7.2:
