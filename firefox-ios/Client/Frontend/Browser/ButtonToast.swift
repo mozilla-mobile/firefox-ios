@@ -49,7 +49,6 @@ class ButtonToast: Toast {
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
-        label.lineBreakMode = .byTruncatingTail
     }
 
     private var roundedButton: UIButton = .build { button in
@@ -141,7 +140,7 @@ class ButtonToast: Toast {
 
         roundedButton.configuration = buttonConfiguration
 
-        stackView.addSubview(roundedButton)
+        toastView.addSubview(roundedButton)
 
         roundedButton.addAction(UIAction { [weak self] _ in
             self?.buttonPressed()
