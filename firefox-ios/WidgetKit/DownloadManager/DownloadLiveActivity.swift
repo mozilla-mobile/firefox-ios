@@ -68,7 +68,7 @@ struct DownloadLiveActivity: Widget {
             // meaning we'd never be redirected to the downloads panel
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        } dynamicIsland: { LiveDownload in
+        } dynamicIsland: { liveDownload in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
                     EmptyView()
