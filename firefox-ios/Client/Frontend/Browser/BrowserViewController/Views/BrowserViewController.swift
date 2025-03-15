@@ -1840,7 +1840,11 @@ class BrowserViewController: UIViewController,
                                                                      bookmarkNode: bookmarkItem,
                                                                      parentBookmarkFolder: parentFolder,
                                                                      presentedFromToast: true) { [weak self] in
-                        self?.showBookmarkToast(action: .remove)
+                        self?.showBookmarkToast(
+                            urlString: bookmarkItem.url,
+                            title: bookmarkItem.title,
+                            action: .remove
+                        )
                     }
                     let controller: DismissableNavigationViewController
                     controller = DismissableNavigationViewController(rootViewController: detailController)
