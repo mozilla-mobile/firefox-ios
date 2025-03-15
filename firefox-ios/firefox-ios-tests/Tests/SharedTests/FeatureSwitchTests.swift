@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Shared
+import Common
 import XCTest
 
 class FeatureSwitchTests: XCTestCase {

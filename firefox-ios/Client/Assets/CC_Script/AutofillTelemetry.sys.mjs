@@ -118,17 +118,20 @@ class AutofillTelemetryBase {
     this.recordGleanFormEvent("formPopupShown", flowId, extra);
   }
 
-  recordFormFilled(flowId, fieldDetails, data) {
+  setUpFormFilledExtra(fieldDetails, data) {
     // Calculate values for telemetry
     const extra = this.#initFormEventExtra("unavailable");
 
     for (const fieldDetail of fieldDetails) {
       // It is possible that we don't autofill a field because it is cross-origin.
       // When that happens, the data will not include that element.
-      let { filledState, filledValue } = data.get(fieldDetail.elementId) ?? {};
+      let { filledState, filledValue, isFilledOnFieldsUpdate } =
+        data.get(fieldDetail.elementId) ?? {};
       switch (filledState) {
         case FIELD_STATES.AUTO_FILLED:
-          filledState = "filled";
+          filledState = isFilledOnFieldsUpdate
+            ? "filled_on_fields_update"
+            : "filled";
           break;
         case FIELD_STATES.NORMAL:
         default:
@@ -140,9 +143,18 @@ class AutofillTelemetryBase {
       }
       this.#setFormEventExtra(extra, fieldDetail.fieldName, filledState);
     }
+    return extra;
+  }
 
+  recordFormFilled(flowId, fieldDetails, data) {
+    const extra = this.setUpFormFilledExtra(fieldDetails, data);
     this.recordFormEvent("filled", flowId, extra);
     this.recordGleanFormEvent("formFilled", flowId, extra);
+  }
+
+  recordFormFilledOnFieldsUpdate(flowId, fieldDetails, data) {
+    const extra = this.setUpFormFilledExtra(fieldDetails, data);
+    this.recordFormEvent("filled_on_fields_update", flowId, extra);
   }
 
   recordFilledModified(flowId, fieldDetails) {
@@ -203,6 +215,8 @@ class AutofillTelemetryBase {
         return this.recordPopupShown(flowId, fieldDetails);
       case "filled":
         return this.recordFormFilled(flowId, fieldDetails, data);
+      case "filled_on_fields_update":
+        return this.recordFormFilledOnFieldsUpdate(flowId, fieldDetails, data);
       case "filled_modified":
         return this.recordFilledModified(flowId, fieldDetails);
       case "submitted":
@@ -288,7 +302,7 @@ export class AddressTelemetry extends AutofillTelemetryBase {
   HISTOGRAM_PROFILE_NUM_USES = "AUTOFILL_PROFILE_NUM_USES";
   HISTOGRAM_PROFILE_NUM_USES_KEY = "address";
 
-  // Fields that are record in `address_form` and `address_form_ext` telemetry
+  // Fields that are recorded in `address_form` and `address_form_ext` telemetry
   SUPPORTED_FIELDS = {
     "street-address": "street_address",
     "address-line1": "address_line1",
@@ -307,7 +321,7 @@ export class AddressTelemetry extends AutofillTelemetryBase {
     tel: "tel",
   };
 
-  // Fields that are record in `address_form` event telemetry extra_keys
+  // Fields that are recorded in `address_form` event telemetry extra_keys
   static SUPPORTED_FIELDS_IN_FORM = [
     "street_address",
     "address_line1",
@@ -319,7 +333,7 @@ export class AddressTelemetry extends AutofillTelemetryBase {
     "country",
   ];
 
-  // Fields that are record in `address_form_ext` event telemetry extra_keys
+  // Fields that are recorded in `address_form_ext` event telemetry extra_keys
   static SUPPORTED_FIELDS_IN_FORM_EXT = [
     "name",
     "given_name",

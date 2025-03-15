@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
-import Common
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
@@ -192,8 +192,6 @@ class ActivityStreamTest: BaseTestCase {
         app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
         // Check that two tabs are open and one of them is the default top site one
-        // Workaround needed after xcode 11.3 update Issue 5937
-        sleep(3)
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -253,7 +251,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855325
-    func testsiteCanBeAddedToShortcuts() {
+    func testSiteCanBeAddedToShortcuts() {
         addWebsiteToShortcut(website: url_3)
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]

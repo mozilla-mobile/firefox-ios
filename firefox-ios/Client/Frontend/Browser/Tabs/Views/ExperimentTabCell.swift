@@ -9,10 +9,10 @@ import Shared
 import SiteImageView
 
 /// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
-class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
+class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     struct UX {
         static let selectedBorderWidth: CGFloat = 3.0
-        static let unselectedBorderWidth: CGFloat = 0.8
+        static let unselectedBorderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 16
         static let subviewDefaultPadding: CGFloat = 6.0
         static let faviconSize = CGSize(width: 16, height: 16)
@@ -26,6 +26,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
         static let tabViewFooterSpacing: CGFloat = 4
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1
+        static let thumbnailScreenshotHeight: CGFloat = 200
     }
     // MARK: - Properties
 
@@ -40,6 +44,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
     }
 
     private lazy var favicon: FaviconImageView = .build()
+    private lazy var faviconContainer: UIView = .build()
 
     // MARK: - UI
 
@@ -50,6 +55,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         stackView.alignment = .fill
         stackView.spacing = UX.tabViewFooterSpacing
         stackView.backgroundColor = .clear
+        stackView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var backgroundHolder: UIView = .build { view in
@@ -68,6 +75,8 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.isAccessibilityElement = false
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -80,14 +89,16 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         button.alpha = 0.5
     }
 
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         favicon.layer.cornerRadius = UX.faviconSize.height / 2
         smallFaviconView.layer.cornerRadius = UX.fallbackFaviconSize.height / 2
+
+        backgroundHolder.layoutIfNeeded()
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: self.backgroundHolder.bounds,
+            cornerRadius: self.backgroundHolder.layer.cornerRadius
+        ).cgPath
     }
 
     // MARK: - Initializer
@@ -101,8 +112,9 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         contentView.addSubview(backgroundHolder)
         contentView.addSubview(footerView)
 
-        footerView.addArrangedSubview(favicon)
+        footerView.addArrangedSubview(faviconContainer)
         footerView.addArrangedSubview(titleText)
+        faviconContainer.addSubview(favicon)
 
         backgroundHolder.addSubviews(screenshotView, smallFaviconView, closeButton)
 
@@ -171,6 +183,14 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
         smallFaviconView.tintColor = theme.colors.textPrimary
+        setupShadow(theme: theme)
+    }
+
+    func setupShadow(theme: Theme) {
+        contentView.layer.shadowRadius = UX.shadowRadius
+        contentView.layer.shadowOffset = UX.shadowOffset
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = UX.shadowOpacity
     }
 
     // MARK: - Configuration
@@ -232,8 +252,6 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
         // Reset any close animations.
         super.prepareForReuse()
         screenshotView.image = nil
-        backgroundHolder.transform = .identity
-        backgroundHolder.alpha = 1
         smallFaviconView.isHidden = true
         layer.shadowOffset = .zero
         layer.shadowPath = nil
@@ -248,16 +266,22 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, Fe
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundHolder.bottomAnchor.constraint(equalTo: footerView.topAnchor,
-                                                     constant: -UX.tabViewFooterSpacing),
+            backgroundHolder.heightAnchor.constraint(equalToConstant: UX.thumbnailScreenshotHeight),
 
+            footerView.topAnchor.constraint(equalTo: backgroundHolder.bottomAnchor,
+                                            constant: UX.tabViewFooterSpacing),
             footerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             footerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
 
+            faviconContainer.topAnchor.constraint(lessThanOrEqualTo: favicon.topAnchor),
+            faviconContainer.bottomAnchor.constraint(greaterThanOrEqualTo: favicon.bottomAnchor),
+            faviconContainer.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
+            faviconContainer.trailingAnchor.constraint(equalTo: favicon.trailingAnchor),
             favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
             favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            favicon.centerYAnchor.constraint(equalTo: titleText.centerYAnchor),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),

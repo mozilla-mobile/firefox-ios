@@ -109,7 +109,7 @@ class BrowsingPDFTests: BaseTestCase {
         // Open pdf from pinned site
         let pdfTopSite = app
             .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .links[PDF_website["bookmarkLabel"]!]
+            .links["Pinned: \(PDF_website["bookmarkLabel"]!)"]
             .children(matching: .other)
             .element
             .children(matching: .other)

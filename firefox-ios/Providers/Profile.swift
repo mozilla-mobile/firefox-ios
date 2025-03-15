@@ -230,8 +230,10 @@ open class BrowserProfile: Profile {
             fatalError("Could not create directory at root path: \(error)")
         }
     }()
+    private var rustKeychainEnabled = false
     fileprivate let name: String
-    fileprivate let keychain: MZKeychainWrapper
+    fileprivate let keychain: RustKeychain
+    fileprivate let legacyKeychain: MZKeychainWrapper
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -257,6 +259,7 @@ open class BrowserProfile: Profile {
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
          creditCardAutofillEnabled: Bool = false,
+         rustKeychainEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -264,7 +267,9 @@ open class BrowserProfile: Profile {
                    category: .setup)
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
+        self.rustKeychainEnabled = rustKeychainEnabled
+        self.keychain = KeychainManager.shared
+        self.legacyKeychain = KeychainManager.legacyShared
         self.logger = logger
         self.fxaCommandsDelegate = fxaCommandsDelegate
 
@@ -301,7 +306,11 @@ open class BrowserProfile: Profile {
             logger.log("New profile. Removing old Keychain/Prefs data.",
                        level: .info,
                        category: .setup)
-            MZKeychainWrapper.wipeKeychain()
+            if rustKeychainEnabled {
+                RustKeychain.wipeKeychain()
+            } else {
+                MZKeychainWrapper.wipeKeychain()
+            }
             prefs.clearAll()
         }
 
@@ -311,7 +320,8 @@ open class BrowserProfile: Profile {
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
         self.syncManager = RustSyncManager(profile: self,
-                                           creditCardAutofillEnabled: creditCardAutofillEnabled)
+                                           creditCardAutofillEnabled: creditCardAutofillEnabled,
+                                           rustKeychainEnabled: rustKeychainEnabled)
 
         let notificationCenter = NotificationCenter.default
 
@@ -472,7 +482,7 @@ open class BrowserProfile: Profile {
         isDirectory: true
     ).appendingPathComponent("autofill.db").path
 
-    lazy var autofill = RustAutofill(databasePath: autofillDbPath)
+    lazy var autofill = RustAutofill(databasePath: autofillDbPath, rustKeychainEnabled: rustKeychainEnabled)
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
     lazy var searchEnginesManager: SearchEnginesManager = {
@@ -676,7 +686,7 @@ open class BrowserProfile: Profile {
             fileURLWithPath: directory,
             isDirectory: true
         ).appendingPathComponent("loginsPerField.db").path
-        return RustLogins(databasePath: databasePath)
+        return RustLogins(databasePath: databasePath, rustKeychainEnabled: self.rustKeychainEnabled)
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
@@ -755,24 +765,48 @@ open class BrowserProfile: Profile {
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
 
         // Save the keys that will be restored
-        let rustAutofillKey = RustAutofillEncryptionKeys()
-        let creditCardKey = keychain.string(forKey: rustAutofillKey.ccKeychainKey)
         let rustLoginsKeys = RustLoginEncryptionKeys()
-        let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
-        // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
-        // simply restore what is needed.
-        keychain.removeAllKeys()
+        let rustAutofillKey = RustAutofillEncryptionKeys()
+        var loginsKey: String?
+        var loginsCanary: String?
 
-        if let perFieldKey = perFieldKey {
-            keychain.set(
-                perFieldKey,
-                forKey: rustLoginsKeys.loginPerFieldKeychainKey,
-                withAccessibility: .afterFirstUnlock
-            )
-        }
+        var creditCardKey: String?
+        var creditCardCanary: String?
 
-        if let creditCardKey = creditCardKey {
-            keychain.set(creditCardKey, forKey: rustAutofillKey.ccKeychainKey, withAccessibility: .afterFirstUnlock)
+        if rustKeychainEnabled {
+            (creditCardKey, creditCardCanary) = keychain.getCreditCardKeyData()
+            (loginsKey, loginsCanary) = keychain.getLoginsKeyData()
+
+            // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
+            // simply restore what is needed.
+            keychain.removeAllKeys()
+
+            if let creditCardKey = creditCardKey, let creditCardCanary = creditCardCanary {
+                keychain.setCreditCardsKeyData(keyValue: creditCardKey, canaryValue: creditCardCanary)
+            }
+
+            if let loginsKey = loginsKey, let loginsCanary = loginsCanary {
+                keychain.setLoginsKeyData(keyValue: loginsKey, canaryValue: loginsCanary)
+            }
+        } else {
+            creditCardKey = legacyKeychain.string(forKey: rustAutofillKey.ccKeychainKey)
+            loginsKey = legacyKeychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
+
+            // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something),
+            // simply restore what is needed.
+            legacyKeychain.removeAllKeys()
+
+            if let creditCardKey = creditCardKey {
+                legacyKeychain.set(creditCardKey,
+                                   forKey: rustAutofillKey.ccKeychainKey,
+                                   withAccessibility: .afterFirstUnlock)
+            }
+
+            if let loginsKey = loginsKey {
+                legacyKeychain.set(loginsKey,
+                                   forKey: rustLoginsKeys.loginPerFieldKeychainKey,
+                                   withAccessibility: .afterFirstUnlock)
+            }
         }
 
         // Tell any observers that our account has changed.

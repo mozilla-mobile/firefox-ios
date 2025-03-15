@@ -256,12 +256,14 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
 
         // "Undo" toast message is displayed. Tap on "Undo" button
-        app.buttons["Undo"].waitAndTap()
-
-        // All the private tabs are restored
-        navigator.goto(TabTray)
-        numTab = app.otherElements["Tabs Tray"].cells.count
-        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        // Tab tray UI experiment doesn't have toasts notifications anymore
+        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
+//        app.buttons["Undo"].waitAndTap()
+//
+//        // All the private tabs are restored
+//        navigator.goto(TabTray)
+//        numTab = app.otherElements["Tabs Tray"].cells.count
+//        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307003
