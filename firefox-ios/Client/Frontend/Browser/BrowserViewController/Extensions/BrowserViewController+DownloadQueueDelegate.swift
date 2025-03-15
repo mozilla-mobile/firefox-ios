@@ -21,9 +21,9 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
         if #available(iOS 16.2, *), featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly) {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(downloadProgressManager: downloadProgressManager)
             downloadProgressManager.addDelegate(delegate: downloadLiveActivityWrapper)
-            self._downloadLiveActivityWrapper = downloadLiveActivityWrapper
+            self.downloadLiveActivityWrapper = downloadLiveActivityWrapper
             guard downloadLiveActivityWrapper.start() else {
-                self._downloadLiveActivityWrapper = nil
+                self.downloadLiveActivityWrapper = nil
                 return
             }
         }
@@ -70,7 +70,7 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
             downloadToast.dismiss(false)
             if #available(iOS 16.2, *), let downloadLiveActivityWrapper = self?.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self?._downloadLiveActivityWrapper = nil
+                self?.downloadLiveActivityWrapper = nil
             }
             self?.downloadProgressManager = nil
             self?.presentDownloadCompletedToast(filename: download.filename)
@@ -90,7 +90,7 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
             if #available(iOS 16.2, *),
                let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
                 downloadLiveActivityWrapper.end(durationToDismissal: .delayed)
-                self._downloadLiveActivityWrapper = nil
+                self.downloadLiveActivityWrapper = nil
             }
             self.downloadProgressManager = nil
 

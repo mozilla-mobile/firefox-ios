@@ -111,10 +111,15 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
 
-    var _downloadLiveActivityWrapper: Any?
+    private var _downloadLiveActivityWrapper: Any?
+
     @available(iOS 16.2, *)
     var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
-        return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+        get {
+            return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+        } set(newValue) {
+            _downloadLiveActivityWrapper = newValue
+        }
     }
 
     // popover rotation handling
