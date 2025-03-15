@@ -14,8 +14,19 @@ struct TopSiteConfiguration: Hashable, Equatable {
         return .FirefoxHomepage.Shortcuts.Sponsored
     }
 
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
+    }
+
+    private var pinnedStatusTitle: String {
+        return isPinned ? pinnedTitle : title
+    }
+
     var accessibilityLabel: String? {
-        return isSponsored ? "\(title), \(sponsoredText)" : title
+        return isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
     }
 
     var isPinned: Bool {
@@ -64,7 +75,7 @@ struct TopSiteConfiguration: Hashable, Equatable {
         DefaultSponsoredTileTelemetry().sendImpressionTelemetry(tileSite: site, position: position)
     }
 
-    func getTelemetrySiteType() -> String {
+    var getTelemetrySiteType: String {
         if isGooglePinnedTile {
             return "google"
         } else if isPinned {

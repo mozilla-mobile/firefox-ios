@@ -77,6 +77,7 @@
 		8A6445902BA3905100759319 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445892BA3904100759319 /* disconnect-block-content.json */; };
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
+		8C0AB2292D817EC700E88035 /* ProfileIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */; };
 		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
 		8C28008F2D49354400ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C28008E2D49354400ED6D07 /* Shared */; };
 		8C2800912D49357C00ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C2800902D49357C00ED6D07 /* Shared */; };
@@ -688,6 +689,7 @@
 		8A6445872BA3904100759319 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
 		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
+		8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIdentifier.swift; sourceTree = "<group>"; };
 		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
 		8C75DF652D3E636A00924EAB /* TelemetryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryManager.swift; sourceTree = "<group>"; };
 		8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProfileManager.swift; sourceTree = "<group>"; };
@@ -1904,6 +1906,7 @@
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */,
 				8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */,
+				8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
 				D3E3CA7C1DA827AD0079C94B /* HomeViewController.swift */,
 				C8D0305A27E89CC0000664DA /* InternalSettings */,
@@ -2668,6 +2671,7 @@
 				C8CE05072743FA89002057C6 /* UIAction+MenuAction.swift in Sources */,
 				163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */,
 				E5E4505028CF4575005A01F1 /* TipManager.swift in Sources */,
+				8C0AB2292D817EC700E88035 /* ProfileIdentifier.swift in Sources */,
 				16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */,
 				E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */,
 				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
@@ -7224,7 +7228,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 138.0.20250307050321;
+				version = 138.0.20250311050358;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {

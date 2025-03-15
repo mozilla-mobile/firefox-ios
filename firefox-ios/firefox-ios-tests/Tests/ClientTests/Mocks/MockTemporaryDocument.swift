@@ -12,6 +12,8 @@ class MockTemporaryDocument: TemporaryDocument {
     var isDownloading = false
     var downloadCalled = 0
     var downloadAsyncCalled = 0
+    var cancelDownloadCalled = 0
+    var pauseResumeDownloadCalled = 0
     var request: URLRequest?
 
     init(withFileURL fileURL: URL,
@@ -34,6 +36,11 @@ class MockTemporaryDocument: TemporaryDocument {
         return fileURL
     }
 
-    /// Invalidates the current download session if any and release all the resources.
-    func invalidateSession() {}
+    func cancelDownload() {
+        cancelDownloadCalled += 1
+    }
+
+    func pauseResumeDownload() {
+        pauseResumeDownloadCalled += 1
+    }
 }

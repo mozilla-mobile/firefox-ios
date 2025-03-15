@@ -57,7 +57,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
                     return URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)",
                                invalidCharacters: false)
                 case 1:
-                    return URL(string: "https://www.mozilla.org/en-US/about/legal/terms/firefox/",
+                    return URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/",
                                invalidCharacters: false)
                 case 2:
                     return URL(string: "https://www.mozilla.org/privacy/firefox-focus",

@@ -787,6 +787,7 @@ extension BrowserViewController: WKNavigationDelegate {
                            response: URLResponse,
                            request: URLRequest) {
         navigationHandler?.showDocumentLoading()
+        scrollController.showToolbars(animated: false)
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -807,7 +808,28 @@ extension BrowserViewController: WKNavigationDelegate {
                                    change: [.newKey: true],
                                    context: nil)
             }
+            tempPDF.onDownloadError = { error in
+                self?.navigationHandler?.removeDocumentLoading()
+                guard let error, let webView else { return }
+                self?.showErrorPage(webView: webView, error: error)
+            }
             tab?.enqueueDocument(tempPDF)
+        }
+    }
+
+    private func showErrorPage(webView: WKWebView, error: Error) {
+        guard let url = webView.url else { return }
+        if isNativeErrorPageEnabled {
+            let action = NativeErrorPageAction(networkError: error as NSError,
+                                               windowUUID: windowUUID,
+                                               actionType: NativeErrorPageActionType.receivedError
+            )
+            store.dispatch(action)
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
+        } else {
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
+                                                                   forUrl: url,
+                                                                   inWebView: webView)
         }
     }
 

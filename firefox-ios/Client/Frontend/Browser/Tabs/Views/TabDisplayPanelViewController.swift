@@ -24,6 +24,7 @@ class TabDisplayPanelViewController: UIViewController,
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     private lazy var layout: TabTrayLayoutType = {
@@ -44,7 +45,7 @@ class TabDisplayPanelViewController: UIViewController,
     }()
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabView = {
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if isTabTrayUIExperimentsEnabled {
             let view = ExperimentEmptyPrivateTabsView()
             view.translatesAutoresizingMaskIntoConstraints = false
             return view
@@ -131,7 +132,7 @@ class TabDisplayPanelViewController: UIViewController,
         ])
 
         if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty, isCompactLayout {
-            gradientLayer.locations = [0.0, 0.1]
+            gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
             fadeView.layer.addSublayer(gradientLayer)
             view.addSubview(fadeView)
 
@@ -181,6 +182,8 @@ class TabDisplayPanelViewController: UIViewController,
         if isTabTrayUIExperimentsEnabled {
             gradientLayer.colors = [
                 currentTheme().colors.layer1.cgColor,
+                currentTheme().colors.layer1.cgColor,
+                currentTheme().colors.layer1.withAlphaComponent(0.95).cgColor,
                 currentTheme().colors.layer1.withAlphaComponent(0.0).cgColor
             ]
         }

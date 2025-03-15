@@ -26,6 +26,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         setupStore()
+        appState = setupAppState()
     }
 
     override func tearDown() {
@@ -34,6 +35,29 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
+    }
+
+    func test_screenshotAction_triggersRefresh() throws {
+        let subject = createSubject()
+        let action = ScreenshotAction(
+            windowUUID: .XCTestDefaultUUID,
+            tab: Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID),
+            actionType: ScreenshotActionType.screenshotTaken
+        )
+
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+        wait(for: [expectation])
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPanelMiddlewareAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? TabPanelMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, TabPanelMiddlewareActionType.refreshTabs)
     }
 
     func test_homepageInitializeAction_returnsRecentTabs() throws {
@@ -94,7 +118,18 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
-        appState = AppState()
+        let appState = AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .tabsPanel(
+                        TabsPanelState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    )
+                ]
+            )
+        )
+        self.appState = appState
         return appState
     }
 

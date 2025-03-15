@@ -35,7 +35,8 @@ final class LocationView: UIView,
         urlTextField.text?.isEmpty == true
     }
 
-    private var longPressRecognizer: UILongPressGestureRecognizer?
+    private var tapGestureRecognizer: UITapGestureRecognizer?
+    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
@@ -70,9 +71,7 @@ final class LocationView: UIView,
 
     // MARK: - Search Engine / Lock Image
     private lazy var iconContainerStackView: UIStackView = .build { view in
-        view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
     }
 
     private lazy var iconContainerBackgroundView: UIView = .build()
@@ -143,6 +142,12 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(iconContainerCornerRadius: toolbarCornerRadius,
                             isURLTextFieldCentered: isURLTextFieldCentered)
+        handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
+        handleGesture(
+            &longPressGestureRecognizer,
+            type: UILongPressGestureRecognizer.self,
+            action: #selector(handleLongPress)
+        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
@@ -327,7 +332,9 @@ final class LocationView: UIView,
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        if !isURLTextFieldCentered || isEditing {
+            iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        }
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         iconContainerStackViewLeadingConstraint?.constant = isURLTextFieldCentered ? 0.0 : UX.horizontalSpace
         updateGradient()
@@ -474,8 +481,24 @@ final class LocationView: UIView,
     // MARK: - Gesture Recognizers
     private func addLongPressGestureRecognizer() {
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        longPressRecognizer = gestureRecognizer
         urlTextField.addGestureRecognizer(gestureRecognizer)
+    }
+
+    private func handleGesture<T: UIGestureRecognizer>(
+        _ gesture: inout T?,
+        type: T.Type,
+        action: Selector
+    ) {
+        if isURLTextFieldCentered {
+            if gesture == nil {
+                let newGesture = type.init(target: self, action: action)
+                addGestureRecognizer(newGesture)
+                gesture = newGesture
+            }
+        } else if let existingGesture = gesture {
+            removeGestureRecognizer(existingGesture)
+            gesture = nil
+        }
     }
 
     // MARK: - Selectors

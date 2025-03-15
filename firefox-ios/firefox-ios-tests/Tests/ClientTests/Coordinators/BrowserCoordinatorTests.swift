@@ -39,6 +39,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
+        profile.shutdown()
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -453,7 +454,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.show(webView: WKWebView())
         subject.showDocumentLoading()
 
-        let loadingView = subject.webviewController?.view.subviews.first {
+        let loadingView = subject.browserViewController.view.subviews.first {
             $0 is TemporaryDocumentLoadingView
         }
         XCTAssertNotNil(loadingView)
@@ -466,7 +467,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.show(webView: WKWebView())
         subject.showDocumentLoading()
         subject.removeDocumentLoading {
-            let loadingView = subject.webviewController?.view.subviews.first {
+            let loadingView = subject.browserViewController.view.subviews.first {
                 $0 is TemporaryDocumentLoadingView
             }
             XCTAssertNil(loadingView)

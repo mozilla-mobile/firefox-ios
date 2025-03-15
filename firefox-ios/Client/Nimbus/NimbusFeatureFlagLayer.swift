@@ -33,9 +33,6 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForToolbar:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .darkReader:
-            return checkDarkReaderFeature(from: nimbus)
-
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -147,6 +144,9 @@ final class NimbusFeatureFlagLayer {
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
+
+        case .useRustKeychain:
+            return checkUseRustKeychainFeature(from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -392,11 +392,6 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.darkReaderFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
@@ -450,5 +445,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
+    }
+
+    private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
     }
 }

@@ -1033,11 +1033,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showDocumentLoading() {
-        webviewController?.showDocumentLoadingView()
+        browserViewController.showDocumentLoadingView()
     }
 
     func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        webviewController?.removeDocumentLoadingView(completion: completion)
+        browserViewController.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey
@@ -1086,7 +1086,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 

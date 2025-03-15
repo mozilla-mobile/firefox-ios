@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import UIKit
@@ -17,7 +18,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForToolbar
     case creditCardAutofillStatus
     case cleanupHistoryReenabled
-    case darkReader
     case deeplinkOptimizationRefactor
     case fakespotBackInStock
     case fakespotFeature
@@ -58,6 +58,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarNavigationHint
     case tosFeature
     case trackingProtectionRefactor
+    case useRustKeychain
     case zoomFeature
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -80,7 +81,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .unifiedAds,
-                .unifiedSearch:
+                .unifiedSearch,
+                .useRustKeychain:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -123,7 +125,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .cleanupHistoryReenabled,
                 .creditCardAutofillStatus,
-                .darkReader,
                 .deeplinkOptimizationRefactor,
                 .fakespotBackInStock,
                 .fakespotFeature,
@@ -159,6 +160,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarNavigationHint,
                 .tosFeature,
                 .trackingProtectionRefactor,
+                .useRustKeychain,
                 .zoomFeature:
             return nil
         }

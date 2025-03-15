@@ -31,6 +31,7 @@ class TabDisplayView: UIView,
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var shouldHideInactiveTabs: Bool {
@@ -277,7 +278,11 @@ class TabDisplayView: UIView,
 
     func applyTheme(theme: Theme) {
         self.theme = theme
-        collectionView.backgroundColor = theme.colors.layer3
+        if isTabTrayUIExperimentsEnabled {
+            collectionView.backgroundColor = theme.colors.layer1
+        } else {
+            collectionView.backgroundColor = theme.colors.layer3
+        }
     }
 
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {

@@ -30,6 +30,8 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.section.enabled": true,
   "extensions.formautofill.heuristics.captureOnFormRemoval": false,
   "extensions.formautofill.heuristics.captureOnPageNavigation": false,
+  "extensions.formautofill.heuristics.detectDynamicFormChanges": false,
+  "extensions.formautofill.heuristics.fillOnDynamicFormChanges": false,
   "extensions.formautofill.focusOnAutofill": false,
   "extensions.formautofill.test.ignoreVisibilityCheck": false,
   "extensions.formautofill.heuristics.autofillSameOriginWithTop": false,
