@@ -7,10 +7,18 @@ import Common
 import Shared
 import Storage
 
-struct SearchEngineConsolidationFlagManager {
+struct SearchEngineFlagManager {
+    /// Whether Search Engine Consolidation is enabled.
+    /// If enabled, search engines are fetched from Remote Settings rather than our pre-bundled XML files.
     static var isSECEnabled: Bool {
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.searchEngineConsolidation, checking: .buildOnly)
+        // return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.searchEngineConsolidation, checking: .buildOnly)
+        // SEC always disabled (for now)
+        return false
     }
+
+    /// Temporary. App Services framework does not yet have all dumps in place to provide
+    /// cached results. To force a sync for testing purposes, you can enable this flag.
+    static let temp_dbg_forceASSync = false
 }
 
 protocol SearchEnginesManagerProvider {
@@ -21,6 +29,13 @@ protocol SearchEnginesManagerProvider {
 
 protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
+}
+
+struct SearchEngineProviderFactory {
+    static var defaultSearchEngineProvider: SearchEngineProvider = {
+        let secEnabled = SearchEngineFlagManager.isSECEnabled
+        return secEnabled ? ASSearchEngineProvider() : DefaultSearchEngineProvider()
+    }()
 }
 
 /// Manages a set of `OpenSearchEngine`s.
@@ -45,15 +60,26 @@ protocol SearchEngineDelegate: AnyObject {
 class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
-    private let orderedEngineNames = "search.orderedEngineNames"
-    private let disabledEngineNames = "search.disabledEngineNames"
+
+    // Preference keys for old (pre-bundled XML-based) search engines
+    private let legacy_orderedEngineNamesPrefsKey = "search.orderedEngineNames"
+    private let legacy_disabledEngineNamesPrefsKey = "search.disabledEngineNames"
+
+    // Preference keys for new Application Services based search engines
+    private let orderedEngineIDsPrefsKey = "search.sec.orderedEngineIDs"
+    private let disabledEngineIDsPrefsKey = "search.sec.disabledEngineIDs"
+
     private let customSearchEnginesFileName = "customEngines.plist"
     private var engineProvider: SearchEngineProvider
 
     weak var delegate: SearchEngineDelegate?
     private var logger: Logger = DefaultLogger.shared
 
-    init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
+    private lazy var isSECEnabled: Bool = { SearchEngineFlagManager.isSECEnabled }()
+
+    init(prefs: Prefs,
+         files: FileAccessor,
+         engineProvider: SearchEngineProvider = SearchEngineProviderFactory.defaultSearchEngineProvider) {
         self.prefs = prefs
         self.fileAccessor = files
         self.engineProvider = engineProvider
@@ -117,13 +143,21 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // The keys of this dictionary are used as a set.
     private lazy var disabledEngines: [String: Bool] = getDisabledEngines() {
         didSet {
-            self.prefs.setObject(Array(self.disabledEngines.keys), forKey: disabledEngineNames)
+            if isSECEnabled {
+                self.prefs.setObject(Array(self.disabledEngines.keys), forKey: disabledEngineIDsPrefsKey)
+            } else {
+                self.prefs.setObject(Array(self.disabledEngines.keys), forKey: legacy_disabledEngineNamesPrefsKey)
+            }
         }
     }
 
     var orderedEngines: [OpenSearchEngine] {
         didSet {
-            self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: orderedEngineNames)
+            if isSECEnabled {
+                self.prefs.setObject(self.orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
+            } else {
+                self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
+            }
         }
     }
 
@@ -207,11 +241,19 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
-        return disabledEngines.index(forKey: engine.shortName) == nil
+        if isSECEnabled {
+            return disabledEngines.index(forKey: engine.engineID) == nil
+        } else {
+            return disabledEngines.index(forKey: engine.shortName) == nil
+        }
     }
 
     func enableEngine(_ engine: OpenSearchEngine) {
-        disabledEngines.removeValue(forKey: engine.shortName)
+        if isSECEnabled {
+            disabledEngines.removeValue(forKey: engine.engineID)
+        } else {
+            disabledEngines.removeValue(forKey: engine.shortName)
+        }
     }
 
     func disableEngine(_ engine: OpenSearchEngine) {
@@ -219,7 +261,11 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             // Can't disable default engine.
             return
         }
-        disabledEngines[engine.shortName] = true
+        if isSECEnabled {
+            disabledEngines[engine.engineID] = true
+        } else {
+            disabledEngines[engine.shortName] = true
+        }
     }
 
     func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
@@ -255,7 +301,8 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     // MARK: - Private
 
     private func getDisabledEngines() -> [String: Bool] {
-        if let disabledEngines = prefs.stringArrayForKey(disabledEngineNames) {
+        let prefsKey = isSECEnabled ? disabledEngineIDsPrefsKey : legacy_disabledEngineNamesPrefsKey
+        if let disabledEngines = prefs.stringArrayForKey(prefsKey) {
             var disabledEnginesDict = [String: Bool]()
             for engine in disabledEngines {
                 disabledEnginesDict[engine] = true
@@ -267,8 +314,15 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
+        let enginePrefs: [String]?
+        if isSECEnabled {
+            enginePrefs = prefs.stringArrayForKey(self.orderedEngineIDsPrefsKey)
+        } else {
+            enginePrefs = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
+        }
+        // TODO: [FXIOS-11502] Prefs handling needs further investigation for SEC.
         engineProvider.getOrderedEngines(customEngines: customEngines,
-                                         orderedEngineNames: prefs.stringArrayForKey(self.orderedEngineNames),
+                                         orderedEngineNames: enginePrefs,
                                          completion: completion)
     }
 

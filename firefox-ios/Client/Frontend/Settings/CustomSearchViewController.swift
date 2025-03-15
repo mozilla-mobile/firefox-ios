@@ -107,7 +107,9 @@ class CustomSearchViewController: SettingsTableViewController {
                                             siteURL: url)
         let image = await faviconFetcher.getImage(model: siteImageModel)
 
-        let engine = OpenSearchEngine(engineID: nil,
+        // Previously our custom engines did not have an engineID, however now we generate a unique
+        // identifier since our search engine prefs store ID instead of the engine name
+        let engine = OpenSearchEngine(engineID: OpenSearchEngine.generateCustomEngineID(),
                                       shortName: name,
                                       image: image,
                                       searchTemplate: template,

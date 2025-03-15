@@ -6,13 +6,19 @@ import UIKit
 import Common
 
 protocol SearchEngineProvider {
+    /// Takes a list of custom search engines (added by the user) along with an ordered
+    /// engine name list (to provide sorting) which is stored in Prefs, and returns a
+    /// a final list of search engines.
+    /// - Parameters:
+    ///   - customEngines: custom engines added by the local user
+    ///   - orderedEngineNames: ordered engine names for sorting
+    ///   - completion: the completion block called with the final results
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            orderedEngineNames: [String]?,
                            completion: @escaping ([OpenSearchEngine]) -> Void)
 }
 
 class DefaultSearchEngineProvider: SearchEngineProvider {
-    private let orderedEngineNames = "search.orderedEngineNames"
     private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
@@ -23,6 +29,8 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
                            orderedEngineNames: [String]?,
                            completion: @escaping ([OpenSearchEngine]) -> Void) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+
+        // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
@@ -81,16 +89,16 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             fatalError("We are unable to populate search engines for this locale because list.json could not be parsed.")
         }
 
+        // Load the engines which are available for the user's language and region settings
         let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibleLanguageIdentifier, and: region)
         let defaultEngineName = defaultSearchPrefs.searchDefault(for: possibleLanguageIdentifier, and: region)
 
         guard !engineNames.isEmpty else {
             logger.log("No search engines.", level: .fatal, category: .setup)
-            // swiftlint:disable line_length
-            fatalError("We are unable to populate search engines for this locale because the possibilities of search engines is blank.")
-            // swiftlint:enable line_length
+            fatalError("Unable to populate search engines for locale because possibilities is blank.")
         }
 
+        // Map the engine identifiers in `engineNames` to the matching XML file bundled in our SearchPlugins
         DispatchQueue.global().async {
             let result = engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
                 .filter({

@@ -202,8 +202,9 @@ extension BrowserViewController: URLBarDelegate {
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 
+        let engineID: String = engine.isCustomEngine ? "custom" : engine.engineID
         GleanMetrics.Search
-            .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
+            .counts["\(engineID).\(SearchLocation.actionBar.rawValue)"]
             .add()
         searchTelemetry.shouldSetUrlTypeSearch = true
 
