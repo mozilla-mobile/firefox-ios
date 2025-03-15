@@ -49,12 +49,12 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                     return engine1.shortName < engine2.shortName
                 }
 
-                // nil < N for all non-nil values of N.
-                if index1 == nil || index2 == nil {
+                if let index1, let index2 {
+                    return index1 < index2
+                } else {
+                    // nil < N for all non-nil values of N.
                     return index1 ?? -1 > index2 ?? -1
                 }
-
-                return index1! < index2!
             }
 
             ensureMainThread { completion(orderedEngines) }
