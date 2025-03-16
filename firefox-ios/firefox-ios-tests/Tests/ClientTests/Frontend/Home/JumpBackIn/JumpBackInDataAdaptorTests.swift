@@ -48,7 +48,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testGetRecentTabsAndSyncedData() async {
         mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(type: "desktop"),
                                                        tabs: remoteTabs(idRange: 1...3))]
 
         let subject = createSubject()
@@ -71,7 +71,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testSyncTab_whenNoSyncAccount_notReturned() async {
         mockProfile.hasSyncableAccountMock = false
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(type: "desktop"),
                                                        tabs: remoteTabs(idRange: 1...3))]
         let subject = createSubject()
         await loadNewData(for: subject)
@@ -82,7 +82,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testSyncTab_noDesktopClients_notReturned() async {
         mockProfile.hasSyncableAccountMock = false
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(), tabs: remoteTabs(idRange: 1...2))]
         let subject = createSubject()
         await loadNewData(for: subject)
 
@@ -91,7 +91,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_oneDesktopClient_returned() async {
-        let remoteClient = remoteDesktopClient()
+        let remoteClient = remoteClient(type: "desktop")
         let remoteTabs = remoteTabs(idRange: 1...3)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
 
@@ -105,9 +105,9 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_multipleDesktopClients_returnsLast() async {
-        let remoteClient = remoteDesktopClient(name: "Fake Client 2")
+        let remoteClient = remoteClient(name: "Fake Client 2", type: "desktop")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...5)),
                                          ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
 
         let subject = createSubject()
@@ -152,22 +152,11 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         return tab
     }
 
-    private var remoteClient: RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: "Fake client",
-                            modified: 1,
-                            type: nil,
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
-    }
-
-    private func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
+    private func remoteClient(name: String = "Fake client", type: String? = nil) -> RemoteClient {
         return RemoteClient(guid: nil,
                             name: name,
                             modified: 1,
-                            type: "desktop",
+                            type: type,
                             formfactor: nil,
                             os: nil,
                             version: nil,
