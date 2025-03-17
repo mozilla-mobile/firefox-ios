@@ -2126,16 +2126,21 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
-            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Large.lockFill :
-                StandardImageIdentifiers.Large.lockSlashFill
+                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                        StandardImageIdentifiers.Small.shieldSlashFill
+                } else {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Large.lockFill :
+                        StandardImageIdentifiers.Large.lockSlashFill
+                }
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
             }
 
             let action = ToolbarAction(
@@ -2145,7 +2150,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: lockIconNeedsTheming,
+                lockIconNeedsTheming: true,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
