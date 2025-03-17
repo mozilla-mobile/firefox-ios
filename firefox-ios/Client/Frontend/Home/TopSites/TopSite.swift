@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 // Top site UI class, used in the home top site section
-final class TopSite: FeatureFlaggable {
+struct TopSite: FeatureFlaggable {
     let site: Site
     let title: String
 
