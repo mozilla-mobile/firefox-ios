@@ -5,7 +5,6 @@
 import XCTest
 
 @testable import Client
-import SwiftUI
 
 final class SettingsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
@@ -109,7 +108,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.start(with: .theme)
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppearanceSettingsView>)
+        XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
     }
 
     func testWallpaperSettingsRoute_cannotBeShown_showsWallpaperSettingsPage() throws {
@@ -370,7 +369,7 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.pressedTheme()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppearanceSettingsView>)
+        XCTAssertTrue(mockRouter.pushedViewController is ThemeSettingsController)
     }
 
     // MARK: - BrowsingSettingsDelegate
