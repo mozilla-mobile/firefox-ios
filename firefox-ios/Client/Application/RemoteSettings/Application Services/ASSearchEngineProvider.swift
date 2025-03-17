@@ -11,9 +11,12 @@ import Shared
 /// This is unused unless SEC (Search Engine Consolidation) experiment is enabled.
 final class ASSearchEngineProvider: SearchEngineProvider {
     private let logger: Logger
+    private let iconDataFetcher: ASSearchEngineIconDataFetcherProtocol?
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(logger: Logger = DefaultLogger.shared,
+         iconDataFetcher: ASSearchEngineIconDataFetcherProtocol? = ASSearchEngineIconDataFetcher()) {
         self.logger = logger
+        self.iconDataFetcher = iconDataFetcher
     }
 
     // MARK: - SearchEngineProvider
@@ -79,6 +82,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
         let localeCode = locale.identifier
         let region = regionCode(from: locale)
         let logger = self.logger
+        guard let iconPopulator = iconDataFetcher else { completion([]); return }
 
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
@@ -101,8 +105,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             // TODO: can we parallelize this? We need the search engines before we can use the icon data but the initial
             // icon fetch can be done concurrently with the search engine request
 
-            let iconFetch = ASSearchEngineIconDataFetcher(service: service)
-            iconFetch.populateEngineIconData(filteredEngines) { enginesAndIcons in
+            iconPopulator.populateEngineIconData(filteredEngines) { enginesAndIcons in
                 var openSearchEngines: [OpenSearchEngine] = []
                 for (engine, iconImage) in enginesAndIcons {
                     openSearchEngines.append(ASSearchEngineUtilities.convertASToOpenSearch(engine, image: iconImage))
