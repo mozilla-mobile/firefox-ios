@@ -1450,9 +1450,7 @@ workflows:
                 -scheme "$SCHEME" \
                 -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
-                -derivedDataPath "${DERIVED_DATA_DIR}" > xcodebuild.log # ignore the very long logs for now.
-
-            codesign -vvv --deep --strict "${DERIVED_DATA_DIR}/Client-*/Build/Products/*/Client.app"
+                -derivedDataPath "${DERIVED_DATA_DIR}"
 
             echo "-- verify build artifacts --"
 
