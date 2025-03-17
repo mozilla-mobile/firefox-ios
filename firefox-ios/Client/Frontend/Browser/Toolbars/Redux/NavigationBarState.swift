@@ -287,7 +287,7 @@ struct NavigationBarState: StateType, Equatable {
     private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .menu,
-            iconName: StandardImageIdentifiers.Large.appMenu,
+            iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
             badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
             maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
             isEnabled: true,

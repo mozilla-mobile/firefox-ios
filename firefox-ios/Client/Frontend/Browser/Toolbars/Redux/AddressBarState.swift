@@ -897,9 +897,7 @@ struct AddressBarState: StateType, Equatable {
         switch readerModeState {
         case .active, .available:
             let isSelected = readerModeState == .active
-            let iconName = isSelected ?
-            StandardImageIdentifiers.Large.readerViewFill :
-            StandardImageIdentifiers.Medium.readerView
+            let iconName = StandardImageIdentifiers.Medium.readerView
 
             let readerModeAction = ToolbarActionConfiguration(
                 actionType: .readerMode,

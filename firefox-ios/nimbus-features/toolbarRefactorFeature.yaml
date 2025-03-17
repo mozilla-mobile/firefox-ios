@@ -51,7 +51,7 @@ features:
           one_tap_new_tab: false
           navigation_hint: true
           swiping_tabs: false
-          layout: version1
+          layout: baseline
 
 enums:
   ToolbarLayoutType:
