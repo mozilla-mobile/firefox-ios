@@ -116,7 +116,7 @@ open class RustKeychain {
         deleteKeychainSecClass(kSecClassIdentity) // Identity items
     }
 
-    func logAutofillStoreError(err: AutofillApiError, errorDomain: String, errorMessage: String) {
+    func logAutofillStoreError(err: AutofillApiError, errorDomain: String? = nil, errorMessage: String) {
         var message: String {
             switch err {
             case .SqlError(let message),
@@ -129,10 +129,14 @@ open class RustKeychain {
             }
         }
 
+        let description = errorDomain == nil ?
+                            "\(err.descriptionValue): \(message)" :
+                            "\(errorDomain ?? "") - \(err.descriptionValue): \(message)"
+
         logger.log(errorMessage,
                    level: .warning,
                    category: .storage,
-                   description: "\(errorDomain) - \(err.descriptionValue): \(message)")
+                   description: description)
     }
 
     func createCreditCardsKeyData() throws -> String {
@@ -140,17 +144,14 @@ open class RustKeychain {
             return try createAndStoreKey(canaryPhrase: creditCardCanaryPhrase,
                                          canaryIdentifier: creditCardCanaryKeyIdentifier,
                                          keyIdentifier: creditCardKeyIdentifier)
-        } catch let err as NSError {
-            if let autofillStoreError = err as? AutofillApiError {
-                logAutofillStoreError(err: autofillStoreError,
-                                      errorDomain: err.domain,
-                                      errorMessage: "Error while creating and storing credit card key")
-            } else {
-                logger.log("Unknown error while creating and storing credit card key",
-                           level: .warning,
-                           category: .storage,
-                           description: err.localizedDescription)
-            }
+        } catch let err as AutofillApiError {
+            logAutofillStoreError(err: err,
+                                  errorMessage: "Error while creating and storing credit card key")
+       } catch {
+            logger.log("Unknown error while creating and storing credit card key",
+                       level: .warning,
+                       category: .storage,
+                       description: error.localizedDescription)
         }
         throw LoginEncryptionKeyError.noKeyCreated
     }

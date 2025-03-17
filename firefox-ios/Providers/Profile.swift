@@ -774,6 +774,11 @@ open class BrowserProfile: Profile {
         var creditCardCanary: String?
 
         if rustKeychainEnabled {
+            // Long before the new rust keychain logic was introduced, there was a bug in this logic caused by the canary not
+            // being saved with the key. We are correcting this in the new logic below but leaving the old logic unchanged.
+            // This is because we do not want to risk introducing another bug in the old code in case it is required as a
+            // fail safe should these changes need to be rolled back.
+
             (creditCardKey, creditCardCanary) = keychain.getCreditCardKeyData()
             (loginsKey, loginsCanary) = keychain.getLoginsKeyData()
 
