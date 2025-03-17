@@ -733,6 +733,11 @@ struct AccessibilityIdentifiers {
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
             static let sendDailyUsagePingTitle = "SendDailyUsagePing"
+            static let studiesTitle = "StudiesToggle"
+            static let sendTechnicalDataLearnMoreButton = "SendTechnicalDataLearnMoreButton"
+            static let sendCrashReportsLearnMoreButton = "SendCrashReportsLearnMoreButton"
+            static let sendDailyUsagePingLearnMoreButton = "SendDailyUsagePingLearnMoreButton"
+            static let studiesLearnMoreButton = "StudiesLearnMoreButton"
         }
 
         struct PrivacyPolicy {
@@ -777,10 +782,6 @@ struct AccessibilityIdentifiers {
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
-        }
-
-        struct StudiesToggle {
-            static let title = "StudiesToggle"
         }
 
         struct Theme {
