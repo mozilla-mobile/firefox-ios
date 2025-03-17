@@ -1425,6 +1425,7 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
+        - xcconfig_content: ENABLE_DEBUG_DYLIB = NO
     - deploy-to-bitrise-io@2.10.0: {}
     - script@1.2.1:
         title: Firebase Build for Testing Physical Devices
