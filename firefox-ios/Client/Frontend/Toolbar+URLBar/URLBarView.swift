@@ -1137,9 +1137,13 @@ extension URLBarView {
                 searchIconImageView.image = .templateImageNamed(StandardImageIdentifiers.Large.privateMode)?.tinted(withColor: locationActiveBorderColor)
             } else {
                 searchIconImageView.image = .init(named: "iconLogo", in: .ecosia, with: nil)
+                // Ecosia: Add Accesibility ID
+                searchIconImageView.accessibilityIdentifier = "urlbar_logo_image"
             }
         } else {
             searchIconImageView.image = .templateImageNamed("searchUrl")
+            // Ecosia: Add Accesibility ID
+            searchIconImageView.accessibilityIdentifier = "urlbar_search_image"
         }
         searchIconImageView.isHidden = !isHome && !inOverlayMode
     }
