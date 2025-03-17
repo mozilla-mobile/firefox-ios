@@ -400,11 +400,6 @@ final class NimbusFeatureFlagLayer {
         return config.status
     }
 
-    private func checkDarkReaderFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.darkReaderFeature.value()
-        return config.status
-    }
-
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
