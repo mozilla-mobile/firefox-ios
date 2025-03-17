@@ -137,7 +137,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.pageActions.count, 3)
         XCTAssertEqual(newState.pageActions[0].actionType, .readerMode)
-        XCTAssertEqual(newState.pageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertEqual(newState.pageActions[0].iconName, StandardImageIdentifiers.Large.readerView)
         XCTAssertEqual(newState.pageActions[1].actionType, .share)
         XCTAssertEqual(newState.pageActions[2].actionType, .reload)
     }

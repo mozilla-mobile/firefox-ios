@@ -896,8 +896,17 @@ struct AddressBarState: StateType, Equatable {
 
         switch readerModeState {
         case .active, .available:
+            guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { break }
             let isSelected = readerModeState == .active
-            let iconName = StandardImageIdentifiers.Medium.readerView
+            let iconName: String
+            if toolbarState.toolbarLayout == .version1 {
+                iconName = StandardImageIdentifiers.Medium.readerView
+            } else {
+                iconName = isSelected ?
+                StandardImageIdentifiers.Large.readerViewFill :
+                StandardImageIdentifiers.Large.readerView
+            }
 
             let readerModeAction = ToolbarActionConfiguration(
                 actionType: .readerMode,
