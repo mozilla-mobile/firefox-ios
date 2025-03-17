@@ -408,6 +408,7 @@
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
       "requiresRestart": false
+<<<<<<< HEAD
     },
     {
       "schemaVersion": "1.12.0",
@@ -493,6 +494,8 @@
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
       "requiresRestart": false
+=======
+>>>>>>> b484278a4 (Refactor FXIOS [Nimbus] Update initial experiments JSON for Nimbus (#25371))
     }
   ]
 }
