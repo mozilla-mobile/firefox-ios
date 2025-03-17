@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-protocol FullscreenDelegate {
+protocol FullscreenDelegate: AnyObject {
     func enteringFullscreen()
     func exitingFullscreen()
 }

@@ -444,7 +444,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(subject?.sessionData.hasOnlySecureContent, true)
         XCTAssertEqual(engineSessionDelegate.onHasOnlySecureContentCalled, 1)
     }
-    
+
     func testFullscreeChangeGivenFullscreenStateThenCallsDelegate() {
         let expectedFullscreenState = true
         let subject = createSubject()
@@ -454,7 +454,7 @@ final class WKEngineSessionTests: XCTestCase {
         XCTAssertEqual(fullscreenDelegate.onFullscreeChangeCalled, 1)
         XCTAssertTrue(fullscreenDelegate.savedFullscreenState)
     }
-    
+
     func testFullscreeChangeGivenNotFullscreenStateThenCallsDelegate() {
         let expectedFullscreenState = false
         let subject = createSubject()

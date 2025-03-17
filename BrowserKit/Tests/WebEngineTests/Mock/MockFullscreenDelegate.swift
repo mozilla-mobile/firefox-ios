@@ -8,7 +8,7 @@ import Foundation
 class MockFullscreenDelegate: FullscreenDelegate {
     var onFullscreeChangeCalled = 0
     var savedFullscreenState = false
-    
+
     func enteringFullscreen() {
         onFullscreeChangeCalled += 1
         savedFullscreenState = true
