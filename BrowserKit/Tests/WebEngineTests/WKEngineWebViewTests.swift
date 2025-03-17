@@ -68,6 +68,15 @@ final class WKEngineWebViewTests: XCTestCase {
                 hasOnlySecureContentExpectation
             ]
         )
+        
+        if #available(iOS 16.0, *) {
+            let fullscreenExpectation = expectation(that: \WKWebView.fullscreenState, on: subject)
+            wait(
+                for: [
+                    fullscreenExpectation
+                ]
+            )
+        }
 
         XCTAssertGreaterThan(delegate.webViewPropertyChangedCalled, 0)
         XCTAssertNotNil(delegate.lastWebViewPropertyChanged)
