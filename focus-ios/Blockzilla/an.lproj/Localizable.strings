@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Saber-ne mas";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ ye feito per Mozilla. La nuestra misión ye tener un Internet sano y ubierto.";
 
 /* Label on About screen */
@@ -34,10 +34,10 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Usar-lo como una extensión de Safari";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ te mete en contral.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ubrir en %@";
 
 /* Label for button to add a custom URL */
@@ -61,7 +61,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nueva URL personalizada anyadida.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "Activar pa tener autocompletau de %@ con 450 URLs populars en a barra d'adrezas.";
 
 /* label describing URL Autocomplete as disabled */
@@ -103,13 +103,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Cancelar";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ quiere ubrir unatra App";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Ubrir";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ quiere ubrir %2$@";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -127,10 +127,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Toca Safari, selecciona astí Blocadors de Conteniu";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Activar %@";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ no ye activau.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -145,7 +145,7 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocar atros trazadors de contenius puede fer que no s'amuestren bien bells videos u pachinas web.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla s'esfuerza per replegar nomás lo necesario pa fornir y amillorar %@ pa totz.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
@@ -211,7 +211,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Termen a mirar u adreza";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "Mirar %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */

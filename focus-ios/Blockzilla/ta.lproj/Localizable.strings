@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "மேலும் அறிய";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ ஒரு மொசில்லா தயாரிப்பாகும். ஆரோக்கியமான திறந்த இணையத்தை கிடைக்கச் செய்வதே எங்களின் நோக்கம்.";
 
 /* Label on About screen */
@@ -34,13 +34,13 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "சப்பாரி நீட்சியாகப் பயன்படுத்து:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ பற்றி";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ உங்களை கட்டுப்பாட்டில் வைக்கும்.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ திறக்கவும்";
 
 /* Label for button to add a custom URL */
@@ -64,7 +64,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "புது தனிபயன் URL சேர்க்கப்பட்டது.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "முகவரிப்பட்டையில் 450 பிரபல URLs உடைய %@ தானியங்குநிரப்பலைச் செயற்படுத்தவும்.";
 
 /* label describing URL Autocomplete as disabled */
@@ -115,13 +115,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "ரத்து";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ வேறொரு செயலியில் திறக்க விரும்புகிறது";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "திற";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ செயலியில் திறக்க விரும்புகிறது";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -151,10 +151,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "சப்பாரி உலாவியைத் தட்டி, உள்ளடக்க தடுப்புகளைத் தேர்";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "%@ செயற்படுத்து";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ செயலற்றுள்ளது.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -175,13 +175,13 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "மேலும் அறிய.";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ உலாவியை மதிப்பிடு";
 
 /* Title for settings screen */
@@ -232,7 +232,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "செயலின் தடைநீக்க முக அடையாளத்தைப் பாவி";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "ஒரு URL செயலியில் திறந்திருந்தால் முக அடையாளம் கொண்டு %@ உலாவியின் தடையை நீக்க முடியும்";
 
 /* Safari toggle label on settings screen */
@@ -244,7 +244,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "செயலின் தடைநீக்க தொடு அடையாளத்தைப் பாவி";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "ஒரு URL செயலியில் திறந்திருந்தால் தொடு அடையாளம் கொண்டு %@ உலாவியின் தடையை நீக்க முடியும்";
 
 /* Text for a share button */
@@ -268,7 +268,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "தேடு அல்லது முகவரியை இடு";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "%@ சொல்லைத் தேடு";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
