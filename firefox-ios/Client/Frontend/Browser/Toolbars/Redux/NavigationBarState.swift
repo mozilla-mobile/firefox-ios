@@ -195,7 +195,7 @@ struct NavigationBarState: StateType, Equatable {
 
         switch layout {
         case .version1:
-            actions.append(newTabAction)
+            actions.append(middleAction)
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
