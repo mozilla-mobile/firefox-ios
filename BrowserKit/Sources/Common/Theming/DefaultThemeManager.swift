@@ -34,6 +34,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var mainQueue: DispatchQueueInterface
     private var sharedContainerIdentifier: String
 
+    private var isNewAppearanceMenuOnClosure: () -> Bool
+
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
@@ -50,18 +52,25 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.float(forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
     }
 
+    public var isNewAppearanceMenuOn: Bool {
+        return isNewAppearanceMenuOnClosure()
+    }
+
     // MARK: - Initializers
 
     public init(
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-        sharedContainerIdentifier: String
+        sharedContainerIdentifier: String,
+        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
+        self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
+
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -183,7 +192,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
-        if nightModeIsOn { return .nightMode }
+        /// TODO(FXIOS-11655): Once we end the new appearance menu experiment
+        /// NightMode theme should be removed all together.
+        if !isNewAppearanceMenuOn && nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 

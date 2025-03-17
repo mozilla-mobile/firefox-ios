@@ -241,7 +241,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             append(to: &section, action: desktopSiteAction)
         }
 
-        if featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+        /// In the new experiment, where website theming is different from app theming homepage menu should not show
+        /// the website theming option, since it will follow the app theme.
+        if featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly),
+           !(themeManager.isNewAppearanceMenuOn && isHomePage) {
             let nightModeAction = getNightModeAction()
             append(to: &section, action: nightModeAction)
         }
@@ -468,21 +471,29 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return openSettings
     }
 
+    private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
+        if themeManager.isNewAppearanceMenuOn {
+            return isNightModeOn
+                ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+                : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
+        } else {
+            return isNightModeOn
+                ? .LegacyAppMenu.AppMenuTurnOffNightMode
+                : .LegacyAppMenu.AppMenuTurnOnNightMode
+        }
+    }
+
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
-
-        let nightModeTitle: String = nightModeEnabled
-            ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
-            : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
 
         let nightModeIcon: String = nightModeEnabled
             ? StandardImageIdentifiers.Large.nightModeFill
             : StandardImageIdentifiers.Large.nightMode
 
         let nightMode = SingleActionViewModel(
-            title: nightModeTitle,
+            title: getNightModeTitle(nightModeEnabled),
             iconString: nightModeIcon,
             isEnabled: nightModeEnabled
         ) { _ in

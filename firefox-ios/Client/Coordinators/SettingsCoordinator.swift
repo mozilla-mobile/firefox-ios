@@ -142,7 +142,9 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-            return UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
+           return themeManager.isNewAppearanceMenuOn
+               ? UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
+               : ThemeSettingsController(windowUUID: windowUUID)
 
         case .wallpaper:
             if wallpaperManager.canSettingsBeShown {
@@ -376,9 +378,14 @@ class SettingsCoordinator: BaseCoordinator,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .themeSettings)
         store.dispatch(action)
-        let viewController = UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
-        viewController.title = .SettingsAppearanceTitle
-        router.push(viewController)
+
+        if themeManager.isNewAppearanceMenuOn {
+            let viewController = UIHostingController(rootView: AppearanceSettingsView(windowUUID: windowUUID))
+            viewController.title = .SettingsAppearanceTitle
+            router.push(viewController)
+        } else {
+            router.push(ThemeSettingsController(windowUUID: windowUUID))
+        }
     }
 
     func pressedBrowsing() {

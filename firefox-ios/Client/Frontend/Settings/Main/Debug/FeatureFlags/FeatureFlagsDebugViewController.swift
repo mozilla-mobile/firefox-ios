@@ -28,7 +28,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             children: [
                 FeatureFlagsBoolSetting(
                     with: .appearanceMenu,
-                    titleText: format(string: "Enable new appearance menu"),
+                    titleText: format(string: "Enable New Appearance Menu"),
                     statusText: format(string: "Toggle to show the new apperance menu")
                 ) { [weak self] _ in
                     self?.reloadView()
