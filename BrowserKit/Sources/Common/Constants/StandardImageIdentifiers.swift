@@ -19,6 +19,8 @@ public struct StandardImageIdentifiers {
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let pinBadgeFill = "pinBadgeFillSmall"
+        public static let shieldCheckmarkFill = "shieldCheckmarkFillSmall"
+        public static let shieldSlashFill = "shieldSlashFillSmall"
         public static let sponsoredStar = "sponsoredStarSmall"
     }
 
@@ -29,6 +31,7 @@ public struct StandardImageIdentifiers {
         public static let crossCircleFill = "crossCircleFillMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
+        public static let readerView = "readerViewMedium"
         public static let starFill = "starFillMedium"
         public static let starOneHalfFill = "starOneHalfFillMedium"
         public static let sun = "sunMedium"

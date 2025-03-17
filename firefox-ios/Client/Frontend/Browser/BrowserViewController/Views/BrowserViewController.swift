@@ -2121,8 +2121,8 @@ class BrowserViewController: UIViewController,
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Large.lockFill :
-                StandardImageIdentifiers.Large.lockSlashFill
+                StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                StandardImageIdentifiers.Small.shieldSlashFill
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
