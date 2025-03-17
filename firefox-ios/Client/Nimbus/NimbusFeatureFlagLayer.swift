@@ -396,7 +396,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.darkReaderFeature.value()
+        let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
     }
 

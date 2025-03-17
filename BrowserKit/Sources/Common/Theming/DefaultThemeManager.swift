@@ -56,7 +56,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public var isNewAppearanceMenuOn: Bool {
         return isNewAppearanceMenuOnClosure()
     }
-    
+
     public var hasMigratedToNewAppearanceMenu: Bool {
         return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
     }
@@ -75,7 +75,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
         self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
-
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -232,26 +231,29 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return
         }
     }
-    
+
     /// Checks if theme migration should override the current theme selection.
     /// Returns:
     /// - .dark if migration conditions are met and NightMode is active.
     /// - nil otherwise.
     /// NOTE(FXIOS-11655): This code will be removed once the new appearance menu experiment ends.
     private func migratedTheme() -> ThemeType? {
-        // If the new appearance menu is enabled and migration hasn't been performed yet,
-        // check if NightMode is active to force a dark theme.
         if isNewAppearanceMenuOn && !hasMigratedToNewAppearanceMenu {
             // Mark that migration has been performed to avoid repeating the process.
             userDefaults.set(true, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
             if nightModeIsOn {
-                // Update all other themes.
+                // If nightMode was on, force dark mode in the new UI and update all other themes.
                 updateSavedTheme(to: .dark)
                 setSystemTheme(isOn: false)
                 setAutomaticBrightness(isOn: false)
                 return .dark
+            } else if automaticBrightnessIsOn {
+                // If automaticBrightness was on, apply the computed theme.
+                updateSavedTheme(to: getThemeTypeBasedOnBrightness())
+                setSystemTheme(isOn: false)
+                setAutomaticBrightness(isOn: false)
             }
-        } else if !isNewAppearanceMenuOn && hasMigratedToNewAppearanceMenu  {
+        } else if !isNewAppearanceMenuOn && hasMigratedToNewAppearanceMenu {
             // Reset the migration flag (mostly for debugging or rare cases).
             userDefaults.set(false, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
         }
