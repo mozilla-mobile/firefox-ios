@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "अधिक जाणा";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ Mozilla द्वारा उत्पादित केले आहे. एक निरोगी, ओपन इंटरनेट जोपासणे हे आमचे कार्य आहे.";
 
 /* Label on About screen */
@@ -34,16 +34,16 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "हे Safari विस्तार म्हणून वापरा:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ विषयी";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ आपल्याला नियंत्रणात ठेवते.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ मध्ये उघडा";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ कडे परत जाण्यासाठी अधिप्रमाणित करा";
 
 /* Label for button to add a custom URL */
@@ -67,7 +67,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "नवीन सानुकूल URL जोडली.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "450 हुन अधिक विख्यात URL %@ ने स्वयंपूर्ण करणे सक्षम करा.";
 
 /* label describing URL Autocomplete as disabled */
@@ -88,7 +88,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "माझ्या साइट";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "आपल्या आवडत्या URLs स्वयंपूर्ण करण्यासाठी %@ सक्षम करा.";
 
 /* Label for enabling or disabling top sites */
@@ -133,13 +133,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "रद्द करा";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ ला दुसरा अॅप उघडायचा आहे";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "उघडा";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ उघडू इच्छित आहे";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -169,10 +169,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari टॅप करा, नंतर मजकूर अवरोधक निवडा";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "%@ सक्षम करा";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ सक्षम केलेले नाही.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -190,7 +190,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "होय";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "सूचना मिळवण्यासाठी, %@ ला आपण निवडलेल्या शोध इंजिनला आपण पत्ता पट्टीमध्ये काय टाईप करता ते पाठवावे लागेल.";
 
 /* Title for search suggestions prompt */
@@ -202,16 +202,16 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "मजकुराचा मागोवा घेणारे इतर घटक बंद केल्यास काही विडिओ आणि वेब पृष्ठे निकामी होऊ शकतात.";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "आपण जे पत्ता पट्टी मध्ये टाईप कराल ते %@ आपल्या शोध इंजिनला पाठवेल.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "सर्वांसाठी %@ उपलब्ध करण्यासाठी व सुधारण्यास जी गरजेची आहे फक्त तीच माहिती जमा करण्यास Mozilla तत्पर आहे.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "अधिक जाणा.";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ ला गुण द्या";
 
 /* Label for Safari integration section */
@@ -268,7 +268,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "अँप उघडण्यासाठी Face ID वापरा";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "जर अँप मध्ये एखादी URL आधीच उघडलेली आहे तर Face ID %@ उघडू शकते";
 
 /* Show home screen tips toggle label on settings screen */
@@ -283,7 +283,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "अँप उघडण्यासाठी Touch ID वापरा";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "जर अँप मध्ये एखादी URL आधीच उघडलेली आहे तर Touch ID %@ उघडू शकते";
 
 /* Title for settings section to enable different Siri Shortcuts. */
@@ -358,7 +358,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "शोधा किंवा पत्ता द्या";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "याकरिता शोधा %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */

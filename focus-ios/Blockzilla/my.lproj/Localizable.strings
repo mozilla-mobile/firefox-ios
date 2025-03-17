@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "ပိုမိုလေ့လာရန်";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ ကို Mozilla က ထုတ်လုပ်ပါသည်။ ရည်မှန်းချက်မှာ ကောင်းမွန်ပွင့်လင်းသော အင်တာနက်ဖြစ်လာစေရန် ဖြစ်သည်။";
 
 /* Label on About screen */
@@ -34,16 +34,16 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ အကြောင်း";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ တွင် ဖွင့်ပါ";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ ကို ပြန်သွားရန် အတည်ပြုပါ";
 
 /* Label for button to add a custom URL */
@@ -85,7 +85,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "ကျွန်ုပ်၏ ဝဘ်ဆိုက်များ";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "သင့်အကြိုက် URL များကို %@ အလိုအလျောက်ဖြည့်စနစ် ဆောင်ရွက်စေရန် ဖွင့်ပါ။";
 
 /* Label for enabling or disabling top sites */
@@ -130,13 +130,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "မလုပ်ဆောင်တော့ပါ";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ သည် အခြားအက်ပ်ကို ဖွင့်လိုသည်";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "ဖွင့်ပါ";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ သည် %2$@ ကို ဖွင့်လိုသည်";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -166,10 +166,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari ကို တို့ထိပါ၊ ပြီးလျှင် Content Blockers ကို ရွေးပါ";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "%@ ကို ဖွင့်ပါ";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ ကို ဖွင့်မထားပါ။";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -187,7 +187,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "ဟုတ်ကဲ့";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "အကြံပြုချက်များ ရရှိရန်၊ %@ သည် လိပ်စာဘားတန်းတွင် ရိုက်သမျှကို ရှာဖွေရေး ယန္တရားသို့ ပေးပို့ရန် လိုအပ်သည်။";
 
 /* Title for search suggestions prompt */
@@ -199,16 +199,16 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ သည် လိပ်စာဘားတန်းတွင် ရိုက်သမျှကို ရှာဖွေရေးယန္တရားသို့ ပေးပို့ပါမည်။";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla သည် လူတိုင်းအတွက် %@ ကို ပေးစွမ်းရန်နှင့် တိုးတက်ကောင်းမွန်စေရန်အတွက်သာ ကောက်ခံမှုပြုခြင်း ဖြစ်ပါသည်။";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ပိုမိုလေ့လာရန်";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "နှုန်းထား %@";
 
 /* Label for Safari integration section */
@@ -265,7 +265,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "အက်ပ်ဖွင့်ရန် မျက်နှာအိုင်ဒီကိုသုံးပါ";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "ဤ app ထဲတွင် URL ကိုဖွင့်ထားလျှင် မျက်နှာအိုင်ဒီ ဖြင့် %@ ကို ဖွင့်နိုင်သည်";
 
 /* Show home screen tips toggle label on settings screen */
@@ -280,7 +280,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "အက်ပ်ဖွင့်ရန် လက်ဗွေအိုင်ဒီကိုသုံးပါ";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "ဤ app ထဲတွင် URL ကိုဖွင့်ထားလျှင် လက်ဗွေအိုင်ဒီ ဖြင့် %@ ကို ဖွင့်နိုင်သည်";
 
 /* Title for settings section to enable different Siri Shortcuts. */
@@ -355,7 +355,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ရှာဖွေ သို့မဟုတ် လိပ်စာရိုက်ပါ";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "%@ ကို ရှာဖွေရန်";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
