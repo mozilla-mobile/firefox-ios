@@ -8,11 +8,12 @@ import Common
 final class TabWebViewPreview: UIView, ThemeApplicable {
     // MARK: - UX Constants
     private struct UX {
-        static let addressBarCornerRadius = CGFloat(8)
+        static let addressBarCornerRadius: CGFloat = 8
+        static let addressBarBorderHeight: CGFloat = 1
+        static let addressBarHeight: CGFloat = 43
         static let layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        static let addressBarBorderHeight = CGFloat(1)
-        static let addressBarHeight = CGFloat(43)
     }
+
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
     private lazy var addressBarBorderView: UIView = .build()
