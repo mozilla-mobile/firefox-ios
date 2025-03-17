@@ -427,7 +427,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
-    private var downloadedTemporaryDocs = [URL]()
+    /// The dictionary containing as key the source online URL for a document and its corresponding local file location
+    private var downloadedTemporaryDocs = [URL: URL]()
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
@@ -993,7 +994,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         guard !docsURL.isEmpty else { return }
         DispatchQueue.global(qos: .background).async {
             docsURL.forEach { url in
-                try? FileManager.default.removeItem(at: url)
+                try? FileManager.default.removeItem(at: url.value)
             }
         }
     }
@@ -1008,7 +1009,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
-            self?.downloadedTemporaryDocs.append(url)
+            guard let sourceURL = document.sourceURL else { return }
+            self?.downloadedTemporaryDocs[url] = sourceURL
         }
     }
 
@@ -1018,6 +1020,77 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func isDownloadingDocument() -> Bool {
         return temporaryDocument?.isDownloading ?? false
+    }
+
+    func backForList() -> WKBackForwardList? {
+        guard let list = webView?.backForwardList else { return nil }
+        let modifiedBack: [WKBackForwardListItem] = list.backList.compactMap { item in
+            guard let url = downloadedTemporaryDocs[item.url] else { return item }
+            item.customURL = url
+            return item
+        }
+        let modifiedForward: [WKBackForwardListItem] = list.forwardList.compactMap { item in
+            guard let url = downloadedTemporaryDocs[item.url] else { return item }
+            item.customURL = url
+            return item
+        }
+        let backForList = TabBackForwardListItem(backList: modifiedBack, forward: modifiedForward)
+        webView?.updateBackList(backForList)
+        return backForList
+    }
+}
+
+private struct AssociatedKeys {
+    static var customURL = 0
+}
+
+extension WKBackForwardListItem {
+    var customURL: URL? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.customURL) as? URL
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.customURL, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    @objc dynamic var swizzledURL: URL {
+        return customURL ?? self.swizzledURL
+    }
+
+    static func swizzleURLProperty() {
+        let originalSelector = #selector(getter: WKBackForwardListItem.url)
+        let swizzledSelector = #selector(getter: WKBackForwardListItem.swizzledURL)
+
+        guard let originalMethod = class_getInstanceMethod(WKBackForwardListItem.self, originalSelector),
+              let swizzledMethod = class_getInstanceMethod(WKBackForwardListItem.self, swizzledSelector) else {
+            return
+        }
+
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+}
+
+class TabBackForwardListItem: WKBackForwardList {
+    private let back: [WKBackForwardListItem]
+    private let forward: [WKBackForwardListItem]
+
+    init(backList: [WKBackForwardListItem], forward: [WKBackForwardListItem]) {
+        self.back = backList
+        self.forward = forward
+        super.init()
+    }
+
+    override var backList: [WKBackForwardListItem] {
+        return back
+    }
+
+    override var forwardList: [WKBackForwardListItem] {
+        return forward
+    }
+
+    deinit {
+        print("FF: deinit")
     }
 }
 
@@ -1174,10 +1247,19 @@ protocol TabWebViewDelegate: AnyObject {
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
+    private var customBackForwardList: WKBackForwardList?
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
+
+    override var backForwardList: WKBackForwardList {
+        return customBackForwardList ?? super.backForwardList
+    }
+
+    func updateBackList(_ list: WKBackForwardList) {
+        customBackForwardList = list
+    }
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }

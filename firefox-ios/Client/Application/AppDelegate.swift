@@ -8,6 +8,7 @@ import UIKit
 import Common
 import Glean
 import TabDataStore
+import WebKit
 
 import class MozillaAppServices.Viaduct
 
@@ -61,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        WKBackForwardListItem.swizzleURLProperty()
         startRecordingStartupOpenURLTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
