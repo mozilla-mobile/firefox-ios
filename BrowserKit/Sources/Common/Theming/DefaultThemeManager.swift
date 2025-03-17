@@ -12,6 +12,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     enum ThemeKeys {
         static let themeName = "prefKeyThemeName"
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
+        static let hasMigratedToNewAppearanceMenu = "prefKeyhasMigratedToNewAppearanceMenu"
 
         enum AutomaticBrightness {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
@@ -54,6 +55,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var isNewAppearanceMenuOn: Bool {
         return isNewAppearanceMenuOnClosure()
+    }
+    
+    public var hasMigratedToNewAppearanceMenu: Bool {
+        return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
     }
 
     // MARK: - Initializers
@@ -192,9 +197,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
         if getPrivateThemeIsOn(for: window) { return .privateMode }
-        /// TODO(FXIOS-11655): Once we end the new appearance menu experiment
-        /// NightMode theme should be removed all together.
-        if !isNewAppearanceMenuOn && nightModeIsOn { return .nightMode }
+        // Check if a migration override should be applied. This is mainly done because the new behaviour splits
+        // dark theme appearance of the app and web content. Once FXIOS-11655, both this check and nightMode
+        // in general will be removed.
+        if let migratedTheme = migratedTheme() { return migratedTheme }
+        if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
@@ -224,5 +231,30 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         default:
             return
         }
+    }
+    
+    /// Checks if theme migration should override the current theme selection.
+    /// Returns:
+    /// - .dark if migration conditions are met and NightMode is active.
+    /// - nil otherwise.
+    /// NOTE(FXIOS-11655): This code will be removed once the new appearance menu experiment ends.
+    private func migratedTheme() -> ThemeType? {
+        // If the new appearance menu is enabled and migration hasn't been performed yet,
+        // check if NightMode is active to force a dark theme.
+        if isNewAppearanceMenuOn && !hasMigratedToNewAppearanceMenu {
+            // Mark that migration has been performed to avoid repeating the process.
+            userDefaults.set(true, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
+            if nightModeIsOn {
+                // Update all other themes.
+                updateSavedTheme(to: .dark)
+                setSystemTheme(isOn: false)
+                setAutomaticBrightness(isOn: false)
+                return .dark
+            }
+        } else if !isNewAppearanceMenuOn && hasMigratedToNewAppearanceMenu  {
+            // Reset the migration flag (mostly for debugging or rare cases).
+            userDefaults.set(false, forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
+        }
+        return nil
     }
 }
