@@ -11,7 +11,6 @@ import Common
 final class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
-    let sleepTime: UInt64 = 100_000_000
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -29,7 +28,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testEmptyData() async {
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let recentTabs = await subject.getRecentTabData()
         let synced = await subject.getSyncedTabData()
@@ -41,7 +40,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
         mockProfile.hasSyncableAccountMock = false
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let recentTabs = await subject.getRecentTabData()
         XCTAssertEqual(recentTabs.count, 3)
@@ -49,11 +48,11 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testGetRecentTabsAndSyncedData() async {
         mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(type: "desktop"),
                                                        tabs: remoteTabs(idRange: 1...3))]
 
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let recentTabs = await subject.getRecentTabData()
         XCTAssertEqual(recentTabs.count, 3)
@@ -64,7 +63,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testSyncTab_whenNoSyncTabsData_notReturned() async {
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no remote tabs")
@@ -72,10 +71,10 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testSyncTab_whenNoSyncAccount_notReturned() async {
         mockProfile.hasSyncableAccountMock = false
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(type: "desktop"),
                                                        tabs: remoteTabs(idRange: 1...3))]
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since hasSyncableAccount is off")
@@ -83,21 +82,21 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
 
     func testSyncTab_noDesktopClients_notReturned() async {
         mockProfile.hasSyncableAccountMock = false
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(), tabs: remoteTabs(idRange: 1...2))]
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no desktop client")
     }
 
     func testSyncTab_oneDesktopClient_returned() async {
-        let remoteClient = remoteDesktopClient()
+        let remoteClient = remoteClient(type: "desktop")
         let remoteTabs = remoteTabs(idRange: 1...3)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
 
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
@@ -106,31 +105,31 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testSyncTab_multipleDesktopClients_returnsLast() async {
-        let remoteClient = remoteDesktopClient(name: "Fake Client 2")
+        let remoteClient = remoteClient(name: "Fake Client 2", type: "desktop")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
+        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...5)),
                                          ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
 
         let subject = createSubject()
-        try? await Task.sleep(nanoseconds: sleepTime)
+        await loadNewData(for: subject)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
         XCTAssertEqual(syncTab?.tab.title, remoteClientTabs.last?.title)
         XCTAssertEqual(syncTab?.tab.URL, remoteClientTabs.last?.URL)
     }
-}
 
-// MARK: Helpers
-extension JumpBackInDataAdaptorTests {
-    func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
+    // MARK: Helpers
+    private func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
         let notificationCenter = MockNotificationCenter()
 
-        let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
-                                                          tabManager: mockTabManager,
-                                                          mainQueue: dispatchQueue,
-                                                          notificationCenter: notificationCenter)
+        let subject = JumpBackInDataAdaptorImplementation(
+            profile: mockProfile,
+            tabManager: mockTabManager,
+            mainQueue: dispatchQueue,
+            notificationCenter: notificationCenter
+        )
 
         trackForMemoryLeaks(subject, file: file, line: line)
         trackForMemoryLeaks(dispatchQueue, file: file, line: line)
@@ -138,8 +137,13 @@ extension JumpBackInDataAdaptorTests {
         return subject
     }
 
-    func createTab(profile: MockProfile,
-                   urlString: String? = "www.website.com") -> Tab {
+    private func loadNewData(for subject: JumpBackInDataAdaptorImplementation) async {
+        let delegate = MockJumpBackInDelegate()
+        await subject.setDelegate(delegate: delegate)
+        await delegate.waitForNewData()
+    }
+
+    private func createTab(profile: MockProfile, urlString: String? = "www.website.com") -> Tab {
         let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {
@@ -148,29 +152,18 @@ extension JumpBackInDataAdaptorTests {
         return tab
     }
 
-    var remoteClient: RemoteClient {
-        return RemoteClient(guid: nil,
-                            name: "Fake client",
-                            modified: 1,
-                            type: nil,
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: nil)
-    }
-
-    func remoteDesktopClient(name: String = "Fake client") -> RemoteClient {
+    private func remoteClient(name: String = "Fake client", type: String? = nil) -> RemoteClient {
         return RemoteClient(guid: nil,
                             name: name,
                             modified: 1,
-                            type: "desktop",
+                            type: type,
                             formfactor: nil,
                             os: nil,
                             version: nil,
                             fxaDeviceId: nil)
     }
 
-    func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
+    private func remoteTabs(idRange: ClosedRange<Int> = 1...1) -> [RemoteTab] {
         var remoteTabs: [RemoteTab] = []
 
         for index in idRange {
