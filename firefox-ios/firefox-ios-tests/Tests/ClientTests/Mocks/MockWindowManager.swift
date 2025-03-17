@@ -59,8 +59,6 @@ final class MockWindowManager: WindowManager {
         switch action {
         case .closeAllPrivateTabs:
             closePrivateTabsMultiActionCalled += 1
-        case .storeTabs:
-            storeTabsMultiWindowActionCalled = true
         default:
             break
         }

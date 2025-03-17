@@ -854,7 +854,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
     private func storeChanges() {
-        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveSessionData(forTab: selectedTab)
     }
