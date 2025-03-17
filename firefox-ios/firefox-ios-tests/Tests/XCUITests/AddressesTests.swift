@@ -349,6 +349,39 @@ class AddressesTests: BaseTestCase {
         addAddressAndReachAutofillForm(indexField: 8)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2548189
+    // Smoketest
+    func testAutofillAddressesByTapingNameField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 0)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549845
+    func testAutofillAddressesByTapingAddressField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 2)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549846
+    func testAutofillAddressesByTapingCityField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 3)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549848
+    func testAutofillAddressesByTapingPostalCodeField() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        addAddressAndReachAutofillForm(indexField: 5)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2546298
     func testToggleAddressOnOff() throws {
         if #unavailable(iOS 16) {
@@ -412,6 +445,49 @@ class AddressesTests: BaseTestCase {
         validateNightModeOnOff()
         navigator.nowAt(SettingsScreen)
         navigator.goto(BrowserTab)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2549853
+    // Smoketest
+    func testAutofillOptionNotAvailableToggleOFF() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        app.switches.element(boundBy: 1).waitAndTap()
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
+        // Using indexes to tap on text fields to comodate with iOS 16 OS
+        for index in 0...8 {
+            app.webViews.textFields.element(boundBy: index).waitAndTap()
+            // The option to open saved Addresses is not available
+            let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
+            mozWaitForElementToNotExist(app.buttons[addressAutofillButton])
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2667453
+    // Smoketest
+    func testRedirectToSettingsByTappingManageAddresses() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Addresses setting is not available for iOS 15")
+        }
+        reachAddNewAddressScreen()
+        addNewAddress()
+        tapSave()
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
+        app.webViews.textFields.element(boundBy: 1).waitAndTap()
+        let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
+        let manageAddresses = AccessibilityIdentifiers.Autofill.footerPrimaryAction
+        app.buttons[addressAutofillButton].waitAndTap()
+        // Tap the "Manage addresses" link
+        app.otherElements.buttons[manageAddresses].waitAndTap()
+        // User is redirected to the Settings -> addresses menu
+        let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
+        mozWaitForElementToExist(app.navigationBars[addresses.title])
     }
 
     private func validateNightModeOnOff() {

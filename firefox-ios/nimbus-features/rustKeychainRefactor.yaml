@@ -1,0 +1,21 @@
+# The configuration for the rustKeychain feature
+features:
+  rust-keychain-refactor:
+    description: >
+      Feature that enables use of the rust keychain logic for storing and retrieving
+      rust component encryption key data.
+    variables:
+      rust-keychain-enabled:
+        description: >
+          Whether the use of the rust keychain logic is enabled for rust components. When
+          enabled, the rust keychain is used to store and retrieve encryption key data for
+          rust components. Otherwise, the pre-existing MZKeychainWrapper logic is used.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          rust-keychain-enabled: false
+      - channel: developer
+        value:
+          rust-keychain-enabled: true

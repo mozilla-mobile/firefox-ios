@@ -343,6 +343,15 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return switch currentTheme().type {
+        case .dark, .nightMode, .privateMode:
+                .lightContent
+        case .light:
+                .darkContent
+        }
+    }
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
@@ -1840,7 +1849,11 @@ class BrowserViewController: UIViewController,
                                                                      bookmarkNode: bookmarkItem,
                                                                      parentBookmarkFolder: parentFolder,
                                                                      presentedFromToast: true) { [weak self] in
-                        self?.showBookmarkToast(action: .remove)
+                        self?.showBookmarkToast(
+                            urlString: bookmarkItem.url,
+                            title: bookmarkItem.title,
+                            action: .remove
+                        )
                     }
                     let controller: DismissableNavigationViewController
                     controller = DismissableNavigationViewController(rootViewController: detailController)
@@ -2117,16 +2130,21 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
-            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Large.lockFill :
-                StandardImageIdentifiers.Large.lockSlashFill
+                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                        StandardImageIdentifiers.Small.shieldSlashFill
+                } else {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Large.lockFill :
+                        StandardImageIdentifiers.Large.lockSlashFill
+                }
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
             }
 
             let action = ToolbarAction(
@@ -2136,7 +2154,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: lockIconNeedsTheming,
+                lockIconNeedsTheming: true,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)

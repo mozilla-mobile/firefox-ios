@@ -196,12 +196,14 @@ struct NavigationBarState: StateType, Equatable {
         switch layout {
         case .version1:
             actions.append(middleAction)
-            actions.append(menuAction(showWarningBadge: showWarningBadge))
+            actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
+                                      showWarningBadge: showWarningBadge))
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
         default:
             actions.append(middleAction)
             actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
-            actions.append(menuAction(showWarningBadge: showWarningBadge))
+            actions.append(menuAction(iconName: StandardImageIdentifiers.Large.appMenu,
+                                      showWarningBadge: showWarningBadge))
         }
 
         return actions
@@ -284,10 +286,10 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
+    private static func menuAction(iconName: String, showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .menu,
-            iconName: StandardImageIdentifiers.Large.appMenu,
+            iconName: iconName,
             badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
             maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
             isEnabled: true,

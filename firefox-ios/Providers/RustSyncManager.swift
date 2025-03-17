@@ -36,6 +36,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
     var creditCardAutofillEnabled = false
+    var rustKeychainEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
 
@@ -68,6 +69,7 @@ public class RustSyncManager: NSObject, SyncManager {
 
     init(profile: BrowserProfile,
          creditCardAutofillEnabled: Bool = false,
+         rustKeychainEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
@@ -77,6 +79,7 @@ public class RustSyncManager: NSObject, SyncManager {
 
         super.init()
         self.creditCardAutofillEnabled = creditCardAutofillEnabled
+        self.rustKeychainEnabled = rustKeychainEnabled
     }
 
     @objc
@@ -273,9 +276,15 @@ public class RustSyncManager: NSObject, SyncManager {
                     .prefsForSync
                     .branch("scratchpad")
                     .stringForKey("keyLabel") {
-                        MZKeychainWrapper
-                            .sharedClientAppContainerKeychain
-                            .removeObject(forKey: keyLabel)
+                        if self.rustKeychainEnabled {
+                            RustKeychain
+                                .sharedClientAppContainerKeychain
+                                .removeObject(key: keyLabel)
+                        } else {
+                            MZKeychainWrapper
+                                .sharedClientAppContainerKeychain
+                                .removeObject(forKey: keyLabel)
+                        }
                 }
                 self.prefsForSync.clearAll()
             }

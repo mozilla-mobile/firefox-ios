@@ -21,6 +21,13 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 const { FIELD_STATES } = FormAutofillUtils;
 
+export const FORM_CHANGE_REASON = {
+  NODES_ADDED: "nodes-added",
+  NODES_REMOVED: "nodes-removed",
+  ELEMENT_INVISIBLE: "visible-element-became-invisible",
+  ELEMENT_VISIBLE: "invisible-element-became-visible",
+};
+
 /**
  * Handles profile autofill for a DOM Form element.
  */
@@ -53,6 +60,30 @@ export class FormAutofillHandler {
   #fieldDetails = null;
 
   /**
+   * Flags if the MutationObserver that is observing node
+   * additions/removals in the root element has been set up
+   */
+  #isObservingFormChanges = false;
+
+  #visibilityStateObserverByElement = new WeakMap();
+
+  /**
+   *
+   * fillOnFormChangeData.isWithinDynamicFormChangeThreshold:
+   *              Flags if a "form-change" event is received within the timeout threshold
+   *              (see lazy.FormAutofill.fillOnDynamicFormChangeTimeout), that we set
+   *              in order to consider newly detected fields for filling.
+   * fillOnFormChangeData.previouslyUsedProfile
+   *              The previously used profile from the latest autocompletion.
+   * fillOnFormChangeData.previouslyFocusedId
+   *              The previously focused element id from the latest autocompletion
+   *
+   * This is used for any following form changes and is cleared after a time threshold
+   * set by lazy.FormAutofill.fillOnDynamicFormChangeTimeout.
+   */
+  #fillOnFormChangeData = new Map();
+
+  /**
    * Flag to indicate whethere there is an ongoing autofilling/clearing process.
    */
   #isAutofillInProgress = false;
@@ -80,6 +111,15 @@ export class FormAutofillHandler {
     ChromeUtils.defineLazyGetter(this, "log", () =>
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
     );
+  }
+
+  get fillOnFormChangeData() {
+    return this.#fillOnFormChangeData;
+  }
+
+  clearFillOnFormChangeData() {
+    this.#fillOnFormChangeData = new Map();
+    this.#fillOnFormChangeData.isWithinDynamicFormChangeThreshold = false;
   }
 
   /**
@@ -170,6 +210,20 @@ export class FormAutofillHandler {
     return this.#filledStateByElement.get(element);
   }
 
+  isVisiblityStateObserverSetUpByElement(element) {
+    return this.#visibilityStateObserverByElement.has(element);
+  }
+
+  setVisibilityStateObserverByElement(element, observer) {
+    this.#visibilityStateObserverByElement.set(element, observer);
+  }
+
+  clearVisibilityStateObserverByElement(element) {
+    if (this.#visibilityStateObserverByElement.has(element)) {
+      this.#visibilityStateObserverByElement.delete(element);
+    }
+  }
+
   /**
    * Check the form is necessary to be updated. This function should be able to
    * detect any changes including all control elements in the form.
@@ -234,7 +288,7 @@ export class FormAutofillHandler {
    *        True to NOT run heuristics on invisible <input> fields.
    *
    * @returns {Array<FieldDeail>}
-   *        An array containing eliglble fields for autofill, also
+   *        An array containing eligible fields for autofill, also
    *        including iframe.
    */
   static collectFormFieldDetails(
@@ -253,33 +307,50 @@ export class FormAutofillHandler {
     }
 
     // Insert <iframe> elements into the fieldDetails array, maintaining the element order.
-    const fieldDetailsIncludeIframe = [];
-    let index = 0;
-    const elements = formLike.rootElement.querySelectorAll(
-      "input, select, iframe"
-    );
-    for (const element of elements) {
-      if (fieldDetails[index]?.element == element) {
-        fieldDetailsIncludeIframe.push(fieldDetails[index]);
-        index++;
-      } else if (
-        element.localName == "iframe" &&
-        FormAutofillUtils.isFieldVisible(element)
-      ) {
-        // Add the <iframe> only if it is under the `formLike` element.
-        // While we use formLike.rootElement.querySelectorAll, it is still possible
-        // we find an <iframe> inside a <form> within this rootElement. In this
-        // case, we don't want to include the <iframe> in the field list.
-        if (
-          lazy.AutofillFormFactory.findRootForField(element) ==
-          formLike.rootElement
-        ) {
-          const iframeFd = lazy.FieldDetail.create(element, formLike, "iframe");
-          fieldDetailsIncludeIframe.push(iframeFd);
+    const elements = formLike.rootElement.querySelectorAll("iframe");
+
+    let startIndex = 0;
+
+    // eslint-disable-next-line no-labels
+    outer: for (const element of elements) {
+      if (FormAutofillUtils.isFieldVisible(element)) {
+        const iframeFd = lazy.FieldDetail.create(element, formLike, "iframe");
+
+        for (let index = startIndex; index < fieldDetails.length; index++) {
+          let position = element.compareDocumentPosition(
+            fieldDetails[index]?.element
+          );
+          if (
+            position &
+            (Node.DOCUMENT_POSITION_FOLLOWING |
+              Node.DOCUMENT_POSITION_CONTAINED_BY)
+          ) {
+            fieldDetails.splice(index, 0, iframeFd);
+            startIndex = index; // start from this index for later iframes
+            // eslint-disable-next-line no-labels
+            continue outer;
+          }
         }
+
+        fieldDetails.push(iframeFd);
       }
     }
-    return fieldDetailsIncludeIframe;
+
+    return fieldDetails;
+  }
+
+  /**
+   * Resetting the state element's fieldDetail after it was removed from the form
+   * Todo: We'll need to update this.filledResult in FormAutofillParent (Bug 1948077).
+   *
+   * @param {HTMLElement} element that was removed
+   */
+  resetFieldStateWhenRemoved(element) {
+    if (this.getFilledStateByElement(element) != FIELD_STATES.AUTO_FILLED) {
+      return;
+    }
+    const fieldDetail = this.getFieldDetailByElement(element);
+    this.#filledStateByElement.delete(fieldDetail);
   }
 
   /**
@@ -484,13 +555,197 @@ export class FormAutofillHandler {
     };
 
     // Handle the highlight style resetting caused by user's correction afterward.
-    this.log.debug("register change handler for filled form:", this.form);
     this.form.rootElement.addEventListener("input", this.onChangeHandler, {
       mozSystemGroup: true,
     });
     this.form.rootElement.addEventListener("reset", this.onChangeHandler, {
       mozSystemGroup: true,
     });
+  }
+
+  /**
+   * Listens for dynamic form changes by setting up two observer types:
+   *      1. IntersectionObserver(s) that observe(s) intersections between
+   *         (in-)visibile elements and an intersection target (the form/document of interest).
+   *         (see this.setUpElementVisibilityObserver)
+   *      2. MutationsObserver that observes child node additions and removals
+   *         in the form/document of interest (see this.setUpNodesObserver)
+   * If a form change is observed, a "form-changed" event gets dispatched transfering
+   * the changed fields and the reason for the form change (see FORM_CHANGE_REASON).
+   */
+  setUpDynamicFormChangeObserver() {
+    if (!FormAutofill.detectDynamicFormChanges) {
+      return;
+    }
+
+    this.setUpElementVisibilityObserver();
+
+    if (!this.#isObservingFormChanges) {
+      this.setUpNodesObserver();
+      this.#isObservingFormChanges = true;
+    }
+  }
+
+  /**
+   * Iterates through handler.form.elements and sets up an IntersectionObserver for each (in-)visible
+   * address/cc input element that is not observed yet (see handler.#visibilityStateObserverByElement).
+   * The observer notifies of intersections between the (in-)visible element and the intersection target (handler.form).
+   * This is the case if e.g. a visible element becomes invisible or an invisible element becomes visible.
+   * If a visibility state change is observed, a "form-changes" event is dispatched.
+   */
+  setUpElementVisibilityObserver() {
+    const VISIBILITY_STATE = {
+      VISIBLE: true,
+      INVISIBLE: false,
+    };
+
+    // Setting up an observer for an element's changing visibility state
+    const setUpIntersectionObserver = (element, visibilityState) => {
+      const visibilityStateObserver = new this.window.IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting != visibilityState) {
+              return;
+            }
+            if (
+              entry.target.checkVisibility({
+                checkOpacity: true,
+                checkVisibilityCSS: true,
+              }) != visibilityState
+            ) {
+              // The observer notified that the element reached the intersection threshold
+              // (meaning the element's visibility state changed to either visible or invisible.
+              // But checkVisibility doesn't confirm that.
+              // For these mismatches we disconnect the observer to avoid an infinite loop.
+              observer.disconnect();
+              return;
+            }
+            const changes = {};
+            const reason =
+              visibilityState == VISIBILITY_STATE.VISIBLE
+                ? FORM_CHANGE_REASON.ELEMENT_VISIBLE
+                : FORM_CHANGE_REASON.ELEMENT_INVISIBLE;
+            changes[reason] = [entry.target];
+
+            const formChangedEvent = new CustomEvent("form-changed", {
+              detail: {
+                form: this.form.rootElement,
+                changes,
+              },
+              bubbles: true,
+            });
+            this.form.ownerDocument.dispatchEvent(formChangedEvent);
+
+            this.clearVisibilityStateObserverByElement(element);
+            observer.disconnect();
+          });
+        },
+        {
+          root: this.form.rootElement,
+          // intersection reatio between 0.0 (invisible element) and 1.0 (visible element)
+          threshold: visibilityState === VISIBILITY_STATE.INVISIBLE ? 0 : 1,
+        }
+      );
+      visibilityStateObserver.observe(element);
+      this.setVisibilityStateObserverByElement(
+        element,
+        visibilityStateObserver
+      );
+    };
+
+    for (let element of this.form.elements) {
+      if (!FormAutofillUtils.isCreditCardOrAddressFieldType(element)) {
+        continue;
+      }
+      if (this.isVisiblityStateObserverSetUpByElement(element)) {
+        continue;
+      }
+      if (FormAutofillUtils.isFieldVisible(element)) {
+        // Setting up an observer that notifies when the visible element becomes invisible
+        setUpIntersectionObserver(element, VISIBILITY_STATE.INVISIBLE);
+      } else {
+        // Setting up an observer that notifies when the invisible element becomes visible
+        setUpIntersectionObserver(element, VISIBILITY_STATE.VISIBLE);
+      }
+    }
+  }
+
+  /**
+   * Sets up a MutationObserver for the form or document (if form-less) of interest
+   * in order to be notified about child nodes additions or removals.
+   * If any of the added/removed nodes (including the nodes in the node's subtree)
+   * are of an address of cc type, a "form-changed" event is dispatched.
+   */
+  setUpNodesObserver() {
+    const mutationObserver = new this.window.MutationObserver(
+      (mutations, _) => {
+        const collectMutatedNodes = mutations => {
+          let removedNodes = [];
+          let addedNodes = [];
+          mutations.forEach(mutation => {
+            if (mutation.type == "childList") {
+              if (mutation.addedNodes.length) {
+                addedNodes.push(...mutation.addedNodes);
+              } else if (mutation.removedNodes.length) {
+                removedNodes.push(...mutation.removedNodes);
+              }
+            }
+          });
+          return [addedNodes, removedNodes];
+        };
+
+        const collectAllSubtreeElements = node => {
+          if (!node.childNodes.length) {
+            return node;
+          }
+          return Array.from(node.childNodes).flatMap(childNode =>
+            collectAllSubtreeElements(childNode)
+          );
+        };
+
+        const getCCAndAddressElements = nodes => {
+          return nodes
+            .flatMap(node => collectAllSubtreeElements(node))
+            .filter(element =>
+              FormAutofillUtils.isCreditCardOrAddressFieldType(element)
+            );
+        };
+
+        let [addedNodes, removedNodes] = collectMutatedNodes(mutations);
+        let relevantAddedElements = getCCAndAddressElements(addedNodes);
+        // We only care about removed elements that might change the
+        // currently detected fieldDetails
+        let relevantRemovedElements = getCCAndAddressElements(
+          removedNodes
+        ).filter(
+          element =>
+            this.#fieldDetails && !!this.getFieldDetailByElement(element)
+        );
+
+        if (!relevantRemovedElements.length && !relevantAddedElements.length) {
+          return;
+        }
+
+        let changes = {};
+        if (relevantRemovedElements.length) {
+          changes[FORM_CHANGE_REASON.NODES_REMOVED] = relevantRemovedElements;
+        }
+        if (relevantAddedElements.length) {
+          changes[FORM_CHANGE_REASON.NODES_ADDED] = relevantAddedElements;
+        }
+
+        const formChangedEvent = new CustomEvent("form-changed", {
+          detail: {
+            form: this.form.rootElement,
+            changes,
+          },
+          bubbles: true,
+        });
+        this.form.ownerDocument.dispatchEvent(formChangedEvent);
+      }
+    );
+    const config = { childList: true, subtree: true };
+    mutationObserver.observe(this.form.rootElement, config);
   }
 
   computeFillingValue(fieldDetail) {

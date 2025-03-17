@@ -131,7 +131,7 @@ workflows:
             $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
             ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
         is_always_run: true
-    - script@1.2.1:
+    - script@1.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
         timeout: 360
