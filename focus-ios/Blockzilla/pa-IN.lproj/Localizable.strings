@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "ਹੋਰ ਜਾਣੋ";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ ਨੂੰ Mozilla ਵਲੋਂ ਬਣਾਇਆ ਗਿਆ ਹੈ। ਸਾਡਾ ਮਕਸਦ ਹੈ ਮਜ਼ਬੂਤ, ਆਜ਼ਾਦ ਤਿਆਰ ਕਰਨਾ ਹੈ।";
 
 /* Label on About screen */
@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "ਤੁਹਾਡੇ ਹੱਕ";
 
+/* Label for row in About screen */
+"About.rowTerms" = "ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ";
+
 /* Label on About screen */
 "About.safariBullet1" = "ਬੇਹਤਰ ਪਰਦੇਦਾਰੀ ਲਈ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਓ";
 
@@ -34,13 +37,13 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "ਇਸ ਨੂੰ ਸਫ਼ਾਰੀ ਇਕਸਟੈਨਸ਼ਨ ਵਜੋਂ ਵਰਤੋਂ:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ ਬਾਰੇ";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ ਤੁਹਾਨੂੰ ਕੰਟਰੋਲ ਵਿੱਚ ਰੱਖਦਾ ਹੈ।";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
@@ -52,7 +55,7 @@
 /* Title of the 'Add Pass Failed' alert. */
 "AddPass.Error.Title" = "ਪਾਸ ਨੂੰ ਜੋੜਨ ਵਿੱਚ ਫੇਲ੍ਹ ਹੈ";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ ਉੱਤੇ ਜਾਣ ਲਈ ਪ੍ਰਮਾਣਿਤ ਕਰੋ";
 
 /* Label for button to add a custom URL */
@@ -76,7 +79,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "ਨਵਾਂ ਚੁਣਿੰਦਾ URL ਜੋੜਿਆ।";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "%@ ਨੂੰ ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚ 450 ਹਰਮਨਪਿਆਰੇ URL ਆਪਣੇ-ਆਪ ਪੂਰੇ ਕਰਨ ਦੇ ਸਮਰੱਥ ਬਣਾਓ।";
 
 /* label describing URL Autocomplete as disabled */
@@ -97,7 +100,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "ਮੇਰੀਆਂ ਸਾਈਟਾਂ";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "%@ ਨੂੰ ਤੁਹਾਡੇ ਮਨਪਸੰਦ URL ਆਪਣੇ-ਆਪ ਪੂਰੇ ਕਰਨ ਦੇ ਸਮਰੱਥ ਬਣਾਓ।";
 
 /* Label for enabling or disabling top sites */
@@ -145,13 +148,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "ਰੱਦ ਕਰੋ";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ ਹੋਰ ਐਪ ਖੋਲ੍ਹਣੀ ਚਾਹੁੰਦਾ ਹੈ";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "ਖੋਲ੍ਹੋ";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ ਨੂੰ ਖੋਲ੍ਹਣਾ ਚਾਹੁੰਦਾ ਹੈ";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -193,10 +196,10 @@
 /* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.FirstSubtitle.V2" = "ਵਧੇਰੇ ਪਰਦੇਦਾਰੀ ਵਾਸਤੇ ਜਦੋਂ ਵੀ ਤੁਸੀਂ ਐਪ ਨੂੰ ਬੰਦ ਕਰਦੇ ਹੋ ਤਾਂ ਅਸੀਂ ਤੁਹਾਡੇ ਅਤੀਤ ਨੂੰ ਮਿਟਾ ਦਿੰਦੇ ਹਾਂ।";
 
-/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.SecondSubtitle.V2" = "ਤੁਹਾਡੇ ਵਲੋਂ ਹਰ ਲਿੰਕ ਨੂੰ ਖੋਲ੍ਹੇ ਡਾਟੇ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰਨ ਲਈ %@ ਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ।";
 
-/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ ਹੋਰਨਾਂ ਬਰਾਊਜ਼ਰਾਂ ਵਰਗਾ ਨਹੀਂ ਹੈ";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
@@ -208,7 +211,7 @@
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "ਤੁਹਾਡਾ ਅਤੀਤ ਤੁਹਾਡਾ ਪਿੱਛਾ ਨਹੀਂ ਕਰਦਾ ਹੈ";
 
-/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Incognito.Description" = "%@ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਅਤੇ ਸਮੱਗਰੀ ਪਾਬੰਦੀ ਦੇ ਨਾਲ ਸਮਰਪਿਤ ਪਰਦੇਦਾਰੀ ਬਰਾਊਜ਼ਰ ਹੈ।";
 
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
@@ -223,19 +226,19 @@
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "ਆਪਣੀ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਨੂੰ ਅਗਲੇ ਪੜਾਅ ਉੱਤੇ ਲੈ ਜਾਓ।";
 
-/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+/* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Firefox %@ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ!";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari ਛੂਹੋ, ਤਦ ਸਮੱਗਰੀ ਬਲਾਕਰ ਚੁਣੋ";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "%@ ਸਮਰੱਥ ਕਰੋ";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsExtentions" = "Safari ਚੁਣ ਕੇ, ਇਕਸਟੈਨਸਨਾਂ ਨੂੰ ਚੁਣੋ";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ ਸਮਰੱਥ ਨਹੀਂ ਹੈ।";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -256,7 +259,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "ਹਾਂ";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "ਸੁਝਾਅ ਲੈਣ ਲਈ %@ ਨੂੰ ਤੁਹਾਡੇ ਵਲੋਂ ਐਡਰੈਸ ਪੱਟੀ ਵਿੱਚ ਲਿਖੀ ਲਿਖਤ ਨੂੰ ਖੋਜ ਇੰਜਣ ਨੂੰ ਭੇਜਣ ਦੀ ਲੋੜ ਹੈ।";
 
 /* Title for search suggestions prompt */
@@ -286,13 +289,13 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "ਇਹ ਸਾਨੂੰ ਬਰਾਊਜ਼ਰ ਬਾਰੇ ਪੜਤਾਲ ਕਰਨ ਅਤੇ ਮਸਲੇ ਠੀਕ ਕਰਨ ਲਈ ਮਦਦ ਕਰਦੀਆਂ ਹਨ।";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "ਤੁਹਾਡੇ ਵਲੋਂ ਐਡਰੈਸ ਪੱਟੀ ਵਿੱਚ ਲਿਖੀ ਲਿਖਤ %@ ਤੁਹਾਡੇ ਖੋਜ ਇੰਜਣ ਨੂੰ ਭੇਜੇਗਾ।";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla ਸਿਰਫ਼ ਉਹੀ ਇਕੱਠਾ ਕਰਦਾ ਹੈ, ਜੋ ਕਿ ਸਾਨੂੰ ਹਰੇਕ ਲਈ %@ ਨੂੰ ਸੁਧਾਰ ਕਰਨ ਲਈ ਚਾਹੀਦਾ ਹੈ।";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextStudies" = "%@ ਸਮੇਂ ਸਮੇਂ ਉੱਤੇ ਅਧਿਐਨ ਇੰਸਟਾਲ ਕਰ ਤੇ ਚਲਾ ਸਕਦਾ ਹੈ।";
 
 /* Title for section in settings menu */
@@ -307,7 +310,7 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "ਹਲਕਾ";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ ਦਰਜਾ ਦਿਓ";
 
 /* Label for Safari integration section */
@@ -364,7 +367,7 @@
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਵਜੋਂ ਸੈੱਟ ਕਰੋ";
 
-/* %@ is the name of the app. Description for set as default browser option */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
 "Settings.setAsDefaultBrowserDescription" = "ਵੈੱਬਸਾਈਟਾਂ, ਈਮੇਲਾਂ ਤੇ ਸੁਨੇਹਿਆਂ ਤੋਂ ਆਏ ਲਿੰਕ ਆਪਣੇ-ਆਪ %@ ਵਿੱਚ ਖੋਲ੍ਹੋ।";
 
 /* System value for theme section in settings menu */
@@ -397,7 +400,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "ਐਪ ਅਣ-ਲਾਕ ਕਰਨ ਲਈ Face ID ਵਰਤੋਂ";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID %@ ਨੂੰ ਅਣ-ਲਾਕ ਕਰ ਸਕਦਾ ਹੈ, ਜੇ URL ਪਹਿਲਾਂ ਹੀ ਐਪ ਵਿੱਚ ਖੁੱਲ੍ਹਾ ਹੋਵੇ";
 
 /* Show home screen tips toggle label on settings screen */
@@ -415,7 +418,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "ਐਪ ਅਣ-ਲਾਕ ਕਰਨ ਲਈ ਟੱਚ ID ਵਰਤੋਂ";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "ਟੱਚ ID %@ ਨੂੰ ਅਣ-ਲਾਕ ਕਰ ਸਕਦਾ ਹੈ, ਜੇ URL ਪਹਿਲਾਂ ਹੀ ਐਪ ਵਿੱਚ ਖੁੱਲ੍ਹਾ ਹੋਵੇ";
 
 /* Status off for tracking protection in settings screen */
@@ -493,13 +496,13 @@
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "ਆਈਕਾਨਾਂ ਦੇ ਹਿਲਣ-ਡੁੱਲਣ ਤੱਕ ਮੁ਼ੱਖ ਸਕਰੀਨ ਨੂੰ ਉਦੋਂ ਤੱਕ ਦਬਾ ਕੇ ਰੱਖੋ।";
 
-/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ ਲੱਭੋ। ਤਦ ਵਿਜੈੱਟ (widget) ਚੁਣੋ।";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "ਜੋੜ ਦੇ ਚਿੰਨ੍ਹ ਨੂੰ ਛੂਹੋ।";
 
-/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.Title.V2" = "%@ ਵਿਜੈੱਟ ਜੋੜੋ";
 
 /* Button to add a favorite URL to Siri. */
@@ -526,7 +529,7 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "ਖੋਲ੍ਹਣ ਲਈ URL";
 
-/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Biometric.Title" = "ਜਦੋਂ ਸਾਈਟ ਖੁੱਲ੍ਹਦੀ ਹੈ ਤਾਂ %@ ਨੂੰ ਲਾਕ ਕਰੋ:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
@@ -541,13 +544,13 @@
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "ਸਾਈਟ ਦਾ ਪੂਰਾ ਡੈਸਕਟਾਪ ਰੂਪ ਵੇਖਣਾ ਚਾਹੁੰਦੇ ਹੋ?";
 
-/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+/* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "ਹੁਣ ਤੱਕ %@ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਈ";
 
-/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for share trackers tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.ShareTrackers.Title" = "ਤੁਸੀਂ ਕਰੋ ਬਰਾਊਜ਼। %@ ਲਾਉ ਰੋਕਾਂ।";
 
-/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+/* Text for a label that indicates the description for shortcuts tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Shortcuts.Description" = "%@ ਮੇਨੂ ਤੋਂ ਸ਼ਾਰਟਕੱਟ ਵਿੱਚ ਜੋੜੋ ਨੂੰ ਚੁਣੋ";
 
 /* Text for a label that indicates the title for shortcuts tip. */
@@ -556,7 +559,7 @@
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Siri ਸ਼ਾਰਟਕੱਟ ਜੋੜੋ";
 
-/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for siri erase tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.SiriErase.Title" = "“Siri, erase my %@ session.”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
@@ -571,7 +574,7 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ਸਾਈਟ ਦੀ ਸਮੱਗਰੀ ਗੁੰਮ ਹੈ ਜਾਂ ਅਜੀਬ ਤਰ੍ਹਾਂ ਕੰਮ ਕਰ ਰਹੀ ਹੈ?";
 
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TodayWidget.SearchInApp.Instruction" = "%@ ਵਿੱਚ ਲੱਭੋ";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
@@ -583,7 +586,7 @@
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "ਆਪਣਾ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਸ਼ੈਸ਼ਨ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਅਸੀਂ ਤੁਹਾਡੇ ਵਾਸਤੇ ਟਰੈਕਰਾਂ ਤੇ ਹੋਰ ਬੁਰੀਆਂ ਉੱਤੇ ਰੋਕ ਲਾਵਾਂਗੇ।";
 
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+/* This is the body text that is displayed for the Shield icon tooltip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TooltipBodyText.ShieldIcon" = "%@ ਨੇ ਇਸ ਸਾਈਟ ਨੂੰ ਤੁਹਾਡੀ ਜਾਸੂਸੀ ਕਰਨ ਤੋਂ ਰੋਕਿਆ ਹੈ। ਢਾਲ ਨੂੰ ਛੂਹ ਕੇ ਵੇਖੋ ਕਿ ਅਸੀਂ ਕਿਸ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਈ ਹੈ।";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
@@ -616,7 +619,7 @@
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ";
 
-/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. %@ is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "%@ ਤੋਂ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਈ";
 
 /* Text for the header of trackers section from Tracking Protection. */
@@ -643,7 +646,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ਖੋਜੋ ਜਾਂ ਸਿਰਨਾਵਾਂ ਦਿਓ";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "%@ ਦੀ ਖੋਜ ਕਰੋ";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
@@ -652,7 +655,7 @@
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "ਮੈਨੂੰ ਦਿਖਾਓ ਕਿਵੇਂ";
 
-/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "WidgetOnboardingCard.Subtitle" = "ਹੁਣ ਤੁਸੀਂ ਆਪਣੀ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਕਰੋ, ਪਰ ਅਗਲੀ ਵਾਰ ਫ਼ੌਰਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਤੋਂ %@ ਵਿਜੈਟ ਵਰਤ ਸਕਦੇ ਹੋ।";
 
 /* Title shown on card view explaining the app has a widget option */

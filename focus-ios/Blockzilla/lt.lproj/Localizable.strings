@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Sužinoti daugiau";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "„%@“ yra „Mozillos“ kūrinys. Mūsų misija yra skatinti sveiką, atvirą internetą.";
 
 /* Label on About screen */
@@ -34,13 +34,13 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Naudokite ją kaip „Safari“ priedą:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Apie „%@“";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "„%@“ suteikia jums kontrolę.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "Atverti naudojant „%@“";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
@@ -52,7 +52,7 @@
 /* Title of the 'Add Pass Failed' alert. */
 "AddPass.Error.Title" = "Nepavyko pridėti leidimo";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "Patvirtinkite savo tapatybę, kad grįžtumėte į „%@“";
 
 /* Label for button to add a custom URL */
@@ -76,7 +76,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Pridėtas naujas adresas.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "Įjungus, „%@“ automatiškai adreso lauke užbaigs virš 450 populiarių URL adresų.";
 
 /* label describing URL Autocomplete as disabled */
@@ -97,7 +97,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Mano svetainės";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "Įjungus, „%@“ automatiškai užbaigs jūsų mėgiamus adresus.";
 
 /* Label for enabling or disabling top sites */
@@ -142,13 +142,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Atsisakyti";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "„%@“ bando atverti kitą programą";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Atverti";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "„%1$@“ bando atverti programą „%2$@“";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -178,10 +178,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Bakstelėkite „Safari“, tada pasirinkite „Content Blockers“";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Įgalinkte „%@“";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "„%@“ neįgalinta.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -199,7 +199,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Taip";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "Kad gautų siūlymus, „%@“ turi persiųsti ieškyklei viską, ką rašote į adreso lauką.";
 
 /* Title for search suggestions prompt */
@@ -220,13 +220,13 @@
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tamsus";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "„%@“ perduos jūsų ieškyklei tai, ką rašote adreso lauke.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "„Mozilla“ siekia rinkti tik tai, ko reikia norint pagerinti „%@“ visiems.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextStudies" = "„%@“ retkarčiais gali įdiegti ir vykdyti tyrimus.";
 
 /* Title for section in settings menu */
@@ -238,7 +238,7 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Šviesus";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Įvertinti „%@“";
 
 /* Label for Safari integration section */
@@ -316,7 +316,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Naudoti veido atpažinimą programai atrakinti";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Naudojant veido atpažinimą, galima atrakinti „%@“ programą, kai joje jau yra atvertas tinklalapis";
 
 /* Show home screen tips toggle label on settings screen */
@@ -334,7 +334,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Naudoti piršto antspaudą programai atrakinti";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Naudojant jūsų piršto antspaudą, galima atrakinti „%@“ programą, kai joje jau yra atvertas tinklalapis";
 
 /* Status off for tracking protection in settings screen */
@@ -409,7 +409,7 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Atvertinas URL adresas";
 
-/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Biometric.Title" = "Užrakinti „%@“, kai svetainė atidaryta:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
@@ -424,13 +424,13 @@
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "Norite matyti pilną kompiuterinę svetainės versiją?";
 
-/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+/* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "Iki dabar užblokuoti stebėjimo elementai: %@";
 
-/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for share trackers tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.ShareTrackers.Title" = "Jūs naršote. „%@“ blokuoja.";
 
-/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+/* Text for a label that indicates the description for shortcuts tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Shortcuts.Description" = "Pasirinkite „Pridėti prie leistukų“ iš „%@“ meniu";
 
 /* Text for a label that indicates the title for shortcuts tip. */
@@ -439,7 +439,7 @@
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Pridėti „Siri“ leistuką";
 
-/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for siri erase tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.SiriErase.Title" = "„Siri, išvalyk mano %@ seansą.“";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
@@ -472,7 +472,7 @@
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Išplėsta apsauga nuo stebėjimo";
 
-/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. %@ is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Stebėjimo elementai, užblokuoti nuo %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
@@ -499,7 +499,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Įveskite adresą arba paieškos žodžius";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "Ieškoti „%@“";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
