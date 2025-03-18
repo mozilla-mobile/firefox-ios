@@ -4,7 +4,7 @@
 
 import Foundation
 
-extension TabDisplayView: UIViewControllerTransitioningDelegate {
+extension TabTrayViewController: UIViewControllerTransitioningDelegate {
     func animationController(
       forPresented presented: UIViewController,
       presenting: UIViewController,
