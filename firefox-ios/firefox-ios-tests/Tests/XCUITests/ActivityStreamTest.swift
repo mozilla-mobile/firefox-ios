@@ -87,10 +87,11 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         if iPad() {
             navigator.goto(NewTabScreen)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
         } else {
             navigator.goto(HomePanelsScreen)
+            checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 
