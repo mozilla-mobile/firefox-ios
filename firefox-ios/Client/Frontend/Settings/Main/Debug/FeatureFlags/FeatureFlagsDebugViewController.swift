@@ -164,6 +164,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .deeplinkOptimizationRefactor,
+                    titleText: format(string: "Enable Deeplink Optimization Refactor"),
+                    statusText: format(string: "Toggle to enable deeplink optimization refactor")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }
