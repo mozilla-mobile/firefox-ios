@@ -381,7 +381,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -467,6 +467,7 @@ class HistoryTests: BaseTestCase {
         // Workaround for FXIOS-5128. To be replaced by tapping "Close All Tabs"
         waitForTabsButton()
         navigator.goto(TabTray)
+<<<<<<< HEAD
         if isTablet {
             app.otherElements["Tabs Tray"]
                 .collectionViews
@@ -477,6 +478,9 @@ class HistoryTests: BaseTestCase {
         } else {
             app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
         }
+=======
+        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+>>>>>>> 468810962 (Refactor FXIOS-11596 [Tab tray UI experiment] Adjust background color, adjust X button (#25337))
     }
 
     private func closeKeyboard() {
