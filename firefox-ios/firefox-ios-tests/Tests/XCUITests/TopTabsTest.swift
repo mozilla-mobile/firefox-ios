@@ -104,7 +104,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
             app.otherElements.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
         }
