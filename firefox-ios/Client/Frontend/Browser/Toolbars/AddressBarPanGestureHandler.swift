@@ -116,18 +116,25 @@ final class AddressBarPanGestureHandler: NSObject {
         // Determine if the transition should be completed based on the translation and velocity.
         // If the user swiped more than half of the screen or had a velocity higher that the constant,
         // then we can complete the transition.
-        let shouldCompleteTransition = abs(translation.x) > contentContainer.frame.width / 2 || abs(velocity.x) > UX.swipingVelocity
+        let shouldCompleteTransition = abs(translation.x)
+        > contentContainer.frame.width / 2 || abs(velocity.x) > UX.swipingVelocity
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
             if shouldCompleteTransition && isValidIndex {
                 // Move the contentContainer and addressBarContainer off-screen based on the panning direction.
-                contentContainer.frame.origin.x = isPanningLeft ? -contentContainer.frame.width : contentContainer.frame.width
+                contentContainer.frame.origin.x = isPanningLeft
+                ? -contentContainer.frame.width
+                : contentContainer.frame.width
                 webPagePreview.frame.origin.x = 0
-                addressBarContainer.frame.origin.x = isPanningLeft ? -contentContainer.frame.width : contentContainer.frame.width
+                addressBarContainer.frame.origin.x = isPanningLeft
+                ? -contentContainer.frame.width
+                : contentContainer.frame.width
             } else {
                 // Reset the positions if the transition should not be completed
                 contentContainer.frame.origin.x = 0
-                webPagePreview.frame.origin.x = isPanningLeft ? contentContainer.frame.width + UX.offset : -contentContainer.frame.width - UX.offset
+                webPagePreview.frame.origin.x = isPanningLeft
+                ? contentContainer.frame.width + UX.offset
+                : -contentContainer.frame.width - UX.offset
                 addressBarContainer.frame.origin.x = 0
             }
         }) { [self] _ in
