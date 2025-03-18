@@ -17,6 +17,7 @@ class BrowserViewControllerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -32,12 +33,11 @@ class BrowserViewControllerTests: XCTestCase {
 
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
-        DependencyHelperMock().reset()
         profile = nil
         tabManager = nil
         browserViewController = nil
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
@@ -75,10 +75,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
 
     func testOpenURLInNewTab_withPrivateModeEnabled() {
-        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-        browserViewController.topTabsViewController = topTabsViewController
         browserViewController.openURLInNewTab(nil, isPrivate: true)
-        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
         XCTAssertTrue(tabManager.addTabWasCalled)
         XCTAssertNotNil(tabManager.selectedTab)
         guard let selectedTab = tabManager.selectedTab else {
@@ -86,5 +83,47 @@ class BrowserViewControllerTests: XCTestCase {
             return
         }
         XCTAssertTrue(selectedTab.isPrivate)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToAllUIElements_whenToolbarRefactorDisabled() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: false)
+
+        browserViewController.topTabsViewController = topTabsViewController
+        browserViewController.legacyUrlBar =  URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
+
+        browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        let urlBarColor = browserViewController.legacyUrlBar!.locationActiveBorderColor
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertFalse(browserViewController.toolbar.privateModeBadge.badge.isHidden)
+        XCTAssertEqual(urlBarColor, LightTheme().colors.layerAccentPrivateNonOpaque)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: true)
+
+        browserViewController.topTabsViewController = topTabsViewController
+        browserViewController.legacyUrlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
+
+        browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        let urlBarColor = browserViewController.legacyUrlBar!.locationActiveBorderColor
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertTrue(browserViewController.toolbar.privateModeBadge.badge.isHidden)
+        XCTAssertEqual(urlBarColor, .clear)
+    }
+
+    private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(enabled: isEnabled)
+        }
     }
 }
