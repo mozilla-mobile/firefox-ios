@@ -1025,7 +1025,25 @@ class BrowserCoordinator: BaseCoordinator,
             )
         }
 
-        present(navigationController)
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+            guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
+            present(navigationController, customTransition: tabTrayVC, presentationStyle: .fullScreen)
+        } else {
+            present(navigationController)
+        }
+    }
+
+    // This implementation of present is specifically for the animation on .tabTrayUIExperiments
+    private func present(_ viewController: UIViewController,
+                         customTransition: UIViewControllerTransitioningDelegate,
+                         presentationStyle: UIModalPresentationStyle) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: .fullScreen)
+    }
+
+    private func present(_ viewController: UIViewController) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        router.present(viewController)
     }
 
     func showBackForwardList() {
@@ -1091,11 +1109,6 @@ class BrowserCoordinator: BaseCoordinator,
     private func setiPadLayoutDetents(for controller: UIViewController) {
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
-    }
-
-    private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway(from: tabManager.selectedTab)
-        router.present(viewController)
     }
 
     // MARK: - Password Generator

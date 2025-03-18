@@ -30,6 +30,20 @@ class DefaultRouter: NSObject, Router {
         }
 
         viewController.presentationController?.delegate = self
+        // SOPHIE: Should this have a completion??
+        navigationController.present(viewController, animated: animated, completion: nil)
+    }
+
+    func present(_ viewController: UIViewController,
+                 animated: Bool,
+                 customTransition: UIViewControllerTransitioningDelegate?,
+                 presentationStyle: UIModalPresentationStyle = .fullScreen) {
+        viewController.modalPresentationStyle = presentationStyle
+
+        if let transition = customTransition {
+            viewController.transitioningDelegate = transition
+        }
+
         navigationController.present(viewController, animated: animated, completion: nil)
     }
 
