@@ -19,6 +19,9 @@ final class NimbusFeatureFlagLayer {
         case .appIconSelection:
             return checkAppIconSelectionSetting(from: nimbus)
 
+        case .appearanceMenu:
+            return checkAppearanceMenuFeature(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -379,6 +382,11 @@ final class NimbusFeatureFlagLayer {
     private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appIconSelectionFeature.value()
         return config.enabled
+    }
+
+    private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.appearanceMenuFeature.value()
+        return config.status
     }
 
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
