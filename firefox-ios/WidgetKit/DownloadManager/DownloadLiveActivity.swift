@@ -116,3 +116,4 @@ struct DownloadLiveActivity: Widget {
         }
     }
 }
+
