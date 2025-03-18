@@ -163,17 +163,20 @@ class JumpBackInTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
-        // The context menu opens, having the correct options
-        let ContextMenuTable = app.tables["Context Menu"]
-        waitForElementsToExist(
-            [
-                ContextMenuTable,
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
-            ]
-        )
+
+        // After homepage redesign, "Jump back in" is no longer visible
+        // https://github.com/mozilla-mobile/firefox-ios/pull/25357
+        //        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
+        //        // The context menu opens, having the correct options
+        //        let ContextMenuTable = app.tables["Context Menu"]
+        //        waitForElementsToExist(
+        //            [
+        //                ContextMenuTable,
+        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
+        //                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+        //            ]
+        //        )
     }
 }
