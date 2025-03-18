@@ -27,9 +27,6 @@ class ButtonToast: Toast {
     // MARK: - UI
     private var contentStackView: UIStackView = .build { stackView in
         stackView.spacing = UX.stackViewSpacing
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.distribution = .fill
     }
 
     private var imageView: UIImageView = .build { imageView in }
@@ -74,10 +71,8 @@ class ButtonToast: Toast {
         addSubview(createdToastView)
 
         NSLayoutConstraint.activate([
-            toastView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
-                                               constant: Toast.UX.shadowVerticalSpacing),
-            toastView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
-                                                constant: -Toast.UX.shadowVerticalSpacing),
+            toastView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Toast.UX.shadowVerticalSpacing),
+            toastView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Toast.UX.shadowVerticalSpacing),
             toastView.heightAnchor.constraint(equalTo: heightAnchor, constant: -Toast.UX.shadowHorizontalSpacing),
 
             heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeightWithShadow)
@@ -113,46 +108,32 @@ class ButtonToast: Toast {
         }
 
         contentStackView.addArrangedSubview(labelStackView)
-        toastView.addSubview(contentStackView)
         setupPaddedButton(stackView: contentStackView, buttonText: viewModel.buttonText)
+        toastView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
             contentStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.spacing),
             contentStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -UX.spacing),
-            contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: toastView.bottomAnchor, constant: -UX.spacing),
-            contentStackView.topAnchor.constraint(equalTo: toastView.topAnchor, constant: UX.spacing),
+            contentStackView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing),
+            contentStackView.topAnchor.constraint(equalTo: toastView.topAnchor, constant: UX.spacing)
         ])
-
         return toastView
     }
 
     func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
         guard let buttonText = buttonText else { return }
 
-        var buttonConfiguration = UIButton.Configuration.plain()
-        buttonConfiguration.title = buttonText
-        buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.buttonPadding,
-            leading: UX.buttonPadding,
-            bottom: UX.buttonPadding,
-            trailing: UX.buttonPadding
-        )
-
-        roundedButton.configuration = buttonConfiguration
-
-        toastView.addSubview(roundedButton)
-
-        roundedButton.addAction(UIAction { [weak self] _ in
-            self?.buttonPressed()
-        }, for: .touchUpInside)
+        stackView.addArrangedSubview(roundedButton)
+        roundedButton.setTitle(buttonText, for: [])
 
         NSLayoutConstraint.activate([
-            // Position constraints 
-            roundedButton.leadingAnchor.constraint(equalTo: labelStackView.leadingAnchor),
-            roundedButton.trailingAnchor.constraint(greaterThanOrEqualTo: toastView.leadingAnchor, constant: -UX.spacing),
-            roundedButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: UX.spacing),
-            roundedButton.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing)
+            roundedButton.heightAnchor.constraint(
+                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
+            roundedButton.widthAnchor.constraint(
+                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding)
         ])
+
+        roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
     }
 
     override func applyTheme(theme: Theme) {
@@ -161,12 +142,22 @@ class ButtonToast: Toast {
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
-        roundedButton.configuration?.baseForegroundColor = theme.colors.textInverted
-
+        roundedButton.setTitleColor(theme.colors.textInverted, for: [])
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 
     override func adjustLayoutForA11ySizeCategory() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        if contentSizeCategory.isAccessibilityCategory {
+            contentStackView.axis = .vertical
+            contentStackView.alignment = .leading
+            contentStackView.distribution = .fillProportionally
+        } else {
+            contentStackView.axis = .horizontal
+            contentStackView.alignment = .center
+            contentStackView.distribution = .fill
+        }
+
         setNeedsLayout()
     }
 
