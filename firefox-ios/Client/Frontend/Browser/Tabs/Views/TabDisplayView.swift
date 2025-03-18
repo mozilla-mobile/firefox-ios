@@ -278,11 +278,7 @@ class TabDisplayView: UIView,
 
     func applyTheme(theme: Theme) {
         self.theme = theme
-        if isTabTrayUIExperimentsEnabled {
-            collectionView.backgroundColor = theme.colors.layer1
-        } else {
-            collectionView.backgroundColor = theme.colors.layer3
-        }
+        collectionView.backgroundColor = theme.colors.layer3
     }
 
     private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
