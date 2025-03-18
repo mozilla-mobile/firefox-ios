@@ -223,6 +223,11 @@ class TabTrayViewController: UIViewController,
 
         super.init(nibName: nil, bundle: nil)
         self.applyTheme()
+
+        if !UIAccessibility.isReduceMotionEnabled {
+          transitioningDelegate = self
+          modalPresentationStyle = .fullScreen
+        }
     }
 
     required init?(coder: NSCoder) {
