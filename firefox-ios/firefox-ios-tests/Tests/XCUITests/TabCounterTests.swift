@@ -59,7 +59,7 @@ class TabCounterTests: BaseTestCase {
         if isTablet {
             app.otherElements["Tabs Tray"]
                 .collectionViews.cells.element(boundBy: 0)
-                .buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+                .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
             let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
             mozWaitForElementToExist(navBarTabTrayButton)

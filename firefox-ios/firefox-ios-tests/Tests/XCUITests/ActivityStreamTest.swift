@@ -104,7 +104,11 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+        if iPad() {
+            app.collectionViews.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+        } else {
+            app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+        }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
