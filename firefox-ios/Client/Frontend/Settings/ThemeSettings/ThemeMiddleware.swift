@@ -126,7 +126,10 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     func updateNightMode() {
         NightModeHelper.toggle()
-        themeManager.applyThemeUpdatesToWindows()
+        // When the new appearance menu experiment is on, toggling night mode does not update the app theme.
+        if !themeManager.isNewAppearanceMenuOn {
+            themeManager.applyThemeUpdatesToWindows()
+        }
     }
 
     private func dispatchMiddlewareAction(

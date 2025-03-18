@@ -20,7 +20,9 @@ class ThemeSetting: Setting {
     }
 
     override var status: NSAttributedString {
-        if themeManager.systemThemeIsOn {
+        if themeManager.isNewAppearanceMenuOn {
+            return NSAttributedString(string: "")
+        } else if themeManager.systemThemeIsOn {
             return NSAttributedString(string: .SystemThemeSectionHeader)
         } else if !themeManager.automaticBrightnessIsOn {
             return NSAttributedString(string: .DisplayThemeManualStatusLabel)
@@ -41,7 +43,9 @@ class ThemeSetting: Setting {
         let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
-                string: .SettingsDisplayThemeTitle,
+                string: themeManager.isNewAppearanceMenuOn
+                            ? .SettingsAppearanceTitle
+                            : .SettingsDisplayThemeTitle,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
