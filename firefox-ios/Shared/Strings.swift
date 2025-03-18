@@ -2621,31 +2621,31 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Sunset",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of purple fading to pink.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink.")
 
                 public static let BlueHour = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Blue Hour",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of blue fading to purple.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple.")
 
                 public static let Twilight = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Twilight.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Twilight",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of dark blue fading to light blue.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of dark blue fading to light blue.")
 
                 public static let Midnight = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Midnight.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Midnight",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of black fading to dark purple.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to dark purple.")
 
                 public static let NorthernLights = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137",
                     tableName: "AppIconSelection",
                     value: "Northern Lights",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a which has a background gradient of black fading to blue fading to green.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
             }
 
             public struct Accessibility {
