@@ -200,7 +200,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // dark theme appearance of the app and web content. Once FXIOS-11655, both this check and nightMode
         // in general will be removed.
         if let migratedTheme = migratedTheme() { return migratedTheme }
-        if nightModeIsOn { return .nightMode }
+        if !isNewAppearanceMenuOn && nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
