@@ -16,6 +16,7 @@ import AuthenticationServices
 
 import class MozillaAppServices.MZKeychainWrapper
 import class MozillaAppServices.RemoteSettingsService
+import struct MozillaAppServices.RemoteSettingsContext
 import enum MozillaAppServices.Level
 import enum MozillaAppServices.RemoteSettingsServer
 import enum MozillaAppServices.SyncReason
@@ -703,7 +704,9 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(storageDir: path, config: RemoteSettingsConfig2(server: server))
+            return try RemoteSettingsService(
+                storageDir: path,
+                config: RemoteSettingsConfig2(server: server, appContext: remoteSettingsAppContext()))
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,
@@ -738,6 +741,44 @@ open class BrowserProfile: Profile {
             return nil
         }
     }()
+
+    private func remoteSettingsAppContext() -> RemoteSettingsContext {
+        let encoder = JSONEncoder()
+        let appInfo = BrowserKitInformation.shared
+        let uiDevice = UIDevice.current
+        let formFactor = switch uiDevice.userInterfaceIdiom {
+        case .pad: "tablet"
+        case .mac: "desktop"
+        default: "phone"
+        }
+        var customTargetingAttributes: String?
+        let customTargetingAttributesData = try? encoder.encode([
+                "form_factor": formFactor,
+                "country": Locale.current.regionCode,
+        ])
+        if let data = customTargetingAttributesData {
+            customTargetingAttributes = String(
+                decoding: data,
+                as: UTF8.self)
+        }
+        return RemoteSettingsContext(
+            appName: "Firefox iOS",
+            appId: AppInfo.bundleIdentifier,
+            channel: appInfo.buildChannel?.rawValue ?? "release",
+            appVersion: AppInfo.appVersion,
+            appBuild: AppInfo.buildNumber,
+            architecture: nil,
+            deviceManufacturer: "Apple",
+            deviceModel: DeviceInfo.deviceModel(),
+            locale: Locale.current.identifier,
+            os: "iOS",
+            osVersion: uiDevice.systemVersion,
+            androidSdkVersion: nil,
+            debugTag: nil,
+            installationDate: nil,
+            homeDirectory: nil,
+            customTargetingAttributes: customTargetingAttributes)
+    }
 
     func hasAccount() -> Bool {
         return rustFxA.hasAccount()
