@@ -68,6 +68,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
         case    .appIconSelection,
                 .appearanceMenu,
                 .bookmarksRefactor,
+                .deeplinkOptimizationRefactor,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
