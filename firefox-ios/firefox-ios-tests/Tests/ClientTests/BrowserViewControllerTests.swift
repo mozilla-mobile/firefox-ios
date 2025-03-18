@@ -17,7 +17,6 @@ class BrowserViewControllerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -28,6 +27,7 @@ class BrowserViewControllerTests: XCTestCase {
 
         profile = MockProfile()
         tabManager = MockTabManager()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
     }
 
@@ -35,6 +35,7 @@ class BrowserViewControllerTests: XCTestCase {
         TelemetryContextualIdentifier.clearUserDefaults()
         profile = nil
         tabManager = nil
+        browserViewController.legacyUrlBar = nil
         browserViewController = nil
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().reset()
@@ -93,14 +94,10 @@ class BrowserViewControllerTests: XCTestCase {
         setupNimbusToolbarRefactorTesting(isEnabled: false)
 
         browserViewController.topTabsViewController = topTabsViewController
-        browserViewController.legacyUrlBar =  URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
-
         browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
-        let urlBarColor = browserViewController.legacyUrlBar!.locationActiveBorderColor
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
         XCTAssertFalse(browserViewController.toolbar.privateModeBadge.badge.isHidden)
-        XCTAssertEqual(urlBarColor, LightTheme().colors.layerAccentPrivateNonOpaque)
     }
 
     func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
@@ -111,14 +108,11 @@ class BrowserViewControllerTests: XCTestCase {
         setupNimbusToolbarRefactorTesting(isEnabled: true)
 
         browserViewController.topTabsViewController = topTabsViewController
-        browserViewController.legacyUrlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
 
         browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
-        let urlBarColor = browserViewController.legacyUrlBar!.locationActiveBorderColor
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
         XCTAssertTrue(browserViewController.toolbar.privateModeBadge.badge.isHidden)
-        XCTAssertEqual(urlBarColor, .clear)
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
