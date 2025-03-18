@@ -3,7 +3,7 @@ name: Snapshot Tests
 on:
   pull_request:
     paths:
-      - 'firefox-ios/Client/Configuration/Common.xcconfig'
+      - 'Client/Configuration/Common.xcconfig'
 
 jobs:
   execute_snapshot_tests:

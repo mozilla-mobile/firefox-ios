@@ -109,5 +109,5 @@ workflows:
           filters:
             branches:
               only: 
-                - /^.*main.*/
+                - /^.*mob-3113-firefox-upgrade-133.*/
           context: napps

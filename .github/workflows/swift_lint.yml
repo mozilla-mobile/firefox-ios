@@ -1,7 +1,7 @@
 name: SwiftLint
 on:
   pull_request:
-    branches: [main]
+    branches: [ main, mob-3113-firefox-upgrade-133 ]
 jobs:
   build:
     runs-on: ubuntu-latest
