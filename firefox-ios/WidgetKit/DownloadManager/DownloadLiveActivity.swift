@@ -101,10 +101,10 @@ struct DownloadLiveActivity: Widget {
                         .padding(.leading, 2)
                         .padding(.trailing, 1)
                     Circle()
-                        .trim(from: 0.0, to: min(LiveDownload.state.totalProgress, 1.0))
+                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
                         .stroke(style: StrokeStyle(lineWidth: UX.lineWidth))
                         .rotationEffect(.degrees(-90))
-                        .animation(.linear, value: min(LiveDownload.state.totalProgress, 1.0))
+                        .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
                         .foregroundStyle(.orange)
                         .frame(width: UX.circleWidth, height: UX.circleWidth)
                 }
