@@ -788,6 +788,7 @@ extension BrowserViewController: WKNavigationDelegate {
                            request: URLRequest) {
         navigationHandler?.showDocumentLoading()
         scrollController.showToolbars(animated: false)
+
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -814,6 +815,14 @@ extension BrowserViewController: WKNavigationDelegate {
                 self?.showErrorPage(webView: webView, error: error)
             }
             tab?.enqueueDocument(tempPDF)
+            if let url = request.url {
+                self?.observeValue(
+                    forKeyPath: KVOConstants.URL.rawValue,
+                    of: webView,
+                    change: [.newKey: url],
+                    context: nil
+                )
+            }
         }
     }
 

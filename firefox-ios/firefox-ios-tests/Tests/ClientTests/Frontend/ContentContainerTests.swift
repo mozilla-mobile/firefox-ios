@@ -97,14 +97,14 @@ final class ContentContainerTests: XCTestCase {
 
     func testCanAddWebview() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
 
         XCTAssertTrue(subject.canAdd(content: webview))
     }
 
     func testCanAddWebviewOnceOnly() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
 
         subject.add(content: webview)
         XCTAssertFalse(subject.canAdd(content: webview))
@@ -127,7 +127,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasHomepage_falseWhenWebview() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
         subject.add(content: webview)
 
         XCTAssertFalse(subject.hasHomepage)
@@ -155,7 +155,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasNewHomepage_returnsFalseWhenWebview() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
         subject.add(content: webview)
 
         XCTAssertFalse(subject.hasHomepage)
@@ -181,7 +181,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasPrivateHomepage_returnsFalseWhenWebview() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
         subject.add(content: webview)
 
         XCTAssertFalse(subject.hasPrivateHomepage)
@@ -304,7 +304,7 @@ final class ContentContainerTests: XCTestCase {
 
     func test_update_hasWebView_returnsTrue() {
         let subject = ContentContainer(frame: .zero)
-        let webview = WebviewViewController(webView: WKWebView(), windowUUID: UUID())
+        let webview = WebviewViewController(webView: WKWebView())
         subject.update(content: webview)
         XCTAssertTrue(subject.hasWebView)
         XCTAssertFalse(subject.hasLegacyHomepage)
