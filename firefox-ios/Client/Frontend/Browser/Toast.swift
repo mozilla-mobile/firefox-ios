@@ -35,6 +35,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     lazy var gestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        gestureRecognizer.delegate = self
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
@@ -144,5 +145,12 @@ class Toast: UIView, ThemeApplicable, Notifiable {
             adjustLayoutForA11ySizeCategory()
         default: break
         }
+    }
+}
+
+extension Toast: UIGestureRecognizerDelegate {
+    // Do not handle tap on toast when a button, from the Toast, is tapped
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return !(touch.view is UIButton)
     }
 }
