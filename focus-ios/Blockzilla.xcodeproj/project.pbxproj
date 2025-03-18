@@ -5683,6 +5683,7 @@
 		};
 		D316DB111DA705FF006FA26B /* FocusEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -5785,6 +5786,7 @@
 		};
 		D3C70C6D1DDFC48100CEE458 /* KlarEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
@@ -5942,6 +5944,7 @@
 		};
 		D3E872AB1C471F7900BF4DE4 /* FocusDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -6049,6 +6052,7 @@
 		};
 		D3E872AE1C471F7F00BF4DE4 /* FocusRelease */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-focus";
@@ -6898,6 +6902,7 @@
 		};
 		E4BF2DE31BACE8CA00DA9D68 /* KlarDebug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
@@ -6958,6 +6963,7 @@
 		};
 		E4BF2DE41BACE8CA00DA9D68 /* KlarRelease */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2D1A4F2D8877850066F7C9 /* version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BLOCKZILLA_URL_SCHEME = "firefox-klar";
