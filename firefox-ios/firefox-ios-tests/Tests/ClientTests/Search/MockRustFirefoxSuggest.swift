@@ -15,7 +15,7 @@ class MockRustFirefoxSuggest: RustFirefoxSuggestProtocol {
         limit: Int32
     ) async throws -> [RustFirefoxSuggestion] {
         var suggestions = [RustFirefoxSuggestion]()
-        if providers.contains(.ampMobile) {
+        if providers.contains(.amp) {
             suggestions.append(RustFirefoxSuggestion(
                 title: "Mozilla",
                 url: URL(string: "https://mozilla.org")!,
