@@ -145,7 +145,9 @@ class BrowserViewController: UIViewController,
     }
 
     // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
-    private(set) lazy var contentStackView: SidebarEnabledView = .build()
+    private(set) lazy var contentStackView: SidebarEnabledView = .build {
+        $0.backgroundColor = .red
+    }
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
@@ -789,6 +791,7 @@ class BrowserViewController: UIViewController,
 
         // Update theme of already existing views
         let theme = currentTheme()
+        contentStackView.backgroundColor = theme.colors.layer1
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
