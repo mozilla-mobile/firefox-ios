@@ -164,7 +164,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
 
-        // After homepage redesign, "Jump back in" is no longer visible
+        // After homepage redesign, "Jump back in" is no longer visible (FXIOS-11644)
         // https://github.com/mozilla-mobile/firefox-ios/pull/25357
         //        app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
         //        // The context menu opens, having the correct options
