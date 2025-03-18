@@ -7,9 +7,15 @@ import Shared
 import WebKit
 import Common
 
+protocol FullscreenDelegate: AnyObject {
+    func enteringFullscreen()
+    func exitingFullscreen()
+}
+
 class WebviewViewController: UIViewController,
                              ContentContainable,
-                             ScreenshotableView {
+                             ScreenshotableView,
+                             FullscreenDelegate {
     private var webView: WKWebView
     var contentType: ContentType = .webview
 
@@ -58,5 +64,15 @@ class WebviewViewController: UIViewController,
                 completionHandler(nil)
             }
         }
+    }
+
+    // MARK: - FullscreenDelegate
+    func enteringFullscreen() {
+        webView.translatesAutoresizingMaskIntoConstraints = true
+        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+
+    func exitingFullscreen() {
+        setupWebView()
     }
 }
