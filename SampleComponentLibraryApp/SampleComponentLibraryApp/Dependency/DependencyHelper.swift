@@ -15,6 +15,9 @@ class DependencyHelper {
         let themeManager: ThemeManager = appDelegate.themeManager
         AppContainer.shared.register(service: themeManager)
 
+        let engineProvider = appDelegate.engineProvider
+        AppContainer.shared.register(service: engineProvider)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
