@@ -10,7 +10,6 @@ import Foundation
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
         struct Download: Codable, Hashable {
-            var id: UUID
             var fileName: String
             var hasContentEncoding: Bool?
 
@@ -53,12 +52,14 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
-            // Using Rectangle instead of EmptyView because the hitbox
-            // of the empty view is too small (likely non existent),
-            // meaning we'd never be redirected to the downloads panel
-            Rectangle()
-                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { context in
+                    // Using Rectangle instead of EmptyView because the hitbox
+                    // of the empty view is too small (likely non existent),
+                    // meaning we'd never be redirected to the downloads panel
+                    let progress = context.state.totalProgress
+                    let downloads = context.state.totalDownloads
+                    Text("Progress so far: \(progress), total downloads: \(downloads)")
+                        .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
