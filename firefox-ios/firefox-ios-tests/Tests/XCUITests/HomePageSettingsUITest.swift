@@ -156,7 +156,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(HomePanelsScreen)
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts
+        XCTAssertTrue(app.collectionViews.links.staticTexts
             .elementContainingText("Mozilla - Internet for people").exists)
     }
 
