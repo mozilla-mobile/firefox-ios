@@ -78,8 +78,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
         let selector = ASSearchEngineSelector(service: service)
 
-        // TODO: [FXIOS-11553] Confirm localization and region standards that the AS APIs are expecting
-        let localeCode = locale.identifier
+        let localeCode = localeCode(from: locale)
         let region = regionCode(from: locale)
         let logger = self.logger
         guard let iconPopulator = iconDataFetcher else { completion([]); return }
@@ -113,6 +112,19 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 completion(openSearchEngines)
             }
         }
+    }
+
+    private func localeCode(from locale: Locale) -> String {
+        // Per feedback from AS team, we want to pass in the 2-component BCP 47 code. In some
+        // rare cases this may include a script with the region, if so we remove that.
+        // See also: Locale+possibilitiesForLanguageIdentifier.swift
+
+        let identifier = locale.identifier
+        let components = identifier.components(separatedBy: "-")
+        if components.count == 3, let first = components.first, let last = components.last {
+            return "\(first)-\(last)"
+        }
+        return identifier
     }
 
     private func regionCode(from locale: Locale) -> String {
