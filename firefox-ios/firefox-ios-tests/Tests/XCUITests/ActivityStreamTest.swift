@@ -50,7 +50,7 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
         mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        // There should be 6 top sites by default
+        // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
         waitForElementsToExist(
