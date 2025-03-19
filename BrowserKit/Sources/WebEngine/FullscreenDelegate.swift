@@ -12,8 +12,7 @@ import Foundation
 ///
 /// Due to limited documentation on this behavior, the following methods handle
 /// fullscreen transitions based on trial and error.
-protocol FullscreenDelegate: AnyObject {
-    
+public protocol FullscreenDelegate: AnyObject {
     /// Called when the web view enters fullscreen mode.
     ///
     /// When `WKWebView` is removed from the view hierarchy, two updates must be made
@@ -23,7 +22,7 @@ protocol FullscreenDelegate: AnyObject {
     ///
     /// These adjustments ensure the web page is displayed correctly.
     func enteringFullscreen()
-    
+
     /// Called when the web view exits fullscreen mode.
     ///
     /// The `WKWebView` must be re-added to the app’s view hierarchy to restore normal behavior.

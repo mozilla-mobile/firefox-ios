@@ -5,12 +5,8 @@
 import Foundation
 import Shared
 import WebKit
+import WebEngine
 import Common
-
-protocol FullscreenDelegate: AnyObject {
-    func enteringFullscreen()
-    func exitingFullscreen()
-}
 
 class WebviewViewController: UIViewController,
                              ContentContainable,
@@ -71,6 +67,7 @@ class WebviewViewController: UIViewController,
     }
 
     // MARK: - FullscreenDelegate
+
     func enteringFullscreen() {
         isFullScreen = true
         webView.translatesAutoresizingMaskIntoConstraints = true
