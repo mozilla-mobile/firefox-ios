@@ -43,7 +43,7 @@ Each `Contributor OK` issue typically has a reference person assigned. If you ne
 If no reference person is assigned, feel free to contact:
 
 - @FilippoZazzeroni
-- @MattLichtenstein
+- @Foxbolts
 
 ### Issue Categories by Difficulty
 We’ve categorized Contributor OK issues by difficulty to help you get started:
