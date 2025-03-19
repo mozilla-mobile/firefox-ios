@@ -780,6 +780,7 @@ class BrowserViewController: UIViewController,
 
         // Update theme of already existing views
         let theme = currentTheme()
+        contentStackView.backgroundColor = theme.colors.layer1
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
