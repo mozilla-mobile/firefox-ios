@@ -34,6 +34,8 @@ class AccountSyncHandlerTests: XCTestCase {
         self.syncManager = nil
         self.profile = nil
         self.queue = nil
+        self.mockWindowManager = nil
+        DependencyHelperMock().reset()
     }
 
     func testTabDidGainFocus_doesntSyncWithoutAccount() {

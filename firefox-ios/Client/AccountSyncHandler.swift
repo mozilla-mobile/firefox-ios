@@ -84,18 +84,27 @@ class AccountSyncHandler: TabEventHandler {
         let tabManagers = windowManager.allWindowTabManagers()
         let windowCount = tabManagers.count
 
-        // We want all normal tabs and no private or inactive tabs
-        var normalTabs: [Tab] = []
-        var inactiveTabsSet = Set<Tab>()
+        // We want all normal and inactive tabs, we never sync private tabs
+        // Store tabs keyed by tabUUID to easily handle overrides.
+        var storedTabsDict = [String: RemoteTab]()
         for manager in tabManagers {
-            normalTabs.append(contentsOf: manager.normalTabs)
-            inactiveTabsSet.formUnion(manager.inactiveTabs)
+            // Set inactive tabs explicitly as inactive (initial state)
+            for tab in manager.inactiveTabs {
+                if let remoteTab = Tab.toRemoteTab(tab, inactive: true) {
+                    storedTabsDict[tab.tabUUID] = remoteTab
+                }
+            }
+
+            // Active tabs override inactive ones if there's overlap
+            for tab in manager.normalActiveTabs {
+                if let remoteTab = Tab.toRemoteTab(tab, inactive: false) {
+                    storedTabsDict[tab.tabUUID] = remoteTab
+                }
+            }
         }
 
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = normalTabs.compactMap {
-            Tab.toRemoteTab($0, inactive: inactiveTabsSet.contains($0))
-        }
+        // Final stored tabs for syncing
+        let storedTabs = Array(storedTabsDict.values)
 
         // It's fine if we wait until more busy work has finished. We tend to contend with more important
         // work like querying for top sites.
