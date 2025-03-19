@@ -18,6 +18,7 @@ class WebviewViewController: UIViewController,
                              FullscreenDelegate {
     private var webView: WKWebView
     var contentType: ContentType = .webview
+    var isFullScreen = false
 
     init(webView: WKWebView) {
         self.webView = webView
@@ -40,6 +41,9 @@ class WebviewViewController: UIViewController,
 
     func update(webView: WKWebView) {
         self.webView = webView
+
+        // Avoid updating constraints while on fullscreen mode
+        guard !isFullScreen else { return }
         setupWebView()
     }
 
@@ -68,11 +72,13 @@ class WebviewViewController: UIViewController,
 
     // MARK: - FullscreenDelegate
     func enteringFullscreen() {
+        isFullScreen = true
         webView.translatesAutoresizingMaskIntoConstraints = true
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
 
     func exitingFullscreen() {
         setupWebView()
+        isFullScreen = false
     }
 }
