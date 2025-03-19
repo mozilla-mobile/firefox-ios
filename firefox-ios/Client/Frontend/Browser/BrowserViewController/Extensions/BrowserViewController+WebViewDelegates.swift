@@ -602,7 +602,6 @@ extension BrowserViewController: WKNavigationDelegate {
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
         if let scheme = url.scheme, ["http", "https", "blob", "file"].contains(scheme) {
-
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
             }
@@ -626,7 +625,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 decisionHandler(.cancel)
                 return
             }
-
 
             if navigationAction.navigationType == .linkActivated && url != webView.url {
                 if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
@@ -682,15 +680,14 @@ extension BrowserViewController: WKNavigationDelegate {
         let forceDownload = webView == pendingDownloadWebView
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
-        if OpenPassBookHelper.shouldOpenWithPassBook(response: response,
-                                                     forceDownload: forceDownload) {
-            passBookHelper = OpenPassBookHelper(response: response,
-                                                cookieStore: cookieStore,
-                                                presenter: self)
+        if let mimeType = response.mimeType, OpenPassBookHelper.shouldOpenWithPassBook(
+            mimeType: mimeType,
+            forceDownload: forceDownload) {
+            passBookHelper = OpenPassBookHelper(presenter: self)
             // Open our helper and nullifies the helper when done with it
-            passBookHelper?.open {
+            passBookHelper?.open(response: response, cookieStore: cookieStore, completion: {
                 self.passBookHelper = nil
-            }
+            })
 
             // Cancel this response from the webview.
             decisionHandler(.cancel)
