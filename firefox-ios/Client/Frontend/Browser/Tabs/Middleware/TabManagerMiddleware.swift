@@ -388,7 +388,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
-            await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
+            self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
@@ -447,7 +447,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
-    @MainActor
     private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
