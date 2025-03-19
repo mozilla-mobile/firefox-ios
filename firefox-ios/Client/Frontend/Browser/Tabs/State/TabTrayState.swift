@@ -17,6 +17,7 @@ struct TabTrayState: ScreenState, Equatable {
     var normalTabsCount: String
     var hasSyncableAccount: Bool
     var shouldDismiss: Bool
+    var shouldAnimateTransition: Bool
     var toastType: ToastType?
     var windowUUID: WindowUUID
     var showCloseConfirmation: Bool
@@ -43,6 +44,7 @@ struct TabTrayState: ScreenState, Equatable {
                   normalTabsCount: panelState.normalTabsCount,
                   hasSyncableAccount: panelState.hasSyncableAccount,
                   shouldDismiss: panelState.shouldDismiss,
+                  shouldAnimateTransition: panelState.shouldAnimateTransition,
                   toastType: panelState.toastType,
                   showCloseConfirmation: panelState.showCloseConfirmation)
     }
@@ -70,6 +72,7 @@ struct TabTrayState: ScreenState, Equatable {
          normalTabsCount: String,
          hasSyncableAccount: Bool,
          shouldDismiss: Bool = false,
+         shouldAnimateTransition: Bool = false,
          toastType: ToastType? = nil,
          showCloseConfirmation: Bool = false) {
         self.windowUUID = windowUUID
@@ -78,6 +81,7 @@ struct TabTrayState: ScreenState, Equatable {
         self.normalTabsCount = normalTabsCount
         self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
+        self.shouldAnimateTransition = shouldAnimateTransition
         self.toastType = toastType
         self.showCloseConfirmation = showCloseConfirmation
     }
@@ -125,6 +129,15 @@ struct TabTrayState: ScreenState, Equatable {
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 shouldDismiss: true)
+
+        case TabTrayActionType.animateTabTransition:
+            return TabTrayState(windowUUID: state.windowUUID,
+                                isPrivateMode: state.isPrivateMode,
+                                selectedPanel: state.selectedPanel,
+                                normalTabsCount: state.normalTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount,
+                                shouldDismiss: true,
+                                shouldAnimateTransition: true)
 
         case TabTrayActionType.firefoxAccountChanged:
             guard let isSyncAccountEnabled = action.hasSyncableAccount else { return defaultState(from: state) }

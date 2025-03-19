@@ -5,13 +5,6 @@
 import Foundation
 
 extension TabTrayViewController: UIViewControllerTransitioningDelegate {
-    // TODO: Move variables later
-
-    // this animation is using the ExperimentTabCell as part of Tabs Experimentation
-    var selectedCell: ExperimentTabCell?
-    // Can use the existing snapshot for the tab?
-    var selectedCellImageViewSnapshot: UIView?
-
     func animationController(
       forPresented presented: UIViewController,
       presenting: UIViewController,
