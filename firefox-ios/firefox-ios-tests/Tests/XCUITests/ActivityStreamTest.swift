@@ -33,8 +33,7 @@ class ActivityStreamTest: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
-        // Commented out so that the sponsors shortcuts are shown after the homepage redesign.
-        // https://mozilla-hub.atlassian.net/browse/FXIOS-11668
+        // Comment out so that the sponsors shortcuts are shown after the homepage redesign. (FXIOS-11668)
         // launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
