@@ -14,6 +14,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
     private var metadataFetcher: MockMetadataFetcherHelper!
+    private var fullscreenDelegate: MockFullscreenDelegate!
 
     override func setUp() {
         super.setUp()
@@ -23,6 +24,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
         metadataFetcher = MockMetadataFetcherHelper()
+        fullscreenDelegate = MockFullscreenDelegate()
     }
 
     override func tearDown() {
@@ -33,6 +35,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = nil
         engineSessionDelegate = nil
         metadataFetcher = nil
+        fullscreenDelegate = nil
     }
 
     // MARK: Load URL
@@ -440,6 +443,26 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.hasOnlySecureContent, true)
         XCTAssertEqual(engineSessionDelegate.onHasOnlySecureContentCalled, 1)
+    }
+
+    func testFullscreeChangeGivenFullscreenStateThenCallsDelegate() {
+        let expectedFullscreenState = true
+        let subject = createSubject()
+        subject?.fullscreenDelegate = fullscreenDelegate
+        subject?.webViewPropertyChanged(.isFullScreen(expectedFullscreenState))
+
+        XCTAssertEqual(fullscreenDelegate.onFullscreeChangeCalled, 1)
+        XCTAssertTrue(fullscreenDelegate.savedFullscreenState)
+    }
+
+    func testFullscreeChangeGivenNotFullscreenStateThenCallsDelegate() {
+        let expectedFullscreenState = false
+        let subject = createSubject()
+        subject?.fullscreenDelegate = fullscreenDelegate
+        subject?.webViewPropertyChanged(.isFullScreen(expectedFullscreenState))
+
+        XCTAssertEqual(fullscreenDelegate.onFullscreeChangeCalled, 1)
+        XCTAssertFalse(fullscreenDelegate.savedFullscreenState)
     }
 
     // MARK: Page Zoom
