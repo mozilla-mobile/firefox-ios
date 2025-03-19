@@ -4,12 +4,16 @@
 
 import Common
 import Foundation
+import PassKit
 
 extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID
         guard download.originWindow == uuid else { return }
+
+        // Do not need toast message for Passbook Passes since we don't save the download
+        guard download.mimeType != MIMEType.Passbook else { return}
 
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
@@ -30,6 +34,20 @@ extension BrowserViewController: DownloadQueueDelegate {
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
+        // Handle Passbook Pass downloads
+        if download.mimeType == MIMEType.Passbook {
+            do {
+                let pass = try PKPass(data: (download as? BlobDownload)!.data)
+                let vc = PKAddPassesViewController(pass: pass)
+
+                present(vc!, animated: true)
+            } catch {
+                print("Failed to open .pkpass file: \(error.localizedDescription)")
+            }
+            return
+        }
+
+        // Handle toast notification
         guard let downloadToast = self.downloadToast,
               let download = downloadToast.downloads.first,
               download.originWindow == windowUUID, downloadQueue.isEmpty
