@@ -4,7 +4,7 @@
 
 import Foundation
 
-extension TabDisplayPanelViewController: UIViewControllerTransitioningDelegate {
+extension TabTrayViewController: UIViewControllerTransitioningDelegate {
     // TODO: Move variables later
 
     // this animation is using the ExperimentTabCell as part of Tabs Experimentation
