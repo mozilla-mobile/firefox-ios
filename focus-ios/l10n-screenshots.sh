@@ -39,6 +39,7 @@ for lang in $LOCALES; do
     fastlane snapshot --project focus-ios/Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
       --derived_data_path l10n-screenshots-dd \
       --number_of_retries 0 \
+      --concurrent_simulators false \
       --skip_open_summary \
       --xcargs "-maximum-parallel-testing-workers 2" \
       --erase_simulator --localize_simulator \
