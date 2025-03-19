@@ -41,6 +41,12 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlHorizontalSpacing: CGFloat = 16
     }
 
+    // MARK: UIViewControllerTransitioningDelegate animation variables
+    // this animation is using the ExperimentTabCell as part of Tabs Experimentation
+    var selectedExperimentCell: ExperimentTabCell?
+    // Can use the existing snapshot for the tab?
+    var selectedCellImageViewSnapshot: UIView?
+
     // MARK: Theme
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -324,6 +330,7 @@ class TabTrayViewController: UIViewController,
         updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
 
+        // When we add a new tab or select a tab we should kick off the animation here and then dismiss ?
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }

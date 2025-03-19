@@ -30,6 +30,7 @@ enum  TabTrayActionType: ActionType {
     // Middleware actions
     case didLoadTabTray
     case dismissTabTray
+    case animateTabTransition
     case firefoxAccountChanged
     case closePrivateTabsSettingToggled
 }
