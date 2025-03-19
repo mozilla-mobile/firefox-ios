@@ -77,6 +77,11 @@ class TabDisplayPanelViewController: UIViewController,
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+
+        if !UIAccessibility.isReduceMotionEnabled {
+          transitioningDelegate = self
+          modalPresentationStyle = .fullScreen
+        }
     }
 
     required init?(coder: NSCoder) {
