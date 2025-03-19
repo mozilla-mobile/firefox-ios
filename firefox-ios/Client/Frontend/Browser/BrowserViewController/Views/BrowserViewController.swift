@@ -817,6 +817,7 @@ class BrowserViewController: UIViewController,
         topTabsViewController.delegate = self
         addChild(topTabsViewController)
         header.addArrangedViewToTop(topTabsViewController.view)
+        topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
     }
 
