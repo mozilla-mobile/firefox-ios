@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import PassKit
 
 extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
