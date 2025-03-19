@@ -23,12 +23,18 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     /// is useful when the middleware is making an asynchronous call and we want to wait for an expectation to be fulfilled.
     var dispatchCalled: (() -> Void)?
 
+    /// Called when subscriber calls subscribe to the mock store.
+    var subscribeCalled: (() -> Void)?
+
+    /// Called when subscriber calls unsubscribe to the mock store
+    var unsubscribeCalled: (() -> Void)?
+
     init(state: State) {
         self.state = state
     }
 
     func subscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
-        // TODO: if you need it
+        subscribeCalled?()
     }
 
     func subscribe<SubState, S>(
@@ -39,7 +45,7 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
             ) -> Redux.Subscription<SubState>
         )?
     ) where SubState == S.SubscriberStateType, S: Redux.StoreSubscriber {
-        // TODO: if you need it
+        subscribeCalled?()
     }
 
     func unsubscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
