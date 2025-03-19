@@ -598,6 +598,11 @@ final class LocationView: UIView,
         iconContainerBackgroundView.backgroundColor = colors.layerSearch
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: urlTextField.placeholder ?? "",
+            attributes: [.foregroundColor: isURLTextFieldCentered ? colors.textPrimary : colors.textSecondary]
+        )
+
         safeListedURLImageColor = colors.iconAccentBlue
         lockIconButton.tintColor = colors.iconPrimary
         lockIconImageColor = colors.iconPrimary
