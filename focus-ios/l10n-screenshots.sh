@@ -40,7 +40,7 @@ for lang in $LOCALES; do
       --derived_data_path l10n-screenshots-dd \
       --number_of_retries 0 \
       --skip_open_summary \
-      --xcargs "-maximum-parallel-testing-workers 1" \
+      --xcargs "-maximum-parallel-testing-workers 2" \
       --erase_simulator --localize_simulator \
       --devices "$DEVICE" \
       --languages "$lang" \
