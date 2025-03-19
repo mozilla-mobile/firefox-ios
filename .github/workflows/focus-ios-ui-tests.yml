@@ -3,7 +3,7 @@ name: "Focus UI Tests"
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 13 * * *"
 
 env:
     browser: focus-ios
