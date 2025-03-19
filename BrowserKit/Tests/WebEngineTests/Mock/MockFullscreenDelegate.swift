@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockFullscreenDelegate: FullscreenDelegate {
+final class MockFullscreenDelegate: FullscreenDelegate {
     var onFullscreeChangeCalled = 0
     var savedFullscreenState = false
 
