@@ -6,6 +6,8 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 import Foundation
+import Common
+import Shared
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
@@ -52,7 +54,14 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
-    private struct UX {
+    struct UX {
+        static let downloadColor: UIColor = .orange
+        static let circleWidth: CGFloat = 17.5
+        static let lineWidth: CGFloat = 3.5
+        static let downloadIconSize: CGFloat = 19
+        static let downloadPaddingLeading: CGFloat = 2
+        static let downloadPaddingTrailing: CGFloat = 1
+        
         static let iconFrameSize: CGFloat = 50
         static let firefoxIconSize: CGFloat = 44
         static let iconEdgeRounding: CGFloat = 15
@@ -154,10 +163,10 @@ struct DownloadLiveActivity: Widget {
                 .frame(width: DownloadLiveActivity.UX.stateIconSize, height: DownloadLiveActivity.UX.stateIconSize)
             }.frame(width: DownloadLiveActivity.UX.iconFrameSize,
                     height: DownloadLiveActivity.UX.iconFrameSize)
-                .padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
-                                    leading: DownloadLiveActivity.UX.iconLeftPadding,
-                                    bottom: DownloadLiveActivity.UX.iconBottomPadding,
-                                    trailing: DownloadLiveActivity.UX.iconRightPadding))
+            .padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
+                                leading: DownloadLiveActivity.UX.iconLeftPadding,
+                                bottom: DownloadLiveActivity.UX.iconBottomPadding,
+                                trailing: DownloadLiveActivity.UX.iconRightPadding))
         }
     }
     var body: some WidgetConfiguration {
@@ -173,9 +182,32 @@ struct DownloadLiveActivity: Widget {
                 centerExpandedRegion(liveDownload: liveDownload)
                 trailingExpandedRegion(liveDownload: liveDownload)
             } compactLeading: {
-                EmptyView()
+                Image(StandardImageIdentifiers.Large.download)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: UX.downloadIconSize, height: UX.downloadIconSize)
+                    .foregroundStyle(.orange)
+                    .padding([.leading, .trailing], 2)
             } compactTrailing: {
-                EmptyView()
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: UX.lineWidth)
+                        .foregroundColor(.gray)
+                        .opacity(0.3)
+                        .frame(width: UX.circleWidth, height: UX.circleWidth)
+                        .padding(.leading, 2)
+                        .padding(.trailing, 1)
+                    Circle()
+                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: UX.lineWidth))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
+                        .foregroundStyle(.orange)
+                        .frame(width: UX.circleWidth, height: UX.circleWidth)
+                }
+                .padding(.leading, UX.downloadPaddingLeading)
+                .padding(.trailing, UX.downloadPaddingTrailing)
             } minimal: {
                 EmptyView()
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
