@@ -26,9 +26,6 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     /// Called when subscriber calls subscribe to the mock store.
     var subscribeCalled: (() -> Void)?
 
-    /// Called when subscriber calls unsubscribe to the mock store
-    var unsubscribeCalled: (() -> Void)?
-
     init(state: State) {
         self.state = state
     }
