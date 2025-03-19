@@ -131,10 +131,11 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(TabTray)
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
+            app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         } else {
             mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
+            app.cells["Example Domain"].buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         }
-        app.cells["Example Domain"].buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
