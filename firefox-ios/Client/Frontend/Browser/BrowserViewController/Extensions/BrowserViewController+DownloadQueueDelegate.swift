@@ -35,16 +35,11 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
         // Handle Passbook Pass downloads
-        if download.mimeType == MIMEType.Passbook {
-            do {
-                let pass = try PKPass(data: (download as? BlobDownload)!.data)
-                let vc = PKAddPassesViewController(pass: pass)
-
-                present(vc!, animated: true)
-            } catch {
-                print("Failed to open .pkpass file: \(error.localizedDescription)")
+        if OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
+            passBookHelper = OpenPassBookHelper(presenter: self)
+            passBookHelper?.open(data: (download as? BlobDownload)!.data) {
+                self.passBookHelper = nil
             }
-            return
         }
 
         // Handle toast notification

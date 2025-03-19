@@ -40,6 +40,15 @@ class OpenPassBookHelper {
         return mimeType == MIMEType.Passbook && PKAddPassesViewController.canAddPasses() && !forceDownload
     }
 
+    func open(data: Data, completion: @escaping () -> Void) {
+        do {
+            try open(passData: data)
+        } catch {
+            sendLogError(with: error.localizedDescription)
+            presentErrorAlert(completion: completion)
+        }
+    }
+
     func open(response: URLResponse, cookieStore: WKHTTPCookieStore, completion: @escaping () -> Void) {
         do {
             try openPassWithContentsOfURL(url: response.url)
