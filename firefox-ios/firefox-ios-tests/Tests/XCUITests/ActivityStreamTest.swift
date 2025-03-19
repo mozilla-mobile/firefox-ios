@@ -103,7 +103,15 @@ class ActivityStreamTest: BaseTestCase {
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
+<<<<<<< HEAD
         app.collectionViews.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+=======
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        }
+>>>>>>> bc777d799 (Bugfix MTE-4411 iPad specific "x" button (#25431))
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
