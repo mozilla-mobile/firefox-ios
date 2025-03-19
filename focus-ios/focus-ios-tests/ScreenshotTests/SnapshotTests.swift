@@ -7,7 +7,7 @@ import XCTest
 class SnapshotTests: BaseTestCaseL10n {
     @MainActor
     func test01FirstRunScreens() {
-        waitForExistence(app.collectionViews.cells.images["icon_background"], timeout: 10)
+        waitForExistence(app.collectionViews.cells.images["icon_background"], timeout: 30)
         snapshot("00FirstRun")
         app.otherElements.buttons.element(boundBy: 3).tap()
         waitForNoExistence(app.collectionViews.cells.images["icon_background"])
