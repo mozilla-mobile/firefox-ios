@@ -61,7 +61,6 @@ struct DownloadLiveActivity: Widget {
         static let downloadIconSize: CGFloat = 19
         static let downloadPaddingLeading: CGFloat = 2
         static let downloadPaddingTrailing: CGFloat = 1
-        
         static let iconFrameSize: CGFloat = 50
         static let firefoxIconSize: CGFloat = 44
         static let iconEdgeRounding: CGFloat = 15
