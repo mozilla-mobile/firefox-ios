@@ -5,8 +5,6 @@
 import UIKit
 import Shared
 import Common
-import ActivityKit
-import WidgetKit
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
@@ -63,7 +61,6 @@ class DownloadsPanel: UIViewController,
         self.state = .downloads
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        startDownloadLiveActivity()
         events.forEach {
             NotificationCenter.default.addObserver(
                 self,

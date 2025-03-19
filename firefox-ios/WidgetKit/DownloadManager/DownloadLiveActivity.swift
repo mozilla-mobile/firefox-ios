@@ -59,9 +59,9 @@ struct DownloadLiveActivity: Widget {
             // meaning we'd never be redirected to the downloads panel
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        } dynamicIsland: { context in
+        } dynamicIsland: { liveDownload in
             DynamicIsland {
-                expandedContent(context: context)
+                expandedContent(liveDownload: liveDownload)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
@@ -76,7 +76,7 @@ struct DownloadLiveActivity: Widget {
 @available(iOS 16.2, *)
 @DynamicIslandExpandedContentBuilder
 private func expandedContent
-(context: ActivityViewContext<DownloadLiveActivityAttributes>) -> DynamicIslandExpandedContent<some View> {
+(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> DynamicIslandExpandedContent<some View> {
         DynamicIslandExpandedRegion(.leading) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
@@ -86,59 +86,51 @@ private func expandedContent
                     .resizable()
                     .scaledToFit()
                     .frame(width: 44, height: 44)
-            }.padding()
+            }.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
         }
         DynamicIslandExpandedRegion(.trailing) {
             ZStack {
-                // Progress Circle
                 Circle()
-                    .stroke(Color.white.opacity(0.5), lineWidth: 6)
-                    .frame(width: 44, height: 44)
-                // Progress Indicator
+                    .stroke(Color.white.opacity(0.5), lineWidth: 5)
+                    .frame(width: 50, height: 50)
                 Circle()
-                    .trim(from: 0.0, to: min(context.state.totalProgress, 1.0))
-                    .stroke(style: StrokeStyle(lineWidth: 6))
+                    .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                    .stroke(style: StrokeStyle(lineWidth: 5))
                     .rotationEffect(.degrees(270.0))
                     .animation(.linear, value: 0.5)
-                // Stop Button
-                Image("mediaStop")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-            }.frame(width: 44, height: 44)
-                .padding()
+                if liveDownload.state.totalProgress == 1.0 {
+                    Image("checkmarkLarge")
+                    .renderingMode(.template)
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(Color("widgetLabelColors"))
+                } else {
+                    Image("mediaStop")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                }
+            }.frame(width: 50, height: 50)
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
         }
         DynamicIslandExpandedRegion(.center) {
-            Text("Downloading \(context.state.downloads[0].fileName)")
+            Text("Downloading \(liveDownload.state.downloads[0].fileName)")
                 .font(.system(size: 17,
                               weight: .bold))
-            Text("\(String(format: "%.1f", Double(context.state.totalBytesDownloaded) / 1000000)) MB of \(String(format: "%.1f", Double(context.state.totalBytesExpected) / 1000000)) MB")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+            let bytesDownloaded = ByteCountFormatter.string(
+                fromByteCount: liveDownload.state.totalBytesDownloaded,
+                countStyle: .file
+                )
+            let bytesExpected = ByteCountFormatter.string(
+                fromByteCount: liveDownload.state.totalBytesExpected,
+                countStyle: .file
+                )
+            Text("\(bytesDownloaded) of \(bytesExpected)")
                                         .font(.system(size: 15))
                                         .opacity(0.8)
-                                        .foregroundColor(Color("widgetLabelColors"))
+                                        .foregroundColor(Color.white)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
         }
-}
-
-func startDownloadLiveActivity() {
-    guard #available(iOS 16.2, *) else { return }
-
-    let attributes = DownloadLiveActivityAttributes()
-    let state = DownloadLiveActivityAttributes.ContentState(downloads: [DownloadLiveActivityAttributes.ContentState.Download(
-        id: UUID(),
-        fileName: "yayyy",
-        hasContentEncoding: false,
-        totalBytesExpected: 2000000000,
-        bytesDownloaded: 50000000,
-        isComplete: false
-    )])
-
-    do {
-        _ = try Activity<DownloadLiveActivityAttributes>.request(
-            attributes: attributes,
-            content: .init(state: state, staleDate: nil),
-            pushType: nil
-        )
-    } catch {
-        print("Failed to start Live Activity: \(error.localizedDescription)")
-    }
 }
