@@ -76,7 +76,10 @@ class MarketingTests: BaseTestCaseL10n {
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         waitForExistence(app.collectionViews.images["icon_settings"])
-        waitForExistence(app.images["icon_shortcuts_add"])
-        app.images["icon_shortcuts_add"].tap()
+        waitForExistence(app.collectionViews.images["icon_link"])
+        waitForExistence(app.collectionViews.images["icon_searchfor"])
+        waitForExistence(app.collectionViews.images["request_desktop_site_activity"])
+        waitForExistence(app.collectionViews.images["icon_shortcuts_add"])
+        app.collectionViews.images["icon_shortcuts_add"].tap()
     }
 }
