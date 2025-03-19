@@ -104,15 +104,11 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-<<<<<<< HEAD
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
-        } else {
-            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
-=======
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         } else {
+            app.otherElements.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
             app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
->>>>>>> bc777d799 (Bugfix MTE-4411 iPad specific "x" button (#25431))
         }
 
         // After removing only one tab it automatically goes to HomepanelView

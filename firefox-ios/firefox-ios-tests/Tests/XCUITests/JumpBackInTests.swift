@@ -136,10 +136,6 @@ class JumpBackInTests: BaseTestCase {
             mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
             app.cells["Example Domain"].buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
         }
-<<<<<<< HEAD
-        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
-=======
->>>>>>> bc777d799 (Bugfix MTE-4411 iPad specific "x" button (#25431))
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
