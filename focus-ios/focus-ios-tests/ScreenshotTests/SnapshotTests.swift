@@ -9,7 +9,7 @@ class SnapshotTests: BaseTestCaseL10n {
     func test01FirstRunScreens() {
         waitForExistence(app.collectionViews.cells.images["icon_background"], timeout: 10)
         snapshot("00FirstRun")
-        app.collectionViews.cells.images["icon_background"].swipeLeft()
+        app.otherElements.buttons.element(boundBy: 3).tap()
         waitForNoExistence(app.collectionViews.cells.images["icon_background"])
         waitForExistence(app.collectionViews.cells.images["icon_hugging_focus"], timeout: 3)
         snapshot("01FirstRun")
