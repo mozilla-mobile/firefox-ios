@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TabTrayTests: BaseTestCase {
+class A11yTabTrayTests: BaseTestCase {
     func testAccessibility() throws {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
