@@ -152,7 +152,7 @@ DynamicIslandExpandedContent<some View> {
                                     trailing: settings.iconRightPadding))
         }
         DynamicIslandExpandedRegion(.center) {
-            Text("Downloading \(liveDownload.state.downloads[0].fileName)")
+            Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
                 .font(.system(size: settings.downloadingFontSize,
                               weight: .bold))
                 .frame(maxWidth: .infinity,
