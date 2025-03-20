@@ -139,7 +139,7 @@ protocol Profile: AnyObject {
     func cleanupHistoryIfNeeded()
 
     @discardableResult
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func addTabToCommandQueue(_ deviceId: String, url: URL)
     func removeTabFromCommandQueue(_ deviceId: String, url: URL)
@@ -575,8 +575,24 @@ open class BrowserProfile: Profile {
         }
     }
 
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return self.tabs.setLocalTabs(localTabs: tabs)
+    // Store the tabs that we'll be syncing to other clients, and sync right after
+    func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+        // Store local tabs into the DB
+        let res = self.tabs.setLocalTabs(localTabs: tabs)
+
+        // If for some reason we don't have a sync manager, just return
+        // the result of setLocalTabs
+        guard let syncManager = self.syncManager else { return res }
+
+        // Chain syncTabs after setLocalTabs has completed
+        return res.bind { result in
+            // Only sync if the local tabs were successfully set
+            return result.isSuccess
+                // Return the original result from setLocalTabs
+                ? syncManager.syncTabs().bind { _ in res }
+                // If setLocalTabs failed, just return its result
+                : res
+        }
     }
 
     func addTabToCommandQueue(_ deviceId: String, url: URL) {

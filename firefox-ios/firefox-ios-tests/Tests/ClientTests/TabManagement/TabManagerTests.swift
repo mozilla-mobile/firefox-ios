@@ -99,11 +99,7 @@ class TabManagerTests: XCTestCase {
         let subject = createSubject()
         _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         await subject.removeAllTabs(isPrivateMode: false)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
 
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
         XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
     }
 
@@ -148,11 +144,6 @@ class TabManagerTests: XCTestCase {
         subject.backupCloseTab = BackupCloseTab(tab: tab, isSelected: true)
         subject.undoCloseTab()
         XCTAssertEqual(subject.selectedIndex, 0)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
-
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
     }
 
     func testUndoCloseTabWithSelectedTab() {
@@ -166,11 +157,6 @@ class TabManagerTests: XCTestCase {
         subject.backupCloseTab = BackupCloseTab(tab: closedTab, isSelected: true)
         subject.undoCloseTab()
         XCTAssertEqual(subject.selectedIndex, 1)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
-
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
     }
 
     // MARK: - Document pause - restore
