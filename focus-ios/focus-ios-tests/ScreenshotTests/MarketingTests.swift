@@ -6,6 +6,11 @@ import XCTest
 
 class MarketingTests: BaseTestCaseL10n {
     @MainActor
+    func testDummy() {
+        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 60)
+    }
+
+    @MainActor
     func testSettingsView() {
         if iPad() {
             app.windows.element(boundBy: 0).tap()
