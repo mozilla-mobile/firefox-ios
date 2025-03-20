@@ -408,21 +408,22 @@ class SearchTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
     func testFirefoxSuggest() {
+        // In history: mozilla.org
         navigator.openURL("https://www.mozilla.org/en-US/")
-        // navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
-        waitUntilPageLoad()
-        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
         waitUntilPageLoad()
 
         // Bookmark The Book of Mozilla (on localhost)
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
 
-        navigator.goto(TabTray)
-        navigator.goto(CloseTabMenu)
+        // Close all tabs so that the search result would not show
+        // current tabs.
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
+        // Type partial match ("mo") of the history and the bookmark
         navigator.goto(NewTabScreen)
         typeOnSearchBar(text: "mo")
 
@@ -430,7 +431,7 @@ class SearchTests: BaseTestCase {
         // Bookmark suggestion
         mozWaitForElementToExist(app.cells.staticTexts["The Book of Mozilla"])
         // History suggestion
-        mozWaitForElementToExist(app.cells.staticTexts["www.mozilla.org"])
+        mozWaitForElementToExist(app.cells.staticTexts["www.mozilla.org/"])
 
         // typeTextAndValidateSearchSuggestions(text: "local", isSwitchOn: true)
     }
