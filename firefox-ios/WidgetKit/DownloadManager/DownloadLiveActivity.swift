@@ -50,9 +50,9 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
     }
 }
 
-struct UX {
-    static let iconFrameSize: CGFloat = 50
-    static let firefoxIconSize: CGFloat = 44
+private struct UX {
+    var iconFrameSize: CGFloat = 50
+    var firefoxIconSize: CGFloat = 44
     var iconEdgeRounding: CGFloat = 15
     var iconTopPadding: CGFloat = 10
     var iconLeftPadding: CGFloat = 0
@@ -84,8 +84,8 @@ struct DownloadLiveActivity: Widget {
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         } dynamicIsland: { liveDownload in
             DynamicIsland {
-                let settings = expandedContentSettings()
-                expandedContent(liveDownload: liveDownload, settings: settings)
+                let UX = UX()
+                expandedContent(liveDownload: liveDownload, UX: UX)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
@@ -99,36 +99,35 @@ struct DownloadLiveActivity: Widget {
 
 @available(iOS 16.2, *)
 @DynamicIslandExpandedContentBuilder
-private func expandedContent
-(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>, settings: expandedContentSettings) ->
+private func expandedContent(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>, UX: UX) ->
 DynamicIslandExpandedContent<some View> {
         DynamicIslandExpandedRegion(.leading) {
             ZStack {
-                RoundedRectangle(cornerRadius: settings.iconEdgeRounding)
-                    .fill(settings.widgetColours)
-                    .frame(width: settings.iconFrameSize,
-                           height: settings.iconFrameSize)
-                Image(settings.firefoxIcon)
+                RoundedRectangle(cornerRadius: UX.iconEdgeRounding)
+                    .fill(UX.widgetColours)
+                    .frame(width: UX.iconFrameSize,
+                           height: UX.iconFrameSize)
+                Image(UX.firefoxIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: settings.firefoxIconSize,
-                           height: settings.firefoxIconSize)
-            }.padding(EdgeInsets(top: settings.iconTopPadding,
-                                 leading: settings.iconLeftPadding,
-                                 bottom: settings.iconBottomPadding,
-                                 trailing: settings.iconRightPadding))
+                    .frame(width: UX.firefoxIconSize,
+                           height: UX.firefoxIconSize)
+            }.padding(EdgeInsets(top: UX.iconTopPadding,
+                                 leading: UX.iconLeftPadding,
+                                 bottom: UX.iconBottomPadding,
+                                 trailing: UX.iconRightPadding))
         }
         DynamicIslandExpandedRegion(.trailing) {
             ZStack {
                 Circle()
-                    .stroke(settings.widgetColours.opacity(settings.inProgessOpacity),
-                            lineWidth: settings.progressWidth)
-                    .frame(width: settings.iconFrameSize,
-                           height: settings.iconFrameSize)
+                    .stroke(UX.widgetColours.opacity(UX.inProgessOpacity),
+                            lineWidth: UX.progressWidth)
+                    .frame(width: UX.iconFrameSize,
+                           height: UX.iconFrameSize)
                 Circle()
                     .trim(from: 0.0,
                           to: min(liveDownload.state.totalProgress, 1.0))
-                    .stroke(style: StrokeStyle(lineWidth: settings.progressWidth))
+                    .stroke(style: StrokeStyle(lineWidth: UX.progressWidth))
                     .rotationEffect(.degrees(270.0))
                     .animation(.linear, value: 0.5)
                 Image(
@@ -138,26 +137,25 @@ DynamicIslandExpandedContent<some View> {
                 )
                 .resizable()
                 .scaledToFit()
-                .renderingMode(.template)
                 .foregroundStyle(UX.widgetColours)
                 .frame(width: UX.stateIconSize, height: UX.stateIconSize)
-            }.frame(width: settings.iconFrameSize,
-                    height: settings.iconFrameSize)
-                .padding(EdgeInsets(top: settings.iconTopPadding,
-                                    leading: settings.iconLeftPadding,
-                                    bottom: settings.iconBottomPadding,
-                                    trailing: settings.iconRightPadding))
+            }.frame(width: UX.iconFrameSize,
+                    height: UX.iconFrameSize)
+                .padding(EdgeInsets(top: UX.iconTopPadding,
+                                    leading: UX.iconLeftPadding,
+                                    bottom: UX.iconBottomPadding,
+                                    trailing: UX.iconRightPadding))
         }
         DynamicIslandExpandedRegion(.center) {
             Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
-                .font(.system(size: settings.downloadingFontSize,
+                .font(.system(size: UX.downloadingFontSize,
                               weight: .bold))
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
-                .padding(EdgeInsets(top: settings.wordsTopPadding,
-                                    leading: settings.wordsLeftPadding,
-                                    bottom: settings.wordsBottomPadding,
-                                    trailing: settings.wordsRightPadding))
+                .padding(EdgeInsets(top: UX.wordsTopPadding,
+                                    leading: UX.wordsLeftPadding,
+                                    bottom: UX.wordsBottomPadding,
+                                    trailing: UX.wordsRightPadding))
             let bytesDownloaded = ByteCountFormatter.string(
                 fromByteCount: liveDownload.state.totalBytesDownloaded,
                 countStyle: .file
@@ -167,13 +165,13 @@ DynamicIslandExpandedContent<some View> {
                 countStyle: .file
                 )
             Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-                .font(.system(size: settings.progressFontSize))
-                .foregroundColor(settings.widgetColours)
+                .font(.system(size: UX.progressFontSize))
+                .foregroundColor(UX.widgetColours)
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
-                .padding(EdgeInsets(top: settings.wordsTopPadding,
-                                    leading: settings.wordsLeftPadding,
-                                    bottom: settings.wordsBottomPadding,
-                                    trailing: settings.wordsRightPadding))
+                .padding(EdgeInsets(top: UX.wordsTopPadding,
+                                    leading: UX.wordsLeftPadding,
+                                    bottom: UX.wordsBottomPadding,
+                                    trailing: UX.wordsRightPadding))
         }
 }
