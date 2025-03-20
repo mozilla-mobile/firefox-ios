@@ -34,9 +34,10 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
         // Handle Passbook Pass downloads
-        if OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
+        if let download = (download as? BlobDownload),
+           OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
             passBookHelper = OpenPassBookHelper(presenter: self)
-            passBookHelper?.open(data: (download as? BlobDownload)!.data) {
+            passBookHelper?.open(data: download.data) {
                 self.passBookHelper = nil
             }
         }
