@@ -440,6 +440,7 @@ final class LocationView: UIView,
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ config: LocationViewConfiguration) {
+        lockIconButton.isUserInteractionEnabled = isURLTextFieldCentered ? false : true
         lockIconImageName = config.lockIconImageName
         lockIconNeedsTheming = config.lockIconNeedsTheming
         safeListedURLImageName = config.safeListedURLImageName
