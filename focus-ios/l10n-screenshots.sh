@@ -36,6 +36,7 @@ for lang in $LOCALES; do
     # start simple with Focus only
     echo "Snapshotting on $DEVICE"
     mkdir -p "l10n-screenshots/$lang"
+    xcrun simctl erase all
     fastlane snapshot --project focus-ios/Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
       --derived_data_path l10n-screenshots-dd \
       --number_of_retries 0 \
