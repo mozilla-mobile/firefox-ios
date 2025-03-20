@@ -67,7 +67,7 @@ class TopTabsTest: BaseTestCase {
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForTabsButton()
+        waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.openURL(urlExample)
         waitForTabsButton()
