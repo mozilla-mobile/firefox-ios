@@ -314,8 +314,10 @@ class TabDisplayView: UIView,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)
             case .tab(let tabModel):
-                selectedCell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
-                selectedCellImageViewSnapshot = selectedCell?.locationImageView.snapshotView(afterScreenUpdates: false)
+//                if isTabTrayUIExperimentsEnabled {
+//                    selectedExperimentCell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
+//                    selectedCellImageViewSnapshot = selectedCell?.locationImageView.snapshotView(afterScreenUpdates: false)
+//                }
                 let tabUUID = tabModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
