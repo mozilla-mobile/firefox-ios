@@ -7,6 +7,9 @@ import XCTest
 class MarketingTests: BaseTestCaseL10n {
     @MainActor
     func testDummy() {
+        // This test without taking any screenshot is a workaround so that the
+        // simulator is warmed up before testPinTopSites(). Without warming up
+        // the simulator, testPinTopSites() fails intermittently.
         waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 60)
     }
 
