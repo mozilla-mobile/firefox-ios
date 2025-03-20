@@ -28,6 +28,7 @@ struct NavigationToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
+                hasCustomColor: action.hasCustomColor,
                 largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
