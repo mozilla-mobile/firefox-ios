@@ -29,6 +29,9 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element is in the selected state and should be displayed as highlighted.
     let isSelected: Bool
 
+    /// Indicates if the element has a custom color..
+    let hasCustomColor: Bool
+
     /// Title to display in the large content viewer
     let largeContentTitle: String?
 
@@ -70,6 +73,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 isSelected: Bool = false,
+                hasCustomColor: Bool = false,
                 largeContentTitle: String? = nil,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
@@ -88,6 +92,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.isSelected = isSelected
+        self.hasCustomColor = hasCustomColor
         self.largeContentTitle = largeContentTitle
         self.contextualHintType = contextualHintType
         self.onSelected = onSelected
@@ -109,6 +114,7 @@ public struct ToolbarElement: Equatable {
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.isSelected == rhs.isSelected &&
+        lhs.hasCustomColor == rhs.hasCustomColor &&
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
