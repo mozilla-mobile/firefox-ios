@@ -29,7 +29,7 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element is in the selected state and should be displayed as highlighted.
     let isSelected: Bool
 
-    /// Indicates if the element has a custom color..
+    /// Indicates if the element has a custom color
     let hasCustomColor: Bool
 
     /// Title to display in the large content viewer
