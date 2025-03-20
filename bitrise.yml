@@ -927,11 +927,9 @@ workflows:
         stack: osx-xcode-16.2.x
         machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
+    before_run:
+    - SPM_Common_Steps
     steps:
-    - activate-ssh-key@4.1:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
-    - certificate-and-profile-installer@1: {}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1055,11 +1053,9 @@ workflows:
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
   SPM_Deploy_Beta_Only:
+    before_run:
+    - SPM_Common_Steps
     steps:
-    - activate-ssh-key@4.1.1:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -1248,6 +1244,26 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
+  
+  SPM_Common_Steps:
+    steps:
+    - activate-ssh-key@4.1.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - certificate-and-profile-installer@1.11.4: {}
+    - script@1.2.1:
+        is_always_run: true
+        title: Read version from version.txt file
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            pwd
+            ls
+            version=$(cat /Users/vagrant/git/version.txt)
+            echo "Version: $version"
+            # Save version in BITRISE_RELEASE_VERSION
+            envman add --key BITRISE_RELEASE_VERSION --value "$version"
+            envman add --key BITRISE_BETA_VERSION --value "$version"
 
   Bitrise_Performance_Test:
     steps:
@@ -1797,11 +1813,9 @@ workflows:
   # # FOCUS UTILITIES WORKFLOWS
   focus-clone-and-build-dependencies:
     description: Clones the repo and builds dependencies
+    before_run:
+    - SPM_Common_Steps
     steps:
-    - activate-ssh-key@4.1.1:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
         - content: |-
@@ -2161,12 +2175,7 @@ app:
   - opts:
       is_expand: false
     BITRISE_NIGHTLY_VERSION: '9000'
-  - opts:
-      is_expand: false
-    BITRISE_RELEASE_VERSION: '138.0'
-  - opts:
-      is_expand: false
-    BITRISE_BETA_VERSION: '138.0'
+
 
 trigger_map:
 - push_branch: main
