@@ -12,7 +12,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         guard download.originWindow == uuid else { return }
 
         // Do not need toast message for Passbook Passes since we don't save the download
-        guard download.mimeType != MIMEType.Passbook else { return}
+        guard download.mimeType != MIMEType.Passbook else { return }
 
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {

@@ -615,9 +615,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
-            // Blob URL's are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
+            // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
             // - If the blob response has a .pkpass MIME type (FXIOS-11684)
-            // - The <a> tag pressed has a "download" attribute enoting a file download (FXIOS-11125)
+            // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
             // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
             // via JS since we are cancelling the navigation here
             if scheme == "blob" && navigationAction.navigationType != .other {
