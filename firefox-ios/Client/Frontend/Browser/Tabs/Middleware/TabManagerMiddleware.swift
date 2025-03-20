@@ -23,7 +23,8 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         bookmarksSaver: BookmarksSaver? = nil) {
+         bookmarksSaver: BookmarksSaver? = nil
+    ) {
         self.profile = profile
         self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
@@ -914,9 +915,11 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
-        case HomepageActionType.initialize,
+        case HomepageActionType.viewWillAppear,
             JumpBackInActionType.fetchLocalTabs,
-            TabTrayActionType.dismissTabTray:
+            TabTrayActionType.dismissTabTray,
+            TopTabsActionType.didTapNewTab,
+            TopTabsActionType.didTapCloseTab:
             dispatchRecentlyAccessedTabs(action: action)
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
@@ -1048,12 +1051,17 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
     private func dispatchRecentlyAccessedTabs(action: Action) {
-        store.dispatch(
-            TabManagerAction(
-                recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
-                windowUUID: action.windowUUID,
-                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+        // TODO: FXIOS-10919 - Consider testing better with Tasks here
+        Task { @MainActor in
+            // [FXIOS-5149] Recent tabs need to be accessed from .main thread
+            let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
+            store.dispatch(
+                TabManagerAction(
+                    recentTabs: recentTabs,
+                    windowUUID: action.windowUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+                )
             )
-        )
+        }
     }
 }

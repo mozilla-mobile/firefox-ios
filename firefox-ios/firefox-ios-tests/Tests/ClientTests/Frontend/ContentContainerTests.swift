@@ -20,10 +20,10 @@ final class ContentContainerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile = nil
         self.overlayModeManager = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     // MARK: - canAddHomepage
