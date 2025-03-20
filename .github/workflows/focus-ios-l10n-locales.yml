@@ -32,9 +32,6 @@ jobs:
       - name: Run setup scripts for Focus
         run: |
           ./checkout.sh
-      - name: Install fastlane
-        run: |
-          gem install fastlane -v 2.227.0
       - name: Fetch derived data
         id: download-derived-data
         uses: actions/download-artifact@v4
