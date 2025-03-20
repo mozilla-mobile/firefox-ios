@@ -169,7 +169,7 @@ DynamicIslandExpandedContent<some View> {
                 fromByteCount: liveDownload.state.totalBytesExpected,
                 countStyle: .file
                 )
-            Text("\(bytesDownloaded) of \(bytesExpected)")
+            Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
                 .font(.system(size: settings.progressFontSize))
                 .foregroundColor(settings.widgetColours)
                 .frame(maxWidth: .infinity,
