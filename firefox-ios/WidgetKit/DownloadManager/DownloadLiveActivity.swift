@@ -50,9 +50,9 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
     }
 }
 
-struct expandedContentSettings {
-    var iconFrameSize: CGFloat = 50
-    var firefoxIconSize: CGFloat = 44
+struct UX {
+    static let iconFrameSize: CGFloat = 50
+    static let firefoxIconSize: CGFloat = 44
     var iconEdgeRounding: CGFloat = 15
     var iconTopPadding: CGFloat = 10
     var iconLeftPadding: CGFloat = 0
