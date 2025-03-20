@@ -42,7 +42,7 @@ for lang in $LOCALES; do
       --number_of_retries 0 \
       --concurrent_simulators false \
       --skip_open_summary \
-      --xcargs "-maximum-parallel-testing-workers 2" \
+      --xcargs "-maximum-parallel-testing-workers 1" \
       --erase_simulator --localize_simulator \
       --devices "$DEVICE" \
       --languages "$lang" \
