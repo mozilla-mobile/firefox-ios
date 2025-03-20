@@ -416,6 +416,9 @@ class BookmarksTests: BaseTestCase {
         } else {
             navigator.performAction(Action.GoToHomePage)
         }
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        }
         longPressBookmarkCell()
         // The context menu opens, having the correct options
         let contextMenuTable = app.tables["Context Menu"]

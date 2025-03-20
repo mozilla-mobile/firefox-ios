@@ -225,7 +225,7 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
@@ -612,27 +612,32 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentSavePDFController() {
-        guard let webView = browserViewController.tabManager.selectedTab?.webView else { return }
-        webView.createPDF { [weak self] result in
-            switch result {
-            case .success(let data):
-                guard let pdf = PDFDocument(data: data),
-                      let outputURL = pdf.createOutputURL(withFileName: webView.title ?? "") else {
-                    return
-                }
-                pdf.write(to: outputURL)
-                if FileManager.default.fileExists(atPath: outputURL.path) {
-                    let url = URL(fileURLWithPath: outputURL.path)
-                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                    if let popover = controller.popoverPresentationController {
-                        popover.sourceView = self?.browserViewController.addressToolbarContainer
+        guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
+        if selectedTab.mimeType == MIMEType.PDF {
+            showShareSheetForCurrentlySelectedTab()
+        } else {
+            selectedTab.webView?.createPDF { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let data):
+                    guard let pdf = PDFDocument(data: data),
+                          let outputURL = pdf.createOutputURL(withFileName: selectedTab.webView?.title ?? "") else {
+                        return
                     }
-                    self?.present(controller)
+                    startShareSheetCoordinator(
+                        shareType: .file(url: outputURL),
+                        shareMessage: nil,
+                        sourceView: self.browserViewController.addressToolbarContainer,
+                        sourceRect: nil,
+                        toastContainer: self.browserViewController.contentContainer,
+                        popoverArrowDirection: .any
+                    )
+                case .failure(let error):
+                    // TODO: FXIOS-11542 [iOS Menu Redesign] - Handle saveAsPDF Menu option, error case
+                    self.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                                    level: .debug,
+                                    category: .webview)
                 }
-            case .failure(let error):
-                self?.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
-                                 level: .debug,
-                                 category: .webview)
             }
         }
     }
@@ -1028,11 +1033,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showDocumentLoading() {
-        webviewController?.showDocumentLoadingView()
+        browserViewController.showDocumentLoadingView()
     }
 
     func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        webviewController?.removeDocumentLoadingView(completion: completion)
+        browserViewController.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey
@@ -1081,7 +1086,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 
@@ -1195,7 +1200,8 @@ class BrowserCoordinator: BaseCoordinator,
     private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument else {
+              let temporaryDocument = tab.temporaryDocument,
+              !temporaryDocument.isDownloading else {
             return shareType
         }
 

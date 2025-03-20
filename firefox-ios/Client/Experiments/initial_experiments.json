@@ -171,7 +171,7 @@
       "channel": "release",
       "userFacingName": "New Onboarding Experience experiment phase 1 (iOS)",
       "userFacingDescription": "Rolling out new onboarding experience pointing to more information about data use.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -234,7 +234,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('136.!') >= 0)))",
       "startDate": "2025-02-24",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2025-03-11",
       "endDate": null,
       "proposedDuration": 14,
       "proposedEnrollment": 14,
@@ -252,33 +252,42 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "new-toolbar-ios-new-users-ab-testing",
-      "id": "new-toolbar-ios-new-users-ab-testing",
+      "slug": "new-onboarding-experience-experiment-phase-2-ios",
+      "id": "new-onboarding-experience-experiment-phase-2-ios",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "New Toolbar iOS - Phase 1 Experiment Share + Home",
-      "userFacingDescription": "New toolbar experiment.",
-      "isEnrollmentPaused": true,
+      "userFacingName": "New Onboarding Experience experiment phase 2 (iOS)",
+      "userFacingDescription": "Rolling out new onboarding experience pointing to more information about data use.",
+      "isEnrollmentPaused": false,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-toolbar-refactor-feature-release-2",
-        "start": 0,
-        "count": 10000,
+        "namespace": "ios-tos-feature-release-1",
+        "start": 1000,
+        "count": 1000,
         "total": 10000
       },
       "featureIds": [
-        "toolbar-refactor-feature"
+        "tos-feature"
       ],
       "probeSets": [],
-      "outcomes": [],
+      "outcomes": [
+        {
+          "slug": "onboarding",
+          "priority": "primary"
+        },
+        {
+          "slug": "default_browser",
+          "priority": "secondary"
+        }
+      ],
       "branches": [
         {
           "slug": "control",
-          "ratio": 1,
+          "ratio": 5,
           "feature": {
             "featureId": "this-is-included-for-mobile-pre-96-support",
             "enabled": false,
@@ -286,19 +295,17 @@
           },
           "features": [
             {
-              "featureId": "toolbar-refactor-feature",
+              "featureId": "tos-feature",
               "enabled": true,
               "value": {
-                "enabled": false,
-                "one_tap_new_tab": false,
-                "navigation_hint": false
+                "status": false
               }
             }
           ]
         },
         {
           "slug": "treatment-a",
-          "ratio": 1,
+          "ratio": 5,
           "feature": {
             "featureId": "this-is-included-for-mobile-pre-96-support",
             "enabled": false,
@@ -306,28 +313,26 @@
           },
           "features": [
             {
-              "featureId": "toolbar-refactor-feature",
+              "featureId": "tos-feature",
               "enabled": true,
               "value": {
-                "enabled": true,
-                "one_tap_new_tab": false,
-                "navigation_hint": false
+                "status": true
               }
             }
           ]
         }
       ],
-      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('135.1.0') >= 0)))",
-      "startDate": "2025-02-06",
-      "enrollmentEndDate": "2025-02-14",
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('136.!') >= 0)))",
+      "startDate": "2025-03-11",
+      "enrollmentEndDate": null,
       "endDate": null,
-      "proposedDuration": 42,
+      "proposedDuration": 14,
       "proposedEnrollment": 14,
       "referenceBranch": "control",
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2025-02-06T20:30:56.175072Z",
+      "publishedDate": "2025-03-11T19:46:41.458937Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
       "firefoxLabsDescription": null,

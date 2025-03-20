@@ -6,42 +6,52 @@ import Foundation
 import Storage
 
 // Top site UI class, used in the home top site section
-final class TopSite: FeatureFlaggable {
+struct TopSite: FeatureFlaggable {
     let site: Site
     let title: String
 
-    var sponsoredText: String {
-        return .FirefoxHomepage.Shortcuts.Sponsored
+    private var isSuggested: Bool {
+        site.isSuggestedSite
     }
 
-    var accessibilityLabel: String? {
-        return isSponsored ? "\(title), \(sponsoredText)" : title
+    private var pinnedTitle: String {
+        .localizedStringWithFormat(
+            .FirefoxHomepage.Shortcuts.PinnedAccessibilityLabel,
+            title
+        )
     }
 
-    var isPinned: Bool {
-        return site.isPinnedSite
-    }
-
-    var isSuggested: Bool {
-        return site.isSuggestedSite
-    }
-
-    var isSponsored: Bool {
-        return site.isSponsoredSite
-    }
-
-    var type: SiteType {
-        return site.type
+    private var pinnedStatusTitle: String {
+        isPinned ? pinnedTitle : title
     }
 
     var isGooglePinnedTile: Bool {
         guard case SiteType.pinnedSite(let siteInfo) = site.type else { return false }
-
         return siteInfo.isGooglePinnedTile
     }
 
+    var sponsoredText: String {
+        .FirefoxHomepage.Shortcuts.Sponsored
+    }
+
+    var accessibilityLabel: String? {
+        isSponsored ? "\(pinnedStatusTitle), \(sponsoredText)" : pinnedStatusTitle
+    }
+
+    var isPinned: Bool {
+        site.isPinnedSite
+    }
+
+    var isSponsored: Bool {
+        site.isSponsoredSite
+    }
+
+    var type: SiteType {
+        site.type
+    }
+
     var isGoogleURL: Bool {
-        return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+        site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
     }
 
     var identifier = UUID().uuidString
@@ -56,7 +66,6 @@ final class TopSite: FeatureFlaggable {
     }
 
     // MARK: Telemetry
-
     func getTelemetrySiteType() -> String {
         if isGooglePinnedTile {
             return "google"

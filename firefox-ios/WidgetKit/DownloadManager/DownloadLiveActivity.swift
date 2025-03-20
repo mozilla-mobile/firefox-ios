@@ -6,6 +6,8 @@ import WidgetKit
 import ActivityKit
 import SwiftUI
 import Foundation
+import Common
+import Shared
 
 struct DownloadLiveActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable {
@@ -54,9 +56,14 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 struct DownloadLiveActivity: Widget {
     struct UX {
         static let downloadColor: UIColor = .orange
-        static let circleWidth: CGFloat = 19.5
-        static let lineWidth: CGFloat = 3
-        static let downloadIconSize: CGFloat = 12
+        static let circleWidth: CGFloat = 17.5
+        static let lineWidth: CGFloat = 3.5
+        static let downloadIconSize: CGFloat = 19
+        static let downloadPaddingLeading: CGFloat = 2
+        static let downloadPaddingTrailing: CGFloat = 1
+        static let circleWidthMinimal: CGFloat = 19.5
+        static let lineWidthMinimal: CGFloat = 3
+        static let downloadIconSizeMinimal: CGFloat = 12
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
@@ -80,18 +87,15 @@ struct DownloadLiveActivity: Widget {
                     EmptyView()
                 }
             } compactLeading: {
-                EmptyView()
+                Image(StandardImageIdentifiers.Large.download)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: UX.downloadIconSize, height: UX.downloadIconSize)
+                    .foregroundStyle(.orange)
+                    .padding([.leading, .trailing], 2)
             } compactTrailing: {
-                EmptyView()
-            } minimal: {
                 ZStack {
-                    Image(StandardImageIdentifiers.Large.download)
-                              .renderingMode(.template)
-                              .resizable()
-                              .scaledToFit()
-                              .frame(width: UX.downloadIconSize, height: UX.downloadIconSize)
-                              .foregroundStyle(.orange)
-                              .padding([.leading, .trailing], 2)
                     Circle()
                         .stroke(lineWidth: UX.lineWidth)
                         .foregroundColor(.gray)
@@ -106,6 +110,32 @@ struct DownloadLiveActivity: Widget {
                         .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
                         .foregroundStyle(.orange)
                         .frame(width: UX.circleWidth, height: UX.circleWidth)
+                }
+                .padding(.leading, UX.downloadPaddingLeading)
+                .padding(.trailing, UX.downloadPaddingTrailing)
+            } minimal: {
+                ZStack {
+                    Image(StandardImageIdentifiers.Large.download)
+                              .renderingMode(.template)
+                              .resizable()
+                              .scaledToFit()
+                              .frame(width: UX.downloadIconSizeMinimal, height: UX.downloadIconSizeMinimal)
+                              .foregroundStyle(.orange)
+                              .padding([.leading, .trailing], 2)
+                    Circle()
+                        .stroke(lineWidth: UX.lineWidthMinimal)
+                        .foregroundColor(.gray)
+                        .opacity(0.3)
+                        .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
+                        .padding(.leading, 2)
+                        .padding(.trailing, 1)
+                    Circle()
+                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: UX.lineWidthMinimal))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
+                        .foregroundStyle(.orange)
+                        .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
                 }
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }

@@ -27,6 +27,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
+                    with: .appearanceMenu,
+                    titleText: format(string: "Enable New Appearance Menu"),
+                    statusText: format(string: "Toggle to show the new apperance menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .tabTrayUIExperiments,
                     titleText: format(string: "Enable Tab Tray UI Experiment"),
                     statusText: format(string: "Toggle to use the new tab tray UI")
@@ -144,12 +151,26 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .useRustKeychain,
+                    titleText: format(string: "Enable Rust Keychain"),
+                    statusText: format(string: "Toggle to enable rust keychain")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .sentFromFirefox,
                     titleText: format(string: "Enable Sent from Firefox"),
                     statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")
                 ) { [weak self] _ in
                     self?.reloadView()
-                }
+                },
+                FeatureFlagsBoolSetting(
+                    with: .deeplinkOptimizationRefactor,
+                    titleText: format(string: "Enable Deeplink Optimization Refactor"),
+                    statusText: format(string: "Toggle to enable deeplink optimization refactor")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

@@ -34,6 +34,7 @@ public class RustAutofill {
 
     private(set) var isOpen = false
     private var didAttemptToMoveToBackup = false
+    private var rustKeychainEnabled = false
     private let logger: Logger
 
     // MARK: - Initialization
@@ -43,10 +44,13 @@ public class RustAutofill {
     /// - Parameters:
     ///   - databasePath: The path to the Autofill database file.
     ///   - logger: An optional logger for recording informational and error messages. Default is shared DefaultLogger.
-    public init(databasePath: String, logger: Logger = DefaultLogger.shared) {
+    public init(databasePath: String,
+                logger: Logger = DefaultLogger.shared,
+                rustKeychainEnabled: Bool = false) {
         self.databasePath = databasePath
         queue = DispatchQueue(label: "RustAutofill queue: \(databasePath)")
         self.logger = logger
+        self.rustKeychainEnabled = rustKeychainEnabled
     }
 
     // MARK: - Database Operations
@@ -140,7 +144,7 @@ public class RustAutofill {
             return nil
         }
         let keys = RustAutofillEncryptionKeys()
-        return keys.decryptCreditCardNum(encryptedCCNum: encryptedCCNum)
+        return keys.decryptCreditCardNum(encryptedCCNum: encryptedCCNum, rustKeychainEnabled: rustKeychainEnabled)
     }
 
     /// Retrieves a credit card from the database by its identifier.
@@ -519,7 +523,7 @@ public class RustAutofill {
                     // There are no records in the database so we don't need to scrub any
                     // existing credit card records. We just need to create a new key.
                     do {
-                        let key = try rustKeys.createAndStoreKey()
+                        let key = try self.createKey(rustKeys: rustKeys)
                         completion(.success(key))
                     } catch let error as NSError {
                         completion(.failure(error))
@@ -570,9 +574,14 @@ public class RustAutofill {
     private func getKeychainData(rustKeys: RustAutofillEncryptionKeys,
                                  completion: @escaping (String?, String?) -> Void) {
         DispatchQueue.global(qos: .background).sync {
-            let key = rustKeys.keychain.string(forKey: rustKeys.ccKeychainKey)
-            let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.ccCanaryPhraseKey)
-            completion(key, encryptedCanaryPhrase)
+            if rustKeychainEnabled {
+                let (key, encryptedCanaryPhrase) = rustKeys.keychain.getCreditCardKeyData()
+                completion(key, encryptedCanaryPhrase)
+            } else {
+                let key = rustKeys.legacyKeychain.string(forKey: rustKeys.ccKeychainKey)
+                let encryptedCanaryPhrase = rustKeys.legacyKeychain.string(forKey: rustKeys.ccCanaryPhraseKey)
+                completion(key, encryptedCanaryPhrase)
+            }
         }
     }
 
@@ -582,7 +591,7 @@ public class RustAutofill {
             switch result {
             case .success(()):
                 do {
-                    let key = try rustKeys.createAndStoreKey()
+                    let key = try self.createKey(rustKeys: rustKeys)
                     completion(.success(key))
                 } catch let error as NSError {
                     self.logger.log("Error creating credit card encryption key",
@@ -595,6 +604,12 @@ public class RustAutofill {
                 completion(.failure(err as NSError))
             }
         }
+    }
+
+    private func createKey(rustKeys: RustAutofillEncryptionKeys) throws -> String {
+        return self.rustKeychainEnabled ?
+            try rustKeys.keychain.createCreditCardsKeyData() :
+            try rustKeys.createAndStoreKey()
     }
 
     private func hasCreditCards(completion: @escaping (Result<Bool, Error>) -> Void) {

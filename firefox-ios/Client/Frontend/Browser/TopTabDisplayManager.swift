@@ -189,7 +189,6 @@ class TopTabDisplayManager: NSObject {
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         tabManager.addDelegate(self)
-        register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
         getTabs { [weak self] tabsToDisplay in
             guard let self, !tabsToDisplay.isEmpty else { return }
@@ -323,18 +322,8 @@ class TopTabDisplayManager: NSObject {
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
-        getTabs { [weak self] tabsToDisplay in
-            guard let self else { return }
-            // If it is the last tab of regular mode we automatically create an new tab
-            if !self.isPrivate,
-               tabsToDisplay.count == 1 {
-                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
-                    self.tabManager.selectTab(self.tabManager.addTab())
-                }
-                return
-            }
-
-            self.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
+        getTabs { [weak self] _ in
+            self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
         }
     }
 

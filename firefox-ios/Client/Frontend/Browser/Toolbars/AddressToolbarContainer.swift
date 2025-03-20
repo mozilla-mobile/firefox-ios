@@ -32,6 +32,7 @@ final class AddressToolbarContainer: UIView,
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
         static let toolbarIsEditingLeadingPadding: CGFloat = 0
+        static let toolbarIsEditingLeadingPaddingVersion1: CGFloat = 8
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -52,6 +53,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     private var toolbar: BrowserAddressToolbar {
+        guard model?.toolbarLayoutStyle == .version1 else { return regularToolbar }
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
@@ -88,10 +90,15 @@ final class AddressToolbarContainer: UIView,
         return 0
     }
 
-    private func calculateToolbarLeadingSpace(isEditing: Bool) -> CGFloat {
+    private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
+        guard toolbarLayoutStyle == .baseline else {
+            return isEditing ? UX.toolbarIsEditingLeadingPaddingVersion1 : 0
+        }
+
         if shouldDisplayCompact {
             return isEditing ? UX.toolbarIsEditingLeadingPadding : UX.toolbarHorizontalPadding
         }
+
         // Provide 0 padding in iPhone landscape due to safe area insets
         if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
             return UX.toolbarHorizontalPadding
@@ -203,18 +210,22 @@ final class AddressToolbarContainer: UIView,
             }
             updateProgressBarPosition(toolbarState.toolbarPosition)
 
-            compactToolbar.configure(config: newModel.addressToolbarConfig,
-                                     toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
-                                     trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                                     animated: newModel.shouldAnimate)
-            regularToolbar.configure(config: newModel.addressToolbarConfig,
-                                     toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing),
-                                     trailingSpace: calculateToolbarTrailingSpace(),
-                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-                                     animated: newModel.shouldAnimate)
+            compactToolbar.configure(
+                config: newModel.addressToolbarConfig,
+                toolbarDelegate: self,
+                leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
+                                                           toolbarLayoutStyle: newModel.toolbarLayoutStyle),
+                trailingSpace: calculateToolbarTrailingSpace(),
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                animated: newModel.shouldAnimate)
+            regularToolbar.configure(
+                config: newModel.addressToolbarConfig,
+                toolbarDelegate: self,
+                leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
+                                                           toolbarLayoutStyle: newModel.toolbarLayoutStyle),
+                trailingSpace: calculateToolbarTrailingSpace(),
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled,
+                animated: newModel.shouldAnimate)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
@@ -227,9 +238,9 @@ final class AddressToolbarContainer: UIView,
             // All functionality that depends on the new model should come after this
             self.model = newModel
 
-            if shouldSwitchToolbars {
+            if newModel.toolbarLayoutStyle == .baseline, shouldSwitchToolbars {
                 switchToolbars()
-                guard model?.shouldSelectSearchTerm == false else { return }
+                guard model?.shouldSelectSearchTerm == false, model?.isEditing == true else { return }
                 store.dispatch(
                     ToolbarAction(
                         searchTerm: searchTerm,
@@ -237,6 +248,10 @@ final class AddressToolbarContainer: UIView,
                         actionType: ToolbarActionType.didSetSearchTerm
                     )
                 )
+            }
+
+            if newModel.toolbarLayoutStyle == .version1 {
+                self.maximumContentSizeCategory = .extraExtraExtraLarge
             }
         }
     }

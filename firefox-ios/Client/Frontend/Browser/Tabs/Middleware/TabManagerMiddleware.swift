@@ -9,11 +9,17 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
+class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
+                            FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
+
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -34,9 +40,20 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
             self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? ScreenshotAction {
+            self.resolveScreenshotActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
+    }
+
+    private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
+        let manager = tabManager(for: action.windowUUID)
+        manager.tabDidSetScreenshot(action.tab)
+        triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
     private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
@@ -128,7 +145,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
-
+            dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
             moveTab(state: state, moveTabData: moveTabData, uuid: action.windowUUID)
@@ -378,21 +395,25 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                        actionType: TabPanelViewActionType.tabPanelDidLoad)
                 store.dispatch(didLoadAction)
 
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
+                if !isTabTrayUIExperimentsEnabled {
+                    let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
+                                                               windowUUID: uuid,
+                                                               actionType: TabPanelMiddlewareActionType.showToast)
+                    store.dispatch(toastAction)
+                }
             } else if shouldDismiss {
                 let dismissAction = TabTrayAction(windowUUID: uuid,
                                                   actionType: TabTrayActionType.dismissTabTray)
                 store.dispatch(dismissAction)
 
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
+                if !isTabTrayUIExperimentsEnabled {
+                    let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
+                                                           windowUUID: uuid,
+                                                           actionType: GeneralBrowserActionType.showToast)
+                    store.dispatch(toastAction)
+                }
                 addNewTabIfPrivate(uuid: uuid)
-            } else {
+            } else if !isTabTrayUIExperimentsEnabled {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
@@ -476,16 +497,18 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
                                                       actionType: TabPanelMiddlewareActionType.refreshTabs)
                 store.dispatch(action)
 
-                if tabsState.isPrivateMode {
+                if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
                                                           windowUUID: uuid,
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
                 } else {
-                    let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                           windowUUID: uuid,
-                                                           actionType: GeneralBrowserActionType.showToast)
-                    store.dispatch(toastAction)
+                    if !isTabTrayUIExperimentsEnabled {
+                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                               windowUUID: uuid,
+                                                               actionType: GeneralBrowserActionType.showToast)
+                        store.dispatch(toastAction)
+                    }
                     addNewTabIfPrivate(uuid: uuid)
                 }
             }
@@ -891,14 +914,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
-        case HomepageActionType.initialize, JumpBackInActionType.fetchLocalTabs:
-            store.dispatch(
-                TabManagerAction(
-                    recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
-                    windowUUID: action.windowUUID,
-                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
-                )
-            )
+        case HomepageActionType.initialize,
+            JumpBackInActionType.fetchLocalTabs,
+            TabTrayActionType.dismissTabTray:
+            dispatchRecentlyAccessedTabs(action: action)
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
                   let tab = jumpBackInAction.tab else { return }
@@ -1025,5 +1044,16 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private func preserveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.preserveTabs()
+    }
+
+    /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
+    private func dispatchRecentlyAccessedTabs(action: Action) {
+        store.dispatch(
+            TabManagerAction(
+                recentTabs: tabManager(for: action.windowUUID).recentlyAccessedNormalTabs,
+                windowUUID: action.windowUUID,
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+            )
+        )
     }
 }

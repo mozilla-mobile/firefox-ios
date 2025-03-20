@@ -30,9 +30,7 @@ class FindInPageTests: BaseTestCase {
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
-        // Workaround until FxSGraph is fixed to allow the previous way with goto
         navigator.nowAt(BrowserTab)
-
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         navigator.goto(FindInPage)
 
@@ -118,7 +116,6 @@ class FindInPageTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
-        // Workaround until FxSGraph is fixed to allow the previous way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.goto(FindInPage)

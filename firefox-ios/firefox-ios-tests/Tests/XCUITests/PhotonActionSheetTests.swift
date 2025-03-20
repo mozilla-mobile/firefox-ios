@@ -23,10 +23,10 @@ class PhotonActionSheetTests: BaseTestCase {
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
         if #available(iOS 17, *) {
-            mozWaitForElementToExist(app.links["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
             // No identifier is available for iOS 17 amd below
-            mozWaitForElementToExist(app.links["Example Domain"].images.element(boundBy: 1))
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
         }
 
         // Remove pin
@@ -46,14 +46,7 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
-
-        // Temporarily workaround for the url bar redesign work FXIOS-8172:
-        // Launch "Share" from the hamburger menu instead of the share icon from the
-        // awesome bar.
-        // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
-        // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
-        navigator.goto(ToolsBrowserTabMenu)
-        app.cells[AccessibilityIdentifiers.MainMenu.share].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
 
         if #unavailable(iOS 16) {
             waitForElementsToExist(

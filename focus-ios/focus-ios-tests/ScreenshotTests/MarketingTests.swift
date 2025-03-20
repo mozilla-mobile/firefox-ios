@@ -6,6 +6,14 @@ import XCTest
 
 class MarketingTests: BaseTestCaseL10n {
     @MainActor
+    func testDummy() {
+        // This test without taking any screenshot is a workaround so that the
+        // simulator is warmed up before testPinTopSites(). Without warming up
+        // the simulator, testPinTopSites() fails intermittently.
+        waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 60)
+    }
+
+    @MainActor
     func testSettingsView() {
         if iPad() {
             app.windows.element(boundBy: 0).tap()
@@ -72,11 +80,11 @@ class MarketingTests: BaseTestCaseL10n {
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText(TopSite)
         app.textFields.firstMatch.typeText("\n")
-        waitForNoExistence(app.progressIndicators.firstMatch, timeoutValue: 45)
+        waitForNoExistence(app.progressIndicators.firstMatch, timeoutValue: 60)
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         waitForExistence(app.collectionViews.images["icon_settings"])
-        waitForExistence(app.images["icon_shortcuts_add"])
-        app.images["icon_shortcuts_add"].tap()
+        waitForExistence(app.collectionViews.images["icon_shortcuts_add"])
+        app.collectionViews.images["icon_shortcuts_add"].tap()
     }
 }

@@ -14,4 +14,5 @@ enum WKEngineWebViewProperty: Equatable {
     case canGoForward(Bool)
     case contentSize(CGSize)
     case hasOnlySecureContent(Bool)
+    case isFullScreen(Bool)
 }

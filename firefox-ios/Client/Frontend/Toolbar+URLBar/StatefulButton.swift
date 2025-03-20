@@ -43,7 +43,7 @@ class StatefulButton: UIButton {
             case .stop:
                 setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: .normal)
             case .disabled:
-                self.isHidden = true
+                isHidden = true
             }
         }
     }
