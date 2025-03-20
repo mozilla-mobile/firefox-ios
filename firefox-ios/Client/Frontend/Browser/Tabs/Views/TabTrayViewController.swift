@@ -94,7 +94,7 @@ class TabTrayViewController: UIViewController,
     }
 
     var shownToast: Toast?
-    private var logger: Logger
+    var logger: Logger
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?

@@ -25,18 +25,22 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
       let bvc = containerController.topViewController as? BrowserViewController,
       let destinationController = context.viewController(forKey: .to)
     else {
-      logger.module.error(
+      logger.log(
         """
             Attempted to present the tab tray on something that is not a BrowserViewController which is
             currently unsupported.
-        """
+        """,
+        level: .warning,
+        category: .tabs
       )
       context.completeTransition(true)
       return
     }
 
     guard let selectedTab = tabManager.selectedTab else {
-      logger.module.error("Attempted to present the tab tray without having a selected tab")
+      logger.log("Attempted to present the tab tray without having a selected tab",
+                 level: .warning,
+                 category: .tabs)
       context.completeTransition(true)
       return
     }
@@ -152,14 +156,15 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     guard let toViewController = context.viewController(forKey: .to),
       let toView = context.view(forKey: .to)
     else {
-      logger.module.error(
+      logger.log(
         """
             Attempted to dismiss the tab tray without a view to dismiss from.
 
             Likely the `modalPresentationStyle` was changed away from `fullScreen` and should be changed
             back if using this custom animation.
-        """
-      )
+        """,
+        level: .warning,
+        category: .tabs)
       context.completeTransition(true)
       return
     }
@@ -167,12 +172,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     guard let containerController = toViewController as? UINavigationController,
       let bvc = containerController.topViewController as? BrowserViewController
     else {
-        logger.module.error(
+        logger.log(
         """
             Attempted to dismiss the tab tray from something that is not a BrowserViewController which is
             currently unsupported.
-        """
-      )
+        """,
+        level: .warning,
+        category: .tabs)
       context.completeTransition(true)
       return
     }
