@@ -35,17 +35,22 @@ class AccountSyncHandler: TabEventHandler {
     let tabEventWindowResponseType: TabEventHandlerWindowResponseType =
         .allWindows
 
+    // For testing purposes only:
+    private var onSyncCompleted: (() -> Void)?
+
     init(
         with profile: Profile,
         debounceTime: Double = 5.0,
         queue: DispatchQueueInterface = DispatchQueue.global(),
         queueDelay: Double = 0.5,
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        onSyncCompleted: (() -> Void)? = nil
     ) {
         self.profile = profile
         self.debouncer = Debouncer(delay: debounceTime)
         self.logger = logger
         self.queueDelay = queueDelay
+        self.onSyncCompleted = onSyncCompleted
 
         // Other clients only show urls and ordering of tabs, we can ignore everything
         // else that doesn't modify those attributes
@@ -120,6 +125,7 @@ class AccountSyncHandler: TabEventHandler {
                     self?.logger.log(
                         "Failed to store tabs: \(error.localizedDescription)", level: .warning, category: .sync)
                 }
+                self?.onSyncCompleted?() // callback for tests
             }
         }
     }
