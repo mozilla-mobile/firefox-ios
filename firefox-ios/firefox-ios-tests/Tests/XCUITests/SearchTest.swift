@@ -435,7 +435,6 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
         mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["The Book of Mozilla"]) // Bookmark
         mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
-        print(app.debugDescription)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
