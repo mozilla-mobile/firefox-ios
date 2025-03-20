@@ -39,6 +39,7 @@ for lang in $LOCALES; do
     xcrun simctl shutdown all
     xcrun simctl erase all
     xcrun simctl boot "$DEVICE"
+    xcrun simctl install "iPhone 16" l10n-screenshots-dd/Build/Products/FocusDebug-iphonesimulator/Firefox\ Focus.app
     fastlane snapshot --project focus-ios/Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
       --derived_data_path l10n-screenshots-dd \
       --number_of_retries 0 \
