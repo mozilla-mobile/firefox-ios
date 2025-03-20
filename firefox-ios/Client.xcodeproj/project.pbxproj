@@ -266,6 +266,7 @@
 		21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingBasicCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */; };
+		21AE78522D8B54B8002FDC9E /* WebviewViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
 		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
@@ -2783,6 +2784,7 @@
 		21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontTypeButton.swift; sourceTree = "<group>"; };
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBasicCardViewController.swift; sourceTree = "<group>"; };
+		21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewControllerTests.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
 		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
@@ -15170,6 +15172,7 @@
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
+				21AE78512D8B54B8002FDC9E /* WebviewViewControllerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -18379,6 +18382,7 @@
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
 				8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */,
+				21AE78522D8B54B8002FDC9E /* WebviewViewControllerTests.swift in Sources */,
 				ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */,
 				5A9A09D228AFD51900B6F51E /* MockHomepageDataModelDelegate.swift in Sources */,
 				D525DFB325FBE5E000B18763 /* TabTests.swift in Sources */,

@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WebEngine
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -66,11 +67,13 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent
+        .hasOnlySecureContent,
+        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
+    weak var fullscreenDelegate: FullscreenDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
@@ -2104,6 +2107,16 @@ class BrowserViewController: UIViewController,
             if !isToolbarRefactorEnabled {
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
+            }
+        case .fullscreenState:
+            if #available(iOS 16.0, *) {
+                guard webView.fullscreenState == .enteringFullscreen ||
+                        webView.fullscreenState == .exitingFullscreen else { return }
+                if webView.fullscreenState == .enteringFullscreen {
+                    fullscreenDelegate?.enteringFullscreen()
+                } else {
+                    fullscreenDelegate?.exitingFullscreen()
+                }
             }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")

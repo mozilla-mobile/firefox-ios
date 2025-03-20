@@ -198,6 +198,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
+        if #available(iOS 15.4, *) {
+            configuration.preferences.isElementFullscreenEnabled = true
+        }
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         } else {

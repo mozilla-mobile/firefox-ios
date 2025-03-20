@@ -5,11 +5,6 @@
 import Common
 import UIKit
 
-protocol FullscreenDelegate: AnyObject {
-    func enteringFullscreen()
-    func exitingFullscreen()
-}
-
 class WKEngineView: UIView, EngineView, FullscreenDelegate {
     private var session: WKEngineSession?
     private var logger: Logger
