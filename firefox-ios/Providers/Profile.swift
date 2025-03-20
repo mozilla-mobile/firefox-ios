@@ -708,8 +708,11 @@ open class BrowserProfile: Profile {
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
-            let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            let bucketName = (server == .prod ? "main" : "main-preview")
+            // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
+            // let bucketName = (server == .prod ? "main" : "main-preview")
+            // For now we're always using prod, per AS team guidance
+            let server = RemoteSettingsServer.prod
+            let bucketName = "main"
             let config = RemoteSettingsConfig2(server: server,
                                                bucketName: bucketName,
                                                appContext: remoteSettingsAppContext())
