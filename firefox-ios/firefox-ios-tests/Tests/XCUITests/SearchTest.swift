@@ -419,7 +419,7 @@ class SearchTests: BaseTestCase {
         navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
 
-        // Close all tabs so that the search result would not show
+        // Close all tabs so that the search result does not include
         // current tabs.
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
@@ -427,13 +427,15 @@ class SearchTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         typeOnSearchBar(text: "mo")
 
-        mozWaitForElementToExist(app.otherElements["Firefox Suggest"])
-        // Bookmark suggestion
-        mozWaitForElementToExist(app.cells.staticTexts["The Book of Mozilla"])
-        // History suggestion
-        mozWaitForElementToExist(app.cells.staticTexts["www.mozilla.org/"])
+        // Google Search appears
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google search"])
+        mozWaitForElementToExist(app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendUpLeft])
 
-        // typeTextAndValidateSearchSuggestions(text: "local", isSwitchOn: true)
+        // Firefox Suggest appears
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["The Book of Mozilla"]) // Bookmark
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
+        print(app.debugDescription)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
