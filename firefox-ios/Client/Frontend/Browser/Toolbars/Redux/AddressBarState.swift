@@ -920,7 +920,7 @@ struct AddressBarState: StateType, Equatable {
                 iconName: iconName,
                 isEnabled: true,
                 isSelected: isSelected,
-                hasCustomColor: isVersion1Layout ? true : false,
+                hasCustomColor: isVersion1Layout,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,

@@ -104,7 +104,8 @@ final class LocationView: UIView,
     private var isURLTextFieldCentered = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            if let theme { applyTheme(theme: theme) }
+            guard let theme else { return }
+            applyTheme(theme: theme)
         }
     }
 
