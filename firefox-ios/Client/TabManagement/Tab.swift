@@ -296,6 +296,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var pendingScreenshot = false
     var url: URL? {
         didSet {
+            if isPDFRefactorEnabled, let _url = url, let sourceURL = downloadedTemporaryDocs[_url] {
+                url = sourceURL
+            }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
             }
@@ -430,7 +433,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
-    /// The dictionary containing as key the source online URL for a document and its corresponding local file location
+    /// The dictionary containing as key the location for a document and its corresponding source URL.
     private var downloadedTemporaryDocs = [URL: URL]()
 
     private var isPDFRefactorEnabled: Bool {
@@ -1015,7 +1018,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
-            guard let sourceURL = document.sourceURL else { return }
+            // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
+            guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
             self?.downloadedTemporaryDocs[url] = sourceURL
         }
     }
@@ -1026,77 +1030,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func isDownloadingDocument() -> Bool {
         return temporaryDocument?.isDownloading ?? false
-    }
-
-    func backForList() -> WKBackForwardList? {
-        guard let list = webView?.backForwardList else { return nil }
-        let modifiedBack: [WKBackForwardListItem] = list.backList.compactMap { item in
-            guard let url = downloadedTemporaryDocs[item.url] else { return item }
-            item.customURL = url
-            return item
-        }
-        let modifiedForward: [WKBackForwardListItem] = list.forwardList.compactMap { item in
-            guard let url = downloadedTemporaryDocs[item.url] else { return item }
-            item.customURL = url
-            return item
-        }
-        let backForList = TabBackForwardListItem(backList: modifiedBack, forward: modifiedForward)
-        webView?.updateBackList(backForList)
-        return backForList
-    }
-}
-
-private struct AssociatedKeys {
-    static var customURL = 0
-}
-
-extension WKBackForwardListItem {
-    var customURL: URL? {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.customURL) as? URL
-        }
-        set {
-            objc_setAssociatedObject(self, &AssociatedKeys.customURL, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-
-    @objc dynamic var swizzledURL: URL {
-        return customURL ?? self.swizzledURL
-    }
-
-    static func swizzleURLProperty() {
-        let originalSelector = #selector(getter: WKBackForwardListItem.url)
-        let swizzledSelector = #selector(getter: WKBackForwardListItem.swizzledURL)
-
-        guard let originalMethod = class_getInstanceMethod(WKBackForwardListItem.self, originalSelector),
-              let swizzledMethod = class_getInstanceMethod(WKBackForwardListItem.self, swizzledSelector) else {
-            return
-        }
-
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
-}
-
-class TabBackForwardListItem: WKBackForwardList {
-    private let back: [WKBackForwardListItem]
-    private let forward: [WKBackForwardListItem]
-
-    init(backList: [WKBackForwardListItem], forward: [WKBackForwardListItem]) {
-        self.back = backList
-        self.forward = forward
-        super.init()
-    }
-
-    override var backList: [WKBackForwardListItem] {
-        return back
-    }
-
-    override var forwardList: [WKBackForwardListItem] {
-        return forward
-    }
-
-    deinit {
-        print("FF: deinit")
     }
 }
 
@@ -1251,20 +1184,22 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
-    private var customBackForwardList: WKBackForwardList?
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
-
-    override var backForwardList: WKBackForwardList {
-        return customBackForwardList ?? super.backForwardList
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
 
-    func updateBackList(_ list: WKBackForwardList) {
-        customBackForwardList = list
+    override var hasOnlySecureContent: Bool {
+        // When PDF refactor enabled we show the online URL for a local File so secure content should be true
+        if isPDFRefactorEnabled, let url, url.isFileURL {
+            return true
+        }
+        return super.hasOnlySecureContent
     }
 
     override var inputAccessoryView: UIView? {
