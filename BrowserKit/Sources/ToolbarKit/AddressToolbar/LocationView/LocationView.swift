@@ -15,6 +15,7 @@ final class LocationView: UIView,
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
@@ -446,7 +447,11 @@ final class LocationView: UIView,
             updateWidthForLockIcon(0)
             return
         }
-        updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        if isURLTextFieldCentered {
+            updateWidthForLockIcon(UX.shieldImageViewSize.width)
+        } else {
+            updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        }
         onTapLockIcon = config.onTapLockIcon
 
         setLockIconImage()
