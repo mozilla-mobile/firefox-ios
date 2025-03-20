@@ -152,7 +152,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     guard let toViewController = context.viewController(forKey: .to),
       let toView = context.view(forKey: .to)
     else {
-      Logger.module.error(
+      logger.module.error(
         """
             Attempted to dismiss the tab tray without a view to dismiss from.
 
@@ -167,7 +167,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     guard let containerController = toViewController as? UINavigationController,
       let bvc = containerController.topViewController as? BrowserViewController
     else {
-      Logger.module.error(
+        logger.module.error(
         """
             Attempted to dismiss the tab tray from something that is not a BrowserViewController which is
             currently unsupported.
@@ -223,7 +223,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
       var tabCell: TabCell?
       var cellTitleSnapshot: UIView?
       if let tab = tabManager.selectedTab, let indexPath = dataSource.indexPath(for: tab) {
-        // This is needed for some reason otherwise the collection views content offest is
+        // This is needed for some reason otherwise the collection views content offset is
         // incorrect.
         cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
         cv.layoutIfNeeded()
