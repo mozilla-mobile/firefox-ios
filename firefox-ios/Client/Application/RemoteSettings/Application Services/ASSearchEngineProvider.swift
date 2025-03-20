@@ -12,11 +12,19 @@ import Shared
 final class ASSearchEngineProvider: SearchEngineProvider {
     private let logger: Logger
     private let iconDataFetcher: ASSearchEngineIconDataFetcherProtocol?
+    private let selector: ASSearchEngineSelectorProtocol?
 
     init(logger: Logger = DefaultLogger.shared,
+         selector: ASSearchEngineSelectorProtocol? = nil,
          iconDataFetcher: ASSearchEngineIconDataFetcherProtocol? = ASSearchEngineIconDataFetcher()) {
         self.logger = logger
         self.iconDataFetcher = iconDataFetcher
+        let profile = (AppContainer.shared.resolve() as Profile)
+        if selector == nil, let service = profile.remoteSettingsService {
+            self.selector = ASSearchEngineSelector(service: service)
+        } else {
+            self.selector = selector
+        }
     }
 
     // MARK: - SearchEngineProvider
@@ -69,19 +77,10 @@ final class ASSearchEngineProvider: SearchEngineProvider {
     private func getUnorderedBundledEnginesFor(locale: Locale,
                                                possibleLanguageIdentifier: [String],
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
-        let profile: Profile = AppContainer.shared.resolve()
-        guard let service = profile.remoteSettingsService else {
-            logger.log("Remote Settings service unavailable.", level: .warning, category: .remoteSettings)
-            completion([])
-            return
-        }
-
-        let selector = ASSearchEngineSelector(service: service)
-
         let localeCode = localeCode(from: locale)
         let region = regionCode(from: locale)
         let logger = self.logger
-        guard let iconPopulator = iconDataFetcher else { completion([]); return }
+        guard let iconPopulator = iconDataFetcher, let selector else { completion([]); return }
 
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
