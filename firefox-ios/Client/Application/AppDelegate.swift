@@ -8,7 +8,6 @@ import UIKit
 import Common
 import Glean
 import TabDataStore
-import WebKit
 
 import class MozillaAppServices.Viaduct
 
