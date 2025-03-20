@@ -64,6 +64,10 @@ struct DownloadLiveActivity: Widget {
         static let circleWidthMinimal: CGFloat = 19.5
         static let lineWidthMinimal: CGFloat = 3
         static let downloadIconSizeMinimal: CGFloat = 12
+        static let downloadPaddingLeadingMinimal: CGFloat = 2
+        static let downloadPaddingTrailingMinimal: CGFloat = 1
+        static let downloadOpacityMinimal = 0.3
+        static let downloadRotationMinimal: Double = -90.0
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
@@ -121,18 +125,18 @@ struct DownloadLiveActivity: Widget {
                               .scaledToFit()
                               .frame(width: UX.downloadIconSizeMinimal, height: UX.downloadIconSizeMinimal)
                               .foregroundStyle(.orange)
-                              .padding([.leading, .trailing], 2)
+                              .padding([.leading, .trailing], UX.downloadPaddingLeadingMinimal)
                     Circle()
                         .stroke(lineWidth: UX.lineWidthMinimal)
                         .foregroundColor(.gray)
-                        .opacity(0.3)
+                        .opacity(UX.downloadOpacityMinimal)
                         .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
-                        .padding(.leading, 2)
-                        .padding(.trailing, 1)
+                        .padding(.leading, UX.downloadPaddingLeadingMinimal)
+                        .padding(.trailing, UX.downloadPaddingTrailingMinimal)
                     Circle()
                         .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
                         .stroke(style: StrokeStyle(lineWidth: UX.lineWidthMinimal))
-                        .rotationEffect(.degrees(-90))
+                        .rotationEffect(.degrees(UX.downloadRotationMinimal))
                         .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
                         .foregroundStyle(.orange)
                         .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
