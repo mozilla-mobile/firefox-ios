@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Ətraflı öyrən";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ Mozilla məhsuludur. Missiyamız sağlam və açıq İnterneti təmin etməkdir.";
 
 /* Label on About screen */
@@ -34,16 +34,16 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari uzantısı olaraq işlədin:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ Haqqında";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ idarəni sizə verir.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ ilə aç";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
 "Authentication.reason" = "%@ tətbiqinə qayıtmaq üçün təsdiqlənin";
 
 /* Label for button to add a custom URL */
@@ -67,7 +67,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Yeni fərdi ünvan əlavə edildi.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "%@ səyyahının 450 məşhur ünvanı avtomatik tamamlamasını aktivləşdirin.";
 
 /* label describing URL Autocomplete as disabled */
@@ -88,7 +88,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Saytlarım";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "%@ səyyahının sevdiyiniz ünvanları avtomatik doldurmasını aktivləşdirin.";
 
 /* Label for enabling or disabling top sites */
@@ -133,13 +133,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Ləğv et";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "%@ başqa tətbiqi açmaq istəyir";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Aç";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ tətbiqini açmaq istəyir";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -169,10 +169,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari-yə basın, daha sonra Məzmun Əngəlləyicilərini seçin";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Aktivləşdir: %@";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ aktivləşdirilməyib.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -190,7 +190,7 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Bəli";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "Təklifləri almaq üçün %@ ünvan sətrinə yazdıqlarınızı axtarış mühərriyinə göndərməlidir.";
 
 /* Title for search suggestions prompt */
@@ -202,16 +202,16 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Digər məzmun izləyicilərini əngəlləmək bəzi video və saytları işlənməz hala gətirə bilər.";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ünvan sətrində yazdıqlarınızı axtarış mühərriyinizə göndərəcək.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla ancaq %@ səyyahını hamı üçün yaxşılaşdırmağa lazım olan məlumatları yığır.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Ətraflı öyrən.";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ tətbiqini qiymətləndir";
 
 /* Label for Safari integration section */
@@ -268,7 +268,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Tətbiqi açmaq üçün Face ID işlət";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Əgər URL artıq tətbiqdə açıqdırsa Face ID %@ tətbiqini aça bilər";
 
 /* Show home screen tips toggle label on settings screen */
@@ -283,7 +283,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Tətbiqi açmaq üçün Touch ID işlət";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Əgər URL artıq tətbiqdə açıqdırsa Touch ID %@ tətbiqini aça bilər";
 
 /* Title for settings section to enable different Siri Shortcuts. */
@@ -358,7 +358,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Axtar və ya ünvan daxil et";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "%@ üçün axtar";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */

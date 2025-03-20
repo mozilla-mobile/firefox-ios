@@ -500,12 +500,8 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
-            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-            topTabsViewController.delegate = self
-            addChild(topTabsViewController)
-            header.addArrangedViewToTop(topTabsViewController.view)
-            self.topTabsViewController = topTabsViewController
-            topTabsViewController.applyTheme()
+            setupTopTabsViewController()
+            topTabsViewController?.applyTheme()
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
         } else {
@@ -786,15 +782,18 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
+        setupTopTabsViewController()
 
         // Update theme of already existing views
         let theme = currentTheme()
+        contentStackView.backgroundColor = theme.colors.layer1
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
+        topTabsViewController?.applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -821,6 +820,15 @@ class BrowserViewController: UIViewController,
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
         profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+    }
+
+    private func setupTopTabsViewController() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        topTabsViewController.delegate = self
+        addChild(topTabsViewController)
+        header.addArrangedViewToTop(topTabsViewController.view)
+        topTabsViewController.didMove(toParent: self)
+        self.topTabsViewController = topTabsViewController
     }
 
     private func setupAccessibleActions() {
@@ -1511,12 +1519,14 @@ class BrowserViewController: UIViewController,
         documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
-            documentLoadingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
             documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
 
+        view.bringSubviewToFront(header)
+        view.bringSubviewToFront(overKeyboardContainer)
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         documentLoadingView.applyTheme(theme: currentTheme())
         self.documentLoadingView = documentLoadingView
@@ -1849,7 +1859,11 @@ class BrowserViewController: UIViewController,
                                                                      bookmarkNode: bookmarkItem,
                                                                      parentBookmarkFolder: parentFolder,
                                                                      presentedFromToast: true) { [weak self] in
-                        self?.showBookmarkToast(action: .remove)
+                        self?.showBookmarkToast(
+                            urlString: bookmarkItem.url,
+                            title: bookmarkItem.title,
+                            action: .remove
+                        )
                     }
                     let controller: DismissableNavigationViewController
                     controller = DismissableNavigationViewController(rootViewController: detailController)
@@ -2010,7 +2024,15 @@ class BrowserViewController: UIViewController,
             }
 
             // Ensure we do have a URL from that observer
-            guard let url = webView.url else { return }
+            // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
+            let url: URL? = if let webURL = webView.url {
+                webURL
+            } else if let changeURL = change?[.newKey] as? URL, isPDFRefactorEnabled {
+                changeURL
+            } else {
+                nil
+            }
+            guard let url else { break }
 
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
@@ -2126,16 +2148,21 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
-            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Large.lockFill :
-                StandardImageIdentifiers.Large.lockSlashFill
+                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                        StandardImageIdentifiers.Small.shieldSlashFill
+                } else {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Large.lockFill :
+                        StandardImageIdentifiers.Large.lockSlashFill
+                }
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
             }
 
             let action = ToolbarAction(
@@ -2145,7 +2172,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: lockIconNeedsTheming,
+                lockIconNeedsTheming: true,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
@@ -2729,10 +2756,6 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
     }
 
-    func switchToPrivacyMode(isPrivate: Bool) {
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-    }
-
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
@@ -2779,7 +2802,6 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
         return tab

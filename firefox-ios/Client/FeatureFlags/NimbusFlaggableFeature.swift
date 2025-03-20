@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
     case appIconSelection
+    case appearanceMenu
     case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
@@ -65,7 +66,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appIconSelection,
+                .appearanceMenu,
                 .bookmarksRefactor,
+                .deeplinkOptimizationRefactor,
                 .homepageRebuild,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
@@ -119,6 +122,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
         case .appIconSelection,
+                .appearanceMenu,
                 .contextualHintForToolbar,
                 .bookmarksRefactor,
                 .accountSettingsRedux,

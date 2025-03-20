@@ -99,12 +99,10 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForElementsToExist(
-            [
-                app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
-                app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
-            ]
-        )
+        let pinnedItem = app
+            .links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            .staticTexts[PDF_website["bookmarkLabel"]!]
+        mozWaitForElementToExist(pinnedItem)
 
         // Open pdf from pinned site
         let pdfTopSite = app
@@ -120,15 +118,10 @@ class BrowsingPDFTests: BaseTestCase {
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        mozWaitForElementToExist(pinnedItem)
         pdfTopSite.press(forDuration: 1)
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
-        waitForElementsToExist(
-            [
-            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
-            app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
-            ]
-        )
+        mozWaitForElementToNotExist(pinnedItem)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307121
