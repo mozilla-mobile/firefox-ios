@@ -710,8 +710,9 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
             NotificationCenter.default.post(name: .SearchSettingsDidUpdateDefaultSearchEngine)
             self.tableView.reloadData()
 
+            let engineID: String = engine.isCustomEngine ? "custom" : engine.engineID
             let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
-                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engine.engineID ?? "custom"]
+                          TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: engineID]
             TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: extras)
         }
         _ = navigationController?.popViewController(animated: true)
