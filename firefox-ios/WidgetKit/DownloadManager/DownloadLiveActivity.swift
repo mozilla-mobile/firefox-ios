@@ -131,19 +131,16 @@ DynamicIslandExpandedContent<some View> {
                     .stroke(style: StrokeStyle(lineWidth: settings.progressWidth))
                     .rotationEffect(.degrees(270.0))
                     .animation(.linear, value: 0.5)
-                if liveDownload.state.totalProgress == 1.0 {
-                    Image(settings.checkmarkIcon)
-                    .renderingMode(.template)
-                    .frame(width: settings.stateIconSize,
-                           height: settings.stateIconSize)
-                    .foregroundStyle(settings.widgetColours)
-                } else {
-                    Image(settings.mediaStopIcon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: settings.stateIconSize,
-                               height: settings.stateIconSize)
-                }
+                Image(
+                    liveDownload.state.totalProgress == 1.0
+                    ? UX.checkmarkIcon
+                    : UX.mediaStopIcon
+                )
+                .resizable()
+                .scaledToFit()
+                .renderingMode(.template)
+                .foregroundStyle(UX.widgetColours)
+                .frame(width: UX.stateIconSize, height: UX.stateIconSize)
             }.frame(width: settings.iconFrameSize,
                     height: settings.iconFrameSize)
                 .padding(EdgeInsets(top: settings.iconTopPadding,
