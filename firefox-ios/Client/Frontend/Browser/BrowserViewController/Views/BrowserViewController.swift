@@ -1503,12 +1503,14 @@ class BrowserViewController: UIViewController,
         documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(documentLoadingView)
         NSLayoutConstraint.activate([
-            documentLoadingView.topAnchor.constraint(equalTo: contentContainer.topAnchor),
+            documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
             documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
             documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
         ])
 
+        view.bringSubviewToFront(header)
+        view.bringSubviewToFront(overKeyboardContainer)
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         documentLoadingView.applyTheme(theme: currentTheme())
         self.documentLoadingView = documentLoadingView
@@ -2002,7 +2004,15 @@ class BrowserViewController: UIViewController,
             }
 
             // Ensure we do have a URL from that observer
-            guard let url = webView.url else { return }
+            // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
+            let url: URL? = if let webURL = webView.url {
+                webURL
+            } else if let changeURL = change?[.newKey] as? URL, isPDFRefactorEnabled {
+                changeURL
+            } else {
+                nil
+            }
+            guard let url else { break }
 
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
