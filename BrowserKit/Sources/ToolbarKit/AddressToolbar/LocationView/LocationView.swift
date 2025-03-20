@@ -26,6 +26,7 @@ final class LocationView: UIView,
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
+    private var theme: Theme?
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
@@ -99,7 +100,14 @@ final class LocationView: UIView,
         let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
         urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
-    private var isURLTextFieldCentered = false
+
+    private var isURLTextFieldCentered = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme else { return }
+            applyTheme(theme: theme)
+        }
+    }
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -596,6 +604,7 @@ final class LocationView: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.theme = theme
         let colors = theme.colors
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
@@ -610,11 +619,10 @@ final class LocationView: UIView,
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = colors.iconPrimary
-        lockIconImageColor = colors.iconPrimary
+        lockIconButton.tintColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
+        lockIconImageColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
 
         setLockIconImage()
-
         // Applying the theme to urlTextField can cause the url formatting to get removed
         // so we apply it again
         formatAndTruncateURLTextField()
