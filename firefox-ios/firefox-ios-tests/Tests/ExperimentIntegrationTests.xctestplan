@@ -55,6 +55,8 @@
         "A11yOnboardingTests\/testA11yFirstRunTour()",
         "A11ySearchTest",
         "A11ySearchTest\/testA11ySearchSuggestions()",
+        "A11yTabTrayTests",
+        "A11yTabTrayTests\/testAccessibility()",
         "A11yUtils",
         "ActivityStreamTest",
         "AddressesTests",
