@@ -406,6 +406,35 @@ class SearchTests: BaseTestCase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2576803
+    func testFirefoxSuggest() {
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        // navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        waitUntilPageLoad()
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        waitUntilPageLoad()
+
+        // Bookmark The Book of Mozilla (on localhost)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
+
+        navigator.goto(TabTray)
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        navigator.goto(NewTabScreen)
+        typeOnSearchBar(text: "mo")
+
+        mozWaitForElementToExist(app.otherElements["Firefox Suggest"])
+        // Bookmark suggestion
+        mozWaitForElementToExist(app.cells.staticTexts["The Book of Mozilla"])
+        // History suggestion
+        mozWaitForElementToExist(app.cells.staticTexts["www.mozilla.org"])
+
+        // typeTextAndValidateSearchSuggestions(text: "local", isSwitchOn: true)
+    }
+
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
         let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
         mozWaitForElementToExist(showSearchSuggestions)
