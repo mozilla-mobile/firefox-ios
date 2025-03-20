@@ -138,7 +138,6 @@
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
-        "TabTrayTests",
         "TabTrayTests\/testAccessibility()",
         "TabsPerformanceTest",
         "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingLandscape()",
