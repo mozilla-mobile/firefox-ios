@@ -467,7 +467,6 @@ class HistoryTests: BaseTestCase {
         // Workaround for FXIOS-5128. To be replaced by tapping "Close All Tabs"
         waitForTabsButton()
         navigator.goto(TabTray)
-<<<<<<< HEAD
         if isTablet {
             app.otherElements["Tabs Tray"]
                 .collectionViews
@@ -476,11 +475,8 @@ class HistoryTests: BaseTestCase {
                 .buttons[StandardImageIdentifiers.Large.crossCircleFill]
                 .waitAndTap()
         } else {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
-=======
-        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
->>>>>>> 468810962 (Refactor FXIOS-11596 [Tab tray UI experiment] Adjust background color, adjust X button (#25337))
     }
 
     private func closeKeyboard() {
