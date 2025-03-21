@@ -12,6 +12,11 @@ struct HomepageTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    func sendItemTappedTelemetryEvent(for itemName: String) {
+        let itemNameExtra = GleanMetrics.Homepage.ItemTappedExtra(itemName: itemName)
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.itemTapped, extras: itemNameExtra)
+    }
+
     func sendMaskToggleTappedTelemetry(enteringPrivateMode: Bool) {
         let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
         gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: isPrivateModeExtra)

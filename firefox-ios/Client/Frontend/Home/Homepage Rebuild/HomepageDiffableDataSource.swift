@@ -59,6 +59,25 @@ final class HomepageDiffableDataSource:
                 CustomizeHomepageSectionCell.self
             ]
         }
+
+        var telemetryLabel: String? {
+            switch self {
+            case .topSite:
+                return "topSite"
+            case .jumpBackIn:
+                return "jumpBackIn"
+            case .jumpBackInSyncedTab:
+                return "jumpBackInSyncedTab"
+            case .bookmark:
+                return "bookmark"
+            case .pocket:
+                return "pocket"
+            case .pocketDiscover:
+                return "pocketDiscover"
+            default:
+                return nil
+            }
+        }
     }
 
     func updateSnapshot(

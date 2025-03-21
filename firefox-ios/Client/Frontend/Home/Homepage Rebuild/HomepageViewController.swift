@@ -787,6 +787,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
+        dispatchDidSelectItemAction(with: item)
         switch item {
         case .topSite(let state, _):
             let destination = NavigationDestination(
@@ -801,7 +802,6 @@ final class HomepageViewController: UIViewController,
                 tileType: state.getTelemetrySiteType,
                 urlString: state.site.url
             )
-
         case .jumpBackIn(let config):
             store.dispatch(
                 JumpBackInAction(
@@ -836,6 +836,17 @@ final class HomepageViewController: UIViewController,
         default:
             return
         }
+    }
+
+    private func dispatchDidSelectItemAction(with item: HomepageItem) {
+        guard let itemName = item.telemetryLabel else { return }
+        store.dispatch(
+            HomepageAction(
+                telemetryExtras: HomepageTelemetryExtras(itemName: itemName),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.didSelectItem
+            )
+        )
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
