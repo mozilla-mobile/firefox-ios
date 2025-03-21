@@ -88,7 +88,6 @@ final class AddressBarPanGestureHandler: NSObject {
         contentContainer.frame.origin.x = originalPosition.x + translation.x
         addressBarContainer.frame.origin.x = originalPosition.x + translation.x
 
-
         // Update the position of the webPagePreview based on the swipe direction and translation.
         webPagePreview.frame.origin.x = calculateX(translation: translation, width: contentContainer.frame.width)
 
