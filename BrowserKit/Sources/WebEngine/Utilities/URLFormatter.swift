@@ -92,7 +92,7 @@ public class DefaultURLFormatter: URLFormatter {
         // Make sure there's at least one "." in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme
-        if !trimmedEntry.contains(".") || trimmedEntry.contains(" ") { return nil }
+        if !trimmedEntry.contains(".") { return nil }
 
         // If entry is a valid floating point number, don't fixup
         if Double(trimmedEntry) != nil {
