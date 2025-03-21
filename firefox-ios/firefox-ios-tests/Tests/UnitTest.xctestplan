@@ -125,6 +125,7 @@
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabNil_selectsPreviousSelectedTabData()",
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabNotNil_selectsDeeplinkTab()",
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent()",
+        "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes()",
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab()",
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TestFavicons\/testFaviconFetcherParse()",
