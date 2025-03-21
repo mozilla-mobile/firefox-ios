@@ -161,6 +161,7 @@
         "TopTabsTest\/testCloseAllTabsPrivateMode()",
         "TopTabsTest\/testCloseAllTabsUndo()",
         "TopTabsTest\/testCloseOneTab()",
+        "TopTabsTest\/testCloseOneTabUndo()",
         "TopTabsTest\/testOpenTabsViewCurrentTabThumbnail()",
         "TopTabsTest\/testSwitchBetweenTabs()",
         "TopTabsTest\/testTabTrayCloseMultipleTabs()",
