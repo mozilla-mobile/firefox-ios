@@ -1,10 +1,10 @@
 # ``ComponentLibrary/NavigationHeaderView``
 
-The view which is used as a header for sheets, such as a bottom sheet, where some details are displayed and offer possibility to navigate between screens.
+The view which is used as a header for sheets, such as a bottom sheet, where some details are displayed, allowing navigation between screens.
 
 ## Overview
 
-The `NavigationHeaderView` is a subclass of the `UIView`. The view is a custom UIView that acts as a navigation header in an interface. It provides a title, a back button, and a close button, making it useful for navigation within menus or modal views. This view is ideal for use in navigation-driven applications where a header is needed to display a title and provide navigation controls for going back or closing a menu.
+`NavigationHeaderView` is a subclass of `UIView`. It's a custom UIView that acts as a navigation header in an interface. It provides a title, a back button, and a close button, making it useful for navigation within menus or modal views. This view is ideal for use in navigation-driven applications where a header is needed to display a title and provide navigation controls for going back or closing a menu.
 
 ## Illustration
 
