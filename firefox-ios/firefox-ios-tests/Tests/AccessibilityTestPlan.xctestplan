@@ -392,6 +392,7 @@
         "TabCounterTests",
         "TabCounterTests\/testTabDecrement()",
         "TabCounterTests\/testTabIncrement()",
+        "TabsTests",
         "ThirdPartySearchTest",
         "ThirdPartySearchTest\/testCustomEngineFromIncorrectTemplate()",
         "ThirdPartySearchTest\/testCustomSearchEngineAsDefault()",

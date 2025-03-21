@@ -17,7 +17,7 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
-class TopTabsTest: BaseTestCase {
+class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() throws {
@@ -560,7 +560,7 @@ fileprivate extension BaseTestCase {
     }
 }
 
-class TopTabsTestIphone: IphoneOnlyTestCase {
+class TabsTestsIphone: IphoneOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2355535
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
@@ -670,7 +670,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
 // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
 // and closing the tabs by tapping 'x' button
-class TopTabsTestIpad: IpadOnlyTestCase {
+class TabsTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307023
     func testUpdateTabCounter() {
         if skipPlatform { return }

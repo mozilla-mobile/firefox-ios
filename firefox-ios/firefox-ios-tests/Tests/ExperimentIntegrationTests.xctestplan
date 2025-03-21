@@ -116,6 +116,7 @@
         "SyncUITests",
         "TabTrayTests",
         "TabTrayTests\/testAccessibility()",
+        "TabsTests",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
         "TopTabsTestIpad",
