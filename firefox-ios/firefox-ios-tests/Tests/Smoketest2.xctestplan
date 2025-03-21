@@ -128,6 +128,7 @@
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
+        "SearchTests\/testFirefoxSuggest()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
         "SearchTests\/testPromptPresence()",
         "SearchTests\/testSearchEngine()",
