@@ -366,6 +366,20 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
 
+    func testSetURL_showsOnlineURLForLocalDocument_whenPDFRefactorEnabled() {
+        let subject = createSubject()
+        let request = URLRequest(url: URL(string: "https://www.example.com")!)
+        let localURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
+        let document = MockTemporaryDocument(withFileURL: localURL, request: request)
+        setIsPDFRefactorFeature(isEnabled: true)
+
+        subject.enqueueDocument(document)
+
+        subject.url = localURL
+
+        XCTAssertEqual(subject.url, request.url)
+    }
+
     private func createSubject() -> Tab {
         let subject = Tab(profile: mockProfile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)

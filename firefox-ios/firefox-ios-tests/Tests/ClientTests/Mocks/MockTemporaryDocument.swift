@@ -7,6 +7,9 @@ import Foundation
 @testable import Client
 
 class MockTemporaryDocument: TemporaryDocument {
+    var sourceURL: URL? {
+        return request?.url
+    }
     var fileURL: URL
     var filename = ""
     var isDownloading = false
