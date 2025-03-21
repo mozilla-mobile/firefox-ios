@@ -867,11 +867,6 @@ struct AddressBarState: StateType, Equatable {
             }
 
             if !isHomepage, layout == .version1 {
-<<<<<<< HEAD
-                actions.append(shareAction)
-            }
-        } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
-=======
                 var shareAction = shareAction
                 shareAction.iconName = StandardImageIdentifiers.Medium.share
                 shareAction.hasCustomColor = true
@@ -881,7 +876,6 @@ struct AddressBarState: StateType, Equatable {
             var shareAction = shareAction
             shareAction.hasCustomColor = true
             shareAction.iconName = StandardImageIdentifiers.Medium.share
->>>>>>> bd482a634 (Refactor FXIOS-11687 - [Toolbar UI Experiments] - Update colors for icons in Address Bar to secondary (#25470))
             actions.append(shareAction)
         }
 
@@ -946,10 +940,6 @@ struct AddressBarState: StateType, Equatable {
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {
-<<<<<<< HEAD
-            actions.append(stopLoadingAction)
-        } else if isLoading == false {
-=======
             var stopLoadingAction = stopLoadingAction
             if layout == .version1 {
                 stopLoadingAction.iconName = StandardImageIdentifiers.Medium.cross
@@ -962,7 +952,6 @@ struct AddressBarState: StateType, Equatable {
                 reloadAction.iconName = StandardImageIdentifiers.Medium.arrowClockwise
                 reloadAction.hasCustomColor = true
             }
->>>>>>> bd482a634 (Refactor FXIOS-11687 - [Toolbar UI Experiments] - Update colors for icons in Address Bar to secondary (#25470))
             actions.append(reloadAction)
         }
 
