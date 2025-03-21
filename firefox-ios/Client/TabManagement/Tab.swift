@@ -1195,8 +1195,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     }
 
     override var hasOnlySecureContent: Bool {
-        // When PDF refactor enabled we show the online URL for a local File so secure content should be true
-        if isPDFRefactorEnabled, let url, url.isFileURL {
+        // When PDF refactor enabled we show the online URL for a local PDF so secure content should be true
+        if isPDFRefactorEnabled, let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
             return true
         }
         return super.hasOnlySecureContent
