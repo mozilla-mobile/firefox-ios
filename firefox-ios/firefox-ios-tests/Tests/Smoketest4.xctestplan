@@ -180,6 +180,7 @@
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
+        "SearchTests\/testFirefoxSuggest()",
         "SearchTests\/testPromptPresence()",
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchSuggestions()",
