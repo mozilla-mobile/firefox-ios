@@ -72,9 +72,7 @@ final class AddressBarPanGestureHandler: NSObject {
         case .began:
             originalPosition = contentContainer.frame.origin
             // Set the initial position of webPagePreview with the offset
-            webPagePreview.frame.origin.x = translation.x < 0
-            ? originalPosition.x + UX.offset
-            : -originalPosition.x - UX.offset
+            webPagePreview.frame.origin.x = calculateX(width: originalPosition.x)
         case .changed:
             updateWebPagePreview(translation: translation, index: index, tabs: tabs)
         case .ended:
@@ -90,14 +88,12 @@ final class AddressBarPanGestureHandler: NSObject {
         contentContainer.frame.origin.x = originalPosition.x + translation.x
         addressBarContainer.frame.origin.x = originalPosition.x + translation.x
 
-        let isSwipingLeft = translation.x < 0
 
         // Update the position of the webPagePreview based on the swipe direction and translation.
-        webPagePreview.frame.origin.x = isSwipingLeft
-        ? contentContainer.frame.width + translation.x + UX.offset
-        : -contentContainer.frame.width + translation.x - UX.offset
+        webPagePreview.frame.origin.x = calculateX(translation: translation, width: contentContainer.frame.width)
 
-        let newTabIndex = isSwipingLeft ? index + 1 : index - 1
+        let isPanningLeft = translation.x < 0
+        let newTabIndex = isPanningLeft ? index + 1 : index - 1
 
         // Check if the new tab index is within bounds.
         if newTabIndex >= 0 && newTabIndex < tabs.count {
@@ -120,21 +116,18 @@ final class AddressBarPanGestureHandler: NSObject {
         > contentContainer.frame.width / 2 || abs(velocity.x) > UX.swipingVelocity
 
         UIView.animate(withDuration: UX.swipingDuration, animations: { [self] in
+            let contentWidth = contentContainer.frame.width
+            let targetX = isPanningLeft ? -contentWidth : contentWidth
+
             if shouldCompleteTransition && isValidIndex {
                 // Move the contentContainer and addressBarContainer off-screen based on the panning direction.
-                contentContainer.frame.origin.x = isPanningLeft
-                ? -contentContainer.frame.width
-                : contentContainer.frame.width
+                contentContainer.frame.origin.x = targetX
+                addressBarContainer.frame.origin.x = targetX
                 webPagePreview.frame.origin.x = 0
-                addressBarContainer.frame.origin.x = isPanningLeft
-                ? -contentContainer.frame.width
-                : contentContainer.frame.width
             } else {
                 // Reset the positions if the transition should not be completed
+                webPagePreview.frame.origin.x = isPanningLeft ? contentWidth + UX.offset : -contentWidth - UX.offset
                 contentContainer.frame.origin.x = 0
-                webPagePreview.frame.origin.x = isPanningLeft
-                ? contentContainer.frame.width + UX.offset
-                : -contentContainer.frame.width - UX.offset
                 addressBarContainer.frame.origin.x = 0
             }
         }) { [self] _ in
@@ -147,5 +140,11 @@ final class AddressBarPanGestureHandler: NSObject {
                 tabManager.selectTab(tabs[newTabIndex])
             }
         }
+    }
+
+    /// Helper function to calculate the x-position based on swipe direction.
+    private func calculateX(translation: CGPoint = .init(), width: CGFloat) -> CGFloat {
+        let isSwipingLeft = translation.x < 0
+        return isSwipingLeft ? width + translation.x + UX.offset : -width + translation.x - UX.offset
     }
 }
