@@ -1611,7 +1611,7 @@ workflows:
             mv "$FIREBASE_XCRESULT" "$BITRISE_XCRESULT"
 
             # create and print perf data object for perfherder ingest via taskcluster log output
-            xcrun xcresulttool graph --path "$BITRISE_XCRESULT"
+            xcrun xcresulttool graph --path "$BITRISE_XCRESULT" --legacy
             ls ..
             # If this ever breaks, check the xcresult_extract.py function find_xcresult_path 
             # and figure out exactly what it is doing because we are using Fennec as the scheme
