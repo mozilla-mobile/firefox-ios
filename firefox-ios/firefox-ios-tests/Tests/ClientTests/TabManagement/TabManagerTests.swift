@@ -321,6 +321,36 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    func testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes() throws {
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        // Simulate deeplink tab
+        let deeplinkTabData = try XCTUnwrap(getMockTabData(count: 1).first)
+        let deeplinkTab = Tab(profile: mockProfile, windowUUID: testUUID)
+        deeplinkTab.url = URL(string: deeplinkTabData.siteUrl)
+        deeplinkTab.tabUUID = deeplinkTabData.id.uuidString
+        let subject = createSubject(tabs: [deeplinkTab], windowUUID: testUUID)
+
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: getMockTabData(count: 4)
+        )
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            let filteredTabs = subject.tabs.filter {
+                $0.tabUUID == deeplinkTab.tabUUID
+            }
+            // There has to be only one tab present
+            XCTAssertEqual(filteredTabs.count, 1)
+            expectation.fulfill()
+        }
+
+        subject.restoreTabs()
+        wait(for: [expectation])
+    }
+
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {

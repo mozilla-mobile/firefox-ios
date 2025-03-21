@@ -703,8 +703,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
+
+        let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
+            tabs.contains { $0.tabUUID == deeplinkTab.tabUUID }
+        } else {
+            false
+        }
+
         if isDeeplinkOptimizationRefactorEnabled,
            let deeplinkTab,
+           !isDeeplinkTabAlreadyAdded,
            deeplinkTab.url?.absoluteString == tabData.siteUrl {
             // if the deeplink tab has the same url of a tab data then use the deeplink tab for the restore
             // in order to prevent a duplicate tab
