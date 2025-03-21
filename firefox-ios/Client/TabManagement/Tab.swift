@@ -1312,6 +1312,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer1
         pullRefresh?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
