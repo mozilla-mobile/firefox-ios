@@ -1450,7 +1450,8 @@ workflows:
                 -scheme "$SCHEME" \
                 -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
-                -derivedDataPath "${DERIVED_DATA_DIR}"
+                -derivedDataPath "${DERIVED_DATA_DIR}" \
+                ENABLE_DEBUG_DYLIB=NO
 
             echo "-- verify build artifacts --"
 
