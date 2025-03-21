@@ -8,6 +8,8 @@ import UIKit
 import Foundation
 
 class MockThemeManager: ThemeManager {
+    var isNewAppearanceMenuOn = false
+
     var getCurrentThemeCallCount = 0
     private var currentThemeStorage: Theme = LightTheme()
 
