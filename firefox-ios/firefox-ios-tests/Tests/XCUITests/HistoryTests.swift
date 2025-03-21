@@ -381,7 +381,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+        app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -475,7 +475,7 @@ class HistoryTests: BaseTestCase {
                 .buttons[StandardImageIdentifiers.Large.crossCircleFill]
                 .waitAndTap()
         } else {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
     }
 
