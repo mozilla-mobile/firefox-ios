@@ -11,7 +11,6 @@ public protocol BasicAnimationControllerDelegate: AnyObject {
   /// - parameter context: The transitioning context
   func animatePresentation(context: UIViewControllerContextTransitioning)
 
-  /// Animate the dismissal of a controller
   ///
   /// - parameter context: The transitioning context
  // func animateDismissal(context: UIViewControllerContextTransitioning)
@@ -58,7 +57,7 @@ extension BasicAnimationController: UIViewControllerAnimatedTransitioning {
       delegate?.animatePresentation(context: transitionContext)
     case .dismissing:
         print("placeholder")
-      //delegate?.animateDismissal(context: transitionContext)
+      // delegate?.animateDismissal(context: transitionContext)
     }
   }
 }
