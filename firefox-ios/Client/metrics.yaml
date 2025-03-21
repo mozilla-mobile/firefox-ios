@@ -2733,6 +2733,24 @@ homepage:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
+  impression:
+    type: event
+    description: |
+      Records when the homepage is viewed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11522
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18518
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
 
 # Library
 library:
