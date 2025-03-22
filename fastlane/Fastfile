@@ -13,6 +13,7 @@ target_name = "Client"
 target_folder_path = "firefox-ios/#{target_name}"
 project_path = "#{target_folder_path}.xcodeproj"
 pbx_project_file = "#{project_path}/project.pbxproj"
+testflight_archive_args = "GCC_TREAT_WARNINGS_AS_ERRORS='NO' SWIFT_TREAT_WARNINGS_AS_ERRORS='NO' VERSIONING_SYSTEM='apple-generic' CURRENT_PROJECT_VERSION='0' FUSE_BUILD_SCRIPT_PHASES='NO'"
 
 if ENV['IS_CIRCLECI']
   import_build_tools(
@@ -122,7 +123,8 @@ platform :ios do
     ci_run_build_number = ENV["CIRCLE_BUILD_NUM"]
 
     udpated_build_number = increment_build_number(
-      build_number: ci_run_build_number
+      build_number: ci_run_build_number,
+      xcodeproj: project_path
     )
 
     match(
@@ -131,10 +133,21 @@ platform :ios do
       readonly: true
     )
 
+    build_app(
+      scheme: "Ecosia",
+      project: project_path,
+      configuration: "Release",
+      export_method: "app-store",
+      xcargs: testflight_archive_args,
+      skip_archive: true
+    )
+
     gym(
       scheme: "Ecosia",
+      project: project_path,      
       export_method: "app-store",
-      configuration: "Release"
+      configuration: "Release",
+      xcargs: testflight_archive_args
     )
 
     inject_appstore_connect_api

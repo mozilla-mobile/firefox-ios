@@ -11,7 +11,7 @@
 #!/bin/bash
 
 # Get the current branch's MARKETING_VERSION
-CURRENT_VERSION=$(grep 'MARKETING_VERSION' Client/Configuration/Common.xcconfig | cut -d ' ' -f3)
+CURRENT_VERSION=$(grep 'MARKETING_VERSION' firefox-ios/Client/Configuration/Common.xcconfig | cut -d ' ' -f3)
 
 if [ -n "$CIRCLECI" ]; then
   # CircleCI: Compare against the previous commit on the same branch
@@ -19,7 +19,7 @@ if [ -n "$CIRCLECI" ]; then
   
   # Check if there is a previous commit available
   if git rev-parse "$CIRCLE_BRANCH~1" >/dev/null 2>&1; then
-    OLD_VERSION=$(git show "$CIRCLE_BRANCH~1:Client/Configuration/Common.xcconfig" | grep 'MARKETING_VERSION' | cut -d ' ' -f3)
+    OLD_VERSION=$(git show "$CIRCLE_BRANCH~1:firefox-ios/Client/Configuration/Common.xcconfig" | grep 'MARKETING_VERSION' | cut -d ' ' -f3)
   else
     echo "No previous commit found on $CIRCLE_BRANCH. Assuming the current version."
     OLD_VERSION=$CURRENT_VERSION
@@ -33,7 +33,7 @@ elif [ -n "$GITHUB_ACTIONS" ]; then
   git fetch origin main || { echo "Failed to fetch main branch"; exit 1; }
 
   # Get the MARKETING_VERSION from the main branch
-  OLD_VERSION=$(git show origin/main:Client/Configuration/Common.xcconfig | grep 'MARKETING_VERSION' | cut -d ' ' -f3)
+  OLD_VERSION=$(git show origin/main:firefox-ios/Client/Configuration/Common.xcconfig | grep 'MARKETING_VERSION' | cut -d ' ' -f3)
   if [ $? -ne 0 ]; then
     echo "Failed to retrieve MARKETING_VERSION from main branch"
     exit 1

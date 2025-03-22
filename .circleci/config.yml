@@ -92,11 +92,12 @@ workflows:
           filters:
             branches:
               only:
-                - /^.*main.*/
-          name: Deploy release version over Testflight if MARKETING_VERION file updated
+                - main
+                - /^main-\d+$/
+          name: Deploy release version over Testflight if MARKETING_VERSION file updated
           config-path: .circleci/deploy-release.yml
           mapping: |
-            Client/Configuration/Common.xcconfig deploy-release true
+            firefox-ios/Client/Configuration/Common.xcconfig deploy-release true
       - build-and-deploy-testflight-beta:
           name: Deploy beta version over Testflight
           filters:
@@ -109,5 +110,5 @@ workflows:
           filters:
             branches:
               only: 
-                - /^.*mob-3113-firefox-upgrade-133.*/
+                - main
           context: napps
