@@ -11,6 +11,9 @@ extension BrowserViewController: DownloadQueueDelegate {
         let uuid = windowUUID
         guard download.originWindow == uuid else { return }
 
+        // Do not need toast message for Passbook Passes since we don't save the download
+        guard download.mimeType != MIMEType.Passbook else { return }
+
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
             presentDownloadProgressToast(download: download, windowUUID: uuid)
@@ -30,6 +33,16 @@ extension BrowserViewController: DownloadQueueDelegate {
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
+        // Handle Passbook Pass downloads
+        if let download = (download as? BlobDownload),
+           OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
+            passBookHelper = OpenPassBookHelper(presenter: self)
+            passBookHelper?.open(data: download.data) {
+                self.passBookHelper = nil
+            }
+        }
+
+        // Handle toast notification
         guard let downloadToast = self.downloadToast,
               let download = downloadToast.downloads.first,
               download.originWindow == windowUUID, downloadQueue.isEmpty
