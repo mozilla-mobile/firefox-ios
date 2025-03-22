@@ -51,7 +51,6 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
         }
     }
 }
-
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     struct UX {
