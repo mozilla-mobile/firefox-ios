@@ -46,7 +46,7 @@ func checkBigPullRequest() {
 
     let additionsAndDeletions = additions + deletions
     if additionsAndDeletions > bigPRThreshold {
-        warn("Pull Request size seems relatively large. If this Pull Request contains multiple changes, please split each into separate PR will helps faster, easier review. Consider using epic branches for work that would affect main.")
+        warn("This Pull Request seems quite large. If it consists of multiple changes, try splitting them into separate PRs for a faster review process. Consider using epic branches for work impacting main.")
     }
 }
 
