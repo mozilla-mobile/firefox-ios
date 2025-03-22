@@ -166,7 +166,7 @@ struct DownloadLiveActivity: Widget {
                                 leading: DownloadLiveActivity.UX.iconLeftPadding,
                                 bottom: DownloadLiveActivity.UX.iconBottomPadding,
                                 trailing: DownloadLiveActivity.UX.iconRightPadding))
-      }
+        }
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
