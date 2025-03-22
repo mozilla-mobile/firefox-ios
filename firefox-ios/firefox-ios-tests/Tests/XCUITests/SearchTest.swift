@@ -428,7 +428,7 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: "mo")
 
         // Google Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google search"])
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
         mozWaitForElementToExist(app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendUpLeft])
 
         // Firefox Suggest appears
