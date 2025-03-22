@@ -50,112 +50,63 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
     }
 }
 
-private struct UX {
-    var iconFrameSize: CGFloat = 50
-    var firefoxIconSize: CGFloat = 44
-    var iconEdgeRounding: CGFloat = 15
-    var iconTopPadding: CGFloat = 10
-    var iconLeftPadding: CGFloat = 0
-    var iconRightPadding: CGFloat = 0
-    var iconBottomPadding: CGFloat = 0
-    var inProgessOpacity: CGFloat = 0.5
-    var progressWidth: CGFloat = 4
-    var stateIconSize: CGFloat = 24
-    var downloadingFontSize: CGFloat = 17
-    var progressFontSize: CGFloat = 15
-    var wordsTopPadding: CGFloat = 0
-    var wordsLeftPadding: CGFloat = 5
-    var wordsRightPadding: CGFloat = 5
-    var wordsBottomPadding: CGFloat = 0
-    var checkmarkIcon = "checkmarkLarge"
-    var mediaStopIcon = "mediaStop"
-    var firefoxIcon = "faviconFox"
-    var widgetColours = Color.white
-}
-
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
-    var body: some WidgetConfiguration {
-        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
-            // Using Rectangle instead of EmptyView because the hitbox
-            // of the empty view is too small (likely non existent),
-            // meaning we'd never be redirected to the downloads panel
-            Rectangle()
-                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        } dynamicIsland: { liveDownload in
-            DynamicIsland {
-                let UX = UX()
-                expandedContent(liveDownload: liveDownload, UX: UX)
-            } compactLeading: {
-                EmptyView()
-            } compactTrailing: {
-                EmptyView()
-            } minimal: {
-                EmptyView()
-            }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
-        }
+    private struct UX {
+        static let iconFrameSize: CGFloat = 50
+        static let firefoxIconSize: CGFloat = 44
+        static let iconEdgeRounding: CGFloat = 15
+        static let iconTopPadding: CGFloat = 10
+        static let iconLeftPadding: CGFloat = 0
+        static let iconRightPadding: CGFloat = 0
+        static let iconBottomPadding: CGFloat = 0
+        static let inProgessOpacity: CGFloat = 0.5
+        static let progressWidth: CGFloat = 4
+        static let stateIconSize: CGFloat = 24
+        static let downloadingFontSize: CGFloat = 17
+        static let progressFontSize: CGFloat = 15
+        static let wordsTopPadding: CGFloat = 0
+        static let wordsLeftPadding: CGFloat = 5
+        static let wordsRightPadding: CGFloat = 5
+        static let wordsBottomPadding: CGFloat = 0
+        static let checkmarkIcon = "checkmarkLarge"
+        static let mediaStopIcon = "mediaStop"
+        static let firefoxIcon = "faviconFox"
+        static let widgetColours = Color.white
     }
-}
-
-@available(iOS 16.2, *)
-@DynamicIslandExpandedContentBuilder
-private func expandedContent(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>, UX: UX) ->
-DynamicIslandExpandedContent<some View> {
+    private func leadingExpandedRegion
+    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    -> DynamicIslandExpandedRegion<some View> {
         DynamicIslandExpandedRegion(.leading) {
             ZStack {
-                RoundedRectangle(cornerRadius: UX.iconEdgeRounding)
-                    .fill(UX.widgetColours)
-                    .frame(width: UX.iconFrameSize,
-                           height: UX.iconFrameSize)
-                Image(UX.firefoxIcon)
+                RoundedRectangle(cornerRadius: DownloadLiveActivity.UX.iconEdgeRounding)
+                    .fill(DownloadLiveActivity.UX.widgetColours)
+                    .frame(width: DownloadLiveActivity.UX.iconFrameSize,
+                           height: DownloadLiveActivity.UX.iconFrameSize)
+                Image(DownloadLiveActivity.UX.firefoxIcon)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: UX.firefoxIconSize,
-                           height: UX.firefoxIconSize)
-            }.padding(EdgeInsets(top: UX.iconTopPadding,
-                                 leading: UX.iconLeftPadding,
-                                 bottom: UX.iconBottomPadding,
-                                 trailing: UX.iconRightPadding))
+                    .frame(width: DownloadLiveActivity.UX.firefoxIconSize,
+                           height: DownloadLiveActivity.UX.firefoxIconSize)
+            }.padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
+                                 leading: DownloadLiveActivity.UX.iconLeftPadding,
+                                 bottom: DownloadLiveActivity.UX.iconBottomPadding,
+                                 trailing: DownloadLiveActivity.UX.iconRightPadding))
         }
-        DynamicIslandExpandedRegion(.trailing) {
-            ZStack {
-                Circle()
-                    .stroke(UX.widgetColours.opacity(UX.inProgessOpacity),
-                            lineWidth: UX.progressWidth)
-                    .frame(width: UX.iconFrameSize,
-                           height: UX.iconFrameSize)
-                Circle()
-                    .trim(from: 0.0,
-                          to: min(liveDownload.state.totalProgress, 1.0))
-                    .stroke(style: StrokeStyle(lineWidth: UX.progressWidth))
-                    .rotationEffect(.degrees(270.0))
-                    .animation(.linear, value: 0.5)
-                Image(
-                    liveDownload.state.totalProgress == 1.0
-                    ? UX.checkmarkIcon
-                    : UX.mediaStopIcon
-                )
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(UX.widgetColours)
-                .frame(width: UX.stateIconSize, height: UX.stateIconSize)
-            }.frame(width: UX.iconFrameSize,
-                    height: UX.iconFrameSize)
-                .padding(EdgeInsets(top: UX.iconTopPadding,
-                                    leading: UX.iconLeftPadding,
-                                    bottom: UX.iconBottomPadding,
-                                    trailing: UX.iconRightPadding))
-        }
+    }
+    private func centerExpandedRegion
+    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    -> DynamicIslandExpandedRegion<some View> {
         DynamicIslandExpandedRegion(.center) {
             Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
-                .font(.system(size: UX.downloadingFontSize,
+                .font(.system(size: DownloadLiveActivity.UX.downloadingFontSize,
                               weight: .bold))
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
-                .padding(EdgeInsets(top: UX.wordsTopPadding,
-                                    leading: UX.wordsLeftPadding,
-                                    bottom: UX.wordsBottomPadding,
-                                    trailing: UX.wordsRightPadding))
+                .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
+                                    leading: DownloadLiveActivity.UX.wordsLeftPadding,
+                                    bottom: DownloadLiveActivity.UX.wordsBottomPadding,
+                                    trailing: DownloadLiveActivity.UX.wordsRightPadding))
             let bytesDownloaded = ByteCountFormatter.string(
                 fromByteCount: liveDownload.state.totalBytesDownloaded,
                 countStyle: .file
@@ -165,13 +116,69 @@ DynamicIslandExpandedContent<some View> {
                 countStyle: .file
                 )
             Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-                .font(.system(size: UX.progressFontSize))
-                .foregroundColor(UX.widgetColours)
+                .font(.system(size: DownloadLiveActivity.UX.progressFontSize))
+                .foregroundColor(DownloadLiveActivity.UX.widgetColours)
                 .frame(maxWidth: .infinity,
                        alignment: .leading)
-                .padding(EdgeInsets(top: UX.wordsTopPadding,
-                                    leading: UX.wordsLeftPadding,
-                                    bottom: UX.wordsBottomPadding,
-                                    trailing: UX.wordsRightPadding))
+                .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
+                                    leading: DownloadLiveActivity.UX.wordsLeftPadding,
+                                    bottom: DownloadLiveActivity.UX.wordsBottomPadding,
+                                    trailing: DownloadLiveActivity.UX.wordsRightPadding))
         }
+    }
+    private func trailingExpandedRegion
+    (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
+    -> DynamicIslandExpandedRegion<some View> {
+        DynamicIslandExpandedRegion(.trailing) {
+            ZStack {
+                Circle()
+                    .stroke(DownloadLiveActivity.UX.widgetColours.opacity(DownloadLiveActivity.UX.inProgessOpacity),
+                            lineWidth: DownloadLiveActivity.UX.progressWidth)
+                    .frame(width: DownloadLiveActivity.UX.iconFrameSize,
+                           height: DownloadLiveActivity.UX.iconFrameSize)
+                Circle()
+                    .trim(from: 0.0,
+                          to: min(liveDownload.state.totalProgress, 1.0))
+                    .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.progressWidth))
+                    .rotationEffect(.degrees(270.0))
+                    .animation(.linear, value: 0.5)
+                Image(
+                    liveDownload.state.totalProgress == 1.0
+                    ? DownloadLiveActivity.UX.checkmarkIcon
+                    : DownloadLiveActivity.UX.mediaStopIcon
+                )
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(DownloadLiveActivity.UX.widgetColours)
+                .frame(width: DownloadLiveActivity.UX.stateIconSize, height: DownloadLiveActivity.UX.stateIconSize)
+            }.frame(width: DownloadLiveActivity.UX.iconFrameSize,
+                    height: DownloadLiveActivity.UX.iconFrameSize)
+                .padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
+                                    leading: DownloadLiveActivity.UX.iconLeftPadding,
+                                    bottom: DownloadLiveActivity.UX.iconBottomPadding,
+                                    trailing: DownloadLiveActivity.UX.iconRightPadding))
+        }
+    }
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { _ in
+            // Using Rectangle instead of EmptyView because the hitbox
+            // of the empty view is too small (likely non existent),
+            // meaning we'd never be redirected to the downloads panel
+            Rectangle()
+                .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+        } dynamicIsland: { liveDownload in
+            DynamicIsland {
+                leadingExpandedRegion(liveDownload: liveDownload)
+                centerExpandedRegion(liveDownload: liveDownload)
+                trailingExpandedRegion(liveDownload: liveDownload)
+            } compactLeading: {
+                EmptyView()
+            } compactTrailing: {
+                EmptyView()
+            } minimal: {
+                EmptyView()
+            }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
+        }
+    }
 }
