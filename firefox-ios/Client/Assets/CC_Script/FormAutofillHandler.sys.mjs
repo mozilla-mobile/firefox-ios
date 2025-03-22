@@ -60,10 +60,12 @@ export class FormAutofillHandler {
   #fieldDetails = null;
 
   /**
-   * Flags if the MutationObserver that is observing node
-   * additions/removals in the root element has been set up
+   * Flags if the MutationObserver (this.#formMutationObserver) that is observing
+   * node additions/removals for the root element has been set up
    */
-  #isObservingFormChanges = false;
+  #isObservingFormMutations = false;
+
+  #formMutationObserver = null;
 
   #visibilityStateObserverByElement = new WeakMap();
 
@@ -219,7 +221,9 @@ export class FormAutofillHandler {
   }
 
   clearVisibilityStateObserverByElement(element) {
-    if (this.#visibilityStateObserverByElement.has(element)) {
+    if (this.isVisiblityStateObserverSetUpByElement(element)) {
+      const observer = this.#visibilityStateObserverByElement.get(element);
+      observer.disconnect();
       this.#visibilityStateObserverByElement.delete(element);
     }
   }
@@ -579,11 +583,7 @@ export class FormAutofillHandler {
     }
 
     this.setUpElementVisibilityObserver();
-
-    if (!this.#isObservingFormChanges) {
-      this.setUpNodesObserver();
-      this.#isObservingFormChanges = true;
-    }
+    this.setUpFormNodesMutationObserver();
   }
 
   /**
@@ -676,7 +676,11 @@ export class FormAutofillHandler {
    * If any of the added/removed nodes (including the nodes in the node's subtree)
    * are of an address of cc type, a "form-changed" event is dispatched.
    */
-  setUpNodesObserver() {
+  setUpFormNodesMutationObserver() {
+    if (this.#isObservingFormMutations) {
+      return;
+    }
+
     const mutationObserver = new this.window.MutationObserver(
       (mutations, _) => {
         const collectMutatedNodes = mutations => {
@@ -745,7 +749,27 @@ export class FormAutofillHandler {
       }
     );
     const config = { childList: true, subtree: true };
-    mutationObserver.observe(this.form.rootElement, config);
+    this.#formMutationObserver = mutationObserver;
+    this.#formMutationObserver.observe(this.form.rootElement, config);
+    this.#isObservingFormMutations = true;
+  }
+
+  /**
+   * After the form was submitted, disconnect all IntersectionObserver that
+   * are still observing form's elements and disconnect the MutationsOberver
+   * that is observing the form.
+   */
+  clearFormChangeObservers() {
+    if (!this.#isObservingFormMutations) {
+      return;
+    }
+    // Disconnect intersection observers
+    for (let element of this.form.elements) {
+      this.clearVisibilityStateObserverByElement(element);
+    }
+    // Disconnect mutation observer
+    this.#formMutationObserver.disconnect();
+    this.#isObservingFormMutations = false;
   }
 
   computeFillingValue(fieldDetail) {

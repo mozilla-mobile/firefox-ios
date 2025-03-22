@@ -1418,18 +1418,6 @@ FormAutofillUtils = {
   },
 };
 
-ChromeUtils.defineLazyGetter(FormAutofillUtils, "stringBundle", function () {
-  return Services.strings.createBundle(
-    "chrome://formautofill/locale/formautofill.properties"
-  );
-});
-
-ChromeUtils.defineLazyGetter(FormAutofillUtils, "brandBundle", function () {
-  return Services.strings.createBundle(
-    "chrome://branding/locale/brand.properties"
-  );
-});
-
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofillUtils,
   "_reauthEnabledByUser",
