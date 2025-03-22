@@ -2,21 +2,15 @@
 
 This is the subdirectory that contains the Firefox for iOS application.
 
-## Main branch
-
-Firefox for iOS works with [Xcode 16.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.6 and supports iOS 15.0 and above.
-
-Please make sure you aim your pull requests in the right direction.
-
-For bug fixes and features for a specific release, use the version branch.
+For versions of Xcode and Swift this branch of Firefox for iOS works with, and the minimum iOS supported version, see [readme](../README.md) at the root of the project.
 
 ## Getting Involved
 
-See readme at the root of the project for [the guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) on how to contribute to this project.
+For information about participation, communications channels, instructions how to run on devices using free personal developer accounts, coding standards or PR rules, see the [guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) on how to contribute to this project.
 
 ## Building the code
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
+1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the [table](../README.md) at repository root.
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
     ```shell
     brew update
@@ -60,7 +54,7 @@ User Scripts (JavaScript injected into the `WKWebView`) are compiled, concatenat
                 |-- /AtDocumentStart
 ```
 
-This reduces the total possible number of User Scripts down to four. The compiled output from concatenating and minifying the User Scripts placed in these folders resides in `/Client/Assets` and are named accordingly:
+This reduces the total possible number of User Scripts down to four. The compiled output from concatenating and minifying the User Scripts placed in these folders resides in `/Client/Assets` and is named accordingly:
 
 * `AllFramesAtDocumentEnd.js`
 * `AllFramesAtDocumentStart.js`
@@ -77,7 +71,7 @@ npm run dev
 
 ⚠️ Note: `npm run dev` will build the JS bundles in development mode with source maps, which allows tracking down lines in the source code for debugging.
 
-To create a production build of the User Scripts run the following `npm` command in the root directory of the project:
+To create a production build of the User Scripts, run the following `npm` command in the root directory of the project:
 
 ```shell
 npm run build
