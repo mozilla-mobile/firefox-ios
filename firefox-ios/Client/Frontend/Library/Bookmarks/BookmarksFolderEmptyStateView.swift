@@ -22,6 +22,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateLogoImage
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -29,6 +30,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Bold.headline.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateTitleLabel
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
@@ -36,6 +38,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateBodyLabel
     }
 
     private lazy var signInButton: PrimaryRoundedButton = .build { button in
