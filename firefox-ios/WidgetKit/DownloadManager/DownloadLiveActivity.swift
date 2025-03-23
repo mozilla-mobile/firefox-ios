@@ -107,8 +107,7 @@ struct DownloadLiveActivity: Widget {
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.center) {
         Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
-          .font(.system(size: DownloadLiveActivity.UX.downloadingFontSize,
-                 weight: .bold))
+          .font(.headline)
           .frame(maxWidth: .infinity,
               alignment: .leading)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
