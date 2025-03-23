@@ -37,7 +37,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     var historySites: [Site] {
         delegate?.searchData.compactMap { $0 }
-            .filter { $0.isBookmarked == nil || $0.isBookmarked == false } ?? []
+            .filter { $0.isBookmarked == false } ?? []
     }
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1
@@ -244,12 +244,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
-        let providers = [.amp, .ampMobile, .wikipedia]
+        let providers = [.amp, .wikipedia]
             .filter { NimbusFirefoxSuggestFeatureLayer().isSuggestionProviderAvailable($0) }
             .filter {
                 switch $0 {
                 case .amp: includeSponsored
-                case .ampMobile: includeSponsored
                 case .wikipedia: includeNonSponsored
                 default: false
                 }

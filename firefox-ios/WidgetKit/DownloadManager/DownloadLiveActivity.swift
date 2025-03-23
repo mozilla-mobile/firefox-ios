@@ -54,18 +54,14 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
-    private struct UX {
+    private struct lockScreenUX {
         static let hSpacing: CGFloat = 16
         static let vSpacing: CGFloat = 4
         static let iconSize: CGFloat = 40
         static let titleFont: CGFloat = 17
         static let subtitleFont: CGFloat = 15
-        static let subtitleOpacity: CGFloat = 0.8
         static let circleRadius: CGFloat = 44
         static let circleWidth: CGFloat = 4
-        static let circleOpacity: CGFloat = 0.3
-        static let circleRotation: CGFloat = 270
-        static let circleAnimation: CGFloat = 0.5
         static let progressIconSize: CGFloat = 20
         static let appIcon = "faviconFox"
         static let stopIcon = "mediaStop"
@@ -73,6 +69,14 @@ struct DownloadLiveActivity: Widget {
         static let gradient1 =  Color("searchButtonColorTwo")
         static let gradient2 = Color("searchButtonColorOne")
         static let labelColor = Color("widgetLabelColors")
+    }
+    struct dynamicIslandUX {
+        static let downloadColor: UIColor = .orange
+        static let circleWidth: CGFloat = 17.5
+        static let lineWidth: CGFloat = 3.5
+        static let downloadIconSize: CGFloat = 19
+        static let downloadPaddingLeading: CGFloat = 2
+        static let downloadPaddingTrailing: CGFloat = 1
     }
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DownloadLiveActivityAttributes.self) { liveDownload in
@@ -86,47 +90,47 @@ struct DownloadLiveActivity: Widget {
                 Rectangle()
                     .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
                     .foregroundStyle(LinearGradient(
-                        gradient: Gradient(colors: [UX.gradient1, UX.gradient2]),
+                        gradient: Gradient(colors: [lockScreenUX.gradient1, lockScreenUX.gradient2]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing))
-                HStack(spacing: UX.hSpacing) {
+                HStack(spacing: lockScreenUX.hSpacing) {
                     ZStack {
-                        Image(UX.appIcon)
+                        Image(lockScreenUX.appIcon)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: UX.iconSize, height: UX.iconSize)
+                            .frame(width: lockScreenUX.iconSize, height: lockScreenUX.iconSize)
                     }
-                    VStack(alignment: .leading, spacing: UX.vSpacing) {
+                    VStack(alignment: .leading, spacing: lockScreenUX.vSpacing) {
                         Text(liveDownload.state.downloads.count == 1 ?
                              String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
                                 String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads.count))
-                            .font(.system(size: UX.titleFont, weight: .bold))
-                            .foregroundColor(UX.labelColor)
+                            .font(.system(size: lockScreenUX.titleFont, weight: .bold))
+                            .foregroundColor(lockScreenUX.labelColor)
                         Text(subtitle)
-                            .font(.system(size: UX.subtitleFont))
-                            .opacity(UX.subtitleOpacity)
-                            .foregroundColor(UX.labelColor)
+                            .font(.system(size: lockScreenUX.subtitleFont))
+                            .opacity(0.8)
+                            .foregroundColor(lockScreenUX.labelColor)
                     }
                     Spacer()
                     ZStack {
-                        Circle().stroke(lineWidth: UX.circleWidth)
-                            .foregroundColor(UX.labelColor)
-                            .opacity(UX.circleOpacity)
+                        Circle().stroke(lineWidth: lockScreenUX.circleWidth)
+                            .foregroundColor(lockScreenUX.labelColor)
+                            .opacity(0.3)
                         Circle().trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
-                            .stroke(style: StrokeStyle(lineWidth: UX.circleWidth))
-                            .rotationEffect(.degrees(UX.circleRotation))
-                            .animation(.linear, value: UX.circleAnimation)
-                            .foregroundColor(UX.labelColor)
-                        Image(totalCompletion ? UX.checkmarkIcon : UX.stopIcon)
+                            .stroke(style: StrokeStyle(lineWidth: lockScreenUX.circleWidth))
+                            .rotationEffect(.degrees(270))
+                            .animation(.linear, value: 0.5)
+                            .foregroundColor(lockScreenUX.labelColor)
+                        Image(totalCompletion ? lockScreenUX.checkmarkIcon : lockScreenUX.stopIcon)
                             .renderingMode(.template)
-                            .frame(width: UX.progressIconSize, height: UX.progressIconSize)
-                            .foregroundStyle(UX.labelColor)
+                            .frame(width: lockScreenUX.progressIconSize, height: lockScreenUX.progressIconSize)
+                            .foregroundStyle(lockScreenUX.labelColor)
                     }
-                    .frame(width: UX.circleRadius, height: UX.circleRadius)
+                    .frame(width: lockScreenUX.circleRadius, height: lockScreenUX.circleRadius)
                 }
                 .padding()
             }
-        } dynamicIsland: { _ in
+        } dynamicIsland: { liveDownload in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
                     EmptyView()
@@ -141,9 +145,32 @@ struct DownloadLiveActivity: Widget {
                     EmptyView()
                 }
             } compactLeading: {
-                EmptyView()
+                Image(StandardImageIdentifiers.Large.download)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: dynamicIslandUX.downloadIconSize, height: dynamicIslandUX.downloadIconSize)
+                    .foregroundStyle(.orange)
+                    .padding([.leading, .trailing], 2)
             } compactTrailing: {
-                EmptyView()
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: dynamicIslandUX.lineWidth)
+                        .foregroundColor(.gray)
+                        .opacity(0.3)
+                        .frame(width: dynamicIslandUX.circleWidth, height: dynamicIslandUX.circleWidth)
+                        .padding(.leading, 2)
+                        .padding(.trailing, 1)
+                    Circle()
+                        .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: dynamicIslandUX.lineWidth))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
+                        .foregroundStyle(.orange)
+                        .frame(width: dynamicIslandUX.circleWidth, height: dynamicIslandUX.circleWidth)
+                }
+                .padding(.leading, dynamicIslandUX.downloadPaddingLeading)
+                .padding(.trailing, dynamicIslandUX.downloadPaddingTrailing)
             } minimal: {
                 EmptyView()
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))

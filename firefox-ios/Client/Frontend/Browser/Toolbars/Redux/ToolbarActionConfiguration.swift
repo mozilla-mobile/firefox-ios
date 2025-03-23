@@ -25,13 +25,15 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     }
 
     var actionType: ActionType
-    var iconName: String
+    var actionLabel: String?
+    var iconName: String?
     var badgeImageName: String?
     var maskImageName: String?
     var numberOfTabs: Int?
     var isFlippedForRTL = false
     var isEnabled: Bool
     var isSelected = false
+    var hasCustomColor = false
     var largeContentTitle: String?
     var contextualHintType: String?
     var a11yLabel: String

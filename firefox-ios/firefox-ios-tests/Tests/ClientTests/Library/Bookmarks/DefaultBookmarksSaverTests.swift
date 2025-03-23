@@ -24,6 +24,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     }
 
     override func tearDown() {
+        mockProfile.shutdown()
         mockProfile = nil
         testBookmarkGUID = nil
         testFolderGUID = nil

@@ -20,7 +20,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEventHandler {
+class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     let windowUUID: WindowUUID
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -36,6 +36,10 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
 
     var count: Int {
@@ -157,7 +161,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         super.init()
 
         GlobalTabEventHandlers.configure(with: profile)
-        register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
         setupNotifications(
@@ -195,6 +198,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
+        if #available(iOS 15.4, *) {
+            configuration.preferences.isElementFullscreenEnabled = true
+        }
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         } else {
@@ -697,8 +703,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
+
+        let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
+            tabs.contains { $0.tabUUID == deeplinkTab.tabUUID }
+        } else {
+            false
+        }
+
         if isDeeplinkOptimizationRefactorEnabled,
            let deeplinkTab,
+           !isDeeplinkTabAlreadyAdded,
            deeplinkTab.url?.absoluteString == tabData.siteUrl {
             // if the deeplink tab has the same url of a tab data then use the deeplink tab for the restore
             // in order to prevent a duplicate tab
@@ -851,7 +865,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
     private func storeChanges() {
-        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveSessionData(forTab: selectedTab)
     }
@@ -875,12 +888,15 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
 
     // MARK: - Select Tab
 
-    /// This function updates the _selectedIndex.
+    /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
+        if isPDFRefactorEnabled {
+            previous?.pauseResumeDocumentDownload()
+        }
 
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
@@ -929,6 +945,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatch(action)
 
+        if isPDFRefactorEnabled {
+            tab.pauseResumeDocumentDownload()
+        }
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
 
@@ -1000,7 +1019,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
     }
 
     // MARK: - TabEventHandler
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+    func tabDidSetScreenshot(_ tab: Tab) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
@@ -1015,7 +1034,11 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable, TabEvent
         guard let screenshot = tab.screenshot else { return }
 
         Task {
-            try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            do {
+                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            } catch {
+                logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
+            }
         }
     }
 

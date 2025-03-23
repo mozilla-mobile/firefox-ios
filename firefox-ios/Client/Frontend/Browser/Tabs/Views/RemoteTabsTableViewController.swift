@@ -27,6 +27,11 @@ class RemoteTabsTableViewController: UITableViewController,
     private var hiddenSections = Set<Int>()
     private let logger: Logger
 
+    private var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -36,7 +41,7 @@ class RemoteTabsTableViewController: UITableViewController,
 
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
     private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if isTabTrayUIExperimentsEnabled {
             let view = ExperimentRemoteTabsEmptyView()
             view.translatesAutoresizingMaskIntoConstraints = false
             return view

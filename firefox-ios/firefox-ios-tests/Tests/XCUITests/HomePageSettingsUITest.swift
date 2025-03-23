@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
 
@@ -155,7 +156,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(HomePanelsScreen)
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts
+        XCTAssertTrue(app.collectionViews.links.staticTexts
             .elementContainingText("Mozilla - Internet for people").exists)
     }
 

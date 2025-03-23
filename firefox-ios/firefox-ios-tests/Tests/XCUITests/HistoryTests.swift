@@ -381,7 +381,11 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
+        }
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -439,7 +443,6 @@ class HistoryTests: BaseTestCase {
     private func navigateToPage() {
         navigator.openURL("example.com")
         waitUntilPageLoad()
-        // Workaround as the item does not appear if there is only that tab open
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
@@ -464,18 +467,12 @@ class HistoryTests: BaseTestCase {
     }
 
     private func closeFirstTabByX() {
-        // Workaround for FXIOS-5128. To be replaced by tapping "Close All Tabs"
         waitForTabsButton()
         navigator.goto(TabTray)
-        if isTablet {
-            app.otherElements["Tabs Tray"]
-                .collectionViews
-                .cells
-                .element(boundBy: 0)
-                .buttons[StandardImageIdentifiers.Large.crossCircleFill]
-                .waitAndTap()
+        if iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         } else {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].firstMatch.waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
     }
 

@@ -50,6 +50,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
     }
 
+    private var isNewAppearanceMenuOn: Bool {
+        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+    }
+
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
@@ -486,17 +490,27 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         )
     }
 
+    private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
+        if isNewAppearanceMenuOn {
+            return isNightModeOn
+                ? .MainMenu.Submenus.Tools.WebsiteDarkModeOff
+                : .MainMenu.Submenus.Tools.WebsiteDarkModeOn
+        } else {
+            return isNightModeOn
+                ? .MainMenu.Submenus.Tools.NightModeOff
+                : .MainMenu.Submenus.Tools.NightModeOn
+        }
+    }
+
     private func configureNightModeItem(with uuid: WindowUUID, and tabInfo: MainMenuTabInfo) -> MenuElement {
-        typealias Strings = String.MainMenu.Submenus.Tools
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
 
         let nightModeIsOn = NightModeHelper.isActivated()
-        let title = nightModeIsOn ? Strings.NightModeOff : Strings.NightModeOn
         let icon = nightModeIsOn ? Icons.nightModeOn : Icons.nightModeOff
         let a11yLabel = nightModeIsOn ? A11y.NightModeOff : A11y.NightModeOn
 
         return MenuElement(
-            title: title,
+            title: getNightModeTitle(nightModeIsOn),
             iconName: icon,
             isEnabled: true,
             isActive: nightModeIsOn,

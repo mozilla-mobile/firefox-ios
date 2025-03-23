@@ -161,6 +161,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var canonicalURL: URL? {
+        if isPDFRefactorEnabled, temporaryDocument?.isDownloading ?? false {
+            return url
+        }
         if let string = pageMetadata?.siteURL,
            let siteURL = URL(string: string, invalidCharacters: false) {
             // If the canonical URL from the page metadata doesn't contain the
@@ -174,7 +177,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             return siteURL
         }
-        return self.url
+        return url
     }
 
     var loading: Bool {
@@ -293,6 +296,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var pendingScreenshot = false
     var url: URL? {
         didSet {
+            if isPDFRefactorEnabled, let _url = url, let sourceURL = downloadedTemporaryDocs[_url] {
+                url = sourceURL
+            }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization, invalidCharacters: false)
             }
@@ -427,7 +433,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
-    private var downloadedTemporaryDocs = [URL]()
+    /// The dictionary containing as key the location for a document and its corresponding source URL.
+    private var downloadedTemporaryDocs = [URL: URL]()
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
@@ -977,12 +984,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     @discardableResult
     private func cancelTemporaryDocumentDownload(forceReload: Bool = true) -> Bool {
         guard let temporaryDocument else { return false }
-
+        self.temporaryDocument = nil
         if temporaryDocument.isDownloading {
-            temporaryDocument.invalidateSession()
-            self.temporaryDocument = nil
+            temporaryDocument.cancelDownload()
             if forceReload {
-                reload()
+                // if the webView's url is the home page then bypass cache so to reload the homepage
+                // Otherwise the webView is restored causing the PDF to be reloaded again.
+                let isInternalURL = InternalURL(webView?.url) != nil
+                reload(bypassCache: isInternalURL)
             }
             return true
         }
@@ -994,7 +1003,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         guard !docsURL.isEmpty else { return }
         DispatchQueue.global(qos: .background).async {
             docsURL.forEach { url in
-                try? FileManager.default.removeItem(at: url)
+                try? FileManager.default.removeItem(at: url.value)
             }
         }
     }
@@ -1009,8 +1018,18 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument?.download { [weak self] url in
             guard let url else { return }
             self?.webView?.load(URLRequest(url: url))
-            self?.downloadedTemporaryDocs.append(url)
+            // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
+            guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
+            self?.downloadedTemporaryDocs[url] = sourceURL
         }
+    }
+
+    func pauseResumeDocumentDownload() {
+        temporaryDocument?.pauseResumeDownload()
+    }
+
+    func isDownloadingDocument() -> Bool {
+        return temporaryDocument?.isDownloading ?? false
     }
 }
 
@@ -1165,12 +1184,23 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
     lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
+    private var isPDFRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+
+    override var hasOnlySecureContent: Bool {
+        // When PDF refactor enabled we show the online URL for a local PDF so secure content should be true
+        if isPDFRefactorEnabled, let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
+            return true
+        }
+        return super.hasOnlySecureContent
+    }
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1299,6 +1329,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer1
         pullRefresh?.applyTheme(theme: theme)
         if url == nil {
             let backgroundColor = theme.colors.layer1.hexString
