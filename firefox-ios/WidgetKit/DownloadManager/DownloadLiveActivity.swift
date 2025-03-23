@@ -123,7 +123,7 @@ struct DownloadLiveActivity: Widget {
           countStyle: .file
           )
         Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-          .font(.system(size: DownloadLiveActivity.UX.progressFontSize))
+          .font(.subheadline)
           .foregroundColor(DownloadLiveActivity.UX.widgetColours)
           .frame(maxWidth: .infinity,
               alignment: .leading)
