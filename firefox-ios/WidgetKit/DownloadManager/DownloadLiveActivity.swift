@@ -54,6 +54,8 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     struct UX {
+        static let rotation: CGFloat = -90
+        
         static let downloadColor: UIColor = .orange
         static let circleWidth: CGFloat = 17.5
         static let lineWidth: CGFloat = 3.5
@@ -109,7 +111,7 @@ struct DownloadLiveActivity: Widget {
         Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
           .font(.headline)
           .frame(maxWidth: .infinity,
-              alignment: .leading)
+                 alignment: .leading)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
                     leading: DownloadLiveActivity.UX.wordsLeftPadding,
                     bottom: DownloadLiveActivity.UX.wordsBottomPadding,
@@ -126,7 +128,7 @@ struct DownloadLiveActivity: Widget {
           .font(.subheadline)
           .foregroundColor(DownloadLiveActivity.UX.widgetColours)
           .frame(maxWidth: .infinity,
-              alignment: .leading)
+                 alignment: .leading)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
                     leading: DownloadLiveActivity.UX.wordsLeftPadding,
                     bottom: DownloadLiveActivity.UX.wordsBottomPadding,
@@ -147,7 +149,7 @@ struct DownloadLiveActivity: Widget {
             .trim(from: 0.0,
                to: min(liveDownload.state.totalProgress, 1.0))
             .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.progressWidth))
-            .rotationEffect(.degrees(270.0))
+            .rotationEffect(.degrees(DownloadLiveActivity.UX.rotation))
             .animation(.linear, value: 0.5)
           Image(
             liveDownload.state.totalProgress == 1.0
@@ -199,7 +201,7 @@ struct DownloadLiveActivity: Widget {
                     Circle()
                         .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
                         .stroke(style: StrokeStyle(lineWidth: UX.lineWidth))
-                        .rotationEffect(.degrees(-90))
+                        .rotationEffect(.degrees(UX.rotation))
                         .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
                         .foregroundStyle(.orange)
                         .frame(width: UX.circleWidth, height: UX.circleWidth)
