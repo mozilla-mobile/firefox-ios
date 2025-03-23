@@ -106,8 +106,7 @@ struct DownloadLiveActivity: Widget {
                                 String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads.count))
                             .font(.system(size: lockScreenUX.titleFont, weight: .bold))
                             .foregroundColor(lockScreenUX.labelColor)
-                        Text(subtitle)
-                            .font(.system(size: lockScreenUX.subtitleFont))
+                        Text(subtitle).font(.system(size: lockScreenUX.subtitleFont))
                             .opacity(0.8)
                             .foregroundColor(lockScreenUX.labelColor)
                     }
