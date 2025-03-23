@@ -7,7 +7,7 @@ import WidgetKit
 
 @testable import Client
 
-class DownloadLiveActivityTest: XCTestCase {
+class DownloadLiveActivityAttributesTests: XCTestCase {
     func testContentStateComputedProperties() {
         let download1 = makeDownload(type: DownloadType.normal, isComplete: true)
         let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)
@@ -98,7 +98,6 @@ class DownloadLiveActivityTest: XCTestCase {
         isComplete: Bool = false
     ) -> DownloadLiveActivityAttributes.ContentState.Download {
         DownloadLiveActivityAttributes.ContentState.Download(
-            id: UUID(),
             fileName: fileName,
             hasContentEncoding: type == DownloadType.contentEncoded,
             totalBytesExpected: type == DownloadType.nilExpectedBytes ? nil : totalBytesExpected,

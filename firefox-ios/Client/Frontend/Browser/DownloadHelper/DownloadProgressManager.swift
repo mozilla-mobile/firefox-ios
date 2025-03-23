@@ -57,6 +57,8 @@ class DownloadProgressManager {
             } else {
                 self.combinedTotalBytesExpected = nil
             }
+        } else {
+            delegates.forEach({ $0.delegate?.updateCombinedTotalBytesExpected(value: self.combinedTotalBytesExpected) })
         }
     }
 }
