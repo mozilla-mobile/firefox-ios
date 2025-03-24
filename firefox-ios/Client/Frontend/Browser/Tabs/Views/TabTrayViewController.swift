@@ -333,7 +333,6 @@ class TabTrayViewController: UIViewController,
         updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
 
-        // When we add a new tab or select a tab we should kick off the animation here and then dismiss ?
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
