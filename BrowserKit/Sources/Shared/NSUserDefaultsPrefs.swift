@@ -100,6 +100,10 @@ open class NSUserDefaultsPrefs: Prefs {
         return userDefaults.object(forKey: qualifyKey(defaultName)) as? T
     }
 
+    open func hasObjectForKey(_ defaultName: String) -> Bool {
+        return userDefaults.object(forKey: qualifyKey(defaultName)) != nil
+    }
+
     open func intForKey(_ defaultName: String) -> Int32? {
         return nsNumberForKey(defaultName)?.int32Value
     }

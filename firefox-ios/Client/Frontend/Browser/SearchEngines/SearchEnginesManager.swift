@@ -314,16 +314,34 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
-        let enginePrefs: [String]?
-        if isSECEnabled {
-            enginePrefs = prefs.stringArrayForKey(self.orderedEngineIDsPrefsKey)
-        } else {
-            enginePrefs = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
-        }
-        // TODO: [FXIOS-11502] Prefs handling needs further investigation for SEC.
+        let enginePrefs = getOrderingPrefs()
         engineProvider.getOrderedEngines(customEngines: customEngines,
-                                         orderedEngineNames: enginePrefs,
+                                         engineOrderingPrefs: enginePrefs,
+                                         prefsMigrator: DefaultSearchEnginePrefsMigrator(),
                                          completion: completion)
+    }
+
+    private func getOrderingPrefs() -> SearchEngineOrderingPrefs {
+        let enginePrefs: SearchEngineOrderingPrefs
+        if isSECEnabled {
+            if prefs.hasObjectForKey(orderedEngineIDsPrefsKey) {
+                // v2 (SEC) preferences are available on-disk
+                let engineStrings = prefs.stringArrayForKey(orderedEngineIDsPrefsKey)
+                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v2)
+            } else if prefs.hasObjectForKey(legacy_orderedEngineNamesPrefsKey) {
+                // We're running for the first time with SEC enabled but haven't yet saved ordering
+                // prefs for those engines. We send the v1  preferences which will be migrated.
+                let engineStrings = prefs.stringArrayForKey(legacy_orderedEngineNamesPrefsKey)
+                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
+            } else {
+                // Fresh install. No v2 or v1 preferences.
+                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: nil, version: .v2)
+            }
+        } else {
+            let engineStrings = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
+            enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
+        }
+        return enginePrefs
     }
 
     private var customEngineFilePath: String {

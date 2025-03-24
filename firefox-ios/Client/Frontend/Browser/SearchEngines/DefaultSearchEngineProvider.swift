@@ -14,8 +14,22 @@ protocol SearchEngineProvider {
     ///   - orderedEngineNames: ordered engine names for sorting
     ///   - completion: the completion block called with the final results
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
+                           engineOrderingPrefs: SearchEngineOrderingPrefs,
+                           prefsMigrator: SearchEnginePreferencesMigrator,
                            completion: @escaping ([OpenSearchEngine]) -> Void)
+    
+    /// Returns the search ordering preference format that this provider utilizes.
+    var preferencesVersion: SearchEngineOrderingPrefsVersion { get }
+}
+
+enum SearchEngineOrderingPrefsVersion {
+    case v1 // Pre-bundled XML search engines, before Search Consolidation
+    case v2 // Consolidated search (engines are fetched from Remote Settings)
+}
+
+struct SearchEngineOrderingPrefs {
+    let engineIdentifiers: [String]?
+    let version: SearchEngineOrderingPrefsVersion
 }
 
 class DefaultSearchEngineProvider: SearchEngineProvider {
@@ -25,19 +39,26 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
         self.logger = logger
     }
 
+    var preferencesVersion: SearchEngineOrderingPrefsVersion { .v1 }
+
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
+                           engineOrderingPrefs: SearchEngineOrderingPrefs,
+                           prefsMigrator: SearchEnginePreferencesMigrator,
                            completion: @escaping ([OpenSearchEngine]) -> Void) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let prefsVersion = preferencesVersion
 
         // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
+            let finalEngineOrderingPrefs = prefsMigrator.migratePrefsIfNeeded(engineOrderingPrefs,
+                                                                              to: prefsVersion,
+                                                                              availableEngines: unorderedEngines)
 
-            // might not work to change the default.
-            guard let orderedEngineNames = orderedEngineNames else {
+            guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
+                  !orderedEngineNames.isEmpty else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
                 DispatchQueue.main.async {
                     completion(unorderedEngines)
