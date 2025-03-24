@@ -43,7 +43,7 @@ struct OpenTabsView: View {
                     }
 
                     Text(tab.title!)
-                        .foregroundColor(Color("openTabsLabelColor"))
+                        .foregroundColor(Color("openTabsContentColor"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -62,9 +62,9 @@ struct OpenTabsView: View {
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                .foregroundColor(Color("openTabsLabelColor"))
+                .foregroundColor(Color("openTabsContentColor"))
             Text("Open Firefox")
-                .foregroundColor(Color("openTabsLabelColor"))
+                .foregroundColor(Color("openTabsContentColor"))
                 .lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
@@ -87,8 +87,9 @@ struct OpenTabsView: View {
                     HStack {
                         Spacer()
                         Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                            .foregroundColor(Color("openTabsContentColor"))
                         Text(String.OpenFirefoxLabel)
-                            .foregroundColor(Color("openTabsLabelColor"))
+                            .foregroundColor(Color("openTabsContentColor"))
                             .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
@@ -104,7 +105,7 @@ struct OpenTabsView: View {
                     if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
                             Image(decorative: StandardImageIdentifiers.Small.externalLink)
-                                .foregroundColor(Color.white)
+                                .foregroundColor(Color("openTabsContentColor"))
                                 .frame(width: 16, height: 16)
                             Text(
                                 String.localizedStringWithFormat(
@@ -112,7 +113,7 @@ struct OpenTabsView: View {
                                     (entry.tabs.count - numberOfTabsToDisplay)
                                 )
                             )
-                            .foregroundColor(Color("openTabsLabelColor"))
+                            .foregroundColor(Color("openTabsContentColor"))
                             .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                             Spacer()
