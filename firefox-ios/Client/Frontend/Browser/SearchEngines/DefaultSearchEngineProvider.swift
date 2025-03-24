@@ -17,7 +17,7 @@ protocol SearchEngineProvider {
                            engineOrderingPrefs: SearchEngineOrderingPrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
                            completion: @escaping ([OpenSearchEngine]) -> Void)
-    
+
     /// Returns the search ordering preference format that this provider utilizes.
     var preferencesVersion: SearchEngineOrderingPrefsVersion { get }
 }
