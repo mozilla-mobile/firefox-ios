@@ -24,14 +24,14 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     var dispatchCalled: (() -> Void)?
 
     /// Called when subscriber calls subscribe to the mock store.
-    var subscribeCalled: (() -> Void)?
+    var subscribeCallCount = 0
 
     init(state: State) {
         self.state = state
     }
 
     func subscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {
-        subscribeCalled?()
+        subscribeCallCount += 1
     }
 
     func subscribe<SubState, S>(
@@ -42,7 +42,7 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
             ) -> Redux.Subscription<SubState>
         )?
     ) where SubState == S.SubscriberStateType, S: Redux.StoreSubscriber {
-        subscribeCalled?()
+        subscribeCallCount += 1
     }
 
     func unsubscribe<S>(_ subscriber: S) where S: Redux.StoreSubscriber, State == S.SubscriberStateType {

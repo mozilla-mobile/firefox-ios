@@ -23,51 +23,32 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func testRemoteTabsPanel_simpleCreation_hasNoLeaks() {
-        let subject = createSubject()
-        trackForMemoryLeaks(subject)
-    }
-
     func testRemoteTabs_whenSubscribeToReduxCalled_subscribesToReduxStore() {
-        var subscribeCount = 0
-        mockStore.subscribeCalled = {
-            subscribeCount += 1
-        }
-
         let subject = createSubject()
         subject.subscribeToRedux()
 
         XCTAssertFalse(mockStore.dispatchedActions.isEmpty)
-        XCTAssertEqual(subscribeCount, 1)
+        XCTAssertEqual(mockStore.subscribeCallCount, 1)
     }
 
-    func testRemoteTabs_whenUnsubscribeFromReduxCalled_dispatchesCloseScreenAction() {
+    func testRemoteTabs_whenUnsubscribeFromReduxCalled_dispatchesCloseScreenAction() throws {
         let subject = createSubject()
         subject.unsubscribeFromRedux()
 
-        guard
-            let action = try? XCTUnwrap(mockStore.dispatchedActions.last),
-            let actionType = action.actionType as? ScreenActionType
-        else {
-            XCTFail("Incorrect action type")
-            return
-        }
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last)
+        let actionType = try XCTUnwrap(action.actionType as? ScreenActionType)
 
         XCTAssertEqual(actionType, ScreenActionType.closeScreen)
     }
 
     // MARK: - Actions
-    func testRemoteTabs_whenPulledToRefresh_refreshsTabs() {
+    func testRemoteTabs_whenPulledToRefresh_refreshsTabs() throws {
         let subject = createSubject()
         subject.tableViewControllerDidPullToRefresh()
 
-        guard
-            let action = try? XCTUnwrap(mockStore.dispatchedActions.last),
-            let actionType = action.actionType as? RemoteTabsPanelActionType
-        else {
-            XCTFail("Incorrect action type")
-            return
-        }
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
         XCTAssertEqual(actionType, RemoteTabsPanelActionType.refreshTabs)
     }
 
@@ -87,6 +68,8 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject() -> RemoteTabsPanel {
-        RemoteTabsPanel(windowUUID: windowUUID)
+        let subject = RemoteTabsPanel(windowUUID: windowUUID)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
