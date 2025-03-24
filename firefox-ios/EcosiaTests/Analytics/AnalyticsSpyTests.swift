@@ -111,6 +111,11 @@ final class AnalyticsSpy: Analytics {
         }
     }
 
+    var inappSearchUrlCalled: URL?
+    override func inappSearch(url: URL) {
+        inappSearchUrlCalled = url
+    }
+
     var ntpTopSiteActionCalled: Action.TopSite?
     var ntpTopSitePropertyCalled: Property.TopSite?
     var ntpTopSitePositionCalled: NSNumber?
@@ -767,6 +772,42 @@ final class AnalyticsSpyTests: XCTestCase {
         // Verify that the analytics event was called with the correct action and label
         XCTAssertEqual(analyticsSpy.navigationActionCalled, .open, "Analytics should track navigationActionCalled as .open.")
         XCTAssertEqual(analyticsSpy.navigationLabelCalled, testSection.label, "Analytics should track navigationLabelCalled correctly.")
+    }
+
+    // MARK: - URL Bar Search Event
+
+    func testURLBarViewTracksSearchEventOnEcosiaVerticalURLChange() {
+        let urlBar = URLBarView(profile: profileMock, windowUUID: .XCTestDefaultUUID)
+
+        let rootURL = Environment.current.urlProvider.root
+        let testCases = [
+            ("https://www.example.org", false, "Does not track external URLs"),
+            ("\(rootURL)", false, "Does not track index page"),
+            ("\(rootURL)/search?q=test", true, "Tracks search query"),
+            ("\(rootURL)/search?q=test", false, "Does not track if url did not change"),
+            ("\(rootURL)/images?q=test1", true, "Tracks images query"),
+            ("\(rootURL)/news?q=test2&p=1", true, "Tracks news query"),
+            ("\(rootURL)/videos?q=test3", true, "Tracks videos query"),
+            ("\(rootURL)/settings", false, "Does not track non-search pages"),
+            ("https://blog.ecosia.org/", false, "Does not track on other Ecosia urls"),
+        ]
+
+        for (urlString, shouldTrack, message) in testCases {
+            analyticsSpy = AnalyticsSpy()
+            Analytics.shared = analyticsSpy
+            let url = URL(string: urlString)!
+            urlBar.currentURL = url
+
+            if shouldTrack {
+                XCTAssertEqual(analyticsSpy.inappSearchUrlCalled?.absoluteString,
+                               url.ecosified(isIncognitoEnabled: false).absoluteString,
+                               "Failure on: \(message)")
+            } else {
+                XCTAssertNil(analyticsSpy.inappSearchUrlCalled, "Failure on: \(message)")
+            }
+            analyticsSpy = nil
+            Analytics.shared = Analytics()
+        }
     }
 
     // MARK: - Analytics Context Tests

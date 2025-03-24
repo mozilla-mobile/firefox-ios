@@ -18,6 +18,8 @@ final class URLTests: XCTestCase {
         try? FileManager.default.removeItem(at: FileManager.user)
     }
 
+    // MARK: - `ecosiaSearchWithQuery`
+
     func testSearchUrl() {
         let expect = expectation(description: "")
         let suffix = "&tt=iosapp"
@@ -42,6 +44,83 @@ final class URLTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    // MARK: - `isEcosiaSearchQuery`
+
+    func testAssertIsNotEcosiaSearchURLOnNonEcosiaURL() {
+        let nonEcosiaURL = URL(string: "https://www.non-ecosia.com/search")!
+        XCTAssertFalse(nonEcosiaURL.isEcosiaSearchQuery(urlProvider))
+    }
+
+    func testAssertIsNotEcosiaSearchURLOnNonEcosiaSearchQueryURL() {
+        let nonSearchEcosiaURL = URL(string: "https://www.ecosia.org/example")!
+        XCTAssertFalse(nonSearchEcosiaURL.isEcosiaSearchQuery(urlProvider))
+    }
+
+    func testAssertIsEcosiaSearchURLOnEcosiaSearchQueryURL() {
+        let searchEcosiaURL = URL(string: "https://www.ecosia.org/search")!
+        XCTAssertTrue(searchEcosiaURL.isEcosiaSearchQuery(urlProvider))
+    }
+
+    // MARK: - `isEcosiaSearchVertical` & `getEcosiaSearchVerticalPath`
+
+    func testAssertNotEcosiaSearchVerticalOnNonEcosiaURL() {
+        let nonEcosiaURL = URL(string: "https://www.non-ecosia.com/search")!
+        XCTAssertFalse(nonEcosiaURL.isEcosiaSearchVertical(urlProvider))
+        XCTAssertNil(nonEcosiaURL.getEcosiaSearchVerticalPath(urlProvider))
+    }
+
+    func testAssertNotEcosiaSearchVerticalOnNonSearchPage() {
+        let settingsURL = URL(string: "https://www.ecosia.org/settings")!
+        XCTAssertFalse(settingsURL.isEcosiaSearchVertical(urlProvider))
+        XCTAssertNil(settingsURL.getEcosiaSearchVerticalPath(urlProvider))
+    }
+
+    func testAssertEcosiaSearchVerticalOnEnumCases() {
+        for path in URL.EcosiaSearchVertical.allCases.map(\.rawValue) {
+            let url = URL(string: "https://www.ecosia.org/\(path)?q=test")!
+            XCTAssertTrue(url.isEcosiaSearchVertical(urlProvider))
+            XCTAssertEqual(url.getEcosiaSearchVerticalPath(urlProvider), path)
+        }
+    }
+
+    // MARK: - `getEcosiaSearchQuery` & `getEcosiaSearchPage`
+
+    func testAssertEcosiaSearchQueryAndPageOnNonEcosiaURL() {
+        let nonEcosiaURL = URL(string: "https://www.non-ecosia.com/search?q=test&p=1")!
+        XCTAssertNil(nonEcosiaURL.getEcosiaSearchQuery(urlProvider))
+        XCTAssertNil(nonEcosiaURL.getEcosiaSearchPage(urlProvider))
+    }
+
+    func testAssertEcosiaSearchQueryAndPageOnEcosiaURL() {
+        let ecosiaUrl = URL(string: "https://www.ecosia.org?q=test&p=1")!
+        XCTAssertEqual(ecosiaUrl.getEcosiaSearchQuery(urlProvider), "test")
+        XCTAssertEqual(ecosiaUrl.getEcosiaSearchPage(urlProvider), 1)
+    }
+
+    // MARK: - `shouldEcosify`
+
+    func testAssertShouldEcosifyOnNonEcosiaURL() {
+        let nonSearchEcosiaURL = URL(string: "https://www.google.com")!
+        XCTAssertFalse(nonSearchEcosiaURL.shouldEcosify(urlProvider))
+    }
+
+    func testAssertShouldEcosifyOnAllEcosiaURLs() {
+        let ecosiaURLs = [
+            "https://ecosia.org",
+            "https://www.ecosia.org/search?q=foo",
+            "https://ecosia.org/image?q=test",
+            "https://ecosia.org/chat?q=test",
+            "https://ecosia.org/news?q=test",
+            "https://blog.ecosia.org/",
+            "https://www.ecosia.org/settings"
+        ]
+        ecosiaURLs.forEach { urlString in
+            XCTAssertTrue(URL(string: urlString)!.shouldEcosify(urlProvider))
+        }
+    }
+
+    // MARK: - `ecosified`
+
     func testAvoidEcosifyWrongScheme() {
         let ecosified = URL(string: "gmsg://ecosia.org")!.ecosified(isIncognitoEnabled: false)
         XCTAssertEqual(ecosified, URL(string: "gmsg://ecosia.org"))
@@ -50,22 +129,6 @@ final class URLTests: XCTestCase {
     func testDontEcosifyIfNotEcosia() {
         let ecosified = URL(string: "https://guacamole.org")!.ecosified(isIncognitoEnabled: false)
         XCTAssertEqual(ecosified, URL(string: "https://guacamole.org"))
-    }
-
-    func testPolicyAllow() {
-        XCTAssertEqual(.allow, URL(string: "ecosia.org")!.policy)
-        XCTAssertEqual(.allow, URL(string: "http://ecosia.org")!.policy)
-        XCTAssertEqual(.allow, URL(string: "http://www.ecosia.org")!.policy)
-        XCTAssertEqual(.allow, URL(string: "https://www.ecosia.org")!.policy)
-        XCTAssertEqual(.allow, URL(string: "ecosia://ecosia.org")!.policy)
-        XCTAssertEqual(.allow, URL(string: "maps://ecosia.org")!.policy)
-    }
-
-    func testPolicyCancel() {
-        XCTAssertEqual(.cancel, URL(string: "gmsg://mobileads.google.com/appEvent?name=sitedefault&info=true&google.afma.Notify_dt=1625136586354")!.policy)
-        XCTAssertEqual(.cancel, URL(string: "gmsg://mobileads.google.com")!.policy)
-        XCTAssertEqual(.cancel, URL(string: "gmsg://something")!.policy)
-        XCTAssertEqual(.cancel, URL(string: "gmsg://")!.policy)
     }
 
     func testPatchWithAnalyticsId() {
@@ -146,38 +209,21 @@ final class URLTests: XCTestCase {
         XCTAssertEqual(ecosified, URL(string: "https://ecosia.org?_sp=\(UUID(uuid: UUID_NULL).uuidString)"))
     }
 
-    func testAssertIsNotEcosiaSearchURLOnNonEcosiaURL() {
-        let nonEcosiaURL = URL(string: "https://www.non-ecosia.com/search")!
-        XCTAssertFalse(nonEcosiaURL.isEcosiaSearchQuery(urlProvider))
+    // MARK: - `policy`
+
+    func testPolicyAllow() {
+        XCTAssertEqual(.allow, URL(string: "ecosia.org")!.policy)
+        XCTAssertEqual(.allow, URL(string: "http://ecosia.org")!.policy)
+        XCTAssertEqual(.allow, URL(string: "http://www.ecosia.org")!.policy)
+        XCTAssertEqual(.allow, URL(string: "https://www.ecosia.org")!.policy)
+        XCTAssertEqual(.allow, URL(string: "ecosia://ecosia.org")!.policy)
+        XCTAssertEqual(.allow, URL(string: "maps://ecosia.org")!.policy)
     }
 
-    func testAssertIsNotEcosiaSearchURLOnNonEcosiaSearchQueryURL() {
-        let nonSearchEcosiaURL = URL(string: "https://www.ecosia.org/example")!
-        XCTAssertFalse(nonSearchEcosiaURL.isEcosiaSearchQuery(urlProvider))
-    }
-
-    func testAssertIsEcosiaSearchURLOnEcosiaSearchQueryURL() {
-        let searchEcosiaURL = URL(string: "https://www.ecosia.org/search")!
-        XCTAssertTrue(searchEcosiaURL.isEcosiaSearchQuery(urlProvider))
-    }
-
-    func testAssertShouldEcosifyOnNonEcosiaURL() {
-        let nonSearchEcosiaURL = URL(string: "https://www.google.com")!
-        XCTAssertFalse(nonSearchEcosiaURL.shouldEcosify(urlProvider))
-    }
-
-    func testAssertShouldEcosifyOnAllEcosiaURLs() {
-        let ecosiaURLs = [
-            "https://ecosia.org",
-            "https://www.ecosia.org/search?q=foo",
-            "https://ecosia.org/image?q=test",
-            "https://ecosia.org/chat?q=test",
-            "https://ecosia.org/news?q=test",
-            "https://blog.ecosia.org/",
-            "https://www.ecosia.org/settings"
-        ]
-        ecosiaURLs.forEach { urlString in
-            XCTAssertTrue(URL(string: urlString)!.shouldEcosify(urlProvider))
-        }
+    func testPolicyCancel() {
+        XCTAssertEqual(.cancel, URL(string: "gmsg://mobileads.google.com/appEvent?name=sitedefault&info=true&google.afma.Notify_dt=1625136586354")!.policy)
+        XCTAssertEqual(.cancel, URL(string: "gmsg://mobileads.google.com")!.policy)
+        XCTAssertEqual(.cancel, URL(string: "gmsg://something")!.policy)
+        XCTAssertEqual(.cancel, URL(string: "gmsg://")!.policy)
     }
 }

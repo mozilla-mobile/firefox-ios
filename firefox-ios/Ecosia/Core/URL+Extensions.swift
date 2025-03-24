@@ -6,17 +6,30 @@ import Foundation
 
 extension URL {
 
-    public enum Key: String {
+    public enum EcosiaQueryItemName: String {
         case
+        page = "p",
         query = "q",
         typeTag = "tt",
         userId = "_sp"
     }
 
+    public enum EcosiaSearchVertical: String, CaseIterable {
+        case search
+        case images
+        case news
+        case videos
+
+        init?(path: String) {
+            let pathWithNoLeadingSlash = String(path.dropFirst())
+            self.init(rawValue: pathWithNoLeadingSlash)
+        }
+    }
+
     public static func ecosiaSearchWithQuery(_ query: String, urlProvider: URLProvider = Environment.current.urlProvider) -> URL {
         var components = URLComponents(url: urlProvider.root, resolvingAgainstBaseURL: false)!
         components.path = "/search"
-        components.queryItems = [item(key: .query, value: query), item(key: .typeTag, value: "iosapp")]
+        components.queryItems = [item(name: .query, value: query), item(name: .typeTag, value: "iosapp")]
         return components.url!
     }
 
@@ -29,6 +42,41 @@ extension URL {
         return components.path == "/search"
     }
 
+    public func isEcosiaSearchVertical(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
+        getEcosiaSearchVerticalPath(urlProvider) != nil
+    }
+
+    public func getEcosiaSearchVerticalPath(_ urlProvider: URLProvider = Environment.current.urlProvider) -> String? {
+        guard isEcosia(urlProvider),
+              let components = components else {
+            return nil
+        }
+        return EcosiaSearchVertical(path: components.path)?.rawValue
+    }
+
+    public func getEcosiaSearchQuery(_ urlProvider: URLProvider = Environment.current.urlProvider) -> String? {
+        guard isEcosia(urlProvider),
+              let components = components else {
+            return nil
+        }
+        return components.queryItems?.first(where: {
+            $0.name == EcosiaQueryItemName.query.rawValue
+        })?.value
+    }
+
+    public func getEcosiaSearchPage(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Int? {
+        guard isEcosia(urlProvider),
+              let components = components else {
+            return nil
+        }
+        if let pageNumber = components.queryItems?.first(where: {
+            $0.name == EcosiaQueryItemName.page.rawValue
+        })?.value {
+            return Int(pageNumber)
+        }
+        return nil
+    }
+
     /// Check whether the URL should be Ecosified. At the moment this is true for every Ecosia URL.
     public func shouldEcosify(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
         return isEcosia(urlProvider)
@@ -38,7 +86,7 @@ extension URL {
         guard isEcosia(urlProvider),
               var components = components
         else { return self }
-        components.queryItems?.removeAll(where: { $0.name == Key.userId.rawValue })
+        components.queryItems?.removeAll(where: { $0.name == EcosiaQueryItemName.userId.rawValue })
         var items = components.queryItems ?? .init()
         /* 
          The `sendAnonymousUsageData` is set by the native UX component in settings
@@ -52,7 +100,7 @@ extension URL {
                                     !User.shared.hasAnalyticsCookieConsent ||
                                     !User.shared.sendAnonymousUsageData
         let userId = shouldAnonymizeUserId ? UUID(uuid: UUID_NULL).uuidString : User.shared.analyticsId.uuidString
-        items.append(Self.item(key: .userId, value: userId))
+        items.append(Self.item(name: .userId, value: userId))
         components.queryItems = items
         return components.url!
     }
@@ -63,8 +111,8 @@ extension URL {
             .policy
     }
 
-    private subscript(_ key: Key) -> String? {
-        components?.queryItems?.first { $0.name == key.rawValue }?.value
+    private subscript(_ itemName: EcosiaQueryItemName) -> String? {
+        components?.queryItems?.first { $0.name == itemName.rawValue }?.value
     }
 
     private func isEcosia(_ urlProvider: URLProvider = Environment.current.urlProvider) -> Bool {
@@ -78,7 +126,7 @@ extension URL {
         URLComponents(url: self, resolvingAgainstBaseURL: false)
     }
 
-    private static func item(key: Key, value: String) -> URLQueryItem {
-        .init(name: key.rawValue, value: value)
+    private static func item(name: EcosiaQueryItemName, value: String) -> URLQueryItem {
+        .init(name: name.rawValue, value: value)
     }
 }

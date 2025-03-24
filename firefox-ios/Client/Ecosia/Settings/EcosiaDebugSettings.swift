@@ -224,6 +224,16 @@ final class UnleashAPNConsent: UnleashVariantResetSetting {
     }
 }
 
+final class UnleashNativeSRPVAnalyticsSetting: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "Native SRPV Analytics"
+    }
+
+    override var unleashEnabled: Bool? {
+        Unleash.isEnabled(.nativeSRPVAnalytics)
+    }
+}
+
 final class AnalyticsIdentifierSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Analytics Identifier", attributes: [NSAttributedString.Key.foregroundColor: theme.colors.ecosia.tableViewRowText])

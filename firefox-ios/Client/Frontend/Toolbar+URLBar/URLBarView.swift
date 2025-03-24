@@ -6,6 +6,7 @@ import Common
 import Shared
 import SnapKit
 import UIKit
+import Ecosia
 
 private struct URLBarViewUX {
     static let LocationLeftPadding: CGFloat = 8
@@ -248,15 +249,22 @@ class URLBarView: UIView,
         }
 
         set(newURL) {
-            // Ecosia: Update URL accordingly
-            // locationView.url = newURL
+            /* Ecosia: Change setter to update URL accordingly and track search event when needed
+            locationView.url = newURL
+             */
+            let oldURL = currentURL
             var updatedUrl = newURL
+            // Ecosia: Ecosify if needed
             if updatedUrl?.shouldEcosify() ?? false {
                 updatedUrl = newURL?.ecosified(isIncognitoEnabled: isPrivate)
             }
             locationView.url = updatedUrl
-
-            // Ecosia: update visibility of reload/multi-state button
+            // Ecosia: Track search if url changed and is Ecosia's vertical
+            // (this has to be done after ecosifying so we properly track only if changed)
+            if let updatedUrl = updatedUrl, oldURL != updatedUrl, updatedUrl.isEcosiaSearchVertical() {
+                Analytics.shared.inappSearch(url: updatedUrl)
+            }
+            // Ecosia: Update constraints if needed
             if !inOverlayMode {
                 setNeedsUpdateConstraints()
             }
