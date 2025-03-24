@@ -867,9 +867,15 @@ struct AddressBarState: StateType, Equatable {
             }
 
             if !isHomepage, layout == .version1 {
+                var shareAction = shareAction
+                shareAction.iconName = StandardImageIdentifiers.Medium.share
+                shareAction.hasCustomColor = true
                 actions.append(shareAction)
             }
         } else if !isHomepage, isShowingNavigationToolbar, layout == .version1 {
+            var shareAction = shareAction
+            shareAction.hasCustomColor = true
+            shareAction.iconName = StandardImageIdentifiers.Medium.share
             actions.append(shareAction)
         }
 
@@ -899,8 +905,9 @@ struct AddressBarState: StateType, Equatable {
             guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { break }
             let isSelected = readerModeState == .active
+            let isVersion1Layout = toolbarState.toolbarLayout == .version1
             let iconName: String
-            if toolbarState.toolbarLayout == .version1 {
+            if isVersion1Layout {
                 iconName = StandardImageIdentifiers.Medium.readerView
             } else {
                 iconName = isSelected ?
@@ -913,6 +920,7 @@ struct AddressBarState: StateType, Equatable {
                 iconName: iconName,
                 isEnabled: true,
                 isSelected: isSelected,
+                hasCustomColor: isVersion1Layout,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
@@ -932,8 +940,18 @@ struct AddressBarState: StateType, Equatable {
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {
+            var stopLoadingAction = stopLoadingAction
+            if layout == .version1 {
+                stopLoadingAction.iconName = StandardImageIdentifiers.Medium.cross
+                stopLoadingAction.hasCustomColor = true
+            }
             actions.append(stopLoadingAction)
         } else if isLoading == false {
+            var reloadAction = reloadAction
+            if layout == .version1 {
+                reloadAction.iconName = StandardImageIdentifiers.Medium.arrowClockwise
+                reloadAction.hasCustomColor = true
+            }
             actions.append(reloadAction)
         }
 

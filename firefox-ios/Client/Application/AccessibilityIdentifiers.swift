@@ -783,6 +783,7 @@ struct AccessibilityIdentifiers {
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
+            static let blockImages = "NoImageModeStatus"
         }
 
         struct Theme {

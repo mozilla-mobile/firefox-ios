@@ -227,6 +227,7 @@ class BrowserCoordinator: BaseCoordinator,
         } else {
             let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
+            browserViewController.fullscreenDelegate = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }

@@ -198,6 +198,9 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
+        if #available(iOS 15.4, *) {
+            configuration.preferences.isElementFullscreenEnabled = true
+        }
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         } else {
@@ -700,8 +703,16 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
+
+        let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
+            tabs.contains { $0.tabUUID == deeplinkTab.tabUUID }
+        } else {
+            false
+        }
+
         if isDeeplinkOptimizationRefactorEnabled,
            let deeplinkTab,
+           !isDeeplinkTabAlreadyAdded,
            deeplinkTab.url?.absoluteString == tabData.siteUrl {
             // if the deeplink tab has the same url of a tab data then use the deeplink tab for the restore
             // in order to prevent a duplicate tab
@@ -854,7 +865,6 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
     private func storeChanges() {
-        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveSessionData(forTab: selectedTab)
     }

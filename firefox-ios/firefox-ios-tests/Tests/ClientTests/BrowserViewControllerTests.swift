@@ -27,17 +27,18 @@ class BrowserViewControllerTests: XCTestCase {
 
         profile = MockProfile()
         tabManager = MockTabManager()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
     }
 
     override func tearDown() {
         TelemetryContextualIdentifier.clearUserDefaults()
-        DependencyHelperMock().reset()
         profile = nil
         tabManager = nil
+        browserViewController.legacyUrlBar = nil
         browserViewController = nil
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
@@ -75,10 +76,7 @@ class BrowserViewControllerTests: XCTestCase {
     }
 
     func testOpenURLInNewTab_withPrivateModeEnabled() {
-        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-        browserViewController.topTabsViewController = topTabsViewController
         browserViewController.openURLInNewTab(nil, isPrivate: true)
-        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
         XCTAssertTrue(tabManager.addTabWasCalled)
         XCTAssertNotNil(tabManager.selectedTab)
         guard let selectedTab = tabManager.selectedTab else {
@@ -86,5 +84,40 @@ class BrowserViewControllerTests: XCTestCase {
             return
         }
         XCTAssertTrue(selectedTab.isPrivate)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToAllUIElements_whenToolbarRefactorDisabled() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: false)
+
+        browserViewController.topTabsViewController = topTabsViewController
+        browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertFalse(browserViewController.toolbar.privateModeBadge.badge.isHidden)
+    }
+
+    func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: testTab)
+        testTab.webView = mockTabWebView
+        setupNimbusToolbarRefactorTesting(isEnabled: true)
+
+        browserViewController.topTabsViewController = topTabsViewController
+
+        browserViewController.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
+
+        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
+        XCTAssertTrue(browserViewController.toolbar.privateModeBadge.badge.isHidden)
+    }
+
+    private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
+            return ToolbarRefactorFeature(enabled: isEnabled)
+        }
     }
 }

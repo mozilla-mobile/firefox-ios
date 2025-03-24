@@ -66,6 +66,7 @@ let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 let BrowsingSettings = "BrowsingSettings"
 let AutofillPasswordSettings = "AutofillsPasswordsSettings"
 let Shortcuts = "Shortcuts"
+let AutoplaySettings = "AutoplaySettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -1094,6 +1095,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(BrowsingSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+        
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay], to: AutoplaySettings)
+        
+        screenState.backAction = navigationControllerBackAction
+    }
+
     map.addScreenState(LoginsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
@@ -1103,6 +1112,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(AddressesSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(AutoplaySettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

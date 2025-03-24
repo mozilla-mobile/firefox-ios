@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WebEngine
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -66,11 +67,13 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent
+        .hasOnlySecureContent,
+        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
+    weak var fullscreenDelegate: FullscreenDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
@@ -500,12 +503,8 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
-            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-            topTabsViewController.delegate = self
-            addChild(topTabsViewController)
-            header.addArrangedViewToTop(topTabsViewController.view)
-            self.topTabsViewController = topTabsViewController
-            topTabsViewController.applyTheme()
+            setupTopTabsViewController()
+            topTabsViewController?.applyTheme()
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
         } else {
@@ -786,6 +785,7 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
+        setupTopTabsViewController()
 
         // Update theme of already existing views
         let theme = currentTheme()
@@ -796,6 +796,7 @@ class BrowserViewController: UIViewController,
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
+        topTabsViewController?.applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -822,6 +823,15 @@ class BrowserViewController: UIViewController,
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
         profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+    }
+
+    private func setupTopTabsViewController() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        topTabsViewController.delegate = self
+        addChild(topTabsViewController)
+        header.addArrangedViewToTop(topTabsViewController.view)
+        topTabsViewController.didMove(toParent: self)
+        self.topTabsViewController = topTabsViewController
     }
 
     private func setupAccessibleActions() {
@@ -2098,6 +2108,16 @@ class BrowserViewController: UIViewController,
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
             }
+        case .fullscreenState:
+            if #available(iOS 16.0, *) {
+                guard webView.fullscreenState == .enteringFullscreen ||
+                        webView.fullscreenState == .exitingFullscreen else { return }
+                if webView.fullscreenState == .enteringFullscreen {
+                    fullscreenDelegate?.enteringFullscreen()
+                } else {
+                    fullscreenDelegate?.exitingFullscreen()
+                }
+            }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -2749,10 +2769,6 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
     }
 
-    func switchToPrivacyMode(isPrivate: Bool) {
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-    }
-
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
@@ -2799,7 +2815,6 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
         return tab

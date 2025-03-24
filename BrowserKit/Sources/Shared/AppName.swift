@@ -46,4 +46,5 @@ public enum KVOConstants: String {
     case canGoForward
     case contentSize
     case hasOnlySecureContent
+    case fullscreenState
 }

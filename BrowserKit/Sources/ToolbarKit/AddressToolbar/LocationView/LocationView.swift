@@ -15,6 +15,7 @@ final class LocationView: UIView,
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
@@ -25,6 +26,7 @@ final class LocationView: UIView,
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
+    private var theme: Theme?
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
@@ -98,7 +100,14 @@ final class LocationView: UIView,
         let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
         urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
-    private var isURLTextFieldCentered = false
+
+    private var isURLTextFieldCentered = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme else { return }
+            applyTheme(theme: theme)
+        }
+    }
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -439,6 +448,7 @@ final class LocationView: UIView,
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ config: LocationViewConfiguration) {
+        lockIconButton.isUserInteractionEnabled = isURLTextFieldCentered ? false : true
         lockIconImageName = config.lockIconImageName
         lockIconNeedsTheming = config.lockIconNeedsTheming
         safeListedURLImageName = config.safeListedURLImageName
@@ -446,7 +456,11 @@ final class LocationView: UIView,
             updateWidthForLockIcon(0)
             return
         }
-        updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        if isURLTextFieldCentered {
+            updateWidthForLockIcon(UX.shieldImageViewSize.width)
+        } else {
+            updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+        }
         onTapLockIcon = config.onTapLockIcon
 
         setLockIconImage()
@@ -590,6 +604,7 @@ final class LocationView: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.theme = theme
         let colors = theme.colors
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
@@ -598,12 +613,16 @@ final class LocationView: UIView,
         iconContainerBackgroundView.backgroundColor = colors.layerSearch
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: urlTextField.placeholder ?? "",
+            attributes: [.foregroundColor: isURLTextFieldCentered ? colors.textPrimary : colors.textSecondary]
+        )
+
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = colors.iconPrimary
-        lockIconImageColor = colors.iconPrimary
+        lockIconButton.tintColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
+        lockIconImageColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
 
         setLockIconImage()
-
         // Applying the theme to urlTextField can cause the url formatting to get removed
         // so we apply it again
         formatAndTruncateURLTextField()

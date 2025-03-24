@@ -156,12 +156,6 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         clearButtonTintColor = colors.iconPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
         textColor = colors.textPrimary
-
-        attributedPlaceholder = NSAttributedString(
-            string: placeholder ?? "",
-            attributes: [NSAttributedString.Key.foregroundColor: colors.textSecondary]
-        )
-
         tintClearButton()
     }
 

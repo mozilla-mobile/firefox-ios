@@ -1450,7 +1450,8 @@ workflows:
                 -scheme "$SCHEME" \
                 -sdk "$SDK$IOS_VERSION" \
                 -destination "$DESTINATION" \
-                -derivedDataPath "${DERIVED_DATA_DIR}"
+                -derivedDataPath "${DERIVED_DATA_DIR}" \
+                ENABLE_DEBUG_DYLIB=NO
 
             echo "-- verify build artifacts --"
 
@@ -1568,7 +1569,7 @@ workflows:
             set -ex
 
             # get dependency
-            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            cd ./test-fixtures && git clone https://github.com/clarmso/xcresult_extract.git
 
             # pull firebase xcresult and rename it to extract measurement data
             mkdir test_firebase_xcresult
@@ -1610,7 +1611,7 @@ workflows:
             mv "$FIREBASE_XCRESULT" "$BITRISE_XCRESULT"
 
             # create and print perf data object for perfherder ingest via taskcluster log output
-            xcrun xcresulttool graph --path "$BITRISE_XCRESULT"
+            xcrun xcresulttool graph --path "$BITRISE_XCRESULT" --legacy
             ls ..
             # If this ever breaks, check the xcresult_extract.py function find_xcresult_path 
             # and figure out exactly what it is doing because we are using Fennec as the scheme
