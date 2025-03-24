@@ -43,7 +43,7 @@ struct OpenTabsView: View {
                     }
 
                     Text(tab.title!)
-                        .foregroundColor(Color("widgetLabelColors"))
+                        .foregroundColor(Color("openTabsLabelColor"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -51,8 +51,9 @@ struct OpenTabsView: View {
                 }.padding(.horizontal)
             }
 
+            // Separator
             Rectangle()
-                .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
+                .fill(Color("separatorColor"))
                 .frame(height: 0.5)
                 .padding(.leading, 45)
         }
@@ -60,7 +61,8 @@ struct OpenTabsView: View {
 
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
-            Image(decorative: StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white)
+            Image(decorative: StandardImageIdentifiers.Small.externalLink)
+                .foregroundColor(Color("openTabsLabelColor"))
             Text("Open Firefox")
                 .foregroundColor(Color("openTabsLabelColor"))
                 .lineLimit(1)
@@ -91,7 +93,8 @@ struct OpenTabsView: View {
                             .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
                     }.padding(10)
-                }.foregroundColor(Color.white)
+                }
+                .foregroundColor(Color("backgroundColor"))
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
