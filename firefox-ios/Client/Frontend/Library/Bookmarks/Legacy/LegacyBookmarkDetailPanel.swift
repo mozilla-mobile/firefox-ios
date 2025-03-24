@@ -315,7 +315,9 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                             }
                         }
                     }
-                    addFolderAndDescendants(rootFolder)
+                    self.addFolderAndDescendants(rootFolder,
+                                                 bookmarkFolders: &bookmarkFolders,
+                                                 bookmarksCountResult: bookmarksCountResult)
                     self.bookmarkFolders = bookmarkFolders
                     self.tableView.reloadData()
                 }
