@@ -43,7 +43,7 @@ struct OpenTabsView: View {
                     }
 
                     Text(tab.title!)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("widgetLabelColors"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .font(.system(size: 15, weight: .regular, design: .default))
@@ -62,7 +62,8 @@ struct OpenTabsView: View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white)
             Text("Open Firefox")
-                .foregroundColor(Color.white).lineLimit(1)
+                .foregroundColor(Color("openTabsLabelColor"))
+                .lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
             Spacer()
         }.padding([.horizontal])
@@ -85,7 +86,8 @@ struct OpenTabsView: View {
                         Spacer()
                         Image(decorative: StandardImageIdentifiers.Small.externalLink)
                         Text(String.OpenFirefoxLabel)
-                            .foregroundColor(Color.white).lineLimit(1)
+                            .foregroundColor(Color("openTabsLabelColor"))
+                            .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                         Spacer()
                     }.padding(10)
@@ -107,7 +109,7 @@ struct OpenTabsView: View {
                                     (entry.tabs.count - numberOfTabsToDisplay)
                                 )
                             )
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color("openTabsLabelColor"))
                             .lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
                             Spacer()
@@ -121,7 +123,7 @@ struct OpenTabsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00)))
+        .widgetBackground(Color("backgroundColor"))
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
