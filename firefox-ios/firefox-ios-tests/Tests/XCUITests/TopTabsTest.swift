@@ -105,8 +105,10 @@ class TopTabsTest: BaseTestCase {
         // Close the tab using 'x' button
         if iPad() {
             app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         } else {
             app.otherElements.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
