@@ -8,10 +8,11 @@ import Common
 final class TabWebViewPreview: UIView, ThemeApplicable {
     // MARK: - UX Constants
     private struct UX {
-        static let addressBarCornerRadius = CGFloat(8)
+        static let addressBarCornerRadius: CGFloat = 8
+        static let addressBarBorderHeight: CGFloat = 1
+        static let addressBarHeight: CGFloat = 43
+        static let toolbarHeight: CGFloat = 48
         static let layoutMargins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
-        static let addressBarBorderHeight = CGFloat(1)
-        static let addressBarHeight = CGFloat(43)
     }
     // MARK: - UI Properties
     private lazy var webPageScreenshotImageView: UIImageView = .build()
@@ -23,7 +24,6 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     private lazy var skeletonAddressBar: UIView = .build { addressBar in
         addressBar.layer.cornerRadius = UX.addressBarCornerRadius
     }
-
     // MARK: - Constraint Properties
     private var webViewTopConstraint: NSLayoutConstraint?
     private var webViewBottomConstraint: NSLayoutConstraint?
@@ -41,7 +41,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
 
     // MARK: - Layout
     private func setupLayout() {
-        addSubviews(topStackView, webPageScreenshotImageView, addressBarBorderView, bottomStackView)
+        addSubviews(webPageScreenshotImageView, addressBarBorderView, topStackView, bottomStackView)
 
         NSLayoutConstraint.activate([
             addressBarBorderView.heightAnchor.constraint(equalToConstant: UX.addressBarBorderHeight),
@@ -63,6 +63,11 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         ])
     }
 
+    // MARK: - Public Functions
+
+    /// Updates the layout based on the given search bar position.
+    ///
+    /// - Parameter searchBarPosition: The position of the search bar, either `.top` or `.bottom`.
     func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
         topStackView.removeAllArrangedViews()
         bottomStackView.removeAllArrangedViews()
@@ -71,19 +76,21 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         webViewBottomConstraint?.isActive = false
         addressBarBorderViewTopBottomConstraint?.isActive = false
 
+        setStackViewsVisibility(by: searchBarPosition)
         switch searchBarPosition {
         case .bottom:
             bottomStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
-            webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor
-                .constraint(equalTo: bottomStackView.topAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
+            webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(
+                equalTo: bottomAnchor,
+                constant: UX.toolbarHeight + UIConstants.BottomInset
+            )
         case .top:
             topStackView.addArrangedSubview(skeletonAddressBar)
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor
-                .constraint(equalTo: topStackView.bottomAnchor)
         }
 
         webViewTopConstraint?.isActive = true
@@ -91,6 +98,14 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         addressBarBorderViewTopBottomConstraint?.isActive = true
     }
 
+    /// Sets the screenshot image for the web page preview.
+    ///
+    /// - Parameter image: The screenshot image to display, or `nil` to remove the current image.
+    func setScreenshot(_ image: UIImage?) {
+        webPageScreenshotImageView.image = image
+    }
+
+    // MARK: - Helper Functions
     private func createStackView() -> UIStackView {
         return .build { stackView in
             stackView.axis = .vertical
@@ -99,14 +114,18 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         }
     }
 
-    func setScreenshot(_ image: UIImage?) {
-        webPageScreenshotImageView.image = image
+    private func setStackViewsVisibility(by searchBarPosition: SearchBarPosition) {
+        let isBottom = searchBarPosition == .bottom
+        bottomStackView.isHidden = !isBottom
+        topStackView.isHidden = isBottom
     }
+
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
         addressBarBorderView.backgroundColor = colors.borderPrimary
+        topStackView.backgroundColor = colors.layer1
         bottomStackView.backgroundColor = colors.layer1
         skeletonAddressBar.backgroundColor = colors.layerSearch
     }
