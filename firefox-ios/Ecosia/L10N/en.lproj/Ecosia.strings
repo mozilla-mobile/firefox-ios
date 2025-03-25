@@ -124,13 +124,6 @@
 "How it works" = "How it works";
 "My Impact" = "My Impact";
 "Group your impact" = "Grow your impact";
-"Get a tree with every friend who joins. They get one too!" = "Plant more trees by sharing Ecosia with your friends";
-"About Ecosia" = "About Ecosia";
-"Trees update" = "Our trees";
-"See exactly how much money we made, how we spent it, and how many trees we planted." = "See exactly how much money we made, how we spent it, and how many trees we planted.";
-"Discover where we plant trees, and find out how our tree planting projects across the globe are doing." = "Discover where we plant trees, and find out how our tree planting projects across the globe are doing.";
-"Learn how we protect your privacy by encrypting your searches, never selling your data to advertisers without your permission and more." = "Learn how we protect your privacy by encrypting your searches, never selling your data to advertisers without your permission and more.";
-"Find answers to popular questions like how Ecosia neutralizes CO2 emissions and what it means to be a social business." = "Find answers to popular questions like how we became carbon negative and what it means to be a social business";
 
 // Tour
 "Skip" = "Skip";
@@ -186,8 +179,6 @@
 "This onboarding illustration shows briefly an example of a before and after comparision of trees planted in a land. The image is a screenshot from the satellite view." = "This onboarding illustration shows briefly an example of a before and after comparision of trees planted in a land. The image is a screenshot from the satellite view.";
 "This onboarding illustration shows a few numbers like the projects Ecosia is involved in, the total number of trees planted by the Ecosia community, alongisde the number of countries Ecosia is active. A small map of the planisphere with trees pins in few geographic location, background." = "This onboarding illustration shows a few numbers like the projects Ecosia is involved in, the total number of trees planted by the Ecosia community, alongisde the number of countries Ecosia is active. A small map of the planisphere with trees pins in few geographic location, background.";
 "This onboarding illustration shows the latest financial reports of Ecosia. On the background there is an image of a person caring for tree seedlings" = "This onboarding illustration shows the latest financial reports of Ecosia. On the background there is an image of a person caring for tree seedlings";
-"Interact to collapse content" = "Interact to collapse content";
-"Interact to expand content" = "Interact to expand content";
 
 // Bookmark import/export
 "Export bookmarks" = "Export bookmarks";

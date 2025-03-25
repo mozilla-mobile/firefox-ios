@@ -135,7 +135,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var libraryViewModel: NTPLibraryCellViewModel
     var impactViewModel: NTPImpactCellViewModel
     var newsViewModel: NTPNewsCellViewModel
-    var aboutEcosiaViewModel: NTPAboutEcosiaCellViewModel
     var ntpCustomizationViewModel: NTPCustomizationCellViewModel
     var climateImpactCounterViewModel: NTPSeedCounterViewModel
     /* 
@@ -173,7 +172,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.libraryViewModel = NTPLibraryCellViewModel(theme: theme)
         self.impactViewModel = NTPImpactCellViewModel(referrals: referrals, theme: theme)
         self.newsViewModel = NTPNewsCellViewModel(theme: theme)
-        self.aboutEcosiaViewModel = NTPAboutEcosiaCellViewModel(theme: theme)
         self.ntpCustomizationViewModel = NTPCustomizationCellViewModel(theme: theme)
         self.climateImpactCounterViewModel = NTPSeedCounterViewModel(profile: profile, theme: theme)
 
@@ -236,7 +234,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                 topSiteViewModel,
                                 impactViewModel,
                                 newsViewModel,
-                                aboutEcosiaViewModel,
                                 ntpCustomizationViewModel]
         self.isPrivate = isPrivate
 

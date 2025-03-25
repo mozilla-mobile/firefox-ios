@@ -193,9 +193,6 @@ class LegacyHomepageViewController:
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        // Ecosia
-        viewModel.aboutEcosiaViewModel.deselectExpanded()
-
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
         viewModel.recordViewDisappeared()
@@ -863,7 +860,6 @@ private extension LegacyHomepageViewController {
         viewModel.libraryViewModel.delegate = self
         viewModel.impactViewModel.delegate = self
         viewModel.newsViewModel.delegate = self
-        viewModel.aboutEcosiaViewModel.delegate = self
         viewModel.ntpCustomizationViewModel.delegate = self
         viewModel.climateImpactCounterViewModel.delegate = self
     }

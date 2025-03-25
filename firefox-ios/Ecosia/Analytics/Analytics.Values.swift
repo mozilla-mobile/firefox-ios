@@ -79,7 +79,6 @@ extension Analytics {
         public enum Navigation: String {
             case
             inapp,
-            financialReports = "financial_reports",
             news,
             privacy,
             projects,
@@ -89,7 +88,6 @@ extension Analytics {
 
         public enum NTP: String {
             case
-            about,
             climateCounter = "climate_counter",
             customize,
             impact,

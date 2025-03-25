@@ -46,7 +46,6 @@ public struct User: Codable, Equatable {
     public var topSitesRows = 4
     public var showClimateImpact = true
     public var showEcosiaNews = true
-    public var showAboutEcosia = true
 
     // MARK: Install
     public var install = Date()
@@ -88,7 +87,6 @@ public struct User: Codable, Equatable {
         topSitesRows,
         showClimateImpact,
         showEcosiaNews,
-        showAboutEcosia,
         migrated,
         referrals,
         id,
@@ -117,7 +115,6 @@ public struct User: Codable, Equatable {
         showTopSites = (try? root.decode(Bool.self, forKey: .showTopSites)) ?? true
         showClimateImpact = (try? root.decode(Bool.self, forKey: .showClimateImpact)) ?? true
         showEcosiaNews = (try? root.decode(Bool.self, forKey: .showEcosiaNews)) ?? true
-        showAboutEcosia = (try? root.decode(Bool.self, forKey: .showAboutEcosia)) ?? true
         migrated = (try? root.decode(Bool.self, forKey: .migrated)) ?? false
         referrals = (try? root.decode(Referrals.Model.self, forKey: .referrals)) ?? .init()
         id = try? root.decode(String.self, forKey: .id)
@@ -146,7 +143,6 @@ public struct User: Codable, Equatable {
             showTopSites = stored.showTopSites
             showClimateImpact = stored.showClimateImpact
             showEcosiaNews = stored.showEcosiaNews
-            showAboutEcosia = stored.showAboutEcosia
             referrals = stored.referrals
             install = stored.install
             versionOnInstall = stored.versionOnInstall

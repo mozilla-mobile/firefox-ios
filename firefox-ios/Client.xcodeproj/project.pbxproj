@@ -347,7 +347,6 @@
 		2CFEA0552D455BD500B25CE0 /* WelcomeTourRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0402D455BD500B25CE0 /* WelcomeTourRow.swift */; };
 		2CFEA0562D455BD500B25CE0 /* NewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA02B2D455BD500B25CE0 /* NewsController.swift */; };
 		2CFEA0572D455BD500B25CE0 /* NTPLogoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0292D455BD500B25CE0 /* NTPLogoCell.swift */; };
-		2CFEA0582D455BD500B25CE0 /* NTPAboutEcosiaCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA00C2D455BD500B25CE0 /* NTPAboutEcosiaCellViewModel.swift */; };
 		2CFEA0592D455BD500B25CE0 /* NTPImpactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA01F2D455BD500B25CE0 /* NTPImpactCell.swift */; };
 		2CFEA05A2D455BD500B25CE0 /* EcosiaPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFE9FFC2D455BD500B25CE0 /* EcosiaPrimaryButton.swift */; };
 		2CFEA05B2D455BD500B25CE0 /* WelcomeTourProfit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA03F2D455BD500B25CE0 /* WelcomeTourProfit.swift */; };
@@ -364,7 +363,6 @@
 		2CFEA0672D455BD500B25CE0 /* PageActionsShortcutsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0452D455BD500B25CE0 /* PageActionsShortcutsHeader.swift */; };
 		2CFEA0682D455BD500B25CE0 /* NTPImpactDividerFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0212D455BD500B25CE0 /* NTPImpactDividerFooter.swift */; };
 		2CFEA0692D455BD500B25CE0 /* EmptyBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFE9FFD2D455BD500B25CE0 /* EmptyBookmarksView.swift */; };
-		2CFEA06A2D455BD500B25CE0 /* AboutEcosiaSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA00A2D455BD500B25CE0 /* AboutEcosiaSection.swift */; };
 		2CFEA06B2D455BD500B25CE0 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0392D455BD500B25CE0 /* Welcome.swift */; };
 		2CFEA06C2D455BD500B25CE0 /* ArcProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0112D455BD500B25CE0 /* ArcProgressView.swift */; };
 		2CFEA06D2D455BD500B25CE0 /* Sparkle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0182D455BD500B25CE0 /* Sparkle.swift */; };
@@ -406,7 +404,6 @@
 		2CFEA0922D455BD500B25CE0 /* SeedCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0162D455BD500B25CE0 /* SeedCounterView.swift */; };
 		2CFEA0942D455BD500B25CE0 /* NTPLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0342D455BD500B25CE0 /* NTPLayout.swift */; };
 		2CFEA0952D455BD500B25CE0 /* PageActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0432D455BD500B25CE0 /* PageActionMenu.swift */; };
-		2CFEA0962D455BD500B25CE0 /* NTPAboutEcosiaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA00B2D455BD500B25CE0 /* NTPAboutEcosiaCell.swift */; };
 		2CFEA0972D455BD500B25CE0 /* NTPLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA0262D455BD500B25CE0 /* NTPLibraryCell.swift */; };
 		2CFEA0982D455BD500B25CE0 /* WhatsNewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA04F2D455BD500B25CE0 /* WhatsNewCell.swift */; };
 		2CFEA0992D455BD500B25CE0 /* EcosiaThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFEA04A2D455BD500B25CE0 /* EcosiaThemeManager.swift */; };
@@ -2826,9 +2823,6 @@
 		2CFEA0062D455BD500B25CE0 /* MarketsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketsController.swift; sourceTree = "<group>"; };
 		2CFEA0072D455BD500B25CE0 /* MultiplyImpact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyImpact.swift; sourceTree = "<group>"; };
 		2CFEA0082D455BD500B25CE0 /* MultiplyImpactStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyImpactStep.swift; sourceTree = "<group>"; };
-		2CFEA00A2D455BD500B25CE0 /* AboutEcosiaSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutEcosiaSection.swift; sourceTree = "<group>"; };
-		2CFEA00B2D455BD500B25CE0 /* NTPAboutEcosiaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPAboutEcosiaCell.swift; sourceTree = "<group>"; };
-		2CFEA00C2D455BD500B25CE0 /* NTPAboutEcosiaCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPAboutEcosiaCellViewModel.swift; sourceTree = "<group>"; };
 		2CFEA00E2D455BD500B25CE0 /* SeedProgressManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedProgressManagerProtocol.swift; sourceTree = "<group>"; };
 		2CFEA00F2D455BD500B25CE0 /* UserDefaultsSeedProgressManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSeedProgressManager.swift; sourceTree = "<group>"; };
 		2CFEA0112D455BD500B25CE0 /* ArcProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcProgressView.swift; sourceTree = "<group>"; };
@@ -10551,16 +10545,6 @@
 			path = MultiplyImpact;
 			sourceTree = "<group>";
 		};
-		2CFEA00D2D455BD500B25CE0 /* AboutEcosia */ = {
-			isa = PBXGroup;
-			children = (
-				2CFEA00A2D455BD500B25CE0 /* AboutEcosiaSection.swift */,
-				2CFEA00B2D455BD500B25CE0 /* NTPAboutEcosiaCell.swift */,
-				2CFEA00C2D455BD500B25CE0 /* NTPAboutEcosiaCellViewModel.swift */,
-			);
-			path = AboutEcosia;
-			sourceTree = "<group>";
-		};
 		2CFEA0102D455BD500B25CE0 /* SeedProgressManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -10649,7 +10633,6 @@
 		2CFEA0382D455BD500B25CE0 /* NTP */ = {
 			isa = PBXGroup;
 			children = (
-				2CFEA00D2D455BD500B25CE0 /* AboutEcosia */,
 				2CFEA0192D455BD500B25CE0 /* ClimateImpactCounter */,
 				2CFEA01D2D455BD500B25CE0 /* Customization */,
 				2CFEA0242D455BD500B25CE0 /* Impact */,
@@ -17060,7 +17043,6 @@
 				2CFEA0552D455BD500B25CE0 /* WelcomeTourRow.swift in Sources */,
 				2CFEA0562D455BD500B25CE0 /* NewsController.swift in Sources */,
 				2CFEA0572D455BD500B25CE0 /* NTPLogoCell.swift in Sources */,
-				2CFEA0582D455BD500B25CE0 /* NTPAboutEcosiaCellViewModel.swift in Sources */,
 				2CFEA0592D455BD500B25CE0 /* NTPImpactCell.swift in Sources */,
 				2CFEA05A2D455BD500B25CE0 /* EcosiaPrimaryButton.swift in Sources */,
 				2CFEA05B2D455BD500B25CE0 /* WelcomeTourProfit.swift in Sources */,
@@ -17077,7 +17059,6 @@
 				2CFEA0672D455BD500B25CE0 /* PageActionsShortcutsHeader.swift in Sources */,
 				2CFEA0682D455BD500B25CE0 /* NTPImpactDividerFooter.swift in Sources */,
 				2CFEA0692D455BD500B25CE0 /* EmptyBookmarksView.swift in Sources */,
-				2CFEA06A2D455BD500B25CE0 /* AboutEcosiaSection.swift in Sources */,
 				2CFEA06B2D455BD500B25CE0 /* Welcome.swift in Sources */,
 				2CFEA06C2D455BD500B25CE0 /* ArcProgressView.swift in Sources */,
 				2CFEA06D2D455BD500B25CE0 /* Sparkle.swift in Sources */,
@@ -17119,7 +17100,6 @@
 				2CFEA0922D455BD500B25CE0 /* SeedCounterView.swift in Sources */,
 				2CFEA0942D455BD500B25CE0 /* NTPLayout.swift in Sources */,
 				2CFEA0952D455BD500B25CE0 /* PageActionMenu.swift in Sources */,
-				2CFEA0962D455BD500B25CE0 /* NTPAboutEcosiaCell.swift in Sources */,
 				2CFEA0972D455BD500B25CE0 /* NTPLibraryCell.swift in Sources */,
 				2CFEA0982D455BD500B25CE0 /* WhatsNewCell.swift in Sources */,
 				2CFEA0992D455BD500B25CE0 /* EcosiaThemeManager.swift in Sources */,

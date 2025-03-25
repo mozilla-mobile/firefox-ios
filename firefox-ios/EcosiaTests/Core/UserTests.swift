@@ -243,18 +243,6 @@ final class UserTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testShowAboutEcosia() {
-        let expect = expectation(description: "")
-        XCTAssertEqual(true, User.shared.showAboutEcosia)
-        User.shared.showAboutEcosia = false
-        User.queue.async {
-            let user = User()
-            XCTAssertEqual(false, user.showAboutEcosia)
-            expect.fulfill()
-        }
-        waitForExpectations(timeout: 1)
-    }
-
     func testWhatsNewItemsVersions() {
         let expect = expectation(description: "")
         XCTAssertTrue(User.shared.whatsNewItemsVersionsShown.isEmpty)

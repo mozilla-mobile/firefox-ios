@@ -739,41 +739,6 @@ final class AnalyticsSpyTests: XCTestCase {
         XCTAssertNil(analyticsSpy.ntpTopSitePositionCalled, "Analytics ntpTopSitePositionCalled should be nil.")
     }
 
-    func testNTPAboutEcosiaCellLearnMoreActionTracksNavigationOpen() {
-        // Arrange
-
-        // Create an instance of the real NTPAboutEcosiaCellViewModel
-        let aboutViewModel = NTPAboutEcosiaCellViewModel(theme: EcosiaLightTheme())
-        let sections = aboutViewModel.sections
-
-        // Ensure that there are sections available
-        guard let testSection = sections.first else {
-            XCTFail("No sections available in NTPAboutEcosiaCellViewModel")
-            return
-        }
-
-        // Create an instance of NTPAboutEcosiaCell
-        let aboutCell = NTPAboutEcosiaCell(frame: CGRect(x: 0, y: 0, width: 320, height: 64))
-
-        // Configure the cell with the real section and view model
-        aboutCell.configure(section: testSection, viewModel: aboutViewModel)
-
-        // Ensure that the analytics methods have not been called yet
-        XCTAssertNil(analyticsSpy.navigationActionCalled, "Analytics navigationActionCalled should be nil before action.")
-        XCTAssertNil(analyticsSpy.navigationLabelCalled, "Analytics navigationLabelCalled should be nil before action.")
-
-        // Act
-
-        // Simulate tapping the "Learn More" button by sending the touchUpInside action
-        aboutCell.learnMoreButton.sendActions(for: .touchUpInside)
-
-        // Assert
-
-        // Verify that the analytics event was called with the correct action and label
-        XCTAssertEqual(analyticsSpy.navigationActionCalled, .open, "Analytics should track navigationActionCalled as .open.")
-        XCTAssertEqual(analyticsSpy.navigationLabelCalled, testSection.label, "Analytics should track navigationLabelCalled correctly.")
-    }
-
     // MARK: - URL Bar Search Event
 
     func testURLBarViewTracksSearchEventOnEcosiaVerticalURLChange() {

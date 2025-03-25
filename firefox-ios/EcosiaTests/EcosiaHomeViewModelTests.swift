@@ -39,13 +39,12 @@ class EcosiaHomeViewModelTests: XCTestCase {
                                           referrals: .init(),
                                           theme: EcosiaLightTheme())
         // Ecosia: Update shown sections
-        XCTAssertEqual(viewModel.shownSections.count, 5)
+        XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)
         XCTAssertEqual(viewModel.shownSections[2], HomepageSectionType.impact)
         // News is not shown without items
         // XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.news)
-        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.aboutEcosia)
-        XCTAssertEqual(viewModel.shownSections[4], HomepageSectionType.ntpCustomization)
+        XCTAssertEqual(viewModel.shownSections[3], HomepageSectionType.ntpCustomization)
     }
 }

@@ -42,7 +42,7 @@ class FirefoxHomeViewModelTests: XCTestCase {
         /* Ecosia: Udpate number of sections
         XCTAssertEqual(viewModel.shownSections.count, 2)
          */
-        XCTAssertEqual(viewModel.shownSections.count, 5)
+        XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
         /* Ecosia: Update section type
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.customizeHome)
