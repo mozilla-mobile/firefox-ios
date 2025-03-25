@@ -45,6 +45,31 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    func test_didSelectItemAction_sendTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            telemetryExtras: HomepageTelemetryExtras(itemName: "test_item_name"),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.didSelectItem
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents?[0] as? EventMetricType<GleanMetrics.Homepage.ItemTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras as? GleanMetrics.Homepage.ItemTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Homepage.itemTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.itemName, "test_item_name")
+    }
+
     // MARK: - Helpers
     private func createSubject() -> HomepageMiddleware {
         return HomepageMiddleware(

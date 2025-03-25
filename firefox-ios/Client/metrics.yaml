@@ -2734,6 +2734,26 @@ homepage:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
+  item_tapped:
+    type: event
+    description: |
+      Records when a content item has been tapped on the homepage.
+    extra_keys:
+      item_name:
+       type: string
+       description: |
+        The name associated with the item that was tapped on the homepage.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11526
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18518
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
 # Library
 library:
   panel_pressed:
