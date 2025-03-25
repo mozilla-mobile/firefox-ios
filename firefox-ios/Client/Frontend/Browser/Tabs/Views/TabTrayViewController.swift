@@ -480,8 +480,11 @@ class TabTrayViewController: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
+                                    /* Ecosia: Remove bottom padding
                                     theme: currentTheme(),
                                     bottomConstraintPadding: -toolbarHeight)
+                                     */
+                                    theme: currentTheme())
         }
     }
 
