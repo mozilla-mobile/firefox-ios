@@ -10,6 +10,7 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID
         guard download.originWindow == uuid else { return }
+        
         if let downloadProgressManager = self.downloadProgressManager {
             downloadProgressManager.addDownload(download)
             return
