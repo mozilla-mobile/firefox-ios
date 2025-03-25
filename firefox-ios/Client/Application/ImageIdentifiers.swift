@@ -10,10 +10,16 @@ import Foundation
 /// Sing the song if you must.
 public struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
+    /* Ecosia: Update Firefox brand logos
     public static let firefoxFavicon = "faviconFox"
     public static let foxConfirmation = "foxConfirmation"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
+     */
+    public static let firefoxFavicon = "ecosiaHomeHeaderLogoBall"
+    public static let foxConfirmation = "foxConfirmation"
+    public static let homeHeaderLogoBall = "ecosiaHomeHeaderLogoBall"
+    public static let homeHeaderLogoText = "ecosiaHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
     public static let logo = "splash"
     public static let logoAmex = "logo_amex"
