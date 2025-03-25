@@ -82,7 +82,7 @@ extension AppSettingsTableViewController {
                 prefKey: "showClipboardBar",
                 defaultValue: false,
                 titleText: .SettingsOfferClipboardBarTitle,
-                statusText: .SettingsOfferClipboardBarStatus
+                statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
             ),
             BoolSetting(
                 prefs: profile.prefs,

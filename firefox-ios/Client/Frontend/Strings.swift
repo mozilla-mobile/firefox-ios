@@ -3434,7 +3434,7 @@ extension String {
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
         key: "Settings.OfferClipboardBar.Status.v128",
         tableName: nil,
-        value: "When Opening Ecosia",
+        value: "When opening %@",
         comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
 }
 
