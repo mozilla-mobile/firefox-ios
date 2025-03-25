@@ -2116,6 +2116,17 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
+        public struct General {
+            public struct ScrollToHideTabAndAddressBar {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.ScrollToHideTabAndAddressBar.Title.v138",
+                    tableName: "Settings",
+                    value: "Scroll to Hide Tab and Address Bar",
+                    comment: "In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar."
+                )
+            }
+        }
+
         public struct Homepage {
             public struct Current {
                 public static let Description = MZLocalizedString(
