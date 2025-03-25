@@ -131,10 +131,18 @@ class TabScrollingController: NSObject,
         return bottomContainerHeight
     }
 
+    var isAutoHideBarEnabled: Bool {
+        // check PrefsKeys.UserFeatureFlagPrefs.TopTabsAndAddressBarAutoHide && isIpad
+        guard UIDevice.current.userInterfaceIdiom == .pad,
+              let prefs = tab?.profile.prefs else { return true }
+  
+        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide) ?? true
+    }
+
     // If scrollview contentSize height is bigger that device height plus delta
     var isAbleToScroll: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
-            contentSize.height
+            contentSize.height && isAutoHideBarEnabled
     }
 
     deinit {
