@@ -34,15 +34,15 @@ struct OpenTabsView: View {
         VStack(alignment: .leading) {
             Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
-                    if entry.favicons[tab.imageKey] != nil {
-                        (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
+                    if let favIcon = entry.favicons[tab.imageKey] {
+                        favIcon.resizable().frame(width: 16, height: 16)
                     } else {
                         Image(decorative: StandardImageIdentifiers.Large.globe)
                             .foregroundColor(Color.white)
                             .frame(width: 16, height: 16)
                     }
 
-                    Text(tab.title!)
+                    Text(tab.title ?? "")
                         .foregroundColor(Color("openTabsContentColor"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
