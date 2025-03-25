@@ -94,8 +94,11 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
         guard let client else { return nil }
         do {
             let data = try client.getAttachment(record: iconRecord.backingRecord)
-            if iconRecord.mimeType?.hasPrefix("image/svg") ?? false {
+            let mimeType = iconRecord.mimeType
+            if mimeType?.hasPrefix("image/svg") ?? false {
                 return SVG(data: data)?.rasterize()
+            } else if mimeType?.hasPrefix("application/pdf") ?? false {
+                return UIImage.imageFromPDF(data: data, minimumSize: CGSize(width: 64.0, height: 64.0))
             } else {
                 return UIImage(data: data)
             }
