@@ -39,7 +39,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
         self.logger = logger
     }
 
-    var preferencesVersion: SearchEngineOrderingPrefsVersion { .v1 }
+    let preferencesVersion: SearchEngineOrderingPrefsVersion = .v1
 
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            engineOrderingPrefs: SearchEngineOrderingPrefs,

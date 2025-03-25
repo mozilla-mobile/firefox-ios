@@ -29,7 +29,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
     // MARK: - SearchEngineProvider
 
-    var preferencesVersion: SearchEngineOrderingPrefsVersion { .v2 }
+    let preferencesVersion: SearchEngineOrderingPrefsVersion = .v2
 
     func getOrderedEngines(customEngines: [OpenSearchEngine],
                            engineOrderingPrefs: SearchEngineOrderingPrefs,
