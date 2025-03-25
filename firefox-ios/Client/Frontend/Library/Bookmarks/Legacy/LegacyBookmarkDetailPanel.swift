@@ -272,55 +272,66 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
 
                     var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
-                    func addFolderAndDescendants(_ folder: BookmarkFolderData, indent: Int = 0) {
-                        // Do not append itself and the top "root" folder to this list as
-                        // bookmarks cannot be stored directly within it.
-                        if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
-                            bookmarkFolders.append((folder, indent))
-                        }
-
-                        var folderChildren: [BookmarkNodeData]?
-                        // Suitable to be appended
-                        if folder.guid != self.bookmarkNodeGUID {
-                            folderChildren = folder.children
-                        }
-
-                        func addFolder(childFolder: BookmarkFolderData) {
-                            // Any "root" folders (i.e. "Mobile Bookmarks") should
-                            // have an indentation of 0.
-                            if childFolder.isRoot {
-                                addFolderAndDescendants(childFolder)
-                            }
-                            // Otherwise, all non-root folder should increase the
-                            // indentation by 1.
-                            else {
-                                addFolderAndDescendants(childFolder, indent: indent + 1)
-                            }
-                        }
-
-                        for case let childFolder as BookmarkFolderData in folderChildren ?? [] {
-                            // Only append desktop folders if they already contain bookmarks
-                            if !BookmarkRoots.DesktopRoots.contains(childFolder.guid) {
-                                addFolder(childFolder: childFolder)
-                            } else {
-                                switch bookmarksCountResult {
-                                case .success(let bookmarkCount):
-                                    if (bookmarkCount > 0 && BookmarkRoots.DesktopRoots.contains(childFolder.guid))
-                                        || !self.isBookmarkRefactorEnabled {
-                                        addFolder(childFolder: childFolder)
-                                    }
-                                case .failure(let error):
-                                    self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
-                                }
-                            }
-                        }
-                    }
-                    addFolderAndDescendants(rootFolder)
+                    self.addFolderAndDescendants(rootFolder,
+                                                 bookmarkFolders: &bookmarkFolders,
+                                                 bookmarksCountResult: bookmarksCountResult)
                     self.bookmarkFolders = bookmarkFolders
                     self.tableView.reloadData()
                 }
                 }
             }
+    }
+
+    private func addFolderAndDescendants(_ folder: BookmarkFolderData,
+                                         bookmarkFolders: inout [(folder: BookmarkFolderData, indent: Int)],
+                                         bookmarksCountResult: Result<Int, any Error>,
+                                         indent: Int = 0) {
+        // Do not append itself and the top "root" folder to this list as
+        // bookmarks cannot be stored directly within it.
+        if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
+            bookmarkFolders.append((folder, indent))
+        }
+
+        var folderChildren: [BookmarkNodeData]?
+        // Suitable to be appended
+        if folder.guid != self.bookmarkNodeGUID {
+            folderChildren = folder.children
+        }
+
+        func addFolder(childFolder: BookmarkFolderData) {
+            // Any "root" folders (i.e. "Mobile Bookmarks") should
+            // have an indentation of 0.
+            if childFolder.isRoot {
+                addFolderAndDescendants(childFolder,
+                                        bookmarkFolders: &bookmarkFolders,
+                                        bookmarksCountResult: bookmarksCountResult)
+            }
+            // Otherwise, all non-root folder should increase the
+            // indentation by 1.
+            else {
+                addFolderAndDescendants(childFolder,
+                                        bookmarkFolders: &bookmarkFolders,
+                                        bookmarksCountResult: bookmarksCountResult,
+                                        indent: indent + 1)
+            }
+        }
+
+        for case let childFolder as BookmarkFolderData in folderChildren ?? [] {
+            // Only append desktop folders if they already contain bookmarks
+            if !BookmarkRoots.DesktopRoots.contains(childFolder.guid) {
+                addFolder(childFolder: childFolder)
+            } else {
+                switch bookmarksCountResult {
+                case .success(let bookmarkCount):
+                    if (bookmarkCount > 0 && BookmarkRoots.DesktopRoots.contains(childFolder.guid))
+                        || !self.isBookmarkRefactorEnabled {
+                        addFolder(childFolder: childFolder)
+                    }
+                case .failure(let error):
+                    logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
+                }
+            }
+        }
     }
 
     func updateSaveButton() {

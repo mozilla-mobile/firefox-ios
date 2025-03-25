@@ -443,6 +443,7 @@ struct AccessibilityIdentifiers {
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
         static let tabCell = "TabDisplayView.tabCell"
+        static let closeButton = "badge mask"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -782,6 +783,7 @@ struct AccessibilityIdentifiers {
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
+            static let blockImages = "NoImageModeStatus"
         }
 
         struct Theme {

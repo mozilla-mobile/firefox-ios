@@ -10,9 +10,13 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
         // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
         let uuid = windowUUID
         guard download.originWindow == uuid else { return }
-        
-        if let downloadProgressManager = self.downloadProgressManager {
-            downloadProgressManager.addDownload(download)
+
+        // Do not need toast message for Passbook Passes since we don't save the download
+        guard download.mimeType != MIMEType.Passbook else { return }
+
+        // If no other download toast is shown, create a new download toast and show it.
+        guard let downloadToast = self.downloadToast else {
+            presentDownloadProgressToast(download: download, windowUUID: uuid)
             return
         }
 
@@ -61,6 +65,16 @@ extension BrowserViewController: DownloadQueueDelegate, DownloadCancellationDele
     }
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
+        // Handle Passbook Pass downloads
+        if let download = (download as? BlobDownload),
+           OpenPassBookHelper.shouldOpenWithPassBook(mimeType: download.mimeType) {
+            passBookHelper = OpenPassBookHelper(presenter: self)
+            passBookHelper?.open(data: download.data) {
+                self.passBookHelper = nil
+            }
+        }
+
+        // Handle toast notification
         guard let downloadToast = self.downloadToast,
               let downloadProgressManager = self.downloadProgressManager,
               let download = downloadProgressManager.downloads.first,

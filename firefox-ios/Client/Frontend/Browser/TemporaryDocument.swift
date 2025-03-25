@@ -10,6 +10,7 @@ private let temporaryDocumentOperationQueue = OperationQueue()
 
 protocol TemporaryDocument {
     var filename: String { get }
+    var sourceURL: URL? { get }
     var isDownloading: Bool { get }
 
     func canDownload(request: URLRequest) -> Bool
@@ -78,6 +79,9 @@ class DefaultTemporaryDocument: NSObject,
 
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
+    }
+    var sourceURL: URL? {
+        return request.url
     }
 
     init(

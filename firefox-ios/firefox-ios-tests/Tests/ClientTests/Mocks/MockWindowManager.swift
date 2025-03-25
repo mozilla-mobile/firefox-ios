@@ -11,7 +11,6 @@ final class MockWindowManager: WindowManager {
     private let tabManager: MockTabManager
 
     var closePrivateTabsMultiActionCalled = 0
-    var storeTabsMultiWindowActionCalled = false
 
     init(
         wrappedManager: WindowManagerImplementation,
@@ -59,8 +58,6 @@ final class MockWindowManager: WindowManager {
         switch action {
         case .closeAllPrivateTabs:
             closePrivateTabsMultiActionCalled += 1
-        case .storeTabs:
-            storeTabsMultiWindowActionCalled = true
         default:
             break
         }

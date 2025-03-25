@@ -17,7 +17,7 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
-class TopTabsTest: BaseTestCase {
+class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() throws {
@@ -67,7 +67,7 @@ class TopTabsTest: BaseTestCase {
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForTabsButton()
+        waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.openURL(urlExample)
         waitForTabsButton()
@@ -104,9 +104,9 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
         if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
         } else {
-            app.otherElements.cells.buttons[StandardImageIdentifiers.Large.crossCircleFill].waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
 
         // After removing only one tab it automatically goes to HomepanelView
@@ -410,6 +410,59 @@ class TopTabsTest: BaseTestCase {
 //        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306867
+    func testCloseOneTabUndo() {
+        // Open a few tabs
+        waitForTabsButton()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        navigator.createNewTab()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
+        waitUntilPageLoad()
+        navigator.createNewTab()
+        navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-org.html")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+
+        // Experiment from #25337: "Undo" button no longer available on iPhone.
+        if iPad() {
+            // Tap "x"
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Long press tab. Tap "Close Tab" from the context menu
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
+            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+            app.collectionViews.buttons["Close Tab"].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Swipe tab
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        } else {
+            // Tap "x"
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"]
+                .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Long press tab. Tap "Close Tab" from the context menu
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_1"].press(forDuration: 2)
+            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+            app.collectionViews.buttons["Close Tab"].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Swipe tab
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"].swipeLeft()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"])
+        }
+    }
+
     private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
         navigator.openURL(urlExample)
@@ -426,9 +479,9 @@ class TopTabsTest: BaseTestCase {
         // Tab tray UI experiment doesn't have toasts notifications anymore
         // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Close multiple tabs by pressing X button
-//        let crossCircleFillLarge = StandardImageIdentifiers.Large.crossCircleFill
+//        let closeButton = AccessibilityIdentifiers.TabTray.closeButton
 //        for _ in 0...3 {
-//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[crossCircleFillLarge].waitAndTap()
+//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[closeButton].waitAndTap()
 //            // A toast notification is displayed with the message "Tab Closed" and the Undo option
 //            waitForElementsToExist(
 //                [
@@ -437,7 +490,7 @@ class TopTabsTest: BaseTestCase {
 //                ]
 //            )
 //        }
-//        app.collectionViews.buttons[crossCircleFillLarge].waitAndTap()
+//        app.collectionViews.buttons[closeButton].waitAndTap()
 //        waitForElementsToExist(
 //            [
 //                app.buttons["Undo"],
@@ -507,7 +560,7 @@ fileprivate extension BaseTestCase {
     }
 }
 
-class TopTabsTestIphone: IphoneOnlyTestCase {
+class TabsTestsIphone: IphoneOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2355535
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
@@ -617,7 +670,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
 // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
 // and closing the tabs by tapping 'x' button
-class TopTabsTestIpad: IpadOnlyTestCase {
+class TabsTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307023
     func testUpdateTabCounter() {
         if skipPlatform { return }

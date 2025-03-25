@@ -1,0 +1,14 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#include "Common.xcconfig"
+#include "Release.xcconfig"
+#include "version.xcconfig"
+
+MOZ_BUNDLE_DISPLAY_NAME = Firefox Beta
+MOZ_BUNDLE_ID = org.mozilla.ios.FirefoxBeta
+CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FirefoxBetaApplication.entitlements
+CHANNEL = beta
+OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_$(CHANNEL)
+MOZ_INTERNAL_URL_SCHEME = firefox-beta
