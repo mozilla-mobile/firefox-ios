@@ -813,11 +813,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(BrowsingSettings) { screenState in
-        screenState.tap(app.tables.element(boundBy: 0).cells["OpenWith.Setting"], to: MailAppSettings)
-        screenState.backAction = navigationControllerBackAction
-    }
-
     map.addScreenState(ShowTourInSettings) { screenState in
         screenState.gesture(to: Intro_FxASignin) {
             let turnOnSyncButton = app.buttons["signInOnboardingButton"]
@@ -1099,7 +1094,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
         
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay], to: AutoplaySettings)
-        
+        screenState.tap(table.cells["OpenWith.Setting"], to: MailAppSettings)
+
         screenState.backAction = navigationControllerBackAction
     }
 
