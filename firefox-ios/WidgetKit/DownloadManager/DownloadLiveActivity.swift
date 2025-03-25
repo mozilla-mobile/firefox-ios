@@ -55,14 +55,12 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 struct DownloadLiveActivity: Widget {
     struct UX {
         static let rotation: CGFloat = -90
-        
         static let downloadColor: UIColor = .orange
         static let circleWidth: CGFloat = 17.5
         static let lineWidth: CGFloat = 3.5
         static let downloadIconSize: CGFloat = 19
         static let downloadPaddingLeading: CGFloat = 2
         static let downloadPaddingTrailing: CGFloat = 1
-        
         static let iconFrameSize: CGFloat = 50
         static let firefoxIconSize: CGFloat = 44
         static let iconEdgeRounding: CGFloat = 15
@@ -92,16 +90,16 @@ struct DownloadLiveActivity: Widget {
           RoundedRectangle(cornerRadius: DownloadLiveActivity.UX.iconEdgeRounding)
             .fill(DownloadLiveActivity.UX.widgetColours)
             .frame(width: DownloadLiveActivity.UX.iconFrameSize,
-                height: DownloadLiveActivity.UX.iconFrameSize)
+                   height: DownloadLiveActivity.UX.iconFrameSize)
           Image(DownloadLiveActivity.UX.firefoxIcon)
             .resizable()
             .scaledToFit()
             .frame(width: DownloadLiveActivity.UX.firefoxIconSize,
-                height: DownloadLiveActivity.UX.firefoxIconSize)
+                   height: DownloadLiveActivity.UX.firefoxIconSize)
         }.padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
-                   leading: DownloadLiveActivity.UX.iconLeftPadding,
-                   bottom: DownloadLiveActivity.UX.iconBottomPadding,
-                   trailing: DownloadLiveActivity.UX.iconRightPadding))
+                             leading: DownloadLiveActivity.UX.iconLeftPadding,
+                             bottom: DownloadLiveActivity.UX.iconBottomPadding,
+                             trailing: DownloadLiveActivity.UX.iconRightPadding))
       }
     }
     private func centerExpandedRegion
@@ -113,9 +111,9 @@ struct DownloadLiveActivity: Widget {
           .frame(maxWidth: .infinity,
                  alignment: .leading)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
-                    leading: DownloadLiveActivity.UX.wordsLeftPadding,
-                    bottom: DownloadLiveActivity.UX.wordsBottomPadding,
-                    trailing: DownloadLiveActivity.UX.wordsRightPadding))
+                              leading: DownloadLiveActivity.UX.wordsLeftPadding,
+                              bottom: DownloadLiveActivity.UX.wordsBottomPadding,
+                              trailing: DownloadLiveActivity.UX.wordsRightPadding))
         let bytesDownloaded = ByteCountFormatter.string(
           fromByteCount: liveDownload.state.totalBytesDownloaded,
           countStyle: .file
@@ -130,9 +128,9 @@ struct DownloadLiveActivity: Widget {
           .frame(maxWidth: .infinity,
                  alignment: .leading)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.wordsTopPadding,
-                    leading: DownloadLiveActivity.UX.wordsLeftPadding,
-                    bottom: DownloadLiveActivity.UX.wordsBottomPadding,
-                    trailing: DownloadLiveActivity.UX.wordsRightPadding))
+                              leading: DownloadLiveActivity.UX.wordsLeftPadding,
+                              bottom: DownloadLiveActivity.UX.wordsBottomPadding,
+                              trailing: DownloadLiveActivity.UX.wordsRightPadding))
       }
     }
     private func trailingExpandedRegion
@@ -142,12 +140,11 @@ struct DownloadLiveActivity: Widget {
         ZStack {
           Circle()
             .stroke(DownloadLiveActivity.UX.widgetColours.opacity(DownloadLiveActivity.UX.inProgessOpacity),
-                lineWidth: DownloadLiveActivity.UX.progressWidth)
+                    lineWidth: DownloadLiveActivity.UX.progressWidth)
             .frame(width: DownloadLiveActivity.UX.iconFrameSize,
-                height: DownloadLiveActivity.UX.iconFrameSize)
+                   height: DownloadLiveActivity.UX.iconFrameSize)
           Circle()
-            .trim(from: 0.0,
-               to: min(liveDownload.state.totalProgress, 1.0))
+            .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
             .stroke(style: StrokeStyle(lineWidth: DownloadLiveActivity.UX.progressWidth))
             .rotationEffect(.degrees(DownloadLiveActivity.UX.rotation))
             .animation(.linear, value: 0.5)
@@ -160,13 +157,14 @@ struct DownloadLiveActivity: Widget {
           .resizable()
           .scaledToFit()
           .foregroundStyle(DownloadLiveActivity.UX.widgetColours)
-          .frame(width: DownloadLiveActivity.UX.stateIconSize, height: DownloadLiveActivity.UX.stateIconSize)
+          .frame(width: DownloadLiveActivity.UX.stateIconSize,
+                 height: DownloadLiveActivity.UX.stateIconSize)
         }.frame(width: DownloadLiveActivity.UX.iconFrameSize,
-            height: DownloadLiveActivity.UX.iconFrameSize)
+                height: DownloadLiveActivity.UX.iconFrameSize)
           .padding(EdgeInsets(top: DownloadLiveActivity.UX.iconTopPadding,
-                    leading: DownloadLiveActivity.UX.iconLeftPadding,
-                    bottom: DownloadLiveActivity.UX.iconBottomPadding,
-                    trailing: DownloadLiveActivity.UX.iconRightPadding))
+                              leading: DownloadLiveActivity.UX.iconLeftPadding,
+                              bottom: DownloadLiveActivity.UX.iconBottomPadding,
+                              trailing: DownloadLiveActivity.UX.iconRightPadding))
       }
     }
     var body: some WidgetConfiguration {
