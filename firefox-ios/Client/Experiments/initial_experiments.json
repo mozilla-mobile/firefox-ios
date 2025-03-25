@@ -429,6 +429,97 @@
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
       "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "new-toolbar-ios-ios-redesign-iteration-1",
+      "id": "new-toolbar-ios-ios-redesign-iteration-1",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "New Toolbar iOS - iOS Redesign - Iteration 1",
+      "userFacingDescription": "iOS Redesign - New rollout",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-toolbar-refactor-feature-release-3",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "toolbar-refactor-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "toolbar-refactor-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "unified_search": false,
+                "one_tap_new_tab": false,
+                "navigation_hint": true,
+                "swiping_tabs": false,
+                "layout": "baseline"
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "toolbar-refactor-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "unified_search": false,
+                "one_tap_new_tab": true,
+                "navigation_hint": true,
+                "swiping_tabs": false,
+                "layout": "version1"
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('137.!') >= 0)))",
+      "startDate": "2025-03-25",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 14,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-03-25T20:18:58.719647Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null,
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": null,
+      "requiresRestart": false
     }
   ]
 }
