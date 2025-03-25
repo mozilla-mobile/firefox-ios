@@ -148,6 +148,7 @@
 		1D2F68B12ACCA22000524B92 /* RemoteTabsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */; };
 		1D35644F2D90999300F52F12 /* ASSearchEnginePrefsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D35644E2D90998900F52F12 /* ASSearchEnginePrefsMigrator.swift */; };
 		1D3564502D909D7900F52F12 /* ASSearchEnginePrefsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D35644E2D90998900F52F12 /* ASSearchEnginePrefsMigrator.swift */; };
+		1D3564542D9329FA00F52F12 /* SearchPrefsMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */; };
 		1D3822E92BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3822E82BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift */; };
 		1D3C90882ACE1AF400304C87 /* RemoteTabPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */; };
 		1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
@@ -2675,6 +2676,7 @@
 		1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsTableViewController.swift; sourceTree = "<group>"; };
 		1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsEmptyView.swift; sourceTree = "<group>"; };
 		1D35644E2D90998900F52F12 /* ASSearchEnginePrefsMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEnginePrefsMigrator.swift; sourceTree = "<group>"; };
+		1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPrefsMigrationTests.swift; sourceTree = "<group>"; };
 		1D3822E82BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ThemeUUIDIdentifiable.swift"; sourceTree = "<group>"; };
 		1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabPanelTests.swift; sourceTree = "<group>"; };
 		1D558A562BED7ECB001EF527 /* MockWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWindowManager.swift; sourceTree = "<group>"; };
@@ -13091,6 +13093,7 @@
 			isa = PBXGroup;
 			children = (
 				8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */,
+				1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */,
 				8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */,
 			);
 			path = RemoteSettings;
@@ -18467,6 +18470,7 @@
 				8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */,
 				8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */,
 				2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */,
+				1D3564542D9329FA00F52F12 /* SearchPrefsMigrationTests.swift in Sources */,
 				BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */,
 				9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */,
 				615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */,
