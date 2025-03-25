@@ -330,7 +330,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                 enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v2)
             } else if prefs.hasObjectForKey(legacy_orderedEngineNamesPrefsKey) {
                 // We're running for the first time with SEC enabled but haven't yet saved ordering
-                // prefs for those engines. We send the v1  preferences which will be migrated.
+                // prefs for those engines. We send the v1 preferences which will be migrated.
                 let engineStrings = prefs.stringArrayForKey(legacy_orderedEngineNamesPrefsKey)
                 enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
             } else {
