@@ -315,13 +315,25 @@ class SettingsTests: BaseTestCase {
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String, "1")
-        XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String, "0")
-        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String, "1")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String,
+                       "1",
+                       "Inactive tabs - toggle in not enabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
+                       "0",
+                       "Offer to Open Copied Links - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
+                       "1",
+                       "Show Links Previews - toggle is not enabled by default")
         app.swipeUp()
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String, "1")
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockImages].value as? String, "0")
-        XCTAssertEqual(app.switches[settingsQuery.BlockExternal.title].value as? String, "0")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
+                       "1",
+                       "Block Pop-up  Windows - toggle is not enabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockImages].value as? String,
+                       "0",
+                       "Block images - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.BlockExternal.title].value as? String,
+                       "0",
+                       "Block Opening External Apps - toggle is not disabled by default")
         navigator.goto(SettingsScreen)
     }
 }
