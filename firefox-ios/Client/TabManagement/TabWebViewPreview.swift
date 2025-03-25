@@ -81,16 +81,20 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         case .bottom:
             bottomStackView.addArrangedSubview(skeletonAddressBar)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.bottomAnchor.constraint(
+                equalTo: bottomStackView.topAnchor
+            )
             webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
                 constant: UX.toolbarHeight + UIConstants.BottomInset
             )
         case .top:
             topStackView.addArrangedSubview(skeletonAddressBar)
-            webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
-            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
             webViewTopConstraint = webPageScreenshotImageView.topAnchor.constraint(equalTo: topStackView.bottomAnchor)
+            addressBarBorderViewTopBottomConstraint = addressBarBorderView.topAnchor.constraint(
+                equalTo: topStackView.bottomAnchor
+            )
+            webViewBottomConstraint = webPageScreenshotImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
         }
 
         webViewTopConstraint?.isActive = true

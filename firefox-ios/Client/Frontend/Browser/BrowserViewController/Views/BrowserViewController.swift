@@ -1312,7 +1312,9 @@ class BrowserViewController: UIViewController,
         if isBottomSearchBar {
             contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         } else {
-            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
+            contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(
+                equalTo: overKeyboardContainer.topAnchor
+            )
         }
         contentStackViewBottomConstraint?.isActive = true
     }
