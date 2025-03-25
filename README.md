@@ -28,9 +28,9 @@ Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id98980492
 </table>
 
 ## Building the code
-This is a mono repository containing both Firefox and Focus iOS projects. For their related build instructions, please follow the project readme.
-- [Firefox for iOS](https://github.com/mozilla-mobile/firefox-ios/blob/main/firefox-ios/README.md)
-- [Focus iOS](https://github.com/mozilla-mobile/firefox-ios/blob/main/focus-ios/README.md)
+This is a mono repository containing both Firefox and Focus iOS projects. For their related build instructions, please follow the project readme:
+- [Firefox for iOS](./firefox-ios/README.md)
+- [Focus iOS](./focus-ios/README.md)
 
 ## Getting involved
 
