@@ -15,6 +15,8 @@ final class HomepageMiddleware {
         switch action.actionType {
         case NavigationBrowserActionType.tapOnCustomizeHomepage:
             self.homepageTelemetry.sendTapOnCustomizeHomepageTelemetry()
+        case HomepageActionType.homepageViewed:
+            print("cyn - homepage impression")
         default:
             break
         }
