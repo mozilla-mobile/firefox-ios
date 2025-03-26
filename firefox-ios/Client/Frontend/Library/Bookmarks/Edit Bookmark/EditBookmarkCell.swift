@@ -55,6 +55,19 @@ class EditBookmarkCell: UITableViewCell,
     }
 
     private func setupSubviews() {
+        typealias A11y = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel
+        let textFieldViewModel = TextFieldViewModel(
+            formA11yId: A11y.titleTextField,
+            clearButtonA11yId: A11y.titleTextFieldClearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+        )
+        titleTextfield.configure(viewModel: textFieldViewModel)
+        let urlTextFieldViewModel = TextFieldViewModel(
+            formA11yId: A11y.urlTextField,
+            clearButtonA11yId: A11y.titleUrlTextFieldClearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+        )
+        urlTextfield.configure(viewModel: urlTextFieldViewModel)
         textFieldsContainerView.addArrangedSubview(titleTextfield)
         textFieldsContainerView.addArrangedSubview(textFieldsDivider)
         textFieldsContainerView.addArrangedSubview(urlTextfield)

@@ -37,8 +37,8 @@ class EditFolderCell: UITableViewCell,
     private func setupSubviews() {
         typealias A11y = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel
         let viewModel = TextFieldViewModel(
-            formA11yId: A11y.formTextField,
-            clearButtonA11yId: A11y.clearButton,
+            formA11yId: A11y.titleTextField,
+            clearButtonA11yId: A11y.titleTextFieldClearButton,
             clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
         )
         titleTextField.configure(viewModel: viewModel)

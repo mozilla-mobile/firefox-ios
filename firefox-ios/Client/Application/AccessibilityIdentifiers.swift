@@ -474,12 +474,12 @@ struct AccessibilityIdentifiers {
             static let bookmarksCellDisclosureButton = ".DisclosureButton"
             static let emptyStateSignInButton = "BookmarksPanel.EmptyState.signInButton"
             static let titleTextField = "BookmarkDetail.titleTextField"
-            static let formTextField = "BookmarkDetail.formTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
             static let bookmarkParentFolderCell = "BookmarksDetail.ParentFolderSelector.FolderCell"
             static let newFolderCell = "BookmarksDetail.ParentFolderSelector.NewFolderCell"
             static let saveButton = "BookmarksDetail.SaveButton"
-            static let clearButton = "BookmarksDetail.ClearButton"
+            static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
+            static let titleUrlTextFieldClearButton = "BookmarksDetail.TitleUrlTextFieldClearButton"
         }
 
         struct HistoryPanel {
