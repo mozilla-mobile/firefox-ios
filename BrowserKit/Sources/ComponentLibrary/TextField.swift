@@ -7,12 +7,18 @@ import Common
 import UIKit
 
 public struct TextFieldViewModel {
-    public init(clearButtonA11yId: String,
+    public init(formA11yId: String,
+                formA11yLabel: String? = nil,
+                clearButtonA11yId: String,
                 clearButtonA11yLabel: String) {
+        self.formA11yId = formA11yId
+        self.formA11yLabel = formA11yLabel
         self.clearButtonA11yId = clearButtonA11yId
         self.clearButtonA11yLabel = clearButtonA11yLabel
     }
 
+    public let formA11yId: String
+    public let formA11yLabel: String?
     public let clearButtonA11yId: String
     public let clearButtonA11yLabel: String
 }
@@ -48,6 +54,8 @@ public class TextField: UITextField, ThemeApplicable {
     }
 
     public func configure(viewModel: TextFieldViewModel) {
+        accessibilityIdentifier = viewModel.formA11yId
+        accessibilityLabel = viewModel.formA11yLabel
         clearButton.accessibilityIdentifier = viewModel.clearButtonA11yId
         clearButton.accessibilityLabel = viewModel.clearButtonA11yLabel
     }
