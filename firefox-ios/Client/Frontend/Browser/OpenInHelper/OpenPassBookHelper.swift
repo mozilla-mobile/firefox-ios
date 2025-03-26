@@ -25,39 +25,37 @@ class OpenPassBookHelper {
         }
     }
 
-    private var response: URLResponse
-    private var url: URL?
     private let presenter: Presenter
-    private let cookieStore: WKHTTPCookieStore
     private lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent,
                                               configuration: .ephemeralMPTCP)
     private let logger: Logger
 
-    init(response: URLResponse,
-         cookieStore: WKHTTPCookieStore,
-         presenter: Presenter,
+    init(presenter: Presenter,
          logger: Logger = DefaultLogger.shared) {
-        self.response = response
-        self.url = response.url
-        self.cookieStore = cookieStore
         self.presenter = presenter
         self.logger = logger
     }
 
-    static func shouldOpenWithPassBook(response: URLResponse,
-                                       forceDownload: Bool) -> Bool {
-        guard let mimeType = response.mimeType, response.url != nil else { return false }
-
+    static func shouldOpenWithPassBook(mimeType: String, forceDownload: Bool = false) -> Bool {
         return mimeType == MIMEType.Passbook && PKAddPassesViewController.canAddPasses() && !forceDownload
     }
 
-    func open(completion: @escaping () -> Void) {
+    func open(data: Data, completion: @escaping () -> Void) {
         do {
-            try openPassWithContentsOfURL()
+            try open(passData: data)
+        } catch {
+            sendLogError(with: error.localizedDescription)
+            presentErrorAlert(completion: completion)
+        }
+    }
+
+    func open(response: URLResponse, cookieStore: WKHTTPCookieStore, completion: @escaping () -> Void) {
+        do {
+            try openPassWithContentsOfURL(url: response.url)
             completion()
         } catch let error as InvalidPassError {
             sendLogError(with: error.description)
-            openPassWithCookies { error in
+            openPassWithCookies(url: response.url, cookieStore: cookieStore) { error in
                 if error != nil {
                     self.presentErrorAlert(completion: completion)
                 } else {
@@ -70,14 +68,17 @@ class OpenPassBookHelper {
         }
     }
 
-    private func openPassWithCookies(completion: @escaping (InvalidPassError?) -> Void) {
-        configureCookies { [weak self] in
-            self?.openPassFromDataTask(completion: completion)
+    private func openPassWithCookies(
+        url: URL?,
+        cookieStore: WKHTTPCookieStore,
+        completion: @escaping (InvalidPassError?) -> Void) {
+        configureCookies(cookieStore: cookieStore) { [weak self] in
+            self?.openPassFromDataTask(url: url, completion: completion)
         }
     }
 
-    private func openPassFromDataTask(completion: @escaping (InvalidPassError?) -> Void) {
-        getData(completion: { data in
+    private func openPassFromDataTask(url: URL?, completion: @escaping (InvalidPassError?) -> Void) {
+        getData(url: url, completion: { data in
             guard let data = data else {
                 completion(InvalidPassError.dataTaskURL)
                 return
@@ -92,7 +93,7 @@ class OpenPassBookHelper {
         })
     }
 
-    private func getData(completion: @escaping (Data?) -> Void) {
+    private func getData(url: URL?, completion: @escaping (Data?) -> Void) {
         guard let url = url else {
             completion(nil)
             return
@@ -111,7 +112,7 @@ class OpenPassBookHelper {
     }
 
     /// Get webview cookies to add onto download session
-    private func configureCookies(completion: @escaping () -> Void) {
+    private func configureCookies(cookieStore: WKHTTPCookieStore, completion: @escaping () -> Void) {
         cookieStore.getAllCookies { [weak self] cookies in
             for cookie in cookies {
                 self?.session.configuration.httpCookieStorage?.setCookie(cookie)
@@ -121,7 +122,7 @@ class OpenPassBookHelper {
         }
     }
 
-    private func openPassWithContentsOfURL() throws {
+    private func openPassWithContentsOfURL(url: URL?) throws {
         guard let url = url, let passData = try? Data(contentsOf: url) else {
             throw InvalidPassError.contentsOfURL
         }

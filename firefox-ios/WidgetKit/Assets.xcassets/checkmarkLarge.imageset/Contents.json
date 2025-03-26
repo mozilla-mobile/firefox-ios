@@ -8,8 +8,11 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+<<<<<<< HEAD
   },
   "properties" : {
     "preserves-vector-representation" : true
+=======
+>>>>>>> 912119fa073689a017fc52971c3c3435b3bf13c8
   }
 }

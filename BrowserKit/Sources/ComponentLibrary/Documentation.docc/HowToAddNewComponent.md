@@ -25,7 +25,7 @@ You should add the code under the `ComponentLibrary` folder in `BrowserKit`, fol
 1. Ensure your component behaves properly with RTL languages. This means using trailing and leading constraints, and ensure images are flipped where ever needed. See [`imageFlippedForRightToLeftLayoutDirection`](https://developer.apple.com/documentation/uikit/uiimage/1624140-imageflippedforrighttoleftlayout) for more information.
 1. Ensure your component behaves properly with Voice Over. This means we should inject needed identifiers for images to be read out loud to users to have the proper context. As developers, we should ensure the constraints are made properly, so the field highlighted with Voice Over is actually the one being read out loud.
 1. Ensure your component reacts properly to theme manager changes by being `ThemeApplicable`.
-1. Make sure that your component is added to the component library documentation. It needs to be listed in the landing page, as well as having it's own documentation page.
+1. Make sure that your component is added to the component library documentation. It needs to be listed on the landing page, as well as having its own documentation page.
 
 ### Sample application
 > You will need to close the Client application to be able to navigate `BrowserKit` in the Sample application when you open [`Sample app xcodeproj`](https://github.com/mozilla-mobile/firefox-ios/tree/main/SampleComponentLibraryApp)
