@@ -17,6 +17,7 @@ class WKEngineSession: NSObject,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
                        AdsTelemetryScriptDelegate,
+                       ContentScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate? {
         didSet {
@@ -268,6 +269,13 @@ class WKEngineSession: NSObject,
         contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
+        contentScriptManager.addContentScript(FocusContentScript(delegate: self),
+                                              name: FocusContentScript.name(),
+                                              forSession: self)
+    }
+
+    func contentScriptDidSendEvent(_ event: ScriptEvent) {
+        
     }
 
     // MARK: - WKEngineWebViewDelegate

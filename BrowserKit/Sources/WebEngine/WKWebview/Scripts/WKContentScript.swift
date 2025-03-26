@@ -21,3 +21,5 @@ extension WKContentScript {
     // By default most script don't need a `prepareForDeinit`
     func prepareForDeinit() {}
 }
+
+
