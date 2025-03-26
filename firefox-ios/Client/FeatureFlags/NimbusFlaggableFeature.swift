@@ -39,7 +39,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case nightMode
-    case passwordGenerator
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
