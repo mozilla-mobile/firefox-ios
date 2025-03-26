@@ -15,7 +15,7 @@ Object.defineProperty(window.__firefox__, "NoImageMode", {
 const className = "__firefox__NoImageMode";
 
 function initializeStyleSheet () {
-  var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
+  var noImageCSS = "*{background-image:none !important;}img{visibility:hidden !important;}";
   var newCss = document.getElementById(className);
   if (!newCss) {
     var cssStyle = document.createElement("style");
