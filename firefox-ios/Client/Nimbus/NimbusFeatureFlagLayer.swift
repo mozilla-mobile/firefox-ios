@@ -94,9 +94,6 @@ final class NimbusFeatureFlagLayer {
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
-        case .passwordGenerator:
-            return checkPasswordGeneratorFeature(from: nimbus)
-
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
@@ -360,10 +357,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.productAds
-    }
-
-    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.passwordGeneratorFeature.value().enabled
     }
 
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
