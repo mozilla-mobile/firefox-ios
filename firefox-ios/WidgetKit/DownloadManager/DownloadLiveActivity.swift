@@ -111,7 +111,7 @@ struct DownloadLiveActivity: Widget {
             static let widgetColours = Color.white
             static let circleStrokeColor = widgetColours.opacity(inProgessOpacity)
         }
-    } 
+    }
     private func minimalViewBuilder(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
         return ZStack {
             Image(StandardImageIdentifiers.Large.download)
