@@ -97,6 +97,7 @@ struct DownloadLiveActivity: Widget {
             static let wordsRightPadding: CGFloat = 5
             static let wordsBottomPadding: CGFloat = 0
             static let widgetColours = Color.white
+            static let circleStrokeColor = widgetColours.opacity(inProgessOpacity)
         }
     }
     private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
@@ -209,8 +210,7 @@ struct DownloadLiveActivity: Widget {
       DynamicIslandExpandedRegion(.trailing) {
         ZStack {
           Circle()
-            .stroke(DownloadLiveActivity.UX.DynamicIsland.widgetColours.opacity(DownloadLiveActivity.UX.DynamicIsland.inProgessOpacity),
-                    lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
+            .stroke(UX.DynamicIsland.circleStrokeColor, lineWidth: DownloadLiveActivity.UX.DynamicIsland.progressWidth)
             .frame(width: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize,
                    height: DownloadLiveActivity.UX.DynamicIsland.iconFrameSize)
           Circle()
