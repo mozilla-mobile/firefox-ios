@@ -66,10 +66,9 @@ struct DownloadLiveActivity: Widget {
         static let downloadIconSizeMinimal: CGFloat = 12
         static let downloadPaddingLeadingMinimal: CGFloat = 2
         static let downloadPaddingTrailingMinimal: CGFloat = 1
-        static let downloadOpacityMinimal = 0.3
+        static let downloadOpacityMinimal = 0.30
         static let downloadRotationMinimal: Double = -90.0
     }
-    @available(iOS 16.2, *)
     private func minimalViewBuilder(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
         return ZStack {
             Image(StandardImageIdentifiers.Large.download)
