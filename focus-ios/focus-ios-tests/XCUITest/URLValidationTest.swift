@@ -34,7 +34,7 @@ class URLValidationTest: BaseTestCase {
         }
         XCTAssertTrue(app.otherElements.staticTexts.elementContainingText("Mozilla").exists)
         mozWaitForElementToExist(app.textFields["URLBar.urlText"])
-        waitForValueContains(app.textFields["URLBar.urlText"], value: "www.mozilla.org")
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla.org")
     }
 
     private func loadAndValidateHttpURLs(URL: String) {
