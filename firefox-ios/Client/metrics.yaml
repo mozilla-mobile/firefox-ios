@@ -4396,7 +4396,7 @@ toasts.close_single_tab:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
@@ -4413,7 +4413,7 @@ toasts.close_all_tabs:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/25029
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
