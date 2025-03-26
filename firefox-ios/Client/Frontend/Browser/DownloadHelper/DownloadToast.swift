@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-class DownloadToast: Toast {
+class DownloadToast: Toast, DownloadProgressDelegate {
     struct UX {
         static let buttonSize: CGFloat = 40
     }
@@ -49,14 +49,14 @@ class DownloadToast: Toast {
 
     var progressWidthConstraint: NSLayoutConstraint?
 
-    var downloads: [Download] = []
+    var downloadProgressManager: DownloadProgressManager
 
     // Returns true if one or more downloads have encoded data (indicated via response `Content-Encoding` header).
     // If at least one download has encoded data, we cannot get a correct total estimate for all the downloads.
     // In that case, we do not show descriptive text. This will be improved in a later rework of the download manager.
     // FXIOS-9039
     var hasContentEncoding: Bool {
-        return downloads.contains(where: { $0.hasContentEncoding ?? false })
+        return downloadProgressManager.downloads.contains(where: { $0.hasContentEncoding ?? false })
     }
 
     var percent: CGFloat? = 0.0 {
@@ -76,18 +76,6 @@ class DownloadToast: Toast {
         }
     }
 
-    var combinedBytesDownloaded: Int64 = 0 {
-        didSet {
-            updatePercent()
-        }
-    }
-
-    var combinedTotalBytesExpected: Int64? {
-        didSet {
-            updatePercent()
-        }
-    }
-
     var descriptionText: String {
         guard !hasContentEncoding else {
             // We cannot get a correct estimate of encoded downloaded bytes (FXIOS-9039)
@@ -95,11 +83,11 @@ class DownloadToast: Toast {
         }
 
         let downloadedSize = ByteCountFormatter.string(
-            fromByteCount: combinedBytesDownloaded,
+            fromByteCount: downloadProgressManager.combinedBytesDownloaded,
             countStyle: .file
         )
-        let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(
-            fromByteCount: combinedTotalBytesExpected!,
+        let expectedSize = downloadProgressManager.combinedTotalBytesExpected != nil ? ByteCountFormatter.string(
+            fromByteCount: downloadProgressManager.combinedTotalBytesExpected!,
             countStyle: .file
         ) : nil
         let descriptionText = expectedSize != nil ? String(
@@ -108,11 +96,12 @@ class DownloadToast: Toast {
             expectedSize!
         ) : downloadedSize
 
-        guard downloads.count > 1 else {
+        guard downloadProgressManager.downloads.count > 1 else {
             return descriptionText
         }
 
-        let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText, downloads.count)
+        let fileCountDescription = String(format: .DownloadMultipleFilesToastDescriptionText,
+                                          downloadProgressManager.downloads.count)
 
         return String(
             format: .DownloadMultipleFilesAndProgressToastDescriptionText,
@@ -121,17 +110,19 @@ class DownloadToast: Toast {
         )
     }
 
-    init(download: Download,
+    init(downloadProgressManager: DownloadProgressManager,
          theme: Theme,
-         completion: @escaping (_ buttonPressed: Bool) -> Void) {
+
+         completion: @escaping (Bool) -> Void) {
+        self.downloadProgressManager = downloadProgressManager
         super.init(frame: .zero)
 
         self.completionHandler = completion
         self.clipsToBounds = true
 
-        self.combinedTotalBytesExpected = download.totalBytesExpected
+        let download = downloadProgressManager.downloads[0]
 
-        self.downloads.append(download)
+        updatePercent()
 
         self.addSubview(createView(download.filename, descriptionText: self.descriptionText))
 
@@ -153,18 +144,6 @@ class DownloadToast: Toast {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addDownload(_ download: Download) {
-        downloads.append(download)
-
-        if let combinedTotalBytesExpected = self.combinedTotalBytesExpected {
-            if let totalBytesExpected = download.totalBytesExpected {
-                self.combinedTotalBytesExpected = combinedTotalBytesExpected + totalBytesExpected
-            } else {
-                self.combinedTotalBytesExpected = nil
-            }
-        }
-    }
-
     func updatePercent() {
         DispatchQueue.main.async {
             guard !self.hasContentEncoding else {
@@ -173,12 +152,13 @@ class DownloadToast: Toast {
                 return
             }
 
-            guard let combinedTotalBytesExpected = self.combinedTotalBytesExpected else {
+            guard let combinedTotalBytesExpected = self.downloadProgressManager.combinedTotalBytesExpected else {
                 self.percent = 0.0
                 return
             }
+            let combinedBytesDownloaded = self.downloadProgressManager.combinedBytesDownloaded
 
-            self.percent = CGFloat(self.combinedBytesDownloaded) / CGFloat(combinedTotalBytesExpected)
+            self.percent = CGFloat(combinedBytesDownloaded) / CGFloat(combinedTotalBytesExpected)
         }
     }
 
@@ -276,5 +256,9 @@ class DownloadToast: Toast {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             super.dismiss(buttonPressed)
         }
+    }
+
+    func updateCombinedBytesDownloaded(value: Int64) {
+        updatePercent()
     }
 }

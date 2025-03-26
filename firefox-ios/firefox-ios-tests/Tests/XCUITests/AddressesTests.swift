@@ -417,24 +417,29 @@ class AddressesTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         validatePrivacyOptions()
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
         // While in landscape mode check for the options
         XCUIDevice.shared.orientation = .landscapeLeft
-        validatePrivacyOptions()
+        validateAutofillPasswordOptions()
         XCUIDevice.shared.orientation = .portrait
         // While in dark mode check for the options
+        navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         navigator.goto(NewTabScreen)
         switchThemeToDarkOrLight(theme: "Dark")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
         // While in light mode check for the options
+        navigator.goto(SettingsScreen)
         app.buttons["Done"].waitAndTap()
         switchThemeToDarkOrLight(theme: "Light")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
-        navigator.nowAt(SettingsScreen)
+        navigator.goto(AutofillPasswordSettings)
+        validateAutofillPasswordOptions()
         navigator.goto(BrowserTab)
         // Go to a webpage, and select night mode on and off, check options
         navigator.openURL(path(forTestPage: "test-example.html"))

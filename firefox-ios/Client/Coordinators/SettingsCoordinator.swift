@@ -94,6 +94,14 @@ class SettingsCoordinator: BaseCoordinator,
 
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
+        case .appIcon:
+            let viewController = UIHostingController(
+                rootView: AppIconSelectionView(
+                    windowUUID: windowUUID
+                )
+            )
+            viewController.title = .Settings.AppIconSelection.ScreenTitle
+            return viewController
         case .addresses:
             let viewModel = AddressAutofillSettingsViewModel(
                 profile: profile,

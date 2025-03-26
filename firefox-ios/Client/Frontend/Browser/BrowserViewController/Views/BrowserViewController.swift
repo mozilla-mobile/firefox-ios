@@ -13,6 +13,9 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WebEngine
+import WidgetKit
+import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -66,11 +69,13 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent
+        .hasOnlySecureContent,
+        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
+    weak var fullscreenDelegate: FullscreenDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
@@ -107,6 +112,18 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    var downloadProgressManager: DownloadProgressManager?
+
+    private var _downloadLiveActivityWrapper: Any?
+
+    @available(iOS 16.2, *)
+    var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
+        get {
+            return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+        } set(newValue) {
+            _downloadLiveActivityWrapper = newValue
+        }
+    }
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -2104,6 +2121,16 @@ class BrowserViewController: UIViewController,
             if !isToolbarRefactorEnabled {
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
+            }
+        case .fullscreenState:
+            if #available(iOS 16.0, *) {
+                guard webView.fullscreenState == .enteringFullscreen ||
+                        webView.fullscreenState == .exitingFullscreen else { return }
+                if webView.fullscreenState == .enteringFullscreen {
+                    fullscreenDelegate?.enteringFullscreen()
+                } else {
+                    fullscreenDelegate?.exitingFullscreen()
+                }
             }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")

@@ -139,7 +139,7 @@ protocol Profile: AnyObject {
     func cleanupHistoryIfNeeded()
 
     @discardableResult
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func addTabToCommandQueue(_ deviceId: String, url: URL)
     func removeTabFromCommandQueue(_ deviceId: String, url: URL)
@@ -575,8 +575,24 @@ open class BrowserProfile: Profile {
         }
     }
 
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        return self.tabs.setLocalTabs(localTabs: tabs)
+    // Store the tabs that we'll be syncing to other clients, and sync right after
+    func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+        // Store local tabs into the DB
+        let res = self.tabs.setLocalTabs(localTabs: tabs)
+
+        // If for some reason we don't have a sync manager, just return
+        // the result of setLocalTabs
+        guard let syncManager = self.syncManager else { return res }
+
+        // Chain syncTabs after setLocalTabs has completed
+        return res.bind { result in
+            // Only sync if the local tabs were successfully set
+            return result.isSuccess
+                // Return the original result from setLocalTabs
+                ? syncManager.syncTabs().bind { _ in res }
+                // If setLocalTabs failed, just return its result
+                : res
+        }
     }
 
     func addTabToCommandQueue(_ deviceId: String, url: URL) {
@@ -693,9 +709,13 @@ open class BrowserProfile: Profile {
     lazy var remoteSettingsService: RemoteSettingsService? = {
         do {
             // let server = AppConstants.buildChannel == .developer ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-            // [FXIOS-11550] Default to Prod for now; this will be revisited soon.
-            // Related: https://mozilla.slack.com/archives/C05VCNPLFFT/p1741183526964339
+            // let bucketName = (server == .prod ? "main" : "main-preview")
+            // For now we're always using prod, per AS team guidance
             let server = RemoteSettingsServer.prod
+            let bucketName = "main"
+            let config = RemoteSettingsConfig2(server: server,
+                                               bucketName: bucketName,
+                                               appContext: remoteSettingsAppContext())
 
             let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
             let path = url.path
@@ -704,9 +724,7 @@ open class BrowserProfile: Profile {
             if !FileManager.default.fileExists(atPath: path) {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
-            return try RemoteSettingsService(
-                storageDir: path,
-                config: RemoteSettingsConfig2(server: server, appContext: remoteSettingsAppContext()))
+            return try RemoteSettingsService(storageDir: path, config: config)
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
                        level: .fatal,

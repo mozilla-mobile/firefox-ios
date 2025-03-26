@@ -9,7 +9,7 @@ import struct MozillaAppServices.RemoteTabRecord
 
 public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let client: RemoteClient
-    public let tabs: [RemoteTab]
+    public var tabs: [RemoteTab]
 
     public var description: String {
         return "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"

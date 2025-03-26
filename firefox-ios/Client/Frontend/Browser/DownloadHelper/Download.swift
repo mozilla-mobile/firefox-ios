@@ -66,6 +66,15 @@ class Download: NSObject {
 
         return proposedPath
     }
+
+    // Determines if we want to save the download to the downloads panel
+    fileprivate func shouldWriteToDisk() -> Bool {
+        // If we downloaded a Passbook Pass, we want to open this immediately instead of saving it to downloads
+        if self.mimeType == MIMEType.Passbook {
+            return false
+        }
+        return true
+    }
 }
 
 class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate {
@@ -198,7 +207,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
 }
 
 class BlobDownload: Download {
-    private let data: Data
+    let data: Data
 
     init(originWindow: WindowUUID, filename: String, mimeType: String, size: Int64, data: Data) {
         self.data = data
@@ -215,15 +224,42 @@ class BlobDownload: Download {
         // Wait momentarily before continuing here and firing off the delegate
         // callbacks. Otherwise, these may end up getting called before the
         // delegate is set up and the UI may never be notified of completion.
+        // No need to do any actual downloading as download occurred in DownloadHelper.js.
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             do {
                 let destination = try self.uniqueDownloadPathForFilename(self.filename)
-                try self.data.write(to: destination)
+                if self.shouldWriteToDisk() {
+                    try self.data.write(to: destination)
+                }
                 self.isComplete = true
                 self.delegate?.download(self, didFinishDownloadingTo: destination)
             } catch let error {
                 self.delegate?.download(self, didCompleteWithError: error)
             }
         }
+    }
+}
+
+class MockDownload: Download {
+    var downloadTriggered = false
+    var downloadCanceled = false
+
+    init(filename: String = "filename",
+         totalBytesExpected: Int64? = 20,
+         hasContentEncoding: Bool? = false,
+         originWindow: WindowUUID = WindowUUID.XCTestDefaultUUID
+    ) {
+        super.init(originWindow: originWindow)
+        self.filename = filename
+        self.totalBytesExpected = totalBytesExpected
+        self.hasContentEncoding = hasContentEncoding
+    }
+
+    override func resume() {
+        downloadTriggered = true
+    }
+
+    override func cancel() {
+        downloadCanceled = true
     }
 }

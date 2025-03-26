@@ -33,8 +33,7 @@ class ActivityStreamTest: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
-        // Comment out so that the sponsors shortcuts are shown after the homepage redesign. (FXIOS-11668)
-        // launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
+        launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
     override func tearDown() {

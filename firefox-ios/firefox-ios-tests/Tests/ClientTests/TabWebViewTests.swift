@@ -27,6 +27,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         super.tearDown()
         navigationDelegate = nil
         tabWebViewDelegate = nil
+        setIsPDFRefactorFeature(isEnabled: false)
         DependencyHelperMock().reset()
     }
 
@@ -93,6 +94,28 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         trackForMemoryLeaks(tab)
     }
 
+    func testHasOnlySecureContent_returnsTrue_ForLocalFile_whenPDFRefactorEnabled() throws {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        tab.url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
+        tab.createWebview(configuration: configuration)
+        setIsPDFRefactorFeature(isEnabled: true)
+
+        let tabWebView = try XCTUnwrap(tab.webView)
+
+        XCTAssertTrue(tabWebView.hasOnlySecureContent)
+    }
+
+    func testHasOnlySecureContent_returnsFalse_ForLocalFile_whenPDFRefactorDisabled() throws {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        tab.url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
+        tab.createWebview(configuration: configuration)
+        setIsPDFRefactorFeature(isEnabled: false)
+
+        let tabWebView = try XCTUnwrap(tab.webView)
+
+        XCTAssertFalse(tabWebView.hasOnlySecureContent)
+    }
+
     // MARK: - Helper methods
 
     func createSubject(file: StaticString = #file,
@@ -104,6 +127,12 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setIsPDFRefactorFeature(isEnabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            PdfRefactorFeature(enabled: isEnabled)
+        }
     }
 }
 
