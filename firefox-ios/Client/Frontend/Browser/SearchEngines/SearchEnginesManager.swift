@@ -327,10 +327,11 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         let enginePrefs: SearchEngineOrderingPrefs
 
         func fetchPrefs(_ version: SearchEngineOrderingPrefsVersion) -> SearchEngineOrderingPrefs {
-            if version == .v2 {
+            switch version {
+            case .v2:
                 let engineStrings = prefs.stringArrayForKey(orderedEngineIDsPrefsKey)
                 return SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v2)
-            } else if version == .v1 {
+            case .v1:
                 let engineStrings = prefs.stringArrayForKey(legacy_orderedEngineNamesPrefsKey)
                 return SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
             }
