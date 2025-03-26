@@ -132,10 +132,9 @@ class TabScrollingController: NSObject,
     }
 
     var isAutoHideBarEnabled: Bool {
-        // check PrefsKeys.UserFeatureFlagPrefs.TopTabsAndAddressBarAutoHide && isIpad
         guard UIDevice.current.userInterfaceIdiom == .pad,
               let prefs = tab?.profile.prefs else { return true }
-  
+
         return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide) ?? true
     }
 
