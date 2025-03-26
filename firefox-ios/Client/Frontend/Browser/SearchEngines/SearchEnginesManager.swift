@@ -325,23 +325,39 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
     private func getOrderingPrefs() -> SearchEngineOrderingPrefs {
         let enginePrefs: SearchEngineOrderingPrefs
+
+        func fetchPrefs(_ version: SearchEngineOrderingPrefsVersion) -> SearchEngineOrderingPrefs {
+            if version == .v2 {
+                let engineStrings = prefs.stringArrayForKey(orderedEngineIDsPrefsKey)
+                return SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v2)
+            } else if version == .v1 {
+                let engineStrings = prefs.stringArrayForKey(legacy_orderedEngineNamesPrefsKey)
+                return SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
+            }
+        }
+
         if isSECEnabled {
             if prefs.hasObjectForKey(orderedEngineIDsPrefsKey) {
                 // v2 (SEC) preferences are available on-disk
-                let engineStrings = prefs.stringArrayForKey(orderedEngineIDsPrefsKey)
-                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v2)
+                enginePrefs = fetchPrefs(.v2)
             } else if prefs.hasObjectForKey(legacy_orderedEngineNamesPrefsKey) {
                 // We're running for the first time with SEC enabled but haven't yet saved ordering
                 // prefs for those engines. We send the v1 preferences which will be migrated.
-                let engineStrings = prefs.stringArrayForKey(legacy_orderedEngineNamesPrefsKey)
-                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
+                enginePrefs = fetchPrefs(.v1)
             } else {
                 // Fresh install. No v2 or v1 preferences.
                 enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: nil, version: .v2)
             }
         } else {
-            let engineStrings = prefs.stringArrayForKey(self.legacy_orderedEngineNamesPrefsKey)
-            enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: engineStrings, version: .v1)
+            if prefs.hasObjectForKey(legacy_orderedEngineNamesPrefsKey) {
+                enginePrefs = fetchPrefs(.v1)
+            } else if prefs.hasObjectForKey(orderedEngineIDsPrefsKey) {
+                // Unlikely, but it's possible a new user installed during SEC experiment, and then was
+                // moved out of the SEC experiment.
+                enginePrefs = fetchPrefs(.v2)
+            } else {
+                enginePrefs = SearchEngineOrderingPrefs(engineIdentifiers: nil, version: .v1)
+            }
         }
         return enginePrefs
     }
