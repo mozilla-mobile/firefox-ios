@@ -35,6 +35,11 @@ class EditFolderCell: UITableViewCell,
     }
 
     private func setupSubviews() {
+        let viewModel = TextFieldViewModel(
+            clearButtonA11yId: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.clearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+        )
+        titleTextField.configure(viewModel: viewModel)
         titleTextField.placeholder = .BookmarkDetailFieldTitle
         contentView.addSubview(titleTextField)
         NSLayoutConstraint.activate([

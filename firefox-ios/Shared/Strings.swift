@@ -202,6 +202,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "More options",
                 comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
+            public static let ClearButtonA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.ClearButtonA11yLabel.v139",
+                tableName: "Bookmarks",
+                value: "Clear",
+                comment: "Accessibility label for the clear button located within every bookmark site cell text field in the bookmarks panel. Pressing this button text field with the bookmark name, is cleared.")
         }
 
         public struct EmptyState {
