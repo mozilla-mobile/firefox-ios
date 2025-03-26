@@ -231,6 +231,7 @@
 		2152473E2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
+		215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */; };
 		215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458027D7FD7D00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */; };
@@ -2755,6 +2756,7 @@
 		2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordSettingsViewController.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
+		215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabMetadataManager.swift; sourceTree = "<group>"; };
 		215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManagerTests.swift; sourceTree = "<group>"; };
@@ -12385,6 +12387,7 @@
 				EDADF7832D70DAF800C39295 /* SettingsTelemetryTests.swift */,
 				212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
+				215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -18279,6 +18282,7 @@
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				5A31275828906422001F30FA /* BookmarksDelegateMock.swift in Sources */,
+				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */,

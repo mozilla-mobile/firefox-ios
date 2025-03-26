@@ -139,6 +139,7 @@ class TabScrollingController: NSObject,
     }
 
     // If scrollview contentSize height is bigger that device height plus delta
+    // New settings to disable bar autohide only for iPad
     var isAbleToScroll: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height && isAutoHideBarEnabled
