@@ -24,6 +24,17 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - animated: true means it will be animated
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 
+    /// Present a view controller with a custom transition
+    /// - Parameters:
+    ///   - viewController: The view controller to present
+    ///   - animated: true means it will be animated
+    ///   - customTransition: Custom transition to animate the presentation with
+    ///   - presentationStyle: the presentation style
+    func present(_ viewController: UIViewController,
+                 animated: Bool,
+                 customTransition: UIViewControllerTransitioningDelegate?,
+                 presentationStyle: UIModalPresentationStyle)
+
     /// Dismiss a view controller
     /// - Parameters:
     ///   - animated: true means it will be animated
