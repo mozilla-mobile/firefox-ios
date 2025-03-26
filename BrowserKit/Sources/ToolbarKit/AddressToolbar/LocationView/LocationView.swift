@@ -614,7 +614,11 @@ final class LocationView: UIView,
         ).cgColors
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = isURLTextFieldCentered ? layerGradientURLForVersion1 : colors.layerGradientURL.cgColors.reversed()
+        gradientLayer.colors = if isURLTextFieldCentered {
+            layerGradientURLForVersion1
+        } else {
+            colors.layerGradientURL.cgColors.reversed()
+        }
         searchEngineContentView.applyTheme(theme: theme)
         iconContainerBackgroundView.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
         lockIconButton.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
