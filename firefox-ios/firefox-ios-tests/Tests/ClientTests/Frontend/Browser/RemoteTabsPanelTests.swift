@@ -8,6 +8,11 @@ import Common
 @testable import Client
 
 final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
+    private enum Constants {
+        static let testUrlString = "https://mozilla.org"
+        static let testDeviceId = "testDeviceId"
+    }
+
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var mockStore: MockStoreForMiddleware<AppState>!
 
@@ -23,15 +28,21 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func testRemoteTabs_whenSubscribeToReduxCalled_subscribesToReduxStore() {
+    func testViewDidLoad_dispachesDisplayRelatedActionsToStore() throws {
         let subject = createSubject()
-        subject.subscribeToRedux()
+        subject.loadViewIfNeeded()
 
-        XCTAssertFalse(mockStore.dispatchedActions.isEmpty)
+        let action1 = try XCTUnwrap(mockStore.dispatchedActions[0])
+        let action1Type = try XCTUnwrap(action1.actionType as? ScreenActionType)
+        let action2 = try XCTUnwrap(mockStore.dispatchedActions[1])
+        let action2Type = try XCTUnwrap(action2.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(action1Type, ScreenActionType.showScreen)
+        XCTAssertEqual(action2Type, RemoteTabsPanelActionType.panelDidAppear)
         XCTAssertEqual(mockStore.subscribeCallCount, 1)
     }
 
-    func testRemoteTabs_whenUnsubscribeFromReduxCalled_dispatchesCloseScreenAction() throws {
+    func testUnsubscribeFromRedux_dispatchesCloseScreenActionToStore() throws {
         let subject = createSubject()
         subject.unsubscribeFromRedux()
 
@@ -42,7 +53,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Actions
-    func testRemoteTabs_whenPulledToRefresh_refreshsTabs() throws {
+    func testTableViewControllerDidPullToRefresh_dispatchesRefreshsTabsAction() throws {
         let subject = createSubject()
         subject.tableViewControllerDidPullToRefresh()
 
@@ -50,6 +61,105 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
 
         XCTAssertEqual(actionType, RemoteTabsPanelActionType.refreshTabs)
+    }
+
+    func testNewState_setsNewStateInTableViewController() {
+        let subject = createSubject()
+
+        let action = RemoteTabsPanelAction(
+            windowUUID: windowUUID,
+            actionType: RemoteTabsPanelActionType.refreshDidBegin
+        )
+        let newState = RemoteTabsPanelState.reducer(subject.state, action)
+        subject.newState(state: newState)
+
+        XCTAssertEqual(subject.state.refreshState, .refreshing)
+        XCTAssertEqual(subject.tableViewController.state.refreshState, .refreshing)
+    }
+
+    // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
+    func testRemoteTabsClientAndTabsDataSourceDidSelectURL_dispatchesCloseSelectedRemoteURLAction() throws {
+        let subject = createSubject()
+        subject.remoteTabsClientAndTabsDataSourceDidSelectURL(
+            URL(string: Constants.testUrlString)!,
+            visitType: .link
+        )
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.openSelectedURL)
+    }
+
+    func testRemoteTabsClientAndTabsDataSourceDidCloseURL_dispatchesCloseSelectedRemoteURL() throws {
+        let subject = createSubject()
+        subject.remoteTabsClientAndTabsDataSourceDidCloseURL(
+            deviceId: Constants.testDeviceId,
+            url: URL(string: Constants.testUrlString)!
+        )
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.closeSelectedRemoteURL)
+    }
+
+    func testRemoteTabsClientAndTabsDataSourceDidUndo_dispatchesUndoCloseSelectedRemoteURL() throws {
+        let subject = createSubject()
+        subject.remoteTabsClientAndTabsDataSourceDidUndo(
+            deviceId: Constants.testDeviceId,
+            url: URL(string: Constants.testUrlString)!
+        )
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
+    }
+
+    func testRemoteTabsClientAndTabsDataSourceDidTabCommandsFlush_dispatchesFlushTabCommands() throws {
+        let subject = createSubject()
+        subject.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: Constants.testDeviceId)
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.flushTabCommands)
+    }
+
+    // MARK: - RemotePanelDelegate
+    func testRemotePanelDidRequestToSignIn_forwardsCallsToDelegate() {
+        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let subject = createSubject()
+        subject.remoteTabsDelegate = mockDelegate
+
+        subject.remotePanelDidRequestToSignIn()
+
+        XCTAssertEqual(mockDelegate.presentFirefoxAccountSignInCallCount, 1)
+    }
+
+    func testPresentFxAccountSettings_forwardsCallsToDelegate() {
+        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let subject = createSubject()
+        subject.remoteTabsDelegate = mockDelegate
+
+        subject.presentFxAccountSettings()
+
+        XCTAssertEqual(mockDelegate.presentFxAccountSettingsCallCount, 1)
+    }
+
+    // MARK: - RemoteTabsEmptyViewDelegate
+    func testRemotePanelDidRequestToOpenInNewTab_dispatchesCloseSelectedRemoteURLAction() throws {
+        let subject = createSubject()
+        subject.remotePanelDidRequestToOpenInNewTab(
+            URL(string: Constants.testUrlString)!,
+            isPrivate: false
+        )
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last)
+        let actionType = try XCTUnwrap(action.actionType as? RemoteTabsPanelActionType)
+
+        XCTAssertEqual(actionType, RemoteTabsPanelActionType.openSelectedURL)
     }
 
     // MARK: - StoreTestUtility
