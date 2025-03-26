@@ -5,20 +5,18 @@
 import Foundation
 import Glean
 
-/// Note: We will be slowly migrating our existing tabs telemetry probes
-/// over to a "tab_tray" namespace.
-struct TabTrayTelemetry {
+struct ToastTelemetry {
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.gleanWrapper = gleanWrapper
     }
 
-    func undoSelectedOnToastForClosingAllTabs() {
+    func closedSingleTabToastUndoSelected() {
         gleanWrapper.recordEvent(for: GleanMetrics.ToastsCloseAllTabs.undoSelected)
     }
 
-    func undoSelectedOnToastForClosingOneTab() {
+    func closedAllTabsToastUndoSelected() {
         gleanWrapper.recordEvent(for: GleanMetrics.ToastsCloseSingleTab.undoSelected)
     }
 }

@@ -15,7 +15,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
-    private let tabTrayTelemetry: TabTrayTelemetry
+    private let toastTelemetry: ToastTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -30,7 +30,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         self.profile = profile
         self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
-        self.tabTrayTelemetry = TabTrayTelemetry(gleanWrapper: gleanWrapper)
+        self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -461,7 +461,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
-        tabTrayTelemetry.undoSelectedOnToastForClosingOneTab()
+        toastTelemetry.closedSingleTabToastUndoSelected()
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
               tabManager.backupCloseTab != nil
@@ -535,7 +535,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func undoCloseAllTabs(uuid: WindowUUID) {
-        tabTrayTelemetry.undoSelectedOnToastForClosingAllTabs()
+        toastTelemetry.closedAllTabsToastUndoSelected()
         let tabManager = tabManager(for: uuid)
         tabManager.undoCloseAllTabs()
 
