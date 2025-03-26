@@ -168,6 +168,14 @@ final class HomepageViewController: UIViewController,
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        print("cyn - \(isBeingPresented)")
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print("cynd - will display")
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
@@ -761,12 +769,11 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchOpenTopSitesAction(at index: Int, tileType: String, urlString: String) {
+    private func dispatchOpenTopSitesAction(at index: Int, config: TopSiteConfiguration) {
         let config = TopSitesTelemetryConfig(
             isZeroSearch: isZeroSearch,
             position: index,
-            tileType: tileType,
-            url: urlString
+            topSiteConfig: config
         )
         store.dispatch(
             TopSitesAction(
@@ -788,19 +795,15 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
-        case .topSite(let state, _):
+        case .topSite(let config, _):
             let destination = NavigationDestination(
                 .link,
-                url: state.site.url.asURL,
-                isGoogleTopSite: state.isGoogleURL,
+                url: config.site.url.asURL,
+                isGoogleTopSite: config.isGoogleURL,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenTopSitesAction(
-                at: indexPath.item,
-                tileType: state.getTelemetrySiteType,
-                urlString: state.site.url
-            )
+            dispatchOpenTopSitesAction(at: indexPath.item, config: config)
 
         case .jumpBackIn(let config):
             store.dispatch(

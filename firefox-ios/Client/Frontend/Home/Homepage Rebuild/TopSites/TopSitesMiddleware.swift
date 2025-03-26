@@ -7,10 +7,12 @@ import Foundation
 import Redux
 import Storage
 
-final class TopSitesMiddleware {
+final class TopSitesMiddleware: FeatureFlaggable {
     private let topSitesManager: TopSitesManagerInterface
     private let homepageTelemetry: HomepageTelemetry
     private let bookmarksTelemetry: BookmarksTelemetry
+    private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
+    private let sponsoredTileTelemetry: SponsoredTileTelemetry
     private let logger: Logger
     private let profile: Profile
 
@@ -24,7 +26,9 @@ final class TopSitesMiddleware {
         topSitesManager: TopSitesManagerInterface? = nil,
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         bookmarksTelemetry: BookmarksTelemetry = BookmarksTelemetry(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry(),
+        sponsoredTileTelemetry: SponsoredTileTelemetry = DefaultSponsoredTileTelemetry()
     ) {
         self.topSitesManager = topSitesManager ?? TopSitesManager(
             profile: profile,
@@ -38,6 +42,8 @@ final class TopSitesMiddleware {
         self.bookmarksTelemetry = bookmarksTelemetry
         self.logger = logger
         self.profile = profile
+        self.unifiedAdsTelemetry = unifiedAdsTelemetry
+        self.sponsoredTileTelemetry = sponsoredTileTelemetry
     }
 
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
@@ -77,6 +83,8 @@ final class TopSitesMiddleware {
 
         case ContextMenuActionType.tappedOnSponsoredAction:
             self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .sponsoredSupport)
+        case TopSitesActionType.sponsoredSiteSeen:
+            self.handleSponsoredImpressionTracking(for: action)
         default:
             break
         }
@@ -142,6 +150,35 @@ final class TopSitesMiddleware {
         )
     }
 
+    // MARK: Telemetry
+    private func handleSponsoredImpressionTracking(for action: Action) {
+        guard let telemetryMetadata = (action as? TopSitesAction)?.telemetryConfig else {
+            self.logger.log(
+                "Unable to retrieve telemetryMetadata for \(action.actionType)",
+                level: .warning,
+                category: .homepage
+            )
+            return
+        }
+        //            guard !hasSentImpressionForTile(topSiteState) else { return }
+        // Only sending sponsored tile impressions for now
+        guard telemetryMetadata.topSiteConfig.site.isSponsoredSite else { return }
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfig.site, position: telemetryMetadata.position)
+        } else {
+            sponsoredTileTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfig.site, position: telemetryMetadata.position)
+        }
+    }
+
+    private func handleSponsoredClickTracking(with topSiteConfig: TopSiteConfiguration, and position: Int) {
+        guard topSiteConfig.site.isSponsoredSite else { return }
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
+        } else {
+            sponsoredTileTelemetry.sendClickTelemetry(tileSite: topSiteConfig.site, position: position)
+        }
+    }
+
     private func sendOpenInPrivateTelemetry(for action: Action) {
         guard case .topSites = (action as? ContextMenuAction)?.section else {
             self.logger.log(
@@ -155,7 +192,7 @@ final class TopSitesMiddleware {
     }
 
     private func sendOpenTopSitesItemTelemetry(for action: Action) {
-        guard let config = (action as? TopSitesAction)?.telemetryConfig else {
+        guard let telemetryConfig = (action as? TopSitesAction)?.telemetryConfig else {
             self.logger.log(
                 "Unable to retrieve config for \(action.actionType)",
                 level: .debug,
@@ -163,17 +200,21 @@ final class TopSitesMiddleware {
             )
             return
         }
+        let config = telemetryConfig.topSiteConfig
+
+        handleSponsoredClickTracking(with: config, and: telemetryConfig.position)
+
         homepageTelemetry
             .sendTopSitesPressedEvent(
-                position: config.position,
-                tileType: config.tileType,
-                isZeroSearch: config.isZeroSearch
+                position: telemetryConfig.position,
+                tileType: config.getTelemetrySiteType,
+                isZeroSearch: telemetryConfig.isZeroSearch
             )
-        sendBookmarkOpenTelemetry(with: config)
+        sendBookmarkOpenTelemetry(with: config.site.url)
     }
 
-    private func sendBookmarkOpenTelemetry(with config: TopSitesTelemetryConfig) {
-        let isBookmarked = profile.places.isBookmarked(url: config.url).value.successValue ?? false
+    private func sendBookmarkOpenTelemetry(with urlString: String) {
+        let isBookmarked = profile.places.isBookmarked(url: urlString).value.successValue ?? false
         guard isBookmarked else { return }
         bookmarksTelemetry.openBookmarksSite(eventLabel: .topSites)
     }

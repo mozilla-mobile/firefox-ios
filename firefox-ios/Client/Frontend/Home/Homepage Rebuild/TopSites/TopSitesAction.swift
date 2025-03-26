@@ -4,12 +4,12 @@
 import Common
 import Foundation
 import Redux
+import Storage
 
 struct TopSitesTelemetryConfig {
     let isZeroSearch: Bool
     let position: Int
-    let tileType: String
-    let url: String
+    let topSiteConfig: TopSiteConfiguration
 }
 
 final class TopSitesAction: Action {
@@ -40,6 +40,7 @@ enum TopSitesActionType: ActionType {
     case toggleShowSectionSetting
     case toggleShowSponsoredSettings
     case tapOnHomepageTopSitesCell
+    case sponsoredSiteSeen
 }
 
 enum TopSitesMiddlewareActionType: ActionType {
