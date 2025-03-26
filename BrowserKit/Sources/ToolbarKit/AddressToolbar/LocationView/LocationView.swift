@@ -163,6 +163,7 @@ final class LocationView: UIView,
         onLongPress = config.onLongPress
 
         layoutContainerView(config, isURLTextFieldCentered: isURLTextFieldCentered)
+        accessibilityElements = [iconContainerStackView, urlTextField]
     }
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {

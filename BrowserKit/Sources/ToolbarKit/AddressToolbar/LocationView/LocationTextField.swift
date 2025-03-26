@@ -35,7 +35,9 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private var hideCursor = false
     private var isSettingMarkedText = false
     var clearButton: UIButton? {
-        return value(forKey: "_clearButton") as? UIButton
+        let button = value(forKey: "_clearButton") as? UIButton
+        button?.isAccessibilityElement = true
+        return button
     }
     private let copyShortcutKey = "c"
 
