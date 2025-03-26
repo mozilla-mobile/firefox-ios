@@ -43,8 +43,10 @@ struct SearchEngineProviderFactory {
 /// The search engines are ordered and can be enabled and disabled by the user. Order and disabled state are backed by a
 /// write-through cache into a Prefs instance (i.e. UserDefaults).
 ///
-/// Default search engines are localized and given by the `SearchEngineProvider` (from list.json). The user may add
-/// additional custom search engines. Custom search engines entered by the user are saved to a file.
+/// Originally, default search engines were localized and given by the `SearchEngineProvider` (from list.json). With the
+/// forthcoming updates for Search Consolidation (FXIOS-8469) this will be changing, and the engines will be vended via
+/// Application Services. The user may add additional custom search engines. Custom search engines entered by the user are
+/// saved to a file.
 ///
 /// The first search engine is distinguished and labeled the "default" search engine; it can never be disabled.
 /// [FIXME FXIOS-10187 this will change soon ->] Search suggestions should always be sourced from the default search engine
