@@ -144,7 +144,7 @@ class SettingsTests: BaseTestCase {
         checkShowImages(showImages: true)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306808
+    // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -152,16 +152,23 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let settingsTitle = app.staticTexts["Settings"]
+        let doneBtn = app.buttons["Done"]
+        let defaultBrowser = table.cells[settingsQuery.DefaultBrowser.defaultBrowser]
         mozWaitForElementToExist(table)
+        XCTAssertTrue(settingsTitle.isLeftOf(rightElement: doneBtn))
+        XCTAssertTrue(doneBtn.isAbove(element: defaultBrowser))
+        XCTAssertTrue(settingsTitle.isAbove(element: defaultBrowser))
         let toolbarElement = table.cells[settingsQuery.SearchBar.searchBarSetting]
         let settingsElements = [
-            table.cells[settingsQuery.DefaultBrowser.defaultBrowser],
+            defaultBrowser,
             table.cells[settingsQuery.ConnectSetting.title],
             table.cells[settingsQuery.Search.title],
             table.cells[settingsQuery.NewTab.title],
             table.cells[settingsQuery.Homepage.homeSettings],
             table.cells[settingsQuery.Browsing.title],
             table.cells[settingsQuery.Theme.title],
+            table.cells[settingsQuery.AppIconSelection.settingsRowTitle],
             table.cells[settingsQuery.Siri.title],
             table.cells[settingsQuery.AutofillsPasswords.title],
             table.cells[settingsQuery.ClearData.title],
