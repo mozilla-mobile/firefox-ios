@@ -143,7 +143,7 @@ final class LocationView: UIView,
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        searchEngineContentView.configure(config, delegate: delegate)
+        searchEngineContentView.configure(config, isLocationTextCentered, delegate: delegate)
 
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -606,12 +606,18 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
+        let layerGradientURLForVersion1 =  Gradient(
+            colors: [
+                colors.layer2.withAlphaComponent(1),
+                colors.layer2.withAlphaComponent(0)
+            ]
+        ).cgColors
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
+        gradientLayer.colors = isURLTextFieldCentered ? layerGradientURLForVersion1 : colors.layerGradientURL.cgColors.reversed()
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = colors.layerSearch
-        lockIconButton.backgroundColor = colors.layerSearch
+        iconContainerBackgroundView.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
+        lockIconButton.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",

@@ -11,6 +11,10 @@ protocol AlphaDimmable {
 
 class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isClearBackground = false
+    private var toolbarLayoutType: ToolbarLayoutType? {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -106,7 +110,15 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        let color = isClearBackground ? .clear : theme.colors.layer1
+        let color: UIColor
+        if isClearBackground {
+            color = .clear
+        } else {
+            color = switch toolbarLayoutType {
+            case .version1: theme.colors.layer3
+            default: theme.colors.layer1
+            }
+        }
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color
         insetSpacer?.backgroundColor = color

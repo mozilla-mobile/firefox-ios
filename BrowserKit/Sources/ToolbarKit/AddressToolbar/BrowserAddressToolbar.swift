@@ -80,6 +80,14 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
+    private var isURLTextFieldCentered = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme else { return }
+            applyTheme(theme: theme)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
@@ -125,6 +133,7 @@ public class BrowserAddressToolbar: UIView,
     private func configureUX(config: AddressToolbarUXConfiguration) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
+        isURLTextFieldCentered = config.isLocationTextCentered
 
         if config.isNavigationActionsInsideLocationView {
             guard navigationActionStack.superview != locationContainer else { return }
@@ -488,11 +497,12 @@ public class BrowserAddressToolbar: UIView,
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        locationContainer.backgroundColor = theme.colors.layerSearch
-        locationDividerView.backgroundColor = theme.colors.layer1
-        toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
-        toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
+        let colors = theme.colors
+        backgroundColor = isURLTextFieldCentered ? colors.layer3 : colors.layer1
+        locationContainer.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
+        locationDividerView.backgroundColor = colors.layer1
+        toolbarTopBorderView.backgroundColor = colors.borderPrimary
+        toolbarBottomBorderView.backgroundColor = colors.borderPrimary
         locationView.applyTheme(theme: theme)
         self.theme = theme
     }
