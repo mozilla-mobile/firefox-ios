@@ -345,16 +345,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
-        // And iPad only??
-        if let profile {
-            let toolbarHide = BoolSetting(prefs: profile.prefs,
-                                          theme: themeManager.getCurrentTheme(for: windowUUID),
-                                          prefKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide,
-                                          defaultValue: true,
-                                          titleText: .Settings.General.ScrollToHideTabAndAddressBar.Title)
-            generalSettings.append(toolbarHide)
-        }
-
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                children: generalSettings)]
     }
