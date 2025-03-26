@@ -8,12 +8,12 @@ import WebKit
 
 class SearchPrefsMigrationTests: XCTestCase {
     private let mockV1Prefs: SearchEngineOrderingPrefs = {
-        let engines = ["Google", "Custom", "Wikipedia", "DuckDuckGo"]
+        let engines = ["Google", "MyWebsite", "Wikipedia", "DuckDuckGo"]
         return SearchEngineOrderingPrefs(engineIdentifiers: engines, version: .v1)
     }()
 
     private let mockV2Prefs: SearchEngineOrderingPrefs = {
-        let engines = ["google", "Custom", "wikipedia", "duckduckgo"]
+        let engines = ["google", "Custom-1234-1234-1234-1234", "wikipedia", "duckduckgo"]
         return SearchEngineOrderingPrefs(engineIdentifiers: engines, version: .v2)
     }()
 
@@ -44,7 +44,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         ),
         OpenSearchEngine(
             engineID: "Custom-1234-1234-1234-1234",
-            shortName: "Custom",
+            shortName: "MyWebsite",
             image: UIImage(),
             searchTemplate: "",
             suggestTemplate: "",
@@ -52,13 +52,58 @@ class SearchPrefsMigrationTests: XCTestCase {
         ),
     ]
 
-    func testMigrateV1toV2Preferences() async throws {
+    private let mockXMLBasedEngines: [OpenSearchEngine] = [
+        OpenSearchEngine(
+            engineID: "google-b-1-m",
+            shortName: "Google",
+            image: UIImage(),
+            searchTemplate: "",
+            suggestTemplate: "",
+            isCustomEngine: false
+        ),
+        OpenSearchEngine(
+            engineID: "ddg",
+            shortName: "DuckDuckGo",
+            image: UIImage(),
+            searchTemplate: "",
+            suggestTemplate: "",
+            isCustomEngine: false
+        ),
+        OpenSearchEngine(
+            engineID: "wikipedia",
+            shortName: "Wikipedia",
+            image: UIImage(),
+            searchTemplate: "",
+            suggestTemplate: "",
+            isCustomEngine: false
+        ),
+        OpenSearchEngine(
+            engineID: "Custom-1234-1234-1234-1234",
+            shortName: "MyWebsite",
+            image: UIImage(),
+            searchTemplate: "",
+            suggestTemplate: "",
+            isCustomEngine: true
+        ),
+    ]
+
+    func testMigrateV1toV2Preferences() {
         let migrator = createSubject()
         let prefs = mockV1Prefs
         let output = migrator.migratePrefsIfNeeded(prefs, to: .v2, availableEngines: mockRemoteSettingsEngines)
 
         XCTAssertEqual(output.version, .v2)
         XCTAssertEqual(output.engineIdentifiers, ["google", "Custom-1234-1234-1234-1234", "wikipedia", "ddg"])
+    }
+
+    func testMigrateV2toV1Preferences() {
+        let migrator = createSubject()
+        let prefs = mockV2Prefs
+        let output = migrator.migratePrefsIfNeeded(prefs, to: .v1, availableEngines: mockXMLBasedEngines)
+
+        XCTAssertEqual(output.version, .v1)
+        // Note: currently handling for v2 -> v1 migration is TBD, so aspects of this are in flux.
+        XCTAssertEqual(output.engineIdentifiers, ["Google", "MyWebsite", "Wikipedia", "DuckDuckGo"])
     }
 
     private func createSubject() -> DefaultSearchEnginePrefsMigrator {
