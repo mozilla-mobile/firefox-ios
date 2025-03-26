@@ -168,14 +168,6 @@ final class HomepageViewController: UIViewController,
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        print("cyn - \(isBeingPresented)")
-    }
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("cynd - will display")
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopCFRsTimer()
