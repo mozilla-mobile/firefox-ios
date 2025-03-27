@@ -30,7 +30,7 @@ class ClearHistorySheetProvider {
     }
 
     func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
-        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistoryMenuTitle,
+        let alert = UIAlertController(title: .LibraryPanel.History.ClearHistorySheet.Title,
                                       message: nil,
                                       preferredStyle: .actionSheet)
 
@@ -64,9 +64,10 @@ class ClearHistorySheetProvider {
         typealias DateOptions = HistoryDeletionUtilityDateOptions
         [
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
-            (String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
-            (String.ClearHistoryMenuOptionToday, DateOptions.today),
-            (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)
+            (String.LibraryPanel.History.ClearHistorySheet.LastHourOption, DateOptions.lastHour),
+            (String.LibraryPanel.History.ClearHistorySheet.LastTwentyFourHoursOption, DateOptions.lastTwentyFourHours),
+            (String.LibraryPanel.History.ClearHistorySheet.LastSevenDaysOption, DateOptions.lastSevenDays),
+            (String.LibraryPanel.History.ClearHistorySheet.LastFourWeeksOption, DateOptions.lastFourWeeks)
         ].forEach { (name, timeRange) in
             let action = UIAlertAction(title: name, style: .destructive) { _ in
                 let deletionUtility = HistoryDeletionUtility(with: self.profile)
@@ -87,7 +88,8 @@ class ClearHistorySheetProvider {
         to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
-        alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: .LibraryPanel.History.ClearHistorySheet.AllTimeOption,
+                                      style: .destructive) { _ in
             let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
             deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
                 DispatchQueue.main.async {
@@ -106,7 +108,7 @@ class ClearHistorySheetProvider {
     }
 
     func addCancelAction(to alert: UIAlertController) {
-        let cancelAction = UIAlertAction(title: .CancelString, style: .default)
+        let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)
     }
 }
