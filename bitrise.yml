@@ -64,7 +64,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
-    
+
     - deploy-to-bitrise-io@2.9.2: {}
   firefox_configure_build:
     before_run:
@@ -246,7 +246,9 @@ workflows:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_${SHARD}_XCRESULT_PATH'
   determine_apps_affected:
     steps:
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - script@1.2.1:
         title: Determine which application to base configuration
         inputs:
@@ -256,7 +258,7 @@ workflows:
 
             # Determine which application to base configuration while comparing against branch destination:
             # Bitrise: https://devcenter.bitrise.io/en/references/available-environment-variables.html
-            #  
+            #
             # BITRISEIO_GIT_BRANCH_DEST is used only on pull requests and is set to destination/branch (i.e, release/v123 )
             # BITRISE_GIT_BRANCH is the git branch that is built by Bitrise (i.e, release/v123 )
             # BITRISE_GIT_COMMIT is the git commit hash that is built by Bitrise
@@ -454,7 +456,9 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - script@1.2.1:
         inputs:
         - content: |-
@@ -621,7 +625,7 @@ workflows:
                 FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
             fi
 
-            # Manual triggers leave empty commits. 
+            # Manual triggers leave empty commits.
             # Check for empty commit/PR and exit blacklist check if found to avoid erroring out.
             echo "Files changed in commit/PR: $FILES_CHANGED"
             if [[ -z "$FILES_CHANGED" ]]; then
@@ -696,7 +700,9 @@ workflows:
         title: Check main branch for recent activity before continuing
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - cache-pull@2.7.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
@@ -790,7 +796,9 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - cache-pull@2.7.2: {}
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
@@ -885,7 +893,9 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - certificate-and-profile-installer@1.11.4: {}
     - restore-cache@2.5.0:
         inputs:
@@ -1149,7 +1159,9 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
@@ -1244,12 +1256,14 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
-  
+
   SPM_Common_Steps:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6.2: {}
+    - git-clone@8:
+        inputs:
+        - clone_depth: 1
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         is_always_run: true
@@ -1340,7 +1354,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -ex
-             
+
             if [ -e $HOME/sdk/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
             else
@@ -1363,7 +1377,7 @@ workflows:
             set -ex
             set -o pipefail
 
-            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL 
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL
             $HOME/sdk/google-cloud-sdk/bin/gcloud version
             $HOME/sdk/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/sdk/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
@@ -1398,7 +1412,7 @@ workflows:
             # unpack GLCOUD_EXIT_CODE from string to int, if gcloud returns string instead of int for exit code
             if [ $((GCLOUD_EXIT_CODE)) -ne 0 ]; then
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
-            else 
+            else
                 SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
             fi
             envman add --key SLACK_MESSAGE_PRETEXT --value "$SLACK_MESSAGE_PRETEXT"
@@ -1523,7 +1537,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e
-             
+
             if [ -e $HOME/google-cloud-sdk ]; then
               echo "Google Cloud SDK found, skipping installation..."
             else
@@ -1629,7 +1643,7 @@ workflows:
             # create and print perf data object for perfherder ingest via taskcluster log output
             xcrun xcresulttool graph --path "$BITRISE_XCRESULT" --legacy
             ls ..
-            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path 
+            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path
             # and figure out exactly what it is doing because we are using Fennec as the scheme
             # and it works for both Fennec and Fennec_Enterprise, but I don't know why.
             # I would change it here but I am too afraid to break it.
@@ -1641,7 +1655,7 @@ workflows:
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
-  # 
+  #
   focus_configure_build:
     before_run:
     - focus-clone-and-build-dependencies
@@ -1899,7 +1913,7 @@ workflows:
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
 
-  # # Update the name change in Taskcluster files 
+  # # Update the name change in Taskcluster files
   # focus_l10n_build:
   #   before_run:
   #   - focus-clone-and-build-dependencies
@@ -1933,7 +1947,9 @@ workflows:
   #   steps:
   #   - activate-ssh-key@4:
   #       run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-  #   - git-clone@6.2: {}
+  #   - git-clone@8:
+  #       inputs:
+  #       - clone_depth: 1
   #   - cache-pull@2: {}
   #   - certificate-and-profile-installer@1: {}
   #   - script@1:
