@@ -96,16 +96,52 @@ final class URLFormatterTests: XCTestCase {
 
         let result = subject.getURL(entry: givenURL)
 
-        XCTAssertEqual(result?.absoluteString, "foo.bar/foo%20bar")
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
     }
 
-    func testGetURLGivenNoHttpsURLWithSpacePathThenValidEscapedURL() {
+    func testGetURLGivenHttpURLWithSpacePathThenValidEscapedURL() {
         let initialUrl = "http://foo.bar/foo bar"
         let subject = DefaultURLFormatter()
 
         let result = subject.getURL(entry: givenURL)
 
         XCTAssertEqual(result?.absoluteString, "http://foo.bar/foo%20bar")
+    }    
+
+    func testGetURLGivenNoHttpsURLWithTildeThenValidEscapedURL() {
+        let initialUrl = "foo.bar/~/"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+    }
+
+    func testGetURLGivenHttpURLWithTildeThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/~/"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/%7E/")
+    }
+
+    func testGetURLGivenNoHttpsURLWithPlusQueryThenValidEscapedURL() {
+        let initialUrl = "foo.bar/?foo=+"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/?foo=%2B")
+    }
+
+    func testGetURLGivenHttpURLWithPlusQueryThenValidEscapedURL() {
+        let initialUrl = "http://foo.bar/?foo=+"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: givenURL)
+
+        XCTAssertEqual(result?.absoluteString, "http://foo.bar/?foo=%2B")
     }
 
     func testGetURLGivenDotURLThenValidURL() {
