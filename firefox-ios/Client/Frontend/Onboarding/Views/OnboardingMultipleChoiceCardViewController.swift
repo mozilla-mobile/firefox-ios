@@ -250,8 +250,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     private func isSelectedButton<T: OnboardingCardInfoModelProtocol>(
         buttonModel: OnboardingMultipleChoiceButtonModel,
         viewModel: T) -> Bool {
-            let isToolbarBottom = buttonModel.action == .toolbarBottom
-            let isToolbarTop = buttonModel.action == .toolbarTop
             let toolbarLayout = FxNimbus.shared.features
                 .toolbarRefactorFeature
                 .value()
@@ -259,8 +257,12 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
             switch toolbarLayout {
             case .version1:
-                return if isToolbarBottom { true } else {
-                    !isToolbarTop && buttonModel == viewModel.multipleChoiceButtons.first
+                let isToolbarBottomAction = buttonModel.action == .toolbarBottom
+                let isToolbarTopAction = buttonModel.action == .toolbarTop
+                if isToolbarBottomAction {
+                    return true
+                } else {
+                    return !isToolbarTopAction && buttonModel == viewModel.multipleChoiceButtons.first
                 }
             default: return buttonModel == viewModel.multipleChoiceButtons.first
             }
