@@ -595,6 +595,7 @@ final class LocationView: UIView,
         lockIconButton.accessibilityLabel = config.lockIconButtonA11yLabel
 
         urlTextField.accessibilityIdentifier = config.urlTextFieldA11yId
+        accessibilityElements = [iconContainerStackView, urlTextField]
     }
 
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]? {
