@@ -206,7 +206,7 @@ extension String {
                 key: "Bookmarks.Menu.ClearButtonA11yLabel.v139",
                 tableName: "Bookmarks",
                 value: "Clear",
-                comment: "Accessibility label for the clear button located within every bookmark site cell text field in the bookmarks panel. Pressing this button text field with the bookmark name, is cleared.")
+                comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
         }
 
         public struct EmptyState {
