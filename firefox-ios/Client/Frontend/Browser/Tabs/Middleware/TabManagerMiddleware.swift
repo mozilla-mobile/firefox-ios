@@ -1052,6 +1052,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
     private func dispatchRecentlyAccessedTabs(action: Action) {
         // TODO: FXIOS-10919 - Consider testing better with Tasks here
+        // and modifying how we fetch recentlyAccessedNormalTabs since
+        // it doesn't retrieve the proper tabs without this task block
+        // See more details on issue here [FXIOS-5149] [FXIOS-11644]
         Task { @MainActor in
             // [FXIOS-5149] Recent tabs need to be accessed from .main thread
             let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
