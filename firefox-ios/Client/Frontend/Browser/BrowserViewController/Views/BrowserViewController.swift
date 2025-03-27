@@ -2408,6 +2408,18 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload()
         case .stopLoading:
             tabManager.selectedTab?.stop()
+            // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
+            // To make sure we show the correct button change toolbar state directly when the user stops loading
+            // the website
+            // The old toolbar doesn't need to be updated since it gets updates into `newState` method
+            if isToolbarRefactorEnabled {
+                let action = ToolbarAction(
+                    isLoading: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.websiteLoadingStateDidChange
+                )
+                store.dispatch(action)
+            }
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
