@@ -65,12 +65,14 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
 
     func testNewState_setsNewStateInTableViewController() {
         let subject = createSubject()
-
-        let action = RemoteTabsPanelAction(
+        let newState = RemoteTabsPanelState(
             windowUUID: windowUUID,
-            actionType: RemoteTabsPanelActionType.refreshDidBegin
+            refreshState: .refreshing,
+            allowsRefresh: false,
+            clientAndTabs: [],
+            showingEmptyState: nil,
+            devices: []
         )
-        let newState = RemoteTabsPanelState.reducer(subject.state, action)
         subject.newState(state: newState)
 
         XCTAssertEqual(subject.state.refreshState, .refreshing)
