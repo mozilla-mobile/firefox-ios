@@ -5,6 +5,8 @@
 import UIKit
 import Common
 
+typealias SearchEngineCompletion = (SearchEnginePrefs, [OpenSearchEngine]) -> Void
+
 protocol SearchEngineProvider {
     /// Takes a list of custom search engines (added by the user) along with an ordered
     /// engine name list (to provide sorting) which is stored in Prefs, and returns a
@@ -14,9 +16,9 @@ protocol SearchEngineProvider {
     ///   - orderedEngineNames: ordered engine names for sorting
     ///   - completion: the completion block called with the final results
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           engineOrderingPrefs: SearchEngineOrderingPrefs,
+                           engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
-                           completion: @escaping ([OpenSearchEngine]) -> Void)
+                           completion: @escaping SearchEngineCompletion)
 
     /// Returns the search ordering preference format that this provider utilizes.
     var preferencesVersion: SearchEngineOrderingPrefsVersion { get }
@@ -27,8 +29,12 @@ enum SearchEngineOrderingPrefsVersion {
     case v2 // Consolidated search (engines are fetched from Remote Settings)
 }
 
-struct SearchEngineOrderingPrefs {
+struct SearchEnginePrefs {
+    /// The ordered list of engines (first engine is the default)
     let engineIdentifiers: [String]?
+    /// A list of engines that are disabled
+    let disabledEngines: [String]?
+    /// Identifies the schema of how the ordering values are saved to disk
     let version: SearchEngineOrderingPrefsVersion
 }
 
@@ -42,9 +48,9 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
     let preferencesVersion: SearchEngineOrderingPrefsVersion = .v1
 
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           engineOrderingPrefs: SearchEngineOrderingPrefs,
+                           engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
-                           completion: @escaping ([OpenSearchEngine]) -> Void) {
+                           completion: @escaping SearchEngineCompletion) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
         let prefsVersion = preferencesVersion
 
@@ -61,7 +67,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
                   !orderedEngineNames.isEmpty else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
                 DispatchQueue.main.async {
-                    completion(unorderedEngines)
+                    completion(finalEngineOrderingPrefs, unorderedEngines)
                 }
 
                 return
@@ -88,7 +94,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             }
 
             DispatchQueue.main.async {
-                completion(orderedEngines)
+                completion(finalEngineOrderingPrefs, orderedEngines)
             }
         })
     }

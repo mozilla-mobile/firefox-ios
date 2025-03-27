@@ -32,9 +32,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
     let preferencesVersion: SearchEngineOrderingPrefsVersion = .v2
 
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           engineOrderingPrefs: SearchEngineOrderingPrefs,
+                           engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: SearchEnginePreferencesMigrator,
-                           completion: @escaping ([OpenSearchEngine]) -> Void) {
+                           completion: @escaping SearchEngineCompletion) {
         // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
         // Eventually that class will be removed once we switch fully to consolidated search.
 
@@ -53,7 +53,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
             guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
                   !orderedEngineNames.isEmpty else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
-                ensureMainThread { completion(unorderedEngines) }
+                ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
 
@@ -77,7 +77,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 }
             }
 
-            ensureMainThread { completion(orderedEngines) }
+            ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
 
