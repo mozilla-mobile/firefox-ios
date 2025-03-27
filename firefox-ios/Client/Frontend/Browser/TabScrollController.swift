@@ -11,7 +11,7 @@ protocol ScrollToHideToolbar: AnyObject {
     var isScrollToHideToolbarEnabled: Bool { get }
 }
 
-class TabScrollingController: NSObject,
+class TabScrollController: NSObject,
                               SearchBarLocationProvider,
                               ScrollToHideToolbar,
                               Themeable {
@@ -120,10 +120,10 @@ class TabScrollingController: NSObject,
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
 
-    var themeManager: any Common.ThemeManager
+    var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
-    var notificationCenter: any Common.NotificationProtocol
-    var currentWindowUUID: Common.WindowUUID? {
+    var notificationCenter: any NotificationProtocol
+    var currentWindowUUID: WindowUUID? {
         return windowUUID
     }
 
@@ -138,6 +138,7 @@ class TabScrollingController: NSObject,
         return bottomContainerHeight
     }
 
+    // Settings option to avoid hiding Tab and Address bar on iPad
     var isScrollToHideToolbarEnabled: Bool {
         guard deviceType.userInterfaceIdiom == .pad,
               let prefs = tab?.profile.prefs else { return true }
@@ -244,7 +245,7 @@ class TabScrollingController: NSObject,
         toolbarState = .visible
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
-        self.animateToolbarsWithOffsets(
+        animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
             headerOffset: 0,
@@ -259,7 +260,7 @@ class TabScrollingController: NSObject,
         toolbarState = .collapsed
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
+        animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
             headerOffset: -topScrollHeight,
@@ -269,6 +270,7 @@ class TabScrollingController: NSObject,
             completion: nil)
     }
 
+    // MARK: - ScrollView observation
     func beginObserving(scrollView: UIScrollView) {
         guard !observedScrollViews.contains(scrollView) else {
             logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
@@ -305,20 +307,22 @@ class TabScrollingController: NSObject,
     // MARK: - Zoom
     func updateMinimumZoom() {
         guard let scrollView = scrollView else { return }
-        self.isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
-        self.lastZoomedScale = self.isZoomedOut ? 0 : scrollView.zoomScale
+
+        isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
+        lastZoomedScale = isZoomedOut ? 0 : scrollView.zoomScale
     }
 
     func setMinimumZoom() {
         guard let scrollView = scrollView else { return }
-        if self.isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
+
+        if isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
             scrollView.zoomScale = scrollView.minimumZoomScale
         }
     }
 
     func resetZoomState() {
-        self.isZoomedOut = false
-        self.lastZoomedScale = 0
+        isZoomedOut = false
+        lastZoomedScale = 0
     }
 
     func configureRefreshControl() {
@@ -336,7 +340,7 @@ class TabScrollingController: NSObject,
 }
 
 // MARK: - Private
-private extension TabScrollingController {
+private extension TabScrollController {
     @objc
     func reload() {
         guard let tab = tab else { return }
@@ -391,9 +395,7 @@ private extension TabScrollingController {
     }
 
     func scrollWithDelta(_ delta: CGFloat) {
-        if scrollViewHeight >= contentSize.height {
-            return
-        }
+        guard scrollViewHeight < contentSize.height else { return }
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
@@ -511,14 +513,16 @@ private extension TabScrollingController {
     }
 }
 
-extension TabScrollingController: UIGestureRecognizerDelegate {
+// MARK: - UIGestureRecognizerDelegate
+extension TabScrollController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
-extension TabScrollingController: UIScrollViewDelegate {
+// MARK: - UIScrollViewDelegate
+extension TabScrollController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
     }
@@ -558,37 +562,36 @@ extension TabScrollingController: UIScrollViewDelegate {
         }
 
         guard isAnimatingToolbar else { return }
+
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
-            setOffset(y: contentOffsetBeforeAnimation.y + self.topScrollHeight, for: scrollView)
+            setOffset(y: contentOffsetBeforeAnimation.y + topScrollHeight, for: scrollView)
             contentOffsetBeforeAnimation.y = 0
         }
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         // Only mess with the zoom level if the user did not initiate the zoom via a zoom gesture
-        if self.isUserZoom {
-            return
-        }
+        guard !isUserZoom else { return }
 
         // scrollViewDidZoom will be called multiple times when a rotation happens.
         // In that case ALWAYS reset to the minimum zoom level if the previous state was zoomed out (isZoomedOut=true)
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
-        } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
+        } else if roundNum(scrollView.zoomScale) > roundNum(lastZoomedScale) && lastZoomedScale != 0 {
             // When we have manually zoomed in we want to preserve that scale.
             // But sometimes when we rotate a larger zoomScale is applied. In that case apply the lastZoomedScale
-            scrollView.zoomScale = self.lastZoomedScale
+            scrollView.zoomScale = lastZoomedScale
         }
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         tab?.webView?.removePullRefresh()
-        self.isUserZoom = true
+        isUserZoom = true
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         configureRefreshControl()
-        self.isUserZoom = false
+        isUserZoom = false
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
