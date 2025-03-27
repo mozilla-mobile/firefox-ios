@@ -30,6 +30,7 @@ class DefaultRouter: NSObject, Router {
         }
 
         viewController.presentationController?.delegate = self
+        // SOPHIE: Should this have a completion??
         navigationController.present(viewController, animated: animated, completion: nil)
     }
 
@@ -43,7 +44,7 @@ class DefaultRouter: NSObject, Router {
             viewController.transitioningDelegate = transition
         }
 
-        navigationController.present(viewController, animated: animated)
+        navigationController.present(viewController, animated: animated, completion: nil)
     }
 
     func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
