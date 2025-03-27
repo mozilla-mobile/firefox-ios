@@ -23,12 +23,12 @@ struct DefaultSearchEnginePrefsMigrator: SearchEnginePreferencesMigrator {
                               to expectedVersion: SearchEngineOrderingPrefsVersion,
                               availableEngines: [OpenSearchEngine]) -> SearchEnginePrefs {
         guard prefs.version != expectedVersion else {
-            logInfo("No migration needed for search prefs.")
+            logInfo("[SEC] No migration needed for search prefs.")
             return prefs
         }
 
         guard let inputIdentifiers = prefs.engineIdentifiers, !inputIdentifiers.isEmpty else {
-            logWarning("Migration input engine list was empty or nil.")
+            logWarning("[SEC] Migration input engine list was empty or nil.")
             return SearchEnginePrefs(engineIdentifiers: nil,
                                      disabledEngines: prefs.disabledEngines,
                                      version: expectedVersion)
