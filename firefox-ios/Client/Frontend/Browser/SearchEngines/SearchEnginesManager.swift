@@ -153,9 +153,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     private lazy var disabledEngines: [String] = getDisabledEngines() {
         didSet {
             if isSECEnabled {
-                self.prefs.setObject(Array(self.disabledEngines), forKey: disabledEngineIDsPrefsKey)
+                prefs.setObject(Array(disabledEngines), forKey: disabledEngineIDsPrefsKey)
             } else {
-                self.prefs.setObject(Array(self.disabledEngines), forKey: legacy_disabledEngineNamesPrefsKey)
+                prefs.setObject(Array(disabledEngines), forKey: legacy_disabledEngineNamesPrefsKey)
             }
         }
     }
@@ -163,9 +163,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     var orderedEngines: [OpenSearchEngine] {
         didSet {
             if isSECEnabled {
-                self.prefs.setObject(self.orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
+                prefs.setObject(orderedEngines.map { $0.engineID }, forKey: orderedEngineIDsPrefsKey)
             } else {
-                self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
+                prefs.setObject(orderedEngines.map { $0.shortName }, forKey: legacy_orderedEngineNamesPrefsKey)
             }
         }
     }
@@ -174,7 +174,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     ///
     /// The results can be empty if the user disables all search engines besides the default (which can't be disabled).
     var quickSearchEngines: [OpenSearchEngine] {
-        return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
+        return orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
 
     var shouldShowSearchSuggestions = true {

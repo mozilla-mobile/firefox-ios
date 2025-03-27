@@ -7,14 +7,20 @@ import XCTest
 import WebKit
 
 class SearchPrefsMigrationTests: XCTestCase {
-    private let mockV1Prefs: SearchEngineOrderingPrefs = {
+    private let mockV1Prefs: SearchEnginePrefs = {
         let engines = ["Google", "MyWebsite", "Wikipedia", "DuckDuckGo"]
-        return SearchEngineOrderingPrefs(engineIdentifiers: engines, version: .v1)
+        let disabled = ["Wikipedia"]
+        return SearchEnginePrefs(engineIdentifiers: engines,
+                                 disabledEngines: disabled,
+                                 version: .v1)
     }()
 
-    private let mockV2Prefs: SearchEngineOrderingPrefs = {
+    private let mockV2Prefs: SearchEnginePrefs = {
         let engines = ["google", "Custom-1234-1234-1234-1234", "wikipedia", "duckduckgo"]
-        return SearchEngineOrderingPrefs(engineIdentifiers: engines, version: .v2)
+        let disabled = ["wikipedia"]
+        return SearchEnginePrefs(engineIdentifiers: engines,
+                                 disabledEngines: disabled,
+                                 version: .v2)
     }()
 
     private let mockRemoteSettingsEngines: [OpenSearchEngine] = [
@@ -94,6 +100,7 @@ class SearchPrefsMigrationTests: XCTestCase {
 
         XCTAssertEqual(output.version, .v2)
         XCTAssertEqual(output.engineIdentifiers, ["google", "Custom-1234-1234-1234-1234", "wikipedia", "ddg"])
+        XCTAssertEqual(output.disabledEngines, ["wikipedia"])
     }
 
     func testMigrateV2toV1Preferences() {
@@ -104,6 +111,7 @@ class SearchPrefsMigrationTests: XCTestCase {
         XCTAssertEqual(output.version, .v1)
         // Note: currently handling for v2 -> v1 migration is TBD, so aspects of this are in flux.
         XCTAssertEqual(output.engineIdentifiers, ["Google", "MyWebsite", "Wikipedia", "DuckDuckGo"])
+        XCTAssertEqual(output.disabledEngines, ["Wikipedia"])
     }
 
     private func createSubject() -> DefaultSearchEnginePrefsMigrator {

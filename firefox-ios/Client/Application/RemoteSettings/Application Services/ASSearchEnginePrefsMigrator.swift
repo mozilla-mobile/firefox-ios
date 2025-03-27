@@ -50,7 +50,7 @@ struct DefaultSearchEnginePrefsMigrator: SearchEnginePreferencesMigrator {
             // A user may move out of the SEC experiment group and back to the XML engines.
             // Map existing identifiers of AS-based engines to our XML engines
             engineIdentifiers = inputIdentifiers.compactMap { mapV2EngineIDToV1ShortName($0, availableEngines) }
-            disabledEngines = inputDisabledEngines.compactMap { mapV1ShortNameToV2EngineID($0, availableEngines) }
+            disabledEngines = inputDisabledEngines.compactMap { mapV2EngineIDToV1ShortName($0, availableEngines) }
         }
 
         let newPrefs = SearchEnginePrefs(engineIdentifiers: engineIdentifiers,
