@@ -59,8 +59,14 @@ public class DefaultURLFormatter: URLFormatter {
 
     // Handle the entry if it has a scheme, make sure it's safe before browsing to it
     private func handleWithScheme(with entry: String) -> URL? {
+        // First trim white spaces and encode any invalid characters
+        let trimmedEntry = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        guard let escapedURL = trimmedEntry.addingPercentEncoding(withAllowedCharacters: urlAllowed) else {
+            return nil
+        }
+
         // Check if the URL includes a scheme
-        guard let url = URL(string: entry, invalidCharacters: false),
+        guard let url = URL(string: escapedURL, invalidCharacters: false),
               url.scheme != nil,
               entry.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil else {
             return nil
@@ -73,12 +79,12 @@ public class DefaultURLFormatter: URLFormatter {
             }
         }
 
-        guard let url = URL(string: entry) else { return nil }
+        guard let url = URL(string: entry, invalidCharacters: false) else { return nil }
 
         // Only allow this URL if it's safe
-        let browsingContext = BrowsingContext(type: .internalNavigation, url: url)
+        let browsingContext = BrowsingContext(type: .internalNavigation, url: escapedURL)
         if securityManager.canNavigateWith(browsingContext: browsingContext) == .allowed {
-            return URL(string: entry, invalidCharacters: false)
+            return URL(string: escapedURL, invalidCharacters: false)
         } else {
             return nil
         }
