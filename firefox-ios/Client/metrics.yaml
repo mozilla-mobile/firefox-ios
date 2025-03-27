@@ -4389,7 +4389,7 @@ tabs:
 
 # Toasts
 toasts.close_single_tab:
-  undo_selected:
+  undo_tapped:
     type: event
     description: | 
       Records when the user selects undo after closing a tab.
@@ -4406,7 +4406,7 @@ toasts.close_single_tab:
         - TabsPanel
 
 toasts.close_all_tabs:
-  undo_selected:
+  undo_tapped:
     type: event
     description: | 
       Records when the user selects undo after closing all tabs.

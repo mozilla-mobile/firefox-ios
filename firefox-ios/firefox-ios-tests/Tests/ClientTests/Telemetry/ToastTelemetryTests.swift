@@ -17,11 +17,11 @@ final class ToastTelemetryTests: XCTestCase {
     }
 
     func testClosedSingleTabToastUndoSelected_callsGlean() throws {
-        let event = GleanMetrics.ToastsCloseSingleTab.undoSelected
+        let event = GleanMetrics.ToastsCloseSingleTab.undoTapped
         let expectedMetricType = type(of: event)
         let subject = createSubject()
 
-        subject.closedSingleTabToastUndoSelected()
+        subject.undoClosedSingleTab()
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>
@@ -34,11 +34,11 @@ final class ToastTelemetryTests: XCTestCase {
     }
 
     func testClosedAllTabsToastUndoSelected_callsGlean() throws {
-        let event = GleanMetrics.ToastsCloseAllTabs.undoSelected
+        let event = GleanMetrics.ToastsCloseAllTabs.undoTapped
         let expectedMetricType = type(of: event)
         let subject = createSubject()
 
-        subject.closedAllTabsToastUndoSelected()
+        subject.undoClosedAllTabs()
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents?.first as? EventMetricType<NoExtras>

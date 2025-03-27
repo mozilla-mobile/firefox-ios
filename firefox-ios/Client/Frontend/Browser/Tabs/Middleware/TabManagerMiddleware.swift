@@ -461,7 +461,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
     /// Handles undoing the close tab action, gets the backup tab from `TabManager`
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
-        toastTelemetry.closedSingleTabToastUndoSelected()
+        toastTelemetry.undoClosedSingleTab()
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
               tabManager.backupCloseTab != nil
@@ -535,7 +535,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     }
 
     private func undoCloseAllTabs(uuid: WindowUUID) {
-        toastTelemetry.closedAllTabsToastUndoSelected()
+        toastTelemetry.undoClosedAllTabs()
         let tabManager = tabManager(for: uuid)
         tabManager.undoCloseAllTabs()
 
