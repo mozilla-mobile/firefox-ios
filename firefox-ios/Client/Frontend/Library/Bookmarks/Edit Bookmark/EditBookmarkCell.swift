@@ -59,13 +59,13 @@ class EditBookmarkCell: UITableViewCell,
         let textFieldViewModel = TextFieldViewModel(
             formA11yId: A11y.titleTextField,
             clearButtonA11yId: A11y.titleTextFieldClearButton,
-            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearTextFieldButtonA11yLabel
         )
         titleTextfield.configure(viewModel: textFieldViewModel)
         let urlTextFieldViewModel = TextFieldViewModel(
             formA11yId: A11y.urlTextField,
-            clearButtonA11yId: A11y.titleUrlTextFieldClearButton,
-            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+            clearButtonA11yId: A11y.urlTextFieldClearButton,
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearTextFieldButtonA11yLabel
         )
         urlTextfield.configure(viewModel: urlTextFieldViewModel)
         textFieldsContainerView.addArrangedSubview(titleTextfield)

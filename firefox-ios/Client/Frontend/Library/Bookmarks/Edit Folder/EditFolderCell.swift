@@ -39,7 +39,7 @@ class EditFolderCell: UITableViewCell,
         let viewModel = TextFieldViewModel(
             formA11yId: A11y.titleTextField,
             clearButtonA11yId: A11y.titleTextFieldClearButton,
-            clearButtonA11yLabel: String.Bookmarks.Menu.ClearButtonA11yLabel
+            clearButtonA11yLabel: String.Bookmarks.Menu.ClearTextFieldButtonA11yLabel
         )
         titleTextField.configure(viewModel: viewModel)
         titleTextField.placeholder = .BookmarkDetailFieldTitle
