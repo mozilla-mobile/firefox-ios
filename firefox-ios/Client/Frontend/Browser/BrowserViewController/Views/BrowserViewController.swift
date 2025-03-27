@@ -1849,7 +1849,7 @@ class BrowserViewController: UIViewController,
             self.showToast(
                 urlString,
                 title,
-                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                message: String(format: .Bookmarks.Menu.DeletedBookmark, title ?? ""),
                 toastAction: .removeBookmark
             )
         }
