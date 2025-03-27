@@ -16,7 +16,8 @@ class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
-    private var tabTrayViewController: TabTrayViewController?
+    // SOPHIE: Make this private again if possible
+    var tabTrayViewController: TabTrayViewController?
     private let profile: Profile
     private let tabManager: TabManager
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
@@ -50,6 +51,12 @@ class TabTrayCoordinator: BaseCoordinator,
     func start(with tabTraySection: TabTrayPanelType) {
         tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
     }
+
+//    func presentTabTray(_ viewController: UIViewController, presentationStyle: UIModalPresentationStyle) {
+//        guard let tabTrayViewController else { return }
+//
+//        router.present(tabTrayViewController, animated: true, customTransition: tabTrayViewController, presentationStyle: .fullScreen)
+//    }
 
     private func makeChildPanels() -> [UINavigationController] {
         let windowUUID = tabManager.windowUUID
