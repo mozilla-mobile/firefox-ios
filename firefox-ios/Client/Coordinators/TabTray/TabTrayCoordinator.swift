@@ -52,12 +52,6 @@ class TabTrayCoordinator: BaseCoordinator,
         tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
     }
 
-//    func presentTabTray(_ viewController: UIViewController, presentationStyle: UIModalPresentationStyle) {
-//        guard let tabTrayViewController else { return }
-//
-//        router.present(tabTrayViewController, animated: true, customTransition: tabTrayViewController, presentationStyle: .fullScreen)
-//    }
-
     private func makeChildPanels() -> [UINavigationController] {
         let windowUUID = tabManager.windowUUID
         let regularTabsPanel = TabDisplayPanelViewController(isPrivateMode: false, windowUUID: windowUUID)
