@@ -209,6 +209,15 @@ final class URLFormatterTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    func testGetURLGivenURLWithoutTLDThenInvalidURL() {
+        let initialUrl = "mozilla./foo bar"
+        let subject = DefaultURLFormatter()
+
+        let result = subject.getURL(entry: initialUrl)
+
+        XCTAssertNil(result)
+    }
+
     func testGetURLGivenNumbersThenInvalidURL() {
         let initialUrl = "123"
         let subject = DefaultURLFormatter()

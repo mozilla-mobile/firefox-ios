@@ -40,6 +40,7 @@ class SearchTests: XCTestCase {
         checkInvalidURL("foobar")
         checkInvalidURL("foo bar")
         checkInvalidURL("foo bar.")
+        checkInvalidURL("foo bar./foo bar")
         checkInvalidURL("mozilla. org")
         checkInvalidURL("123")
         checkInvalidURL("a/b")
