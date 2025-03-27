@@ -286,8 +286,8 @@ class HistoryDeletionUtilityTests: XCTestCase {
         let profile = MockProfile(databasePrefix: "hsd_deleteLastFourWeeks_WithFurtherHistory")
         guard let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date())?.toMicrosecondsSince1970(),
               let thirtyDaysAgo = Calendar.current.date(byAdding: .day,
-                                                     value: -30,
-                                                     to: Date())?.toMicrosecondsSince1970()
+                                                        value: -30,
+                                                        to: Date())?.toMicrosecondsSince1970()
         else {
             XCTFail("Unable to create date")
             return
