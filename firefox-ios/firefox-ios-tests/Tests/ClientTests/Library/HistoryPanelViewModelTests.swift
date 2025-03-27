@@ -38,15 +38,13 @@ class HistoryPanelViewModelTests: XCTestCase {
         HistoryPanelViewModel.Sections.allCases.forEach({ section in
             switch section {
             case .lastHour:
-                XCTAssertEqual(section.title, .LibraryPanel.Sections.LastHour)
-            case .today:
-                XCTAssertEqual(section.title, .LibraryPanel.Sections.Today)
-            case .yesterday:
-                XCTAssertEqual(section.title, .LibraryPanel.Sections.Yesterday)
-            case .lastWeek:
-                XCTAssertEqual(section.title, .LibraryPanel.Sections.LastWeek)
-            case .lastMonth:
-                XCTAssertEqual(section.title, .LibraryPanel.Sections.LastMonth)
+                XCTAssertEqual(section.title, .LibraryPanel.History.ClearHistorySheet.LastHourOption)
+            case .lastTwentyFourHours:
+                XCTAssertEqual(section.title, .LibraryPanel.History.ClearHistorySheet.LastTwentyFourHoursOption)
+            case .lastSevenDays:
+                XCTAssertEqual(section.title, .LibraryPanel.History.ClearHistorySheet.LastSevenDaysOption)
+            case .lastFourWeeks:
+                XCTAssertEqual(section.title, .LibraryPanel.History.ClearHistorySheet.LastFourWeeksOption)
             case .older:
                 XCTAssertEqual(section.title, .LibraryPanel.Sections.Older)
             case .additionalHistoryActions, .searchResults:
