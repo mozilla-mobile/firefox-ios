@@ -4403,7 +4403,7 @@ toasts.close_single_tab:
     metadata:
       tags:
         - Toasts
-        - TabPanel
+        - TabsPanel
 
 toasts.close_all_tabs:
   undo_selected:
@@ -4420,7 +4420,7 @@ toasts.close_all_tabs:
     metadata:
       tags:
         - Toasts
-        - TabPanel
+        - TabsPanel
   
 # Enhanced Tracking Protection metrics
 tracking_protection:
