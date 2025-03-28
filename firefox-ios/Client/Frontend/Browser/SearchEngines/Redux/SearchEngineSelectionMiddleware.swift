@@ -27,7 +27,7 @@ final class SearchEngineSelectionMiddleware {
 
             guard !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
-                self.searchEnginesManager.getOrderedEngines { [weak self] searchEngines in
+                self.searchEnginesManager.getOrderedEngines { [weak self] preferences, searchEngines in
                     self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
                 }
                 return

@@ -51,7 +51,6 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
             let engineIdentifier = engine.identifier
 
             for iconRecord in iconRecords {
-                // TODO: [FXIOS-11605] Client-side filtering of multiple icon records [?]. TBD.
                 let iconIdentifiers = iconRecord.engineIdentifiers
                 var matchFound = false
 

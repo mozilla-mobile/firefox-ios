@@ -63,9 +63,13 @@ class MockSearchEngineProvider: SearchEngineProvider {
         unorderedEngines?(mockEngines)
     }
 
-    func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
-                           completion: @escaping ([OpenSearchEngine]) -> Void) {
-        completion(mockEngines)
+    func getOrderedEngines(
+        customEngines: [OpenSearchEngine],
+        engineOrderingPrefs: SearchEnginePrefs,
+        prefsMigrator: any SearchEnginePreferencesMigrator,
+        completion: @escaping SearchEngineCompletion) {
+        completion(engineOrderingPrefs, mockEngines)
     }
+
+    let preferencesVersion: SearchEngineOrderingPrefsVersion = .v1
 }
