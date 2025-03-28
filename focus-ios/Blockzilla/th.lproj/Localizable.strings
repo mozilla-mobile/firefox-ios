@@ -217,6 +217,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "ทำได้มากกว่าปกปิดตัวตน";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "ประกาศความเป็นส่วนตัว";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Firefox ห่วงใยเกี่ยวกับความเป็นส่วนตัวของคุณ อ่านเพิ่มเติมใน%@ของเรา";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "กำหนดการตั้งค่าเพื่อตัดสินใจว่าต้องการแบ่งปันข้อมูลมากน้อยเพียงใด";
 
@@ -225,6 +231,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "ให้คุณเรียกดูแบบส่วนตัวในขั้นที่เหนือกว่า";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "ยินยอมและดำเนินต่อ";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "เสร็จสิ้น";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "เงื่อนไขการใช้งาน Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "รวดเร็ว เป็นส่วนตัว และปราศจากสิ่งรบกวน";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "เมื่อดำเนินการต่อ ถือว่าคุณยอมรับ%@";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "ยินดีต้อนรับสู่ %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "ยินดีต้อนรับสู่ Firefox %@!";
