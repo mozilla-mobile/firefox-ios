@@ -12,8 +12,8 @@ struct HistoryDeletionUtilityTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func clearHistory(_ dateOption: HistoryDeletionUtilityDateOptions) {
-        let timeframeExtra = GleanMetrics.LibraryHistoryPanel.ClearHistoryExtra(timeframe: dateOption.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.LibraryHistoryPanel.clearHistory, extras: timeframeExtra)
+    func clearedHistory(_ dateOption: HistoryDeletionUtilityDateOptions) {
+        let timeframeExtra = GleanMetrics.LibraryHistoryPanel.ClearedHistoryExtra(timeframe: dateOption.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.LibraryHistoryPanel.clearedHistory, extras: timeframeExtra)
     }
 }

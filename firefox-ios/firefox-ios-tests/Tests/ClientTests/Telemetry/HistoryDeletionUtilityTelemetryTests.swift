@@ -18,14 +18,14 @@ final class HistoryDeletionUtilityTelemetryTests: XCTestCase {
 
     func testHistoryDeletedTelemetry() throws {
         // The event and event extras type under test
-        let event = GleanMetrics.LibraryHistoryPanel.clearHistory
-        typealias EventExtrasType = GleanMetrics.LibraryHistoryPanel.ClearHistoryExtra
+        let event = GleanMetrics.LibraryHistoryPanel.clearedHistory
+        typealias EventExtrasType = GleanMetrics.LibraryHistoryPanel.ClearedHistoryExtra
 
         let subject = createSubject()
         let expectedDateOption = HistoryDeletionUtilityDateOptions.lastHour
         let expectedMetricType = type(of: event)
 
-        subject.clearHistory(expectedDateOption)
+        subject.clearedHistory(expectedDateOption)
 
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras as? EventExtrasType
