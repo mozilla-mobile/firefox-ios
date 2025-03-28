@@ -1642,6 +1642,7 @@ workflows:
   Firefox_Unit_Tests:
     before_run:
     - 1_git_clone_and_post_clone
+    - firefox_pull_and_unzip_dependencies
     steps:
     - script@1.2.1:
         title: Build for Testing
