@@ -1916,14 +1916,6 @@ class BrowserViewController: UIViewController,
         return false
     }
 
-    func setupLoadingSpinnerFor(_ webView: WKWebView, isLoading: Bool) {
-        if isLoading {
-            webView.scrollView.refreshControl?.beginRefreshing()
-        } else {
-            webView.scrollView.refreshControl?.endRefreshing()
-        }
-    }
-
     func setupMiddleButtonStatus(isLoading: Bool) {
         // Setting the default state to search to account for no tab or starting page tab
         // `state` will be modified later if needed
@@ -2023,7 +2015,6 @@ class BrowserViewController: UIViewController,
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
-            setupLoadingSpinnerFor(webView, isLoading: loading)
 
             if isToolbarRefactorEnabled {
                 let action = ToolbarAction(
@@ -2419,7 +2410,7 @@ class BrowserViewController: UIViewController,
                     actionType: ToolbarActionType.websiteLoadingStateDidChange
                 )
                 store.dispatch(action)
-                addressToolbarContainer.hideProgressBar()
+                addressToolbarContainer.updateProgressBar(progress: 0.0)
             }
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
