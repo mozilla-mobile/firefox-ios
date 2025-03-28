@@ -267,25 +267,25 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cv.layoutIfNeeded()
 
         if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-            tabCell = cell
-//          tabSnapshot.frame = cv.convert(cell.frame, to: view)
-//          toVCSnapshot.frame = tabSnapshot.frame
-//
-//          let titleSnapshot = UIImageView(image: cell.titleBackgroundView.snapshot)
-//          titleSnapshot.contentMode = .scaleToFill
-//          titleSnapshot.clipsToBounds = true
-//          tabSnapshot.addSubview(titleSnapshot)
+          tabCell = cell
+          tabSnapshot.frame = cv.convert(cell.frame, to: view)
+          toVCSnapshot.frame = tabSnapshot.frame
+
+          // let titleSnapshot = UIImageView(image: cell.titleBackgroundView.snapshot)
+          // titleSnapshot.contentMode = .scaleToFill
+          // titleSnapshot.clipsToBounds = true
+         // tabSnapshot.addSubview(titleSnapshot)
 //          titleSnapshot.snp.makeConstraints {
 //            $0.top.leading.trailing.equalToSuperview()
 //          }
-//          cellTitleSnapshot = titleSnapshot
-//          tabSnapshot.setNeedsLayout()
-//          tabSnapshot.layoutIfNeeded()
+         // cellTitleSnapshot = titleSnapshot
+          tabSnapshot.setNeedsLayout()
+          tabSnapshot.layoutIfNeeded()
 
           cell.isHidden = true
         }
       }
-      // tabSnapshot.isHidden = false
+      tabSnapshot.isHidden = false
       let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0) {
         // For some flourish
         cv.transform = .init(scaleX: 1.2, y: 1.2)
