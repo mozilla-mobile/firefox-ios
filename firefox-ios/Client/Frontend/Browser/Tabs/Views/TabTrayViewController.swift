@@ -39,7 +39,7 @@ class TabTrayViewController: UIViewController,
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
-        static let segmentedControlMinHeight: CGFloat = 70
+        static let segmentedControlMinHeight: CGFloat = 45
     }
 
     // MARK: Theme
@@ -585,7 +585,7 @@ class TabTrayViewController: UIViewController,
                 panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor,
+                panel.view.bottomAnchor.constraint(equalTo: newSegmentControl.topAnchor,
                                                    constant: -UX.segmentedControlTopSpacing),
             ])
         } else {

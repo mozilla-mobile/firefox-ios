@@ -7,15 +7,12 @@ import Common
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
-    static let cellSpacing: CGFloat = 20
+    static let cellSpacing: CGFloat = 4
     static let cellHorizontalPadding: CGFloat = 12
     static let cellVerticalPadding: CGFloat = 8
     static let estimatedCellWidth: CGFloat = 100
-    static let selectedBackgroundColor: UIColor = .blue
-    static let unselectedBackgroundColor: UIColor = .clear
-    static let selectedTextColor: UIColor = .white
-    static let unselectedTextColor: UIColor = .black
     static let cornerRadius: CGFloat = 12
+    static let verticalInsets: CGFloat = 4
 }
 
 class TabTraySelectorView: UIView,
@@ -86,8 +83,8 @@ class TabTraySelectorView: UIView,
         collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: -TabTraySelectorUX.verticalInsets),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: TabTraySelectorUX.verticalInsets),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
@@ -160,5 +157,6 @@ class TabTraySelectorView: UIView,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         collectionView.backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer1
     }
 }
