@@ -24,6 +24,9 @@ class StatusBarOverlay: UIView,
     private var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var hasTopTabs = false
+    private var toolbarLayoutType: ToolbarLayoutType? {
+        return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
+    }
 
     /// Returns a value between 0 and 1 which indicates how far the user has scrolled.
     /// This is used as the alpha of the status bar background.
@@ -71,7 +74,7 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = hasTopTabs ? theme.colors.layer3 : theme.colors.layer1
+        savedBackgroundColor = (hasTopTabs || toolbarLayoutType == .version1) ? theme.colors.layer3 : theme.colors.layer1
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }
 
