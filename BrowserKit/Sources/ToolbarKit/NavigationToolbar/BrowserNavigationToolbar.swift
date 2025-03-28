@@ -27,7 +27,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     private var isVersion1Layout = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme else { return }
+            guard let theme, isVersion1Layout != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
