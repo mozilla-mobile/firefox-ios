@@ -1849,7 +1849,7 @@ class BrowserViewController: UIViewController,
             let messageTitle: String = if let title {
                 String(format: .Bookmarks.Menu.DeletedBookmark, title)
             } else {
-                .MainMenu.Submenus.Tools.ZoomNegativeSymbol
+                .LegacyAppMenu.RemoveBookmarkConfirmMessage
             }
             self.showToast(
                 urlString,
