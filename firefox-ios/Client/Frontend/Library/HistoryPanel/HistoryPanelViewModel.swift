@@ -171,7 +171,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         // Since we remove all data, we reset our fetchOffset back to the start.
         currentFetchOffset = 0
 
-        dateGroupedSites = DateGroupedTableData<Site>()
+        dateGroupedSites = DateGroupedTableData<Site>(includeLastHour: true)
         buildVisibleSections()
     }
 
