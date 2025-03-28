@@ -415,6 +415,8 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(3)
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
             navigator.performAction(Action.SystemThemeSwitch)

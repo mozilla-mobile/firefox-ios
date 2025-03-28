@@ -427,19 +427,28 @@ class AddressesTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         navigator.goto(NewTabScreen)
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(3)
         switchThemeToDarkOrLight(theme: "Dark")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(AutofillPasswordSettings)
         validateAutofillPasswordOptions()
         // While in light mode check for the options
+        navigator.nowAt(AutofillPasswordSettings)
         navigator.goto(SettingsScreen)
-        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(3)
         switchThemeToDarkOrLight(theme: "Light")
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(AutofillPasswordSettings)
         validateAutofillPasswordOptions()
+        navigator.nowAt(AutofillPasswordSettings)
+        navigator.goto(SettingsScreen)
+        navigator.nowAt(SettingsScreen)
         navigator.goto(BrowserTab)
         // Go to a webpage, and select night mode on and off, check options
         navigator.openURL(path(forTestPage: "test-example.html"))
@@ -607,9 +616,11 @@ class AddressesTests: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars[addresses.title])
         app.buttons[addresses.addAddress].waitAndTap()
         mozWaitForElementToExist(app.navigationBars[addresses.addAddress])
-        if !app.staticTexts["Name"].exists {
-            app.buttons["Close"].waitAndTap()
-            app.buttons[addresses.addAddress].waitAndTap()
+        var attempts = 3
+        while !app.staticTexts["Name"].exists && attempts > 0 {
+            app.buttons["Close"].tapIfExists()
+            app.buttons[addresses.addAddress].tapIfExists()
+            attempts -= 1
         }
         mozWaitForElementToExist(app.staticTexts["Name"])
     }
@@ -712,6 +723,8 @@ class AddressesTests: BaseTestCase {
 
     private func typeOrganization(organization: String, updateText: Bool = false) {
         app.staticTexts["Organization"].waitAndTap()
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(4)
         if updateText {
             clearText()
         }
@@ -754,10 +767,9 @@ class AddressesTests: BaseTestCase {
     }
 
     private func typePhone(phone: String, updateText: Bool = false) {
-        if app.buttons["Done"].isHittable {
-            app.buttons["Done"].waitAndTap()
-        }
-        app.staticTexts["Phone"].tapOnApp()
+        // Adding sleep to avoid loading screen on bitrise
+        sleep(4)
+        app.staticTexts["Phone"].waitAndTap()
         if updateText {
             clearText(isPhoneNumber: true)
         }
