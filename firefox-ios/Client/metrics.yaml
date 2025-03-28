@@ -2761,7 +2761,7 @@ library:
 
 # Library
 library.history_panel:
-  clear_history: 
+  cleared_history: 
     type: event
     description: |
       A user deleted history entries from a certain timeframe

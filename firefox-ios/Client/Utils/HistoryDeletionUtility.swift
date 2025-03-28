@@ -55,7 +55,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
         deleteProfileMetadataSince(dateOption)
 
-        HistoryDeletionUtilityTelemetry().clearHistory(dateOption)
+        HistoryDeletionUtilityTelemetry().clearedHistory(dateOption)
     }
 
     // MARK: URL based deletion functions
