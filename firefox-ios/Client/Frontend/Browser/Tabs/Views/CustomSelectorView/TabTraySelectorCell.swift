@@ -40,6 +40,8 @@ class TabTraySelectorCell: UICollectionViewCell {
         label.text = title
         label.font = selected ? TabTraySelectorUX.selectedFont : TabTraySelectorUX.unselectedFont
         label.textColor = selected ? TabTraySelectorUX.selectedTextColor : TabTraySelectorUX.unselectedTextColor
-        contentView.backgroundColor = selected ? TabTraySelectorUX.selectedBackgroundColor : TabTraySelectorUX.unselectedBackgroundColor
+        contentView.backgroundColor = selected ?
+                                    TabTraySelectorUX.selectedBackgroundColor :
+                                    TabTraySelectorUX.unselectedBackgroundColor
     }
 }

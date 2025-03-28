@@ -103,6 +103,17 @@ class TabTrayViewController: UIViewController,
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
+    private lazy var newSegmentControl: TabTraySelectorView = {
+        let selector = TabTraySelectorView()
+        selector.items = ["Private", "Tabs", "Sync"]
+
+        // TODO: Update with a delegate insetead
+        selector.onSelectionChanged = { index in
+            print("Selected tab at index: \(index)")
+        }
+        return selector
+    }()
+
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButton.UX.titleFont
@@ -376,6 +387,10 @@ class TabTrayViewController: UIViewController,
         if isTabTrayUIExperimentsEnabled {
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+
+            containerView.addSubview(newSegmentControl)
+            newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+
             NSLayoutConstraint.activate([
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -386,7 +401,14 @@ class TabTrayViewController: UIViewController,
                                                           constant: UX.segmentedControlHorizontalSpacing),
                 segmentedControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
                 segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                           constant: -UX.segmentedControlHorizontalSpacing)
+                                                           constant: -UX.segmentedControlHorizontalSpacing),
+
+                newSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+                newSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                           constant: UX.segmentedControlHorizontalSpacing),
+                newSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                            constant: -UX.segmentedControlHorizontalSpacing),
+                newSegmentControl.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
             ])
         } else {
             view.addSubview(navigationToolbar)
