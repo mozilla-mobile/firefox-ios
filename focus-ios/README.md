@@ -10,7 +10,7 @@ For information on how to contribute to this project, including communication ch
 
 ## Build Instructions
 
-1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the [table](../README.md) at repository root.
+1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the root [README](../README.md).
 1. Clone the repository:
    ```shell
    git clone https://github.com/mozilla-mobile/firefox-ios.git
