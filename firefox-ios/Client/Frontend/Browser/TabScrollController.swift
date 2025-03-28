@@ -67,7 +67,7 @@ class TabScrollController: NSObject,
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
-    let deviceType: DeviceTypeProvider
+    private let deviceType: DeviceTypeProvider
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -175,7 +175,7 @@ class TabScrollController: NSObject,
     }
 
     func traitCollectionDidChange() {
-        tab?.webView?.removePullRefresh()
+        removePullRefreshControl()
         configureRefreshControl()
     }
 
@@ -193,7 +193,7 @@ class TabScrollController: NSObject,
 
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
-            tab?.webView?.removePullRefresh()
+            removePullRefreshControl()
         } else {
             configureRefreshControl()
         }
@@ -305,6 +305,7 @@ class TabScrollController: NSObject,
     }
 
     // MARK: - Zoom
+
     func updateMinimumZoom() {
         guard let scrollView = scrollView else { return }
 
@@ -323,6 +324,12 @@ class TabScrollController: NSObject,
     func resetZoomState() {
         isZoomedOut = false
         lastZoomedScale = 0
+    }
+
+    // MARK: - Pull to refresh
+
+    func removePullRefreshControl() {
+        tab?.webView?.removePullRefresh()
     }
 
     func configureRefreshControl() {
@@ -585,7 +592,7 @@ extension TabScrollController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        tab?.webView?.removePullRefresh()
+        removePullRefreshControl()
         isUserZoom = true
     }
 

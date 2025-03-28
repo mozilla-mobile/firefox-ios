@@ -174,7 +174,7 @@ final class TabScrollControllerTests: XCTestCase {
     private func createSubject(isIpad: Bool = true) -> TabScrollController {
         let deviceType = MockDeviceTypeProvider(idiom: isIpad ? .pad : .phone)
         let subject = TabScrollController(windowUUID: .XCTestDefaultUUID,
-                                             deviceType: deviceType)
+                                          deviceType: deviceType)
         trackForMemoryLeaks(subject)
         return subject
     }
