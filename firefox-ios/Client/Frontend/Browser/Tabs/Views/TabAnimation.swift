@@ -120,8 +120,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                     tabSnapshot.alpha = 0.0
                     bvcSnapshot.alpha = 0.0
                 }
-                tabSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
-                bvcSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
+                tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+                bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
                 backgroundView.alpha = 0
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -212,7 +212,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             let toVCSnapshot: UIView =
             toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
             toVCSnapshot.layer.cornerCurve = .continuous
-            toVCSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
+            toVCSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
             toVCSnapshot.clipsToBounds = true
 
             context.containerView.addSubview(toVCSnapshot)
