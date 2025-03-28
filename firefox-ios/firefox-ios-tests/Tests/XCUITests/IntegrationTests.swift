@@ -143,7 +143,7 @@ class IntegrationTests: BaseTestCase {
         signInFxAccounts()
 
         // Wait for initial sync to complete
-        navigator.nowAt(BrowserTab)
+        waitForInitialSyncComplete()
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 1).waitAndTap()
@@ -154,10 +154,7 @@ class IntegrationTests: BaseTestCase {
         )
 
         // Sync again just to make sure to sync after new name is shown
-        app.buttons["Settings"].waitAndTap()
-        mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
-        app.tables.cells.element(boundBy: 2).waitAndTap()
-        mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        waitForInitialSyncComplete()
     }
 
     func testFxASyncLogins () {
