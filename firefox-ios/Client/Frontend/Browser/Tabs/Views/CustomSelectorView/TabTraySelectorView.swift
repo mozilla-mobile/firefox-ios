@@ -1,0 +1,140 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import UIKit
+
+// MARK: - UX Constants
+struct TabTraySelectorUX {
+    static let cellSpacing: CGFloat = 20
+    static let cellHorizontalPadding: CGFloat = 16
+    static let cellVerticalPadding: CGFloat = 8
+    static let estimatedCellWidth: CGFloat = 100
+    static let selectedBackgroundColor: UIColor = .blue
+    static let unselectedBackgroundColor: UIColor = .clear
+    static let selectedTextColor: UIColor = .white
+    static let unselectedTextColor: UIColor = .black
+    static let cornerRadius: CGFloat = 12
+
+    static let selectedFont: UIFont = UIFontMetrics(forTextStyle: .body)
+        .scaledFont(for: UIFont.boldSystemFont(ofSize: 16))
+
+    static let unselectedFont: UIFont = UIFontMetrics(forTextStyle: .body)
+        .scaledFont(for: UIFont.systemFont(ofSize: 16))
+}
+
+class TabTraySelectorView: UIView,
+                            UICollectionViewDelegateFlowLayout,
+                            UICollectionViewDataSource,
+                            UIScrollViewDelegate {
+    // MARK: - Public API
+    var items: [String] = [] {
+        didSet {
+            collectionView.reloadData()
+            scrollToItem(at: selectedIndex, animated: false)
+        }
+    }
+
+    var selectedIndex = 0 {
+        didSet {
+            if oldValue != selectedIndex {
+                collectionView.reloadData()
+                onSelectionChanged?(selectedIndex)
+            }
+        }
+    }
+
+    var onSelectionChanged: ((Int) -> Void)?
+
+    // MARK: - Layout & Views
+    private lazy var layout: CenterSnappingFlowLayout = {
+        let layout = CenterSnappingFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = TabTraySelectorUX.cellSpacing
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        return layout
+    }()
+
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(TabTraySelectorCell.self, forCellWithReuseIdentifier: "TabTraySelectorCell")
+        collectionView.backgroundColor = .magenta
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.decelerationRate = .fast
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
+    }()
+
+    // MARK: - Init
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let horizontalInset = (bounds.width - TabTraySelectorUX.estimatedCellWidth) / 2
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+    }
+
+    // MARK: - Public Methods
+    func scrollToItem(at index: Int, animated: Bool) {
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+    }
+
+    // MARK: - UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TabTraySelectorCell",
+                                                            for: indexPath) as? TabTraySelectorCell else {
+            return UICollectionViewCell()
+        }
+        cell.configure(title: items[indexPath.item], selected: indexPath.item == selectedIndex)
+        return cell
+    }
+
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedIndex = indexPath.item
+        scrollToItem(at: selectedIndex, animated: true)
+    }
+
+    // MARK: - Scroll Snap
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { snapToNearestItem() }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        snapToNearestItem()
+    }
+
+    private func snapToNearestItem() {
+        let center = convert(CGPoint(x: bounds.midX, y: bounds.midY), to: collectionView)
+        if let indexPath = collectionView.indexPathForItem(at: center) {
+            selectedIndex = indexPath.item
+            scrollToItem(at: selectedIndex, animated: true)
+        }
+    }
+}
