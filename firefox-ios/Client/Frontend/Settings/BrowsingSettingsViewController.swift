@@ -36,18 +36,6 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
-            let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
-                                                  titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
-            settings.append(
-                SettingSection(
-                    title: NSAttributedString(string: .Settings.Browsing.Tabs),
-                    footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
-                    children: [inactiveTabsSetting]
-                )
-            )
-        }
-
         // Setting only available for iPad
         if let profile, UIDevice.current.userInterfaceIdiom == .pad {
             var generalSettings = [Setting]()
@@ -59,6 +47,18 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             generalSettings.append(toolbarHide)
             settings.append(SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                            children: generalSettings))
+        }
+
+        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly) {
+            let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,
+                                                  titleText: NSAttributedString(string: .Settings.Tabs.InactiveTabs))
+            settings.append(
+                SettingSection(
+                    title: NSAttributedString(string: .Settings.Browsing.Tabs),
+                    footerTitle: NSAttributedString(string: .Settings.Tabs.InactiveTabsDescription),
+                    children: [inactiveTabsSetting]
+                )
+            )
         }
 
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
