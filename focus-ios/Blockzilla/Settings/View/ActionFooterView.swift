@@ -8,7 +8,8 @@ class ActionFooterView: UIView {
     lazy var textLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
-        label.font = .footnote12
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
         return label
     }()
@@ -17,7 +18,8 @@ class ActionFooterView: UIView {
         let button = UIButton(type: .system)
         button.setTitleColor(.accent, for: .normal)
         button.setTitleColor(.accent, for: .highlighted)
-        button.titleLabel?.font = .footnote12
+        button.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.numberOfLines = 0
         return button
     }()
