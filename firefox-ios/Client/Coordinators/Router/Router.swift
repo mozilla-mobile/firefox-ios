@@ -24,24 +24,15 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     ///   - animated: true means it will be animated
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
 
-    /// Present a view controller with a custom transition
+    /// Present a view controller with a custom transition.
+    /// UIKit keeps a reference to the UIViewControllerTransitioningDelegate you set when presenting, and automatically asks it for the dismissal animation
+    /// This is why there is no dismiss method passing customTransition.
     /// - Parameters:
     ///   - viewController: The view controller to present
     ///   - animated: true means it will be animated
     ///   - customTransition: Custom transition to animate the presentation with
     ///   - presentationStyle: the presentation style
     func present(_ viewController: UIViewController,
-                 animated: Bool,
-                 customTransition: UIViewControllerTransitioningDelegate?,
-                 presentationStyle: UIModalPresentationStyle)
-
-    /// Present a view controller with a custom transition
-    /// - Parameters:
-    ///   - viewController: The view controller to present
-    ///   - animated: true means it will be animated
-    ///   - customTransition: Custom transition to animate the presentation with
-    ///   - presentationStyle: the presentation style
-    func dismiss(_ viewController: UIViewController,
                  animated: Bool,
                  customTransition: UIViewControllerTransitioningDelegate?,
                  presentationStyle: UIModalPresentationStyle)
