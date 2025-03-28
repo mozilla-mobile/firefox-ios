@@ -1851,7 +1851,7 @@ class BrowserViewController: UIViewController,
             } else {
                 .LegacyAppMenu.RemoveBookmarkConfirmMessage
             }
-            self.showToast(
+            showToast(
                 urlString,
                 title,
                 message: messageTitle,
