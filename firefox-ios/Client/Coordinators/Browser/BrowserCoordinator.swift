@@ -998,7 +998,7 @@ class BrowserCoordinator: BaseCoordinator,
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
-            modalPresentationStyle = .custom
+            modalPresentationStyle = .fullScreen
         } else {
             modalPresentationStyle = isPad ? .fullScreen: .formSheet
         }
@@ -1027,7 +1027,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, style: .custom)
+            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {
             present(navigationController)
         }
