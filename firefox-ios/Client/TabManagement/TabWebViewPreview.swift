@@ -124,7 +124,6 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         topStackView.isHidden = isBottom
     }
 
-
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
