@@ -821,6 +821,8 @@ extension URLBarView: TabLocationViewDelegate {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stop:
             delegate?.urlBarDidPressStop(self)
+            locationView.reloadButton.reloadButtonState = .reload
+            updateProgressBar(0.0)
         case .disabled:
             // do nothing
             break
