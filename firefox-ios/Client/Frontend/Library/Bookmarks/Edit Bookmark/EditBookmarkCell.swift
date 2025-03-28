@@ -41,6 +41,7 @@ class EditBookmarkCell: UITableViewCell,
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.urlTextField
+        view.autocapitalizationType = .none
     }
     var onTitleFieldUpdate: ((String) -> Void)?
     var onURLFieldUpdate: ((String) -> Void)?
