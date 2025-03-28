@@ -61,7 +61,9 @@ class OnboardingFactory {
                     termsLinkText: .termsLinkText,
                     privacyLinkText: .privacyLinkText,
                     buttonText: .termsOfUseButtonText,
-                    doneButton: .doneButtonText
+                    doneButton: .doneButtonText,
+                    errorMessage: .errorMessage,
+                    retryButtonText: .retryButtonText
                 ),
                 isTosEnabled: true,
                 termsURL: termsURL,
@@ -187,5 +189,17 @@ fileprivate extension String {
         "Onboarding.TermsOfUse.Done.ButtonText",
         value: "Done",
         comment: "Button label to dismiss the Privacy Policy and Terms of Use screen."
+    )
+    
+    static let errorMessage = NSLocalizedString(
+        "Network.Offline.ErrorMessage",
+        value: "The Internet connection appears to be offline.",
+        comment: "Error message shown when no internet connection is available"
+    )
+
+    static let retryButtonText = NSLocalizedString(
+        "Network.Offline.RetryButton",
+        value: "Try Again",
+        comment: "Button text for retrying network connection"
     )
 }

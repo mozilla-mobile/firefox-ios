@@ -107,7 +107,9 @@ internal extension OnboardingViewModel {
             termsLinkText: "Firefox Terms of Use",
             privacyLinkText: "Privacy Notice",
             buttonText: "Agree and Continue",
-            doneButton: "Done"
+            doneButton: "Done",
+            errorMessage: "The Internet connection appears to be offline.",
+            retryButtonText: "Try Again"
         ),
         isTosEnabled: true,
         termsURL: URL(string: "https://www.mozilla.org/about/legal/terms/firefox-focus/")!,
