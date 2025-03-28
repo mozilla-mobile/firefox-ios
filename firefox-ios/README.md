@@ -2,15 +2,15 @@
 
 This is the subdirectory that contains the Firefox for iOS application.
 
-For versions of Xcode and Swift this branch of Firefox for iOS works with, and the minimum iOS supported version, see [readme](../README.md) at the root of the project.
+For details on compatible Xcode and Swift versions used to build this project, as well as the minimum iOS version, refer to the root [README](../README.md).
 
 ## Getting Involved
 
-For information about participation, communications channels, instructions how to run on devices using free personal developer accounts, coding standards or PR rules, see the [guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) on how to contribute to this project.
+For information on how to contribute to this project, including communication channels, coding style, PR naming guidelines and more, visit the [Contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
 
 ## Building the code
 
-1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the [table](../README.md) at repository root.
+1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the root [README](../README.md).
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
     ```shell
     brew update

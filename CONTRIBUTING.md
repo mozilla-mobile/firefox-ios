@@ -36,7 +36,7 @@ If you’d like to work on an issue that isn’t labeled Contributor OK, please 
 ### Reference Person
 Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
 
-- Reach out on [Mozilla Matrix chat](https://wiki.mozilla.org/Matrix).
+- Reach out on [Mozilla Matrix chat](#reaching-out-for-help-and-questions).
 - Alternatively, comment directly on the issue for assistance.
 
 ### Missing Reference Person
@@ -56,7 +56,6 @@ We’ve categorized Contributor OK issues by difficulty to help you get started:
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
 * Before you submit your pull request, search the repository for open or closed PRs that relate to your submission. We don't want to duplicate effort. 
 * PRs should be made from a branch on your personal fork to the `mozilla-mobile:main` branch. Please see the [Pull Request Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs.
-* For hints how to split and describe your commits, see the ["Commits" section](#commits) below for detailed info.
 
 ### Commits
 * All of a PR's commits will be squashed to keep a clean git history in `main`. This means that technically, individual commit names are not particularly relevant. However, for an easier review process, we should keep the following rules of thumb in mind:
@@ -91,5 +90,5 @@ We add the "Contributor Fix" label on tasks that have a PR opened for it, or if 
 
 # Reaching out for help and questions
 If more information is required or contributors have any questions then we suggestion reaching out to us via:
-- Chat: See Matrix channel [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion. You can also write DMs to specific teammates on it.
+- Chat: See Matrix channel [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion. You can also write DMs to specific teammates on it. (For more information on how to get started with Matrix, see [Mozilla Matrix wiki page](https://wiki.mozilla.org/Matrix).)
 - Open a [GitHub discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).

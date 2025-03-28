@@ -2,14 +2,11 @@
 
 This is the subdirectory that contains the Focus iOS application.
 
-> Browse like no one’s watching. The new Firefox Focus automatically blocks a wide range of online trackers — from the moment you launch it to the second you leave it. Easily erase your history, passwords and cookies, so you won’t get followed by things like unwanted ads.
-> [Download on the App Store](https://itunes.apple.com/app/id1055677337).
-
-For versions of Xcode and Swift this branch of Focus iOS works with, and the minimum iOS supported version, see [readme](../README.md) at the root of the project.
+For details on compatible Xcode and Swift versions used to build this project, as well as the minimum iOS version, refer to the root [README](../README.md).
 
 ## Getting Involved
 
-For information about participation, communication channels, instructions how to run on devices using free personal developer accounts, coding standards or PR rules, see the [guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) on how to contribute to this project.
+For information on how to contribute to this project, including communication channels, coding style, PR naming guidelines and more, visit the [Contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
 
 ## Build Instructions
 
