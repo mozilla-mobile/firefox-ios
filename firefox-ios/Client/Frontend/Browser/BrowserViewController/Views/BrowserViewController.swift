@@ -1846,10 +1846,15 @@ class BrowserViewController: UIViewController,
                 )
             }
         case .remove:
-            self.showToast(
+            let messageTitle: String = if let title {
+                String(format: .Bookmarks.Menu.DeletedBookmark, title)
+            } else {
+                .LegacyAppMenu.RemoveBookmarkConfirmMessage
+            }
+            showToast(
                 urlString,
                 title,
-                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                message: messageTitle,
                 toastAction: .removeBookmark
             )
         }

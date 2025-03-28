@@ -53,6 +53,19 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 @available(iOS 16.2, *)
 struct DownloadLiveActivity: Widget {
     struct UX {
+        static let downloadColor: UIColor = .orange
+        static let circleWidth: CGFloat = 17.5
+        static let lineWidth: CGFloat = 3.5
+        static let downloadIconSize: CGFloat = 19
+        static let downloadPaddingLeading: CGFloat = 2
+        static let downloadPaddingTrailing: CGFloat = 1
+        static let circleWidthMinimal: CGFloat = 19.5
+        static let lineWidthMinimal: CGFloat = 3
+        static let downloadIconSizeMinimal: CGFloat = 12
+        static let downloadPaddingLeadingMinimal: CGFloat = 2
+        static let downloadPaddingTrailingMinimal: CGFloat = 1
+        static let downloadOpacityMinimal = 0.30
+        static let downloadRotationMinimal: Double = -90.0
         // static let checkmarkIcon = "checkmarkLarge"
         static let checkmarkIcon = StandardImageIdentifiers.Large.checkmark
         static let mediaStopIcon = "mediaStop"
@@ -97,6 +110,31 @@ struct DownloadLiveActivity: Widget {
             static let wordsBottomPadding: CGFloat = 0
             static let widgetColours = Color.white
             static let circleStrokeColor = widgetColours.opacity(inProgessOpacity)
+        }
+    }
+    private func minimalViewBuilder(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        return ZStack {
+            Image(StandardImageIdentifiers.Large.download)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: UX.downloadIconSizeMinimal, height: UX.downloadIconSizeMinimal)
+                .foregroundStyle(.orange)
+                .padding([.leading, .trailing], UX.downloadPaddingLeadingMinimal)
+            Circle()
+                .stroke(lineWidth: UX.lineWidthMinimal)
+                .foregroundColor(.gray)
+                .opacity(UX.downloadOpacityMinimal)
+                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
+                .padding(.leading, UX.downloadPaddingLeadingMinimal)
+                .padding(.trailing, UX.downloadPaddingTrailingMinimal)
+            Circle()
+                .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: UX.lineWidthMinimal))
+                .rotationEffect(.degrees(UX.downloadRotationMinimal))
+                .animation(.linear, value: min(liveDownload.state.totalProgress, 1.0))
+                .foregroundStyle(.orange)
+                .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
         }
     }
     private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
@@ -272,7 +310,7 @@ struct DownloadLiveActivity: Widget {
                 .padding(.leading, UX.DynamicIsland.downloadPaddingLeading)
                 .padding(.trailing, UX.DynamicIsland.downloadPaddingTrailing)
             } minimal: {
-                EmptyView()
+                minimalViewBuilder(liveDownload: liveDownload)
             }.widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
         }
     }
