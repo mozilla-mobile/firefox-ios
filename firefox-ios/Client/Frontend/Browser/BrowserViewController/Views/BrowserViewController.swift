@@ -2419,6 +2419,7 @@ class BrowserViewController: UIViewController,
                     actionType: ToolbarActionType.websiteLoadingStateDidChange
                 )
                 store.dispatch(action)
+                addressToolbarContainer.hideProgressBar()
             }
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
