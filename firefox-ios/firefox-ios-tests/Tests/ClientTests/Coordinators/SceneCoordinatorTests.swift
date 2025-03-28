@@ -17,9 +17,10 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
+        setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -71,6 +72,16 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators.first as? BrowserCoordinator)
+    }
+
+    func testLaunchBrowser_signalRecordStartupComplete_whenSavedRoutePresent() {
+        let subject = createSubject()
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+
+        subject.savedRoute = .search(url: nil, isPrivate: false, options: nil)
+        subject.launchBrowser()
+
+        XCTAssertTrue(AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete))
     }
 
     func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
@@ -147,5 +158,11 @@ final class SceneCoordinatorTests: XCTestCase {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
+            return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
     }
 }
