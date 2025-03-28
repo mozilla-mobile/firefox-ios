@@ -3,8 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
-class TabTraySelectorCell: UICollectionViewCell {
+class TabTraySelectorCell: UICollectionViewCell,
+                           ReusableCell,
+                           ThemeApplicable {
     private let label = UILabel()
     private let padding = UIEdgeInsets(
         top: TabTraySelectorUX.cellVerticalPadding,
@@ -36,12 +39,17 @@ class TabTraySelectorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, selected: Bool) {
+    func configure(title: String, selected: Bool, theme: Theme?) {
+        isSelected = selected
         label.text = title
-        label.font = selected ? TabTraySelectorUX.selectedFont : TabTraySelectorUX.unselectedFont
-        label.textColor = selected ? TabTraySelectorUX.selectedTextColor : TabTraySelectorUX.unselectedTextColor
-        contentView.backgroundColor = selected ?
-                                    TabTraySelectorUX.selectedBackgroundColor :
-                                    TabTraySelectorUX.unselectedBackgroundColor
+        label.font = selected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
+        applyTheme(theme: theme ?? LightTheme())
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: Theme) {
+        label.textColor = theme.colors.textPrimary
+        contentView.backgroundColor = isSelected ? theme.colors.layer4 : .clear
     }
 }

@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 // MARK: - UX Constants
 struct TabTraySelectorUX {
     static let cellSpacing: CGFloat = 20
-    static let cellHorizontalPadding: CGFloat = 16
+    static let cellHorizontalPadding: CGFloat = 12
     static let cellVerticalPadding: CGFloat = 8
     static let estimatedCellWidth: CGFloat = 100
     static let selectedBackgroundColor: UIColor = .blue
@@ -15,19 +16,19 @@ struct TabTraySelectorUX {
     static let selectedTextColor: UIColor = .white
     static let unselectedTextColor: UIColor = .black
     static let cornerRadius: CGFloat = 12
-
-    static let selectedFont: UIFont = UIFontMetrics(forTextStyle: .body)
-        .scaledFont(for: UIFont.boldSystemFont(ofSize: 16))
-
-    static let unselectedFont: UIFont = UIFontMetrics(forTextStyle: .body)
-        .scaledFont(for: UIFont.systemFont(ofSize: 16))
 }
 
 class TabTraySelectorView: UIView,
-                            UICollectionViewDelegateFlowLayout,
-                            UICollectionViewDataSource,
-                            UIScrollViewDelegate {
-    // MARK: - Public API
+                           UICollectionViewDelegateFlowLayout,
+                           UICollectionViewDataSource,
+                           UIScrollViewDelegate,
+                           Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
+    private let windowUUID: WindowUUID
+
     var items: [String] = [] {
         didSet {
             collectionView.reloadData()
@@ -57,8 +58,7 @@ class TabTraySelectorView: UIView,
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TabTraySelectorCell.self, forCellWithReuseIdentifier: "TabTraySelectorCell")
-        collectionView.backgroundColor = .magenta
+        collectionView.register(TabTraySelectorCell.self, forCellWithReuseIdentifier: TabTraySelectorCell.cellIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.decelerationRate = .fast
         collectionView.delegate = self
@@ -67,14 +67,18 @@ class TabTraySelectorView: UIView,
     }()
 
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(frame: .zero)
         setup()
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func setup() {
@@ -87,12 +91,23 @@ class TabTraySelectorView: UIView,
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+
+        applyTheme()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let horizontalInset = (bounds.width - TabTraySelectorUX.estimatedCellWidth) / 2
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+
+        let estimatedCellWidth = TabTraySelectorUX.estimatedCellWidth
+        let horizontalInset = (bounds.width - estimatedCellWidth) / 2
+
+        collectionView.contentInset = UIEdgeInsets(
+            top: 0,
+            left: horizontalInset,
+            bottom: 0,
+            right: horizontalInset
+        )
+        collectionView.contentOffset.x = -horizontalInset
     }
 
     // MARK: - Public Methods
@@ -107,11 +122,13 @@ class TabTraySelectorView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TabTraySelectorCell",
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabTraySelectorCell.cellIdentifier,
                                                             for: indexPath) as? TabTraySelectorCell else {
             return UICollectionViewCell()
         }
-        cell.configure(title: items[indexPath.item], selected: indexPath.item == selectedIndex)
+        cell.configure(title: items[indexPath.item],
+                       selected: indexPath.item == selectedIndex,
+                       theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -136,5 +153,12 @@ class TabTraySelectorView: UIView,
             selectedIndex = indexPath.item
             scrollToItem(at: selectedIndex, animated: true)
         }
+    }
+
+    // MARK: - Theamable
+
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        collectionView.backgroundColor = theme.colors.layer1
     }
 }

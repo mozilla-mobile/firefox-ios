@@ -39,6 +39,7 @@ class TabTrayViewController: UIViewController,
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
+        static let segmentedControlMinHeight: CGFloat = 70
     }
 
     // MARK: Theme
@@ -104,7 +105,7 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var newSegmentControl: TabTraySelectorView = {
-        let selector = TabTraySelectorView()
+        let selector = TabTraySelectorView(windowUUID: windowUUID)
         selector.items = ["Private", "Tabs", "Sync"]
 
         // TODO: Update with a delegate insetead
@@ -408,7 +409,7 @@ class TabTrayViewController: UIViewController,
                                                            constant: UX.segmentedControlHorizontalSpacing),
                 newSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                             constant: -UX.segmentedControlHorizontalSpacing),
-                newSegmentControl.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
+                newSegmentControl.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.segmentedControlMinHeight)
             ])
         } else {
             view.addSubview(navigationToolbar)
