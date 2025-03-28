@@ -478,6 +478,8 @@ struct AccessibilityIdentifiers {
             static let bookmarkParentFolderCell = "BookmarksDetail.ParentFolderSelector.FolderCell"
             static let newFolderCell = "BookmarksDetail.ParentFolderSelector.NewFolderCell"
             static let saveButton = "BookmarksDetail.SaveButton"
+            static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
+            static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
         }
 
         struct HistoryPanel {

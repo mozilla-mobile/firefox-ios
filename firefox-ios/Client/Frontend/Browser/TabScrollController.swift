@@ -7,12 +7,17 @@ import SnapKit
 import Shared
 import Common
 
-private let ToolbarBaseAnimationDuration: CGFloat = 0.2
+protocol ScrollToHideToolbar: AnyObject {
+    var isScrollToHideToolbarEnabled: Bool { get }
+}
+
 class TabScrollingController: NSObject,
                               SearchBarLocationProvider,
+                              ScrollToHideToolbar,
                               Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
+        static let toolbarBaseAnimationDuration: CGFloat = 0.2
     }
 
     enum ScrollDirection {
@@ -61,6 +66,8 @@ class TabScrollingController: NSObject,
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
+
+    let deviceType: DeviceTypeProvider
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -131,10 +138,18 @@ class TabScrollingController: NSObject,
         return bottomContainerHeight
     }
 
+    var isScrollToHideToolbarEnabled: Bool {
+        guard deviceType.userInterfaceIdiom == .pad,
+              let prefs = tab?.profile.prefs else { return true }
+
+        return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide) ?? true
+    }
+
     // If scrollview contentSize height is bigger that device height plus delta
+    // New settings to disable bar autohide only for iPad
     var isAbleToScroll: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
-            contentSize.height
+            contentSize.height && isScrollToHideToolbarEnabled
     }
 
     deinit {
@@ -147,11 +162,13 @@ class TabScrollingController: NSObject,
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         deviceType: DeviceTypeProvider = UIDevice.current) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.deviceType = deviceType
         super.init()
         setupNotifications()
     }
@@ -226,7 +243,7 @@ class TabScrollingController: NSObject,
         guard toolbarState != .visible else { return }
         toolbarState = .visible
 
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * showDurationRatio)
+        let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
         self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
@@ -241,7 +258,7 @@ class TabScrollingController: NSObject,
         guard toolbarState != .collapsed || isFindInPageMode else { return }
         toolbarState = .collapsed
 
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
         self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
