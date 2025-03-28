@@ -66,7 +66,7 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         view.clipsToBounds = true
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
+    lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
     }
