@@ -1662,12 +1662,12 @@ workflows:
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
     - xcode-test-without-building@0:
-        timeout: 600
+        timeout: 6000
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
-        - maximum_test_repetitions: 2
+        - test_repetition_count: 20
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
