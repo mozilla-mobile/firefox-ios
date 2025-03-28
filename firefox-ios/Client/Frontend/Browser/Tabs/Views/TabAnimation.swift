@@ -120,8 +120,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 //          tabSnapshot.setNeedsLayout()
 //          tabSnapshot.layoutIfNeeded()
 //
-//          cell.isHidden = true
-//          cell.alpha = 0.0
+          cell.isHidden = true
+          cell.alpha = 0.0
         }
       }
 
