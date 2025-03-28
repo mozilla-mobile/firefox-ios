@@ -4,11 +4,11 @@
 
 import Foundation
 
-private func getDate(dayOffset: Int) -> Date {
+private func getDate(hourOffset: Int) -> Date {
     let calendar = Calendar(identifier: .gregorian)
-    let components = calendar.dateComponents([.year, .month, .day], from: Date())
+    let components = calendar.dateComponents([.year, .month, .day, .hour], from: Date())
     let today = calendar.date(from: components)!
-    return calendar.date(byAdding: .day, value: dayOffset, to: today)!
+    return calendar.date(byAdding: .hour, value: hourOffset, to: today)!
 }
 
 public struct DateGroupedTableData<T: Equatable> {
@@ -29,13 +29,13 @@ public struct DateGroupedTableData<T: Equatable> {
     public init(includeLastHour: Bool = false) {
         var timestamps: [TimeInterval] = []
         if includeLastHour {
-            timestamps.append(Date().lastHour.timeIntervalSince1970)
+            timestamps.append(Date().lastHour.timeIntervalSince1970) // 1 hour ago
         }
         timestamps.append(contentsOf: [
-            getDate(dayOffset: 0).timeIntervalSince1970,
-            getDate(dayOffset: -1).timeIntervalSince1970,
-            getDate(dayOffset: -7).timeIntervalSince1970,
-            getDate(dayOffset: -30).timeIntervalSince1970])
+            getDate(hourOffset: 24 * -1).timeIntervalSince1970, // 24 hours ago
+            getDate(hourOffset: 24 * -7).timeIntervalSince1970, // 7 days ago
+            getDate(hourOffset: 24 * -28).timeIntervalSince1970]) // 4 weeks ago
+
         self.init(timestamps: timestamps)
     }
 
