@@ -192,49 +192,6 @@ class TabDisplayView: UIView,
     }
 
     private func configureDataSource() {
-//        // swiftlint:disable line_length
-//        dataSource = TabDisplayDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, sectionItem) ->
-//            UICollectionViewCell in
-//            // swiftlint:enable line_length
-//            guard let self else { return UICollectionViewCell() }
-//
-//            switch sectionItem {
-//            case .inactiveTab(let inactiveTab):
-//                guard let cell = collectionView.dequeueReusableCell(
-//                    withReuseIdentifier: InactiveTabsCell.cellIdentifier,
-//                    for: indexPath
-//                ) as? InactiveTabsCell
-//                else { return UICollectionViewCell() }
-//
-//                cell.configure(with: inactiveTab)
-//                if let theme = theme {
-//                    cell.applyTheme(theme: theme)
-//                }
-//                return cell
-//
-//            case .tab(let tab):
-//                if isTabTrayUIExperimentsEnabled {
-//                    guard let cell = collectionView.dequeueReusableCell(
-//                        withReuseIdentifier: ExperimentTabCell.cellIdentifier,
-//                        for: indexPath
-//                    ) as? ExperimentTabCell else { return UICollectionViewCell() }
-//
-//                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-//                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
-//                    return cell
-//                } else {
-//                    guard let cell = collectionView.dequeueReusableCell(
-//                        withReuseIdentifier: TabCell.cellIdentifier,
-//                        for: indexPath
-//                    ) as? TabCell else { return UICollectionViewCell() }
-//
-//                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-//                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
-//                    return cell
-//                }
-//            }
-//        }
-
         // swiftlint:disable line_length
         dataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             // swiftlint:enable line_length
@@ -357,10 +314,6 @@ class TabDisplayView: UIView,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)
             case .tab(let tabModel):
-//                if isTabTrayUIExperimentsEnabled {
-//                    selectedExperimentCell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
-//                    selectedCellImageViewSnapshot = selectedCell?.locationImageView.snapshotView(afterScreenUpdates: false)
-//                }
                 let tabUUID = tabModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
