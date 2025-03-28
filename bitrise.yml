@@ -1641,7 +1641,6 @@ workflows:
 
   Firefox_Unit_Tests:
     before_run:
-    - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
     steps:
     - script@1.2.1:
