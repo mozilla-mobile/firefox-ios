@@ -55,7 +55,11 @@ class RemoteTabsPanelMiddleware {
 
     private func resolveHomepageActions(action: Action, state: AppState) {
         switch action.actionType {
-        case HomepageActionType.initialize, JumpBackInActionType.fetchRemoteTabs:
+        case HomepageActionType.viewWillAppear,
+            JumpBackInActionType.fetchRemoteTabs,
+            TabTrayActionType.dismissTabTray,
+            TopTabsActionType.didTapNewTab,
+            TopTabsActionType.didTapCloseTab:
             self.handleFetchingMostRecentRemoteTab(windowUUID: action.windowUUID)
         default:
             break

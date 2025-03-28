@@ -1006,18 +1006,36 @@ class URLBar: UIView {
         delegate?.urlBarDidDeactivate(self)
     }
 
-    private func setTextToURL(displayFullUrl: Bool = false) {
+    private func setTextToURL() {
         guard let url = url else { return }
 
         // Strip the username/password to prevent domain spoofing.
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         components?.user = nil
         components?.password = nil
-        let fullUrl = components?.url?.absoluteString
-        let truncatedURL = components?.host
-        let displayText = truncatedURL
-        urlTextField.text = displayFullUrl ? fullUrl : displayText
-        truncatedUrlText.text = truncatedURL
+        let fullUrl = components?.url?.absoluteString ?? ""
+        let truncatedURL = formatAndTruncateURLTextField(urlString: fullUrl)
+        urlTextField.attributedText = truncatedURL
+        truncatedUrlText.attributedText = truncatedURL
+    }
+    
+    private func formatAndTruncateURLTextField(urlString: String) -> NSAttributedString? {
+        guard !isEditing else { return nil }
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byTruncatingHead
+
+        let (_, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
+
+        let attributedString = NSMutableAttributedString(string: normalizedHost)
+
+        attributedString.addAttribute(
+            .paragraphStyle,
+            value: paragraphStyle,
+            range: NSRange(location: 0, length: attributedString.length)
+        )
+
+        return attributedString
     }
 
     private func highlightText(_ textField: UITextField) {

@@ -27,11 +27,119 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func test_homepageInitializeAction_returnsMostRecentTab() throws {
+    func test_jumpBackInAction_returnsMostRecentTab() throws {
+        let subject = createSubject()
+        let action = JumpBackInAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: JumpBackInActionType.fetchRemoteTabs
+        )
+
+        let expectation = XCTestExpectation(description: "Most recent tab should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.remoteTabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? RemoteTabsAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? RemoteTabsMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab)
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.client.name, "Fake client")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.title, "Mozilla 3")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.URL.absoluteString, "www.mozilla.org")
+    }
+
+    func test_viewWillAppearHomeAction_returnsMostRecentTab() throws {
         let subject = createSubject()
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
+            actionType: HomepageActionType.viewWillAppear
+        )
+
+        let expectation = XCTestExpectation(description: "Most recent tab should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.remoteTabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? RemoteTabsAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? RemoteTabsMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab)
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.client.name, "Fake client")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.title, "Mozilla 3")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.URL.absoluteString, "www.mozilla.org")
+    }
+
+    func test_dismissTabTrayAction_returnsMostRecentTab() throws {
+        let subject = createSubject()
+        let action = TabTrayAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabTrayActionType.dismissTabTray
+        )
+
+        let expectation = XCTestExpectation(description: "Most recent tab should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.remoteTabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? RemoteTabsAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? RemoteTabsMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab)
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.client.name, "Fake client")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.title, "Mozilla 3")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.URL.absoluteString, "www.mozilla.org")
+    }
+
+    func test_topTabsNewTabAction_returnsMostRecentTab() throws {
+        let subject = createSubject()
+        let action = TopTabsAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TopTabsActionType.didTapNewTab
+        )
+
+        let expectation = XCTestExpectation(description: "Most recent tab should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.remoteTabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? RemoteTabsAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? RemoteTabsMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab)
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.client.name, "Fake client")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.title, "Mozilla 3")
+        XCTAssertEqual(actionCalled.mostRecentSyncedTab?.tab.URL.absoluteString, "www.mozilla.org")
+    }
+
+    func test_topTabsCloseTabAction_returnsMostRecentTab() throws {
+        let subject = createSubject()
+        let action = TopTabsAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TopTabsActionType.didTapNewTab
         )
 
         let expectation = XCTestExpectation(description: "Most recent tab should be returned")

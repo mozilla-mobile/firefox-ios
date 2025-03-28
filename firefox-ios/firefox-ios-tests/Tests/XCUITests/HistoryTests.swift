@@ -307,7 +307,10 @@ class HistoryTests: BaseTestCase {
                 app.tables.cells.staticTexts[bookOfMozilla["label"]!]
             ]
         )
-        XCTAssertEqual(userState.numTabs, 1)
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 1)
+        }
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[StandardImageIdentifiers.Large.plus].waitAndTap()

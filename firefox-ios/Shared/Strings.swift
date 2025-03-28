@@ -202,6 +202,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "More options",
                 comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
+            public static let ClearTextFieldButtonA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139",
+                tableName: "Bookmarks",
+                value: "Clear",
+                comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
         }
 
         public struct EmptyState {
@@ -2114,6 +2119,17 @@ extension String {
                 tableName: nil,
                 value: "Rate on App Store",
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
+        }
+
+        public struct General {
+            public struct ScrollToHideTabAndAddressBar {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.ScrollToHideTabAndAddressBar.Title.v138",
+                    tableName: "Settings",
+                    value: "Scroll to Hide Tab and Address Bar",
+                    comment: "In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar."
+                )
+            }
         }
 
         public struct Homepage {

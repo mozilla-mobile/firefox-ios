@@ -5,6 +5,7 @@
 import XCTest
 
 @testable import Client
+import SwiftUI
 
 final class SettingsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
@@ -174,6 +175,15 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 0)
         XCTAssertNil(mockRouter.pushedViewController)
+    }
+
+    func testAppIconSettingsRoute_showsAppIconSelectionPage() throws {
+        let subject = createSubject()
+
+        subject.start(with: .appIcon)
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppIconSelectionView>)
     }
 
     // MARK: - Delegate

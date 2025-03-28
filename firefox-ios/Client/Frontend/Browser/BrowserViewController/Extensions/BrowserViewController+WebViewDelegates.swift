@@ -296,9 +296,7 @@ extension BrowserViewController: WKUIDelegate {
 
         self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
 
-        guard !topTabsVisible else { return }
-
-        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+        // We are showing the toast always now
         showToastBy(isPrivate: isPrivate, tab: tab)
     }
 

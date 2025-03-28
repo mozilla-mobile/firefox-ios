@@ -16,7 +16,7 @@ class DownloadsTests: BaseTestCase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
         app.terminate()
-        app.activate()
+        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)

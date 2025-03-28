@@ -48,6 +48,19 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             )
         }
 
+        // Setting only available for iPad
+        if let profile, UIDevice.current.userInterfaceIdiom == .pad {
+            var generalSettings = [Setting]()
+            let toolbarHide = BoolSetting(prefs: profile.prefs,
+                                          theme: themeManager.getCurrentTheme(for: windowUUID),
+                                          prefKey: PrefsKeys.UserFeatureFlagPrefs.TabsAndAddressBarAutoHide,
+                                          defaultValue: true,
+                                          titleText: .Settings.General.ScrollToHideTabAndAddressBar.Title)
+            generalSettings.append(toolbarHide)
+            settings.append(SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
+                                           children: generalSettings))
+        }
+
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
         var mediaSection = [Setting]()
         if let profile {
