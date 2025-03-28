@@ -1668,7 +1668,8 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
-        - test_repetition_count: 20
+        - test_repetition_mode: until_failure
+        - maximum_test_repetitions: 20
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
