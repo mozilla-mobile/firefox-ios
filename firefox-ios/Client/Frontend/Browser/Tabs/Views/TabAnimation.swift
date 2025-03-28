@@ -16,7 +16,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return nil
+        return BasicAnimationController(delegate: self, direction: .dismissing)
     }
 }
 
@@ -212,7 +212,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     tabSnapshot.layer.cornerCurve = .continuous
     tabSnapshot.clipsToBounds = true
     tabSnapshot.contentMode = .scaleAspectFill
-    tabSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
+    tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
     tabSnapshot.isHidden = true
 
     let finalFrame = context.finalFrame(for: toViewController)
@@ -236,7 +236,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
       // BVC snapshot animates from the cell to its final resting spot
       let toVCSnapshot: UIView =
-        toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
+      toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
       toVCSnapshot.layer.cornerCurve = .continuous
       toVCSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
       toVCSnapshot.clipsToBounds = true
