@@ -5,6 +5,10 @@
 import UIKit
 import Common
 
+protocol TabTraySelectorDelegate: AnyObject {
+    func didSelectSection(section: Int)
+}
+
 // MARK: - UX Constants
 struct TabTraySelectorUX {
     static let cellSpacing: CGFloat = 4
@@ -24,7 +28,10 @@ class TabTraySelectorView: UIView,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
+    weak var delegate: TabTraySelectorDelegate?
+
     private let windowUUID: WindowUUID
+    private var selectedIndex = 1
 
     var items: [String] = [] {
         didSet {
@@ -32,17 +39,6 @@ class TabTraySelectorView: UIView,
             scrollToItem(at: selectedIndex, animated: false)
         }
     }
-
-    var selectedIndex = 0 {
-        didSet {
-            if oldValue != selectedIndex {
-                collectionView.reloadData()
-                onSelectionChanged?(selectedIndex)
-            }
-        }
-    }
-
-    var onSelectionChanged: ((Int) -> Void)?
 
     // MARK: - Layout & Views
     private lazy var layout: CenterSnappingFlowLayout = {
@@ -131,8 +127,7 @@ class TabTraySelectorView: UIView,
 
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedIndex = indexPath.item
-        scrollToItem(at: selectedIndex, animated: true)
+        selectNewSection(newIndex: indexPath.item)
     }
 
     // MARK: - Scroll Snap
@@ -147,9 +142,16 @@ class TabTraySelectorView: UIView,
     private func snapToNearestItem() {
         let center = convert(CGPoint(x: bounds.midX, y: bounds.midY), to: collectionView)
         if let indexPath = collectionView.indexPathForItem(at: center) {
-            selectedIndex = indexPath.item
-            scrollToItem(at: selectedIndex, animated: true)
+            selectNewSection(newIndex: indexPath.item)
         }
+    }
+
+    func selectNewSection(newIndex: Int) {
+        guard selectedIndex != newIndex else { return }
+        selectedIndex = newIndex
+        collectionView.reloadData()
+        scrollToItem(at: selectedIndex, animated: true)
+        delegate?.didSelectSection(section: newIndex)
     }
 
     // MARK: - Theamable

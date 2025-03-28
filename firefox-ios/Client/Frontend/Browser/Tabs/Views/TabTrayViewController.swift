@@ -25,7 +25,8 @@ class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
                              StoreSubscriber,
-                             FeatureFlaggable {
+                             FeatureFlaggable,
+                             TabTraySelectorDelegate {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -104,14 +105,14 @@ class TabTrayViewController: UIViewController,
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
-    private lazy var newSegmentControl: TabTraySelectorView = {
+    private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selector = TabTraySelectorView(windowUUID: windowUUID)
-        selector.items = ["Private", "Tabs", "Sync"]
+        selector.delegate = self
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          TabTrayPanelType.tabs.label,
+                          TabTrayPanelType.syncedTabs.label]
 
-        // TODO: Update with a delegate insetead
-        selector.onSelectionChanged = { index in
-            print("Selected tab at index: \(index)")
-        }
+        didSelectSection(section: 1)
         return selector
     }()
 
@@ -331,7 +332,6 @@ class TabTrayViewController: UIViewController,
 
         updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
-
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
@@ -389,8 +389,8 @@ class TabTrayViewController: UIViewController,
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 
-            containerView.addSubview(newSegmentControl)
-            newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addSubview(experimentSegmentControl)
+            experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
             NSLayoutConstraint.activate([
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -404,12 +404,12 @@ class TabTrayViewController: UIViewController,
                 segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                            constant: -UX.segmentedControlHorizontalSpacing),
 
-                newSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-                newSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                           constant: UX.segmentedControlHorizontalSpacing),
-                newSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                            constant: -UX.segmentedControlHorizontalSpacing),
-                newSegmentControl.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.segmentedControlMinHeight)
+                experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                                  constant: UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                                   constant: -UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlMinHeight)
             ])
         } else {
             view.addSubview(navigationToolbar)
@@ -585,7 +585,7 @@ class TabTrayViewController: UIViewController,
                 panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: newSegmentControl.topAnchor,
+                panel.view.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
                                                    constant: -UX.segmentedControlTopSpacing),
             ])
         } else {
@@ -677,6 +677,26 @@ class TabTrayViewController: UIViewController,
     private func syncTabsTapped() {
         let action = RemoteTabsPanelAction(windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.refreshTabs)
+        store.dispatch(action)
+    }
+
+    // MARK: - TabTraySelectorDelegate
+
+    func didSelectSection(section: Int) {
+        // Temporary offset of numbers to account for the different order in the experiment
+        // Order can be updated in TabTrayPanelType once the experiment is done
+        var newSection = section
+        if section == 0 { newSection = 1 } else
+        if section == 1 { newSection = 0 }
+
+        guard let panelType = TabTrayPanelType(rawValue: newSection),
+              tabTrayState.selectedPanel != panelType else { return }
+
+        setupOpenPanel(panelType: panelType)
+
+        let action = TabTrayAction(panelType: panelType,
+                                   windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.changePanel)
         store.dispatch(action)
     }
 }
