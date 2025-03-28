@@ -88,12 +88,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource
         else { return }
 
-        // let cv = tabTrayView.collectionView
         cv.reloadData()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
-       // var cellTitleSnapshot: UIView?
-        guard let item = findTabItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
+        guard let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
 
         if let indexPath = dataSource.indexPath(for: item) {
         // This is needed for some reason otherwise the collection views content offset is
@@ -104,22 +102,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         if let cell = tabCell {
           // Hide the cell that is being animated too since we are making a copy of it to animate in
           cellFrame = cv.convert(cell.frame, to: view)
-
-          // For animations sake we are also making a copy of the title and animating it in closer to
-          // the animation finish
-//          let titleSnapshot = UIImageView(image: cell.titleBackgroundView.snapshot)
-//          titleSnapshot.contentMode = .scaleToFill
-//          titleSnapshot.clipsToBounds = true
-//          tabSnapshot.addSubview(titleSnapshot)
-//          titleSnapshot.snp.makeConstraints {
-//            $0.top.leading.trailing.equalToSuperview()
-//          }
-//          titleSnapshot.alpha = 0.0
-//          cellTitleSnapshot = titleSnapshot
-//
-//          tabSnapshot.setNeedsLayout()
-//          tabSnapshot.layoutIfNeeded()
-//
           cell.isHidden = true
           cell.alpha = 0.0
         }
@@ -142,13 +124,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         bvcSnapshot.layer.cornerRadius = TabCell.UX.cornerRadius
         backgroundView.alpha = 0
       }
-      // Need delayed animation for these
-//      animator.addAnimations(
-//        {
-//          cellTitleSnapshot?.alpha = 1.0
-//        },
-//        delayFactor: 0.5
-//      )
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
         tabCell?.isHidden = false
         UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
@@ -254,11 +229,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     let cv = panelViewController.tabDisplayView.collectionView
     guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource
     else { return }
-    guard let item = findTabItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
+    guard let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
 
     cv.reloadData()
 
-//   let webView = selectedTab.webView
         var tabCell: ExperimentTabCell?
         if let indexPath = dataSource.indexPath(for: item) {
         // This is needed for some reason otherwise the collection views content offset is
@@ -271,14 +245,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
           tabSnapshot.frame = cv.convert(cell.frame, to: view)
           toVCSnapshot.frame = tabSnapshot.frame
 
-          // let titleSnapshot = UIImageView(image: cell.titleBackgroundView.snapshot)
-          // titleSnapshot.contentMode = .scaleToFill
-          // titleSnapshot.clipsToBounds = true
-         // tabSnapshot.addSubview(titleSnapshot)
-//          titleSnapshot.snp.makeConstraints {
-//            $0.top.leading.trailing.equalToSuperview()
-//          }
-         // cellTitleSnapshot = titleSnapshot
           tabSnapshot.setNeedsLayout()
           tabSnapshot.layoutIfNeeded()
 
@@ -297,13 +263,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toVCSnapshot.layer.cornerRadius = 0
         backgroundView.alpha = 1
       }
-//      if let titleSnapshot = cellTitleSnapshot {
-//        // Need a quicker animation for this one
-//        UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
-//          titleSnapshot.alpha = 0
-//        }
-//        .startAnimation()
-//      }
+
       animator.addCompletion { _ in
         tabCell?.isHidden = false
         toView.isHidden = false
@@ -318,7 +278,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     // swiftlint:enable closure_body_length
   }
 
-    func findTabItem(by id: String, dataSource: TabDisplayDiffableDataSource) -> TabDisplayDiffableDataSource.TabItem? {
+   private func findItem(by id: String, dataSource: TabDisplayDiffableDataSource) -> TabDisplayDiffableDataSource.TabItem? {
         return dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .tab(let model):
