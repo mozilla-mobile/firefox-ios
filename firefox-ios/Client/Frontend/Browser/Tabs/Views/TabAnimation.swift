@@ -85,13 +85,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             else { return }
 
             let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource
+            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
             else { return }
 
             cv.reloadData()
             var tabCell: ExperimentTabCell?
             var cellFrame: CGRect?
-            guard let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
 
             if let indexPath = dataSource.indexPath(for: item) {
                 // This is needed for some reason otherwise the collection views content offset is
@@ -226,9 +226,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             else { return }
 
             let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource
+            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+                let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
             else { return }
-            guard let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource) else { return }
 
             cv.reloadData()
 
