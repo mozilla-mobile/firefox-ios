@@ -148,7 +148,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             logger.log(
         """
             Attempted to dismiss the tab tray without a view to dismiss from.
-        
             Likely the `modalPresentationStyle` was changed away from `fullScreen` and should be changed
             back if using this custom animation.
         """,
