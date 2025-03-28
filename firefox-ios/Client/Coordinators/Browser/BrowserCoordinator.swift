@@ -998,7 +998,7 @@ class BrowserCoordinator: BaseCoordinator,
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
-            modalPresentationStyle = .fullScreen
+            modalPresentationStyle = .custom
         } else {
             modalPresentationStyle = isPad ? .fullScreen: .formSheet
         }
@@ -1027,7 +1027,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, presentationStyle: .fullScreen)
+            present(navigationController, customTransition: tabTrayVC, style: .custom)
         } else {
             present(navigationController)
         }
@@ -1036,9 +1036,9 @@ class BrowserCoordinator: BaseCoordinator,
     // This implementation of present is specifically for the animation on .tabTrayUIExperiments
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
-                         presentationStyle: UIModalPresentationStyle) {
+                         style: UIModalPresentationStyle) {
         browserViewController.willNavigateAway(from: tabManager.selectedTab)
-        router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: .fullScreen)
+        router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: style)
     }
 
     private func present(_ viewController: UIViewController) {
