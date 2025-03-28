@@ -1846,10 +1846,15 @@ class BrowserViewController: UIViewController,
                 )
             }
         case .remove:
+            let messageTitle: String = if let title {
+                String(format: .Bookmarks.Menu.DeletedBookmark, title)
+            } else {
+                .MainMenu.Submenus.Tools.ZoomNegativeSymbol
+            }
             self.showToast(
                 urlString,
                 title,
-                message: String(format: .Bookmarks.Menu.DeletedBookmark, title ?? ""),
+                message: messageTitle,
                 toastAction: .removeBookmark
             )
         }
