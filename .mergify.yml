@@ -2,7 +2,7 @@ queue_rules:
   - name: rebase-queue
     queue_conditions:
       - check-success=Bitrise
-    merge_method: rebase  
+    merge_method: rebase
   - name: squash-queue
     queue_conditions:
       - check-success=Bitrise
@@ -13,8 +13,8 @@ pull_request_rules:
     conditions:
       - conflict
     actions:
-        comment:
-          message: This pull request has conflicts when rebasing. Could you fix it @{{author}}? 🙏
+      comment:
+        message: This pull request has conflicts when rebasing. Could you fix it @{{author}}? 🙏
   - name: Bitrise update - Auto Merge
     conditions:
       - author=github-actions[bot]
@@ -72,3 +72,8 @@ pull_request_rules:
     actions:
       queue:
         name: squash-queue
+priority_rules:
+  - name: priority for queue `rebase-queue`
+    conditions:
+      - queue-name=rebase-queue
+    priority: 2250
