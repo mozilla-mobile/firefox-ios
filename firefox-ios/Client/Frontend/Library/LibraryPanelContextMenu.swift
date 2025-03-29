@@ -19,6 +19,10 @@ protocol LibraryPanelContextMenu {
 }
 
 extension LibraryPanelContextMenu {
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        fatalError("getSiteDetails(for:) Not Implemented")
+    }
+
     func presentContextMenu(for indexPath: IndexPath) {
         guard let site = getSiteDetails(for: indexPath) else { return }
 
