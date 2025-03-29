@@ -224,7 +224,7 @@ extension TopSitesHelperTests {
 }
 
 // MARK: - SiteCursorMock
-class SiteCursorMock: Cursor<Site> {
+private class SiteCursorMock: Cursor<Site> {
     var sites = [Site]()
     override func asArray() -> [Site] {
         return sites
@@ -232,7 +232,7 @@ class SiteCursorMock: Cursor<Site> {
 }
 
 // MARK: - MockablePinnedSites
-class PinnedSitesMock: MockablePinnedSites {
+private class PinnedSitesMock: MockablePinnedSites {
     class Error: MaybeErrorType {
         var description = "Error"
     }

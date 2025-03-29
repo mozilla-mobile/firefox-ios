@@ -3128,6 +3128,11 @@ extension String {
         tableName: nil,
         value: "Add to Shortcuts",
         comment: "The title for the pinning a shortcut action")
+    public static let RemoveFromShortcutsTitle = MZLocalizedString(
+        key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
+        tableName: nil,
+        value: "Remove from Shortcuts",
+        comment: "The title for the unpinning a shortcut action")
 }
 
 // MARK: - PhotonActionSheet String

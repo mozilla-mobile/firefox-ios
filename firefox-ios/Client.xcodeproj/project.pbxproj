@@ -430,6 +430,7 @@
 		401F68A52D84726700786D0C /* RemoteTabsPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F68A42D84726700786D0C /* RemoteTabsPanelTests.swift */; };
 		401F68F62D94966D00786D0C /* RemoteTabsPanelDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F68F52D94966600786D0C /* RemoteTabsPanelDelegateMock.swift */; };
 		401F68F82D9499B100786D0C /* RemoteTabsEmptyViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F68F72D9499B100786D0C /* RemoteTabsEmptyViewDelegate.swift */; };
+		401F68FC2D9701F400786D0C /* BookmarksViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F68FB2D9701E900786D0C /* BookmarksViewControllerTests.swift */; };
 		43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43079D1F2C85D3BB0047C28D /* Bookmarks.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43079D1D2C85D3BB0047C28D /* Bookmarks.strings */; };
 		43079D232C85D3BB0047C28D /* MainMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43079D212C85D3BB0047C28D /* MainMenu.strings */; };
@@ -3183,6 +3184,7 @@
 		401F68A42D84726700786D0C /* RemoteTabsPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelTests.swift; sourceTree = "<group>"; };
 		401F68F52D94966600786D0C /* RemoteTabsPanelDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelDelegateMock.swift; sourceTree = "<group>"; };
 		401F68F72D9499B100786D0C /* RemoteTabsEmptyViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsEmptyViewDelegate.swift; sourceTree = "<group>"; };
+		401F68FB2D9701E900786D0C /* BookmarksViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksViewControllerTests.swift; sourceTree = "<group>"; };
 		40364407BBB70494930FE68D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		406E4E6094EB97EBD3574628 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/Search.strings; sourceTree = "<group>"; };
 		40A64D0FB8B16BBEA2A423A1 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -10729,6 +10731,7 @@
 				0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift */,
 				0B7FC3D12CAE811B005C5CCE /* DefaultBookmarksSaverTests.swift */,
 				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
+				401F68FB2D9701E900786D0C /* BookmarksViewControllerTests.swift */,
 				0B7CF8842CAC1B7000DC02F8 /* Legacy */,
 				21EEAA1A2D3AE3B300595119 /* BookmarksTelemetryTests.swift */,
 			);
@@ -18408,6 +18411,7 @@
 				C8E531CC29E72A2F00E03FEF /* ShortcutRouteTests.swift in Sources */,
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
 				E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */,
+				401F68FC2D9701F400786D0C /* BookmarksViewControllerTests.swift in Sources */,
 				8AC884212D5262070033ABF5 /* CrashTrackerTests.swift in Sources */,
 				C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */,
 				21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */,
