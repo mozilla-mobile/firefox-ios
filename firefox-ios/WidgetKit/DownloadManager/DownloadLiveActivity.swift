@@ -241,19 +241,6 @@ struct DownloadLiveActivity: Widget {
         let bytesExpected = ByteCountFormatter.string(
           fromByteCount: liveDownload.state.totalBytesExpected,
           countStyle: .file
-<<<<<<< HEAD
-          )
-        Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
-          .font(.subheadline)
-          .foregroundColor(DownloadLiveActivity.UX.DynamicIsland.widgetColours)
-          .frame(maxWidth: .infinity,
-                 alignment: .leading)
-          .padding(EdgeInsets(top: DownloadLiveActivity.UX.DynamicIsland.wordsTopPadding,
-                              leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
-                              bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
-                              trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
-          .contentTransition(.identity)
-=======
         )
         if !liveDownload.state.containsOnlyEncodedFiles {
           Text(String(format: .LiveActivity.Downloads.FileProgressText, bytesDownloaded, bytesExpected))
@@ -265,8 +252,8 @@ struct DownloadLiveActivity: Widget {
                                 leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
                                 bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
                                 trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
+            .contentTransition(.identity)
         }
->>>>>>> e6c76b86ba (change view when there are only content encoded files)
       }
     }
     private func trailingExpandedRegion
