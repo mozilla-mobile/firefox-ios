@@ -19,20 +19,9 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         var configuration = defaultContentConfiguration()
         configuration.text = text
         configuration.textProperties.color = .primaryText
-        configuration.textProperties.allowsDefaultTighteningForTruncation = true
-        configuration.textProperties.adjustsFontForContentSizeCategory = true
-        
-        configuration.textProperties.alignment = .natural
-        configuration.textProperties.numberOfLines = 0
-        configuration.textProperties.lineBreakMode = .byWordWrapping
-        configuration.axesPreservingSuperviewLayoutMargins = .horizontal
-        configuration.prefersSideBySideTextAndSecondaryText = true
         
         if let secondaryText {
             configuration.secondaryText = secondaryText
-            configuration.secondaryTextProperties.alignment = .natural
-            configuration.secondaryTextProperties.adjustsFontForContentSizeCategory = true
-            configuration.secondaryTextProperties.adjustsFontSizeToFitWidth = true
         }
         
         let margins = configuration.directionalLayoutMargins
