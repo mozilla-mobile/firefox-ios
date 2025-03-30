@@ -69,7 +69,6 @@ class DownloadsPanel: UIViewController,
                 object: nil
             )
         }
-        startDownloadLiveActivity()
     }
 
     required init?(coder aDecoder: NSCoder) {
