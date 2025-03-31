@@ -88,14 +88,6 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
-    private var isURLTextFieldCentered = false {
-        didSet {
-            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme, isURLTextFieldCentered != oldValue else { return }
-            applyTheme(theme: theme)
-        }
-    }
-
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
