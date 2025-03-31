@@ -11,6 +11,7 @@ import Common
 class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public struct UX {
         public static let stackViewSpacing: CGFloat = 8
+        public static let brightnessSize: CGFloat = 20
     }
 
     // UI views
@@ -35,6 +36,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         slider.addTarget(self, action: #selector(self.changeBrightness), for: .valueChanged)
     }
 
+    // Constraints
+    private var brightnessMinImageHeightConstraint: NSLayoutConstraint?
+    private var brightnessMaxImageHeightConstraint: NSLayoutConstraint?
+
     private var viewModel: ReaderModeStyleViewModel
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -54,7 +59,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
-        adjustLayoutForA11ySizeCategory()
     }
 
     required init?(coder: NSCoder) {
@@ -141,72 +145,14 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         view.addSubview(separatorLines[2])
         makeSeparatorView(fromView: separatorLines[2], topConstraint: themeRow)
 
-        // Brightness row
-
-        view.addSubview(brightnessRow)
-        NSLayoutConstraint.activate(
-            [
-                brightnessRow.topAnchor.constraint(equalTo: separatorLines[2].bottomAnchor),
-                brightnessRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-                brightnessRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-                brightnessRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
-                brightnessRow.bottomAnchor.constraint(
-                    equalTo: view.bottomAnchor,
-                    constant: viewModel.brightnessRowOffset
-                ),
-            ]
-        )
-
-        brightnessRow.addSubview(slider)
-        NSLayoutConstraint.activate(
-            [
-                slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
-                slider.centerYAnchor.constraint(equalTo: brightnessRow.centerYAnchor),
-                slider.widthAnchor.constraint(
-                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessSliderWidth)
-                )
-            ]
-        )
-
-        let brightnessMinImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage(named: StandardImageIdentifiers.Medium.sun)?.withRenderingMode(.alwaysTemplate)
-        }
-        brightnessImageViews.append(brightnessMinImageView)
-        brightnessRow.addSubview(brightnessMinImageView)
-
-        NSLayoutConstraint.activate(
-            [
-                brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-                brightnessMinImageView.rightAnchor.constraint(
-                    equalTo: slider.leftAnchor,
-                    constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
-                )
-            ]
-        )
-
-        let brightnessMaxImageView: UIImageView = .build { imageView in
-            let image = UIImage(named: StandardImageIdentifiers.Medium.sunFill)
-            imageView.image = image?.withRenderingMode(.alwaysTemplate)
-        }
-        brightnessImageViews.append(brightnessMaxImageView)
-        brightnessRow.addSubview(brightnessMaxImageView)
-
-        NSLayoutConstraint.activate(
-            [
-                brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-                brightnessMaxImageView.leftAnchor.constraint(
-                    equalTo: slider.rightAnchor,
-                    constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
-                )
-            ]
-        )
+        setupLayout()
 
         updateFontSizeButtons()
         updateFontTypeButtons()
-        slider.value = Float(UIScreen.main.brightness)
 
         listenForThemeChange(view)
         applyTheme()
+        adjustLayoutForA11ySizeCategory()
     }
 
     // MARK: - Applying Theme
@@ -339,6 +285,74 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     func changeBrightness(_ slider: UISlider) {
         viewModel.sliderDidChange(value: CGFloat(slider.value))
     }
+
+    // MARK: - Private
+    private func setupLayout() {
+        setupBrightnessUI()
+    }
+
+    private func setupBrightnessUI() {
+        view.addSubview(brightnessRow)
+        brightnessRow.addSubview(slider)
+
+        let brightnessMinImageView: UIImageView = .build { imageView in
+            imageView.image = UIImage(named: StandardImageIdentifiers.Medium.sun)?.withRenderingMode(.alwaysTemplate)
+        }
+        brightnessImageViews.append(brightnessMinImageView)
+        brightnessRow.addSubview(brightnessMinImageView)
+
+        brightnessMinImageHeightConstraint = brightnessMinImageView.heightAnchor.constraint(
+            equalToConstant: UX.brightnessSize
+        )
+        brightnessMinImageHeightConstraint?.isActive = true
+
+        let brightnessMaxImageView: UIImageView = .build { imageView in
+            let image = UIImage(named: StandardImageIdentifiers.Medium.sunFill)
+            imageView.image = image?.withRenderingMode(.alwaysTemplate)
+        }
+        brightnessImageViews.append(brightnessMaxImageView)
+        brightnessRow.addSubview(brightnessMaxImageView)
+
+        brightnessMaxImageHeightConstraint = brightnessMaxImageView.heightAnchor.constraint(
+            equalToConstant: UX.brightnessSize
+        )
+        brightnessMaxImageHeightConstraint?.isActive = true
+
+        NSLayoutConstraint.activate(
+            [
+                brightnessRow.topAnchor.constraint(equalTo: separatorLines[2].bottomAnchor),
+                brightnessRow.leftAnchor.constraint(equalTo: view.leftAnchor),
+                brightnessRow.rightAnchor.constraint(equalTo: view.rightAnchor),
+                brightnessRow.bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor,
+                    constant: viewModel.brightnessRowOffset
+                ),
+
+                slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
+                slider.centerYAnchor.constraint(equalTo: brightnessRow.centerYAnchor),
+                slider.widthAnchor.constraint(
+                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessSliderWidth)
+                ),
+
+                brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
+                brightnessMinImageView.rightAnchor.constraint(
+                    equalTo: slider.leftAnchor,
+                    constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                ),
+                brightnessMinImageView.widthAnchor.constraint(equalTo: brightnessMinImageView.heightAnchor),
+
+                brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
+                brightnessMaxImageView.leftAnchor.constraint(
+                    equalTo: slider.rightAnchor,
+                    constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                ),
+                brightnessMaxImageView.widthAnchor.constraint(equalTo: brightnessMaxImageView.heightAnchor)
+            ]
+        )
+
+        slider.value = Float(UIScreen.main.brightness)
+    }
+
     private func adjustLayoutForA11ySizeCategory() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         if contentSizeCategory.isAccessibilityCategory {
@@ -346,6 +360,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         } else {
             fontTypeStackView.axis = .horizontal
         }
+
+        let brightnessImageSize = max(UIFontMetrics.default.scaledValue(for: UX.brightnessSize), UX.brightnessSize)
+        brightnessMinImageHeightConstraint?.constant = brightnessImageSize
+        brightnessMaxImageHeightConstraint?.constant = brightnessImageSize
     }
 
     // MARK: - Notifiable
