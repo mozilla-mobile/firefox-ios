@@ -5,11 +5,13 @@
 import Foundation
 import WebKit
 import Shared
+import Glean
 
-enum HistoryDeletionUtilityDateOptions {
+enum HistoryDeletionUtilityDateOptions: String, CaseIterable {
     case lastHour
-    case today
-    case yesterday
+    case lastTwentyFourHours
+    case lastSevenDays
+    case lastFourWeeks
     case allTime
 }
 
@@ -21,9 +23,11 @@ protocol HistoryDeletionProtocol {
 
 class HistoryDeletionUtility: HistoryDeletionProtocol {
     private var profile: Profile
+    private let gleanWrapper: GleanWrapper
 
-    init(with profile: Profile) {
+    init(with profile: Profile, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.profile = profile
+        self.gleanWrapper = gleanWrapper
     }
 
     // MARK: Interface
@@ -51,7 +55,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
         deleteProfileMetadataSince(dateOption)
 
-        reportDeletionFor(dateOption)
+        HistoryDeletionUtilityTelemetry().clearedHistory(dateOption)
     }
 
     // MARK: URL based deletion functions
@@ -144,36 +148,15 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         switch dateOption {
         case .lastHour:
             return Calendar.current.date(byAdding: .hour, value: -1, to: Date())
-        case .today:
-            return Calendar.current.startOfDay(for: Date())
-        case .yesterday:
-            guard let yesterday = Calendar.current.date(byAdding: .hour,
-                                                        value: -24,
-                                                        to: Date())
-            else { return nil }
-
-            return Calendar.current.startOfDay(for: yesterday)
+        case .lastTwentyFourHours:
+            return Calendar.current.date(byAdding: .hour, value: -24, to: Date())
+        case .lastSevenDays:
+            return Calendar.current.date(byAdding: .day, value: -7, to: Date())
+        case .lastFourWeeks:
+            return Calendar.current.date(byAdding: .day, value: -28, to: Date())
         case .allTime:
             let pastReferenceDate = Date(timeIntervalSinceReferenceDate: 0)
             return requiringAllTimeAsPresent ? Date() : pastReferenceDate
-        }
-    }
-
-    private func reportDeletionFor(_ dateOption: HistoryDeletionUtilityDateOptions) {
-        switch dateOption {
-        case .today:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .historyRemovedToday)
-        case .yesterday:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .historyRemovedTodayAndYesterday)
-        case .allTime:
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .historyRemovedAll)
-        default: break
         }
     }
 }
