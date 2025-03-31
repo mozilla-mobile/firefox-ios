@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-struct LocationViewAppearanceConfig {
+struct LocationViewAppearanceConfiguration {
     let backgroundColor: UIColor
     let placeholderColor: UIColor
     let etpIconImageColor: UIColor

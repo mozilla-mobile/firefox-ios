@@ -39,7 +39,7 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ config: LocationViewConfiguration, _ isLocationTextCentered: Bool, delegate: LocationViewDelegate) {
+    func configure(_ config: LocationViewConfiguration, isLocationTextCentered: Bool, delegate: LocationViewDelegate) {
         isURLTextFieldCentered = isLocationTextCentered
         searchEngineImageView.image = config.searchEngineImage
         configureA11y(config)

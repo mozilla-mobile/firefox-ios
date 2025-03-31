@@ -9,7 +9,7 @@ import Common
 protocol SearchEngineView: UIView {
     func configure(
         _ config: LocationViewConfiguration,
-        _ isLocationTextCentered: Bool,
+        isLocationTextCentered: Bool,
         delegate: LocationViewDelegate
     )
     func applyTheme(theme: Theme)

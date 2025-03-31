@@ -143,7 +143,7 @@ final class LocationView: UIView,
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        searchEngineContentView.configure(config, isLocationTextCentered, delegate: delegate)
+        searchEngineContentView.configure(config, isLocationTextCentered: isLocationTextCentered, delegate: delegate)
 
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -608,7 +608,7 @@ final class LocationView: UIView,
         self.theme = theme
         let colors = theme.colors
         // Get the appearance based on `isURLTextFieldCentered`
-        let appearance: LocationViewAppearanceConfig = if isURLTextFieldCentered {
+        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
             .getAppearanceForVersion1(theme: theme)
         } else {
             .getAppearanceForBaseline(theme: theme)

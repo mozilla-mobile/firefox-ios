@@ -65,7 +65,15 @@ public class BrowserAddressToolbar: UIView,
     private var navigationStackConstrains: [NSLayoutConstraint] = []
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
-    private var previousConfiguration: AddressToolbarConfiguration?
+    private var previousConfiguration: AddressToolbarConfiguration? {
+        didSet {
+            // Ensure the theme is reapplied to update colors and other UI elements
+            // in sync with the new address toolbar configuration.
+            guard let theme else { return }
+            applyTheme(theme: theme)
+        }
+    }
+
     public var isUnifiedSearchEnabled = false {
         didSet {
             guard let previousConfiguration, oldValue != isUnifiedSearchEnabled else { return }
@@ -133,7 +141,6 @@ public class BrowserAddressToolbar: UIView,
     private func configureUX(config: AddressToolbarUXConfiguration) {
         locationContainer.layer.cornerRadius = config.toolbarCornerRadius
         dividerWidthConstraint?.constant = config.browserActionsAddressBarDividerWidth
-        isURLTextFieldCentered = config.isLocationTextCentered
 
         if config.isNavigationActionsInsideLocationView {
             guard navigationActionStack.superview != locationContainer else { return }
@@ -498,8 +505,10 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = isURLTextFieldCentered ? colors.layer3 : colors.layer1
-        locationContainer.backgroundColor = isURLTextFieldCentered ? colors.layer2 : colors.layerSearch
+        backgroundColor = previousConfiguration?.uxConfiguration
+            .addressToolbarBackgroundColor(theme: theme)
+        locationContainer.backgroundColor = previousConfiguration?.uxConfiguration
+            .locationContainerBackgroundColor(theme: theme)
         locationDividerView.backgroundColor = colors.layer1
         toolbarTopBorderView.backgroundColor = colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = colors.borderPrimary
