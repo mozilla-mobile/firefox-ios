@@ -109,6 +109,7 @@ tasks:
               tasks_for in ["action", "cron"]
               || (isPullRequest && pullRequestAction in ["opened", "reopened", "synchronize"])
               || (tasks_for == "github-push" && short_head_branch == "main")
+              || (tasks_for == "github-push" && short_head_branch[:8] == "release/")
               || (tasks_for == "github-release" && releaseAction == "published")
             then:
                 taskId:

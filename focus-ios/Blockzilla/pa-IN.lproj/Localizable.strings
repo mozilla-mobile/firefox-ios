@@ -217,6 +217,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "ਸਿਰਫ਼ ਗੁੰਮਸ਼ੁਦਾ ਤੋਂ ਵੱਧ ਕੇ";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "ਪਰਦੇਦਾਰੀ ਸੂਚਨਾ";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Firefox ਤੁਹਾਡੀ ਪਰਦੇਦਾਰੀ ਦੀ ਪਰਵਾਹ ਕਰਦਾ ਹੈ। %@ ਵਿੱਚ ਹੋਰ ਪੜ੍ਹੋ।";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "ਤੁਸੀਂ ਕਿੰਨਾ ਕੁ ਜਾਂ ਕਿੰਨਾ ਘੱਟ ਸਾਂਝਾ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਦੇ ਬਾਰੇ ਫ਼ੈਸਲਾ ਕਰਨ ਲਈ ਸੈਟਿੰਗਾਂ ਦੀ ਸੰਰਚਨਾ ਕਰੋ।";
 
@@ -225,6 +231,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "ਆਪਣੀ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਨੂੰ ਅਗਲੇ ਪੜਾਅ ਉੱਤੇ ਲੈ ਜਾਓ।";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "ਸਹਿਮਤ ਅਤੇ ਜਾਰੀ ਰੱਖੋ";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "ਮੁਕੰਮਲ";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Firefox ਵਰਤਣ ਦੀਆਂ ਸ਼ਰਤਾਂ";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "ਤੇਜ਼। ਪ੍ਰਾਈਵੇਟ। ਬਿਨਾਂ ਕਿਸੇ ਰੋਕ ਟੋਕ ਦੇ।";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "ਜਾਰੀ ਰੱਖ ਕੇ, ਤੁਸੀਂ %@ ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "%@ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Firefox %@ ਵਲੋਂ ਜੀ ਆਇਆਂ ਨੂੰ!";
