@@ -870,12 +870,6 @@ extension TelemetryWrapper {
             GleanMetrics.History.opened.record()
         case(.action, .swipe, .historySingleItemRemoved, _, _):
             GleanMetrics.History.removed.record()
-        case(.action, .tap, .historyRemovedToday, _, _):
-            GleanMetrics.History.removedToday.record()
-        case(.action, .tap, .historyRemovedTodayAndYesterday, _, _):
-            GleanMetrics.History.removedTodayAndYesterday.record()
-        case(.action, .tap, .historyRemovedAll, _, _):
-            GleanMetrics.History.removedAll.record()
 
         // MARK: Top Site
         case (.action, .tap, .topSiteTile, _, let extras):
