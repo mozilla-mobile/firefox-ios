@@ -66,7 +66,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             bvcSnapshot.layer.cornerCurve = .continuous
             bvcSnapshot.clipsToBounds = true
 
-            // Just a small background view for animation sake between the tab tray and the bvc
+            // This background view is needed for animation between the tab tray and the bvc
             let backgroundView = UIView()
             backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
             backgroundView.frame = finalFrame
@@ -94,20 +94,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             var cellFrame: CGRect?
 
             if let indexPath = dataSource.indexPath(for: item) {
-                // This is needed for some reason otherwise the collection views content offset is
-                // incorrect.
+                // This is needed otherwise the collection views content offset is incorrect
                 cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
                 cv.layoutIfNeeded()
                 tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
                 if let cell = tabCell {
                     cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                    // Hide the cell that is being animated too since we are making a copy of it to animate in
+                    // Hide the cell that is being animated since we are making a copy of it to animate in
                     cell.isHidden = true
                     cell.alpha = 0.0
                 }
             }
 
-            // Just for flourish, scaling the collection view a bit
             cv.transform = .init(scaleX: 1.2, y: 1.2)
             cv.alpha = 0.5
             let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.825) {
@@ -196,7 +194,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         // Allow the UI to render to make the snapshotting code more performant
         // swiftlint:disable closure_body_length
         DispatchQueue.main.async { [self] in
-            // Just a small background view for animation sake between the tab tray and the bvc
+            // This background view is needed for animation between the tab tray and the bvc
             let backgroundView = UIView()
             backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
             backgroundView.alpha = 0
@@ -208,7 +206,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             toView.setNeedsLayout()
             toView.layoutIfNeeded()
 
-            // BVC snapshot animates from the cell to its final resting spot
+            // BVC snapshot animates from the cell to it's final position
             let toVCSnapshot: UIView =
             toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
             toVCSnapshot.layer.cornerCurve = .continuous
@@ -234,8 +232,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
             var tabCell: ExperimentTabCell?
             if let indexPath = dataSource.indexPath(for: item) {
-                // This is needed for some reason otherwise the collection views content offset is
-                // incorrect.
+                // This is needed otherwise the collection views content offset is incorrect
                 cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
                 cv.layoutIfNeeded()
 
@@ -252,7 +249,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             }
             tabSnapshot.isHidden = false
             let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0) {
-                // For some flourish
                 cv.transform = .init(scaleX: 1.2, y: 1.2)
                 cv.alpha = 0.5
 
