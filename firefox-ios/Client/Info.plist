@@ -161,14 +161,6 @@
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewPrivateTab</string>
 		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>qrCodeLarge</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Scan QR Code</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).QRCode</string>
-		</dict>
 	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
