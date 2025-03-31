@@ -60,13 +60,13 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         stackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
-    private lazy var backgroundHolder: UIView = .build { view in
+    lazy var backgroundHolder: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.layer.borderWidth = UX.unselectedBorderWidth
         view.clipsToBounds = true
     }
 
-    lazy var screenshotView: UIImageView = .build { view in
+    private lazy var screenshotView: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
     }

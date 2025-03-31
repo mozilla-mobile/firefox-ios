@@ -100,8 +100,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 cv.layoutIfNeeded()
                 tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
                 if let cell = tabCell {
+                    cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
                     // Hide the cell that is being animated too since we are making a copy of it to animate in
-                    cellFrame = cv.convert(cell.frame, to: view)
                     cell.isHidden = true
                     cell.alpha = 0.0
                 }
