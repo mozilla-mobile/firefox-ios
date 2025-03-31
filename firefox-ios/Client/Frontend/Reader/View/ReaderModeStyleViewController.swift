@@ -8,7 +8,11 @@ import Common
 
 // MARK: - ReaderModeStyleViewController
 
-class ReaderModeStyleViewController: UIViewController, Themeable {
+class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
+    public struct UX {
+        public static let stackViewSpacing: CGFloat = 8
+    }
+
     // UI views
     private var fontTypeButtons: [ReaderModeFontTypeButton] = []
     private lazy var fontSizeLabel: ReaderModeFontSizeLabel = .build()
@@ -17,7 +21,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var brightnessImageViews = [UIImageView]()
     private var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
 
-    private lazy var fontTypeRow: UIView = .build()
+    private lazy var fontTypeStackView: UIStackView = .build { view in
+        view.axis = .horizontal
+        view.distribution = .fill
+        view.spacing = UX.stackViewSpacing
+        view.alignment = .center
+    }
     private lazy var fontSizeRow: UIView = .build()
     private lazy var brightnessRow: UIView = .build()
 
@@ -43,6 +52,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
+
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        adjustLayoutForA11ySizeCategory()
     }
 
     required init?(coder: NSCoder) {
@@ -59,14 +71,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         )
 
         // Font type row
-
-        view.addSubview(fontTypeRow)
+        view.addSubview(fontTypeStackView)
 
         NSLayoutConstraint.activate([
-            fontTypeRow.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
-            fontTypeRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-            fontTypeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            fontTypeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
+            fontTypeStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
+            fontTypeStackView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            fontTypeStackView.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
 
         fontTypeButtons = [
@@ -74,13 +84,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             ReaderModeFontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
-        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(changeFontType))
+        setupButtonsStack(fontTypeButtons, inRow: fontTypeStackView, action: #selector(changeFontType))
 
         view.addSubview(separatorLines[0])
-        makeSeparatorView(fromView: separatorLines[0], topConstraint: fontTypeRow)
+        makeSeparatorView(fromView: separatorLines[0], topConstraint: fontTypeStackView)
 
         // Font size row
-
         view.addSubview(fontSizeRow)
 
         NSLayoutConstraint.activate([
@@ -109,7 +118,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         makeSeparatorView(fromView: separatorLines[1], topConstraint: fontSizeRow)
 
         // Theme row
-
         let themeRow: UIView = .build()
         view.addSubview(themeRow)
 
@@ -209,16 +217,14 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         slider.tintColor = theme.colors.actionPrimary
 
         // Set background color to container views
-        [fontTypeRow, fontSizeRow, brightnessRow].forEach { view in
+        [fontTypeStackView, fontSizeRow, brightnessRow].forEach { view in
             view?.backgroundColor = theme.colors.layer1
         }
 
         fontSizeLabel.textColor = theme.colors.textPrimary
 
         fontTypeButtons.forEach { button in
-            button.setTitleColor(theme.colors.textPrimary,
-                                 for: .selected)
-            button.setTitleColor(theme.colors.textDisabled, for: [])
+            button.applyTheme(theme: theme)
         }
 
         fontSizeButtons.forEach { button in
@@ -257,6 +263,17 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     }
 
     /// Setup constraints for a row of buttons. Left to right. They are all given the same width.
+    private func setupButtonsStack(_ buttons: [UIButton], inRow stackView: UIStackView, action: Selector) {
+        buttons.forEach { button in
+            stackView.addArrangedSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.addTarget(self, action: action, for: .touchUpInside)
+            button.setContentHuggingPriority(.required, for: .vertical)
+        }
+        stackView.setContentHuggingPriority(.required, for: .vertical)
+    }
+
+    /// Setup constraints for a row of buttons. Left to right. They are all given the same width.
     private func setupButtons(_ buttons: [UIButton], inRow row: UIView, action: Selector) {
         for (idx, button) in buttons.enumerated() {
             row.addSubview(button)
@@ -279,12 +296,15 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     private func updateFontTypeButtons() {
         let fontType = viewModel.readerModeStyle.fontType
+
         for button in fontTypeButtons {
             button.isSelected = button.fontType.isSameFamily(fontType)
         }
+
         for button in themeButtons {
             button.fontType = fontType
         }
+
         fontSizeLabel.fontType = fontType
     }
 
@@ -318,5 +338,22 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     @objc
     func changeBrightness(_ slider: UISlider) {
         viewModel.sliderDidChange(value: CGFloat(slider.value))
+    }
+    private func adjustLayoutForA11ySizeCategory() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        if contentSizeCategory.isAccessibilityCategory {
+            fontTypeStackView.axis = .vertical
+        } else {
+            fontTypeStackView.axis = .horizontal
+        }
+    }
+
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustLayoutForA11ySizeCategory()
+        default: break
+        }
     }
 }
