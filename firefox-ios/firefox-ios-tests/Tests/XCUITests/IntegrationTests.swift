@@ -154,6 +154,9 @@ class IntegrationTests: BaseTestCase {
         )
 
         // Sync again just to make sure to sync after new name is shown
+        app.buttons["Settings"].waitAndTap()
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
         waitForInitialSyncComplete()
     }
 
