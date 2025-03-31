@@ -30,7 +30,6 @@ class DefaultRouter: NSObject, Router {
         }
 
         viewController.presentationController?.delegate = self
-        // SOPHIE: Should this have a completion??
         navigationController.present(viewController, animated: animated, completion: nil)
     }
 

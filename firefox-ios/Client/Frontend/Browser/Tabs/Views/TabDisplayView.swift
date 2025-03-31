@@ -27,7 +27,6 @@ class TabDisplayView: UIView,
     private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
 
-    // SOPHIE - testing
     lazy var dataSource =
     TabDisplayDiffableDataSource(
         collectionView: collectionView,

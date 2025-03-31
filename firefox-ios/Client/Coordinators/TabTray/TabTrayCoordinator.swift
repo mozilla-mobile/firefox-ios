@@ -16,7 +16,6 @@ class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
-    // SOPHIE: Make this private again if possible
     var tabTrayViewController: TabTrayViewController?
     private let profile: Profile
     private let tabManager: TabManager
