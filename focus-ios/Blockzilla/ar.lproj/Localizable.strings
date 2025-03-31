@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "حقوقك";
 
+/* Label for row in About screen */
+"About.rowTerms" = "شروط الاستخدام";
+
 /* Label on About screen */
 "About.safariBullet1" = "احجب المتعقبات لتحسين الخصوصية";
 
@@ -214,6 +217,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "أكثر من مجرد وضع متخفِّي";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "تنويه الخصوصية";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "يهتم Firefox بخصوصيتك. اطّلع على المزيد في %@.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "قم بتهيأة الإعدادات لتتمكن من تحديد مقدار ما تشارك.";
 
@@ -222,6 +231,24 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "خذ تصفحك الخاص إلى المستوى التالي.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "موافقة ومتابعة";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "تمّ";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "شروط استخدام Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "سريع. خاص. دون مشتتات.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "بالاستمرار فإنك توافق على %@.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "مرحبًا بك في %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "أهلا بك على Firefox %@!";
@@ -274,8 +301,14 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "احجب متعقبات المحتوى";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "يساعد هذا Mozilla على تقدير عدد المستخدمين النشطين.";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "داكنة";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "يساعدنا هذا في تشخيص مشكلات المتصفح وإصلاحها.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "سيُرسل %@ ما تكتبه في شريط العنوان إلى محرك البحث الذي تُفضّله.";
@@ -381,6 +414,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "التواصل الاجتماعي";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "إرسال تقارير الأعطال تلقائيا";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "استخدم معّرف الوجه لإلغاء قفل التطبيق";
