@@ -287,7 +287,7 @@ class HistoryPanel: UIViewController,
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
-            case .lastHour, .today, .yesterday:
+            case .lastHour, .lastTwentyFourHours, .lastSevenDays, .lastFourWeeks:
                 self?.viewModel.deleteGroupsFor(dateOption: dateOption)
             default:
                 self?.viewModel.removeAllData()

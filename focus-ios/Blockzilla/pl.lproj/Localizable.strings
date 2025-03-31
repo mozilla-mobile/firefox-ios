@@ -221,7 +221,7 @@
 "Onboarding.PrivacyNotice.LinkText" = "zasadach ochrony prywatności";
 
 /* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
-"Onboarding.PrivacyNotice.Text" = "Firefox dba o Twoją prywatność. Dowiedz się więcej w naszych %@.";
+"Onboarding.PrivacyNotice.Text" = "Firefox dba o Twoją prywatność. Dowiedz się więcej w %@.";
 
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Skonfiguruj ustawienia, by samodzielnie zdecydować, jak dużo lub jak mało udostępniasz.";
