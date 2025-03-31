@@ -17,7 +17,7 @@ public protocol BasicAnimationControllerDelegate: AnyObject {
 /// Defines an animation controller which simply redirects presentation/dismissal animations to its delegate.
 ///
 /// This allows us to create complex animations within the controller which needs to be animated without having to mark
-/// some sort of state for whether or not its being dismissed or presented.
+/// state for whether or not its being dismissed or presented.
 ///
 /// It also allows us to access private variables/properties without having to expose them to the animation controller.
 public class BasicAnimationController: NSObject {
@@ -45,7 +45,6 @@ extension BasicAnimationController: UIViewControllerAnimatedTransitioning {
   public func transitionDuration(
     using transitionContext: UIViewControllerContextTransitioning?
   ) -> TimeInterval {
-    // This value doesn't really matter... We could have it assignable as a property if we need it really...
     return 0.2
   }
 

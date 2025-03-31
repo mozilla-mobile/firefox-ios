@@ -168,7 +168,6 @@ class TabDisplayView: UIView,
             scrollToTab(scrollState)
         }
 
-        // Can be deleted?
         if state.didTapAddTab {
             let action = TabPanelViewAction(panelType: self.panelType,
                                             windowUUID: self.windowUUID,

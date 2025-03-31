@@ -43,12 +43,6 @@ class TabTrayViewController: UIViewController,
         static let segmentedControlMinHeight: CGFloat = 45
     }
 
-    // MARK: UIViewControllerTransitioningDelegate animation variables
-    // this animation is using the ExperimentTabCell as part of Tabs Experimentation
-    var selectedExperimentCell: ExperimentTabCell?
-    // Can use the existing snapshot for the tab?
-    var selectedCellImageViewSnapshot: UIView?
-
     // MARK: Theme
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -257,10 +251,6 @@ class TabTrayViewController: UIViewController,
 
         super.init(nibName: nil, bundle: nil)
         self.applyTheme()
-        if !UIAccessibility.isReduceMotionEnabled {
-          transitioningDelegate = self
-          modalPresentationStyle = .fullScreen
-        }
     }
 
     required init?(coder: NSCoder) {
