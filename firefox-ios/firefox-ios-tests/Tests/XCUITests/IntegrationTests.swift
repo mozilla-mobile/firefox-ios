@@ -137,10 +137,12 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabs () {
+        signInFxAccounts()
+
+        // We only sync tabs if the user is signed in
         navigator.openURL(testingURL)
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        signInFxAccounts()
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
