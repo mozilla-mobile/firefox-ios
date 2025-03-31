@@ -1412,17 +1412,17 @@ extension String {
                 value: "Last Hour",
                 comment: "This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour.")
             public static let LastTwentyFourHours = MZLocalizedString(
-                key: "LibraryPanel.Sections.LastTwentyFourHours.v139",
+                key: "LibraryPanel.Sections.LastTwentyFourHours.v138",
                 tableName: "LibraryPanel",
                 value: "Last 24 Hours",
                 comment: "Section title that, when expanded, shows all web browsing history entries for the last 24 hours beneath it (not including entries from the less inclusive sections)")
             public static let LastSevenDays = MZLocalizedString(
-                key: "LibraryPanel.Sections.LastSevenDays.v139",
+                key: "LibraryPanel.Sections.LastSevenDays.v138",
                 tableName: "LibraryPanel",
                 value: "Last 7 Days",
                 comment: "Section title that, when expanded, shows all web browsing history entries for the last 7 days beneath it (not including entries from the less inclusve sections)")
             public static let LastFourWeeks = MZLocalizedString(
-                key: "LibraryPanel.Sections.LastFourWeeks.v139",
+                key: "LibraryPanel.Sections.LastFourWeeks.v138",
                 tableName: "LibraryPanel",
                 value: "Last 4 Weeks",
                 comment: "Section title that, when expanded, shows all web browsing history entries for the last 4 weeks beneath it (not including entries from the less inclusive sections)")
@@ -1489,32 +1489,32 @@ extension String {
 
             public struct ClearHistorySheet {
                 public static let Title = MZLocalizedString(
-                    key: "LibraryPanel.History.Title.v139",
+                    key: "LibraryPanel.History.Title.v138",
                     tableName: "HistoryPanel",
                     value: "Deletes history (including synced history from other devices), cookies, and other browsing data.",
                     comment: "Title of the “Clear browsing history“ action sheet")
                 public static let LastHourOption = MZLocalizedString(
-                    key: "LibraryPanel.History.LastHourOption.v139",
+                    key: "LibraryPanel.History.LastHourOption.v138",
                     tableName: "HistoryPanel",
                     value: "Last Hour",
                     comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour")
                 public static let LastTwentyFourHoursOption = MZLocalizedString(
-                    key: "LibraryPanel.History.LastTwentyFourHoursOption.v139",
+                    key: "LibraryPanel.History.LastTwentyFourHoursOption.v138",
                     tableName: "HistoryPanel",
                     value: "Last 24 Hours",
                     comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours")
                 public static let LastSevenDaysOption = MZLocalizedString(
-                    key: "LibraryPanel.History.LastSevenDaysOption.v139",
+                    key: "LibraryPanel.History.LastSevenDaysOption.v138",
                     tableName: "HistoryPanel",
                     value: "Last 7 Days",
                     comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days")
                 public static let LastFourWeeksOption = MZLocalizedString(
-                    key: "LibraryPanel.History.LastFourWeeksOption.v139",
+                    key: "LibraryPanel.History.LastFourWeeksOption.v138",
                     tableName: "HistoryPanel",
                     value: "Last 4 Weeks",
                     comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks")
                 public static let AllTimeOption = MZLocalizedString(
-                    key: "LibraryPanel.History.AllTimeOption.v139",
+                    key: "LibraryPanel.History.AllTimeOption.v138",
                     tableName: "HistoryPanel",
                     value: "All Time",
                     comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history")
@@ -8139,7 +8139,7 @@ extension String {
                 value: "Tabs",
                 comment: "In the settings menu, this is the title for the Tabs customization section option")
         }
-        struct v139 {
+        struct v138 {
             public static let ClearHistoryMenuTitle = MZLocalizedString(
                 key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
                 tableName: nil,
