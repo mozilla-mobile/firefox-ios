@@ -85,7 +85,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
             self.model = model
             toolbar.configure(
                 config: model.navigationToolbarConfiguration,
-                isVersion1Layout: toolbarState.toolbarLayout == .version1,
+                isVersion1Layout: isVersion1Layout,
                 toolbarDelegate: self
             )
         }
