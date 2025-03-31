@@ -16,8 +16,6 @@ import Redux
 import WidgetKit
 import ActivityKit
 import WebEngine
-import WidgetKit
-import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
