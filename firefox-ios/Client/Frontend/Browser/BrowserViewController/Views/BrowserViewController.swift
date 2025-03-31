@@ -13,6 +13,8 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WidgetKit
+import ActivityKit
 import WebEngine
 import WidgetKit
 import ActivityKit

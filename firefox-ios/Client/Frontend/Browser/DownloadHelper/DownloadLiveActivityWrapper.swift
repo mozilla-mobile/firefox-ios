@@ -40,6 +40,14 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         }
     }
 
+    func update() {
+        let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
+        let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
+        Task {
+            await downloadLiveActivity?.update(using: contentState)
+        }
+    }
+
     func end(durationToDismissal: DurationToDismissal) {
         let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
         let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
@@ -47,5 +55,13 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
             await downloadLiveActivity?.end(using: contentState,
                                             dismissalPolicy: .after(.now.addingTimeInterval(durationToDismissal.rawValue)))
         }
+    }
+
+    func updateCombinedBytesDownloaded(value: Int64) {
+        update()
+    }
+
+    func updateCombinedTotalBytesExpected(value: Int64?) {
+        update()
     }
 }
