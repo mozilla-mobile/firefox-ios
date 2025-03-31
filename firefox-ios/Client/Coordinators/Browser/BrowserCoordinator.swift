@@ -1015,7 +1015,14 @@ class BrowserCoordinator: BaseCoordinator,
         tabTrayCoordinator.start(with: selectedPanel)
 
         navigationController.onViewDismissed = { [weak self] in
-            self?.didDismissTabTray(from: tabTrayCoordinator)
+            guard let self else { return }
+            self.didDismissTabTray(from: tabTrayCoordinator)
+            store.dispatch(
+                TabTrayAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TabTrayActionType.modalSwipedToClose
+                )
+            )
         }
 
         present(navigationController)
