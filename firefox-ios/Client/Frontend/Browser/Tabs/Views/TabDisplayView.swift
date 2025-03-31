@@ -35,7 +35,7 @@ class TabDisplayView: UIView,
     }
 
     var shouldHideInactiveTabs: Bool {
-        guard !tabsState.isPrivateMode else { return true }
+        guard !tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
 
