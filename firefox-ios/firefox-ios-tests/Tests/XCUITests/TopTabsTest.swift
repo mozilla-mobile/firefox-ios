@@ -103,17 +103,7 @@ class TopTabsTest: BaseTestCase {
 
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
-<<<<<<< HEAD:firefox-ios/firefox-ios-tests/Tests/XCUITests/TopTabsTest.swift
-        if iPad() {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.otherElements.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
-=======
         app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
->>>>>>> 2a00f3927 (Refactor FXIOS-11782 [Tab tray UI Experiment] Disable experiment dev build (#25690)):firefox-ios/firefox-ios-tests/Tests/XCUITests/TabsTests.swift
 
         // After removing only one tab it automatically goes to HomepanelView
         mozWaitForElementToExist(
