@@ -5,9 +5,9 @@
 import UIKit
 import Common
 
-class TabTraySelectorCell: UICollectionViewCell,
-                           ReusableCell,
-                           ThemeApplicable {
+final class TabTraySelectorCell: UICollectionViewCell,
+                                 ReusableCell,
+                                 ThemeApplicable {
     private let label = UILabel()
     private let padding = UIEdgeInsets(
         top: TabTraySelectorUX.cellVerticalPadding,
