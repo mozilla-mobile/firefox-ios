@@ -1666,10 +1666,39 @@ workflows:
         timeout: 6000
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
         - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 20
+        - maximum_test_repetitions: 10
+    - script@1.2.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
+
+            echo "-- compress --"
+            # Add Fennec-iphonesimulator folder
+            # Add All .xctestrun files
+            # Add firefox-ios-test files and test plans
+
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
+            "$BITRISE_SOURCE_DIR/xcodebuild.log"
+    - deploy-to-bitrise-io@2.10.0:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+        - pipeline_intermediate_files: |-
+            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
+        is_always_run: true
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
