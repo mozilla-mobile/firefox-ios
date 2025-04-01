@@ -271,6 +271,7 @@ class TabScrollController: NSObject,
     }
 
     // MARK: - ScrollView observation
+
     func beginObserving(scrollView: UIScrollView) {
         guard !observedScrollViews.contains(scrollView) else {
             logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
@@ -349,7 +350,6 @@ class TabScrollController: NSObject,
 // MARK: - Private
 
 private extension TabScrollController {
-
     // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
     // That way we ensure animation has proper timing
     var showDurationRatio: CGFloat {
@@ -400,6 +400,7 @@ private extension TabScrollController {
 
     func isBouncingAtBottom() -> Bool {
         guard let scrollView = scrollView else { return false }
+
         let yOffsetCheck = contentOffset.y > (contentSize.height - scrollView.frame.size.height)
         let heightCheck = contentSize.height > scrollView.frame.size.height
 
@@ -411,6 +412,17 @@ private extension TabScrollController {
         return (toolbarState != .collapsed || topIsRubberbanding) && bottomIsNotRubberbanding
     }
 
+    /// Updates the state of the toolbar based on the scroll positions of various UI components.
+    ///
+    /// The function evaluates the current offsets of three UI containers:
+    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
+    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
+    /// - `headerTopOffset` compared to `-topScrollHeight`
+    ///
+    /// Based on their states, it sets the toolbar state to one of the following:
+    /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
+    /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
+    /// - `.animating`: In transition or partially visible state.
     func updateToolbarState() {
         let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
         let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
@@ -430,12 +442,39 @@ private extension TabScrollController {
         toolbarState = state
     }
 
+    /// Determines whether a given scroll delta would cause rubberbanding behavior.
+    ///
+    /// Rubberbanding typically occurs when the user scrolls past the content bounds,
+    /// causing a stretch or bounce effect. This function checks two conditions where
+    /// rubberbanding might occur:
+    ///
+    /// - Scrolling upwards (`delta < 0`) while already scrolled past the bottom of the content,
+    ///   and the scroll view is shorter than the content.
+    /// - Scrolling beyond the top boundary (`contentOffset.y < delta`)
+    ///
+    /// Returns `false` if rubberbanding would occur; `true` if the delta is within valid bounds.
+    ///
+    /// - Parameter delta: The proposed change in scroll position (positive or negative).
+    /// - Returns: `true` if the scroll delta is allowed without rubberbanding; otherwise, `false`.
     func checkRubberbandingForDelta(_ delta: CGFloat) -> Bool {
         return !((delta < 0 && contentOffset.y + scrollViewHeight > contentSize.height &&
                 scrollViewHeight < contentSize.height) ||
                 contentOffset.y < delta)
     }
 
+    /// Handles synchronized scrolling of the header, bottom container, and over-keyboard container
+    /// in response to a vertical scroll delta.
+    ///
+    /// This function performs the following actions:
+    /// 1. Verifies that scrolling is necessary (i.e., content height exceeds the scroll view height).
+    /// 2. Updates the `headerTopOffset` by applying the delta and clamps it within the allowed range.
+    /// 3. If the header should be displayed at the new offset, updates the scroll view's content offset accordingly.
+    /// 4. Updates the `bottomContainerOffset` and `overKeyboardContainerOffset` with the delta,
+    ///    clamping each within their respective bounds.
+    /// 5. Updates the alpha (transparency) of subviews in `header` and `zoomPageBar` based on scroll position.
+    ///
+    /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
+    ///   a negative delta scrolls up.
     func scrollWithDelta(_ delta: CGFloat) {
         guard scrollViewHeight < contentSize.height else { return }
 
@@ -468,6 +507,20 @@ private extension TabScrollController {
         return y
     }
 
+    /// Animates toolbar components (header, bottom container, and over-keyboard container)
+    ///  to their target positions and alpha with optional animation and completion handling.
+    ///
+    /// This function coordinates the toolbar transition, optionally adjusting the scroll view’s offset if the toolbar
+    /// is being shown from a hidden state, and triggers layout updates for visual consistency.
+    ///
+    /// - Parameters:
+    ///   - animated: Whether the transition should be animated.
+    ///   - duration: Duration of the animation if `animated` is `true`.
+    ///   - headerOffset: Target vertical offset for the header.
+    ///   - bottomContainerOffset: Target offset for the bottom toolbar container.
+    ///   - overKeyboardOffset: Target offset for the over-keyboard container.
+    ///   - alpha: Target alpha value to apply to toolbar subviews.
+    ///   - completion: Optional closure called when the animation completes, passing a `Bool` indicating success.
     func animateToolbarsWithOffsets(_ animated: Bool,
                                     duration: TimeInterval,
                                     headerOffset: CGFloat,
@@ -476,75 +529,70 @@ private extension TabScrollController {
                                     alpha: CGFloat,
                                     completion: ((_ finished: Bool) -> Void)?) {
         guard let scrollView = scrollView else { return }
+
         contentOffsetBeforeAnimation = scrollView.contentOffset
 
-        // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling
-        // by adjusting contentOffset, otherwise when the toolbar is hidden and a link navigated, showing the toolbar
-        // will scroll the page and produce a ~50px page jumping effect in response to tap navigations.
-        let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
+        let isShownFromHidden = shouldAdjustScrollForToolbarShow(currentOffset: headerTopOffset, targetOffset: headerOffset)
 
-        let animation: () -> Void = {
+        let animationBlock = buildToolbarAnimationBlock(
+            isShownFromHidden: isShownFromHidden,
+            headerOffset: headerOffset,
+            bottomContainerOffset: bottomContainerOffset,
+            overKeyboardOffset: overKeyboardOffset,
+            alpha: alpha
+        )
+
+        runToolbarAnimation(animated: animated, duration: duration, animations: animationBlock, completion: completion)
+    }
+
+    func shouldAdjustScrollForToolbarShow(currentOffset: CGFloat, targetOffset: CGFloat) -> Bool {
+        return currentOffset == -topScrollHeight && targetOffset == 0
+    }
+
+    func buildToolbarAnimationBlock(isShownFromHidden: Bool,
+                                    headerOffset: CGFloat,
+                                    bottomContainerOffset: CGFloat,
+                                    overKeyboardOffset: CGFloat,
+                                    alpha: CGFloat) -> () -> Void {
+        return { [weak self] in
+            guard let self = self, let scrollView = self.scrollView else { return }
+
             if isShownFromHidden {
                 scrollView.contentOffset = CGPoint(
                     x: self.contentOffsetBeforeAnimation.x,
                     y: self.contentOffsetBeforeAnimation.y + self.topScrollHeight
                 )
             }
+
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
             self.overKeyboardContainerOffset = overKeyboardOffset
+
             self.header?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
+
             self.zoomPageBar?.updateAlphaForSubviews(alpha)
             self.zoomPageBar?.superview?.layoutIfNeeded()
         }
+    }
 
+    func runToolbarAnimation(animated: Bool,
+                             duration: TimeInterval,
+                             animations: @escaping () -> Void,
+                             completion: ((_ finished: Bool) -> Void)?) {
         if animated {
             isAnimatingToolbar = true
             UIView.animate(withDuration: duration,
                            delay: 0,
                            options: .allowUserInteraction,
-                           animations: animation) { [weak self] finished in
+                           animations: animations) { [weak self] finished in
                 self?.isAnimatingToolbar = false
                 completion?(finished)
             }
         } else {
-            animation()
+            animations()
             completion?(true)
         }
-    }
-
-    // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
-    // That way we ensure animation has proper timing
-    var showDurationRatio: CGFloat {
-        var durationRatio: CGFloat
-        if isBottomSearchBar {
-            durationRatio = abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
-        } else {
-            durationRatio = abs(headerTopOffset / topScrollHeight)
-        }
-        return durationRatio
-    }
-
-    var hideDurationRation: CGFloat {
-        var durationRatio: CGFloat
-        if isBottomSearchBar {
-            durationRatio = abs((overKeyboardScrollHeight + overKeyboardContainerOffset) / overKeyboardScrollHeight)
-        } else {
-            durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
-        }
-        return durationRatio
-    }
-
-    // Scroll alpha is only for header views since status bar has an overlay
-    // Bottom content doesn't have alpha since it's completely hidden
-    // Besides the zoom bar, to hide the gradient
-    var scrollAlpha: CGFloat {
-        if zoomPageBar != nil,
-           isBottomSearchBar {
-            return 1 - abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
-        }
-        return 1 - abs(headerTopOffset / topScrollHeight)
     }
 
     private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
@@ -564,6 +612,7 @@ extension TabScrollController: UIGestureRecognizerDelegate {
 }
 
 // MARK: - UIScrollViewDelegate
+
 extension TabScrollController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
