@@ -347,7 +347,42 @@ class TabScrollController: NSObject,
 }
 
 // MARK: - Private
+
 private extension TabScrollController {
+
+    // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
+    // That way we ensure animation has proper timing
+    var showDurationRatio: CGFloat {
+        var durationRatio: CGFloat
+        if isBottomSearchBar {
+            durationRatio = abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
+        } else {
+            durationRatio = abs(headerTopOffset / topScrollHeight)
+        }
+        return durationRatio
+    }
+
+    var hideDurationRation: CGFloat {
+        var durationRatio: CGFloat
+        if isBottomSearchBar {
+            durationRatio = abs((overKeyboardScrollHeight + overKeyboardContainerOffset) / overKeyboardScrollHeight)
+        } else {
+            durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
+        }
+        return durationRatio
+    }
+
+    // Scroll alpha is only for header views since status bar has an overlay
+    // Bottom content doesn't have alpha since it's completely hidden
+    // Besides the zoom bar, to hide the gradient
+    var scrollAlpha: CGFloat {
+        if zoomPageBar != nil,
+           isBottomSearchBar {
+            return 1 - abs(overKeyboardContainerOffset / overKeyboardScrollHeight)
+        }
+        return 1 - abs(headerTopOffset / topScrollHeight)
+    }
+
     @objc
     func reload() {
         guard let tab = tab else { return }
