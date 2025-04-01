@@ -29,22 +29,31 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
     // MARK: - SearchEngineProvider
 
+    let preferencesVersion: SearchEngineOrderingPrefsVersion = .v2
+
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
-                           completion: @escaping ([OpenSearchEngine]) -> Void) {
+                           engineOrderingPrefs: SearchEnginePrefs,
+                           prefsMigrator: SearchEnginePreferencesMigrator,
+                           completion: @escaping SearchEngineCompletion) {
         // Note: this currently duplicates the logic from DefaultSearchEngineProvider.
         // Eventually that class will be removed once we switch fully to consolidated search.
 
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let prefsVersion = preferencesVersion
 
         // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
-            guard let orderedEngineNames = orderedEngineNames else {
+            let finalEngineOrderingPrefs = prefsMigrator.migratePrefsIfNeeded(engineOrderingPrefs,
+                                                                              to: prefsVersion,
+                                                                              availableEngines: unorderedEngines)
+
+            guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
+                  !orderedEngineNames.isEmpty else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
-                ensureMainThread { completion(unorderedEngines) }
+                ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
 
@@ -68,7 +77,7 @@ final class ASSearchEngineProvider: SearchEngineProvider {
                 }
             }
 
-            ensureMainThread { completion(orderedEngines) }
+            ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
     }
 
