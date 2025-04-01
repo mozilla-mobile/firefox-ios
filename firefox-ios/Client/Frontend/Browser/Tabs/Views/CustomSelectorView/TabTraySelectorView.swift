@@ -19,11 +19,11 @@ struct TabTraySelectorUX {
     static let verticalInsets: CGFloat = 4
 }
 
-class TabTraySelectorView: UIView,
-                           UICollectionViewDelegateFlowLayout,
-                           UICollectionViewDataSource,
-                           UIScrollViewDelegate,
-                           Themeable {
+final class TabTraySelectorView: UIView,
+                                 UICollectionViewDelegateFlowLayout,
+                                 UICollectionViewDataSource,
+                                 UIScrollViewDelegate,
+                                 Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
