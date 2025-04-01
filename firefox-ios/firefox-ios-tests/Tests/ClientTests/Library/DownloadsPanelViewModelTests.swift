@@ -202,3 +202,9 @@ class MockDownloadFileFetcher: DownloadFileFetcher {
         return downloadedFile
     }
 }
+
+extension Date {
+    public func isWithinLastTwentyFourHours(comparisonDate: Date = Date()) -> Bool {
+        return (comparisonDate.lastTwentyFourHours ... comparisonDate).contains(self)
+    }
+}
