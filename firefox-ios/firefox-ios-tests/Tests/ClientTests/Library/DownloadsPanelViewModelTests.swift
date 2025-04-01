@@ -111,7 +111,7 @@ class DownloadsPanelViewModelTests: XCTestCase {
         }
 
         XCTAssertEqual(downloadFile.path.absoluteString, "https://test1.file.com")
-        XCTAssertTrue(downloadFile.lastModified.isToday())
+        XCTAssertTrue(downloadFile.lastModified.isWithinLastTwentyFourHours())
     }
 
     func testGetNumberOfItems_ForLastTwentyFourHours() {
