@@ -31,10 +31,11 @@ class TabDisplayView: UIView,
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var shouldHideInactiveTabs: Bool {
-        guard !tabsState.isPrivateMode else { return true }
+        guard !tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
 

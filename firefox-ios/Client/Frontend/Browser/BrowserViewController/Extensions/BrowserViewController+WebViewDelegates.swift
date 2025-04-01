@@ -296,9 +296,7 @@ extension BrowserViewController: WKUIDelegate {
 
         self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
 
-        guard !topTabsVisible else { return }
-
-        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+        // We are showing the toast always now
         showToastBy(isPrivate: isPrivate, tab: tab)
     }
 
@@ -601,7 +599,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
-        if ["http", "https", "blob", "file"].contains(url.scheme) {
+        if let scheme = url.scheme, ["http", "https", "blob", "file"].contains(scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
             }
@@ -613,6 +611,17 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = platformSpecificUserAgent
             } else {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+            }
+
+            // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
+            // - If the blob response has a .pkpass MIME type (FXIOS-11684)
+            // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
+            // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
+            // via JS since we are cancelling the navigation here
+            if scheme == "blob" && navigationAction.navigationType != .other {
+                _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
+                decisionHandler(.cancel)
+                return
             }
 
             if navigationAction.navigationType == .linkActivated && url != webView.url {
@@ -669,15 +678,14 @@ extension BrowserViewController: WKNavigationDelegate {
         let forceDownload = webView == pendingDownloadWebView
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
-        if OpenPassBookHelper.shouldOpenWithPassBook(response: response,
-                                                     forceDownload: forceDownload) {
-            passBookHelper = OpenPassBookHelper(response: response,
-                                                cookieStore: cookieStore,
-                                                presenter: self)
+        if let mimeType = response.mimeType, OpenPassBookHelper.shouldOpenWithPassBook(
+            mimeType: mimeType,
+            forceDownload: forceDownload) {
+            passBookHelper = OpenPassBookHelper(presenter: self)
             // Open our helper and nullifies the helper when done with it
-            passBookHelper?.open {
+            passBookHelper?.open(response: response, cookieStore: cookieStore, completion: {
                 self.passBookHelper = nil
-            }
+            })
 
             // Cancel this response from the webview.
             decisionHandler(.cancel)
@@ -787,6 +795,8 @@ extension BrowserViewController: WKNavigationDelegate {
                            response: URLResponse,
                            request: URLRequest) {
         navigationHandler?.showDocumentLoading()
+        scrollController.showToolbars(animated: false)
+
         let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
         cookieStore.getAllCookies { [weak tab, weak webView, weak self] cookies in
             let tempPDF = DefaultTemporaryDocument(
@@ -807,7 +817,36 @@ extension BrowserViewController: WKNavigationDelegate {
                                    change: [.newKey: true],
                                    context: nil)
             }
+            tempPDF.onDownloadError = { error in
+                self?.navigationHandler?.removeDocumentLoading()
+                guard let error, let webView else { return }
+                self?.showErrorPage(webView: webView, error: error)
+            }
             tab?.enqueueDocument(tempPDF)
+            if let url = request.url {
+                self?.observeValue(
+                    forKeyPath: KVOConstants.URL.rawValue,
+                    of: webView,
+                    change: [.newKey: url],
+                    context: nil
+                )
+            }
+        }
+    }
+
+    private func showErrorPage(webView: WKWebView, error: Error) {
+        guard let url = webView.url else { return }
+        if isNativeErrorPageEnabled {
+            let action = NativeErrorPageAction(networkError: error as NSError,
+                                               windowUUID: windowUUID,
+                                               actionType: NativeErrorPageActionType.receivedError
+            )
+            store.dispatch(action)
+            webView.load(PrivilegedRequest(url: url) as URLRequest)
+        } else {
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
+                                                                   forUrl: url,
+                                                                   inWebView: webView)
         }
     }
 

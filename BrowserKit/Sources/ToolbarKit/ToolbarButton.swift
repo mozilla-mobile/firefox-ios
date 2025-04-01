@@ -36,6 +36,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var largeContentViewerInteraction: UILargeContentViewerInteraction?
 
     private var isTextButton = false
+    private var hasCustomColor = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,6 +58,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         configureCustomA11yActionIfNeeded(for: element)
         isSelected = element.isSelected
         isTextButton = element.title != nil
+        hasCustomColor = element.hasCustomColor
         self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
@@ -256,7 +258,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors
-        foregroundColorNormal = colors.iconPrimary
+        foregroundColorNormal = hasCustomColor ? colors.iconSecondary : colors.iconPrimary
         foregroundColorHighlighted = colors.actionPrimary
         foregroundColorDisabled = colors.iconDisabled
         backgroundColorNormal = .clear

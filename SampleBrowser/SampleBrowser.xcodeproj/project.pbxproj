@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
+		21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */; };
 		8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0687602B6D9F990031427A /* SettingsDelegate.swift */; };
 		8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F446A2B56EDC900438589 /* EngineProvider.swift */; };
 		8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0F446D2B56EF1A00438589 /* WebEngine */; };
@@ -46,7 +47,6 @@
 		8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */; };
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
-		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
 		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
 		E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */; };
 		E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */; };
@@ -57,6 +57,7 @@
 /* Begin PBXFileReference section */
 		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
 		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
+		21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		8A0687602B6D9F990031427A /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
@@ -95,7 +96,6 @@
 		8ADF72C42B73DB9700530E7A /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
 		8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
-		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
 		E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerModel.swift; sourceTree = "<group>"; };
 		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
@@ -116,6 +116,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21AE784F2D8B4AE6002FDC9E /* Dependency */ = {
+			isa = PBXGroup;
+			children = (
+				21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */,
+			);
+			path = Dependency;
+			sourceTree = "<group>";
+		};
 		8A0F44692B56EDC000438589 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +214,7 @@
 		8A4601E32B0FE20500FFD17F /* SampleBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				21AE784F2D8B4AE6002FDC9E /* Dependency */,
 				8A4601E42B0FE20500FFD17F /* AppDelegate.swift */,
 				8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */,
 				8A4601ED2B0FE20700FFD17F /* Assets.xcassets */,
@@ -215,7 +224,6 @@
 				8A4601EF2B0FE20700FFD17F /* LaunchScreen.storyboard */,
 				8A0F44882B5704C100438589 /* Model */,
 				8A0F44892B57050200438589 /* Networking */,
-				E189C24A2BB2D1140065CEF2 /* Dependency */,
 				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
 				1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */,
 				8A4602142B0FE40E00FFD17F /* UI */,
@@ -278,15 +286,6 @@
 				8ADF72C32B73DB9700530E7A /* WebcompatAllFramesAtDocumentStart.js */,
 			);
 			path = Scripts;
-			sourceTree = "<group>";
-		};
-		E189C24A2BB2D1140065CEF2 /* Dependency */ = {
-			isa = PBXGroup;
-			children = (
-				E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */,
-			);
-			name = Dependency;
-			path = ../../SampleComponentLibraryApp/SampleComponentLibraryApp/Dependency;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,7 +407,6 @@
 				8A0F447D2B56FD9600438589 /* SearchModel.swift in Sources */,
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,
 				1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */,
-				E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */,
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
@@ -423,6 +421,7 @@
 				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,
 				E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
+				21AE78502D8B4AE6002FDC9E /* DependencyHelper.swift in Sources */,
 				E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,

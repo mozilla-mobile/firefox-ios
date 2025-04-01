@@ -13,6 +13,9 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WebEngine
+import WidgetKit
+import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -66,11 +69,13 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent
+        .hasOnlySecureContent,
+        .fullscreenState
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
+    weak var fullscreenDelegate: FullscreenDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
@@ -107,6 +112,18 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    var downloadProgressManager: DownloadProgressManager?
+
+    private var _downloadLiveActivityWrapper: Any?
+
+    @available(iOS 16.2, *)
+    var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
+        get {
+            return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+        } set(newValue) {
+            _downloadLiveActivityWrapper = newValue
+        }
+    }
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -114,6 +131,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: Lazy loading UI elements
 
+    private var documentLoadingView: TemporaryDocumentLoadingView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
@@ -342,6 +360,15 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return switch currentTheme().type {
+        case .dark, .nightMode, .privateMode:
+                .lightContent
+        case .light:
+                .darkContent
+        }
+    }
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
@@ -490,12 +517,8 @@ class BrowserViewController: UIViewController,
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
-            let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-            topTabsViewController.delegate = self
-            addChild(topTabsViewController)
-            header.addArrangedViewToTop(topTabsViewController.view)
-            self.topTabsViewController = topTabsViewController
-            topTabsViewController.applyTheme()
+            setupTopTabsViewController()
+            topTabsViewController?.applyTheme()
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
         } else {
@@ -535,7 +558,7 @@ class BrowserViewController: UIViewController,
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
         if let tab = tabManager.selectedTab, let screenshotHelper {
-            screenshotHelper.takeScreenshot(tab)
+            screenshotHelper.takeScreenshot(tab, windowUUID: windowUUID)
         }
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
@@ -776,15 +799,18 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
+        setupTopTabsViewController()
 
         // Update theme of already existing views
         let theme = currentTheme()
+        contentStackView.backgroundColor = theme.colors.layer1
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
+        topTabsViewController?.applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -811,6 +837,15 @@ class BrowserViewController: UIViewController,
         // in getting the value. When the delay happens the credit cards might not sync
         // as the default value is false
         profile.syncManager?.updateCreditCardAutofillStatus(value: autofillCreditCardStatus)
+    }
+
+    private func setupTopTabsViewController() {
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        topTabsViewController.delegate = self
+        addChild(topTabsViewController)
+        header.addArrangedViewToTop(topTabsViewController.view)
+        topTabsViewController.didMove(toParent: self)
+        self.topTabsViewController = topTabsViewController
     }
 
     private func setupAccessibleActions() {
@@ -1087,9 +1122,9 @@ class BrowserViewController: UIViewController,
         UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
-    func willNavigateAway() {
-        if let tab = tabManager.selectedTab {
-            screenshotHelper?.takeScreenshot(tab)
+    func willNavigateAway(from tab: Tab?) {
+        if let tab {
+            screenshotHelper?.takeScreenshot(tab, windowUUID: windowUUID)
         }
     }
 
@@ -1493,6 +1528,38 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
+    // MARK: - Document Loading
+
+    func showDocumentLoadingView() {
+        guard documentLoadingView == nil else { return }
+        let documentLoadingView = TemporaryDocumentLoadingView()
+        documentLoadingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(documentLoadingView)
+        NSLayoutConstraint.activate([
+            documentLoadingView.topAnchor.constraint(equalTo: header.bottomAnchor),
+            documentLoadingView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
+            documentLoadingView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
+            documentLoadingView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
+        ])
+
+        view.bringSubviewToFront(header)
+        view.bringSubviewToFront(overKeyboardContainer)
+        documentLoadingView.animateLoadingAppearanceIfNeeded()
+        documentLoadingView.applyTheme(theme: currentTheme())
+        self.documentLoadingView = documentLoadingView
+    }
+
+    func removeDocumentLoadingView(completion: (() -> Void)? = nil) {
+        guard let documentLoadingView else { return }
+        UIView.animate(withDuration: 0.3) {
+            documentLoadingView.alpha = 0.0
+        } completion: { _ in
+            documentLoadingView.removeFromSuperview()
+            self.documentLoadingView = nil
+            completion?()
+        }
+    }
+
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
@@ -1779,10 +1846,15 @@ class BrowserViewController: UIViewController,
                 )
             }
         case .remove:
-            self.showToast(
+            let messageTitle: String = if let title {
+                String(format: .Bookmarks.Menu.DeletedBookmark, title)
+            } else {
+                .LegacyAppMenu.RemoveBookmarkConfirmMessage
+            }
+            showToast(
                 urlString,
                 title,
-                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                message: messageTitle,
                 toastAction: .removeBookmark
             )
         }
@@ -1809,7 +1881,11 @@ class BrowserViewController: UIViewController,
                                                                      bookmarkNode: bookmarkItem,
                                                                      parentBookmarkFolder: parentFolder,
                                                                      presentedFromToast: true) { [weak self] in
-                        self?.showBookmarkToast(action: .remove)
+                        self?.showBookmarkToast(
+                            urlString: bookmarkItem.url,
+                            title: bookmarkItem.title,
+                            action: .remove
+                        )
                     }
                     let controller: DismissableNavigationViewController
                     controller = DismissableNavigationViewController(rootViewController: detailController)
@@ -1843,14 +1919,6 @@ class BrowserViewController: UIViewController,
             return true
         }
         return false
-    }
-
-    func setupLoadingSpinnerFor(_ webView: WKWebView, isLoading: Bool) {
-        if isLoading {
-            webView.scrollView.refreshControl?.beginRefreshing()
-        } else {
-            webView.scrollView.refreshControl?.endRefreshing()
-        }
     }
 
     func setupMiddleButtonStatus(isLoading: Bool) {
@@ -1928,7 +1996,8 @@ class BrowserViewController: UIViewController,
         switch path {
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
-            if let url = webView.url, !InternalURL.isValid(url: url) {
+            let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
+            if let url = webView.url, !InternalURL.isValid(url: url) || isLoadingDocument {
                 let progress = if let progress = change?[.newKey] as? Double {
                     progress
                 } else {
@@ -1951,7 +2020,6 @@ class BrowserViewController: UIViewController,
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
-            setupLoadingSpinnerFor(webView, isLoading: loading)
 
             if isToolbarRefactorEnabled {
                 let action = ToolbarAction(
@@ -1969,7 +2037,15 @@ class BrowserViewController: UIViewController,
             }
 
             // Ensure we do have a URL from that observer
-            guard let url = webView.url else { return }
+            // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
+            let url: URL? = if let webURL = webView.url {
+                webURL
+            } else if let changeURL = change?[.newKey] as? URL, isPDFRefactorEnabled {
+                changeURL
+            } else {
+                nil
+            }
+            guard let url else { break }
 
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
@@ -2042,6 +2118,16 @@ class BrowserViewController: UIViewController,
                 legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
                 legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
             }
+        case .fullscreenState:
+            if #available(iOS 16.0, *) {
+                guard webView.fullscreenState == .enteringFullscreen ||
+                        webView.fullscreenState == .exitingFullscreen else { return }
+                if webView.fullscreenState == .enteringFullscreen {
+                    fullscreenDelegate?.enteringFullscreen()
+                } else {
+                    fullscreenDelegate?.exitingFullscreen()
+                }
+            }
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -2085,16 +2171,21 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
-            var lockIconNeedsTheming = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Large.lockFill :
-                StandardImageIdentifiers.Large.lockSlashFill
+                let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+                if let toolbarState, toolbarState.toolbarLayout == .version1 {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                        StandardImageIdentifiers.Small.shieldSlashFill
+                } else {
+                    lockIconImageName = hasSecureContent ?
+                        StandardImageIdentifiers.Large.lockFill :
+                        StandardImageIdentifiers.Large.lockSlashFill
+                }
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
             }
 
             let action = ToolbarAction(
@@ -2104,7 +2195,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: lockIconNeedsTheming,
+                lockIconNeedsTheming: true,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
@@ -2313,6 +2404,16 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload()
         case .stopLoading:
             tabManager.selectedTab?.stop()
+            // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
+            // To make sure we show the correct button change toolbar state directly when the user stops loading
+            // the website.
+            let action = ToolbarAction(
+                isLoading: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.websiteLoadingStateDidChange
+            )
+            store.dispatch(action)
+            addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
@@ -2688,10 +2789,6 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
     }
 
-    func switchToPrivacyMode(isPrivate: Bool) {
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-    }
-
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
@@ -2738,7 +2835,6 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
         return tab
@@ -2853,8 +2949,6 @@ class BrowserViewController: UIViewController,
 
         guard let webView = tab.webView else { return }
 
-        self.screenshotHelper?.takeScreenshot(tab)
-
         // when navigating in a tab, if the tab's mime type is pdf, we should:
         // - scroll to top
         // - set readermode state to unavailable
@@ -2900,7 +2994,7 @@ class BrowserViewController: UIViewController,
                 // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
                 let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
                 DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper?.takeScreenshot(tab)
+                    self.screenshotHelper?.takeScreenshot(tab, windowUUID: self.windowUUID)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
                     }
@@ -3270,6 +3364,7 @@ class BrowserViewController: UIViewController,
             addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
+        documentLoadingView?.applyTheme(theme: currentTheme)
         toolbar.applyTheme(theme: currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
@@ -3974,6 +4069,14 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
+        if isPDFRefactorEnabled {
+            if selectedTab.isDownloadingDocument() {
+                navigationHandler?.showDocumentLoading()
+            } else {
+                navigationHandler?.removeDocumentLoading()
+            }
+        }
+
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let previousWebView = previousTab?.webView {
@@ -4092,6 +4195,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if topTabsVisible {
+            /// If we are on iPad we need to trigger `willNavigateAway` when switching tabs
+            willNavigateAway(from: previousTab)
             topTabsDidChangeTab()
         }
 

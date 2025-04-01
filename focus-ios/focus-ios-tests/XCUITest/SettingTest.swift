@@ -333,7 +333,7 @@ class SettingTest: BaseTestCase {
         // Providing straight URL to avoid the error - and use internal website
         app.buttons["icon clear"].tap()
         loadWebPage("https://www.example.com")
-        waitForValueContains(label, value: "www.example.com")
+        waitForValueContains(label, value: "example.com")
 
         // Erase the history
         app.buttons["URLBar.deleteButton"].firstMatch.tap()

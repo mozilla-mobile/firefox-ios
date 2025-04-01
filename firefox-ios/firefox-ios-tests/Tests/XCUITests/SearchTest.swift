@@ -406,6 +406,37 @@ class SearchTests: BaseTestCase {
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2576803
+    func testFirefoxSuggest() {
+        // In history: mozilla.org
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+
+        // Bookmark The Book of Mozilla (on localhost)
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
+
+        // Close all tabs so that the search result does not include
+        // current tabs.
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        // Type partial match ("mo") of the history and the bookmark
+        navigator.goto(NewTabScreen)
+        typeOnSearchBar(text: "mo")
+
+        // Google Search appears
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
+        mozWaitForElementToExist(app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendUpLeft])
+
+        // Firefox Suggest appears
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["The Book of Mozilla"]) // Bookmark
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["www.mozilla.org/"]) // History
+    }
+
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
         let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
         mozWaitForElementToExist(showSearchSuggestions)

@@ -137,16 +137,20 @@ extension URL {
             return self
         }
 
-        if self.absoluteString.starts(with: "blob:") {
+        if absoluteString.starts(with: "blob:") {
             return URL(string: "blob:")
         }
 
-        if self.isFileURL {
-            return URL(string: "file://\(self.lastPathComponent)")
+        if isFileURL {
+            if #available(iOS 16.0, *) {
+                return URL(filePath: lastPathComponent)
+            } else {
+                return URL(fileURLWithPath: lastPathComponent)
+            }
         }
 
-        if self.isReaderModeURL {
-            return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
+        if isReaderModeURL {
+            return decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
         if let internalUrl = InternalURL(self), internalUrl.isErrorPage {
@@ -154,7 +158,7 @@ extension URL {
         }
 
         if !InternalURL.isValid(url: self) {
-            return self.havingRemovedAuthorisationComponents()
+            return havingRemovedAuthorisationComponents()
         }
 
         return nil

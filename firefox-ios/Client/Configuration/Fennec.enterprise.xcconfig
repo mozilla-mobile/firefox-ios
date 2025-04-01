@@ -4,6 +4,7 @@
 
 #include "Common.xcconfig"
 #include "Debug.xcconfig"
+#include "version.xcconfig"
 
 MOZ_BUNDLE_DISPLAY_NAME = Fennec
 MOZ_BUNDLE_ID = org.mozilla.ios.FennecEnterprise

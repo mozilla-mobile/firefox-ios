@@ -443,6 +443,7 @@ struct AccessibilityIdentifiers {
         static let learnMoreButton = "learnMoreButton"
         static let collectionView = "TabDisplayView.collectionView"
         static let tabCell = "TabDisplayView.tabCell"
+        static let closeButton = "badge mask"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -471,12 +472,17 @@ struct AccessibilityIdentifiers {
             static let tableView = "Bookmarks List"
             static let bookmarksCell = "BookmarksPanel.BookmarksCell"
             static let bookmarksCellDisclosureButton = ".DisclosureButton"
+            static let emptyStateLogoImage = "BookmarksPanel.EmptyState.emptyStateLogoImage"
+            static let emptyStateTitleLabel = "BookmarksPanel.EmptyState.emptyStateTitleLabel"
+            static let emptyStateBodyLabel = "BookmarksPanel.EmptyState.emptyStateBodyLabel"
             static let emptyStateSignInButton = "BookmarksPanel.EmptyState.signInButton"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
             static let bookmarkParentFolderCell = "BookmarksDetail.ParentFolderSelector.FolderCell"
             static let newFolderCell = "BookmarksDetail.ParentFolderSelector.NewFolderCell"
             static let saveButton = "BookmarksDetail.SaveButton"
+            static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
+            static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
         }
 
         struct HistoryPanel {
@@ -782,6 +788,7 @@ struct AccessibilityIdentifiers {
             static let inactiveTabsSwitch = "Inactive Tabs"
             static let blockPopUps = "blockPopups"
             static let autoPlay = "AutoplaySettings"
+            static let blockImages = "NoImageModeStatus"
         }
 
         struct Theme {

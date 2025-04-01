@@ -40,6 +40,7 @@ class TabManagerTests: XCTestCase {
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
         setIsDeeplinkOptimizationRefactorEnabled(false)
+        setIsPDFRefactorEnabled(false)
     }
 
     override func tearDown() {
@@ -98,11 +99,7 @@ class TabManagerTests: XCTestCase {
         let subject = createSubject()
         _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         await subject.removeAllTabs(isPrivateMode: false)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
 
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
         XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
     }
 
@@ -147,11 +144,6 @@ class TabManagerTests: XCTestCase {
         subject.backupCloseTab = BackupCloseTab(tab: tab, isSelected: true)
         subject.undoCloseTab()
         XCTAssertEqual(subject.selectedIndex, 0)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
-
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
     }
 
     func testUndoCloseTabWithSelectedTab() {
@@ -165,11 +157,23 @@ class TabManagerTests: XCTestCase {
         subject.backupCloseTab = BackupCloseTab(tab: closedTab, isSelected: true)
         subject.undoCloseTab()
         XCTAssertEqual(subject.selectedIndex, 1)
-        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
-            return XCTFail("windowManager was not found")
-        }
+    }
 
-        XCTAssertTrue(windowManager.storeTabsMultiWindowActionCalled)
+    // MARK: - Document pause - restore
+
+    func testSelectTab_pauseCurrentDocumentDownload() throws {
+        setIsPDFRefactorEnabled(true)
+
+        let tabs = generateTabs(count: 2)
+        let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
+        let subject = createSubject(tabs: tabs)
+
+        let tab = try XCTUnwrap(tabs.first)
+        tab.enqueueDocument(document)
+
+        subject.selectTab(tabs[1], previous: tab)
+
+        XCTAssertEqual(document.pauseResumeDownloadCalled, 1)
     }
 
     // MARK: - Restore tabs
@@ -317,6 +321,36 @@ class TabManagerTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    func testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes() throws {
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let testUUID = UUID()
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        // Simulate deeplink tab
+        let deeplinkTabData = try XCTUnwrap(getMockTabData(count: 1).first)
+        let deeplinkTab = Tab(profile: mockProfile, windowUUID: testUUID)
+        deeplinkTab.url = URL(string: deeplinkTabData.siteUrl)
+        deeplinkTab.tabUUID = deeplinkTabData.id.uuidString
+        let subject = createSubject(tabs: [deeplinkTab], windowUUID: testUUID)
+
+        mockTabStore.fetchTabWindowData = WindowData(
+            id: UUID(),
+            activeTabId: UUID(),
+            tabData: getMockTabData(count: 4)
+        )
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            let filteredTabs = subject.tabs.filter {
+                $0.tabUUID == deeplinkTab.tabUUID
+            }
+            // There has to be only one tab present
+            XCTAssertEqual(filteredTabs.count, 1)
+            expectation.fulfill()
+        }
+
+        subject.restoreTabs()
+        wait(for: [expectation])
+    }
+
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {
@@ -354,7 +388,7 @@ class TabManagerTests: XCTestCase {
             return
         }
 
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        subject.tabDidSetScreenshot(tab)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
     }
@@ -366,7 +400,7 @@ class TabManagerTests: XCTestCase {
             return
         }
         tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
+        subject.tabDidSetScreenshot(tab)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
     }
@@ -1612,6 +1646,12 @@ class TabManagerTests: XCTestCase {
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
+    }
+
+    private func setIsPDFRefactorEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
+            return PdfRefactorFeature(enabled: enabled)
         }
     }
 

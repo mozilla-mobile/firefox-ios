@@ -202,6 +202,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "More options",
                 comment: "Accessibility label for the \"...\" disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions.")
+            public static let ClearTextFieldButtonA11yLabel = MZLocalizedString(
+                key: "Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139",
+                tableName: "Bookmarks",
+                value: "Clear",
+                comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
         }
 
         public struct EmptyState {
@@ -1172,6 +1177,13 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible.")
+
+            public static let PinnedAccessibilityLabel = MZLocalizedString(
+                key: "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139",
+                tableName: "FirefoxHomepage",
+                value: "Pinned: %@",
+                comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
+            )
         }
 
         public struct YourLibrary { }
@@ -1399,29 +1411,24 @@ extension String {
                 tableName: "LibraryPanel",
                 value: "Last Hour",
                 comment: "This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour.")
-            public static let Today = MZLocalizedString(
-                key: "Today",
-                tableName: nil,
-                value: "Today",
-                comment: "This label is meant to signify the section containing a group of items from the current day.")
-            public static let Yesterday = MZLocalizedString(
-                key: "Yesterday",
-                tableName: nil,
-                value: "Yesterday",
-                comment: "This label is meant to signify the section containing a group of items from the past 24 hours.")
-            public static let LastWeek = MZLocalizedString(
-                key: "Last week",
-                tableName: nil,
-                value: "Last week",
-                comment: "This label is meant to signify the section containing a group of items from the past seven days.")
-            public static let LastMonth = MZLocalizedString(
-                key: "Last month",
-                tableName: nil,
-                value: "Last month",
-                comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
+            public static let LastTwentyFourHours = MZLocalizedString(
+                key: "LibraryPanel.Sections.LastTwentyFourHours.v138",
+                tableName: "LibraryPanel",
+                value: "Last 24 Hours",
+                comment: "Section title that, when expanded, shows all web browsing history entries for the last 24 hours beneath it (not including entries from the less inclusive sections)")
+            public static let LastSevenDays = MZLocalizedString(
+                key: "LibraryPanel.Sections.LastSevenDays.v138",
+                tableName: "LibraryPanel",
+                value: "Last 7 Days",
+                comment: "Section title that, when expanded, shows all web browsing history entries for the last 7 days beneath it (not including entries from the less inclusve sections)")
+            public static let LastFourWeeks = MZLocalizedString(
+                key: "LibraryPanel.Sections.LastFourWeeks.v138",
+                tableName: "LibraryPanel",
+                value: "Last 4 Weeks",
+                comment: "Section title that, when expanded, shows all web browsing history entries for the last 4 weeks beneath it (not including entries from the less inclusive sections)")
             public static let Older = MZLocalizedString(
                 key: "LibraryPanel.Section.Older",
-                tableName: nil,
+                tableName: "LibraryPanel",
                 value: "Older",
                 comment: "This label is meant to signify the section containing a group of items that are older than thirty days.")
         }
@@ -1459,11 +1466,6 @@ extension String {
                 tableName: nil,
                 value: "Synced History",
                 comment: "Within the History Panel, users can see the option of viewing their history from synced tabs.")
-            public static let ClearHistoryMenuTitle = MZLocalizedString(
-                key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
-                tableName: nil,
-                value: "Removes history (including history synced from other devices), cookies and other browsing data.",
-                comment: "Within the History Panel, users can open an action menu to clear recent history.")
             public static let ClearGroupedTabsTitle = MZLocalizedString(
                 key: "LibraryPanel.History.ClearGroupedTabsTitle.v100",
                 tableName: nil,
@@ -1484,6 +1486,39 @@ extension String {
                 tableName: nil,
                 value: "Delete",
                 comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.")
+
+            public struct ClearHistorySheet {
+                public static let Title = MZLocalizedString(
+                    key: "LibraryPanel.History.Title.v138",
+                    tableName: "HistoryPanel",
+                    value: "Deletes history (including synced history from other devices), cookies, and other browsing data.",
+                    comment: "Title of the “Clear browsing history“ action sheet")
+                public static let LastHourOption = MZLocalizedString(
+                    key: "LibraryPanel.History.LastHourOption.v138",
+                    tableName: "HistoryPanel",
+                    value: "Last Hour",
+                    comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour")
+                public static let LastTwentyFourHoursOption = MZLocalizedString(
+                    key: "LibraryPanel.History.LastTwentyFourHoursOption.v138",
+                    tableName: "HistoryPanel",
+                    value: "Last 24 Hours",
+                    comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours")
+                public static let LastSevenDaysOption = MZLocalizedString(
+                    key: "LibraryPanel.History.LastSevenDaysOption.v138",
+                    tableName: "HistoryPanel",
+                    value: "Last 7 Days",
+                    comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days")
+                public static let LastFourWeeksOption = MZLocalizedString(
+                    key: "LibraryPanel.History.LastFourWeeksOption.v138",
+                    tableName: "HistoryPanel",
+                    value: "Last 4 Weeks",
+                    comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks")
+                public static let AllTimeOption = MZLocalizedString(
+                    key: "LibraryPanel.History.AllTimeOption.v138",
+                    tableName: "HistoryPanel",
+                    value: "All Time",
+                    comment: "Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history")
+            }
         }
 
         public struct ReadingList { }
@@ -2109,6 +2144,17 @@ extension String {
                 comment: "A label indicating the action that a user can rate the Firefox app in the App store.")
         }
 
+        public struct General {
+            public struct ScrollToHideTabAndAddressBar {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.ScrollToHideTabAndAddressBar.Title.v138",
+                    tableName: "Settings",
+                    value: "Scroll to Hide Tab and Address Bar",
+                    comment: "In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar."
+                )
+            }
+        }
+
         public struct Homepage {
             public struct Current {
                 public static let Description = MZLocalizedString(
@@ -2520,11 +2566,11 @@ extension String {
                     value: "Blue",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue background.")
 
-                public static let BlueGradient = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.BlueGradient.Title.v136",
+                public static let Cyan = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Cyan.Title.v137",
                     tableName: "AppIconSelection",
-                    value: "Blue Gradient",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a blue gradient background.")
+                    value: "Cyan",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a cyan background.")
 
                 public static let Green = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Green.Title.v136",
@@ -2544,11 +2590,11 @@ extension String {
                     value: "Lazy",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the artsy Firefox for iOS icon of a funny fox lying on top of a globe.")
 
-                public static let OrangeGradient = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.OrangeGradient.Title.v136",
+                public static let Orange = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Orange.Title.v137",
                     tableName: "AppIconSelection",
-                    value: "Orange Gradient",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with an orange gradient background.")
+                    value: "Orange",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a orange background.")
 
                 public static let Pink = MZLocalizedString(
                     key: "Settings.AppIconSelection.AppIconNames.Pink.Title.v136",
@@ -2566,19 +2612,79 @@ extension String {
                     key: "Settings.AppIconSelection.AppIconNames.Pride.Title.v136",
                     tableName: "AppIconSelection",
                     value: "Pride",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a fox logo.")
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a LGBT+ pride fox logo.")
 
-                public static let RedGradient = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.RedGradient.Title.v136",
+                public static let Purple = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Purple.Title.v137",
                     tableName: "AppIconSelection",
-                    value: "Red Gradient",
-                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red gradient background.")
+                    value: "Purple",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a purple background.")
+
+                public static let Red = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Red.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Red",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a red background.")
 
                 public static let Retro = MZLocalizedString(
-                    key: "Settings.AppIconSelection.AppIconNames.Pixelated.Retro.Title.v136",
+                    key: "Settings.AppIconSelection.AppIconNames.Retro.Title.v136",
                     tableName: "AppIconSelection",
                     value: "Retro",
                     comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of a retro version of the regular Firefox for iOS app icon.")
+
+                public static let Yellow = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Yellow.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Yellow",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox icon with a yellow background.")
+
+                public static let Sunrise = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Sunrise.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Sunrise",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to yellow.")
+
+                public static let Midday = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Midday.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Midday",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of light blue fading to light purple.")
+
+                public static let GoldenHour = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Golden Hour",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange.")
+
+                public static let Sunset = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Sunset.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Sunset",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of purple fading to pink.")
+
+                public static let BlueHour = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.BlueHour.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Blue Hour",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of blue fading to purple.")
+
+                public static let Twilight = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Twilight.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Twilight",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of dark blue fading to light blue.")
+
+                public static let Midnight = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.Midnight.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Midnight",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to dark purple.")
+
+                public static let NorthernLights = MZLocalizedString(
+                    key: "Settings.AppIconSelection.AppIconNames.NorthernLights.Title.v137",
+                    tableName: "AppIconSelection",
+                    value: "Northern Lights",
+                    comment: "On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of black fading to blue fading to green.")
             }
 
             public struct Accessibility {
@@ -3279,30 +3385,6 @@ extension String {
         tableName: "HistoryPanel",
         value: nil,
         comment: "Action button for deleting history entries in the history panel.")
-}
-
-// MARK: - Clear recent history action menu
-extension String {
-    public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
-        key: "HistoryPanel.ClearHistoryMenuOptionTheLastHour",
-        tableName: nil,
-        value: "The Last Hour",
-        comment: "Button to perform action to clear history for the last hour")
-    public static let ClearHistoryMenuOptionToday = MZLocalizedString(
-        key: "HistoryPanel.ClearHistoryMenuOptionToday",
-        tableName: nil,
-        value: "Today",
-        comment: "Button to perform action to clear history for today only")
-    public static let ClearHistoryMenuOptionTodayAndYesterday = MZLocalizedString(
-        key: "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday",
-        tableName: nil,
-        value: "Today and Yesterday",
-        comment: "Button to perform action to clear history for yesterday and today")
-    public static let ClearHistoryMenuOptionEverything = MZLocalizedString(
-        key: "HistoryPanel.ClearHistoryMenuOptionEverything",
-        tableName: nil,
-        value: "Everything",
-        comment: "Option title to clear all browsing history.")
 }
 
 // MARK: - Syncing
@@ -8056,6 +8138,53 @@ extension String {
                 tableName: nil,
                 value: "Tabs",
                 comment: "In the settings menu, this is the title for the Tabs customization section option")
+        }
+        struct v138 {
+            public static let ClearHistoryMenuTitle = MZLocalizedString(
+                key: "LibraryPanel.History.ClearHistoryMenuTitle.v100",
+                tableName: nil,
+                value: "Removes history (including history synced from other devices), cookies and other browsing data.",
+                comment: "Within the History Panel, users can open an action menu to clear recent history.")
+            public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionTheLastHour",
+                tableName: nil,
+                value: "The Last Hour",
+                comment: "Button to perform action to clear history for the last hour")
+            public static let ClearHistoryMenuOptionToday = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionToday",
+                tableName: nil,
+                value: "Today",
+                comment: "Button to perform action to clear history for today only")
+            public static let ClearHistoryMenuOptionTodayAndYesterday = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday",
+                tableName: nil,
+                value: "Today and Yesterday",
+                comment: "Button to perform action to clear history for yesterday and today")
+            public static let ClearHistoryMenuOptionEverything = MZLocalizedString(
+                key: "HistoryPanel.ClearHistoryMenuOptionEverything",
+                tableName: nil,
+                value: "Everything",
+                comment: "Option title to clear all browsing history.")
+            public static let Today = MZLocalizedString(
+                key: "Today",
+                tableName: nil,
+                value: "Today",
+                comment: "This label is meant to signify the section containing a group of items from the current day.")
+            public static let Yesterday = MZLocalizedString(
+                key: "Yesterday",
+                tableName: nil,
+                value: "Yesterday",
+                comment: "This label is meant to signify the section containing a group of items from the past 24 hours.")
+            public static let LastWeek = MZLocalizedString(
+                key: "Last week",
+                tableName: nil,
+                value: "Last week",
+                comment: "This label is meant to signify the section containing a group of items from the past seven days.")
+            public static let LastMonth = MZLocalizedString(
+                key: "Last month",
+                tableName: nil,
+                value: "Last month",
+                comment: "This label is meant to signify the section containing a group of items from the past thirty days.")
         }
     }
 }

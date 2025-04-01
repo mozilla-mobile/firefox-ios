@@ -225,8 +225,9 @@ class BrowserCoordinator: BaseCoordinator,
             browserViewController.frontEmbeddedContent(webviewController)
             logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
-            let webviewViewController = WebviewViewController(webView: webView, windowUUID: windowUUID)
+            let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
+            browserViewController.fullscreenDelegate = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
@@ -1014,7 +1015,14 @@ class BrowserCoordinator: BaseCoordinator,
         tabTrayCoordinator.start(with: selectedPanel)
 
         navigationController.onViewDismissed = { [weak self] in
-            self?.didDismissTabTray(from: tabTrayCoordinator)
+            guard let self else { return }
+            self.didDismissTabTray(from: tabTrayCoordinator)
+            store.dispatch(
+                TabTrayAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TabTrayActionType.modalSwipedToClose
+                )
+            )
         }
 
         present(navigationController)
@@ -1033,11 +1041,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showDocumentLoading() {
-        webviewController?.showDocumentLoadingView()
+        browserViewController.showDocumentLoadingView()
     }
 
     func removeDocumentLoading(completion: (() -> Void)? = nil) {
-        webviewController?.removeDocumentLoadingView(completion: completion)
+        browserViewController.removeDocumentLoadingView(completion: completion)
     }
 
     // MARK: Microsurvey
@@ -1086,7 +1094,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func present(_ viewController: UIViewController) {
-        browserViewController.willNavigateAway()
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
         router.present(viewController)
     }
 
@@ -1200,7 +1208,8 @@ class BrowserCoordinator: BaseCoordinator,
     private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument else {
+              let temporaryDocument = tab.temporaryDocument,
+              !temporaryDocument.isDownloading else {
             return shareType
         }
 

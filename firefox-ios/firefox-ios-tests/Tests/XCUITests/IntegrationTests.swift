@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import Shared
 
@@ -136,13 +137,16 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabs () {
-        navigator.openURL(testingURL)
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
         signInFxAccounts()
 
-        // Wait for initial sync to complete
+        // We only sync tabs if the user is signed in
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.openURL(testingURL)
+        waitUntilPageLoad()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 1).waitAndTap()
@@ -154,9 +158,9 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].waitAndTap()
-        mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
-        app.tables.cells.element(boundBy: 2).waitAndTap()
-        mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(BrowserTab)
+        waitForInitialSyncComplete()
     }
 
     func testFxASyncLogins () {
@@ -290,7 +294,6 @@ class IntegrationTests: BaseTestCase {
 
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
-        app.swipeDown()
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
 

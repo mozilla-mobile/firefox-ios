@@ -116,11 +116,7 @@ final class HomepageViewController: UIViewController,
             .TopSitesUpdated,
             .DefaultSearchEngineUpdated,
             .BookmarksUpdated,
-            .RustPlacesOpened,
-            .TabDataUpdated,
-            .TabsTrayDidClose,
-            .TabsTrayDidSelectHomeTab,
-            .TopTabsTabClosed
+            .RustPlacesOpened
         ])
 
         subscribeToRedux()
@@ -160,6 +156,18 @@ final class HomepageViewController: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         addTapGestureRecognizerToDismissKeyboard()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        /// Used as a trigger for showing a microsurvey based on viewing the homepage
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewWillAppear
+            )
+        )
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -925,9 +933,6 @@ final class HomepageViewController: UIViewController,
             )
         case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
             dispatchActionToFetchTopSites()
-            dispatchActionToFetchTabs()
-
-        case .TabDataUpdated, .TabsTrayDidClose, .TabsTrayDidSelectHomeTab, .TopTabsTabClosed:
             dispatchActionToFetchTabs()
         default: break
         }

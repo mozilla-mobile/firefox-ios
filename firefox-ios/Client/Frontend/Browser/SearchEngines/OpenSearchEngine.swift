@@ -12,7 +12,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     }
 
     let shortName: String
-    let engineID: String?
+    let engineID: String
     let image: UIImage
     let isCustomEngine: Bool
     let searchTemplate: String
@@ -38,7 +38,13 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         case engineID
     }
 
-    init(engineID: String?,
+    override var debugDescription: String {
+        let className = String(describing: type(of: self))
+        let memAddr = Unmanaged.passUnretained(self).toOpaque()
+        return "<\(className): \(memAddr)> Name: '\(shortName)' ID: '\(engineID)' Custom: \(isCustomEngine)"
+    }
+
+    init(engineID: String,
          shortName: String,
          image: UIImage,
          searchTemplate: String,
@@ -70,7 +76,8 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
         self.image = image
-        self.engineID = aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String
+        self.engineID = (aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String) ??
+        Self.generateCustomEngineID()
         self.suggestTemplate = nil
     }
 
@@ -181,5 +188,9 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     /// Helper method for Redux state.
     func generateModel() -> SearchEngineModel {
         return SearchEngineModel(name: self.shortName, image: self.image)
+    }
+
+    static func generateCustomEngineID() -> String {
+        return "Custom-" + UUID().uuidString
     }
 }

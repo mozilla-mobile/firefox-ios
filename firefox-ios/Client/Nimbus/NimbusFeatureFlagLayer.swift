@@ -19,6 +19,9 @@ final class NimbusFeatureFlagLayer {
         case .appIconSelection:
             return checkAppIconSelectionSetting(from: nimbus)
 
+        case .appearanceMenu:
+            return checkAppearanceMenuFeature(from: nimbus)
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -144,6 +147,9 @@ final class NimbusFeatureFlagLayer {
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
+
+        case .useRustKeychain:
+            return checkUseRustKeychainFeature(from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -389,6 +395,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.appearanceMenuFeature.value()
+        return config.status
+    }
+
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
@@ -442,5 +453,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
+    }
+
+    private func checkUseRustKeychainFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.rustKeychainRefactor.value().rustKeychainEnabled
     }
 }

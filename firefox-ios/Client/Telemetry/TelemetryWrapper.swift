@@ -97,6 +97,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
         // the event in the startup sequence.
+
         let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
@@ -869,12 +870,6 @@ extension TelemetryWrapper {
             GleanMetrics.History.opened.record()
         case(.action, .swipe, .historySingleItemRemoved, _, _):
             GleanMetrics.History.removed.record()
-        case(.action, .tap, .historyRemovedToday, _, _):
-            GleanMetrics.History.removedToday.record()
-        case(.action, .tap, .historyRemovedTodayAndYesterday, _, _):
-            GleanMetrics.History.removedTodayAndYesterday.record()
-        case(.action, .tap, .historyRemovedAll, _, _):
-            GleanMetrics.History.removedAll.record()
 
         // MARK: Top Site
         case (.action, .tap, .topSiteTile, _, let extras):

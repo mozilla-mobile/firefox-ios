@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Μάθετε περισσότερα";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "Το %@ αναπτύσσεται από τη Mozilla. Αποστολή μας είναι ένα υγιές και ανοικτό διαδίκτυο.";
 
 /* Label on About screen */
@@ -37,26 +37,26 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Χρησιμοποιήστε το με το Safari για:";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "Σχετικά με το %@";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "Το %@ σάς δίνει τον έλεγχο.";
 
-/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
-"actionSheet.openIn" = "Άνοιγμα σε %@";
+/* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
+"actionSheet.openIn" = "Άνοιγμα στο «%@»";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
 "AddPass.Error.Dismiss" = "OK";
 
 /* Message of the 'Add Pass Failed' alert. */
-"AddPass.Error.Message" = "Προέκυψε σφάλμα κατά την προσθήκη του πάσο στο Πορτοφόλι. Παρακαλώ δοκιμάστε ξανά αργότερα.";
+"AddPass.Error.Message" = "Προέκυψε σφάλμα κατά την προσθήκη του πάσου στο Πορτοφόλι. Δοκιμάστε ξανά αργότερα.";
 
 /* Title of the 'Add Pass Failed' alert. */
-"AddPass.Error.Title" = "Αποτυχία προσθήκης πάσο";
+"AddPass.Error.Title" = "Αποτυχία προσθήκης πάσου";
 
-/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
-"Authentication.reason" = "Ταυτοποίηση για επιστροφή στο %@";
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Κάντε ταυτοποίηση για επιστροφή στο %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Προσθήκη προσαρμοσμένου URL";
@@ -79,7 +79,7 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Προστέθηκε νέο προσαρμοσμένο URL.";
 
-/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for enabling or disabling the default list. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.defaultDescriptoin" = "Ενεργοποιήστε το για συμπλήρωση πάνω από 450 δημοφιλών URL στη γραμμή διευθύνσεων του %@.";
 
 /* label describing URL Autocomplete as disabled */
@@ -100,7 +100,7 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Οι ιστότοποί μου";
 
-/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+/* Description for adding and managing custom autocomplete URLs. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Autocomplete.mySitesDesc" = "Ενεργοποιήστε το για συμπλήρωση των αγαπημένων σας URL στο %@.";
 
 /* Label for enabling or disabling top sites */
@@ -148,13 +148,13 @@
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Ακύρωση";
 
-/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+/* Dialog title used for opening an external app from Focus. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ExternalAppLink.messageTitle" = "Το %@ θέλει να ανοίξει μια άλλη εφαρμογή";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Άνοιγμα";
 
-/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+/* Dialog title used for opening an external app from Focus. %1$@ is the app name (for example “Firefox Focus” or ”Firefox Klar”), %2$@ is the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "Το %1$@ θέλει να ανοίξει το %2$@";
 
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
@@ -196,10 +196,10 @@
 /* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Διαγράφουμε το ιστορικό σας όταν κλείνετε την εφαρμογή για επιπλέον ιδιωτικότητα.";
 
-/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Ορίστε το %@ ως προεπιλογή για να προστατεύσετε τα δεδομένα σας με κάθε σύνδεσμο που ανοίγετε.";
 
-/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.DefaultBrowser.Title.V2" = "Το %@ δεν είναι σαν τα άλλα προγράμματα περιήγησης";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
@@ -211,11 +211,17 @@
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Το ιστορικό σας δεν σας ακολουθεί";
 
-/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Incognito.Description" = "Το %@ είναι ένα ιδιωτικό πρόγραμμα περιήγησης με προστασία από καταγραφή και φραγή περιεχομένου.";
 
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Κάτι παραπάνω από απλή ανωνυμία";
+
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "Σημείωση απορρήτου";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Το Firefox νοιάζεται για το απόρρητό σας. Διαβάστε περισσότερα στη %@.";
 
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Διαμορφώστε τις ρυθμίσεις ώστε να αποφασίσετε για το τι θα μοιράζεστε.";
@@ -226,19 +232,37 @@
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Μεταβείτε στο επόμενο επίπεδο ιδιωτικής περιήγησης.";
 
-/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Αποδοχή και συνέχεια";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Τέλος";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Όρους χρήσης του Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Γρήγορο. Ιδιωτικό. Χωρίς περισπασμούς.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "Συνεχίζοντας, συμφωνείτε με τους %@.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Καλώς ορίσατε στο %@";
+
+/* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Καλώς ορίσατε στο Firefox %@!";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Πατήστε το Safari και επιλέξτε «Προγράμματα αποκλεισμού περιεχομένου»";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Ενεργοποίηση στο %@";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsExtentions" = "Επιλέξτε το Safari και έπειτα, επιλέξτε «Επεκτάσεις»";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "Το %@ δεν είναι ενεργό.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -259,8 +283,8 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Ναι";
 
-/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Για να λάβετε προτάσεις, το %@ πρέπει να στείλει ό,τι πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησης.";
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Για να λαμβάνετε προτάσεις, το %@ πρέπει να στέλνει στη μηχανή αναζήτησης ό,τι πληκτρολογείτε στη γραμμή διευθύνσεων.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Εμφάνιση προτάσεων αναζήτησης;";
@@ -289,13 +313,13 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
 
-/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "Το %@ θα στέλνει όσα πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησής σας.";
 
-/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Η Mozilla προσπαθεί να συλλέγει μόνο όσα χρειάζεται για να παρέχει και να βελτιώνει το %@ για όλους.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextStudies" = "Το %@ ενδέχεται να εγκαθιστά και να εκτελεί περιστασιακά μελέτες.";
 
 /* Title for section in settings menu */
@@ -310,7 +334,7 @@
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "Ανοιχτόχρωμο";
 
-/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Αξιολόγηση του %@";
 
 /* Label for Safari integration section */
@@ -367,7 +391,7 @@
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Ορισμός ως προεπιλογή";
 
-/* %@ is the name of the app. Description for set as default browser option */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
 "Settings.setAsDefaultBrowserDescription" = "Ρύθμιση για αυτόματο άνοιγμα συνδέσμων από ιστοτόπους, email και μηνύματα στο %@.";
 
 /* System value for theme section in settings menu */
@@ -392,7 +416,7 @@
 "Settings.toggleBlockOther2" = "Περιεχόμενο";
 
 /* Label for the checkbox to toggle Social trackers */
-"Settings.toggleBlockSocial2" = "Κοινωνικά δίκτυα";
+"Settings.toggleBlockSocial2" = "Μέσα κοινωνικής δικτύωσης";
 
 /* Label for Crash Reports toggle on settings screen */
 "Settings.toggleCrashReports" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
@@ -400,7 +424,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Χρήση Face ID για ξεκλείδωμα";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Το Face ID μπορεί να ξεκλειδώσει το %@ αν είναι ήδη ανοικτό κάποιο URL";
 
 /* Show home screen tips toggle label on settings screen */
@@ -418,7 +442,7 @@
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Χρήση Touch ID για ξεκλείδωμα";
 
-/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Το Touch ID μπορεί να ξεκλειδώσει το %@ αν είναι ήδη ανοικτό κάποιο URL";
 
 /* Status off for tracking protection in settings screen */
@@ -437,7 +461,7 @@
 "share" = "Κοινή χρήση";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "Προσθήκη στις συντομεύσεις";
+"ShareMenu.AddToShortcuts" = "Προσθήκη συντόμευσης";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
 "ShareMenu.AddToShortcuts.Confirm" = "Προστέθηκε στις συντομεύσεις";
@@ -449,7 +473,7 @@
 "ShareMenu.FindInPage" = "Εύρεση στη σελίδα";
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
-"ShareMenu.RemoveFromShortcuts" = "Αφαίρεση από συντομεύσεις";
+"ShareMenu.RemoveFromShortcuts" = "Αφαίρεση συντόμευσης";
 
 /* Toast displayed to the user after removing the item from the Shortcuts. */
 "ShareMenu.RemoveShortcut.Confirm" = "Η συντόμευση αφαιρέθηκε";
@@ -461,13 +485,13 @@
 "ShareMenu.RequestMobile" = "Έκδοση για κινητά";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
-"ShareMenu.ShareOpenChrome" = "Άνοιγμα σε Chrome";
+"ShareMenu.ShareOpenChrome" = "Άνοιγμα στο Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
-"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα σε προεπιλεγμένο φυλλομετρητή";
+"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα στο προεπιλεγμένο πρόγραμμα περιήγησης";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "Άνοιγμα σε Firefox";
+"ShareMenu.ShareOpenFirefox" = "Άνοιγμα στο Firefox";
 
 /* Text for the share menu option when a user wants to open the current website inside the app. */
 "ShareMenu.ShareOpenLink" = "Άνοιγμα συνδέσμου";
@@ -476,7 +500,7 @@
 "ShareMenu.SharePage" = "Κοινή χρήση σελίδας με…";
 
 /* Text for the long press on a shortcut option in context menu. */
-"ShortcutView.RemoveFromShortcuts" = "Αφαίρεση από συντομεύσεις";
+"ShortcutView.RemoveFromShortcuts" = "Αφαίρεση συντόμευσης";
 
 /* Text for the long press on a shortcut rename option in context menu. */
 "ShortcutView.Rename" = "Μετονομασία συντόμευσης";
@@ -496,13 +520,13 @@
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "Πατήστε παρατεταμένα στην αρχική οθόνη μέχρι τα εικονίδια να αρχίσουν να ανακινούνται.";
 
-/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "Αναζητήστε το %@ και επιλέξτε ένα widget.";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Πατήστε το εικονίδιο «συν».";
 
-/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.Title.V2" = "Προσθήκη widget %@";
 
 /* Button to add a favorite URL to Siri. */
@@ -529,7 +553,7 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL για άνοιγμα";
 
-/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Biometric.Title" = "Κλείδωμα του %@ όταν είναι ανοικτός ένας ιστότοπος:";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
@@ -544,13 +568,13 @@
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "Θέλετε να δείτε την πλήρη έκδοση ενός ιστοτόπου;";
 
-/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+/* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
 "Tip.ShareTrackers.Description" = "%@ αποκλεισμένοι ιχνηλάτες μέχρι στιγμής";
 
-/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for share trackers tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.ShareTrackers.Title" = "Εσείς περιηγείστε. Το %@ αποκλείει.";
 
-/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+/* Text for a label that indicates the description for shortcuts tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.Shortcuts.Description" = "Επιλέξτε «Προσθήκη συντόμευσης» από το μενού του %@";
 
 /* Text for a label that indicates the title for shortcuts tip. */
@@ -559,7 +583,7 @@
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "Προσθήκη συντόμευσης Siri";
 
-/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+/* Text for a label that indicates the title for siri erase tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.SiriErase.Title" = "«Siri, διάγραψε τη συνεδρία μου στο %@.»";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
@@ -574,19 +598,19 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Απώλεια περιεχομένου ή περίεργη συμπεριφορά;";
 
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TodayWidget.SearchInApp.Instruction" = "Αναζήτηση στο %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Μεταβείτε στις ρυθμίσεις για να διαχειριστείτε συγκεκριμένες επιλογές απορρήτου και ασφάλειας.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
-"TooltipBodyText.Privacy" = "Αυτές οι προεπιλεγμένες ρυθμίσεις προσφέρουν ισχυρή προστασία. Αλλά μπορείτε εύκολα να τις προσαρμόσετε για να ταιριάξουν με τις δικές σας ανάγκες.";
+"TooltipBodyText.Privacy" = "Οι προεπιλεγμένες ρυθμίσεις παρέχουν ισχυρή προστασία, αλλά μπορείτε εύκολα να τις προσαρμόσετε με βάση τις ανάγκες σας.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Ξεκινήστε τη συνεδρία ιδιωτικής περιήγησής σας και θα αποκλείσουμε τους ιχνηλάτες και άλλα επιβλαβή στοιχεία.";
 
-/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+/* This is the body text that is displayed for the Shield icon tooltip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TooltipBodyText.ShieldIcon" = "Το %@ εμπόδισε την παρακολούθησή σας από αυτόν τον ιστότοπο. Πατήστε την ασπίδα για πληροφορίες σχετικά με το τι αποκλείσαμε.";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
@@ -599,7 +623,7 @@
 "TooltipBodyText.TrashIcon.V2" = "Πατήστε εδώ για να τα διαγράψετε όλα — ιστορικό, cookie, τα πάντα — και ξεκινήστε από την αρχή σε μια νέα καρτέλα.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
-"TooltipTitleText.Privacy" = "Προστατεύεστε!";
+"TooltipTitleText.Privacy" = "Προστατεύεστε! ";
 
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Η σύνδεση δεν είναι ασφαλής";
@@ -619,7 +643,7 @@
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "Ενισχυμένη προστασία από καταγραφή";
 
-/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. %@ is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "Αποκλεισμένοι ιχνηλάτες από τις %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
@@ -646,7 +670,7 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Αναζήτηση ή εισαγωγή διεύθυνσης";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "Αναζήτηση για «%@»";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
@@ -655,8 +679,8 @@
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Εμφάνιση οδηγιών";
 
-/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
-"WidgetOnboardingCard.Subtitle" = "Θα σας αφήσουμε στην ιδιωτική σας περιήγηση, αλλά ξεκινήστε πιο γρήγορα την επόμενη φορά με το widget %@ στην αρχική σας οθόνη.";
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"WidgetOnboardingCard.Subtitle" = "Συνεχίστε την ιδιωτική σας περιήγηση, αλλά ξεκινήστε ταχύτερα την επόμενη φορά με το widget του %@ στην οθόνη Αφετηρίας.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Το ιστορικό περιήγησης διαγράφηκε! 🎉";

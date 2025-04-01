@@ -1,7 +1,7 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Meer inligting";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.missionLabel" = "%@ word deur Mozilla gebou. Ons missie is om ’n gesonde, oop Internet te bevorder.";
 
 /* Label on About screen */
@@ -31,7 +31,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Gebruik dit as ’n uitbreiding vir Safari:";
 
-/* Label on About screen */
+/* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "About.topLabel" = "%@ plaas mens in beheer.";
 
 /* Accessibility label for the back button */
@@ -64,10 +64,10 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Raak op Safari en kies dan Content Blockers";
 
-/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsEnable" = "Aktiveer %@";
 
-/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ is nie geaktiveer nie.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
@@ -97,6 +97,6 @@
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Soek, of tik adres in";
 
-/* Label displayed for search button when typing in the URL bar */
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
 "URL.searchLabel" = "Soek vir %@";
 

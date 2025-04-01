@@ -330,7 +330,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        // For enrolled users whose devices support alternate app icons, add the App Icon setting
+        // FXIOS-11645 For enrolled users whose devices support alternate app icons, add the App Icon setting
         if featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly),
            UIApplication.shared.supportsAlternateIcons {
             generalSettings.append(
@@ -457,7 +457,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            ScreenshotSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

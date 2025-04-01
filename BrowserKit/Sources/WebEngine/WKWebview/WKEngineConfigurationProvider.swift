@@ -37,6 +37,9 @@ struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !parameters.blockPopups
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
+        if #available(iOS 15.4, *) {
+            configuration.preferences.isElementFullscreenEnabled = true
+        }
         if parameters.isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         } else {

@@ -244,12 +244,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
-        let providers = [.amp, .ampMobile, .wikipedia]
+        let providers = [.amp, .wikipedia]
             .filter { NimbusFirefoxSuggestFeatureLayer().isSuggestionProviderAvailable($0) }
             .filter {
                 switch $0 {
                 case .amp: includeSponsored
-                case .ampMobile: includeSponsored
                 case .wikipedia: includeNonSponsored
                 default: false
                 }

@@ -15,7 +15,8 @@ struct AppIconView: View, ThemeApplicable {
     // MARK: - Theming
     // FIXME FXIOS-11472 Improve our SwiftUI theming
     @Environment(\.themeManager)
-    var themeManager
+    private var themeManager
+    @State private var currentTheme: Theme = LightTheme()
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     struct UX {
@@ -25,15 +26,17 @@ struct AppIconView: View, ThemeApplicable {
         static let itemPaddingVertical: CGFloat = 2
         static let appIconSize: CGFloat = 50
         static let appIconBorderWidth: CGFloat = 1
+        static let appIconLightBackgroundColor = Color.white
+        static let appIconDarkBackgroundColor = UIColor(rgb: 33).color
     }
 
-    var selectionImageAccessibilityLabel: String {
+    private var selectionImageAccessibilityLabel: String {
         return isSelected
                ? .Settings.AppIconSelection.Accessibility.AppIconSelectedLabel
                : .Settings.AppIconSelection.Accessibility.AppIconUnselectedLabel
     }
 
-    var selectionAccessibilityHint: String {
+    private var selectionAccessibilityHint: String {
         return .localizedStringWithFormat(
             .Settings.AppIconSelection.Accessibility.AppIconSelectionHint,
             appIcon.displayName
@@ -59,6 +62,29 @@ struct AppIconView: View, ThemeApplicable {
         }
     }
 
+    /// Devices prior to iOS 18 cannot change their icon display mode with their system settings
+    private var forceLightTheme: Bool {
+        if #available(iOS 18, *) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    /// The expected default app icon background for iOS 18+ app icons with transparency
+    private var appIconBackgroundColor: Color {
+        if forceLightTheme {
+            return UX.appIconLightBackgroundColor
+        } else {
+            switch currentTheme.type.colorScheme {
+            case .light:
+                return UX.appIconLightBackgroundColor
+            default:
+                return UX.appIconDarkBackgroundColor
+            }
+        }
+    }
+
     private func button(for image: UIImage) -> some View {
         Button(action: {
             setAppIcon(appIcon)
@@ -68,6 +94,20 @@ struct AppIconView: View, ThemeApplicable {
                 Image(uiImage: image)
                     .resizable()
                     .frame(width: UX.appIconSize, height: UX.appIconSize)
+                    // Note: Do not fallback to the current app theme, because the user can view settings in the private mode
+                    // theme, but app icons can only be Light or Dark
+                    .background(
+                        forceLightTheme
+                        ? UX.appIconLightBackgroundColor
+                        : appIconBackgroundColor
+                    )
+                    // Pre iOS 18, force Light mode for the icons since users will only ever see Light home screen icons
+                    // Note: This fix does not work on iOS15 but it's a small user base
+                    .colorScheme(
+                        forceLightTheme
+                        ? ColorScheme.light
+                        : currentTheme.type.colorScheme
+                    )
                     .cornerRadius(UX.cornerRadius)
                     .overlay(
                         // Add rounded border
@@ -79,9 +119,9 @@ struct AppIconView: View, ThemeApplicable {
                     .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
                 if isSelected {
+                    // swiftlint:disable:next accessibility_label_for_image
                     Image(systemName: UX.checkmarkImageIdentifier)
                         .foregroundStyle(themeColors.actionPrimary.color)
-                        .accessibilityLabel(selectionImageAccessibilityLabel)
                 }
             }
             .padding(.horizontal, UX.itemPaddingHorizontal)
@@ -91,6 +131,7 @@ struct AppIconView: View, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        self.currentTheme = theme
         self.themeColors = theme.colors
     }
 }

@@ -8,7 +8,7 @@ import UIKit
 
 public struct TextFieldViewModel {
     public init(formA11yId: String,
-                formA11yLabel: String,
+                formA11yLabel: String? = nil,
                 clearButtonA11yId: String,
                 clearButtonA11yLabel: String) {
         self.formA11yId = formA11yId
@@ -18,7 +18,7 @@ public struct TextFieldViewModel {
     }
 
     public let formA11yId: String
-    public let formA11yLabel: String
+    public let formA11yLabel: String?
     public let clearButtonA11yId: String
     public let clearButtonA11yLabel: String
 }

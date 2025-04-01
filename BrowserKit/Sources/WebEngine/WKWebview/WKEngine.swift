@@ -2,17 +2,25 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 public class WKEngine: Engine {
+    private let sourceTimerFactory: DispatchSourceTimerFactory
+    private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager
+    private let webServerUtil: WKWebServerUtil
 
     public static func factory() -> WKEngine {
         return WKEngine()
     }
 
-    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager()) {
+    init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
+         webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
+         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory()) {
         self.userScriptManager = userScriptManager
+        self.webServerUtil = webServerUtil
+        self.sourceTimerFactory = sourceTimerFactory
 
         InternalUtil().setUpInternalHandlers()
     }
@@ -30,5 +38,25 @@ public class WKEngine: Engine {
         }
 
         return session
+    }
+
+    public func warmEngine() {
+        shutdownWebServerTimer?.cancel()
+        shutdownWebServerTimer = nil
+
+        webServerUtil.setUpWebServer()
+    }
+
+    public func idleEngine() {
+        let timer = sourceTimerFactory.createDispatchSource()
+        // 2 seconds is ample for a localhost request to be completed by GCDWebServer.
+        // <500ms is expected on newer devices.
+        timer.schedule(deadline: .now() + 2.0, repeating: .never)
+        timer.setEventHandler {
+            self.webServerUtil.stopWebServer()
+            self.shutdownWebServerTimer = nil
+        }
+        timer.resume()
+        shutdownWebServerTimer = timer
     }
 }

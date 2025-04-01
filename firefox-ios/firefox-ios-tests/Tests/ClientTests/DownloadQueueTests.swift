@@ -17,7 +17,7 @@ class DownloadQueueTests: XCTestCase {
 
     override func setUp() {
         queue = DownloadQueue()
-        download = MockDownload(originWindow: .XCTestDefaultUUID)
+        download = MockDownload()
 
         super.setUp()
     }
@@ -74,7 +74,7 @@ class DownloadQueueTests: XCTestCase {
     func testDidFinishDownloadingToWithTwoElementsInQueue() {
         let mockQueueDelegate = MockDownloadQueueDelegate()
         queue.addDelegate(mockQueueDelegate)
-        queue.downloads = [download, MockDownload(originWindow: .XCTestDefaultUUID)]
+        queue.downloads = [download, MockDownload(originWindow: WindowUUID.XCTestDefaultUUID)]
         queue.download(download, didFinishDownloadingTo: url)
         XCTAssertEqual(mockQueueDelegate.methodCalled, didFinishDownloadingTo)
     }
@@ -107,19 +107,6 @@ private enum DownloadTestError: Error {
 }
 
 private let url = URL(string: "http://mozilla.org")!
-
-class MockDownload: Download {
-    var downloadTriggered = false
-    var downloadCanceled = false
-
-    override func resume() {
-        downloadTriggered = true
-    }
-
-    override func cancel() {
-        downloadCanceled = true
-    }
-}
 
 class MockDownloadQueueDelegate: DownloadQueueDelegate {
     let windowUUID: WindowUUID = .XCTestDefaultUUID

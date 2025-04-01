@@ -15,54 +15,20 @@ struct DefaultBrowserOnboardingView: View {
         VStack {
             HStack {
                 Spacer()
-                Button(action: {
-                    viewModel.send(.defaultBrowserCloseTapped)
-                }, label: {
-                    Image.close
-                })
+                closeOnboardingButton
             }
             Image.huggingFocus
                 .resizable()
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
             VStack {
-                Text(viewModel.defaultBrowserConfig.title)
-                    .bold()
-                    .font(.system(size: .titleSize))
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, .titleBottomPadding)
-                VStack(alignment: .leading) {
-                    Text(viewModel.defaultBrowserConfig.firstSubtitle)
-                        .padding(.bottom, .firstSubtitleBottomPadding)
-                    Text(viewModel.defaultBrowserConfig.secondSubtitle)
-                }
-                .font(.body16)
+                title
+                subtitles
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
-            Button(action: {
-                viewModel.send(.defaultBrowserSettingsTapped)
-            }, label: {
-                Text(viewModel.defaultBrowserConfig.topButtonTitle)
-                    .foregroundColor(.systemBackground)
-                    .font(.body16Bold)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: .buttonHeight)
-                    .background(Color.actionButton)
-                    .cornerRadius(.radius)
-            })
-            Button(action: {
-                viewModel.send(.defaultBrowserSkip)
-            }, label: {
-                Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
-                    .foregroundColor(.black)
-                    .font(.body16Bold)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: .buttonHeight)
-                    .background(Color.secondOnboardingScreenBottomButton)
-                    .cornerRadius(.radius)
-            })
-            .padding(.bottom, .skipButtonPadding)
+            openSettingsButton
+            skipOnboardingButton
         }
         .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
@@ -71,6 +37,60 @@ struct DefaultBrowserOnboardingView: View {
         .onAppear {
             viewModel.send(.defaultBrowserAppeared)
         }
+    }
+
+    private var closeOnboardingButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserCloseTapped)
+        }, label: {
+            Image.close
+        })
+    }
+
+    private var title: some View {
+        return Text(viewModel.defaultBrowserConfig.title)
+            .bold()
+            .font(.system(size: .titleSize))
+            .multilineTextAlignment(.center)
+            .padding(.bottom, .titleBottomPadding)
+    }
+
+    private var subtitles: some View {
+        return VStack(alignment: .leading) {
+            Text(viewModel.defaultBrowserConfig.firstSubtitle)
+                .padding(.bottom, .firstSubtitleBottomPadding)
+            Text(viewModel.defaultBrowserConfig.secondSubtitle)
+        }
+        .font(.body16)
+    }
+
+    private var openSettingsButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserSettingsTapped)
+        }, label: {
+            Text(viewModel.defaultBrowserConfig.topButtonTitle)
+                .foregroundColor(.systemBackground)
+                .font(.body16Bold)
+                .frame(maxWidth: .infinity)
+                .frame(height: .buttonHeight)
+                .background(Color.actionButton)
+                .cornerRadius(.radius)
+        })
+    }
+
+    private var skipOnboardingButton: some View {
+        return Button(action: {
+            viewModel.send(.defaultBrowserSkip)
+        }, label: {
+            Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
+                .foregroundColor(.black)
+                .font(.body16Bold)
+                .frame(maxWidth: .infinity)
+                .frame(height: .buttonHeight)
+                .background(Color.secondOnboardingScreenBottomButton)
+                .cornerRadius(.radius)
+        })
+        .padding(.bottom, .skipButtonPadding)
     }
 }
 

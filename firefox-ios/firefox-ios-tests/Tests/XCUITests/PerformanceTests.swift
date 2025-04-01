@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
-import Shared
 
 class PerformanceTests: BaseTestCase {
     let fixtures = ["testPerfTabs_1_20startup": "tabsState20.archive",
@@ -301,8 +301,7 @@ class PerformanceTests: BaseTestCase {
                 do {
                     // Activity measurement here
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
-                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let bookmarks = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
 
                     XCTAssertEqual(bookmarks.count, 1, "Number of cells in 'Bookmarks List' is not equal to 1")
                 } catch {
@@ -357,8 +356,7 @@ class PerformanceTests: BaseTestCase {
                 // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
                 do {
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
-                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let bookmarks = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
 
                     // Activity measurement here
                     XCTAssertEqual(bookmarks.count, 100, "Number of cells in 'Bookmarks List' is not equal to 100")
@@ -415,8 +413,7 @@ class PerformanceTests: BaseTestCase {
                 do {
                     // Activity measurement here
                     let bookmarksListSnapshot = try bookmarksList.snapshot()
-                    let bookmarksListCells = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
-                    let bookmarks = bookmarksListCells.dropFirst()
+                    let bookmarks = bookmarksListSnapshot.children.filter { $0.elementType == .cell }
 
                     XCTAssertEqual(bookmarks.count, 1000, "Number of cells in 'Bookmarks List' is not equal to 1000")
                 } catch {

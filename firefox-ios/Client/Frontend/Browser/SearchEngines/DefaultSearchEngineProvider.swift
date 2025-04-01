@@ -5,34 +5,69 @@
 import UIKit
 import Common
 
+typealias SearchEngineCompletion = (SearchEnginePrefs, [OpenSearchEngine]) -> Void
+
 protocol SearchEngineProvider {
+    /// Takes a list of custom search engines (added by the user) along with an ordered
+    /// engine name list (to provide sorting) which is stored in Prefs, and returns a
+    /// a final list of search engines.
+    /// - Parameters:
+    ///   - customEngines: custom engines added by the local user
+    ///   - orderedEngineNames: ordered engine names for sorting
+    ///   - completion: the completion block called with the final results
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
-                           completion: @escaping ([OpenSearchEngine]) -> Void)
+                           engineOrderingPrefs: SearchEnginePrefs,
+                           prefsMigrator: SearchEnginePreferencesMigrator,
+                           completion: @escaping SearchEngineCompletion)
+
+    /// Returns the search ordering preference format that this provider utilizes.
+    var preferencesVersion: SearchEngineOrderingPrefsVersion { get }
+}
+
+enum SearchEngineOrderingPrefsVersion {
+    case v1 // Pre-bundled XML search engines, before Search Consolidation
+    case v2 // Consolidated search (engines are fetched from Remote Settings)
+}
+
+struct SearchEnginePrefs {
+    /// The ordered list of engines (first engine is the default)
+    let engineIdentifiers: [String]?
+    /// A list of engines that are disabled
+    let disabledEngines: [String]?
+    /// Identifies the schema of how the ordering values are saved to disk
+    let version: SearchEngineOrderingPrefsVersion
 }
 
 class DefaultSearchEngineProvider: SearchEngineProvider {
-    private let orderedEngineNames = "search.orderedEngineNames"
     private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
     }
 
+    let preferencesVersion: SearchEngineOrderingPrefsVersion = .v1
+
     func getOrderedEngines(customEngines: [OpenSearchEngine],
-                           orderedEngineNames: [String]?,
-                           completion: @escaping ([OpenSearchEngine]) -> Void) {
+                           engineOrderingPrefs: SearchEnginePrefs,
+                           prefsMigrator: SearchEnginePreferencesMigrator,
+                           completion: @escaping SearchEngineCompletion) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let prefsVersion = preferencesVersion
+
+        // First load the unordered engines, based on the current locale and language
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
+            let finalEngineOrderingPrefs = prefsMigrator.migratePrefsIfNeeded(engineOrderingPrefs,
+                                                                              to: prefsVersion,
+                                                                              availableEngines: unorderedEngines)
 
-            // might not work to change the default.
-            guard let orderedEngineNames = orderedEngineNames else {
+            guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
+                  !orderedEngineNames.isEmpty else {
                 // We haven't persisted the engine order, so return whatever order we got from disk.
                 DispatchQueue.main.async {
-                    completion(unorderedEngines)
+                    completion(finalEngineOrderingPrefs, unorderedEngines)
                 }
 
                 return
@@ -59,7 +94,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             }
 
             DispatchQueue.main.async {
-                completion(orderedEngines)
+                completion(finalEngineOrderingPrefs, orderedEngines)
             }
         })
     }
@@ -81,16 +116,16 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             fatalError("We are unable to populate search engines for this locale because list.json could not be parsed.")
         }
 
+        // Load the engines which are available for the user's language and region settings
         let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibleLanguageIdentifier, and: region)
         let defaultEngineName = defaultSearchPrefs.searchDefault(for: possibleLanguageIdentifier, and: region)
 
         guard !engineNames.isEmpty else {
             logger.log("No search engines.", level: .fatal, category: .setup)
-            // swiftlint:disable line_length
-            fatalError("We are unable to populate search engines for this locale because the possibilities of search engines is blank.")
-            // swiftlint:enable line_length
+            fatalError("Unable to populate search engines for locale because possibilities is blank.")
         }
 
+        // Map the engine identifiers in `engineNames` to the matching XML file bundled in our SearchPlugins
         DispatchQueue.global().async {
             let result = engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
                 .filter({

@@ -6,9 +6,15 @@ import Common
 import UIKit
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
-class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
+class SceneCoordinator: BaseCoordinator,
+                        LaunchCoordinatorDelegate,
+                        LaunchFinishedLoadingDelegate,
+                        FeatureFlaggable {
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
     private let windowManager: WindowManager
@@ -135,6 +141,13 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
 
         if let savedRoute {
             browserCoordinator.findAndHandle(route: savedRoute)
+            // In the case we have saved route it means we are starting the browser with a deeplink.
+            // A saved route is present when findAndHandle is called on the SceneCoordinator and BrowserCoordinator
+            // is not in the hierarchy yet.
+            guard isDeeplinkOptimizationRefactorEnabled,
+                  !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete),
+                  !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) else { return }
+            AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkComplete)
         }
     }
 

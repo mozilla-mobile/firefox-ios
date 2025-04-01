@@ -2,35 +2,26 @@
 
 This is the subdirectory that contains the Focus iOS application.
 
-_Browse like no one’s watching. The new Firefox Focus automatically blocks a wide range of online trackers — from the moment you launch it to the second you leave it. Easily erase your history, passwords and cookies, so you won’t get followed by things like unwanted ads._
-
-Download on the [App Store](https://itunes.apple.com/app/id1055677337).
-
-## Main Branch
-
-This branch works with Xcode 16.1 and supports iOS 15.0 and newer.
-
-Pull requests should be submitted with `main` as the base branch.
+For details on compatible Xcode and Swift versions used to build this project, as well as the minimum iOS version, refer to the root [README](../README.md).
 
 ## Getting Involved
 
-See readme at the root of the project for [the guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) on how to contribute to this project.
+For information on how to contribute to this project, including communication channels, coding style, PR naming guidelines and more, visit the [Contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
 
 ## Build Instructions
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
-2. Clone the repository:
-
-  ```shell
-  git clone https://github.com/mozilla-mobile/firefox-ios.git
-  ```
-
-3. Pull in the project dependencies:
-
-  ```shell
-  cd firefox-ios
-  ./checkout.sh
-  ```
-
-4. Open `Blockzilla.xcodeproj` in Xcode.
-5. Build the `Focus` scheme in Xcode.
+1. Install the version of [Xcode](https://developer.apple.com/download/applications/) from Apple that matches what this project uses, as listed in the root [README](../README.md).
+1. Clone the repository:
+   ```shell
+   git clone https://github.com/mozilla-mobile/firefox-ios.git
+   ```
+1. Change directories to the project root:
+    ```shell
+    cd firefox-ios
+    ```
+1. Pull in the project dependencies:
+   ```shell
+   ./checkout.sh
+   ```
+1. Open `Blockzilla.xcodeproj` under the `focus-ios` folder in Xcode.
+1. Build the `Focus` scheme in Xcode.
