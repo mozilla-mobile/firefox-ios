@@ -318,7 +318,7 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
+            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         // userState.numTabs does not work on iOS 15
@@ -352,14 +352,14 @@ class HistoryTests: BaseTestCase {
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
-            mozWaitForElementToExist(app.segmentedControls["navBarTabTray"])
+            mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].isHittable)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         if isTablet {
             XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
         } else {
-            XCTAssertTrue(app.segmentedControls["navBarTabTray"].buttons["privateModeLarge"].isSelected)
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         }
         mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         XCTAssertEqual(userState.numTabs, 1)
@@ -381,11 +381,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[webpage["label"]!])
-        if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -471,11 +467,7 @@ class HistoryTests: BaseTestCase {
         // Workaround for FXIOS-5128. To be replaced by tapping "Close All Tabs"
         waitForTabsButton()
         navigator.goto(TabTray)
-        if iPad() {
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
     }
 
     private func closeKeyboard() {
