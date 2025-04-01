@@ -14,6 +14,8 @@ import MobileCoreServices
 import Common
 import Redux
 import WebEngine
+import WidgetKit
+import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -111,6 +113,18 @@ class BrowserViewController: UIViewController,
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
+    var downloadProgressManager: DownloadProgressManager?
+
+    private var _downloadLiveActivityWrapper: Any?
+
+    @available(iOS 16.2, *)
+    var downloadLiveActivityWrapper: DownloadLiveActivityWrapper? {
+        get {
+            return _downloadLiveActivityWrapper as? DownloadLiveActivityWrapper
+        } set(newValue) {
+            _downloadLiveActivityWrapper = newValue
+        }
+    }
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -1884,10 +1898,15 @@ class BrowserViewController: UIViewController,
                 )
             }
         case .remove:
-            self.showToast(
+            let messageTitle: String = if let title {
+                String(format: .Bookmarks.Menu.DeletedBookmark, title)
+            } else {
+                .LegacyAppMenu.RemoveBookmarkConfirmMessage
+            }
+            showToast(
                 urlString,
                 title,
-                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                message: messageTitle,
                 toastAction: .removeBookmark
             )
         }
@@ -1952,14 +1971,6 @@ class BrowserViewController: UIViewController,
             return true
         }
         return false
-    }
-
-    func setupLoadingSpinnerFor(_ webView: WKWebView, isLoading: Bool) {
-        if isLoading {
-            webView.scrollView.refreshControl?.beginRefreshing()
-        } else {
-            webView.scrollView.refreshControl?.endRefreshing()
-        }
     }
 
     func setupMiddleButtonStatus(isLoading: Bool) {
@@ -2061,7 +2072,6 @@ class BrowserViewController: UIViewController,
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
-            setupLoadingSpinnerFor(webView, isLoading: loading)
 
             if isToolbarRefactorEnabled {
                 let action = ToolbarAction(
@@ -2446,6 +2456,16 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload()
         case .stopLoading:
             tabManager.selectedTab?.stop()
+            // There is an edge case in which calling stop on the webView doesn't update webView's isLoading var.
+            // To make sure we show the correct button change toolbar state directly when the user stops loading
+            // the website.
+            let action = ToolbarAction(
+                isLoading: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.websiteLoadingStateDidChange
+            )
+            store.dispatch(action)
+            addressToolbarContainer.updateProgressBar(progress: 0.0)
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }

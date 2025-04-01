@@ -7,7 +7,9 @@ import XCTest
 class SettingsTests: BaseTestCase {
     override func tearDown() {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
-            name.contains("testBrowsingSettingsOptionSubtitles") {
+            name.contains("testBrowsingSettingsOptionSubtitles") ||
+            name.contains("testSettingsOptionSubtitlesDarkMode") ||
+            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") {
             switchThemeToDarkOrLight(theme: "Light")
         }
         XCUIDevice.shared.orientation = .portrait
@@ -144,53 +146,40 @@ class SettingsTests: BaseTestCase {
         checkShowImages(showImages: true)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306808
+    // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2989418
+    func testSettingsOptionSubtitlesLandspace() {
+        XCUIDevice.shared.orientation = .landscapeLeft
+        validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2989420
+    func testSettingsOptionSubtitlesDarkMode() {
+        switchThemeToDarkOrLight(theme: "Dark")
+        validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2986986
+    func testSettingsOptionSubtitlesDarkModeLandscape() {
+        switchThemeToDarkOrLight(theme: "Dark")
+        XCUIDevice.shared.orientation = .landscapeLeft
+        validateSettingsUIOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2875583
+    func testSettingsCrashReportsOption() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        let table = app.tables.element(boundBy: 0)
-        let settingsQuery = AccessibilityIdentifiers.Settings.self
-        mozWaitForElementToExist(table)
-        let toolbarElement = table.cells[settingsQuery.SearchBar.searchBarSetting]
-        let settingsElements = [
-            table.cells[settingsQuery.DefaultBrowser.defaultBrowser],
-            table.cells[settingsQuery.ConnectSetting.title],
-            table.cells[settingsQuery.Search.title],
-            table.cells[settingsQuery.NewTab.title],
-            table.cells[settingsQuery.Homepage.homeSettings],
-            table.cells[settingsQuery.Browsing.title],
-            table.cells[settingsQuery.Theme.title],
-            table.cells[settingsQuery.Siri.title],
-            table.cells[settingsQuery.AutofillsPasswords.title],
-            table.cells[settingsQuery.ClearData.title],
-            app.switches[settingsQuery.ClosePrivateTabs.title],
-            table.cells[settingsQuery.ContentBlocker.title],
-            table.cells[settingsQuery.Notifications.title],
-            table.cells[settingsQuery.PrivacyPolicy.title],
-            table.cells[settingsQuery.SendFeedback.title],
-            table.cells[settingsQuery.ShowIntroduction.title],
-            table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
-            table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
-            table.cells[settingsQuery.SendData.sendCrashReportsTitle],
-            table.cells[settingsQuery.SendData.studiesTitle],
-            table.cells[settingsQuery.Version.title],
-            table.cells[settingsQuery.Help.title],
-            table.cells[settingsQuery.RateOnAppStore.title],
-            table.cells[settingsQuery.Licenses.title],
-            table.cells[settingsQuery.YourRights.title]
-        ]
-        if !iPad() {
-            mozWaitForElementToExist(toolbarElement)
-            XCTAssertTrue(toolbarElement.isVisible())
-        }
-
-        for i in settingsElements {
-            scrollToElement(i)
-            mozWaitForElementToExist(i)
-            XCTAssertTrue(i.isVisible())
-        }
+        let crashReportToggle = app.switches["settings.sendCrashReports"]
+        scrollToElement(crashReportToggle)
+        XCTAssertEqual(crashReportToggle.value as? String, "1", "Crash report toggle in not enabled by default")
+        crashReportToggle.waitAndTap()
+        XCTAssertEqual(crashReportToggle.value as? String, "0", "Crash report toggle in not disabled")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
@@ -315,13 +304,79 @@ class SettingsTests: BaseTestCase {
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String, "1")
-        XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String, "0")
-        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String, "1")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String,
+                       "1",
+                       "Inactive tabs - toggle in not enabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
+                       "0",
+                       "Offer to Open Copied Links - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
+                       "1",
+                       "Show Links Previews - toggle is not enabled by default")
         app.swipeUp()
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String, "1")
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockImages].value as? String, "0")
-        XCTAssertEqual(app.switches[settingsQuery.BlockExternal.title].value as? String, "0")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
+                       "1",
+                       "Block Pop-up  Windows - toggle is not enabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.Browsing.blockImages].value as? String,
+                       "0",
+                       "Block images - toggle is not disabled by default")
+        XCTAssertEqual(app.switches[settingsQuery.BlockExternal.title].value as? String,
+                       "0",
+                       "Block Opening External Apps - toggle is not disabled by default")
         navigator.goto(SettingsScreen)
+    }
+
+    private func validateSettingsUIOptions() {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let settingsTitle = app.staticTexts["Settings"]
+        let doneButton = app.buttons["Done"]
+        let defaultBrowser = table.cells[settingsQuery.DefaultBrowser.defaultBrowser]
+        mozWaitForElementToExist(table)
+        XCTAssertTrue(settingsTitle.isLeftOf(rightElement: doneButton))
+        XCTAssertTrue(doneButton.isAbove(element: defaultBrowser))
+        XCTAssertTrue(settingsTitle.isAbove(element: defaultBrowser))
+        let toolbarElement = table.cells[settingsQuery.SearchBar.searchBarSetting]
+        let settingsElements = [
+            defaultBrowser,
+            table.cells[settingsQuery.ConnectSetting.title],
+            table.cells[settingsQuery.Search.title],
+            table.cells[settingsQuery.NewTab.title],
+            table.cells[settingsQuery.Homepage.homeSettings],
+            table.cells[settingsQuery.Browsing.title],
+            table.cells[settingsQuery.Theme.title],
+            table.cells[settingsQuery.AppIconSelection.settingsRowTitle],
+            table.cells[settingsQuery.Siri.title],
+            table.cells[settingsQuery.AutofillsPasswords.title],
+            table.cells[settingsQuery.ClearData.title],
+            app.switches[settingsQuery.ClosePrivateTabs.title],
+            table.cells[settingsQuery.ContentBlocker.title],
+            table.cells[settingsQuery.Notifications.title],
+            table.cells[settingsQuery.PrivacyPolicy.title],
+            table.cells[settingsQuery.SendFeedback.title],
+            table.cells[settingsQuery.ShowIntroduction.title],
+            table.cells[settingsQuery.SendData.sendTechnicalDataTitle],
+            table.cells[settingsQuery.SendData.sendDailyUsagePingTitle],
+            table.cells[settingsQuery.SendData.sendCrashReportsTitle],
+            table.cells[settingsQuery.SendData.studiesTitle],
+            table.cells[settingsQuery.Version.title],
+            table.cells[settingsQuery.Help.title],
+            table.cells[settingsQuery.RateOnAppStore.title],
+            table.cells[settingsQuery.Licenses.title],
+            table.cells[settingsQuery.YourRights.title]
+        ]
+        if !iPad() {
+            mozWaitForElementToExist(toolbarElement)
+            XCTAssertTrue(toolbarElement.isVisible())
+        }
+
+        for i in settingsElements {
+            scrollToElement(i)
+            mozWaitForElementToExist(i)
+            XCTAssertTrue(i.isVisible())
+        }
+        app.buttons["Done"].waitAndTap()
     }
 }

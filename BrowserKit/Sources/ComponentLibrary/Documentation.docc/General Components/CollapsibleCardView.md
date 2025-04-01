@@ -1,10 +1,10 @@
 # ``ComponentLibrary/CollapsibleCardView``
 
-The collapsible card view opens to show content with a user press.
+The collapsible card view opens to show content on user press.
 
 ## Overview
 
-The `CollapsibleCardView` is a subclass of the `ShadowCardView`. You should configure the card view content view, accessibility identifier, and state through it's view model ``CollapsibleCardViewModel``. The rounded corners and padding around the content of the view shouldn't be adjusted and should be used as is.
+`CollapsibleCardView` is a subclass of `ShadowCardView`. You should configure the card view content view, accessibility identifier, and state through its view model ``CollapsibleCardViewModel``. The rounded corners and padding around the content of the view shouldn't be adjusted and should be used as is.
 
 ## Illustration
 

@@ -239,3 +239,27 @@ class BlobDownload: Download {
         }
     }
 }
+
+class MockDownload: Download {
+    var downloadTriggered = false
+    var downloadCanceled = false
+
+    init(filename: String = "filename",
+         totalBytesExpected: Int64? = 20,
+         hasContentEncoding: Bool? = false,
+         originWindow: WindowUUID = WindowUUID.XCTestDefaultUUID
+    ) {
+        super.init(originWindow: originWindow)
+        self.filename = filename
+        self.totalBytesExpected = totalBytesExpected
+        self.hasContentEncoding = hasContentEncoding
+    }
+
+    override func resume() {
+        downloadTriggered = true
+    }
+
+    override func cancel() {
+        downloadCanceled = true
+    }
+}

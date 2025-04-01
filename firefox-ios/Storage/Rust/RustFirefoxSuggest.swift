@@ -9,7 +9,6 @@ import class MozillaAppServices.RemoteSettingsService
 import class MozillaAppServices.SuggestStoreBuilder
 import class MozillaAppServices.Viaduct
 import enum MozillaAppServices.SuggestionProvider
-import enum MozillaAppServices.RemoteSettingsServer
 import struct MozillaAppServices.SuggestIngestionConstraints
 import struct MozillaAppServices.SuggestionQuery
 
@@ -46,15 +45,10 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
     public init(
         dataPath: String,
         cachePath: String,
-        remoteSettingsServer: RemoteSettingsServer? = nil,
         remoteSettingsService: RemoteSettingsService
     ) throws {
         var builder = SuggestStoreBuilder()
             .dataPath(path: dataPath)
-
-        if let remoteSettingsServer {
-            builder = builder.remoteSettingsServer(server: remoteSettingsServer)
-        }
 
         builder = builder.remoteSettingsService(rsService: remoteSettingsService)
 

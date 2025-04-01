@@ -33,8 +33,7 @@ class ActivityStreamTest: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
-        // Comment out so that the sponsors shortcuts are shown after the homepage redesign. (FXIOS-11668)
-        // launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
+        launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
     }
     override func tearDown() {
@@ -49,8 +48,8 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
         mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        // There should be 5 top sites by default
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        // There should be 7 top sites by default
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 7)
         // Check their names so that test is added to Smoketest
         waitForElementsToExist(
             [

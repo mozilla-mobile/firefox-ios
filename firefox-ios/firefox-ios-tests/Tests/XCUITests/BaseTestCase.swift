@@ -411,15 +411,21 @@ class BaseTestCase: XCTestCase {
     }
 
     func switchThemeToDarkOrLight(theme: String) {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        if !app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].isHittable {
+            app.buttons["Done"].waitAndTap()
+        }
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
+        sleep(3)
+        if !app.switches["SystemThemeSwitchValue"].exists {
+            navigator.goto(DisplaySettings)
+        }
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
             navigator.performAction(Action.SystemThemeSwitch)
         }
-        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        mozWaitElementHittable(element: app.cells.staticTexts["Dark"], timeout: TIMEOUT)
         if theme == "Dark" {
             app.cells.staticTexts["Dark"].waitAndTap()
         } else {

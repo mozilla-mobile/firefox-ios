@@ -45,7 +45,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 12)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 8)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
@@ -53,17 +53,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                                                            .TopSitesUpdated,
                                                            .DefaultSearchEngineUpdated,
                                                            .BookmarksUpdated,
-                                                           .RustPlacesOpened,
-                                                           .TabDataUpdated,
-                                                           .TabsTrayDidClose,
-                                                           .TabsTrayDidSelectHomeTab,
-                                                           .TopTabsTabClosed
+                                                           .RustPlacesOpened
         ])
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 13)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 9)
         XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
                                                            .FirefoxAccountChanged,
                                                            .PrivateDataClearedHistory,
@@ -72,10 +68,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
                                                            .DefaultSearchEngineUpdated,
                                                            .BookmarksUpdated,
                                                            .RustPlacesOpened,
-                                                           .TabDataUpdated,
-                                                           .TabsTrayDidClose,
-                                                           .TabsTrayDidSelectHomeTab,
-                                                           .TopTabsTabClosed,
                                                            .ThemeDidChange
         ])
     }

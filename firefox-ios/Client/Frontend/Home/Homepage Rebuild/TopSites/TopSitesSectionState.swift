@@ -78,7 +78,7 @@ struct TopSitesSectionState: StateType, Equatable {
             topSitesData: sites,
             numberOfRows: state.numberOfRows,
             numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: !sites.isEmpty && state.shouldShowSection
+            shouldShowSection: state.shouldShowSection
         )
     }
 
