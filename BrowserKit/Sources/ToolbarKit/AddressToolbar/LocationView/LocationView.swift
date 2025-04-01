@@ -167,7 +167,7 @@ final class LocationView: UIView,
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
-        if isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
+        if config.isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
             // leading alignment configuration
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
