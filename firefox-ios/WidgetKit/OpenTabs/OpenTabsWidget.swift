@@ -36,9 +36,10 @@ struct OpenTabsView: View {
                 HStack(alignment: .center, spacing: 15) {
                     if let favIcon = entry.favicons[tab.imageKey] {
                         favIcon.resizable().frame(width: 16, height: 16)
+                            .foregroundColor(Color("openTabsContentColor"))
                     } else {
                         Image(decorative: StandardImageIdentifiers.Large.globe)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color("openTabsContentColor"))
                             .frame(width: 16, height: 16)
                     }
 
@@ -133,5 +134,19 @@ struct OpenTabsView: View {
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
+    }
+}
+
+struct OpenTabsPreview: PreviewProvider {
+    static let favIcons = ["globe":
+                            Image(decorative: StandardImageIdentifiers.Large.globe)]
+    static let tabs = [SimpleTab(lastUsedTime: nil)]
+    static let testEntry = OpenTabsEntry(date: Date(),
+                                         favicons: favIcons,
+                                         tabs: [SimpleTab]())
+    static var previews: some View {
+        Group {
+            OpenTabsView(entry: testEntry)
+        }
     }
 }
