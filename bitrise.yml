@@ -1671,7 +1671,6 @@ workflows:
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 10
     - script@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Compress Derived Data
         is_always_run: true
         inputs:
