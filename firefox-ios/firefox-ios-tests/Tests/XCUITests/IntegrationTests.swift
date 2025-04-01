@@ -140,9 +140,10 @@ class IntegrationTests: BaseTestCase {
         signInFxAccounts()
 
         // We only sync tabs if the user is signed in
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.openURL(testingURL)
         waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
