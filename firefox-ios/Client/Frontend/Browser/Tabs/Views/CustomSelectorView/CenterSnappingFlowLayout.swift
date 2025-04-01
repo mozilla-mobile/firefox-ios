@@ -4,7 +4,7 @@
 
 import UIKit
 
-class CenterSnappingFlowLayout: UICollectionViewFlowLayout {
+final class CenterSnappingFlowLayout: UICollectionViewFlowLayout {
     override func targetContentOffset(
         forProposedContentOffset proposedContentOffset: CGPoint,
         withScrollingVelocity velocity: CGPoint
