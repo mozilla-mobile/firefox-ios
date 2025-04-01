@@ -104,7 +104,7 @@ final class LocationView: UIView,
     private var isURLTextFieldCentered = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme else { return }
+            guard let theme, isURLTextFieldCentered != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
@@ -143,7 +143,7 @@ final class LocationView: UIView,
                                   ? dropDownSearchEngineView
                                   : plainSearchEngineView
 
-        searchEngineContentView.configure(config, delegate: delegate)
+        searchEngineContentView.configure(config, isLocationTextCentered: isLocationTextCentered, delegate: delegate)
 
         configureLockIconButton(config)
         configureURLTextField(config)
@@ -606,21 +606,28 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
+        // Get the appearance based on `isURLTextFieldCentered`
+        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
+            .getAppearanceForVersion1(theme: theme)
+        } else {
+            .getAppearanceForBaseline(theme: theme)
+        }
+
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
+        gradientLayer.colors = appearance.gradientColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = colors.layerSearch
-        lockIconButton.backgroundColor = colors.layerSearch
+        iconContainerBackgroundView.backgroundColor = appearance.backgroundColor
+        lockIconButton.backgroundColor = appearance.backgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: isURLTextFieldCentered ? colors.textPrimary : colors.textSecondary]
+            attributes: [.foregroundColor: appearance.placeholderColor]
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
-        lockIconImageColor = isURLTextFieldCentered ? colors.textSecondary : colors.textPrimary
+        lockIconButton.tintColor = appearance.etpIconTintColor
+        lockIconImageColor = appearance.etpIconImageColor
 
         setLockIconImage()
         // Applying the theme to urlTextField can cause the url formatting to get removed
