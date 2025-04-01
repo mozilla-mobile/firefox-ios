@@ -41,7 +41,7 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate) {
+    func configure(_ config: LocationViewConfiguration, isLocationTextCentered: Bool, delegate: LocationViewDelegate) {
         searchEngineImageView.image = config.searchEngineImage
         configureA11y(config)
         self.delegate = delegate
