@@ -59,84 +59,17 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabSnapshot.frame = webView.frame
 
         // Allow the UI to render to make the snapshotting code more performant
-        // swiftlint:disable closure_body_length
+
         DispatchQueue.main.async { [self] in
-            // BVC snapshot animates to the cell
-            let bvcSnapshot = UIImageView(image: bvc.view.snapshot)
-            bvcSnapshot.layer.cornerCurve = .continuous
-            bvcSnapshot.clipsToBounds = true
-
-            // This background view is needed for animation between the tab tray and the bvc
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
-            backgroundView.frame = finalFrame
-
-            context.containerView.addSubview(destinationController.view)
-            context.containerView.addSubview(backgroundView)
-            context.containerView.addSubview(bvcSnapshot)
-            context.containerView.addSubview(tabSnapshot)
-
-            destinationController.view.frame = finalFrame
-            destinationController.view.setNeedsLayout()
-            destinationController.view.layoutIfNeeded()
-
-            guard let panel = currentPanel as? ThemedNavigationController,
-                  let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-            else { return }
-
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
-
-            cv.reloadData()
-            var tabCell: ExperimentTabCell?
-            var cellFrame: CGRect?
-
-            if let indexPath = dataSource.indexPath(for: item) {
-                // This is needed otherwise the collection views content offset is incorrect
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                cv.layoutIfNeeded()
-                tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
-                if let cell = tabCell {
-                    cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
-                    // Hide the cell that is being animated since we are making a copy of it to animate in
-                    cell.isHidden = true
-                    cell.alpha = 0.0
-                }
-            }
-
-            cv.transform = .init(scaleX: 1.2, y: 1.2)
-            cv.alpha = 0.5
-            let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.825) {
-                cv.transform = .identity
-                cv.alpha = 1
-                if let frame = cellFrame {
-                    tabSnapshot.frame = frame
-                    bvcSnapshot.frame = frame
-                } else {
-                    tabSnapshot.alpha = 0.0
-                    bvcSnapshot.alpha = 0.0
-                }
-                tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-                backgroundView.alpha = 0
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                tabCell?.isHidden = false
-                UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
-                    tabCell?.alpha = 1
-                }.startAnimation()
-            }
-            animator.addCompletion { _ in
-                backgroundView.removeFromSuperview()
-                tabSnapshot.removeFromSuperview()
-                bvcSnapshot.removeFromSuperview()
-                context.completeTransition(true)
-            }
-            animator.startAnimation()
+            runPresentationAnimation(
+                context: context,
+                browserVC: bvc,
+                destinationController: destinationController,
+                tabSnapshot: tabSnapshot,
+                finalFrame: finalFrame,
+                selectedTab: selectedTab
+            )
         }
-        // swiftlint:enable closure_body_length
     }
 
     func animateDismissal(context: UIViewControllerContextTransitioning) {
@@ -169,8 +102,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        guard let selectedTab = bvc.tabManager.selectedTab,
-              let webView = selectedTab.webView
+        guard let selectedTab = bvc.tabManager.selectedTab
         else {
             logger.log("Attempted to dismiss the tab tray without having a selected tab",
                        level: .warning,
@@ -192,85 +124,188 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toView.frame = finalFrame
 
         // Allow the UI to render to make the snapshotting code more performant
-        // swiftlint:disable closure_body_length
         DispatchQueue.main.async { [self] in
-            // This background view is needed for animation between the tab tray and the bvc
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
-            backgroundView.alpha = 0
-            backgroundView.frame = finalFrame
-
-            context.containerView.addSubview(toView)
-            context.containerView.addSubview(backgroundView)
-
-            toView.setNeedsLayout()
-            toView.layoutIfNeeded()
-
-            // BVC snapshot animates from the cell to it's final position
-            let toVCSnapshot: UIView =
-            toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
-            toVCSnapshot.layer.cornerCurve = .continuous
-            toVCSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-            toVCSnapshot.clipsToBounds = true
-
-            context.containerView.addSubview(toVCSnapshot)
-            context.containerView.addSubview(tabSnapshot)
-
-            // Hide the destination as we're animating a snapshot into place
-            toView.isHidden = true
-
-            guard let panel = currentPanel as? ThemedNavigationController,
-                  let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-            else { return }
-
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-                let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
-
-            cv.reloadData()
-
-            var tabCell: ExperimentTabCell?
-            if let indexPath = dataSource.indexPath(for: item) {
-                // This is needed otherwise the collection views content offset is incorrect
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-                cv.layoutIfNeeded()
-
-                if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-                    tabCell = cell
-                    tabSnapshot.frame = cv.convert(cell.frame, to: view)
-                    toVCSnapshot.frame = tabSnapshot.frame
-
-                    tabSnapshot.setNeedsLayout()
-                    tabSnapshot.layoutIfNeeded()
-
-                    cell.isHidden = true
-                }
-            }
-            tabSnapshot.isHidden = false
-            let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0) {
-                cv.transform = .init(scaleX: 1.2, y: 1.2)
-                cv.alpha = 0.5
-
-                tabSnapshot.frame = webView.frame
-                tabSnapshot.layer.cornerRadius = 0
-                toVCSnapshot.frame = finalFrame
-                toVCSnapshot.layer.cornerRadius = 0
-                backgroundView.alpha = 1
-            }
-
-            animator.addCompletion { _ in
-                tabCell?.isHidden = false
-                toView.isHidden = false
-                self.view.removeFromSuperview()
-                tabSnapshot.removeFromSuperview()
-                toVCSnapshot.removeFromSuperview()
-                backgroundView.removeFromSuperview()
-                context.completeTransition(true)
-            }
-            animator.startAnimation()
+            runDismissalAnimation(
+                context: context,
+                toViewController: toViewController,
+                toView: toView,
+                browserVC: bvc,
+                tabSnapshot: tabSnapshot,
+                finalFrame: finalFrame,
+                selectedTab: selectedTab
+            )
         }
-        // swiftlint:enable closure_body_length
+    }
+
+    private func runPresentationAnimation(
+        context: UIViewControllerContextTransitioning,
+        browserVC: BrowserViewController,
+        destinationController: UIViewController,
+        tabSnapshot: UIImageView,
+        finalFrame: CGRect,
+        selectedTab: Tab
+    ) {
+        // BVC snapshot animates to the cell
+        let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
+        bvcSnapshot.layer.cornerCurve = .continuous
+        bvcSnapshot.clipsToBounds = true
+
+        // This background view is needed for animation between the tab tray and the bvc
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
+        backgroundView.frame = finalFrame
+
+        context.containerView.addSubview(destinationController.view)
+        context.containerView.addSubview(backgroundView)
+        context.containerView.addSubview(bvcSnapshot)
+        context.containerView.addSubview(tabSnapshot)
+
+        destinationController.view.frame = finalFrame
+        destinationController.view.setNeedsLayout()
+        destinationController.view.layoutIfNeeded()
+
+        guard let panel = currentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
+        else { return }
+
+        let cv = panelViewController.tabDisplayView.collectionView
+        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+        else { return }
+
+        cv.reloadData()
+        var tabCell: ExperimentTabCell?
+        var cellFrame: CGRect?
+
+        if let indexPath = dataSource.indexPath(for: item) {
+            // This is needed otherwise the collection views content offset is incorrect
+            cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            cv.layoutIfNeeded()
+            tabCell = cv.cellForItem(at: indexPath) as? ExperimentTabCell
+            if let cell = tabCell {
+                cellFrame = cell.backgroundHolder.convert(cell.backgroundHolder.bounds, to: nil)
+                // Hide the cell that is being animated since we are making a copy of it to animate in
+                cell.isHidden = true
+                cell.alpha = 0.0
+            }
+        }
+
+        cv.transform = .init(scaleX: 1.2, y: 1.2)
+        cv.alpha = 0.5
+        let animator = UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.825) {
+            cv.transform = .identity
+            cv.alpha = 1
+            if let frame = cellFrame {
+                tabSnapshot.frame = frame
+                bvcSnapshot.frame = frame
+            } else {
+                tabSnapshot.alpha = 0.0
+                bvcSnapshot.alpha = 0.0
+            }
+            tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            bvcSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            backgroundView.alpha = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            tabCell?.isHidden = false
+            UIViewPropertyAnimator(duration: 0.1, curve: .linear) {
+                tabCell?.alpha = 1
+            }.startAnimation()
+        }
+        animator.addCompletion { _ in
+            backgroundView.removeFromSuperview()
+            tabSnapshot.removeFromSuperview()
+            bvcSnapshot.removeFromSuperview()
+            context.completeTransition(true)
+        }
+        animator.startAnimation()
+    }
+
+    private func runDismissalAnimation(
+        context: UIViewControllerContextTransitioning,
+        toViewController: UIViewController,
+        toView: UIView,
+        browserVC: BrowserViewController,
+        tabSnapshot: UIImageView,
+        finalFrame: CGRect,
+        selectedTab: Tab
+    ) {
+        // This background view is needed for animation between the tab tray and the bvc
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
+        backgroundView.alpha = 0
+        backgroundView.frame = finalFrame
+
+        context.containerView.addSubview(toView)
+        context.containerView.addSubview(backgroundView)
+
+        toView.setNeedsLayout()
+        toView.layoutIfNeeded()
+
+        // BVC snapshot animates from the cell to it's final position
+        let toVCSnapshot: UIView =
+        toView.snapshotView(afterScreenUpdates: true) ?? UIImageView(image: toView.snapshot)
+        toVCSnapshot.layer.cornerCurve = .continuous
+        toVCSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+        toVCSnapshot.clipsToBounds = true
+
+        context.containerView.addSubview(toVCSnapshot)
+        context.containerView.addSubview(tabSnapshot)
+
+        // Hide the destination as we're animating a snapshot into place
+        toView.isHidden = true
+
+        guard let panel = currentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController,
+              let webView = selectedTab.webView
+        else { return }
+
+        let cv = panelViewController.tabDisplayView.collectionView
+        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+        else { return }
+
+        cv.reloadData()
+
+        var tabCell: ExperimentTabCell?
+        if let indexPath = dataSource.indexPath(for: item) {
+            // This is needed otherwise the collection views content offset is incorrect
+            cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            cv.layoutIfNeeded()
+
+            if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
+                tabSnapshot.frame = cv.convert(cell.frame, to: view)
+                toVCSnapshot.frame = tabSnapshot.frame
+
+                tabSnapshot.setNeedsLayout()
+                tabSnapshot.layoutIfNeeded()
+
+                cell.isHidden = true
+            }
+        }
+        tabSnapshot.isHidden = false
+        let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0) {
+            cv.transform = .init(scaleX: 1.2, y: 1.2)
+            cv.alpha = 0.5
+
+            tabSnapshot.frame = webView.frame
+            tabSnapshot.layer.cornerRadius = 0
+            toVCSnapshot.frame = finalFrame
+            toVCSnapshot.layer.cornerRadius = 0
+            backgroundView.alpha = 1
+        }
+
+        animator.addCompletion { _ in
+            tabCell?.isHidden = false
+            toView.isHidden = false
+            self.view.removeFromSuperview()
+            tabSnapshot.removeFromSuperview()
+            toVCSnapshot.removeFromSuperview()
+            backgroundView.removeFromSuperview()
+            context.completeTransition(true)
+        }
+        animator.startAnimation()
     }
 
     private func findItem(by id: String, dataSource: TabDisplayDiffableDataSource) -> TabDisplayDiffableDataSource.TabItem? {
