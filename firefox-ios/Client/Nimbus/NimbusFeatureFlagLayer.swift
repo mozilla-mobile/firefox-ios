@@ -70,9 +70,6 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .jsAlertRefactor:
-            return checkJSAlertRefactor(from: nimbus)
-
         case .loginAutofill:
             return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
@@ -342,12 +339,6 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
-    }
-
-    private func checkJSAlertRefactor(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.jsAlertRefactor.value()
-
-        return config.enabled
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {

@@ -253,10 +253,6 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isJSAlertRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
-    }
-
     var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
@@ -1088,10 +1084,6 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        if !isJSAlertRefactorEnabled {
-            showQueuedAlertIfAvailable()
-        }
-
         prepareURLOnboardingContextualHint()
 
         if !isDeeplinkOptimizationRefactorEnabled {
@@ -1141,12 +1133,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
         ])
 
-        if isJSAlertRefactorEnabled {
-            // This will be documented with FXIOS-10952
-            checkForJSAlerts()
-        } else {
-            showQueuedAlertIfAvailable()
-        }
+        // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
+        checkForJSAlerts()
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
     }
@@ -1156,7 +1144,7 @@ class BrowserViewController: UIViewController,
 
         if presentedViewController == nil {
             // We can show the alert, let's show it
-            guard let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() else { return }
+            guard let nextAlert = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() else { return }
             let alertController = nextAlert.alertController()
             alertController.delegate = self
             present(alertController, animated: true)
@@ -4446,16 +4434,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 }
 
+// MARK: JSPromptAlertControllerDelegate
+
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
-        showQueuedAlertIfAvailable()
-    }
-}
-
-// MARK: NewJSPromptAlertControllerDelegate
-
-extension BrowserViewController: NewJSPromptAlertControllerDelegate {
-    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)
