@@ -1024,8 +1024,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    func pauseResumeDocumentDownload() {
-        temporaryDocument?.pauseResumeDownload()
+    func pauseDocumentDownload() {
+        temporaryDocument?.pauseDownload()
+    }
+
+    func resumeDocumentDownload() {
+        temporaryDocument?.resumeDownload()
     }
 
     func isDownloadingDocument() -> Bool {

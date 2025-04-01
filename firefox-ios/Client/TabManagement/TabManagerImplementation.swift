@@ -895,7 +895,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
         if isPDFRefactorEnabled {
-            previous?.pauseResumeDocumentDownload()
+            previous?.pauseDocumentDownload()
         }
 
         guard let tab = tab,
@@ -946,7 +946,7 @@ class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         store.dispatch(action)
 
         if isPDFRefactorEnabled {
-            tab.pauseResumeDocumentDownload()
+            tab.resumeDocumentDownload()
         }
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
