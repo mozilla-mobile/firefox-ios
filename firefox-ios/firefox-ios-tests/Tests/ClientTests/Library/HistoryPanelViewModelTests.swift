@@ -176,10 +176,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testGroupBelongToSection_ForLastHour() {
-        let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .minute, value: -30, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
 
-        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
-            XCTFail("Expected to return today section")
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup,
+                                                               comparisonDate: controlledCurrentDate) else {
+            XCTFail("Expected to return lastHour section")
             return
         }
 
@@ -187,11 +190,12 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testGroupBelongToSection_ForToday() {
-        let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
-        let timestamp = date.toMicrosecondsSince1970()
-        let searchTermGroup = createSearchTermGroup(timestamp: timestamp)
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .hour, value: -2, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
 
-        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup,
+                                                               comparisonDate: controlledCurrentDate) else {
             XCTFail("Expected to return today section")
             return
         }
@@ -200,11 +204,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testGroupBelongToSection_ForYesterday() {
-        let yesterday = Date.yesterday
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .day, value: -1, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
 
-        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
-            XCTFail("Expected to return today section")
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup,
+                                                               comparisonDate: controlledCurrentDate) else {
+            XCTFail("Expected to return yesterday section")
             return
         }
 
@@ -212,11 +218,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testGroupBelongToSection_ForLastWeek() {
-        let yesterday = Date().lastWeek
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .day, value: -6, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
 
-        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
-            XCTFail("Expected to return today section")
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup,
+                                                               comparisonDate: controlledCurrentDate) else {
+            XCTFail("Expected to return lastWeek section")
             return
         }
 
@@ -224,11 +232,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testGroupBelongToSection_ForTwoLastWeek() {
-        let yesterday = Date().lastTwoWeek
-        let searchTermGroup = createSearchTermGroup(timestamp: yesterday.toMicrosecondsSince1970())
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .day, value: -13, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
 
-        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup) else {
-            XCTFail("Expected to return today section")
+        guard let section = self.subject.groupBelongsToSection(asGroup: searchTermGroup,
+                                                               comparisonDate: controlledCurrentDate) else {
+            XCTFail("Expected to return lastMonth section")
             return
         }
 
@@ -236,12 +246,13 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     func testShouldAddGroupToSections_ForToday() {
-        let date = Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date()
-        let timestamp = date.toMicrosecondsSince1970()
-        let searchTermGroup = createSearchTermGroup(timestamp: timestamp)
+        let controlledCurrentDate = Date().noon
+        let searchTermDate = Calendar.current.date(byAdding: .hour, value: -2, to: controlledCurrentDate)!
+        let searchTermGroup = createSearchTermGroup(timestamp: searchTermDate.toMicrosecondsSince1970())
         subject.visibleSections.append(.today)
 
-        guard let section = self.subject.shouldAddGroupToSections(group: searchTermGroup) else {
+        guard let section = self.subject.shouldAddGroupToSections(group: searchTermGroup,
+                                                                  comparisonDate: controlledCurrentDate) else {
             XCTFail("Expected to return today section")
             return
         }

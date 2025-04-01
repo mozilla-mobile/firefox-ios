@@ -6,7 +6,6 @@ import Common
 import XCTest
 import Shared
 @testable import Client
-@testable import Ecosia
 
 class FirefoxHomeViewModelTests: XCTestCase {
     var profile: MockProfile!
@@ -21,13 +20,11 @@ class FirefoxHomeViewModelTests: XCTestCase {
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
-        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
         profile = nil
-        AppContainer.shared.reset()
     }
 
     // MARK: Number of sections
@@ -36,17 +33,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
-                                          // Ecosia: Add referrals
-                                          referrals: Referrals(),
                                           theme: LightTheme())
-        /* Ecosia: Udpate number of sections
         XCTAssertEqual(viewModel.shownSections.count, 2)
-         */
-        XCTAssertEqual(viewModel.shownSections.count, 4)
-        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
-        /* Ecosia: Update section type
+        XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.customizeHome)
-         */
-        XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)
     }
 }

@@ -15,6 +15,7 @@ class EcosiaHomeViewModelTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile()
+        User.shared = User()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         // Clean user defaults to avoid having flaky test changing the section count
         // because message card reach max amount of impressions
@@ -31,14 +32,13 @@ class EcosiaHomeViewModelTests: XCTestCase {
 
     // MARK: Number of sections
 
-    func testNumberOfSection_withoutUpdatingData_has5Sections() {
-        // Ecosia: Update Viewmodel
+    func testNumberOfSection_withoutUpdatingData_has4Sections() {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
                                           referrals: .init(),
                                           theme: EcosiaLightTheme())
-        // Ecosia: Update shown sections
+
         XCTAssertEqual(viewModel.shownSections.count, 4)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.homepageHeader)
         XCTAssertEqual(viewModel.shownSections[1], HomepageSectionType.libraryShortcuts)

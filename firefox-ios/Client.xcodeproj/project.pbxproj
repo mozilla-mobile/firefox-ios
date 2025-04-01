@@ -1657,7 +1657,6 @@
 		E1ADE23C2B0649F200FD17AA /* FakespotState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1ADE23B2B0649F200FD17AA /* FakespotState.swift */; };
 		E1ADE23E2B06559500FD17AA /* FakespotAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1ADE23D2B06559500FD17AA /* FakespotAction.swift */; };
 		E1AEC178286E0CF500062E29 /* LegacyHomepageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC171286E0CF500062E29 /* LegacyHomepageViewControllerTests.swift */; };
-		E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC172286E0CF500062E29 /* FirefoxHomeViewModelTests.swift */; };
 		E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC175286E0CF500062E29 /* WebViewNavigationHandlerTests.swift */; };
 		E1AF27442A17BCF700CE5991 /* engagementNotificationWithoutConditions.json in Resources */ = {isa = PBXBuildFile; fileRef = E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */; };
 		E1AF3560286DE5F800960045 /* Smoketest3.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF3558286DE5F600960045 /* Smoketest3.xctestplan */; };
@@ -17230,7 +17229,6 @@
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
-				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,

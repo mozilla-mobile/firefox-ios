@@ -331,45 +331,40 @@ final class AnalyticsSpyTests: XCTestCase {
         }
 
         let testCases: [MenuStatusTestCase] = [
-            MenuStatusTestCase(label: .readingList, value: true, title: .ShareAddToReadingList),
-            MenuStatusTestCase(label: .readingList, value: false, title: .LegacyAppMenu.RemoveReadingList),
-            MenuStatusTestCase(label: .bookmark, value: true, title: .KeyboardShortcuts.AddBookmark),
-            MenuStatusTestCase(label: .shortcut, value: true, title: .AddToShortcutsActionTitle),
-            MenuStatusTestCase(label: .shortcut, value: false, title: .LegacyAppMenu.RemoveFromShortcuts)
+            .init(label: .readingList, value: true, title: .ShareAddToReadingList),
+            .init(label: .readingList, value: false, title: .LegacyAppMenu.RemoveReadingList),
+            .init(label: .bookmark, value: true, title: .KeyboardShortcuts.AddBookmark),
+            .init(label: .shortcut, value: true, title: .AddToShortcutsActionTitle),
+            .init(label: .shortcut, value: false, title: .LegacyAppMenu.RemoveFromShortcuts)
         ]
 
         for testCase in testCases {
-            XCTContext.runActivity(named: "Menu status change \(testCase.label.rawValue) to \(testCase.value) is tracked") { _ in
-                // Arrange
+            XCTContext.runActivity(named: "Track menu status change \(testCase.label.rawValue) to \(testCase.value)") { _ in
+                // Reset state
                 analyticsSpy = AnalyticsSpy()
                 Analytics.shared = analyticsSpy
-                XCTAssertNil(analyticsSpy.menuStatusItemCalled, "Analytics menuStatusItemCalled should be nil before action.")
-                XCTAssertNil(analyticsSpy.menuStatusItemChangedTo, "Analytics menuStatusItemChangedTo should be nil before action.")
                 tabManagerMock.selectedTab?.url = URL(string: "https://example.com")
 
-                // Create expectation
-                let expectation = self.expectation(description: "Analytics menuStatus called with \(testCase.label.rawValue) and \(testCase.value)")
+                // Set expectation
+                let expectation = self.expectation(description: "menuStatus called for \(testCase.label.rawValue) to \(testCase.value)")
                 analyticsSpy.menuStatusExpectation = expectation
 
                 // Act
                 menuHelper.getToolbarActions(navigationController: .init()) { actions in
-                    let action = actions
-                        .flatMap { $0 } // Flatten sections
-                        .flatMap { $0.items } // Flatten items in sections
-                        .first { $0.title == testCase.title }
-                    if let action = action {
-                        action.tapHandler!(action)
-                    } else {
-                        XCTFail("No action title with \(testCase.title) found")
+                    let flatItems = actions.flatMap { $0 }.flatMap { $0.items }
+                    guard let action = flatItems.first(where: { $0.title == testCase.title }) else {
+                        XCTFail("No action with title \(testCase.title) found")
+                        return
                     }
+
+                    action.tapHandler?(action)
                 }
 
-                // Wait for expectation
                 wait(for: [expectation], timeout: 2)
 
                 // Assert
-                XCTAssertEqual(analyticsSpy.menuStatusItemCalled, testCase.label, "Analytics should track menu status with label \(testCase.label.rawValue).")
-                XCTAssertEqual(analyticsSpy.menuStatusItemChangedTo, testCase.value, "Analytics should track menu status changed to \(testCase.value).")
+                XCTAssertEqual(analyticsSpy.menuStatusItemCalled, testCase.label, "Expected menu status label to be \(testCase.label.rawValue)")
+                XCTAssertEqual(analyticsSpy.menuStatusItemChangedTo, testCase.value, "Expected menu status value to be \(testCase.value)")
             }
         }
     }

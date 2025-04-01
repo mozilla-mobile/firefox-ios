@@ -16,6 +16,7 @@ runs:
         bundle exec fastlane run run_tests prelaunch_simulator:true
 
     - name: Publish Test Report
+      if: always()
       uses: mikepenz/action-junit-report@v3.7.6
       with:
         report_paths: '**/test_output/xml/report.junit'

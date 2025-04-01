@@ -148,7 +148,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
          isPrivate: Bool,
          tabManager: TabManager,
          nimbus: FxNimbus = FxNimbus.shared,
-         referrals: Referrals, // Ecosia: Add referrals
+         referrals: Referrals = .init(), // Ecosia: Add referrals
          isZeroSearch: Bool = false,
          theme: Theme,
          wallpaperManager: WallpaperManager = WallpaperManager(),
