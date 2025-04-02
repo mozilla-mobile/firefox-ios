@@ -106,13 +106,25 @@ class TabTrayViewController: UIViewController,
     }()
 
     private lazy var experimentSegmentControl: TabTraySelectorView = {
-        let selector = TabTraySelectorView(windowUUID: windowUUID)
+        // Temporary offset of numbers to account for the different order in the experiment
+        // Order can be updated in TabTrayPanelType once the experiment is done
+        var selectedIndex = 0
+        switch tabTrayState.selectedPanel {
+        case .privateTabs:
+            selectedIndex = 0
+        case .tabs:
+            selectedIndex = 1
+        case .syncedTabs:
+            selectedIndex = 2
+        }
+
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
         selector.delegate = self
         selector.items = [TabTrayPanelType.privateTabs.label,
                           TabTrayPanelType.tabs.label,
                           TabTrayPanelType.syncedTabs.label]
 
-        didSelectSection(section: 1)
+        didSelectSection(panelType: tabTrayState.selectedPanel)
         return selector
     }()
 
@@ -676,15 +688,8 @@ class TabTrayViewController: UIViewController,
 
     // MARK: - TabTraySelectorDelegate
 
-    func didSelectSection(section: Int) {
-        // Temporary offset of numbers to account for the different order in the experiment
-        // Order can be updated in TabTrayPanelType once the experiment is done
-        var newSection = section
-        if section == 0 { newSection = 1 } else
-        if section == 1 { newSection = 0 }
-
-        guard let panelType = TabTrayPanelType(rawValue: newSection),
-              tabTrayState.selectedPanel != panelType else { return }
+    func didSelectSection(panelType: TabTrayPanelType) {
+        guard tabTrayState.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
 
