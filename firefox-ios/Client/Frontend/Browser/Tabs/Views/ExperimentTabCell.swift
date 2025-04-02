@@ -19,10 +19,10 @@ class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let fallbackFaviconSize = CGSize(width: 24, height: 24)
         static let closeButtonSize: CGFloat = 32
         static let textBoxHeight: CGFloat = 32
-        static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 10,
-                                                                  leading: 10,
-                                                                  bottom: 10,
-                                                                  trailing: 10)
+        static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 12,
+                                                                  leading: 12,
+                                                                  bottom: 12,
+                                                                  trailing: 12)
         static let closeButtonTop: CGFloat = 6
         static let closeButtonTrailing: CGFloat = 8
         static let closeButtonOverlaySpacing: CGFloat = 16
