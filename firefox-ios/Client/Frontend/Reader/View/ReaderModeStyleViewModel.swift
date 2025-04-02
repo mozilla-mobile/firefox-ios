@@ -28,10 +28,6 @@ class ReaderModeStyleViewModel {
     struct UX {
         // For top or bottom presentation
         static let PresentationSpace = 13.0
-
-        static let SeparatorLineThickness = 1.0
-
-        static let BrightnessIconOffset = 10
     }
 
     var isBottomPresented: Bool

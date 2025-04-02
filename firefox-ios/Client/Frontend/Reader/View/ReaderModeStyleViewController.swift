@@ -10,6 +10,15 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public struct UX {
         public static let stackViewSpacing: CGFloat = 8
         public static let brightnessSize: CGFloat = 20
+        public static let sliderVerticalSpacing: CGFloat = 16
+        public static let brightnessHorizontalSpacing: CGFloat = 24
+
+        public static let rowHeight: CGFloat = 50.0
+        public static let separatorLineThickness: CGFloat = 1.0
+        public static let width: CGFloat = 270.0
+        public static let height: CGFloat = 4.0 * rowHeight + 3.0 * separatorLineThickness
+
+        public static let brightnessIconOffset: CGFloat = 10
     }
 
     // UI views
@@ -127,9 +136,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
                 fromView.topAnchor.constraint(equalTo: topConstraint.bottomAnchor),
                 fromView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 fromView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                fromView.heightAnchor.constraint(
-                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.SeparatorLineThickness)
-                )
+                fromView.heightAnchor.constraint(equalToConstant: CGFloat(UX.separatorLineThickness))
             ]
         )
     }
@@ -314,23 +321,24 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
                 brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
                 brightnessMinImageView.leadingAnchor.constraint(equalTo: brightnessRow.leadingAnchor,
-                                                                constant: 24),
+                                                                constant: UX.brightnessHorizontalSpacing),
                 brightnessMinImageView.trailingAnchor.constraint(
                     equalTo: slider.leadingAnchor,
-                    constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                    constant: -CGFloat(UX.brightnessIconOffset)
                 ),
                 brightnessMinImageView.widthAnchor.constraint(equalTo: brightnessMinImageView.heightAnchor),
 
-                slider.topAnchor.constraint(equalTo: brightnessRow.topAnchor, constant: 16),
-                slider.bottomAnchor.constraint(equalTo: brightnessRow.bottomAnchor, constant: -16),
+                slider.topAnchor.constraint(equalTo: brightnessRow.topAnchor, constant: UX.sliderVerticalSpacing),
+                slider.bottomAnchor.constraint(equalTo: brightnessRow.bottomAnchor,
+                                               constant: -UX.sliderVerticalSpacing),
 
                 brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
                 brightnessMaxImageView.leadingAnchor.constraint(
                     equalTo: slider.trailingAnchor,
-                    constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
+                    constant: CGFloat(UX.brightnessIconOffset)
                 ),
                 brightnessMaxImageView.trailingAnchor.constraint(equalTo: brightnessRow.trailingAnchor,
-                                                                 constant: -24),
+                                                                 constant: -UX.brightnessHorizontalSpacing),
                 brightnessMaxImageView.widthAnchor.constraint(equalTo: brightnessMaxImageView.heightAnchor)
             ]
         )
