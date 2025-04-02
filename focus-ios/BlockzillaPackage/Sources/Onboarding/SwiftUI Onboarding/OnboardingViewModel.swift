@@ -79,9 +79,7 @@ public class OnboardingViewModel: ObservableObject {
         case .defaultBrowserAppeared:
             break
         case .onAcceptAndContinueTapped:
-            withAnimation(.easeInOut(duration: 5)) {
-                activeScreen = .default
-            }
+            activeScreen = .default
         case let .openTermsOfUse(url):
             privacyPolicyURL = url
         case let .openPrivacyNotice(url):

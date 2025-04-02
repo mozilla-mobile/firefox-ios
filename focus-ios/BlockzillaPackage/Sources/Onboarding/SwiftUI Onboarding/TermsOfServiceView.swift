@@ -4,22 +4,6 @@
 
 import SwiftUI
 
-// MARK: - Accessibility Identifiers
-
-struct AccessibilityIdentifiers {
-    struct TermsOfService {
-        static let title = "TermsOfService.title"
-        static let subtitle = "TermsOfService.subtitle"
-        static let termsOfServiceAgreement = "TermsOfService.termsOfServiceAgreement"
-        static let privacyNoticeAgreement = "TermsOfService.privacyNoticeAgreement"
-        static let agreeAndContinueButton = "TermsOfService.agreeAndContinueButton"
-    }
-    
-    struct AttributedLinkText {
-        static let view = "AttributedLinkText.view"
-    }
-}
-
 // MARK: - Main View
 
 struct TermsOfServiceView: View {
