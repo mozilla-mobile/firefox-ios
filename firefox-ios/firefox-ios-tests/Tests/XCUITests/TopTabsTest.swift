@@ -384,6 +384,7 @@ class TopTabsTest: BaseTestCase {
         // Tab tray UI experiment doesn't have toasts notifications anymore
         // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Choose to undo the action
+<<<<<<< HEAD:firefox-ios/firefox-ios-tests/Tests/XCUITests/TopTabsTest.swift
 //        app.buttons["Undo"].waitAndTap()
 //        waitUntilPageLoad()
 //        // Only the latest tab closed is restored
@@ -410,6 +411,88 @@ class TopTabsTest: BaseTestCase {
 //            XCTAssertEqual(1, tabsTrayCell.count)
 //        }
 //        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+=======
+        app.buttons["Undo"].waitAndTap()
+        waitUntilPageLoad()
+        // Only the latest tab closed is restored
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        if !iPad() {
+            let button = AccessibilityIdentifiers.Toolbar.tabsButton
+            let numTab = app.buttons[button].value as? String
+            XCTAssertEqual(numTab, "\(tabsTrayCell.count)")
+        } else {
+            XCTAssertEqual(tabsTrayCell.count, 2)
+            XCTAssertTrue(app.buttons.elementContainingText("2").exists)
+        }
+        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+        // Repeat for private browsing mode
+        navigator.performAction(Action.TogglePrivateMode)
+        validateToastWhenClosingMultipleTabs()
+        // Choose to undo the action
+        app.buttons["Undo"].waitAndTap()
+        // Only the latest tab closed is restored
+        if !iPad() {
+            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+            XCTAssertEqual(1, tabsTrayCell.count)
+        }
+        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306867
+    func testCloseOneTabUndo() {
+        // Open a few tabs
+        waitForTabsButton()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        navigator.createNewTab()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
+        waitUntilPageLoad()
+        navigator.createNewTab()
+        navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-org.html")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+
+        // Experiment from #25337: "Undo" button no longer available on iPhone.
+        if iPad() {
+            // Tap "x"
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Long press tab. Tap "Close Tab" from the context menu
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
+            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+            app.collectionViews.buttons["Close Tab"].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Swipe tab
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+            app.buttons["Undo"].waitAndTap()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        } else {
+            // Tap "x"
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"]
+                .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Long press tab. Tap "Close Tab" from the context menu
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_1"].press(forDuration: 2)
+            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+            app.collectionViews.buttons["Close Tab"].waitAndTap()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+
+            // Swipe tab
+            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"].swipeLeft()
+            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"])
+        }
+>>>>>>> a73eda1ac (Bugfix FXIOS-11782 Missing experiment related image identifiers  (#25733)):firefox-ios/firefox-ios-tests/Tests/XCUITests/TabsTests.swift
     }
 
     private func validateToastWhenClosingMultipleTabs() {
