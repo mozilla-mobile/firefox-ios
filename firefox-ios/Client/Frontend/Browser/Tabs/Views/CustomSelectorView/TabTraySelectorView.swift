@@ -31,7 +31,7 @@ final class TabTraySelectorView: UIView,
     weak var delegate: TabTraySelectorDelegate?
 
     private let windowUUID: WindowUUID
-    var selectedIndex: Int
+    private var selectedIndex: Int
 
     var items: [String] = [] {
         didSet {
@@ -166,7 +166,7 @@ final class TabTraySelectorView: UIView,
         delegate?.didSelectSection(panelType: panelType)
     }
 
-    // MARK: - Theamable
+    // MARK: - Themeable
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
