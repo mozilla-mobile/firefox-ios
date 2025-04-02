@@ -20,11 +20,12 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         static let faviconYOffset: CGFloat = 10.0
         static let faviconSize: CGFloat = 20
         static let closeButtonSize: CGFloat = 32
-        static let textBoxHeight: CGFloat = 32
-        static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 10,
-                                                                  leading: 10,
-                                                                  bottom: 10,
-                                                                  trailing: 10)
+        static let textBoxHeight: CGFloat = 44
+        static let closeButtonTrailing: CGFloat = 4
+        static let closeButtonEdgeInset = NSDirectionalEdgeInsets(top: 12,
+                                                                  leading: 12,
+                                                                  bottom: 12,
+                                                                  trailing: 12)
 
         // Using the same sizes for fallback favicon as the top sites on the homepage
         static let imageBackgroundSize = TopSiteItemCell.UX.imageBackgroundSize
@@ -263,7 +264,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor,
+                                                  constant: -UX.closeButtonTrailing),
 
             titleText.leadingAnchor.constraint(equalTo: favicon.trailingAnchor,
                                                constant: UX.subviewDefaultPadding),

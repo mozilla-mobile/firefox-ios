@@ -771,7 +771,7 @@ open class BrowserProfile: Profile {
         }
         var customTargetingAttributes: String?
         let customTargetingAttributesData = try? encoder.encode([
-                "form_factor": formFactor,
+                "formFactor": formFactor,
                 "country": Locale.current.regionCode,
         ])
         if let data = customTargetingAttributesData {
