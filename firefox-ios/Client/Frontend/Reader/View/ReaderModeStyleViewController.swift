@@ -6,8 +6,6 @@ import UIKit
 import Shared
 import Common
 
-// MARK: - ReaderModeStyleViewController
-
 class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public struct UX {
         public static let stackViewSpacing: CGFloat = 8
@@ -16,7 +14,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
     // UI views
     private var fontTypeButtons: [ReaderModeFontTypeButton] = []
-    private lazy var fontSizeLabel: ReaderModeFontSizeLabel = .build()
     private var fontSizeButtons: [ReaderModeFontSizeButton] = []
     private var themeButtons: [ReaderModeThemeButton] = []
     private var brightnessImageViews = [UIImageView]()
@@ -28,7 +25,18 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         view.spacing = UX.stackViewSpacing
         view.alignment = .center
     }
-    private lazy var fontSizeRow: UIView = .build()
+    private lazy var fontSizeStackView: UIStackView = .build { view in
+        view.axis = .horizontal
+        view.distribution = .fillEqually
+        view.spacing = UX.stackViewSpacing
+        view.alignment = .center
+    }
+    private lazy var themeStackView: UIStackView = .build { view in
+        view.axis = .horizontal
+        view.distribution = .fillEqually
+        view.spacing = 0
+        view.alignment = .center
+    }
     private lazy var brightnessRow: UIView = .build()
 
     private lazy var slider: UISlider = .build { slider in
@@ -69,81 +77,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         super.viewDidLoad()
 
         // Our preferred content size has a fixed width and height based on the rows + padding
-        preferredContentSize = CGSize(
-            width: ReaderModeStyleViewModel.UX.Width,
-            height: ReaderModeStyleViewModel.UX.Height
-        )
-
-        // Font type row
-        view.addSubview(fontTypeStackView)
-
-        NSLayoutConstraint.activate([
-            fontTypeStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
-            fontTypeStackView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            fontTypeStackView.rightAnchor.constraint(equalTo: view.rightAnchor),
-        ])
-
-        fontTypeButtons = [
-            ReaderModeFontTypeButton(fontType: ReaderModeFontType.sansSerif),
-            ReaderModeFontTypeButton(fontType: ReaderModeFontType.serif)
-        ]
-
-        setupButtonsStack(fontTypeButtons, inRow: fontTypeStackView, action: #selector(changeFontType))
-
-        view.addSubview(separatorLines[0])
-        makeSeparatorView(fromView: separatorLines[0], topConstraint: fontTypeStackView)
-
-        // Font size row
-        view.addSubview(fontSizeRow)
-
-        NSLayoutConstraint.activate([
-            fontSizeRow.topAnchor.constraint(equalTo: separatorLines[0].bottomAnchor),
-            fontSizeRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-            fontSizeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            fontSizeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight),
-        ])
-
-        fontSizeRow.addSubview(fontSizeLabel)
-
-        NSLayoutConstraint.activate([
-            fontSizeLabel.centerXAnchor.constraint(equalTo: fontSizeRow.centerXAnchor),
-            fontSizeLabel.centerYAnchor.constraint(equalTo: fontSizeRow.centerYAnchor),
-        ])
-
-        fontSizeButtons = [
-            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.smaller),
-            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.reset),
-            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.bigger)
-        ]
-
-        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(changeFontSize))
-
-        view.addSubview(separatorLines[1])
-        makeSeparatorView(fromView: separatorLines[1], topConstraint: fontSizeRow)
-
-        // Theme row
-        let themeRow: UIView = .build()
-        view.addSubview(themeRow)
-
-        NSLayoutConstraint.activate([
-            themeRow.topAnchor.constraint(equalTo: separatorLines[1].bottomAnchor),
-            themeRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-            themeRow.rightAnchor.constraint(equalTo: view.rightAnchor),
-            themeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.UX.RowHeight)
-        ])
-
-        // These UIButtons represent the ReaderModeTheme (Light/Sepia/Dark)
-        // they don't follow the App Theme
-        themeButtons = [
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light),
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia),
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.dark)
-        ]
-
-        setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))
-
-        view.addSubview(separatorLines[2])
-        makeSeparatorView(fromView: separatorLines[2], topConstraint: themeRow)
 
         setupLayout()
 
@@ -163,20 +96,13 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         slider.tintColor = theme.colors.actionPrimary
 
         // Set background color to container views
-        [fontTypeStackView, fontSizeRow, brightnessRow].forEach { view in
+        [fontTypeStackView, fontSizeStackView, brightnessRow].forEach { view in
             view?.backgroundColor = theme.colors.layer1
         }
 
-        fontSizeLabel.textColor = theme.colors.textPrimary
-
-        fontTypeButtons.forEach { button in
-            button.applyTheme(theme: theme)
-        }
-
-        fontSizeButtons.forEach { button in
-            button.setTitleColor(theme.colors.textPrimary, for: .normal)
-            button.setTitleColor(theme.colors.textPrimary, for: .disabled)
-        }
+        fontSizeButtons.forEach { $0.applyTheme(theme: theme) }
+        fontTypeButtons.forEach { $0.applyTheme(theme: theme) }
+        themeButtons.forEach { $0.applyTheme(theme: theme) }
 
         separatorLines.forEach { line in
             line.backgroundColor = theme.colors.borderPrimary
@@ -199,8 +125,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         NSLayoutConstraint.activate(
             [
                 fromView.topAnchor.constraint(equalTo: topConstraint.bottomAnchor),
-                fromView.leftAnchor.constraint(equalTo: view.leftAnchor),
-                fromView.rightAnchor.constraint(equalTo: view.rightAnchor),
+                fromView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                fromView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 fromView.heightAnchor.constraint(
                     equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.SeparatorLineThickness)
                 )
@@ -208,7 +134,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         )
     }
 
-    /// Setup constraints for a row of buttons. Left to right. They are all given the same width.
+    /// Setup a row of buttons.
     private func setupButtonsStack(_ buttons: [UIButton], inRow stackView: UIStackView, action: Selector) {
         buttons.forEach { button in
             stackView.addArrangedSubview(button)
@@ -217,21 +143,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
             button.setContentHuggingPriority(.required, for: .vertical)
         }
         stackView.setContentHuggingPriority(.required, for: .vertical)
-    }
-
-    /// Setup constraints for a row of buttons. Left to right. They are all given the same width.
-    private func setupButtons(_ buttons: [UIButton], inRow row: UIView, action: Selector) {
-        for (idx, button) in buttons.enumerated() {
-            row.addSubview(button)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.addTarget(self, action: action, for: .touchUpInside)
-            NSLayoutConstraint.activate([
-                button.topAnchor.constraint(equalTo: row.topAnchor),
-                button.leftAnchor.constraint(equalTo: idx == 0 ? row.leftAnchor : buttons[idx - 1].rightAnchor),
-                button.bottomAnchor.constraint(equalTo: row.bottomAnchor),
-                button.widthAnchor.constraint(equalToConstant: self.preferredContentSize.width / CGFloat(buttons.count))
-            ])
-        }
     }
 
     @objc
@@ -248,10 +159,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         }
 
         for button in themeButtons {
-            button.fontType = fontType
+            button.configure(fontType: fontType)
         }
 
-        fontSizeLabel.fontType = fontType
+        for button in fontSizeButtons {
+            button.configure(fontType: fontType)
+        }
     }
 
     @objc
@@ -288,13 +201,80 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
     // MARK: - Private
     private func setupLayout() {
-        setupBrightnessUI()
+        setupFontTypeRow()
+        setupFontSizeRow()
+        setupThemeRow()
+        setupBrightnessRow()
     }
 
-    private func setupBrightnessUI() {
-        view.addSubview(brightnessRow)
-        brightnessRow.addSubview(slider)
+    private func setupFontTypeRow() {
+        view.addSubview(fontTypeStackView)
 
+        NSLayoutConstraint.activate([
+            fontTypeStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: viewModel.fontTypeOffset),
+            fontTypeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            fontTypeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        fontTypeButtons = [
+            ReaderModeFontTypeButton(fontType: ReaderModeFontType.sansSerif),
+            ReaderModeFontTypeButton(fontType: ReaderModeFontType.serif)
+        ]
+
+        setupButtonsStack(fontTypeButtons, inRow: fontTypeStackView, action: #selector(changeFontType))
+
+        view.addSubview(separatorLines[0])
+        makeSeparatorView(fromView: separatorLines[0], topConstraint: fontTypeStackView)
+    }
+
+    private func setupFontSizeRow() {
+        view.addSubview(fontSizeStackView)
+
+        NSLayoutConstraint.activate([
+            fontSizeStackView.topAnchor.constraint(equalTo: separatorLines[0].bottomAnchor),
+            fontSizeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            fontSizeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        fontSizeButtons = [
+            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.smaller),
+            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.reset),
+            ReaderModeFontSizeButton(fontSizeAction: FontSizeAction.bigger)
+        ]
+
+        setupButtonsStack(fontSizeButtons, inRow: fontSizeStackView, action: #selector(changeFontSize))
+
+        view.addSubview(separatorLines[1])
+        makeSeparatorView(fromView: separatorLines[1], topConstraint: fontSizeStackView)
+    }
+
+    private func setupThemeRow() {
+        view.addSubview(themeStackView)
+
+        NSLayoutConstraint.activate([
+            themeStackView.topAnchor.constraint(equalTo: separatorLines[1].bottomAnchor),
+            themeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            themeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        // These UIButtons represent the ReaderModeTheme (Light/Sepia/Dark)
+        // they don't follow the App Theme
+        themeButtons = [
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.dark)
+        ]
+
+        setupButtonsStack(themeButtons, inRow: themeStackView, action: #selector(changeTheme))
+
+        view.addSubview(separatorLines[2])
+        makeSeparatorView(fromView: separatorLines[2], topConstraint: themeStackView)
+    }
+
+    private func setupBrightnessRow() {
+        view.addSubview(brightnessRow)
+
+        // min image
         let brightnessMinImageView: UIImageView = .build { imageView in
             imageView.image = UIImage(named: StandardImageIdentifiers.Medium.sun)?.withRenderingMode(.alwaysTemplate)
         }
@@ -306,6 +286,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         )
         brightnessMinImageHeightConstraint?.isActive = true
 
+        // slider
+        brightnessRow.addSubview(slider)
+
+        // max image
         let brightnessMaxImageView: UIImageView = .build { imageView in
             let image = UIImage(named: StandardImageIdentifiers.Medium.sunFill)
             imageView.image = image?.withRenderingMode(.alwaysTemplate)
@@ -321,31 +305,32 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         NSLayoutConstraint.activate(
             [
                 brightnessRow.topAnchor.constraint(equalTo: separatorLines[2].bottomAnchor),
-                brightnessRow.leftAnchor.constraint(equalTo: view.leftAnchor),
-                brightnessRow.rightAnchor.constraint(equalTo: view.rightAnchor),
+                brightnessRow.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                brightnessRow.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 brightnessRow.bottomAnchor.constraint(
                     equalTo: view.bottomAnchor,
                     constant: viewModel.brightnessRowOffset
                 ),
 
-                slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
-                slider.centerYAnchor.constraint(equalTo: brightnessRow.centerYAnchor),
-                slider.widthAnchor.constraint(
-                    equalToConstant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessSliderWidth)
-                ),
-
                 brightnessMinImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-                brightnessMinImageView.rightAnchor.constraint(
-                    equalTo: slider.leftAnchor,
+                brightnessMinImageView.leadingAnchor.constraint(equalTo: brightnessRow.leadingAnchor,
+                                                                constant: 24),
+                brightnessMinImageView.trailingAnchor.constraint(
+                    equalTo: slider.leadingAnchor,
                     constant: -CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
                 ),
                 brightnessMinImageView.widthAnchor.constraint(equalTo: brightnessMinImageView.heightAnchor),
 
+                slider.topAnchor.constraint(equalTo: brightnessRow.topAnchor, constant: 16),
+                slider.bottomAnchor.constraint(equalTo: brightnessRow.bottomAnchor, constant: -16),
+
                 brightnessMaxImageView.centerYAnchor.constraint(equalTo: slider.centerYAnchor),
-                brightnessMaxImageView.leftAnchor.constraint(
-                    equalTo: slider.rightAnchor,
+                brightnessMaxImageView.leadingAnchor.constraint(
+                    equalTo: slider.trailingAnchor,
                     constant: CGFloat(ReaderModeStyleViewModel.UX.BrightnessIconOffset)
                 ),
+                brightnessMaxImageView.trailingAnchor.constraint(equalTo: brightnessRow.trailingAnchor,
+                                                                 constant: -24),
                 brightnessMaxImageView.widthAnchor.constraint(equalTo: brightnessMaxImageView.heightAnchor)
             ]
         )
@@ -357,8 +342,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
         if contentSizeCategory.isAccessibilityCategory {
             fontTypeStackView.axis = .vertical
+            themeStackView.axis = .vertical
+            themeStackView.alignment = .fill
         } else {
             fontTypeStackView.axis = .horizontal
+            themeStackView.axis = .horizontal
+            themeStackView.alignment = .center
         }
 
         let brightnessImageSize = max(UIFontMetrics.default.scaledValue(for: UX.brightnessSize), UX.brightnessSize)

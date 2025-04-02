@@ -5,57 +5,36 @@
 import Common
 import UIKit
 
-class ReaderModeThemeButton: UIButton {
+class ReaderModeThemeButton: ReaderModeSettingsButton {
     var readerModeTheme: ReaderModeTheme?
-
-    var fontType: ReaderModeFontType = .sansSerif {
-        didSet {
-            switch fontType {
-            case .sansSerif,
-                 .sansSerifBold:
-                titleLabel?.font = UIFont(
-                    name: "SF-Pro",
-                    size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
-                )
-            case .serif,
-                 .serifBold:
-                titleLabel?.font = UIFont(
-                    name: "NewYorkMedium-Regular",
-                    size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
-                )
-            }
-        }
-    }
 
     convenience init(readerModeTheme: ReaderModeTheme) {
         self.init(frame: .zero)
         self.readerModeTheme = readerModeTheme
 
         accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
-        applyTheme()
     }
 
-    func applyTheme() {
-        // This view doesn't follow the ThemeApplicable protocol. The view title and background is the
+    override func applyTheme(theme: Theme) {
+        // This view ignores the theme parameter. The view title and background is the
         // same color independently from the app theme, to accomplish this we create direct instances from
         // LightTheme for (.light and sepia) and DarkTheme for (.dark)
         let theme: Theme = readerModeTheme == .dark ? DarkTheme() : LightTheme()
 
         switch readerModeTheme {
         case .light:
-            setTitle(.ReaderModeStyleLightLabel, for: [])
-            setTitleColor(theme.colors.textPrimary, for: .normal)
+            configuration?.title = .ReaderModeStyleLightLabel
             backgroundColor = theme.colors.layer1
         case .sepia:
-            setTitle(.ReaderModeStyleSepiaLabel, for: [])
-            setTitleColor(theme.colors.textPrimary, for: .normal)
+            configuration?.title = .ReaderModeStyleSepiaLabel
             backgroundColor = theme.colors.layerSepia
         case .dark:
-            setTitle(.ReaderModeStyleDarkLabel, for: [])
-            setTitleColor(theme.colors.textPrimary, for: [])
+            configuration?.title = .ReaderModeStyleDarkLabel
             backgroundColor = theme.colors.layer1
         case .none:
             break
         }
+
+        configuration?.baseForegroundColor = theme.colors.textPrimary
     }
 }
