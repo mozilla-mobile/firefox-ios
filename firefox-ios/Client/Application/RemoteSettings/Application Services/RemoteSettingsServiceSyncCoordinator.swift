@@ -35,7 +35,6 @@ final class RemoteSettingsServiceSyncCoordinator {
                 repeats: false
             ) { [weak self] _ in
                 self?.syncIfNeeded()
-                self?.syncTimer = nil
             }
         }
     }
@@ -46,29 +45,35 @@ final class RemoteSettingsServiceSyncCoordinator {
         let lastSync = (prefs.objectForKey(prefsKey) as Any? as? Date) ?? Date.distantPast
         let timeSince = lastSync.timeIntervalSinceNow
         if timeSince <= -maxSyncFrequency {
-            guard let service else {
-                logger.log(
-                    "Remote Settings needs sync but service instance is nil.",
-                    level: .warning,
-                    category: .remoteSettings
-                )
-                return
-            }
-            do {
-                let syncResults = try service.sync()
-                updateLastSyncTime()
-                logger.log(
-                    "Remote Settings Service sync'd: \(syncResults)",
-                    level: .info,
-                    category: .remoteSettings
-                )
-            } catch {
-                logger.log(
-                    "Remote Settings sync error: \(error)",
-                    level: .warning,
-                    category: .remoteSettings
-                )
-            }
+            // Persist our sync time. Note that this will persist the timestamp
+            // even if the sync fails, which means we won't retry for another 24hrs
+            updateLastSyncTime()
+            Task { await performSync() }
+        }
+    }
+
+    private func performSync() async {
+        guard let service else {
+            logger.log(
+                "Remote Settings needs sync but service instance is nil.",
+                level: .warning,
+                category: .remoteSettings
+            )
+            return
+        }
+        do {
+            let syncResults = try service.sync()
+            logger.log(
+                "Remote Settings Service sync'd: \(syncResults)",
+                level: .info,
+                category: .remoteSettings
+            )
+        } catch {
+            logger.log(
+                "Remote Settings sync error: \(error)",
+                level: .warning,
+                category: .remoteSettings
+            )
         }
     }
 
