@@ -429,7 +429,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
-    private var newAlertQueue = [NewJSAlertInfo]()
 
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSKeyValueObservation?
@@ -883,6 +882,14 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
 
+    func cancelQueuedAlerts() {
+        alertQueue.forEach { alert in
+            alert.cancel()
+        }
+    }
+
+    /// Queues a JS Alert for later display
+    /// Do not call completionHandler until the alert is displayed and dismissed
     func queueJavascriptAlertPrompt(_ alert: JSAlertInfo) {
         alertQueue.append(alert)
     }
@@ -892,25 +899,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return alertQueue.removeFirst()
     }
 
-    func cancelQueuedAlerts() {
-        newAlertQueue.forEach { alert in
-            alert.cancel()
-        }
-    }
-
-    /// Queues a JS Alert for later display
-    /// Do not call completionHandler until the alert is displayed and dismissed
-    func newQueueJavascriptAlertPrompt(_ alert: NewJSAlertInfo) {
-        newAlertQueue.append(alert)
-    }
-
-    func newDequeueJavascriptAlertPrompt() -> NewJSAlertInfo? {
-        guard !newAlertQueue.isEmpty else { return nil }
-        return newAlertQueue.removeFirst()
-    }
-
     func hasJavascriptAlertPrompt() -> Bool {
-        return !newAlertQueue.isEmpty
+        return !alertQueue.isEmpty
     }
 
     override func observeValue(
