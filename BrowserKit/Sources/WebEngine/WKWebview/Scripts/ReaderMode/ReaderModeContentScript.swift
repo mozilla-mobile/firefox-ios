@@ -36,7 +36,7 @@ class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
         return ["readerModeMessageHandler"]
     }
 
-    fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
+    private func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
         case .pageShow:
             guard let session else { return }
@@ -44,13 +44,13 @@ class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
         }
     }
 
-    fileprivate func handleReaderModeStateChange(_ state: ReaderModeState) {
+    private func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
         guard let session else { return }
         delegate?.readerMode(self, didChangeReaderModeState: state, forSession: session)
     }
 
-    fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
+    private func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
         guard let session else { return }
         logger.log("Reader content parsed",
                    level: .debug,
