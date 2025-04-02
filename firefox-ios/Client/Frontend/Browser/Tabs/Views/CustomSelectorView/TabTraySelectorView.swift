@@ -56,6 +56,7 @@ final class TabTraySelectorView: UIView,
         collectionView.decelerationRate = .fast
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.isScrollEnabled = false
         return collectionView
     }()
 
