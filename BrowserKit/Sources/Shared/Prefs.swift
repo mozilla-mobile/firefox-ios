@@ -41,6 +41,7 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
+    public static let ReaderModeProfileKeyStyle = "readermode.style"
 
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"

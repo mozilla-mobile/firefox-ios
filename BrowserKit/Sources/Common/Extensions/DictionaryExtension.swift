@@ -8,4 +8,14 @@ public extension Dictionary {
     func merge(with dictionary: Dictionary) -> Dictionary {
         return self.merging(dictionary) { (_, new) in new }
     }
+
+    var asString: String? {
+        guard let jsonData = try? JSONSerialization.data(
+            withJSONObject: self,
+            options: .prettyPrinted
+        ) else { return nil }
+
+        let jsonString = String(data: jsonData, encoding: .utf8)
+        return jsonString
+    }
 }

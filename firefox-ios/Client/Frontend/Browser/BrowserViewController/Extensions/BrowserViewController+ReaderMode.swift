@@ -40,7 +40,7 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
 
         // Persist the new style to the profile
         let encodedStyle: [String: Any] = style.encodeAsDictionary()
-        profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
+        profile.prefs.setObject(encodedStyle, forKey: PrefsKeys.ReaderModeProfileKeyStyle)
 
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
@@ -122,7 +122,7 @@ extension BrowserViewController {
             webView.go(to: forwardList.first!)
         } else {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
-            webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).readerize()") { object, error in
+            webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeInfo.namespace).readerize()") { object, error in
                 guard let readabilityResult = ReadabilityResult(object: object as AnyObject?) else { return }
 
                 try? self.readerModeCache.put(currentURL, readabilityResult)
@@ -161,7 +161,7 @@ extension BrowserViewController {
 
     func applyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
         var readerModeStyle = ReaderModeStyle.defaultStyle(for: windowUUID)
-        if let dict = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
+        if let dict = preferences.dictionaryForKey(PrefsKeys.ReaderModeProfileKeyStyle),
            let style = ReaderModeStyle(windowUUID: windowUUID, dict: dict as [String: AnyObject]) {
             readerModeStyle = style
         }
@@ -184,7 +184,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             else { break }
 
             var readerModeStyle = ReaderModeStyle.defaultStyle(for: windowUUID)
-            if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+            if let dict = profile.prefs.dictionaryForKey(PrefsKeys.ReaderModeProfileKeyStyle),
                let style = ReaderModeStyle(windowUUID: windowUUID, dict: dict as [String: AnyObject]) {
                 readerModeStyle = style
             }
@@ -193,8 +193,10 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                                                                isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
             readerModeViewModel.delegate = self
-            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel,
-                                                                              windowUUID: windowUUID)
+            let readerModeStyleViewController: UIViewController = ReaderModeStyleViewController(
+                viewModel: readerModeViewModel,
+                windowUUID: windowUUID
+            )
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in
