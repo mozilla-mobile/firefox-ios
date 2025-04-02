@@ -442,7 +442,7 @@ class TabsTests: BaseTestCase {
         } else {
             // Tap "x"
             app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"]
-                .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+                .buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
             mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
 
             // Long press tab. Tap "Close Tab" from the context menu
