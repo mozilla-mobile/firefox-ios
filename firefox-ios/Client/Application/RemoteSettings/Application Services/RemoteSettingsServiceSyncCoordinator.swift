@@ -21,25 +21,33 @@ final class RemoteSettingsServiceSyncCoordinator {
         self.service = service
         self.prefs = prefs
         self.logger = logger
+
         NotificationCenter.default.addObserver(
             forName: UIApplication.didBecomeActiveNotification,
             object: nil,
             queue: nil
-        ) { [weak self] _ in
-            guard let self else { return }
-            // Don't perform sync immediately upon becoming active, give the app
-            // some time to allow any other work or threads to take priority
-            syncTimer?.invalidate()
-            syncTimer = Timer.scheduledTimer(
-                withTimeInterval: 5.0,
-                repeats: false
-            ) { [weak self] _ in
-                self?.syncIfNeeded()
-            }
-        }
+        ) { [weak self] _ in self?.didBecomeActive() }
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willResignActiveNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in self?.willResignActive() }
     }
 
     // MARK: - Private API
+
+    private func willResignActive() {
+        syncTimer?.invalidate()
+    }
+
+    private func didBecomeActive() {
+        // Don't perform sync immediately upon becoming active, give the app
+        // some time to allow any other work or threads to take priority
+        syncTimer?.invalidate()
+        syncTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { [weak self] _ in
+            self?.syncIfNeeded()
+        }
+    }
 
     private func syncIfNeeded() {
         let lastSync = prefs.objectForKey(prefsKey) as Date? ?? .distantPast
