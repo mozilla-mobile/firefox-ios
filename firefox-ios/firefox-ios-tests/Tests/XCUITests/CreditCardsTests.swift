@@ -324,8 +324,10 @@ class CreditCardsTests: BaseTestCase {
             app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
-            app.scrollViews.otherElements.tables.cells["creditCardCell_2"].waitAndTap()
+            let creditCardCell2 = app.scrollViews.otherElements.tables.cells["creditCardCell_2"]
+            mozWaitForElementToExist(creditCardCell2)
+            creditCardCell2.swipeUp()
+            creditCardCell2.waitAndTap()
             validateAutofillCardInfo(cardNr: "5346755600299631", expYear: "2040", expMonth: "07", name: "Test3")
         }
     }
