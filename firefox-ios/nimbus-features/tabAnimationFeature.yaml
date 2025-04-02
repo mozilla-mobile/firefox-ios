@@ -4,7 +4,7 @@ features:
     description: >
       An animation for when presenting or dismissing the the tab tray.
     variables:
-      new-variable:
+      enabled:
         description: >
           If true, enables the animation.
         type: Boolean
@@ -12,8 +12,8 @@ features:
     defaults:
       - channel: beta
         value:
-          new-variable: false
+          enabled: false
       - channel: developer
         value:
-          new-variable: false
+          enabled: false
 
