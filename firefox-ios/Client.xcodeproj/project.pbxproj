@@ -1773,6 +1773,7 @@
 		E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E1516A3E2A7BC07E007819A4 /* ReliabilityGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */; };
+		E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
@@ -9954,6 +9955,7 @@
 		E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarStateTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
 		E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityGrade.swift; sourceTree = "<group>"; };
+		E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSettingsButton.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -10922,6 +10924,7 @@
 				E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */,
 				E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */,
 				8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */,
+				E1549A622D9D268300895330 /* ReaderModeSettingsButton.swift */,
 				2178A69F291454B5002EC290 /* ReaderModeThemeButton.swift */,
 				2178A6A129145506002EC290 /* ReaderModeFontSizeLabel.swift */,
 				2178A6A3291455F7002EC290 /* ReaderModeFontSizeButton.swift */,
@@ -17384,6 +17387,7 @@
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				E1549A632D9D268B00895330 /* ReaderModeSettingsButton.swift in Sources */,
 				AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
