@@ -725,10 +725,9 @@ open class BrowserProfile: Profile {
                 try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
             }
             let service = try RemoteSettingsService(storageDir: path, config: config)
-            serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(
-                service: service,
-                prefs: prefs
-            )
+            #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
+            serviceSyncCoordinator = RemoteSettingsServiceSyncCoordinator(service: service, prefs: prefs)
+            #endif
             return service
         } catch {
             logger.log("Failed to instantiate RemoteSettingsService",
