@@ -160,7 +160,8 @@ struct DownloadLiveActivity: Widget {
                 VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
                     Text(liveDownload.state.downloads.count == 1 ?
                          String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                            String(format: .LiveActivity.Downloads.FileCountText, String(liveDownload.state.downloads.count)))
+                            String(format: .LiveActivity.Downloads.FileCountText,
+                                   String(liveDownload.state.downloads.count)))
                         .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
                         .foregroundColor(UX.LockScreen.labelColor)
                     Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
