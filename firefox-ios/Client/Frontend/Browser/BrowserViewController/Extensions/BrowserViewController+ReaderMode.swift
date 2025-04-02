@@ -122,7 +122,9 @@ extension BrowserViewController {
             webView.go(to: forwardList.first!)
         } else {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
-            webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeInfo.namespace).readerize()") { object, error in
+            webView.evaluateJavascriptInDefaultContentWorld(
+                "\(ReaderModeInfo.namespace.rawValue).readerize()"
+            ) { object, error in
                 guard let readabilityResult = ReadabilityResult(object: object as AnyObject?) else { return }
 
                 try? self.readerModeCache.put(currentURL, readabilityResult)
@@ -193,10 +195,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                                                                isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
             readerModeViewModel.delegate = self
-            let readerModeStyleViewController: UIViewController = ReaderModeStyleViewController(
-                viewModel: readerModeViewModel,
-                windowUUID: windowUUID
-            )
+            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel,
+                                                                              windowUUID: windowUUID)
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in

@@ -110,7 +110,9 @@ class WKReadabilityOperation: Operation,
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         guard let session else { return }
-        session.webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeInfo.namespace).checkReadability()")
+        session.webView.evaluateJavascriptInDefaultContentWorld(
+            "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
+        )
     }
 
     // MARK: - WKReaderModeDelegate

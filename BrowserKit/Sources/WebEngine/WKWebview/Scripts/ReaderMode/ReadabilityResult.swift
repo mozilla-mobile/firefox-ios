@@ -23,8 +23,8 @@ public struct ReadabilityResult {
     public let textContent: String
     public let title: String
     public let credits: String
-    let byline: String
     public let excerpt: String
+    let byline: String
     let length: Int
     let language: String
     let siteName: String
