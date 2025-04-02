@@ -29,7 +29,6 @@ class ReaderModeFontSizeButton: ReaderModeSettingsButton {
             configuration?.title = .ReaderModeStyleFontSize
             accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
         }
-
     }
 
     // MARK: ThemeApplicable
