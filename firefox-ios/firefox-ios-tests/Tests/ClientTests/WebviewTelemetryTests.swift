@@ -14,10 +14,10 @@ class WebviewTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockGlean = MockGleanWrapper()
-        subject = WebViewLoadMeasurementTelemetry(gleanWrapper: mockGlean)
     }
 
     func testLoadMeasurement() {
+        let subject = createSubject()
         subject.start()
         subject.stop()
 
@@ -26,10 +26,28 @@ class WebviewTelemetryTests: XCTestCase {
     }
 
     func testCancelLoadMeasurement() {
+        let subject = createSubject()
         subject.start()
         subject.cancel()
 
         XCTAssertEqual(mockGlean.startTimingCalled, 1, "Start timer should be called once")
         XCTAssertEqual(mockGlean.cancelTimingCalled, 1, "Cancel timer should be called once")
     }
+    private func createSubject() -> WebViewLoadMeasurementTelemetry {
+            let subject = WebViewLoadMeasurementTelemetry(gleanWrapper: mockGlean)
+            trackForMemoryLeak(subject)
+            return subject
+        }
+
+        private func trackForMemoryLeak(
+            _ instance: AnyObject,
+            file: StaticString = #file,
+            ine: UInt = #line) {addTeardownBlock { [weak instance] in
+                XCTAssertNil(instance,
+                             "Instance should have been deallocated. Potential memory leak.",
+                             file: file,
+                             line: #line
+                )
+            }
+        }
 }
