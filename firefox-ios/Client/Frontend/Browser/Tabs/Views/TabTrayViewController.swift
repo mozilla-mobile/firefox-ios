@@ -103,6 +103,32 @@ class TabTrayViewController: UIViewController,
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
+<<<<<<< HEAD
+=======
+    private lazy var experimentSegmentControl: TabTraySelectorView = {
+        // Temporary offset of numbers to account for the different order in the experiment
+        // Order can be updated in TabTrayPanelType once the experiment is done
+        var selectedIndex = 0
+        switch tabTrayState.selectedPanel {
+        case .privateTabs:
+            selectedIndex = 0
+        case .tabs:
+            selectedIndex = 1
+        case .syncedTabs:
+            selectedIndex = 2
+        }
+
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
+        selector.delegate = self
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          TabTrayPanelType.tabs.label,
+                          TabTrayPanelType.syncedTabs.label]
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
+>>>>>>> 96ca933f7 (Bugfix FIXIOS-11813 [Tab Tray Experiments] Fix tab selector starting on tabs every time (#25761))
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
         label.font = TabsButton.UX.titleFont
@@ -650,4 +676,20 @@ class TabTrayViewController: UIViewController,
                                            actionType: RemoteTabsPanelActionType.refreshTabs)
         store.dispatch(action)
     }
+<<<<<<< HEAD
+=======
+
+    // MARK: - TabTraySelectorDelegate
+
+    func didSelectSection(panelType: TabTrayPanelType) {
+        guard tabTrayState.selectedPanel != panelType else { return }
+
+        setupOpenPanel(panelType: panelType)
+
+        let action = TabTrayAction(panelType: panelType,
+                                   windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.changePanel)
+        store.dispatch(action)
+    }
+>>>>>>> 96ca933f7 (Bugfix FIXIOS-11813 [Tab Tray Experiments] Fix tab selector starting on tabs every time (#25761))
 }
