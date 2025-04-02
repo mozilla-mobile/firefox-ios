@@ -384,34 +384,6 @@ class TopTabsTest: BaseTestCase {
         // Tab tray UI experiment doesn't have toasts notifications anymore
         // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Choose to undo the action
-<<<<<<< HEAD:firefox-ios/firefox-ios-tests/Tests/XCUITests/TopTabsTest.swift
-//        app.buttons["Undo"].waitAndTap()
-//        waitUntilPageLoad()
-//        // Only the latest tab closed is restored
-//        navigator.nowAt(BrowserTab)
-//        waitForTabsButton()
-//        navigator.goto(TabTray)
-//        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-//        if !iPad() {
-//            let numTab = app.buttons.element(boundBy: 3).label
-//            XCTAssertEqual(Int(numTab), tabsTrayCell.count)
-//        } else {
-//            XCTAssertEqual(tabsTrayCell.count, 2)
-//            XCTAssertTrue(app.buttons.elementContainingText("2").exists)
-//        }
-//        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
-//        // Repeat for private browsing mode
-//        navigator.performAction(Action.TogglePrivateMode)
-//        validateToastWhenClosingMultipleTabs()
-//        // Choose to undo the action
-//        app.buttons["Undo"].waitAndTap()
-//        // Only the latest tab closed is restored
-//        if !iPad() {
-//            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
-//            XCTAssertEqual(1, tabsTrayCell.count)
-//        }
-//        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
-=======
         app.buttons["Undo"].waitAndTap()
         waitUntilPageLoad()
         // Only the latest tab closed is restored
@@ -492,7 +464,6 @@ class TopTabsTest: BaseTestCase {
             app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"].swipeLeft()
             mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"])
         }
->>>>>>> a73eda1ac (Bugfix FXIOS-11782 Missing experiment related image identifiers  (#25733)):firefox-ios/firefox-ios-tests/Tests/XCUITests/TabsTests.swift
     }
 
     private func validateToastWhenClosingMultipleTabs() {
