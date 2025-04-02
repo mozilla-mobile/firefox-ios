@@ -42,7 +42,7 @@ final class RemoteSettingsServiceSyncCoordinator {
     // MARK: - Private API
 
     private func syncIfNeeded() {
-        let lastSync = (prefs.objectForKey(prefsKey) as Any? as? Date) ?? Date.distantPast
+        let lastSync = prefs.objectForKey(prefsKey) as Date? ?? .distantPast
         let timeSince = lastSync.timeIntervalSinceNow
         if timeSince <= -maxSyncFrequency {
             // Persist our sync time. Note that this will persist the timestamp
