@@ -113,9 +113,59 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tabTrayDismissAction_returnsRecentTabs() throws {
         let subject = createSubject()
-        let action = JumpBackInAction(
+        let action = TabTrayAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: JumpBackInActionType.fetchLocalTabs
+            actionType: TabTrayActionType.dismissTabTray
+        )
+
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabManagerAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? TabManagerMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
+        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+    }
+
+    func test_tabTrayModalSwipedToCloseAction_returnsRecentTabs() throws {
+        let subject = createSubject()
+        let action = TabTrayAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabTrayActionType.modalSwipedToClose
+        )
+
+        let expectation = XCTestExpectation(description: "Recent tabs should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabManagerAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? TabManagerMiddlewareActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
+        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+    }
+
+    func test_tabTrayDoneButtonTappedAction_returnsRecentTabs() throws {
+        let subject = createSubject()
+        let action = TabTrayAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabTrayActionType.doneButtonTapped
         )
 
         let expectation = XCTestExpectation(description: "Recent tabs should be returned")

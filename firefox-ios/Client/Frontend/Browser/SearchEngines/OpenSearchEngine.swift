@@ -38,6 +38,12 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         case engineID
     }
 
+    override var debugDescription: String {
+        let className = String(describing: type(of: self))
+        let memAddr = Unmanaged.passUnretained(self).toOpaque()
+        return "<\(className): \(memAddr)> Name: '\(shortName)' ID: '\(engineID)' Custom: \(isCustomEngine)"
+    }
+
     init(engineID: String,
          shortName: String,
          image: UIImage,
