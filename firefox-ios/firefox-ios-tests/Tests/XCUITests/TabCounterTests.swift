@@ -68,7 +68,7 @@ class TabCounterTests: BaseTestCase {
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
 
             app.otherElements["Tabs Tray"].cells
-                .element(boundBy: 0).buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+                .element(boundBy: 0).buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
         }
 
         app.otherElements["Tabs Tray"].cells.element(boundBy: 0).waitAndTap()
