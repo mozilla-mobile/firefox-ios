@@ -2,76 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
-private let DiskReaderModeCacheSharedInstance = DiskReaderModeCache()
-private let MemoryReaderModeCacheSharedInstance = MemoryReaderModeCache()
+struct ReaderModeError {
+    static let domain = "com.mozilla.client.readermodecache."
 
-let ReaderModeCacheErrorDomain = "com.mozilla.client.readermodecache."
-enum ReaderModeCacheErrorCode: Int {
-    case noPathsFound = 0
-}
-
-// NSObject wrapper around ReadabilityResult Swift struct for adding into the NSCache
-private class ReadabilityResultWrapper: NSObject {
-    let result: ReadabilityResult
-
-    init(readabilityResult: ReadabilityResult) {
-        self.result = readabilityResult
-        super.init()
-    }
-}
-
-protocol ReaderModeCache {
-    func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws
-
-    func get(_ url: URL) throws -> ReadabilityResult
-
-    func delete(_ url: URL, error: NSErrorPointer)
-
-    func contains(_ url: URL) -> Bool
-
-    func clear()
-}
-
-/// A non-persistent cache for reader mode content for times when you don't want to write reader data to disk.
-/// For example, when the user is in a private tab, we want to make sure that we leave no trace on the file system
-class MemoryReaderModeCache: ReaderModeCache {
-    var cache: NSCache<AnyObject, AnyObject>
-
-    init(cache: NSCache<AnyObject, AnyObject> = NSCache()) {
-        self.cache = cache
-    }
-
-    class var sharedInstance: ReaderModeCache {
-        return MemoryReaderModeCacheSharedInstance
-    }
-
-    func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
-        cache.setObject(ReadabilityResultWrapper(readabilityResult: readabilityResult), forKey: url as AnyObject)
-    }
-
-    func get(_ url: URL) throws -> ReadabilityResult {
-        guard let resultWrapper = cache.object(forKey: url as AnyObject) as? ReadabilityResultWrapper else {
-            throw NSError(
-                domain: ReaderModeCacheErrorDomain,
-                code: ReaderModeCacheErrorCode.noPathsFound.rawValue,
-                userInfo: nil
-            )
-        }
-        return resultWrapper.result
-    }
-
-    func delete(_ url: URL, error: NSErrorPointer) {
-        cache.removeObject(forKey: url as AnyObject)
-    }
-
-    func contains(_ url: URL) -> Bool {
-        return cache.object(forKey: url as AnyObject) != nil
-    }
-
-    func clear() {
-        cache.removeAllObjects()
+    enum CacheError: Int {
+        case noPathsFound = 0
     }
 }
 
@@ -81,16 +19,14 @@ class MemoryReaderModeCache: ReaderModeCache {
 /// This currently lives in ~/Library/Caches so that the data can be pruned in case the OS needs
 /// more space. Whether that is a good idea or not is not sure. We have a bug on file to investigate
 /// and improve at a later time.
-class DiskReaderModeCache: ReaderModeCache {
-    class var sharedInstance: ReaderModeCache {
-        return DiskReaderModeCacheSharedInstance
-    }
+public final class DiskReaderModeCache: ReaderModeCache {
+    public static let shared = DiskReaderModeCache()
 
-    func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
+    public func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
         guard let (cacheDirectoryPath, contentFilePath) = cachePathsForURL(url) else {
             throw NSError(
-                domain: ReaderModeCacheErrorDomain,
-                code: ReaderModeCacheErrorCode.noPathsFound.rawValue,
+                domain: ReaderModeError.domain,
+                code: ReaderModeError.CacheError.noPathsFound.rawValue,
                 userInfo: nil
             )
         }
@@ -105,7 +41,7 @@ class DiskReaderModeCache: ReaderModeCache {
         return
     }
 
-    func get(_ url: URL) throws -> ReadabilityResult {
+    public func get(_ url: URL) throws -> ReadabilityResult {
         if let (_, contentFilePath) = cachePathsForURL(url), FileManager.default.fileExists(atPath: contentFilePath) {
             let string = try String(contentsOfFile: contentFilePath, encoding: .utf8)
             if let value = ReadabilityResult(string: string) {
@@ -114,13 +50,13 @@ class DiskReaderModeCache: ReaderModeCache {
         }
 
         throw NSError(
-            domain: ReaderModeCacheErrorDomain,
-            code: ReaderModeCacheErrorCode.noPathsFound.rawValue,
+            domain: ReaderModeError.domain,
+            code: ReaderModeError.CacheError.noPathsFound.rawValue,
             userInfo: nil
         )
     }
 
-    func delete(_ url: URL, error: NSErrorPointer) {
+    public func delete(_ url: URL, error: NSErrorPointer) {
         guard let (cacheDirectoryPath, _) = cachePathsForURL(url) else { return }
 
         if FileManager.default.fileExists(atPath: cacheDirectoryPath) {
@@ -132,7 +68,7 @@ class DiskReaderModeCache: ReaderModeCache {
         }
     }
 
-    func contains(_ url: URL) -> Bool {
+    public func contains(_ url: URL) -> Bool {
         if let (_, contentFilePath) = cachePathsForURL(url), FileManager.default.fileExists(atPath: contentFilePath) {
             return true
         }
@@ -145,7 +81,7 @@ class DiskReaderModeCache: ReaderModeCache {
         return cachesDirectoryURL?.appendingPathComponent("ReaderView", isDirectory: true)
     }
 
-    fileprivate func cachePathsForURL(_ url: URL) -> (cacheDirectoryPath: String, contentFilePath: String)? {
+    private func cachePathsForURL(_ url: URL) -> (cacheDirectoryPath: String, contentFilePath: String)? {
         if let mainURL = DiskReaderModeCache.readerViewCacheURL, let hashedPath = hashedPathForURL(url) {
             let cacheDirectoryURL = mainURL.appendingPathComponent(hashedPath)
             return (cacheDirectoryURL.path, cacheDirectoryURL.appendingPathComponent("content.json").path)
@@ -154,7 +90,7 @@ class DiskReaderModeCache: ReaderModeCache {
         return nil
     }
 
-    fileprivate func hashedPathForURL(_ url: URL) -> String? {
+    private func hashedPathForURL(_ url: URL) -> String? {
         guard let hash = hashForURL(url) else { return nil }
 
         return NSString.path(
@@ -168,13 +104,13 @@ class DiskReaderModeCache: ReaderModeCache {
         ) as String
     }
 
-    fileprivate func hashForURL(_ url: URL) -> NSString? {
+    private func hashForURL(_ url: URL) -> NSString? {
         guard let data = url.absoluteString.data(using: .utf8) else { return nil }
 
         return data.sha1.hexEncodedString as NSString?
     }
 
-    func clear() {
+    public func clear() {
         guard let mainURL = DiskReaderModeCache.readerViewCacheURL else { return }
         do {
             try FileManager.default.removeItem(at: mainURL)

@@ -135,7 +135,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
-    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+    private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private lazy var screenshotHelper: ScreenshotHelper? = ScreenshotHelper(controller: self)
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
 
@@ -2949,7 +2949,7 @@ class BrowserViewController: UIViewController,
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
-                webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
+                webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeInfo.namespace).checkReadability()")
             }
 
             // Update Fakespot sidebar if necessary
@@ -4107,7 +4107,7 @@ extension BrowserViewController: TabManagerDelegate {
            previousTab != nil && previousTab?.isPrivate != selectedTab.isPrivate {
             privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
         }
-        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.readerModeCache = readerModeCache
 
         scrollController.tab = selectedTab

@@ -1886,11 +1886,9 @@
 		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
 		E4791B9C1CC035FD00C6D77B /* testcert1.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C81CA356F900A5EC69 /* testcert1.pem */; };
 		E4791BAA1CC0360200C6D77B /* testcert2.pem in Resources */ = {isa = PBXBuildFile; fileRef = D37DE2C91CA356F900A5EC69 /* testcert2.pem */; };
-		E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
 		E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A961171AC041C40069AD6F /* ReadabilityService.swift */; };
 		E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */ = {isa = PBXBuildFile; fileRef = E4A961371AC06FA50069AD6F /* ReaderViewLoading.html */; };
 		E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B334891BBF23F9004E2BFF /* AdSupport.framework */; };
-		E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */; };
 		E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */; };
 		E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C358541AF144BA00299F7E /* FSReadingList.m */; };
 		E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9E901A6897FB00318571 /* ReaderMode.swift */; };
@@ -10086,12 +10084,10 @@
 		E4824D15AF09E068F893E5EB /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E4A24AEDBADFB70B9C57198F /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		E4A74B5A8B8AE039CF03EDE5 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Intro.strings; sourceTree = "<group>"; };
-		E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeUtils.swift; sourceTree = "<group>"; };
 		E4A961171AC041C40069AD6F /* ReadabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadabilityService.swift; sourceTree = "<group>"; };
 		E4A961371AC06FA50069AD6F /* ReaderViewLoading.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ReaderViewLoading.html; sourceTree = "<group>"; };
 		E4B334871BBF23F3004E2BFF /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		E4B334891BBF23F9004E2BFF /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeCache.swift; sourceTree = "<group>"; };
 		E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeHandlers.swift; sourceTree = "<group>"; };
 		E4C358541AF144BA00299F7E /* FSReadingList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSReadingList.m; sourceTree = "<group>"; };
 		E4C358561AF1467A00299F7E /* FSReadingList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSReadingList.h; sourceTree = "<group>"; };
@@ -15400,8 +15396,6 @@
 				2178A69E2914546D002EC290 /* Resources */,
 				2178A69D291453CC002EC290 /* View */,
 				E4CD9E901A6897FB00318571 /* ReaderMode.swift */,
-				E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */,
-				E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */,
 				E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */,
 				E4A961171AC041C40069AD6F /* ReadabilityService.swift */,
 			);
@@ -17241,7 +17235,6 @@
 				E1877A832875DEDE00F5BDF2 /* LegacySyncedTabCell.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
 				8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */,
-				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
@@ -17529,7 +17522,6 @@
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
-				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				1DF2BDC32BD1BCF300E53C57 /* WindowManager+DebugUtilities.swift in Sources */,
 				C855728629AEA3FB00AF32B0 /* SurveySurfaceViewController.swift in Sources */,
 				AB4FB4DA2C89FB10005EF0CC /* BlockedTrackersModel.swift in Sources */,
