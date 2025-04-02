@@ -53,7 +53,7 @@ public struct ReaderModeStyle {
         self.fontSize = fontSize!
     }
 
-    mutating public func ensurePreferredColorThemeIfNeeded() {
+    public mutating func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 
