@@ -671,8 +671,9 @@ class BookmarksViewController: SiteTableViewController,
 
 extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
-        Task {
-            if let site = await getSiteDetailsAsync(for: indexPath) {
+        viewModel.getSiteDetails(for: indexPath) { [weak self] site in
+            guard let self else { return }
+            if let site {
                 presentContextMenu(for: site, with: indexPath, completionHandler: {
                     return self.contextMenu(for: site, with: indexPath)
                 })
@@ -709,40 +710,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         present(contextMenu, animated: true, completion: nil)
     }
 
-    func getSiteDetailsAsync(for indexPath: IndexPath) async -> Site? {
-        guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
-              let bookmarkItem = bookmarkNode as? BookmarkItemData
-        else {
-            logger.log("Could not get site details for indexPath \(indexPath)",
-                       level: .debug,
-                       category: .library)
-            return nil
-        }
-
-        if await isPinnedURL(bookmarkItem.url) {
-            return Site.createPinnedSite(
-                url: bookmarkItem.url,
-                title: bookmarkItem.title,
-                isGooglePinnedTile: false
-            )
-        }
-
-        return Site.createBasicSite(
-            url: bookmarkItem.url,
-            title: bookmarkItem.title,
-            isBookmarked: true
-        )
-    }
-
-    private func isPinnedURL(_ url: String, queue: DispatchQueue = .main) async -> Bool {
-        await withCheckedContinuation { continuation in
-            profile.pinnedSites.isPinnedTopSite(url)
-                .uponQueue(queue) { result in
-                    continuation.resume(returning: result.successValue ?? false)
-                }
-        }
-    }
-
     private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {
         let editAction = SingleActionViewModel(title: .Bookmarks.Menu.EditFolder,
                                                iconString: StandardImageIdentifiers.Large.edit,
@@ -775,11 +742,11 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         }).items
         var actions: [PhotonRowActions] = [editBookmark] + defaultActions
 
-        let pinTopSite = site.isPinnedSite
-        ? createPinUnpinAction(for: site, isPinned: true)
-        : createPinUnpinAction(for: site, isPinned: false)
-
-        actions.append(pinTopSite)
+        let pinTopSiteAction = viewModel.createPinUnpinAction(for: site, isPinned: site.isPinnedSite) { [weak self] message in
+            guard let self else { return }
+            SimpleToast().showAlertWithText(message, bottomContainer: view, theme: currentTheme())
+        }
+        actions.append(pinTopSiteAction)
 
         let removeAction = SingleActionViewModel(title: .RemoveBookmarkContextMenuTitle,
                                                  iconString: StandardImageIdentifiers.Large.bookmarkSlash,
@@ -793,30 +760,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
 
         return actions
-    }
-
-    private func createPinUnpinAction(for site: Site, isPinned: Bool) -> PhotonRowActions {
-        let title: String = isPinned ? .RemoveFromShortcutsTitle : .AddToShortcutsActionTitle
-        let icon: String = isPinned ? StandardImageIdentifiers.Large.pinSlash : StandardImageIdentifiers.Large.pin
-        let tapHandler: () -> Void = { [weak self] in
-            guard let self else { return }
-            let action = isPinned
-            ? self.profile.pinnedSites.removeFromPinnedTopSites(site)
-            : self.profile.pinnedSites.addPinnedTopSite(site)
-
-            action.uponQueue(.main) { result in
-                if result.isSuccess {
-                    let message: String = isPinned
-                    ? .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage
-                    : .LegacyAppMenu.AddPinToShortcutsConfirmMessage
-                    SimpleToast().showAlertWithText(message, bottomContainer: self.view, theme: self.currentTheme())
-                } else {
-                    let logMessage = isPinned ? "Could not remove pinned site" : "Could not add pinne site"
-                    self.logger.log(logMessage, level: .debug, category: .library)
-                }
-            }
-        }
-        return SingleActionViewModel(title: title, iconString: icon, tapHandler: { _ in tapHandler() }).items
     }
 }
 

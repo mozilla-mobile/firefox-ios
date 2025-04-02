@@ -222,9 +222,61 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
     }
+
+    func testGetSiteDetails_whenNotPinnedTopSite_returnsBasicSite() {
+        let expectation = expectation(description: "get site details")
+        profile = MockProfile(
+            injectedPinnedSites: PinnedSitesMock(
+                stubbedIsPinnedtopSite: false
+            )
+        )
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        subject.bookmarkNodes.append(mockBookmark)
+        let indexPath = IndexPath(row: 0, section: 0)
+
+        subject.getSiteDetails(for: indexPath) { site in
+            XCTAssertNotNil(site)
+            XCTAssertFalse(site?.isPinnedSite ?? true)
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5)
+    }
+
+    func testGetSiteDetails_whenIsPinnedTopSite_returnsPinnedSite() {
+        let expectation = expectation(description: "get site details")
+        profile = MockProfile(
+            injectedPinnedSites: PinnedSitesMock(
+                stubbedIsPinnedtopSite: true
+            )
+        )
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        subject.bookmarkNodes.append(mockBookmark)
+        let indexPath = IndexPath(row: 0, section: 0)
+
+        subject.getSiteDetails(for: indexPath) { site in
+            expectation.fulfill()
+            XCTAssertNotNil(site)
+            XCTAssertTrue(site?.isPinnedSite ?? false)
+        }
+
+        waitForExpectations(timeout: 5)
+    }
 }
 
 extension BookmarksPanelViewModelTests {
+    var mockBookmark: BookmarkItemData {
+        return BookmarkItemData(
+            guid: "abc",
+            dateAdded: Int64(Date().toTimestamp()),
+            lastModified: Int64(Date().toTimestamp()),
+            parentGUID: "123",
+            position: 0,
+            url: "www.firefox.com",
+            title: "bookmark1"
+        )
+    }
+
     func createSubject(guid: GUID, bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: bookmarksHandler,
@@ -270,7 +322,8 @@ extension BookmarksPanelViewModelTests {
     }
 }
 
-class MockBookmarkNode: FxBookmarkNode {
+// MARK: - Mocks
+private final class MockBookmarkNode: FxBookmarkNode {
     var type: BookmarkNodeType = .bookmark
     var guid = "12345"
     var parentGUID: String?
@@ -280,5 +333,19 @@ class MockBookmarkNode: FxBookmarkNode {
 
     init(title: String) {
         self.title = title
+    }
+}
+
+private final class PinnedSitesMock: MockablePinnedSites {
+    let isPinnedTopSite: Bool
+
+    init(stubbedIsPinnedtopSite: Bool) {
+        isPinnedTopSite = stubbedIsPinnedtopSite
+    }
+
+    override func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> {
+        let deffered = Deferred<Maybe<Bool>>()
+        deffered.fill(Maybe(success: isPinnedTopSite))
+        return deffered
     }
 }

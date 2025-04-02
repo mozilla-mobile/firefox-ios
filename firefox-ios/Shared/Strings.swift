@@ -245,6 +245,16 @@ extension String {
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal.")
             }
         }
+
+        public enum ActivityStream {
+            public enum ContextMenu {
+                public static let RemoveFromShortcutsTitle = MZLocalizedString(
+                    key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
+                    tableName: "Bookmarks",
+                    value: "Remove from Shortcuts",
+                    comment: "The title for the unpinning a shortcut action in the context menu when tapped on bookmark item menu button")
+            }
+        }
     }
 }
 
@@ -3151,11 +3161,6 @@ extension String {
         tableName: nil,
         value: "Add to Shortcuts",
         comment: "The title for the pinning a shortcut action")
-    public static let RemoveFromShortcutsTitle = MZLocalizedString(
-        key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
-        tableName: nil,
-        value: "Remove from Shortcuts",
-        comment: "The title for the unpinning a shortcut action")
 }
 
 // MARK: - PhotonActionSheet String

@@ -8,6 +8,7 @@ import Storage
 import Shared
 
 import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
 class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
@@ -86,6 +87,49 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
 
         bookmarkNodes.remove(at: sourceIndexPath.row)
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath, completion: @escaping (Site?) -> Void) {
+        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row],
+              let bookmarkItem = bookmarkNode as? BookmarkItemData
+        else {
+            logger.log("Could not get site details for indexPath \(indexPath)",
+                       level: .debug,
+                       category: .library)
+            completion(nil)
+            return
+        }
+
+        checkIfPinnedURL(bookmarkItem.url) { [weak self] isPinned in
+            guard let self else { return }
+            let site = self.createSite(isPinned: isPinned, bookmarkItem: bookmarkItem)
+            completion(site)
+        }
+    }
+    
+    func createPinUnpinAction(for site: Site, isPinned: Bool, successHandler: @escaping (String) -> Void) -> PhotonRowActions {
+        return SingleActionViewModel(
+            title: isPinned ? .Bookmarks.ActivityStream.ContextMenu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
+            iconString: isPinned ? StandardImageIdentifiers.Large.pinSlash : StandardImageIdentifiers.Large.pin,
+            tapHandler: { [weak self] _ in
+                guard let self else { return }
+                let action = isPinned
+                ? profile.pinnedSites.removeFromPinnedTopSites(site)
+                : profile.pinnedSites.addPinnedTopSite(site)
+
+                action.uponQueue(.main) { result in
+                    if result.isSuccess {
+                        let message: String = isPinned
+                        ? .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage
+                        : .LegacyAppMenu.AddPinToShortcutsConfirmMessage
+                        successHandler(message)
+                    } else {
+                        let logMessage = isPinned ? "Could not remove pinned site" : "Could not add pinne site"
+                        self.logger.log(logMessage, level: .debug, category: .library)
+                    }
+                }
+            }
+        ).items
     }
 
     // MARK: - Private
@@ -186,5 +230,27 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
             }
             completion()
         }
+    }
+
+    private func checkIfPinnedURL(_ url: String, queue: DispatchQueue = .main, completion: @escaping (Bool) -> Void ) {
+        profile.pinnedSites.isPinnedTopSite(url)
+            .uponQueue(queue) { result in
+                completion(result.successValue ?? false)
+            }
+    }
+
+    private func createSite(isPinned: Bool, bookmarkItem: BookmarkItemData) -> Site {
+        guard isPinned else {
+            return Site.createBasicSite(
+                url: bookmarkItem.url,
+                title: bookmarkItem.title,
+                isBookmarked: true
+            )
+        }
+        return Site.createPinnedSite(
+            url: bookmarkItem.url,
+            title: bookmarkItem.title,
+            isGooglePinnedTile: false
+        )
     }
 }
