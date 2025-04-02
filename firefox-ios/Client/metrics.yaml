@@ -2734,7 +2734,7 @@ homepage:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
-# Library
+# Metrics related to the history panel of the library
 library:
   panel_pressed:
     type: labeled_counter
@@ -2758,6 +2758,30 @@ library:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+
+# Library
+library.history_panel:
+  cleared_history: 
+    type: event
+    description: |
+      A user deleted history entries from a certain timeframe
+    extra_keys:
+      timeframe:
+        type: string
+        description: |
+          The timeframe all history was cleared from
+          Options are listed in the HistoryDeletionUtilityDateOptions enum
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/24790
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25614
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - HistoryPanel
+        - Library
 
 # History Panel
 history:
@@ -2847,40 +2871,6 @@ history:
     type: event
     description: |
       A user removed a history item.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_today:
-    type: event
-    description: |
-      A user removed history items opened that day.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_today_and_yesterday:
-    type: event
-    description: |
-      A user removed history items opened that
-      day and the day before.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14905
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15696
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
-  removed_all:
-    type: event
-    description: |
-      A user removed all history items.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/14905
     data_reviews:
@@ -4387,6 +4377,41 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
+# Toasts
+toasts.close_single_tab:
+  undo_tapped:
+    type: event
+    description: | 
+      Records when the user selects undo after closing a tab.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - Toasts
+        - TabsPanel
+
+toasts.close_all_tabs:
+  undo_tapped:
+    type: event
+    description: | 
+      Records when the user selects undo after closing all tabs.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-11714
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25569
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+    metadata:
+      tags:
+        - Toasts
+        - TabsPanel
+  
 # Enhanced Tracking Protection metrics
 tracking_protection:
   enabled:

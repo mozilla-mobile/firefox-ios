@@ -14,7 +14,7 @@
 "About.privateBullet3" = "清除 Cookie、搜尋紀錄、上網紀錄";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "可當作私密瀏覽器使用:";
+"About.privateBulletHeader" = "可當作私密瀏覽器使用：";
 
 /* Label for row in About screen */
 "About.rowHelp" = "說明";
@@ -35,7 +35,7 @@
 "About.safariBullet2" = "封鎖網路字型，減少網頁大小";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "以 Safari 延伸功能使用:";
+"About.safariBulletHeader" = "以 Safari 延伸功能使用：";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "關於 %@";
@@ -65,7 +65,7 @@
 "Autocomplete.addCustomUrlError" = "請檢查您輸入的網址。";
 
 /* A label displaying an example URL */
-"Autocomplete.addCustomUrlExample" = "舉例: example.com";
+"Autocomplete.addCustomUrlExample" = "舉例：example.com";
 
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "要新增的網址";
@@ -275,13 +275,13 @@
 "Save" = "儲存";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "資料有誤。請將搜尋詞修改為: %s 然後再試一次。";
+"SearchEngine.addEngineError" = "資料有誤。請將搜尋詞修改為：%s 然後再試一次。";
 
 /* Label for disable option on search suggestions prompt */
-"SearchSuggestions.promptDisable" = "關";
+"SearchSuggestions.promptDisable" = "不要";
 
 /* Label for enable option on search suggestions prompt */
-"SearchSuggestions.promptEnable" = "開";
+"SearchSuggestions.promptEnable" = "好的，開啟";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
 "SearchSuggestions.promptMessage" = "為了取得建議，%@ 需要將您在網址列輸入的文字傳送至搜尋引擎。";
@@ -368,10 +368,10 @@
 "Settings.Search.SearchTemplate" = "要使用的搜尋字串";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "例如: searchengine.example.com/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "例如：searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "請貼上或輸入搜尋字串。有需要的話，將搜尋詞修改為: %s。";
+"Settings.Search.SearchTemplatePlaceholder" = "請貼上或輸入搜尋字串。有需要的話，將搜尋詞修改為：%s。";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "搜尋引擎";
@@ -554,7 +554,7 @@
 "Siri.urlToOpen" = "要開啟的網址";
 
 /* Text for a label that indicates the title for biometric tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Tip.Biometric.Title" = "有網站開啟時鎖定 %@:";
+"Tip.Biometric.Title" = "有網站開啟時鎖定 %@：";
 
 /* Text for a label that indicates the description for biometric Face ID tip. */
 "Tip.BiometricFaceId.Description" = "開啟 Face ID";
@@ -578,7 +578,7 @@
 "Tip.Shortcuts.Description" = "選擇 %@ 選單中的「新增捷徑」";
 
 /* Text for a label that indicates the title for shortcuts tip. */
-"Tip.Shortcuts.Title" = "為您常開啟的網站建立捷徑:";
+"Tip.Shortcuts.Title" = "為您常開啟的網站建立捷徑：";
 
 /* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriErase.Description" = "新增 Siri 捷徑";
@@ -662,7 +662,7 @@
 "URL.eraseMessageLabel2" = "已清除瀏覽紀錄";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "在頁面中搜尋: %@";
+"URL.findOnPageLabel" = "在頁面中搜尋：%@";
 
 /* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
 "URL.paste" = "貼上";

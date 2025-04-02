@@ -59,7 +59,7 @@
 "Authentication.reason" = "Pre návrat do aplikácie %@ sa vyžaduje overenie";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Pridať vlastnú URL";
+"Autocomplete.addCustomUrl" = "Pridať vlastnú webovú adresu";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "Skontrolujte zadanú URL adresu.";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlPlaceholder" = "Prilepte alebo zadajte URL adresu";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ Pridať vlastnú URL";
+"Autocomplete.addCustomUrlWithPlus" = "+ Pridať vlastnú webovú adresu";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Bola pridaná nová vlastná URL adresa.";
@@ -290,7 +290,7 @@
 "SearchSuggestions.promptTitle" = "Zobrazovať návrhy vyhľadávania?";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Automatické dokončovanie URL adries";
+"Settings.autocompleteSection" = "Automatické dopĺňanie adresy URL";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokovanie ostatných sledovacích prvkov môže rozbiť niektoré videá a webové stránky.";
@@ -371,13 +371,13 @@
 "settings.Search.SearchTemplateExample" = "Príklad: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Prilepte alebo zadajte výraz vyhľadávania. Ak je to nutné, nahraďte výraz s: %s.";
+"Settings.Search.SearchTemplatePlaceholder" = "Prilepte alebo zadajte hľadaný reťazec. V prípade potreby nahraďte hľadaný výraz výrazom: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Vyhľadávací modul";
 
 /* Label for the Search Suggestions toggle row */
-"Settings.searchSuggestions" = "Získať návrhy vyhľadávania";
+"Settings.searchSuggestions" = "Získavať návrhy vyhľadávania";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "VYHĽADÁVANIE";
@@ -392,7 +392,7 @@
 "Settings.setAsDefaultBrowser" = "Nastaviť ako predvolený prehliadač";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for set as default browser option. */
-"Settings.setAsDefaultBrowserDescription" = "Nastavte si automatické otváranie webových stránok, e‑mailov a správ vo %@e.";
+"Settings.setAsDefaultBrowserDescription" = "Nastavte si automatické otváranie webových stránok, e‑mailov a správ v prehliadači %@.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Systémová téma";
@@ -422,7 +422,7 @@
 "Settings.toggleCrashReports" = "Automaticky odosielať správy o zlyhaní";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "Na odomknutie aplikácie použiť Face ID";
+"Settings.toggleFaceID" = "Na odomknutie aplikácie používať Face ID";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID môže odomknúť %@ ak je URL v aplikácii už otvorené";
@@ -440,7 +440,7 @@
 "Settings.toggleStudies" = "Štúdie";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "Na odomknutie aplikácie použiť Touch ID";
+"Settings.toggleTouchID" = "Na odomknutie aplikácie používať Touch ID";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID môže odomknúť %@ ak je URL v aplikácii už otvorené";
@@ -647,7 +647,7 @@
 "trackingProtection.trackersBlockedLabel" = "Sledovacie prvky zablokované od %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
-"trackingProtection.trackersHeader" = "Sledovacie prvky a skripty na zablokovanie";
+"trackingProtection.trackersHeader" = "Sledovacie prvky a skripty, ktoré je možné blokovať";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Pridať odkaz na automatické dopĺňanie";

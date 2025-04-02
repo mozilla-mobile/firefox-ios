@@ -30,7 +30,6 @@ include:
   - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
-  - nimbus-features/jsAlertRefactor.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
