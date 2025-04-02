@@ -167,6 +167,7 @@ struct DownloadLiveActivity: Widget {
                     Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
                         .opacity(0.8)
                         .foregroundColor(UX.LockScreen.labelColor)
+                        .contentTransition(.identity)
                 }
                 Spacer()
                 ZStack {
@@ -239,6 +240,7 @@ struct DownloadLiveActivity: Widget {
                               leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
                               bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
                               trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
+          .contentTransition(.identity)
       }
     }
     private func trailingExpandedRegion
