@@ -1025,7 +1025,8 @@ class BrowserCoordinator: BaseCoordinator,
             )
         }
 
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {

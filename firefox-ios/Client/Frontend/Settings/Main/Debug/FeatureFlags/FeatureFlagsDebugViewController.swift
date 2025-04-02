@@ -41,6 +41,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .tabAnimation,
+                    titleText: format(string: "Enable Tab Tray Animation"),
+                    statusText: format(string: "Toggle to use the new tab tray animation when new tab experiment is enabled")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .bookmarksRefactor,
                     titleText: format(string: "Enable Bookmarks Redesign"),
                     statusText: format(string: "Toggle to use the new bookmarks design")
