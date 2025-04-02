@@ -60,7 +60,7 @@ enum ClimateImpactInfo: Equatable {
         case .referral:
             return .init(named: "groupYourImpact")
         case .totalTrees:
-            return .init(named: "hand")
+            return .init(named: "hand", in: .ecosia, with: nil)
         case .totalInvested:
             return .init(named: "financialReports", in: .ecosia, with: nil)
         }

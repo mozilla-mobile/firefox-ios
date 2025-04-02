@@ -51,15 +51,25 @@ final class ShowTour: HiddenSetting, WelcomeDelegate {
         super.init(settings: settings)
     }
 
+    var parentPresenter: UIViewController?
     override func onClick(_ navigationController: UINavigationController?) {
         let welcome = Welcome(delegate: self, windowUUID: windowUUID)
         welcome.modalPresentationStyle = .fullScreen
         welcome.modalTransitionStyle = .coverVertical
-        navigationController?.present(welcome, animated: true)
+        let presentingViewController = navigationController?.presentingViewController
+        navigationController?.dismiss(animated: true) {
+            presentingViewController?.present(welcome, animated: true)
+        }
     }
 
     func welcomeDidFinish(_ welcome: Welcome) {
-        welcome.dismiss(animated: true, completion: nil)
+        if let presentedTour = welcome.presentedViewController {
+            presentedTour.dismiss(animated: true) {
+                welcome.dismiss(animated: true)
+            }
+        } else {
+            welcome.dismiss(animated: true)
+        }
     }
 }
 
