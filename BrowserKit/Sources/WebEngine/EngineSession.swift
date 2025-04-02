@@ -5,7 +5,7 @@
 import Foundation
 
 /// Protocol representing a single engine session. In browsers usually a session corresponds to a tab.
-public protocol EngineSession {
+public protocol EngineSession: AnyObject {
     /// Engine session delegate
     var delegate: EngineSessionDelegate? { get set }
 
@@ -69,6 +69,11 @@ public protocol EngineSession {
 
     /// Change the page zoom scale.
     func updatePageZoom(_ change: ZoomChangeValue)
+
+    /// Call a javascript method in the session's scripts
+    /// - Parameter method: The method signature to be called in javascript world.
+    /// - Parameter scope: An optional string defining the scope in which the method should be called.
+    func callJavascriptMethod(_ method: String, scope: String?)
 }
 
 public extension EngineSession {

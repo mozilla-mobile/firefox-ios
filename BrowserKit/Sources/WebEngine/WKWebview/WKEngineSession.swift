@@ -16,8 +16,6 @@ class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
                        MetadataFetcherDelegate,
-                       AdsTelemetryScriptDelegate,
-                       ContentScriptDelegate,
                        SessionHandler {
     weak var delegate: EngineSessionDelegate? {
         didSet {
@@ -28,6 +26,7 @@ class WKEngineSession: NSObject,
     var sessionData: WKEngineSessionData
     var telemetryProxy: EngineTelemetryProxy?
     var fullscreenDelegate: FullscreenDelegate?
+    lazy var scriptResponder = EngineSessionScriptResponder(session: self)
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
@@ -243,6 +242,14 @@ class WKEngineSession: NSObject,
         webView.setValue(newZoom, forKey: zoomKey)
     }
 
+    func callJavascriptMethod(_ method: String, scope: String?) {
+        guard let scope else {
+            webView.evaluateJavascriptInDefaultContentWorld(method)
+            return
+        }
+        webView.evaluateJavaScript(method, in: nil, in: .world(name: scope), completionHandler: nil)
+    }
+
     // MARK: - SessionHandler
 
     func commitURLChange() {
@@ -266,16 +273,13 @@ class WKEngineSession: NSObject,
     // MARK: - Content scripts
 
     private func addContentScripts() {
-        contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
+        contentScriptManager.addContentScript(AdsTelemetryContentScript(searchProviderModels: delegate?.adsSearchProviderModels() ?? [],
+                                                                        delegate: scriptResponder),
                                               name: AdsTelemetryContentScript.name(),
                                               forSession: self)
-        contentScriptManager.addContentScript(FocusContentScript(delegate: self),
+        contentScriptManager.addContentScript(FocusContentScript(delegate: scriptResponder),
                                               name: FocusContentScript.name(),
                                               forSession: self)
-    }
-
-    func contentScriptDidSendEvent(_ event: ScriptEvent) {
-        
     }
 
     // MARK: - WKEngineWebViewDelegate
@@ -379,19 +383,5 @@ class WKEngineSession: NSObject,
 
     func didLoad(pageMetadata: EnginePageMetadata) {
         delegate?.didLoad(pageMetadata: pageMetadata)
-    }
-
-    // MARK: - AdsTelemetryScriptDelegate
-
-    func trackAdsClickedOnPage(providerName: String) {
-        telemetryProxy?.handleTelemetry(event: .trackAdsClickedOnPage(providerName: providerName))
-    }
-
-    func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        telemetryProxy?.handleTelemetry(event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
-    }
-
-    func searchProviderModels() -> [EngineSearchProviderModel] {
-        return delegate?.adsSearchProviderModels() ?? []
     }
 }
