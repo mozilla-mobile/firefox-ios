@@ -106,8 +106,12 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
             completion(site)
         }
     }
-    
-    func createPinUnpinAction(for site: Site, isPinned: Bool, successHandler: @escaping (String) -> Void) -> PhotonRowActions {
+
+    func createPinUnpinAction(
+        for site: Site,
+        isPinned: Bool,
+        successHandler: @escaping (String) -> Void
+    ) -> PhotonRowActions {
         return SingleActionViewModel(
             title: isPinned ? .Bookmarks.ActivityStream.ContextMenu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
             iconString: isPinned ? StandardImageIdentifiers.Large.pinSlash : StandardImageIdentifiers.Large.pin,

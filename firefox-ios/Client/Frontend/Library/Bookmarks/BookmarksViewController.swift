@@ -742,7 +742,10 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         }).items
         var actions: [PhotonRowActions] = [editBookmark] + defaultActions
 
-        let pinTopSiteAction = viewModel.createPinUnpinAction(for: site, isPinned: site.isPinnedSite) { [weak self] message in
+        let pinTopSiteAction = viewModel.createPinUnpinAction(
+            for: site,
+            isPinned: site.isPinnedSite
+        ) { [weak self] message in
             guard let self else { return }
             SimpleToast().showAlertWithText(message, bottomContainer: view, theme: currentTheme())
         }
