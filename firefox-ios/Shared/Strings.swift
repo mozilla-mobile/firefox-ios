@@ -211,7 +211,7 @@ extension String {
                 key: "Bookmarks.Menu.RemoveFromShortcutsTitle.v139",
                 tableName: "Bookmarks",
                 value: "Remove from Shortcuts",
-                comment: "The title for the unpinning a shortcut action in the context menu when tapped on bookmark item menu button")
+                comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
         }
 
         public struct EmptyState {
