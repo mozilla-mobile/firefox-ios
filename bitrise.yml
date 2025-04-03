@@ -30,7 +30,6 @@ pipelines:
         firefox_configure_build:
             depends_on:
             - determine_apps_affected
-            - run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
         run_firefox_ui_tests:
             depends_on:
             - firefox_configure_build
@@ -135,6 +134,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
 
   firefox_configure_build:
+    run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
