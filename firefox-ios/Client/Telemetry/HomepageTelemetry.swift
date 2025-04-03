@@ -12,11 +12,6 @@ struct HomepageTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func sendMaskToggleTappedTelemetry(enteringPrivateMode: Bool) {
-        let isPrivateModeExtra = GleanMetrics.Homepage.PrivateModeToggleExtra(isPrivateMode: enteringPrivateMode)
-        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.privateModeToggle, extras: isPrivateModeExtra)
-    }
-
     // MARK: - Top Sites
     enum ContextMenuTelemetryActionType: String {
         case remove, unpin, pin, settings, sponsoredSupport

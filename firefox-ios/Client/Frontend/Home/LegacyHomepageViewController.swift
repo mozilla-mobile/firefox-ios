@@ -108,7 +108,6 @@ class LegacyHomepageViewController:
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
-        updateHeaderToShowPrivateModeToggle()
         viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
@@ -216,7 +215,6 @@ class LegacyHomepageViewController:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
-        updateHeaderToShowPrivateModeToggle()
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
@@ -243,15 +241,6 @@ class LegacyHomepageViewController:
             actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatch(action)
-    }
-
-    // Displays or hides the private mode toggle button in the header
-    // Depends on feature flag and if user is on iPhone
-    private func updateHeaderToShowPrivateModeToggle() {
-        let featureFlagOn = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let showToggle = featureFlagOn && !shouldUseiPadSetup()
-        viewModel.headerViewModel.showPrivateModeToggle = showToggle
-        viewModel.headerViewModel.showiPadSetup = shouldUseiPadSetup()
     }
 
     // MARK: - Layout
