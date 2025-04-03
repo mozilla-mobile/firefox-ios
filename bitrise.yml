@@ -34,16 +34,6 @@ pipelines:
             depends_on:
             - firefox_configure_build
             parallel: 4
-stages:
-  pre_configuration:
-    workflows:
-    - determine_apps_affected: {}
-  build_applications:
-    workflows:
-    - firefox_configure_build:
-        run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - focus_configure_build:
-        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
 
 workflows:
   firefox_accessibility_test:
@@ -174,8 +164,7 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
     - xcode-test-without-building@0.4.0:
-    #    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-    #    timeout: 1200
+        timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -189,7 +178,6 @@ workflows:
     - save-spm-cache@1.3.1:
         is_always_run: true
     - deploy-to-bitrise-io@2.10.0:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" | and (getenv "BITRISE_XCRESULT_PATH" | ne "")}}'
         inputs:
         - pipeline_intermediate_files: |-
             BITRISE_TEST_SHARDS_PATH
@@ -197,7 +185,6 @@ workflows:
             BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         is_always_run: true
     - script@1.1.1:
-        #run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
         timeout: 360
         inputs:
@@ -260,6 +247,7 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
   run_firefox_ui_tests:
+    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
     before_run:
     - 1_git_clone_and_post_clone
     steps:
@@ -406,26 +394,6 @@ workflows:
             echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
-  firefox_pull_and_unzip_dependencies:
-    steps:
-    - pull-intermediate-files@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - verbose: true
-        - artifact_sources: build_applications.firefox_configure_build
-    - script@1.2.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Unzip
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "$DERIVED_DATA_DIR"
-
-            echo "-- unzip -- "
-            exec unzip "$DERIVED_DATA_DIR"
-
-            echo "show dir"
-            ls
   send_slack_notification:
     steps:
     - slack@4.2.1:
@@ -1724,6 +1692,7 @@ workflows:
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
   focus_configure_build:
+    run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
     before_run:
     - focus-clone-and-build-dependencies
     steps:
