@@ -208,7 +208,7 @@ extension String {
                 value: "Clear",
                 comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
             public static let RemoveFromShortcutsTitle = MZLocalizedString(
-                key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
+                key: "Bookmarks.Menu.RemoveFromShortcutsTitle.v139",
                 tableName: "Bookmarks",
                 value: "Remove from Shortcuts",
                 comment: "The title for the unpinning a shortcut action in the context menu when tapped on bookmark item menu button")
