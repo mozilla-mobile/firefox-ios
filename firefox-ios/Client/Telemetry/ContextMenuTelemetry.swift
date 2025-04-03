@@ -45,6 +45,6 @@ struct ContextMenuTelemetry {
 
     func dismissed(origin: OriginExtra) {
         let dismissedExtras = GleanMetrics.ContextMenu.DismissedExtra(origin: origin.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.ContextMenu.shown, extras: dismissedExtras)
+        gleanWrapper.recordEvent(for: GleanMetrics.ContextMenu.dismissed, extras: dismissedExtras)
     }
 }

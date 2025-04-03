@@ -186,13 +186,19 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     // MARK: - Helpers
-    private func contextMenuConfiguration(for url: URL, webView: WKWebView, elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
+    private func contextMenuConfiguration(for url: URL,
+                                          webView: WKWebView,
+                                          elements: ContextMenuHelper.Elements) -> UIContextMenuConfiguration {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: contextMenuPreviewProvider(for: url, webView: webView),
-                                          actionProvider: contextMenuActionProvider(for: url, webView: webView, elements: elements))
+                                          actionProvider: contextMenuActionProvider(for: url,
+                                                                                    webView: webView,
+                                                                                    elements: elements))
     }
 
-    private func contextMenuActionProvider(for url: URL, webView: WKWebView, elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
+    private func contextMenuActionProvider(for url: URL,
+                                           webView: WKWebView,
+                                           elements: ContextMenuHelper.Elements) -> UIContextMenuActionProvider {
         return { [self] (suggested) -> UIMenu? in
             guard let currentTab = tabManager.selectedTab else { return nil }
 
