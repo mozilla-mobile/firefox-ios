@@ -597,7 +597,7 @@ context_menu:
   option_selected:
     type: event
     description: |
-      Records when the user selects an option from a context menu
+      Records when the user selects an option from a context menu.
     extra_keys:
       option_selected:
         type: string
@@ -610,7 +610,7 @@ context_menu:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
@@ -620,7 +620,7 @@ context_menu:
   shown:
     type: event
     description: |
-      Records when a context menu is shown
+      Records when a context menu is shown.
     extra_keys:
       origin:
         type: string
@@ -629,7 +629,7 @@ context_menu:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
@@ -639,7 +639,7 @@ context_menu:
   dismissed:
     type: event
     description: |
-      Records when a context menu is dismissed
+      Records when a context menu is dismissed.
     extra_keys:
       origin:
         type: string
@@ -648,7 +648,7 @@ context_menu:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-11798
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25805
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
