@@ -96,6 +96,11 @@ public struct PrefsKeys {
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
     }
 
+    public struct RemoteSettings {
+        public static let lastRemoteSettingsServiceSyncTimestamp =
+        "LastRemoteSettingsServiceSyncTimestamp"
+    }
+
     public struct Sync {
         public static let numberOfSyncedDevices = "numberOfSyncedDevicesKey"
         public static let signedInFxaAccount = "signedInFxaAccountKey"
