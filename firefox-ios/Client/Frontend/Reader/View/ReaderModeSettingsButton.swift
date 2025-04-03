@@ -9,11 +9,12 @@ class ReaderModeSettingsButton: UIButton {
     public struct UX {
         public static let verticalInset: CGFloat = 16
         public static let horizontalInset: CGFloat = 16
+        public static let serifFontName = "NewYorkMedium-Regular"
     }
 
     var fontType: ReaderModeFontType = .sansSerif
     var sansSerifFont: UIFont? = FXFontStyles.Regular.body.scaledFont()
-    var serifFont: UIFont? = UIFont(name: "NewYorkMedium-Regular",
+    var serifFont: UIFont? = UIFont(name: UX.serifFontName,
                                     size: FXFontStyles.Regular.body.systemFont().pointSize)
 
     override init(frame: CGRect) {

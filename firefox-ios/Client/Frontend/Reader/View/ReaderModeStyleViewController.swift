@@ -45,7 +45,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         view.spacing = 0
         view.alignment = .center
     }
-    
+
     private lazy var brightnessRow: UIView = .build()
 
     private lazy var slider: UISlider = .build { slider in
