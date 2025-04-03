@@ -375,7 +375,8 @@ export const FormAutofillHeuristics = {
       "address-line3",
     ];
 
-    let houseNumberFields = 0;
+    // Store the index of fields that are recognized as 'address-housenumber'
+    let houseNumberFields = [];
 
     // We need to build a list of the address fields. A list of the indicies
     // is also needed as the fields with a given name can change positions
@@ -387,8 +388,12 @@ export const FormAutofillHeuristics = {
 
       // Skip over any house number fields. There should only be zero or one,
       // but we'll skip over them all anyway.
-      if (detail?.fieldName == "address-housenumber") {
-        houseNumberFields++;
+      if (
+        [detail?.fieldName, detail?.alternativeFieldName].includes(
+          "address-housenumber"
+        )
+      ) {
+        houseNumberFields.push(idx);
         continue;
       }
 
@@ -417,6 +422,7 @@ export const FormAutofillHeuristics = {
           const OTHER_ADDRESS_FIELDS = [
             "address-level1",
             "address-level2",
+            "address-level3",
             "postal-code",
             "organization",
           ];
@@ -465,7 +471,13 @@ export const FormAutofillHeuristics = {
         break;
     }
 
-    scanner.parsingIndex += fields.length + houseNumberFields;
+    // 'address-housenumber' might be recognized alongside another field type
+    // (see `alternativeFieldName`). In this case, we should update the field
+    // name before advancing the parsing index.
+    for (const idx of houseNumberFields) {
+      scanner.updateFieldName(idx, "address-housenumber");
+    }
+    scanner.parsingIndex += fields.length + houseNumberFields.length;
     return true;
   },
 
@@ -939,9 +951,15 @@ export const FormAutofillHeuristics = {
         "cc-exp-year",
         "cc-exp",
         "cc-type",
+        "tel-country-code",
       ];
       fieldNames = fieldNames.filter(name =>
         FIELDNAMES_FOR_SELECT_ELEMENT.includes(name)
+      );
+    } else if (HTMLTextAreaElement.isInstance(element)) {
+      const FIELDNAMES_FOR_TEXT_AREA_ELEMENT = ["street-address"];
+      fieldNames = fieldNames.filter(name =>
+        FIELDNAMES_FOR_TEXT_AREA_ELEMENT.includes(name)
       );
     }
 
@@ -1050,6 +1068,7 @@ export const FormAutofillHeuristics = {
 
     // Find a matched field name using regexp-based heuristics
     const matchedFieldNames = this._findMatchedFieldNames(element, fields);
+
     return [matchedFieldNames, inferredInfo];
   },
 
