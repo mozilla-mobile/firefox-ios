@@ -115,7 +115,7 @@ final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
             title: isPinned ? .Bookmarks.Menu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
             iconString: isPinned ? StandardImageIdentifiers.Large.pinSlash : StandardImageIdentifiers.Large.pin,
             tapHandler: { [weak self] _ in
-                guard let self else { return }
+                guard let profile = self?.profile, let logger = self?.logger else { return }
                 let action = isPinned
                 ? profile.pinnedSites.removeFromPinnedTopSites(site)
                 : profile.pinnedSites.addPinnedTopSite(site)
@@ -128,7 +128,7 @@ final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
                         successHandler(message)
                     } else {
                         let logMessage = isPinned ? "Could not remove pinned site" : "Could not add pinne site"
-                        self.logger.log(logMessage, level: .debug, category: .library)
+                        logger.log(logMessage, level: .debug, category: .library)
                     }
                 }
             }
