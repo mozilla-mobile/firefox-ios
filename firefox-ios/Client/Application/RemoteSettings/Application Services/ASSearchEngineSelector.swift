@@ -66,9 +66,9 @@ extension RefinedSearchConfig {
     /// Ensures that the default engine is always at position 0 in the engines list.
     /// Per AS team we should not rely on the provided sort order of `engines`.
     mutating func sortDefaultEngineToIndex0() {
-        guard let defaultEngineID = appDefaultEngineId else { return }
-        guard let idx = engines.firstIndex(where: { $0.identifier == defaultEngineID }) else { return }
-        guard idx != 0 else { return }
+        guard let defaultEngineID = appDefaultEngineId,
+              let idx = engines.firstIndex(where: { $0.identifier == defaultEngineID }),
+              idx != 0 else { return }
         let engine = engines[idx]
         engines.remove(at: idx)
         engines.insert(engine, at: 0)
