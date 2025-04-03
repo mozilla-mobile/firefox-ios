@@ -23,7 +23,7 @@ final class WKWebServerUtilTests: XCTestCase {
     func testSetupWebServerGivenIsRunningThenDoesntStart() {
         let subject = createSubject()
 
-        subject.setUpWebServer()
+        subject.setUpWebServer(readerModeConfiguration: readerModeConfiguration)
 
         XCTAssertFalse(webServer.isRunning)
         XCTAssertEqual(webServer.startCalled, 1)
@@ -34,7 +34,7 @@ final class WKWebServerUtilTests: XCTestCase {
         webServer.isRunning = true
         let subject = createSubject()
 
-        subject.setUpWebServer()
+        subject.setUpWebServer(readerModeConfiguration: readerModeConfiguration)
 
         XCTAssertTrue(webServer.isRunning)
         XCTAssertEqual(webServer.startCalled, 0)
@@ -53,5 +53,12 @@ final class WKWebServerUtilTests: XCTestCase {
         let subject = DefaultWKWebServerUtil(webServer: webServer)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private var readerModeConfiguration: ReaderModeConfiguration {
+        return ReaderModeConfiguration(loadingText: "loadingText",
+                                       loadingFailedText: "loadingFailedText",
+                                       loadOriginalText: "loadOriginalText",
+                                       readerModeErrorText: "readerModeErrorText")
     }
 }
