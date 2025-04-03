@@ -8,7 +8,7 @@ import Photos
 import Shared
 import Storage
 
-class ActionProviderBuilder {
+class WebContextMenuActionsProvider {
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
 
