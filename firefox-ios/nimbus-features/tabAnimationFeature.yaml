@@ -1,12 +1,12 @@
-# The configuration for the tabTrayUIExperiments feature
+# The configuration for the tabAnimationFeature feature
 features:
-  tab-tray-ui-experiments:
+  tab-animation-feature:
     description: >
-      The tab tray will undergo some UI experimentation to test potential improvements.
+      An animation for when presenting or dismissing the the tab tray.
     variables:
       enabled:
         description: >
-          If true, enables the tab tray UI experiments.
+          If true, enables the animation.
         type: Boolean
         default: false
     defaults:
