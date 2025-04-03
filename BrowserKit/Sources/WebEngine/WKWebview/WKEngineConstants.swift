@@ -4,6 +4,8 @@
 
 import Foundation
 
-extension Notification.Name {
-    public static let ThemeDidChange = Notification.Name("ThemeDidChange")
+/// The specific constants related to the WK session and view
+struct WKEngineConstants {
+    static var webserverPort = 6571
+    static let isPrivateKey = "isPrivate"
 }

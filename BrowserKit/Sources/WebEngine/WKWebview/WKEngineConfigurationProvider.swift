@@ -33,6 +33,12 @@ public struct WKWebViewParameters {
         self.schemeHandler = schemeHandler
         self.pullRefreshType = pullRefreshType
     }
+
+    /// Default Webview parameters for internal WebEngine purpose
+    init() {
+        self.blockPopups = false
+        self.isPrivate = false
+    }
 }
 
 /// Provider to get a configured `WKEngineConfiguration`

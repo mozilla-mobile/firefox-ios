@@ -50,9 +50,17 @@ public class WKEngine: Engine {
 
     @MainActor
     public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
+<<<<<<< HEAD
         guard let session = WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
                                                            dependencies: dependencies,
                                                            configurationProvider: configProvider) else {
+=======
+        let configProvider = DefaultWKEngineConfigurationProvider(parameters: dependencies.webviewParameters)
+        guard let session = WKEngineSession(userScriptManager: userScriptManager,
+                                            readerModeDelegate: dependencies.readerModeDelegate,
+                                            telemetryProxy: dependencies.telemetryProxy,
+                                            configurationProvider: configProvider) else {
+>>>>>>> f509a6daf9 (WIP)
             throw EngineError.sessionNotCreated
         }
 

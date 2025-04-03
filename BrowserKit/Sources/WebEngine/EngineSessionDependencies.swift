@@ -8,10 +8,12 @@ import Foundation
 public struct EngineSessionDependencies {
     var webviewParameters: WKWebViewParameters
     var telemetryProxy: EngineTelemetryProxy?
+    weak var readerModeDelegate: WKReaderModeDelegate?
 
     public init(webviewParameters: WKWebViewParameters,
                 telemetryProxy: EngineTelemetryProxy? = nil) {
         self.webviewParameters = webviewParameters
+        self.readerModeDelegate = readerModeDelegate
         self.telemetryProxy = telemetryProxy
     }
 }

@@ -8,6 +8,7 @@ import WebKit
 protocol WKNavigationHandler: WKNavigationDelegate {
     var session: SessionHandler? { get set }
     var telemetryProxy: EngineTelemetryProxy? { get set }
+    var readerModeNavigationDelegate: ReaderModeNavigationDelegate? { get set }
 
     func webView(_ webView: WKWebView,
                  didCommit navigation: WKNavigation?)
@@ -52,6 +53,7 @@ protocol WKNavigationHandler: WKNavigationDelegate {
 class DefaultNavigationHandler: NSObject, WKNavigationHandler {
     weak var session: SessionHandler?
     weak var telemetryProxy: EngineTelemetryProxy?
+    weak var readerModeNavigationDelegate: ReaderModeNavigationDelegate?
     var logger: Logger = DefaultLogger.shared
 
     func webView(_ webView: WKWebView,
@@ -71,6 +73,7 @@ class DefaultNavigationHandler: NSObject, WKNavigationHandler {
             session?.fetchMetadata(withURL: url)
         }
         telemetryProxy?.handleTelemetry(event: .pageLoadFinished)
+        readerModeNavigationDelegate?.didFinish()
     }
 
     func webView(_ webView: WKWebView,
@@ -82,6 +85,7 @@ class DefaultNavigationHandler: NSObject, WKNavigationHandler {
 
         telemetryProxy?.handleTelemetry(event: .didFailNavigation)
         telemetryProxy?.handleTelemetry(event: .pageLoadCancelled)
+        readerModeNavigationDelegate?.didFailWithError(error: error)
     }
 
     func webView(_ webView: WKWebView,
@@ -93,6 +97,7 @@ class DefaultNavigationHandler: NSObject, WKNavigationHandler {
 
         telemetryProxy?.handleTelemetry(event: .didFailProvisionalNavigation)
         telemetryProxy?.handleTelemetry(event: .pageLoadCancelled)
+        readerModeNavigationDelegate?.didFailWithError(error: error)
 
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
