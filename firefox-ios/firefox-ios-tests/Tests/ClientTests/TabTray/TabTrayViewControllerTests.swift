@@ -124,7 +124,7 @@ final class TabTrayViewControllerTests: XCTestCase {
     private func createSubject(selectedSegment: TabTrayPanelType = .tabs,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabTrayViewController {
-        let subject = TabTrayViewController(selectedTab: selectedSegment, windowUUID: .XCTestDefaultUUID)
+        let subject = TabTrayViewController(panelType: selectedSegment, windowUUID: .XCTestDefaultUUID)
         subject.delegate = delegate
         subject.childPanelControllers = makeChildPanels()
         subject.setupOpenPanel(panelType: selectedSegment)
