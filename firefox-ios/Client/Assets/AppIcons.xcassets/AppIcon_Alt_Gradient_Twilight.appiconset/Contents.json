@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "twilight-light.png",
+      "filename" : "twilight-light-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "twilight-dark.png",
+      "filename" : "twilight-dark-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

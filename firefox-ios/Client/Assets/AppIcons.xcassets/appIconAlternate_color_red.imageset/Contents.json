@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "red-light.png",
+      "filename" : "red-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "red-dark.png",
+      "filename" : "red-dark.pdf",
       "idiom" : "universal"
     }
   ],

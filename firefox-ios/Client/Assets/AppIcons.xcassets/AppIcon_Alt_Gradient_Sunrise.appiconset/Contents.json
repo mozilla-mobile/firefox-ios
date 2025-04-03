@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "sunrise-light.png",
+      "filename" : "sunrise-light-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "sunrise-dark.png",
+      "filename" : "sunrise-dark-min.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
