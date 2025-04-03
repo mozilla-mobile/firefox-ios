@@ -33,7 +33,7 @@ export class FormStateManager {
   /**
    * Get the form handler for the specified input element.
    *
-   * @param {HTMLInputElement} element
+   * @param {HTMLElement} element
    *        Focused input which triggered profile searching
    * @returns {FormAutofillHandler | null}
    *        The form handler associated with the specified input element.
@@ -68,7 +68,7 @@ export class FormStateManager {
    * Get the form handler for the specified input element. If no handler exists
    * in the cache, this function creates a new one.
    *
-   * @param {HTMLInputElement} element
+   * @param {HTMLElement} element
    *        Focused input which triggered profile searching
    * @returns {FormAutofillHandler}
    *        The form handler associated with the specified input element.
