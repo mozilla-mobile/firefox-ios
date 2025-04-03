@@ -182,7 +182,6 @@ struct AccessibilityIdentifiers {
 
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
-            static let privateModeToggleButton = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
             static let closeButton = "FirefoxHomepage.closeButton"
         }
