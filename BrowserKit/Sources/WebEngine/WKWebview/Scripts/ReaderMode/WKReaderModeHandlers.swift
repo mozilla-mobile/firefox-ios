@@ -26,7 +26,7 @@ struct WKReaderModeHandlers: WKReaderModeHandlersProtocol {
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
         // TODO: FXIOS-11373 - This queue could be injected to add unit tests here
         DispatchQueue.main.ensureMainThread {
-            register(webServer, readerModeConfiguration: readerModeConfiguration)
+            register(webServer: webServer, readerModeConfiguration: readerModeConfiguration)
         }
     }
 
