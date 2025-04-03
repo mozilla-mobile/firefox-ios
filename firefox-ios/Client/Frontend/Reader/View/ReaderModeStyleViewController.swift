@@ -31,18 +31,21 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         view.spacing = UX.stackViewSpacing
         view.alignment = .center
     }
+
     private lazy var fontSizeStackView: UIStackView = .build { view in
         view.axis = .horizontal
         view.distribution = .fillEqually
         view.spacing = UX.stackViewSpacing
         view.alignment = .center
     }
+
     private lazy var themeStackView: UIStackView = .build { view in
         view.axis = .horizontal
         view.distribution = .fillEqually
         view.spacing = 0
         view.alignment = .center
     }
+    
     private lazy var brightnessRow: UIView = .build()
 
     private lazy var slider: UISlider = .build { slider in
