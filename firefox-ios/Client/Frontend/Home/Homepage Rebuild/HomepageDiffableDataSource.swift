@@ -59,6 +59,27 @@ final class HomepageDiffableDataSource:
                 CustomizeHomepageSectionCell.self
             ]
         }
+
+        var telemetryTappedItemType: HomepageTelemetry.TappedItemType? {
+            switch self {
+            case .topSite:
+                return .topSite
+            case .jumpBackIn:
+                return .jumpBackInTab
+            case .jumpBackInSyncedTab:
+                return .jumpBackInSyncedTab
+            case .bookmark:
+                return .bookmark
+            case .pocket:
+                return .story
+            case .pocketDiscover:
+                return .storyDiscoverMore
+            case .customizeHomepage:
+                return .customizeHomepage
+            default:
+                return nil
+            }
+        }
     }
 
     func updateSnapshot(
