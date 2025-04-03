@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import WebEngine
+import GCDWebServers
 
 class MockWebServer: WKEngineWebServerProtocol {
     var isRunning = false
@@ -12,6 +13,9 @@ class MockWebServer: WKEngineWebServerProtocol {
     var addTestHandlerCalled = 0
     var baseReaderModeURLCalled = 0
     var mockBaseReaderModeURL = ""
+    var registerMainBundleResourcesOfTypeCalled = 0
+    var registerMainBundleResourceCalled = 0
+    var registerHandlerForMethodCalled = 0
 
     func start() throws -> Bool {
         startCalled += 1
@@ -29,5 +33,22 @@ class MockWebServer: WKEngineWebServerProtocol {
     func baseReaderModeURL() -> String {
         baseReaderModeURLCalled += 1
         return mockBaseReaderModeURL
+    }
+
+    func registerMainBundleResourcesOfType(_ type: String,
+                                           module: String) {
+        registerMainBundleResourcesOfTypeCalled += 1
+    }
+
+    func registerMainBundleResource(_ resource: String,
+                                    module: String) {
+        registerMainBundleResourceCalled += 1
+    }
+
+    func registerHandlerForMethod(_ method: String,
+                                  module: String,
+                                  resource: String,
+                                  handler: @escaping (GCDWebServerRequest?) -> GCDWebServerResponse?) {
+        registerHandlerForMethodCalled += 1
     }
 }
