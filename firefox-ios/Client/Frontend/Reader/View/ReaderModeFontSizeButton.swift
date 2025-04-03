@@ -29,6 +29,12 @@ class ReaderModeFontSizeButton: ReaderModeSettingsButton {
             configuration?.title = .ReaderModeStyleFontSize
             accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
         }
+
+        guard fontSizeAction != .reset else { return }
+
+        sansSerifFont = FXFontStyles.Regular.title3.scaledFont()
+        serifFont = UIFont(name: "NewYorkMedium-Regular",
+                           size: FXFontStyles.Regular.title3.systemFont().pointSize)
     }
 
     // MARK: ThemeApplicable
