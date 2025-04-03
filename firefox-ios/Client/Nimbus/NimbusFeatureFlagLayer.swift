@@ -70,9 +70,6 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
-        case .jsAlertRefactor:
-            return checkJSAlertRefactor(from: nimbus)
-
         case .loginAutofill:
             return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
@@ -132,6 +129,9 @@ final class NimbusFeatureFlagLayer {
 
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
+
+        case .tabAnimation:
+            return checkTabAnimationFeature(from: nimbus)
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
@@ -242,6 +242,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabAnimationFeature.value()
+        return config.enabled
+    }
+
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.enabled
@@ -342,12 +347,6 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
-    }
-
-    private func checkJSAlertRefactor(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.jsAlertRefactor.value()
-
-        return config.enabled
     }
 
     private func checkFakespotFeature(from nimbus: FxNimbus) -> Bool {
