@@ -241,7 +241,6 @@
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
 		215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */; };
 		215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */; };
-		215360672D948A7900D9B8E6 /* MockDeviceTypeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215360662D948A7900D9B8E6 /* MockDeviceTypeProvider.swift */; };
 		215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458027D7FD7D00E5E800 /* LegacyTabGroupData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */; };
 		215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */; };
@@ -2017,6 +2016,8 @@
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
 		F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */; };
+		F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */; };
+		F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F639D90D2D8A326C007EDC60 /* TabAnimation.swift */; };
 		F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */; };
 		F80DF73F27034F6400E4C37D /* LegacyDynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */; };
 		F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */; };
@@ -2786,7 +2787,6 @@
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
 		215349052886007900FADB4D /* GleanPlumbMessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStoreTests.swift; sourceTree = "<group>"; };
 		215360642D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingSettingsViewControllerTests.swift; sourceTree = "<group>"; };
-		215360662D948A7900D9B8E6 /* MockDeviceTypeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDeviceTypeProvider.swift; sourceTree = "<group>"; };
 		215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabGroupData.swift; sourceTree = "<group>"; };
 		215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabMetadataManager.swift; sourceTree = "<group>"; };
 		215B458327DA87FC00E5E800 /* TabMetadataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMetadataManagerTests.swift; sourceTree = "<group>"; };
@@ -10338,6 +10338,8 @@
 		F5E84699B672AEC4CE4D5871 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F5F94E989BFE5C0AAD2FFCFD /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayDiffableDataSource.swift; sourceTree = "<group>"; };
+		F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAnimationControllerDelegate.swift; sourceTree = "<group>"; };
+		F639D90D2D8A326C007EDC60 /* TabAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAnimation.swift; sourceTree = "<group>"; };
 		F63D438AB501007BE110524A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		F6AA4920A08DE9E2F0BC44C2 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F6EA434FA5D8305063BC630B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -11036,6 +11038,8 @@
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
 				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
 				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
+				F639D90D2D8A326C007EDC60 /* TabAnimation.swift */,
+				F637D6722D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -13788,7 +13792,6 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				215360662D948A7900D9B8E6 /* MockDeviceTypeProvider.swift */,
 				0B7B05422D64C08F007FD7AC /* MockURLProtocol.swift */,
 				0B7B05402D64C087007FD7AC /* MockURLResponse.swift */,
 				0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */,
@@ -17743,6 +17746,7 @@
 				8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */,
 				8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */,
 				0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */,
+				F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */,
 				E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */,
 				96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */,
 				BD6B361E2B3C2511005E5345 /* CircularProgressView.swift in Sources */,
@@ -17928,6 +17932,7 @@
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
+				F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */,
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */,
@@ -18494,7 +18499,6 @@
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
 				CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */,
 				C8610DA82A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift in Sources */,
-				215360672D948A7900D9B8E6 /* MockDeviceTypeProvider.swift in Sources */,
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
@@ -28801,7 +28805,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 138.0.20250328200527;
+				version = 139.0.20250402050327;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

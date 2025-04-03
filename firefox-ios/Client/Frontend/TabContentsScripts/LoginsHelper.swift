@@ -140,27 +140,25 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             tab?.webView?.accessoryView.reloadViewFor(.standard)
         }
 
-        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
-            if type == "generatePassword",
-                let tab = self.tab,
-                !tab.isPrivate,
-                profile.prefs.boolForKey("saveLogins") ?? true {
-                let userDefaults = UserDefaults.standard
-                let showPasswordGeneratorClosure = {
-                    let newAction = GeneralBrowserAction(
-                        frame: message.frameInfo,
-                        windowUUID: tab.windowUUID,
-                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+        if type == "generatePassword",
+            let tab = self.tab,
+            !tab.isPrivate,
+            profile.prefs.boolForKey("saveLogins") ?? true {
+            let userDefaults = UserDefaults.standard
+            let showPasswordGeneratorClosure = {
+                let newAction = GeneralBrowserAction(
+                    frame: message.frameInfo,
+                    windowUUID: tab.windowUUID,
+                    actionType: GeneralBrowserActionType.showPasswordGenerator)
 
-                    store.dispatch(newAction)
-                }
-                if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
-                    userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
-                    showPasswordGeneratorClosure()
-                } else {
-                    tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
-                    tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
-                }
+                store.dispatch(newAction)
+            }
+            if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
+                userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
+                showPasswordGeneratorClosure()
+            } else {
+                tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
+                tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
             }
         }
 
@@ -251,8 +249,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
-        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) &&
-            profile.prefs.boolForKey("saveLogins") ?? true &&
+        if profile.prefs.boolForKey("saveLogins") ?? true &&
             tab?.isPrivate == false {
             clearStoredPasswordAfterGeneration(origin: login.hostname)
         }

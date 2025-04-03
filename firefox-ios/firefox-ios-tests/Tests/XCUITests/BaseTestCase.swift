@@ -425,7 +425,6 @@ class BaseTestCase: XCTestCase {
         if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
             navigator.performAction(Action.SystemThemeSwitch)
         }
-        mozWaitElementHittable(element: app.cells.staticTexts["Dark"], timeout: TIMEOUT)
         if theme == "Dark" {
             app.cells.staticTexts["Dark"].waitAndTap()
         } else {

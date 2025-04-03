@@ -8,15 +8,17 @@ export const HeuristicsRegExp = {
   RULES: {
     email: undefined,
     tel: undefined,
+    "tel-country-code" : undefined,
     "address-housenumber": undefined,
     "street-address": undefined,
     "address-line1": undefined,
     "address-line2": undefined,
     "address-line3": undefined,
+    "postal-code": undefined,
+    "address-level3": undefined,
     "address-level2": undefined,
     "address-level1": undefined,
-    "postal-code": undefined,
-    // Note: We place the `organization` field after the `address` fields, to 
+    // Note: We place the `organization` field after the `address` fields, to
     // ensure that all address-related fields that might contain organization 
     // info are matched as address fields first.
     organization: undefined,
@@ -52,8 +54,12 @@ export const HeuristicsRegExp = {
         "addrline2|address_2|addl2" +
         "|landmark", // common in IN
       "address-line3": "addrline3|address_3|addl3",
+      "address-level2": "città", // it-IT
       "address-housenumber":
         "house\\s*number|hausnummer|haus|house[a-z\-]*n(r|o)",
+      "address-level3":
+        "(^address-?level-?3$)" +
+        "|neighbou*rhood|barrio|bairro|colonia|suburb", // en/es/pt/mx/au/nz
       "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
@@ -86,6 +92,9 @@ export const HeuristicsRegExp = {
         "|typ.*karty",       // pl-PL
       "cc-csc":
         "(\\bcvn\\b|\\bcvv\\b|\\bcvc\\b|\\bcsc\\b|\\bcvd\\b|\\bcid\\b|\\bccv\\b)",
+      "tel-country-code":
+        "phone.*country|country.*phone" +
+        "tel.*country|country.*tel",
     },
 
     //=========================================================================
