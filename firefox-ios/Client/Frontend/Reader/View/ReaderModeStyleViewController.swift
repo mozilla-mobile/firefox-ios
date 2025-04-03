@@ -12,12 +12,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         public static let brightnessSize: CGFloat = 20
         public static let sliderVerticalSpacing: CGFloat = 16
         public static let brightnessHorizontalSpacing: CGFloat = 24
-
-        public static let rowHeight: CGFloat = 50.0
         public static let separatorLineThickness: CGFloat = 1.0
         public static let width: CGFloat = 270.0
-        public static let height: CGFloat = 4.0 * rowHeight + 3.0 * separatorLineThickness
-
         public static let brightnessIconOffset: CGFloat = 10
     }
 
@@ -85,8 +81,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Our preferred content size has a fixed width and height based on the rows + padding
-
         setupLayout()
 
         updateFontSizeButtons()
@@ -95,6 +89,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         listenForThemeChange(view)
         applyTheme()
         adjustLayoutForA11ySizeCategory()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let targetSize = CGSize(width: UX.width, height: UIView.layoutFittingCompressedSize.height)
+        preferredContentSize = view.systemLayoutSizeFitting(targetSize)
     }
 
     // MARK: - Applying Theme
@@ -165,11 +165,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
             button.isSelected = button.fontType.isSameFamily(fontType)
         }
 
-        for button in themeButtons {
+        for button in fontSizeButtons {
             button.configure(fontType: fontType)
         }
 
-        for button in fontSizeButtons {
+        for button in themeButtons {
             button.configure(fontType: fontType)
         }
     }
