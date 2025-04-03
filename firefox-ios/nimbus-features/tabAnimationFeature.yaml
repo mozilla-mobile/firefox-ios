@@ -1,0 +1,19 @@
+# The configuration for the tabAnimationFeature feature
+features:
+  tab-animation-feature:
+    description: >
+      An animation for when presenting or dismissing the the tab tray.
+    variables:
+      enabled:
+        description: >
+          If true, enables the animation.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
+

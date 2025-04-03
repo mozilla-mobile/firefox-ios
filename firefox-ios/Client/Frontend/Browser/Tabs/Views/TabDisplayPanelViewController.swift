@@ -36,7 +36,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     // MARK: UI elements
-    private lazy var tabDisplayView: TabDisplayView = {
+    lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(panelType: self.panelType,
                                   state: self.tabsState,
                                   windowUUID: windowUUID)
