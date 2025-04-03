@@ -10,6 +10,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public struct UX {
         public static let stackViewSpacing: CGFloat = 8
         public static let brightnessSize: CGFloat = 20
+        public static let brightnessMaxSize: CGFloat = 35
         public static let sliderVerticalSpacing: CGFloat = 16
         public static let brightnessHorizontalSpacing: CGFloat = 24
         public static let separatorLineThickness: CGFloat = 1.0
@@ -358,7 +359,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
             themeStackView.alignment = .center
         }
 
-        let brightnessImageSize = max(UIFontMetrics.default.scaledValue(for: UX.brightnessSize), UX.brightnessSize)
+        var brightnessImageSize = max(UIFontMetrics.default.scaledValue(for: UX.brightnessSize), UX.brightnessSize)
+        brightnessImageSize = min(brightnessImageSize, UX.brightnessMaxSize)
         brightnessMinImageHeightConstraint?.constant = brightnessImageSize
         brightnessMaxImageHeightConstraint?.constant = brightnessImageSize
     }
