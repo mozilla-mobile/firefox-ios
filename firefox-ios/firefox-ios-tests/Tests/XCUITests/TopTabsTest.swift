@@ -103,13 +103,7 @@ class TopTabsTest: BaseTestCase {
 
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         // Close the tab using 'x' button
-        if iPad() {
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
-            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        } else {
-            app.otherElements.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
-            app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
-        }
+        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
 
         // After removing only one tab it automatically goes to HomepanelView
         mozWaitForElementToExist(
@@ -126,7 +120,7 @@ class TopTabsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
-    func testCloseAllTabsUndo() throws {
+    func testCloseAllTabsUndo() {
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -148,28 +142,27 @@ class TopTabsTest: BaseTestCase {
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
-        throw XCTSkip("Skipping since the tab UI experiment doesn't have this toast anymore")
-//        // Close all tabs, undo it and check that the number of tabs is correct
-//        navigator.performAction(Action.AcceptRemovingAllTabs)
-//
-//        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
-//
-//        mozWaitForElementToExist(
-//            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-//        )
-//        navigator.nowAt(BrowserTab)
-//        if !iPad() {
-//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-//        }
-//
-//        if iPad() {
-//            navigator.goto(TabTray)
-//        } else {
-//            navigator.performAction(Action.CloseURLBarOpen)
-//        }
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-//
-//        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
+
+        mozWaitForElementToExist(
+            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        )
+        navigator.nowAt(BrowserTab)
+        if !iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        }
+
+        if iPad() {
+            navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+
+        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
@@ -381,8 +374,6 @@ class TopTabsTest: BaseTestCase {
     func testTabTrayCloseMultipleTabs() {
         navigator.nowAt(NewTabScreen)
         validateToastWhenClosingMultipleTabs()
-        // Tab tray UI experiment doesn't have toasts notifications anymore
-        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()
         waitUntilPageLoad()
@@ -479,27 +470,25 @@ class TopTabsTest: BaseTestCase {
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
-        // Tab tray UI experiment doesn't have toasts notifications anymore
-        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // Close multiple tabs by pressing X button
-//        let closeButton = AccessibilityIdentifiers.TabTray.closeButton
-//        for _ in 0...3 {
-//            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[closeButton].waitAndTap()
-//            // A toast notification is displayed with the message "Tab Closed" and the Undo option
-//            waitForElementsToExist(
-//                [
-//                    app.buttons["Undo"],
-//                    app.staticTexts["Tab Closed"]
-//                ]
-//            )
-//        }
-//        app.collectionViews.buttons[closeButton].waitAndTap()
-//        waitForElementsToExist(
-//            [
-//                app.buttons["Undo"],
-//                app.staticTexts["Tab Closed"]
-//            ]
-//        )
+        let closeButton = StandardImageIdentifiers.Large.cross
+        for _ in 0...3 {
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons[closeButton].waitAndTap()
+            // A toast notification is displayed with the message "Tab Closed" and the Undo option
+            waitForElementsToExist(
+                [
+                    app.buttons["Undo"],
+                    app.staticTexts["Tab Closed"]
+                ]
+            )
+        }
+        app.collectionViews.buttons[closeButton].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.buttons["Undo"],
+                app.staticTexts["Tab Closed"]
+            ]
+        )
     }
 
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {
@@ -514,7 +503,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         navigator.goto(TabTray)
         // Long press on the tab tray to open the context menu
-        // let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         app.otherElements["Tabs Tray"].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
         // Context menu opens
         waitForElementsToExist(
@@ -525,21 +514,19 @@ class TopTabsTest: BaseTestCase {
         )
         // Choose to close the tab
         app.buttons["Close Tab"].waitAndTap()
-        // Tab tray UI experiment doesn't have toasts notifications anymore
-        // https://github.com/mozilla-mobile/firefox-ios/issues/25343
         // A toast notification is displayed with the message "Tab Closed" and the Undo option
-//        waitForElementsToExist(
-//            [
-//                app.buttons["Undo"],
-//                app.staticTexts["Tab Closed"]
-//            ]
-//        )
-//        app.buttons["Undo"].waitAndTap()
-//        mozWaitForElementToNotExist(app.buttons["Undo"])
-//        mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
-//        // The tab closed is restored
-//        mozWaitForElementToExist(tabsTrayCell.element(boundBy: 3))
-//        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+        waitForElementsToExist(
+            [
+                app.buttons["Undo"],
+                app.staticTexts["Tab Closed"]
+            ]
+        )
+        app.buttons["Undo"].waitAndTap()
+        mozWaitForElementToNotExist(app.buttons["Undo"])
+        mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
+        // The tab closed is restored
+        mozWaitForElementToExist(tabsTrayCell.element(boundBy: 3))
+        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
     }
 }
 

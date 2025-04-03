@@ -25,7 +25,8 @@ class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
                              StoreSubscriber,
-                             FeatureFlaggable {
+                             FeatureFlaggable,
+                             TabTraySelectorDelegate {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -39,6 +40,7 @@ class TabTrayViewController: UIViewController,
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
+        static let segmentedControlMinHeight: CGFloat = 45
     }
 
     // MARK: Theme
@@ -88,6 +90,7 @@ class TabTrayViewController: UIViewController,
     }
 
     var shownToast: Toast?
+    var logger: Logger
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -101,6 +104,29 @@ class TabTrayViewController: UIViewController,
     private lazy var segmentedControl: UISegmentedControl = {
         return createSegmentedControl(action: #selector(segmentChanged),
                                       a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
+    }()
+
+    private lazy var experimentSegmentControl: TabTraySelectorView = {
+        // Temporary offset of numbers to account for the different order in the experiment
+        // Order can be updated in TabTrayPanelType once the experiment is done
+        var selectedIndex = 0
+        switch tabTrayState.selectedPanel {
+        case .privateTabs:
+            selectedIndex = 0
+        case .tabs:
+            selectedIndex = 1
+        case .syncedTabs:
+            selectedIndex = 2
+        }
+
+        let selector = TabTraySelectorView(selectedIndex: selectedIndex, windowUUID: windowUUID)
+        selector.delegate = self
+        selector.items = [TabTrayPanelType.privateTabs.label,
+                          TabTrayPanelType.tabs.label,
+                          TabTrayPanelType.syncedTabs.label]
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
     }()
 
     lazy var countLabel: UILabel = {
@@ -212,12 +238,14 @@ class TabTrayViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    init(selectedTab: TabTrayPanelType,
+    init(panelType: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: selectedTab)
+        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: panelType)
         self.themeManager = themeManager
+        self.logger = logger
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
 
@@ -319,7 +347,6 @@ class TabTrayViewController: UIViewController,
 
         updateTabCountImage(count: tabTrayState.normalTabsCount)
         segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
-
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
@@ -376,6 +403,10 @@ class TabTrayViewController: UIViewController,
         if isTabTrayUIExperimentsEnabled {
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+
+            containerView.addSubview(experimentSegmentControl)
+            experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+
             NSLayoutConstraint.activate([
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -386,7 +417,14 @@ class TabTrayViewController: UIViewController,
                                                           constant: UX.segmentedControlHorizontalSpacing),
                 segmentedControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
                 segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                           constant: -UX.segmentedControlHorizontalSpacing)
+                                                           constant: -UX.segmentedControlHorizontalSpacing),
+
+                experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
+                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                                  constant: UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                                   constant: -UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlMinHeight)
             ])
         } else {
             view.addSubview(navigationToolbar)
@@ -562,7 +600,7 @@ class TabTrayViewController: UIViewController,
                 panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panel.view.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor,
+                panel.view.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
                                                    constant: -UX.segmentedControlTopSpacing),
             ])
         } else {
@@ -648,6 +686,19 @@ class TabTrayViewController: UIViewController,
     private func syncTabsTapped() {
         let action = RemoteTabsPanelAction(windowUUID: windowUUID,
                                            actionType: RemoteTabsPanelActionType.refreshTabs)
+        store.dispatch(action)
+    }
+
+    // MARK: - TabTraySelectorDelegate
+
+    func didSelectSection(panelType: TabTrayPanelType) {
+        guard tabTrayState.selectedPanel != panelType else { return }
+
+        setupOpenPanel(panelType: panelType)
+
+        let action = TabTrayAction(panelType: panelType,
+                                   windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.changePanel)
         store.dispatch(action)
     }
 }
