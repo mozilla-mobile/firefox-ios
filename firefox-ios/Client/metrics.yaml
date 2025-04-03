@@ -2715,6 +2715,23 @@ firefox_home_page:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
+# HomePage - General
+homepage:
+  viewed:
+    type: event
+    description: |
+      Records when the homepage is viewed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/11522
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/25284
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    metadata:
+      tags:
+        - Homepage
+
 # Metrics related to the history panel of the library
 library:
   panel_pressed:

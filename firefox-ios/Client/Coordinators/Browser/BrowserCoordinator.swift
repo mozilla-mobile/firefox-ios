@@ -1020,7 +1020,7 @@ class BrowserCoordinator: BaseCoordinator,
             store.dispatch(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
-                    actionType: TabTrayActionType.modalSwipedToClose
+                    actionType: TabTrayActionType.onViewDismissed
                 )
             )
         }
