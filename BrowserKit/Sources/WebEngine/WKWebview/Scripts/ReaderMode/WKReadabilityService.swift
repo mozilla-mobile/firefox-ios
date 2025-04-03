@@ -4,7 +4,8 @@
 
 import Foundation
 
-class WKReadabilityService {
+// TODO: Laurie - test
+final class WKReadabilityService {
     private let ReadabilityServiceDefaultConcurrency = 1
     var queue: OperationQueue
 

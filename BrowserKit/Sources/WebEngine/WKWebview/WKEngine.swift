@@ -36,6 +36,7 @@ public class WKEngine: Engine {
     public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
         let configProvider = DefaultWKEngineConfigurationProvider(parameters: dependencies.webviewParameters)
         guard let session = WKEngineSession(userScriptManager: userScriptManager,
+                                            readerModeDelegate: dependencies.readerModeDelegate,
                                             telemetryProxy: dependencies.telemetryProxy,
                                             configurationProvider: configProvider) else {
             throw EngineError.sessionNotCreated

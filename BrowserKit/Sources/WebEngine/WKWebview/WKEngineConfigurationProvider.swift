@@ -17,15 +17,22 @@ public struct WKWebviewParameters {
         self.blockPopups = blockPopups
         self.isPrivate = isPrivate
     }
+
+    /// Default Webview parameters for internal WebEngine purpose
+    init() {
+        self.blockPopups = false
+        self.isPrivate = false
+    }
 }
 
 /// Provider to get a configured `WKEngineConfiguration`
 protocol WKEngineConfigurationProvider {
+    var parameters: WKWebviewParameters { get }
     func createConfiguration() -> WKEngineConfiguration
 }
 
 struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
-    private let parameters: WKWebviewParameters
+    var parameters: WKWebviewParameters
 
     init(parameters: WKWebviewParameters) {
         self.parameters = parameters

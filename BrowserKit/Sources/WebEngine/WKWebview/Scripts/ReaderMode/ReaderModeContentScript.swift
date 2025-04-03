@@ -9,12 +9,11 @@ public enum ReaderModeInfo: String {
     case namespace = "window.__firefox__.reader"
 }
 
-protocol ReaderModeStyleSetter {
+public protocol ReaderModeStyleSetter {
     var style: ReaderModeStyle { get set }
 }
 
 class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
-    // TODO: FXIOS-11373 - This delegate needs to be set
     weak var delegate: WKReaderModeDelegate?
 
     private var logger: Logger

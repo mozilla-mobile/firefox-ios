@@ -93,6 +93,10 @@ extension Notification.Name {
 
     public static let TabMimeTypeDidSet = Notification.Name("TabMimeTypeDidSet")
 
+    public static let ReaderModeSessionChanged = Notification.Name("ReaderModeSessionChanged")
+
+    public static let ThemeDidChange = Notification.Name("ThemeDidChange")
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is
