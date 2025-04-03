@@ -21,6 +21,7 @@ struct ContextMenuTelemetry {
 
     enum OriginExtra: String {
         case webLink
+        case imageLink
     }
 
     private let gleanWrapper: GleanWrapper

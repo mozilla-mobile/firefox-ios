@@ -300,7 +300,7 @@ extension BrowserViewController: WKUIDelegate {
                        image: URL?,
                        currentTab: Tab,
                        webView: WKWebView) -> [UIAction] {
-        let actionBuilder = WebContextMenuActionsProvider()
+        let actionBuilder = WebContextMenuActionsProvider(menuType: image != nil ? .image : .web)
         let isJavascriptScheme = (url.scheme?.caseInsensitiveCompare("javascript") == .orderedSame)
 
         if !isPrivate && !isJavascriptScheme {

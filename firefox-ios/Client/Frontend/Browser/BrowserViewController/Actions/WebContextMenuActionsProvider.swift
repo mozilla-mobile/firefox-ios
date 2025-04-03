@@ -9,8 +9,18 @@ import Shared
 import Storage
 
 class WebContextMenuActionsProvider {
+    enum MenuType {
+        case web
+        case image
+    }
+
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+    private let menuType: MenuType
+
+    init(menuType: MenuType) {
+        self.menuType = menuType
+    }
 
     func build() -> [UIAction] {
         return actions
@@ -24,7 +34,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
             ) { _ in
                 addTab(url, false, currentTab)
-                ContextMenuTelemetry().optionSelected(option: .openInNewTab, origin: .webLink)
+                self.recordOptionSelectedTelemetry(option: .openInNewTab)
             })
     }
 
@@ -36,7 +46,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
             ) { _ in
                 addTab(url, true, currentTab)
-                ContextMenuTelemetry().optionSelected(option: .openInNewPrivateTab, origin: .webLink)
+                self.recordOptionSelectedTelemetry(option: .openInNewPrivateTab)
             })
     }
 
@@ -48,7 +58,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
             ) { _ in
                 addBookmark(url.absoluteString, title, nil)
-                ContextMenuTelemetry().optionSelected(option: .bookmarkLink, origin: .webLink)
+                self.recordOptionSelectedTelemetry(option: .bookmarkLink)
                 BookmarksTelemetry().addBookmark(eventLabel: .pageActionMenu)
             }
         )
@@ -69,7 +79,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
             ) { _ in
                 removeBookmark(urlString, title, nil)
-                ContextMenuTelemetry().optionSelected(option: .removeBookmark, origin: .webLink)
+                self.recordOptionSelectedTelemetry(option: .removeBookmark)
                 BookmarksTelemetry().deleteBookmark(eventLabel: .pageActionMenu)
             }
         )
@@ -91,7 +101,7 @@ class WebContextMenuActionsProvider {
                 assignWebView(currentTab.webView)
                 let request = URLRequest(url: url)
                 currentTab.webView?.load(request)
-                ContextMenuTelemetry().optionSelected(option: .downloadLink, origin: .webLink)
+                self.recordOptionSelectedTelemetry(option: .downloadLink)
             }
         })
     }
@@ -103,7 +113,7 @@ class WebContextMenuActionsProvider {
             identifier: UIAction.Identifier("linkContextMenu.copyLink")
         ) { _ in
             UIPasteboard.general.url = url
-            ContextMenuTelemetry().optionSelected(option: .copyLink, origin: .webLink)
+            self.recordOptionSelectedTelemetry(option: .copyLink)
         })
     }
 
@@ -134,7 +144,7 @@ class WebContextMenuActionsProvider {
                 toastContainer: contentContainer,
                 popoverArrowDirection: .unknown
             )
-            ContextMenuTelemetry().optionSelected(option: .shareLink, origin: .webLink)
+            self.recordOptionSelectedTelemetry(option: .shareLink)
         })
     }
 
@@ -156,7 +166,7 @@ class WebContextMenuActionsProvider {
                     writeToPhotoAlbum(image)
                 }
             }
-            ContextMenuTelemetry().optionSelected(option: .saveImage, origin: .webLink)
+            self.recordOptionSelectedTelemetry(option: .saveImage)
         })
     }
 
@@ -195,7 +205,7 @@ class WebContextMenuActionsProvider {
 
                 application.endBackgroundTask(self.taskId)
             }.resume()
-            ContextMenuTelemetry().optionSelected(option: .copyImage, origin: .webLink)
+            self.recordOptionSelectedTelemetry(option: .copyImage)
         })
     }
 
@@ -205,7 +215,12 @@ class WebContextMenuActionsProvider {
             identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
         ) { _ in
             UIPasteboard.general.url = url as URL
-            ContextMenuTelemetry().optionSelected(option: .copyImageLink, origin: .webLink)
+            self.recordOptionSelectedTelemetry(option: .copyImageLink)
         })
+    }
+
+    private func recordOptionSelectedTelemetry(option: ContextMenuTelemetry.OptionExtra) {
+        let originExtra = menuType == .image ? ContextMenuTelemetry.OriginExtra.imageLink : ContextMenuTelemetry.OriginExtra.webLink
+        ContextMenuTelemetry().optionSelected(option: .copyImageLink, origin: originExtra)
     }
 }
