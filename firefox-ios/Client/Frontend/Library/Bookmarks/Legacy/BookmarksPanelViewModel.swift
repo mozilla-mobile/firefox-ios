@@ -11,7 +11,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
-class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
+final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -101,8 +101,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
         }
 
         checkIfPinnedURL(bookmarkItem.url) { [weak self] isPinned in
-            guard let self else { return }
-            let site = self.createSite(isPinned: isPinned, bookmarkItem: bookmarkItem)
+            guard let site = self?.createSite(isPinned: isPinned, bookmarkItem: bookmarkItem) else { return }
             completion(site)
         }
     }
@@ -113,7 +112,7 @@ class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
         successHandler: @escaping (String) -> Void
     ) -> PhotonRowActions {
         return SingleActionViewModel(
-            title: isPinned ? .Bookmarks.ActivityStream.ContextMenu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
+            title: isPinned ? .Bookmarks.Menu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
             iconString: isPinned ? StandardImageIdentifiers.Large.pinSlash : StandardImageIdentifiers.Large.pin,
             tapHandler: { [weak self] _ in
                 guard let self else { return }

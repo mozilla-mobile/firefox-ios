@@ -10,7 +10,7 @@ import SiteImageView
 
 import MozillaAppServices
 
-class BookmarksViewController: SiteTableViewController,
+final class BookmarksViewController: SiteTableViewController,
                                LibraryPanel,
                                CanRemoveQuickActionBookmark,
                                UITableViewDropDelegate {
@@ -746,8 +746,8 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             for: site,
             isPinned: site.isPinnedSite
         ) { [weak self] message in
-            guard let self else { return }
-            SimpleToast().showAlertWithText(message, bottomContainer: view, theme: currentTheme())
+            guard let view = self?.view, let theme = self?.currentTheme() else { return }
+            SimpleToast().showAlertWithText(message, bottomContainer: view, theme: theme)
         }
         actions.append(pinTopSiteAction)
 

@@ -207,6 +207,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Clear",
                 comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
+            public static let RemoveFromShortcutsTitle = MZLocalizedString(
+                key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
+                tableName: "Bookmarks",
+                value: "Remove from Shortcuts",
+                comment: "The title for the unpinning a shortcut action in the context menu when tapped on bookmark item menu button")
         }
 
         public struct EmptyState {
@@ -243,16 +248,6 @@ extension String {
                     tableName: "Bookmarks",
                     value: "Add bookmarks as you browse so you can find your favorite sites later.",
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal.")
-            }
-        }
-
-        public enum ActivityStream {
-            public enum ContextMenu {
-                public static let RemoveFromShortcutsTitle = MZLocalizedString(
-                    key: "ActivityStream.ContextMenu.RemoveFromShortcuts.Title.v139",
-                    tableName: "Bookmarks",
-                    value: "Remove from Shortcuts",
-                    comment: "The title for the unpinning a shortcut action in the context menu when tapped on bookmark item menu button")
             }
         }
     }
