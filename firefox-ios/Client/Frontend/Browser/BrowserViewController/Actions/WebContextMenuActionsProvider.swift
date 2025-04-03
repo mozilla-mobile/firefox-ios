@@ -220,7 +220,8 @@ class WebContextMenuActionsProvider {
     }
 
     private func recordOptionSelectedTelemetry(option: ContextMenuTelemetry.OptionExtra) {
-        let originExtra = menuType == .image ? ContextMenuTelemetry.OriginExtra.imageLink : ContextMenuTelemetry.OriginExtra.webLink
+        let originExtra = menuType == .image ? ContextMenuTelemetry.OriginExtra.imageLink
+                                             : ContextMenuTelemetry.OriginExtra.webLink
         ContextMenuTelemetry().optionSelected(option: .copyImageLink, origin: originExtra)
     }
 }
