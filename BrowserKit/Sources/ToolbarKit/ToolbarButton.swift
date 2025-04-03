@@ -271,6 +271,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
 
+        layoutIfNeeded()
         setNeedsUpdateConfiguration()
     }
 

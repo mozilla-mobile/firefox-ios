@@ -88,6 +88,7 @@ class TabTrayViewController: UIViewController,
     }
 
     var shownToast: Toast?
+    var logger: Logger
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -212,12 +213,14 @@ class TabTrayViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    init(selectedTab: TabTrayPanelType,
+    init(panelType: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: selectedTab)
+        self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: panelType)
         self.themeManager = themeManager
+        self.logger = logger
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
 

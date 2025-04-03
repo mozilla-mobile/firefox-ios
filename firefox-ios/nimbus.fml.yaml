@@ -15,7 +15,6 @@ channels:
 include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
-  - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/autofillFeature.yaml
   - nimbus-features/bookmarkRefactorFeature.yaml
@@ -35,16 +34,23 @@ include:
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
+  - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
+<<<<<<< HEAD
+=======
+  - nimbus-features/rustKeychainRefactor.yaml
+  - nimbus-features/searchEngineConsolidationFeature.yaml
+>>>>>>> 7909a3192 (Added FXIOS-11603 [Tab Tray UI Experiments] Add Full Screen Presentation and Dismissal Animation to Tab Tray (#25653))
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
+  - nimbus-features/tabAnimationFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml

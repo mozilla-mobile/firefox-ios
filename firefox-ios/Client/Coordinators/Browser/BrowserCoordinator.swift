@@ -1012,7 +1012,30 @@ class BrowserCoordinator: BaseCoordinator,
             self?.didDismissTabTray(from: tabTrayCoordinator)
         }
 
-        present(navigationController)
+        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+            featureFlags.isFeatureEnabled(.tabAnimation, checking: .buildOnly) {
+            guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
+            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+        } else {
+            present(navigationController)
+        }
+    }
+
+    // This implementation of present is specifically for the animation on .tabTrayUIExperiments
+    private func present(_ viewController: UIViewController,
+                         customTransition: UIViewControllerTransitioningDelegate,
+                         style: UIModalPresentationStyle) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        if !UIAccessibility.isReduceMotionEnabled {
+            router.present(viewController, animated: true, customTransition: customTransition, presentationStyle: style)
+        } else {
+            router.present(viewController)
+        }
+    }
+
+    private func present(_ viewController: UIViewController) {
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        router.present(viewController)
     }
 
     func showBackForwardList() {
@@ -1080,11 +1103,14 @@ class BrowserCoordinator: BaseCoordinator,
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
 
+<<<<<<< HEAD
     private func present(_ viewController: UIViewController) {
         browserViewController.willNavigateAway()
         router.present(viewController)
     }
 
+=======
+>>>>>>> 7909a3192 (Added FXIOS-11603 [Tab Tray UI Experiments] Add Full Screen Presentation and Dismissal Animation to Tab Tray (#25653))
     // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
