@@ -12,6 +12,18 @@ class ReaderModeThemeButton: ReaderModeSettingsButton {
         self.init(frame: .zero)
         self.readerModeTheme = readerModeTheme
 
+        switch readerModeTheme {
+        case .light:
+            configuration?.title = .ReaderModeStyleLightLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.lightThemeButton
+        case .sepia:
+            configuration?.title = .ReaderModeStyleSepiaLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.sepiaThemeButton
+        case .dark:
+            configuration?.title = .ReaderModeStyleDarkLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.darkThemeButton
+        }
+
         accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
     }
 
@@ -23,13 +35,10 @@ class ReaderModeThemeButton: ReaderModeSettingsButton {
 
         switch readerModeTheme {
         case .light:
-            configuration?.title = .ReaderModeStyleLightLabel
             backgroundColor = theme.colors.layer1
         case .sepia:
-            configuration?.title = .ReaderModeStyleSepiaLabel
             backgroundColor = theme.colors.layerSepia
         case .dark:
-            configuration?.title = .ReaderModeStyleDarkLabel
             backgroundColor = theme.colors.layer1
         case .none:
             break

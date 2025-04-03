@@ -18,10 +18,12 @@ class ReaderModeFontTypeButton: ReaderModeSettingsButton {
         switch fontType {
          case .sansSerif,
               .sansSerifBold:
-             configuration?.title = .ReaderModeStyleSansSerifFontType
+            configuration?.title = .ReaderModeStyleSansSerifFontType
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.sansSerifFontButton
          case .serif,
               .serifBold:
-             configuration?.title = .ReaderModeStyleSerifFontType
+            configuration?.title = .ReaderModeStyleSerifFontType
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.serifFontButton
          }
 
         configure(fontType: fontType)

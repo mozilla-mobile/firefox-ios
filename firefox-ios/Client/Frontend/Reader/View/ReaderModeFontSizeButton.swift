@@ -22,12 +22,15 @@ class ReaderModeFontSizeButton: ReaderModeSettingsButton {
         case .smaller:
             configuration?.title = .ReaderModeStyleSmallerLabel
             accessibilityLabel = .ReaderModeStyleSmallerAccessibilityLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.smallerFontSizeButton
         case .bigger:
             configuration?.title = .ReaderModeStyleLargerLabel
             accessibilityLabel = .ReaderModeStyleLargerAccessibilityLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.biggerFontSizeButton
         case .reset:
             configuration?.title = .ReaderModeStyleFontSize
             accessibilityLabel = .ReaderModeResetFontSizeAccessibilityLabel
+            accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.resetFontSizeButton
         }
 
         guard fontSizeAction != .reset else { return }

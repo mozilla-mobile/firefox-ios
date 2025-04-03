@@ -286,6 +286,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         let brightnessMinImageView: UIImageView = .build { imageView in
             imageView.image = UIImage(named: StandardImageIdentifiers.Medium.sun)?.withRenderingMode(.alwaysTemplate)
         }
+        brightnessMinImageView.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.darkerBrightnessButton
         brightnessImageViews.append(brightnessMinImageView)
         brightnessRow.addSubview(brightnessMinImageView)
 
@@ -296,12 +297,14 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
         // slider
         brightnessRow.addSubview(slider)
+        slider.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.brightnessSlider
 
         // max image
         let brightnessMaxImageView: UIImageView = .build { imageView in
             let image = UIImage(named: StandardImageIdentifiers.Medium.sunFill)
             imageView.image = image?.withRenderingMode(.alwaysTemplate)
         }
+        brightnessMaxImageView.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.lighterBrightnessButton
         brightnessImageViews.append(brightnessMaxImageView)
         brightnessRow.addSubview(brightnessMaxImageView)
 

@@ -911,5 +911,19 @@ struct AccessibilityIdentifiers {
         static let updateButton = "UpdateLoginPrompt.updateButton"
         static let dontUpdateButton = "UpdateLoginPrompt.dontUpdateButton"
     }
+
+    struct ReaderMode {
+        static let sansSerifFontButton = "ReaderMode.sansSerifFontButton"
+        static let serifFontButton = "ReaderMode.serifFontButton"
+        static let smallerFontSizeButton = "ReaderMode.smallerFontSizeButton"
+        static let biggerFontSizeButton = "ReaderMode.biggerFontSizeButton"
+        static let resetFontSizeButton = "ReaderMode.resetFontSizeButton"
+        static let lightThemeButton = "ReaderMode.lightThemeButton"
+        static let sepiaThemeButton = "ReaderMode.sepiaThemeButton"
+        static let darkThemeButton = "ReaderMode.darkThemeButton"
+        static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
+        static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
+        static let brightnessSlider = "ReaderMode.brightnessSlider"
+    }
 }
 // swiftlint:enable line_length
