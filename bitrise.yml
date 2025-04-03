@@ -30,7 +30,7 @@ pipelines:
         firefox_configure_build:
             depends_on:
             - determine_apps_affected
-            run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+            - run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
         run_firefox_ui_tests:
             depends_on:
             - firefox_configure_build
