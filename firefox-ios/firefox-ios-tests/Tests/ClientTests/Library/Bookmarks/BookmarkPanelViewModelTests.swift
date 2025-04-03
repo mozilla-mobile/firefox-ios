@@ -231,10 +231,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             )
         )
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        
+
         let bookmark = createBookmarkItemData()
         subject.bookmarkNodes.append(bookmark)
-        
+
         let indexPath = IndexPath(row: 0, section: 0)
         subject.getSiteDetails(for: indexPath) { site in
             XCTAssertNotNil(site)
@@ -253,10 +253,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             )
         )
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        
+
         let bookmark = createBookmarkItemData()
         subject.bookmarkNodes.append(bookmark)
-        
+
         let indexPath = IndexPath(row: 0, section: 0)
         subject.getSiteDetails(for: indexPath) { site in
             expectation.fulfill()
@@ -267,7 +267,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         wait(for: [expectation], timeout: 1)
     }
 
-    private func createSubject(guid: GUID, bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()) -> BookmarksPanelViewModel {
+    private func createSubject(
+        guid: GUID,
+        bookmarksHandler: BookmarksHandler = BookmarksHandlerMock()
+    ) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: bookmarksHandler,
                                                 bookmarkFolderGUID: guid,
@@ -275,7 +278,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         trackForMemoryLeaks(viewModel)
         return viewModel
     }
-    
+
     private func createBookmarkItemData() -> BookmarkItemData {
         return BookmarkItemData(
             guid: "abc",
@@ -287,7 +290,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             title: "bookmark1"
         )
     }
-    
+
     private func createBookmarksNode(count: Int) -> [FxBookmarkNode] {
         var nodes = [FxBookmarkNode]()
         (0..<count).forEach { index in
