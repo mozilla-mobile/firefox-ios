@@ -56,6 +56,7 @@
         "AddressesTests\/testAutofillAddressesByTapingOrganizationField()",
         "AddressesTests\/testAutofillAddressesByTapingPhoneField()",
         "AddressesTests\/testAutofillAddressesByTapingStateField()",
+        "AddressesTests\/testDeleteAddress()",
         "AddressesTests\/testDeleteAllAddresses()",
         "AddressesTests\/testToggleAddressOnOff()",
         "AddressesTests\/testUpdateAddressFieldCity()",
@@ -250,10 +251,22 @@
         "TabTrayTests",
         "TabTrayTests\/testAccessibility()",
         "TabsPerformanceTest",
+<<<<<<< HEAD
+=======
+        "TabsTests",
+        "TabsTests\/testAddTabFromContext()",
+        "TabsTests\/testCloseAllTabs()",
+        "TabsTests\/testCloseAllTabsPrivateMode()",
+        "TabsTests\/testCloseOneTab()",
+        "TabsTests\/testSwitchBetweenTabs()",
+        "TabsTestsIpad",
+        "TabsTestsIphone",
+>>>>>>> c1ff57642 (Remove FXIOS-11810 [Felt Privacy] toggle mask and show private toggle (#25756))
         "ThirdPartySearchTest",
         "TodayWidgetTests",
         "ToolbarMenuTests",
         "ToolbarTests",
+<<<<<<< HEAD
         "TopTabsTest",
         "TopTabsTest\/testAddTabFromContext()",
         "TopTabsTest\/testCloseAllTabs()",
@@ -262,6 +275,8 @@
         "TopTabsTest\/testSwitchBetweenTabs()",
         "TopTabsTestIpad",
         "TopTabsTestIphone",
+=======
+>>>>>>> c1ff57642 (Remove FXIOS-11810 [Felt Privacy] toggle mask and show private toggle (#25756))
         "TrackingProtectionTests",
         "TrackingProtectionTests\/testBasicMoreInfo()",
         "TrackingProtectionTests\/testETPLockMenu()",

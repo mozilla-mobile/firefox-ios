@@ -891,6 +891,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     // MARK: - Homepage Related Actions
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
+<<<<<<< HEAD
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
         case HomepageActionType.initialize, JumpBackInActionType.fetchLocalTabs:
@@ -901,6 +902,13 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                     actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
                 )
             )
+=======
+        case HomepageActionType.viewWillAppear,
+            JumpBackInActionType.fetchLocalTabs,
+            TopTabsActionType.didTapNewTab,
+            TopTabsActionType.didTapCloseTab:
+            dispatchRecentlyAccessedTabs(action: action)
+>>>>>>> c1ff57642 (Remove FXIOS-11810 [Felt Privacy] toggle mask and show private toggle (#25756))
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
                   let tab = jumpBackInAction.tab else { return }

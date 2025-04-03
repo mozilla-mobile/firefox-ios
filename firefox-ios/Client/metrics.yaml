@@ -2715,6 +2715,7 @@ firefox_home_page:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
+<<<<<<< HEAD
 # HomePage - General
 homepage:
   private_mode_toggle:
@@ -2735,6 +2736,9 @@ homepage:
     expires: "2025-07-01"
 
 # Library
+=======
+# Metrics related to the history panel of the library
+>>>>>>> c1ff57642 (Remove FXIOS-11810 [Felt Privacy] toggle mask and show private toggle (#25756))
 library:
   panel_pressed:
     type: labeled_counter
