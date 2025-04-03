@@ -4,8 +4,9 @@
 
 import UIKit
 import Common
+import Redux
 
-final class TabWebViewPreview: UIView, ThemeApplicable {
+final class TabWebViewPreview: UIView, ThemeApplicable, StoreSubscriber {
     // MARK: - UX Constants
     private struct UX {
         static let addressBarCornerRadius: CGFloat = 8
@@ -28,15 +29,54 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
     private var webViewTopConstraint: NSLayoutConstraint?
     private var webViewBottomConstraint: NSLayoutConstraint?
     private var addressBarBorderViewTopBottomConstraint: NSLayoutConstraint?
+    // MARK: - Redux Properties
+    typealias SubscriberStateType = TabWebViewPreviewState
+    private var previousState: TabWebViewPreviewState?
 
-    // MARK: Inits
+    // MARK: - Inits
     init() {
         super.init(frame: .zero)
         setupLayout()
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit { unsubscribeFromRedux() }
+
+    // MARK: - Redux
+    func newState(state: TabWebViewPreviewState) {
+        updateLayoutBasedOn(searchBarPosition: state.addressBarPosition)
+        previousState = state
+    }
+
+    func subscribeToRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: .unavailable,
+                actionType: ScreenActionType.showScreen,
+                screen: .tabWebViewPreview
+            )
+        )
+
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return TabWebViewPreviewState(appState: appState)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: .unavailable,
+                actionType: ScreenActionType.closeScreen,
+                screen: .tabWebViewPreview
+            )
+        )
+        store.unsubscribe(self)
     }
 
     // MARK: - Layout
@@ -63,12 +103,11 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         ])
     }
 
-    // MARK: - Public Functions
-
     /// Updates the layout based on the given search bar position.
     ///
     /// - Parameter searchBarPosition: The position of the search bar, either `.top` or `.bottom`.
-    func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
+    private func updateLayoutBasedOn(searchBarPosition: SearchBarPosition) {
+        guard previousState?.addressBarPosition != searchBarPosition else { return }
         topStackView.removeAllArrangedViews()
         bottomStackView.removeAllArrangedViews()
 
@@ -101,6 +140,8 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         webViewBottomConstraint?.isActive = true
         addressBarBorderViewTopBottomConstraint?.isActive = true
     }
+
+    // MARK: - Public Functions
 
     /// Sets the screenshot image for the web page preview.
     ///

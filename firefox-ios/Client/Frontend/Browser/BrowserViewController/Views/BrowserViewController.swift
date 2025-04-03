@@ -442,7 +442,12 @@ class BrowserViewController: UIViewController,
         searchBarView.removeFromParent()
         searchBarView.addToParent(parent: newParent)
         if isSwipingTabsEnabled {
-            webPagePreview.updateLayoutBasedOn(searchBarPosition: newSearchBarPosition)
+            store.dispatch(
+                TabWebViewPreviewAction(
+                    addressBarPosition: newSearchBarPosition,
+                    actionType: TabWebViewPreviewActionType.changeAddressBarPosition
+                )
+            )
             addressBarPanGestureHandler?.updateAddressBarContainer(newParent)
         }
         if let readerModeBar = readerModeBar {
@@ -1035,7 +1040,12 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             screenshotHelper: screenshotHelper
         )
-        webPagePreview.updateLayoutBasedOn(searchBarPosition: searchBarPosition)
+        store.dispatch(
+            TabWebViewPreviewAction(
+                addressBarPosition: searchBarPosition,
+                actionType: TabWebViewPreviewActionType.changeAddressBarPosition
+            )
+        )
     }
 
     func addSubviews() {
