@@ -284,6 +284,40 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.staticTexts.matching(identifier: "foo").count, 1, "Duplicate entry in the login list")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2798587
+    func testVerifyPasswordsSettingMenu() {
+        // Go to Settings - Passwords
+        openLoginsSettingsFromBrowserTab()
+        // Validate passwords section options are displayed
+        waitForElementsToExist(
+            [
+                app.switches["saveLogins"],
+                app.switches["showLoginsInAppMenu"],
+                app.searchFields["Search passwords"],
+                app.staticTexts["No passwords found"],
+                app.buttons["Add"]
+            ]
+        )
+        XCTAssertEqual(app.switches["saveLogins"].value as? String,
+                       "1",
+                       "Save passwords toggle in not enabled by default")
+        XCTAssertEqual(app.switches["showLoginsInAppMenu"].value as? String,
+                       "1",
+                       "Show in Application Menu toggle in not enabled by default")
+        app.buttons["Add"].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.buttons["Save"],
+                app.buttons["Cancel"],
+                app.tables["Add Credential"].cells["Website, "],
+                app.tables["Add Credential"].cells["Username, "],
+                app.tables["Add Credential"].cells["Password"]
+            ]
+        )
+        app.buttons["Cancel"].waitAndTap()
+        navigator.goto(SettingsScreen)
+    }
+
     private func createLoginManually() {
         app.buttons["Add"].waitAndTap()
         waitForElementsToExist(
