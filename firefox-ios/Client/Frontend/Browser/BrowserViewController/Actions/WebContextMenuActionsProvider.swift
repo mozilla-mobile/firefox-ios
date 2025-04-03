@@ -24,6 +24,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
             ) { _ in
                 addTab(url, false, currentTab)
+                ContextMenuTelemetry().optionSelected(option: .openInNewTab, origin: .webLink)
             })
     }
 
@@ -35,6 +36,7 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
             ) { _ in
                 addTab(url, true, currentTab)
+                ContextMenuTelemetry().optionSelected(option: .openInNewPrivateTab, origin: .webLink)
             })
     }
 
@@ -46,8 +48,8 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
             ) { _ in
                 addBookmark(url.absoluteString, title, nil)
-                let bookmarksTelemetry = BookmarksTelemetry()
-                bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
+                ContextMenuTelemetry().optionSelected(option: .bookmarkLink, origin: .webLink)
+                BookmarksTelemetry().addBookmark(eventLabel: .pageActionMenu)
             }
         )
     }
@@ -67,8 +69,8 @@ class WebContextMenuActionsProvider {
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
             ) { _ in
                 removeBookmark(urlString, title, nil)
-                let bookmarksTelemetry = BookmarksTelemetry()
-                bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
+                ContextMenuTelemetry().optionSelected(option: .removeBookmark, origin: .webLink)
+                BookmarksTelemetry().deleteBookmark(eventLabel: .pageActionMenu)
             }
         )
     }
@@ -89,6 +91,7 @@ class WebContextMenuActionsProvider {
                 assignWebView(currentTab.webView)
                 let request = URLRequest(url: url)
                 currentTab.webView?.load(request)
+                ContextMenuTelemetry().optionSelected(option: .downloadLink, origin: .webLink)
             }
         })
     }
@@ -100,6 +103,7 @@ class WebContextMenuActionsProvider {
             identifier: UIAction.Identifier("linkContextMenu.copyLink")
         ) { _ in
             UIPasteboard.general.url = url
+            ContextMenuTelemetry().optionSelected(option: .copyLink, origin: .webLink)
         })
     }
 
@@ -130,6 +134,7 @@ class WebContextMenuActionsProvider {
                 toastContainer: contentContainer,
                 popoverArrowDirection: .unknown
             )
+            ContextMenuTelemetry().optionSelected(option: .shareLink, origin: .webLink)
         })
     }
 
@@ -151,6 +156,7 @@ class WebContextMenuActionsProvider {
                     writeToPhotoAlbum(image)
                 }
             }
+            ContextMenuTelemetry().optionSelected(option: .saveImage, origin: .webLink)
         })
     }
 
@@ -189,6 +195,7 @@ class WebContextMenuActionsProvider {
 
                 application.endBackgroundTask(self.taskId)
             }.resume()
+            ContextMenuTelemetry().optionSelected(option: .copyImage, origin: .webLink)
         })
     }
 
@@ -198,6 +205,7 @@ class WebContextMenuActionsProvider {
             identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
         ) { _ in
             UIPasteboard.general.url = url as URL
+            ContextMenuTelemetry().optionSelected(option: .copyImageLink, origin: .webLink)
         })
     }
 }
