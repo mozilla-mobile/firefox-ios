@@ -12,6 +12,9 @@ class ReaderModeSettingsButton: UIButton, ThemeApplicable {
     }
 
     var fontType: ReaderModeFontType = .sansSerif
+    var sansSerifFont: UIFont? = FXFontStyles.Regular.body.scaledFont()
+    var serifFont: UIFont? = UIFont(name: "NewYorkMedium-Regular",
+                                    size: FXFontStyles.Regular.body.systemFont().pointSize)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,18 +40,15 @@ class ReaderModeSettingsButton: UIButton, ThemeApplicable {
         switch fontType {
         case .sansSerif,
              .sansSerifBold:
-            let font = UIFont(
-                name: "SF-Pro-Text-Regular",
-                size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
-            )
-            updateFont(font)
+            updateFont(sansSerifFont)
         case .serif,
              .serifBold:
-            let font = UIFont(
-                name: "NewYorkMedium-Regular",
-                size: LegacyDynamicFontHelper.defaultHelper.ReaderStandardFontSize
-            )
-            updateFont(font)
+            guard let serifFont else {
+                updateFont(serifFont)
+                return
+            }
+
+            updateFont(UIFontMetrics.default.scaledFont(for: serifFont))
         }
     }
 
