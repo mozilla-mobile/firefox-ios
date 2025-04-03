@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class ReaderModeFontTypeButton: ReaderModeSettingsButton {
+class ReaderModeFontTypeButton: ReaderModeSettingsButton, ThemeApplicable {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorSelected: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
@@ -46,7 +46,7 @@ class ReaderModeFontTypeButton: ReaderModeSettingsButton {
     }
 
     // MARK: ThemeApplicable
-    override public func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.textDisabled
         foregroundColorSelected = theme.colors.textPrimary
         backgroundColorNormal = .clear

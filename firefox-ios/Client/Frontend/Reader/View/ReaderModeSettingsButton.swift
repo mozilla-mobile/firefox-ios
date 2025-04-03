@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class ReaderModeSettingsButton: UIButton, ThemeApplicable {
+class ReaderModeSettingsButton: UIButton {
     public struct UX {
         public static let verticalInset: CGFloat = 16
         public static let horizontalInset: CGFloat = 16
@@ -50,10 +50,6 @@ class ReaderModeSettingsButton: UIButton, ThemeApplicable {
 
             updateFont(UIFontMetrics.default.scaledFont(for: serifFont))
         }
-    }
-
-    // MARK: ThemeApplicable
-    public func applyTheme(theme: Theme) {
     }
 
     // MARK: Helper

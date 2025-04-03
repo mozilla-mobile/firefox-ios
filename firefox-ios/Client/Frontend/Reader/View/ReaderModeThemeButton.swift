@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class ReaderModeThemeButton: ReaderModeSettingsButton {
+class ReaderModeThemeButton: ReaderModeSettingsButton, ThemeApplicable {
     var readerModeTheme: ReaderModeTheme?
 
     convenience init(readerModeTheme: ReaderModeTheme) {
@@ -27,7 +27,8 @@ class ReaderModeThemeButton: ReaderModeSettingsButton {
         accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
     }
 
-    override func applyTheme(theme: Theme) {
+    // MARK: ThemeApplicable
+    func applyTheme(theme: Theme) {
         // This view ignores the theme parameter. The view title and background is the
         // same color independently from the app theme, to accomplish this we create direct instances from
         // LightTheme for (.light and sepia) and DarkTheme for (.dark)

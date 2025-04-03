@@ -11,7 +11,7 @@ enum FontSizeAction {
     case bigger
 }
 
-class ReaderModeFontSizeButton: ReaderModeSettingsButton {
+class ReaderModeFontSizeButton: ReaderModeSettingsButton, ThemeApplicable {
     var fontSizeAction: FontSizeAction = .bigger
 
     convenience init(fontSizeAction: FontSizeAction) {
@@ -41,7 +41,7 @@ class ReaderModeFontSizeButton: ReaderModeSettingsButton {
     }
 
     // MARK: ThemeApplicable
-    override public func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         configuration?.baseForegroundColor = theme.colors.textPrimary
         setNeedsUpdateConfiguration()
     }
