@@ -32,7 +32,7 @@ struct ContextMenuTelemetry {
 
     func optionSelected(option: OptionExtra, origin: OriginExtra) {
         let optionSelectedExtras = GleanMetrics.ContextMenu.OptionSelectedExtra(
-            optionSelected: option.rawValue,
+            option: option.rawValue,
             origin: origin.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ContextMenu.optionSelected, extras: optionSelectedExtras)

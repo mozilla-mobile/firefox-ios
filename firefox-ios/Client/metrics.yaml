@@ -599,7 +599,7 @@ context_menu:
     description: |
       Records when the user selects an option from a context menu.
     extra_keys:
-      option_selected:
+      option:
         type: string
         description: |
           The type of option selected.
