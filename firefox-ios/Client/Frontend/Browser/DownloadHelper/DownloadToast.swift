@@ -112,6 +112,7 @@ class DownloadToast: Toast, DownloadProgressDelegate {
 
     init(downloadProgressManager: DownloadProgressManager,
          theme: Theme,
+         
          completion: @escaping (Bool) -> Void) {
         self.downloadProgressManager = downloadProgressManager
         super.init(frame: .zero)
