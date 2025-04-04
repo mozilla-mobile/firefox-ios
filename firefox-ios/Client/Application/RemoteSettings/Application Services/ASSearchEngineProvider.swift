@@ -52,7 +52,9 @@ final class ASSearchEngineProvider: SearchEngineProvider {
 
             guard let orderedEngineNames = finalEngineOrderingPrefs.engineIdentifiers,
                   !orderedEngineNames.isEmpty else {
-                // We haven't persisted the engine order, so return whatever order we got from disk.
+                // We haven't persisted the engine order, so use the default engine ordering.
+                // For AS-based engines we are guaranteed the preferred default to be at index 0
+                // (this happens in `fetchSearchEngines()`).
                 ensureMainThread { completion(finalEngineOrderingPrefs, unorderedEngines) }
                 return
             }
