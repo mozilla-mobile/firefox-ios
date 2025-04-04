@@ -8,9 +8,19 @@ import Photos
 import Shared
 import Storage
 
-class ActionProviderBuilder {
+class WebContextMenuActionsProvider {
+    enum MenuType {
+        case web
+        case image
+    }
+
     private var actions = [UIAction]()
     private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+    private let menuType: MenuType
+
+    init(menuType: MenuType) {
+        self.menuType = menuType
+    }
 
     func build() -> [UIAction] {
         return actions
@@ -24,6 +34,7 @@ class ActionProviderBuilder {
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
             ) { _ in
                 addTab(url, false, currentTab)
+                self.recordOptionSelectedTelemetry(option: .openInNewTab)
             })
     }
 
@@ -35,6 +46,7 @@ class ActionProviderBuilder {
                 identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
             ) { _ in
                 addTab(url, true, currentTab)
+                self.recordOptionSelectedTelemetry(option: .openInNewPrivateTab)
             })
     }
 
@@ -46,8 +58,8 @@ class ActionProviderBuilder {
                 identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
             ) { _ in
                 addBookmark(url.absoluteString, title, nil)
-                let bookmarksTelemetry = BookmarksTelemetry()
-                bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
+                self.recordOptionSelectedTelemetry(option: .bookmarkLink)
+                BookmarksTelemetry().addBookmark(eventLabel: .pageActionMenu)
             }
         )
     }
@@ -67,8 +79,8 @@ class ActionProviderBuilder {
                 identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
             ) { _ in
                 removeBookmark(urlString, title, nil)
-                let bookmarksTelemetry = BookmarksTelemetry()
-                bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
+                self.recordOptionSelectedTelemetry(option: .removeBookmark)
+                BookmarksTelemetry().deleteBookmark(eventLabel: .pageActionMenu)
             }
         )
     }
@@ -89,6 +101,7 @@ class ActionProviderBuilder {
                 assignWebView(currentTab.webView)
                 let request = URLRequest(url: url)
                 currentTab.webView?.load(request)
+                self.recordOptionSelectedTelemetry(option: .downloadLink)
             }
         })
     }
@@ -100,6 +113,7 @@ class ActionProviderBuilder {
             identifier: UIAction.Identifier("linkContextMenu.copyLink")
         ) { _ in
             UIPasteboard.general.url = url
+            self.recordOptionSelectedTelemetry(option: .copyLink)
         })
     }
 
@@ -130,6 +144,7 @@ class ActionProviderBuilder {
                 toastContainer: contentContainer,
                 popoverArrowDirection: .unknown
             )
+            self.recordOptionSelectedTelemetry(option: .shareLink)
         })
     }
 
@@ -151,6 +166,7 @@ class ActionProviderBuilder {
                     writeToPhotoAlbum(image)
                 }
             }
+            self.recordOptionSelectedTelemetry(option: .saveImage)
         })
     }
 
@@ -189,6 +205,7 @@ class ActionProviderBuilder {
 
                 application.endBackgroundTask(self.taskId)
             }.resume()
+            self.recordOptionSelectedTelemetry(option: .copyImage)
         })
     }
 
@@ -198,6 +215,13 @@ class ActionProviderBuilder {
             identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
         ) { _ in
             UIPasteboard.general.url = url as URL
+            self.recordOptionSelectedTelemetry(option: .copyImageLink)
         })
+    }
+
+    private func recordOptionSelectedTelemetry(option: ContextMenuTelemetry.OptionExtra) {
+        let originExtra = menuType == .image ? ContextMenuTelemetry.OriginExtra.imageLink
+                                             : ContextMenuTelemetry.OriginExtra.webLink
+        ContextMenuTelemetry().optionSelected(option: option, origin: originExtra)
     }
 }

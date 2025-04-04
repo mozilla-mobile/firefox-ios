@@ -695,7 +695,7 @@
 		78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
 		7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */; };
-		7ADC1D192C27D35B003ED924 /* ActionProviderBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */; };
+		7ADC1D192C27D35B003ED924 /* WebContextMenuActionsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC1D182C27D35B003ED924 /* WebContextMenuActionsProvider.swift */; };
 		7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
 		7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8A47F51D01D3B400C07734 /* PassKit.framework */; };
@@ -1379,6 +1379,8 @@
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */; };
+		C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */; };
+		C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */; };
 		C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80685D026A0C93900DCD895 /* UserResearch.swift */; };
 		C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */; };
 		C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */; };
@@ -7864,7 +7866,7 @@
 		7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderPanelEmptyStateView.swift; sourceTree = "<group>"; };
 		7ACC4EB59896863B677D102A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7AD14377A3F3B824C049E709 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
-		7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionProviderBuilder.swift; sourceTree = "<group>"; };
+		7ADC1D182C27D35B003ED924 /* WebContextMenuActionsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebContextMenuActionsProvider.swift; sourceTree = "<group>"; };
 		7AEF4108BAAE5BBD5949E64C /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		7B0A456E95C86CC158227349 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7B0B49C7B69DC54BC3CA5972 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -9118,6 +9120,8 @@
 		C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderEmptyStateView.swift; sourceTree = "<group>"; };
 		C7D341F8BA6A9E44518C11C8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7DB49358A6A84AA7391EEE6 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/Intro.strings; sourceTree = "<group>"; };
+		C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetry.swift; sourceTree = "<group>"; };
+		C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetryTests.swift; sourceTree = "<group>"; };
 		C80685D026A0C93900DCD895 /* UserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResearch.swift; sourceTree = "<group>"; };
 		C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManagerTests.swift; sourceTree = "<group>"; };
 		C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTrackerTests.swift; sourceTree = "<group>"; };
@@ -11643,7 +11647,7 @@
 			isa = PBXGroup;
 			children = (
 				5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */,
-				7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */,
+				7ADC1D182C27D35B003ED924 /* WebContextMenuActionsProvider.swift */,
 				8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */,
 			);
 			path = Actions;
@@ -12765,6 +12769,7 @@
 				0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */,
 				8AC225642B6D3FA400CDA7FD /* HomepageTelemetryTests.swift */,
 				0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */,
+				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -14838,6 +14843,7 @@
 				1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */,
 				8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */,
 				8A359EF42A1FD4CF004A5BB7 /* Wrapper */,
+				C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -17259,6 +17265,7 @@
 				C8610DAA2A0EBF7100B79FF1 /* OnboardingCardDelegate.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */,
 				C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */,
+				C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */,
 				819656192C80ECFE00E62323 /* MainMenuMiddleware.swift in Sources */,
 				E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */,
 				8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */,
@@ -17937,7 +17944,7 @@
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
 				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
-				7ADC1D192C27D35B003ED924 /* ActionProviderBuilder.swift in Sources */,
+				7ADC1D192C27D35B003ED924 /* WebContextMenuActionsProvider.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
@@ -18106,6 +18113,7 @@
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
+				C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				0B7B053D2D647D00007FD7AC /* TemporaryDocumentTests.swift in Sources */,
 				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
