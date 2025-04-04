@@ -14,8 +14,6 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
-<<<<<<< HEAD
-=======
 ContextMenu:
   description: Corresponds to any context menu in the app.
 
@@ -25,7 +23,6 @@ Library:
 HistoryPanel:
   description: Corresponds to the history panel of the library.
 
->>>>>>> 96c3e2ca6 (Add FXIOS-11798 Web view context menu telemetry (#25805))
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
