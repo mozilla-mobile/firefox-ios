@@ -14,6 +14,9 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+ContextMenu:
+  description: Corresponds to any context menu in the app.
+
 Library:
   description: Corresponds to library, containing bookmarks, history, reading list, and downloads.
 
