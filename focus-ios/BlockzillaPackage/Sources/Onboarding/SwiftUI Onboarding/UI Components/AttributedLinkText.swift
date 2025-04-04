@@ -19,15 +19,11 @@ struct AttributedLinkText: View {
         self.url = url
         self.linkAction = linkAction
         
-        // Initialize attributed string
         var attrString = AttributedString(fullText)
         attrString.foregroundColor = Color(.secondaryLabel)
         
-        // Find range of link text
         if let range = attrString.range(of: linkText) {
             attrString[range].foregroundColor = .accent
-            
-            // Create a link for the text
             attrString[range].link = url
         }
         
@@ -36,6 +32,8 @@ struct AttributedLinkText: View {
     
     var body: some View {
         Text(attributedString)
+            .accessibilityIdentifier(AccessibilityIdentifiers.AttributedLinkText.view)
+            .accessibilityAddTraits([.isStaticText, .isButton])
             .font(.caption)
             .multilineTextAlignment(.center)
             .environment(\.openURL, OpenURLAction { url in

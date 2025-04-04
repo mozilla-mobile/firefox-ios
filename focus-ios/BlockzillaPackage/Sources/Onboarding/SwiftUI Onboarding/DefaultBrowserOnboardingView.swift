@@ -16,11 +16,14 @@ struct DefaultBrowserOnboardingView: View {
             HStack {
                 Spacer()
                 closeOnboardingButton
+                    .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.closeButton)
             }
             Image.huggingFocus
                 .resizable()
                 .scaledToFit()
                 .frame(maxHeight: .imageMaxHeight)
+                .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.image)
+                .accessibilityHidden(true)
             VStack {
                 title
                 subtitles
@@ -28,19 +31,25 @@ struct DefaultBrowserOnboardingView: View {
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
             openSettingsButton
+                .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.openSettingsButton)
             skipOnboardingButton
+                .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.skipOnboardingButton)
         }
         .padding([.leading, .trailing], .viewPadding)
         .navigationBarHidden(true)
         .background(Color.secondOnboardingScreenBackground
-        .edgesIgnoringSafeArea([.top, .bottom]))
-        .onAppear {
-            viewModel.send(.defaultBrowserAppeared)
+            .edgesIgnoringSafeArea([.top, .bottom]))
+        .onChange(of: viewModel.activeScreen) { newValue in
+            if newValue == .default {
+                DispatchQueue.main.async {
+                    UIAccessibility.post(notification: .screenChanged, argument: title)
+                }
+            }
         }
     }
 
     private var closeOnboardingButton: some View {
-        return Button(action: {
+        Button(action: {
             viewModel.send(.defaultBrowserCloseTapped)
         }, label: {
             Image.close
@@ -48,24 +57,27 @@ struct DefaultBrowserOnboardingView: View {
     }
 
     private var title: some View {
-        return Text(viewModel.defaultBrowserConfig.title)
+        Text(viewModel.defaultBrowserConfig.title)
             .bold()
             .font(.system(size: .titleSize))
             .multilineTextAlignment(.center)
             .padding(.bottom, .titleBottomPadding)
+            .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.title)
+            .accessibilityAddTraits(.isHeader)
     }
 
     private var subtitles: some View {
-        return VStack(alignment: .leading) {
+        VStack(alignment: .leading) {
             Text(viewModel.defaultBrowserConfig.firstSubtitle)
                 .padding(.bottom, .firstSubtitleBottomPadding)
             Text(viewModel.defaultBrowserConfig.secondSubtitle)
         }
         .font(.body16)
+        .accessibilityIdentifier(AccessibilityIdentifiers.DefaultBrowserOnboarding.subtitles)
     }
 
     private var openSettingsButton: some View {
-        return Button(action: {
+        Button(action: {
             viewModel.send(.defaultBrowserSettingsTapped)
         }, label: {
             Text(viewModel.defaultBrowserConfig.topButtonTitle)
@@ -79,7 +91,7 @@ struct DefaultBrowserOnboardingView: View {
     }
 
     private var skipOnboardingButton: some View {
-        return Button(action: {
+        Button(action: {
             viewModel.send(.defaultBrowserSkip)
         }, label: {
             Text(viewModel.defaultBrowserConfig.bottomButtonTitle)
