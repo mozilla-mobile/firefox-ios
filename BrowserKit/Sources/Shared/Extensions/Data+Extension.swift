@@ -6,13 +6,6 @@ import Foundation
 import CommonCrypto
 
 extension Data {
-    public var sha1: Data {
-        let length = Int(CC_SHA1_DIGEST_LENGTH)
-        let digest = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
-        CC_SHA1((self as NSData).bytes, CC_LONG(self.count), digest)
-        return Data(bytes: UnsafePointer<UInt8>(digest), count: length)
-    }
-
     public var sha256: Data {
         let length = Int(CC_SHA256_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<UInt8>.allocate(capacity: length)

@@ -10,17 +10,20 @@ public class WKEngine: Engine {
     private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager
     private let webServerUtil: WKWebServerUtil
+    private let engineDependencies: EngineDependencies
 
-    public static func factory() -> WKEngine {
-        return WKEngine()
+    public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
+        return WKEngine(engineDependencies: engineDependencies)
     }
 
     init(userScriptManager: WKUserScriptManager = DefaultUserScriptManager(),
          webServerUtil: WKWebServerUtil = DefaultWKWebServerUtil(),
-         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory()) {
+         sourceTimerFactory: DispatchSourceTimerFactory = DefaultDispatchSourceTimerFactory(),
+         engineDependencies: EngineDependencies) {
         self.userScriptManager = userScriptManager
         self.webServerUtil = webServerUtil
         self.sourceTimerFactory = sourceTimerFactory
+        self.engineDependencies = engineDependencies
 
         InternalUtil().setUpInternalHandlers()
     }
@@ -44,7 +47,7 @@ public class WKEngine: Engine {
         shutdownWebServerTimer?.cancel()
         shutdownWebServerTimer = nil
 
-        webServerUtil.setUpWebServer()
+        webServerUtil.setUpWebServer(readerModeConfiguration: engineDependencies.readerModeConfiguration)
     }
 
     public func idleEngine() {

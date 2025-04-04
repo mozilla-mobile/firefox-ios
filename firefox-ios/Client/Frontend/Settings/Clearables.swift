@@ -2,12 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import CoreSpotlight
 import Foundation
+import SiteImageView
 import Shared
 import WebKit
-import CoreSpotlight
-import SiteImageView
-import Common
+import WebEngine
 
 // A base protocol for something that can be cleared.
 protocol Clearable {
@@ -77,10 +78,10 @@ class CacheClearable: Clearable {
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         // Clear in-memory reader cache (private browsing content etc.)
-        MemoryReaderModeCache.sharedInstance.clear()
+        MemoryReaderModeCache.shared.clear()
 
         // Clear out any persistent cached readerized content on disk
-        DiskReaderModeCache.sharedInstance.clear()
+        DiskReaderModeCache.shared.clear()
 
         // Ensure all log files are cleared. A new log file will be immediately created as soon as our
         // next log message is sent but any older cached log data will be reset to free up disk space.

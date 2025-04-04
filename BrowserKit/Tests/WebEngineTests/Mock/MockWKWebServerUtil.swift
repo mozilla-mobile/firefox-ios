@@ -9,7 +9,7 @@ class MockWKWebServerUtil: WKWebServerUtil {
     var setUpWebServerCalled = 0
     var stopWebServerCalled = 0
 
-    func setUpWebServer() {
+    func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {
         setUpWebServerCalled += 1
     }
 

@@ -11,4 +11,5 @@ struct WKEngineSessionData {
     var title: String?
     var pageMetadata: EnginePageMetadata?
     var hasOnlySecureContent: Bool?
+    var readabilityResult: ReadabilityResult?
 }

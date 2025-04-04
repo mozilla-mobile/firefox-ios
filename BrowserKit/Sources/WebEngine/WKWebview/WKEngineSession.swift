@@ -270,6 +270,14 @@ class WKEngineSession: NSObject,
                                               forSession: self)
     }
 
+    func setReaderMode(style: ReaderModeStyle, namespace: ReaderModeInfo) {
+        webView.evaluateJavascriptInDefaultContentWorld(
+            "\(namespace.rawValue).setStyle(\(style.encode()))"
+        ) { object, error in
+            return
+        }
+    }
+
     // MARK: - WKEngineWebViewDelegate
 
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String) {

@@ -15,6 +15,15 @@ protocol WKEngineWebServerProtocol {
 
     func addTestHandler()
     func baseReaderModeURL() -> String
+
+    func registerMainBundleResourcesOfType(_ type: String, module: String)
+    func registerMainBundleResource(_ resource: String, module: String)
+    func registerHandlerForMethod(
+        _ method: String,
+        module: String,
+        resource: String,
+        handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse?
+    )
 }
 
 class WKEngineWebServer: WKEngineWebServerProtocol {
