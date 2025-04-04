@@ -10,7 +10,7 @@ open class Analytics {
     private static let abTestSchema = "iglu:org.ecosia/abtest_context/jsonschema/1-0-1"
     private static let consentSchema = "iglu:org.ecosia/eccc_context/jsonschema/1-0-2"
     static let userSchema = "iglu:org.ecosia/app_user_state_context/jsonschema/1-0-0"
-    static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-0"
+    static let inappSearchSchema = "iglu:org.ecosia/inapp_search_event/jsonschema/1-0-1"
     private static let abTestRoot = "ab_tests"
     private static let namespace = "ios_sp"
 
