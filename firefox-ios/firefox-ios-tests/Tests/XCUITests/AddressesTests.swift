@@ -567,11 +567,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func reachEditAndRemoveAddress() {
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update the all addresses fields
         tapEdit()
         // Remove address
