@@ -75,3 +75,14 @@ class EmbeddedNavController {
         navigationController.removeFromParent()
     }
 }
+
+
+// Small iPhone screens in landscape require that the popup have a shorter height.
+func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
+    if !UX.enableResizeRowsForSmallScreens {
+        return false
+    }
+
+    let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
+    return hasSmallScreen && traitCollection.verticalSizeClass == .compact
+}
