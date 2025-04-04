@@ -64,7 +64,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator18.2-arm64.xctestrun"
         - maximum_test_repetitions: 2
-    
+
     - deploy-to-bitrise-io@2.9.2: {}
   firefox_configure_build:
     before_run:
@@ -784,7 +784,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-16.3.x
         machine_type_id: g2.mac.large
   L10nBuild:
     steps:
@@ -1244,7 +1244,7 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
-  
+
   SPM_Common_Steps:
     steps:
     - activate-ssh-key@4.1.1:
