@@ -13,9 +13,9 @@ import Account
 import MobileCoreServices
 import Common
 import Redux
+import WebEngine
 import WidgetKit
 import ActivityKit
-import WebEngine
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
