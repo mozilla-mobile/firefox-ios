@@ -207,6 +207,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Clear",
                 comment: "Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text")
+            public static let RemoveFromShortcutsTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.RemoveFromShortcutsTitle.v139",
+                tableName: "Bookmarks",
+                value: "Remove from Shortcuts",
+                comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
         }
 
         public struct EmptyState {
