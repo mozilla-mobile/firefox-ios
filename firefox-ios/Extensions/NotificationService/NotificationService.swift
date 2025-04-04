@@ -6,8 +6,7 @@ import Common
 import Account
 import Shared
 import UserNotifications
-
-import class MozillaAppServices.Viaduct
+import MozillaAppServices
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
@@ -25,6 +24,7 @@ class NotificationService: UNNotificationServiceExtension {
         // Set-up Rust network stack. This is needed in addition to the call
         // from the AppDelegate due to the fact that this uses a separate process
         Viaduct.shared.useReqwestBackend()
+        MozillaAppServices.initialize()
 
         let userInfo = request.content.userInfo
 
