@@ -998,10 +998,17 @@ struct AddressBarState: StateType, Equatable {
         let menuIcon = layout == .version1 ? StandardImageIdentifiers.Large.moreHorizontalRound
                                            : StandardImageIdentifiers.Large.appMenu
 
-        actions.append(contentsOf: [
-            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
-        ])
+        if layout == .version1 {
+            actions.append(contentsOf: [
+                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
+                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
+            ])
+        } else {
+            actions.append(contentsOf: [
+                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
+            ])
+        }
 
         return actions
     }
