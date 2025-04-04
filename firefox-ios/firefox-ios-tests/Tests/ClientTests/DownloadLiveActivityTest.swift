@@ -21,7 +21,7 @@ class DownloadLiveActivityAttributesTests: XCTestCase {
         XCTAssertEqual(contentState.totalDownloads, 4)
         XCTAssertEqual(contentState.containsOnlyEncodedFiles, false)
     }
-  
+
     func testContainsOnlyEncodedFilesProperty() {
         let download1 = makeDownload(type: DownloadType.contentEncoded, isComplete: false)
         let download2 = makeDownload(type: DownloadType.contentEncoded, isComplete: true)

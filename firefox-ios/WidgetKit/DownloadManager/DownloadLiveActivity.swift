@@ -107,7 +107,7 @@ struct DownloadLiveActivity: Widget {
             static let stateIconSize: CGFloat = 24
             static let downloadingFontSize: CGFloat = 17
             static let progressFontSize: CGFloat = 15
-            static let wordsTopPadding: CGFloat = 0
+            static let wordsTopPadding: CGFloat = 4
             static let wordsLeftPadding: CGFloat = 5
             static let wordsRightPadding: CGFloat = 5
             static let wordsBottomPadding: CGFloat = 0
@@ -150,6 +150,24 @@ struct DownloadLiveActivity: Widget {
         let circleProgressPercentage = min(
           liveDownload.state.containsOnlyEncodedFiles ? 1.0 : liveDownload.state.totalProgress, 1.0
         )
+
+        var downloadTexts: some View {
+          VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
+              Text(liveDownload.state.downloads.count == 1 ?
+                   String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
+                      String(format: .LiveActivity.Downloads.FileCountText,
+                             String(liveDownload.state.downloads.count)))
+                  .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
+                  .foregroundColor(UX.LockScreen.labelColor)
+              if !liveDownload.state.containsOnlyEncodedFiles {
+                Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
+                    .opacity(0.8)
+                    .foregroundColor(UX.LockScreen.labelColor)
+                    .contentTransition(.identity)
+            }
+          }
+        }
+
         return ZStack {
             Rectangle()
                 .widgetURL(URL(string: URL.mozInternalScheme + "://deep-link?url=/homepanel/downloads"))
@@ -164,20 +182,7 @@ struct DownloadLiveActivity: Widget {
                         .scaledToFit()
                         .frame(width: UX.LockScreen.iconSize, height: UX.LockScreen.iconSize)
                 }
-                VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
-                    Text(liveDownload.state.downloads.count == 1 ?
-                         String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                            String(format: .LiveActivity.Downloads.FileCountText,
-                                   String(liveDownload.state.downloads.count)))
-                        .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
-                        .foregroundColor(UX.LockScreen.labelColor)
-                    if !liveDownload.state.containsOnlyEncodedFiles {
-                      Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
-                          .opacity(0.8)
-                          .foregroundColor(UX.LockScreen.labelColor)
-                          .contentTransition(.identity)
-                    }
-                }
+                downloadTexts
                 Spacer()
                 ZStack {
                     Circle()
