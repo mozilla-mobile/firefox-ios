@@ -57,7 +57,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let titleLabel: UILabel = .build { label in
         label.numberOfLines = 2
-        label.font = LegacyDynamicFontHelper.defaultHelper.DeviceFont
+        label.font = FXFontStyles.Bold.body.scaledFont()
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1

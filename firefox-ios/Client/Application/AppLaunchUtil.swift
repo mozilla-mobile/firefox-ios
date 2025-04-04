@@ -68,7 +68,6 @@ class AppLaunchUtil {
         setUserAgent()
 
         KeyboardHelper.defaultHelper.startObserving()
-        LegacyDynamicFontHelper.defaultHelper.startObserving()
 
         setMenuItems()
 

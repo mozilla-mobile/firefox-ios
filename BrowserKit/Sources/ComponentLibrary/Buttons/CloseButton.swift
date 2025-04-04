@@ -36,7 +36,7 @@ public class CloseButton: UIButton,
         heightConstraint?.isActive = true
         widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
         widthConstraint?.isActive = true
-        updateButtonSizeForDyanimcFont()
+        updateButtonSizeForDynamicFont()
     }
 
     public func configure(viewModel: CloseButtonViewModel,
@@ -49,7 +49,7 @@ public class CloseButton: UIButton,
         accessibilityLabel = viewModel.a11yLabel
     }
 
-    private func updateButtonSizeForDyanimcFont() {
+    private func updateButtonSizeForDynamicFont() {
         let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width), UX.closeButtonSize.width)
         let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height), UX.closeButtonSize.height)
         heightConstraint?.constant = dynamicHeight
@@ -61,7 +61,7 @@ public class CloseButton: UIButton,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            updateButtonSizeForDyanimcFont()
+            updateButtonSizeForDynamicFont()
         default:
             break
         }
