@@ -35,6 +35,7 @@ enum AppScreen {
     case searchEngineSelection
     case passwordGenerator
     case nativeErrorPage
+    case tabWebViewPreview
 }
 
 enum ScreenActionType: ActionType {
