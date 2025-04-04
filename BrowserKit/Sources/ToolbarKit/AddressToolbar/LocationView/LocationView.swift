@@ -167,17 +167,17 @@ final class LocationView: UIView,
 
     private func layoutContainerView(_ config: LocationViewConfiguration, isURLTextFieldCentered: Bool) {
         NSLayoutConstraint.deactivate(containerViewConstrains)
-        if config.isEditing || !isURLTextFieldCentered {
+        if config.isEditing || !isURLTextFieldCentered || doesURLTextFieldExceedViewWidth {
             // leading alignment configuration
             containerViewConstrains = [
                 containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
-        } else {
+        } else if let superview, !doesURLTextFieldExceedViewWidth {
             containerViewConstrains = [
-                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-                containerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
-                containerView.centerXAnchor.constraint(equalTo: centerXAnchor)
+                containerView.leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor),
+                containerView.trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor),
+                containerView.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
             ]
         }
         NSLayoutConstraint.activate(containerViewConstrains)
@@ -198,6 +198,9 @@ final class LocationView: UIView,
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradient()
+        // Updates the URL text field's leading constraint to ensure it reflects the current layout state
+        // during layout passes, such as on screen size or orientation changes.
+        updateURLTextFieldLeadingConstraintBasedOnState()
     }
 
     private func setupLayout() {
