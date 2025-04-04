@@ -17,12 +17,6 @@ AppIconSelection:
 ContextMenu:
   description: Corresponds to any context menu in the app.
 
-Library:
-  description: Corresponds to library, containing bookmarks, history, reading list, and downloads.
-
-HistoryPanel:
-  description: Corresponds to the history panel of the library.
-
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
