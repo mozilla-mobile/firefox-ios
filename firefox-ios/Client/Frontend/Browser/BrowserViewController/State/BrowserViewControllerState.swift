@@ -156,7 +156,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case NavigationBrowserActionType.tapOnCustomizeHomepage,
+        case NavigationBrowserActionType.tapOnCustomizeHomepageButton,
             NavigationBrowserActionType.tapOnTrackingProtection,
             NavigationBrowserActionType.tapOnCell,
             NavigationBrowserActionType.tapOnLink,

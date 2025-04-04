@@ -94,7 +94,7 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage, destination: .settings(.homePage))
+        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepageButton, destination: .settings(.homePage))
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.navigationDestination?.destination, .settings(.homePage))
