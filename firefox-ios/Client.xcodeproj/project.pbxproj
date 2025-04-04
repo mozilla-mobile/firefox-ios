@@ -17266,7 +17266,6 @@
 				3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */,
 				C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */,
 				C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */,
-				0E4AF8652D764046002E4238 /* DownloadProgressManager.swift in Sources */,
 				819656192C80ECFE00E62323 /* MainMenuMiddleware.swift in Sources */,
 				E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */,
 				8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */,
