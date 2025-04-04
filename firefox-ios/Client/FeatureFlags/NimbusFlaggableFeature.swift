@@ -30,7 +30,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
-    case jsAlertRefactor
     case jumpBackIn
     case loginAutofill
     case menuRefactor
@@ -39,7 +38,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case noInternetConnectionErrorPage
     case nightMode
-    case passwordGenerator
     case pdfRefactor
     case downloadLiveActivities
     case preferSwitchToOpenTabOverDuplicate
@@ -53,6 +51,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case unifiedAds
     case unifiedSearch
+    case tabAnimation
     case tabTrayUIExperiments
     case toolbarRefactor
     case toolbarOneTapNewTab
@@ -77,10 +76,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .sentFromFirefox,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .unifiedAds,
@@ -135,7 +134,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .homepageRebuild,
                 .isToolbarCFREnabled,
-                .jsAlertRefactor,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
@@ -143,7 +141,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
                 .nightMode,
-                .passwordGenerator,
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .preferSwitchToOpenTabOverDuplicate,
@@ -158,6 +155,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .unifiedAds,
                 .unifiedSearch,
+                .tabAnimation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,

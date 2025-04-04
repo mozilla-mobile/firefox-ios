@@ -66,7 +66,6 @@ struct DownloadLiveActivity: Widget {
         static let downloadPaddingTrailingMinimal: CGFloat = 1
         static let downloadOpacityMinimal = 0.30
         static let downloadRotationMinimal: Double = -90.0
-        // static let checkmarkIcon = "checkmarkLarge"
         static let checkmarkIcon = StandardImageIdentifiers.Large.checkmark
         static let mediaStopIcon = "mediaStop"
         static let firefoxIcon = "faviconFox"
@@ -161,12 +160,14 @@ struct DownloadLiveActivity: Widget {
                 VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
                     Text(liveDownload.state.downloads.count == 1 ?
                          String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
-                            String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads.count))
+                            String(format: .LiveActivity.Downloads.FileCountText,
+                                   String(liveDownload.state.downloads.count)))
                         .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
                         .foregroundColor(UX.LockScreen.labelColor)
                     Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
                         .opacity(0.8)
                         .foregroundColor(UX.LockScreen.labelColor)
+                        .contentTransition(.identity)
                 }
                 Spacer()
                 ZStack {
@@ -214,7 +215,9 @@ struct DownloadLiveActivity: Widget {
     (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
       DynamicIslandExpandedRegion(.center) {
-        Text(String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName))
+          Text(liveDownload.state.downloads.count == 1 ?
+               String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
+                  String(format: .LiveActivity.Downloads.FileCountText, String(liveDownload.state.downloads.count)))
           .font(.headline)
           .frame(maxWidth: .infinity,
                  alignment: .leading)
@@ -239,6 +242,7 @@ struct DownloadLiveActivity: Widget {
                               leading: DownloadLiveActivity.UX.DynamicIsland.wordsLeftPadding,
                               bottom: DownloadLiveActivity.UX.DynamicIsland.wordsBottomPadding,
                               trailing: DownloadLiveActivity.UX.DynamicIsland.wordsRightPadding))
+          .contentTransition(.identity)
       }
     }
     private func trailingExpandedRegion
@@ -256,7 +260,7 @@ struct DownloadLiveActivity: Widget {
             .rotationEffect(.degrees(DownloadLiveActivity.UX.DynamicIsland.rotation))
             .animation(.linear, value: 0.5)
           Image(
-            liveDownload.state.totalProgress == 1.0
+            liveDownload.state.completedDownloads == liveDownload.state.downloads.count
             ? DownloadLiveActivity.UX.checkmarkIcon
             : DownloadLiveActivity.UX.mediaStopIcon
           )

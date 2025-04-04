@@ -8,6 +8,8 @@ import Overrides from "resource://gre/modules/Overrides.ios.js";
 /* eslint mozilla/use-isInstance: 0 */
 HTMLSelectElement.isInstance = element => element instanceof HTMLSelectElement;
 HTMLInputElement.isInstance = element => element instanceof HTMLInputElement;
+HTMLTextAreaElement.isInstance = element =>
+  element instanceof HTMLTextAreaElement;
 HTMLIFrameElement.isInstance = element => element instanceof HTMLIFrameElement;
 HTMLFormElement.isInstance = element => element instanceof HTMLFormElement;
 ShadowRoot.isInstance = element => element instanceof ShadowRoot;
@@ -26,7 +28,7 @@ Object.defineProperty(HTMLInputElement.prototype, "hasBeenTypePassword", {
   configurable: true,
 });
 
-HTMLInputElement.prototype.setUserInput = function (value) {
+function setUserInput(value) {
   this.value = value;
 
   // In React apps, setting .value may not always work reliably.
@@ -42,7 +44,10 @@ HTMLInputElement.prototype.setUserInput = function (value) {
   });
 
   this.dispatchEvent(new Event("blur", { bubbles: true }));
-};
+}
+
+HTMLInputElement.prototype.setUserInput = setUserInput;
+HTMLTextAreaElement.prototype.setUserInput = setUserInput;
 
 // Mimic the behavior of .getAutocompleteInfo()
 // It should return an object with a fieldName property matching the autocomplete attribute

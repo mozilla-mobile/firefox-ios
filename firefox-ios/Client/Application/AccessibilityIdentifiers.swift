@@ -182,7 +182,6 @@ struct AccessibilityIdentifiers {
 
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
-            static let privateModeToggleButton = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
             static let closeButton = "FirefoxHomepage.closeButton"
         }
@@ -472,6 +471,9 @@ struct AccessibilityIdentifiers {
             static let tableView = "Bookmarks List"
             static let bookmarksCell = "BookmarksPanel.BookmarksCell"
             static let bookmarksCellDisclosureButton = ".DisclosureButton"
+            static let emptyStateLogoImage = "BookmarksPanel.EmptyState.emptyStateLogoImage"
+            static let emptyStateTitleLabel = "BookmarksPanel.EmptyState.emptyStateTitleLabel"
+            static let emptyStateBodyLabel = "BookmarksPanel.EmptyState.emptyStateBodyLabel"
             static let emptyStateSignInButton = "BookmarksPanel.EmptyState.signInButton"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"

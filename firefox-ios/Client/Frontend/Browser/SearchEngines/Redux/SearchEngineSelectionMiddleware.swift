@@ -15,7 +15,7 @@ final class SearchEngineSelectionMiddleware {
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
-        self.searchEnginesManager = searchEnginesManager ?? SearchEnginesManager(prefs: profile.prefs, files: profile.files)
+        self.searchEnginesManager = searchEnginesManager ?? profile.searchEnginesManager
     }
 
     lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
@@ -27,7 +27,7 @@ final class SearchEngineSelectionMiddleware {
 
             guard !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
-                self.searchEnginesManager.getOrderedEngines { [weak self] searchEngines in
+                self.searchEnginesManager.getOrderedEngines { [weak self] preferences, searchEngines in
                     self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
                 }
                 return

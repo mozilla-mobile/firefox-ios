@@ -14,9 +14,25 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 AppIconSelection:
   description: Corresponds to the feature where users can change their default app icon in the settings.
 
+ContextMenu:
+  description: Corresponds to any context menu in the app.
+
+Library:
+  description: Corresponds to library, containing bookmarks, history, reading list, and downloads.
+
+HistoryPanel:
+  description: Corresponds to the history panel of the library.
+
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
 
 TopSites:
   description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
     label on GitHub.
+  
+TabsPanel:
+  description: Corresponds to all things related to the tab panel.
+
+Toasts:
+  description: Corresponds to any events around toasts in the app. Toasts are the shortlived banners that 
+    appear when an action is taken.

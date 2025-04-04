@@ -392,8 +392,9 @@ extension FxAWebViewModel {
               let sessionToken = data["sessionToken"] as? String
         else { return }
 
-        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) {
+        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) { [weak self] in
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            self?.profile.syncManager?.syncEverything(why: .enabledChange)
         }
     }
 

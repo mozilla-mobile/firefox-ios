@@ -16,7 +16,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private var headerState: HeaderState?
-    private var action: (() -> Void)?
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -26,16 +25,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         let logoHeader = HomeLogoHeaderCell()
         return logoHeader
     }()
-
-    private lazy var privateModeButton: UIButton = .build { [weak self] button in
-        let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
-        button.setImage(maskImage, for: .normal)
-        button.frame = UX.circleSize
-        button.layer.cornerRadius = button.frame.size.width / 2
-        button.addTarget(self, action: #selector(self?.switchMode), for: .touchUpInside)
-        button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-    }
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -50,7 +39,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private func setupView(with showiPadSetup: Bool) {
         stackContainer.addArrangedSubview(logoHeaderCell.contentView)
-        stackContainer.addArrangedSubview(privateModeButton)
         contentView.addSubview(stackContainer)
 
         setupConstraints(for: showiPadSetup)
@@ -67,40 +55,20 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
 
-            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width),
-            privateModeButton.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
             logoHeaderCell.contentView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
         ]
 
         NSLayoutConstraint.activate(logoConstraints)
     }
 
-    func configure(
-        headerState: HeaderState,
-        action: @escaping () -> Void
-    ) {
+    func configure(headerState: HeaderState) {
         self.headerState = headerState
-        self.action = action
         setupView(with: headerState.showiPadSetup)
         logoHeaderCell.configure(with: headerState.showiPadSetup)
-        privateModeButton.isHidden = headerState.showiPadSetup
-    }
-
-    @objc
-    private func switchMode() {
-        // TODO: FXIOS-10171 - Add Telemetry for toggle, to live in homepage middleware
-        action?()
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        guard let isPrivateHomepage = headerState?.isPrivate else { return }
         logoHeaderCell.applyTheme(theme: theme)
-        let privateModeButtonTintColor = isPrivateHomepage ? theme.colors.layer2 : theme.colors.iconPrimary
-        privateModeButton.imageView?.tintColor = privateModeButtonTintColor
-        privateModeButton.backgroundColor = isPrivateHomepage ? .white : .clear
-        privateModeButton.accessibilityValue = isPrivateHomepage ?
-            .TabTrayToggleAccessibilityValueOn :
-            .TabTrayToggleAccessibilityValueOff
     }
 }

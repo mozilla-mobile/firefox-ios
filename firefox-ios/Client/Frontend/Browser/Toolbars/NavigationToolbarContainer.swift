@@ -24,13 +24,21 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
         }
     }
     weak var toolbarDelegate: NavigationToolbarContainerDelegate?
-    private var toolbarState: ToolbarState?
     private var model: NavigationToolbarContainerModel?
 
     private lazy var toolbar: BrowserNavigationToolbar =  .build { _ in }
     private var toolbarHeightConstraint: NSLayoutConstraint?
 
     private var bottomToolbarHeight: CGFloat { return UX.toolbarHeight + UIConstants.BottomInset }
+
+    private var theme: Theme?
+    private var isVersion1Layout = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme, isVersion1Layout != oldValue else { return }
+            applyTheme(theme: theme)
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -70,11 +78,16 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
     private func updateModel(toolbarState: ToolbarState) {
         guard let windowUUID else { return }
+        isVersion1Layout = toolbarState.toolbarLayout == .version1
         let model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
 
         if self.model != model {
             self.model = model
-            toolbar.configure(config: model.navigationToolbarConfiguration, toolbarDelegate: self)
+            toolbar.configure(
+                config: model.navigationToolbarConfiguration,
+                isVersion1Layout: isVersion1Layout,
+                toolbarDelegate: self
+            )
         }
     }
 
@@ -95,7 +108,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer1
+        backgroundColor = isVersion1Layout ? theme.colors.layer3 : theme.colors.layer1
     }
 }
 

@@ -323,18 +323,17 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell = defaultBrowserCell
         case .general:
             let themeCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "themeCell")
-            themeCell.labelText = String(format: UIConstants.strings.theme)
             themeCell.accessibilityIdentifier = "settingsViewController.themeCell"
-            themeCell.accessoryLabelText = labelTextForCurrentTheme
+            themeCell.setConfiguration(text: String(format: UIConstants.strings.theme), secondaryText: labelTextForCurrentTheme)
             cell = themeCell
         case .privacy:
             if indexPath.row == 0 {
                 let trackingCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "trackingCell")
-                trackingCell.labelText = String(format: UIConstants.strings.trackingProtectionLabel)
                 trackingCell.accessibilityIdentifier = "settingsViewController.trackingCell"
-                trackingCell.accessoryLabelText = Settings.getToggle(.trackingProtection) ?
+                let secondaryText = Settings.getToggle(.trackingProtection) ?
                     UIConstants.strings.settingsTrackingProtectionOn :
                     UIConstants.strings.settingsTrackingProtectionOff
+                trackingCell.setConfiguration(text: String(format: UIConstants.strings.trackingProtectionLabel), secondaryText: secondaryText)
                 cell = trackingCell
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
@@ -350,9 +349,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let (label, accessoryLabel, identifier) = indexPath.row == 0 ?
                     (UIConstants.strings.settingsSearchLabel, searchEngineManager.activeEngine.name, "SettingsViewController.searchCell")
                     : (UIConstants.strings.settingsAutocompleteSection, autocompleteLabel, "SettingsViewController.autocompleteCell")
-
-                searchCell.accessoryLabelText = accessoryLabel
-                searchCell.labelText = label
+                searchCell.setConfiguration(text: label, secondaryText: accessoryLabel)
                 searchCell.accessibilityIdentifier = identifier
                 cell = searchCell
             } else {
@@ -361,22 +358,22 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .siri:
             let siriCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
             if indexPath.row == 0 {
-                siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
                 SiriShortcuts().hasAddedActivity(type: .erase) { (result: Bool) in
-                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    let secondaryText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    siriCell.setConfiguration(text: UIConstants.strings.eraseSiri, secondaryText: secondaryText)
                 }
             } else if indexPath.row == 1 {
-                siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
                 SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
-                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    let secondaryText = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    siriCell.setConfiguration(text: UIConstants.strings.eraseAndOpenSiri, secondaryText: secondaryText)
                 }
             } else {
-                siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
                 SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
-                    siriCell.accessoryLabelText = result ? UIConstants.strings.Edit : UIConstants.strings.add
+                    let secondaryText = result ? UIConstants.strings.Edit : UIConstants.strings.add
+                    siriCell.setConfiguration(text: UIConstants.strings.openUrlSiri, secondaryText: secondaryText)
                 }
             }
             cell = siriCell
@@ -480,7 +477,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return sections[section] == .privacy ? 50 : 30
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -696,7 +697,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
-        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewAccessoryCell)?.accessoryLabelText = engine.name
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewAccessoryCell {
+            var configuration = cell.defaultContentConfiguration()
+            let margins = configuration.directionalLayoutMargins
+            configuration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: margins.top, leading: UIConstants.layout.settingsCellLeftInset, bottom: margins.bottom, trailing: margins.trailing)
+            configuration.secondaryText = engine.name
+            cell.contentConfiguration = configuration
+        }
     }
 }
 

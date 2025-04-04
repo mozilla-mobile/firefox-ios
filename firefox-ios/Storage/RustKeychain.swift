@@ -309,6 +309,14 @@ open class RustKeychain {
                 return "EncryptionFailed reason:\(reason)"
             case .DecryptionFailed(reason: let reason):
                 return "DecryptionFailed reason:\(reason)"
+            case .NssUninitialized:
+                return "NssUninitialized"
+            case .NssAuthenticationError(reason: let reason):
+                return "NssAuthenticationError reason:\(reason)"
+            case .AuthenticationError(reason: let reason):
+                return "AuthenticationError reason:\(reason)"
+            case .AuthenticationCanceled:
+                return "AuthenticationCanceled"
             }
         }
 

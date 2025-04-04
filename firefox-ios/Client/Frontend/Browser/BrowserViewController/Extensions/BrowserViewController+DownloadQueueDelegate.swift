@@ -42,6 +42,7 @@ extension BrowserViewController: DownloadQueueDelegate {
            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
+            self.downloadLiveActivityWrapper = nil
         }
         self.downloadProgressManager = nil
 

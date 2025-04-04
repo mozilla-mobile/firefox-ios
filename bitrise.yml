@@ -1639,6 +1639,65 @@ workflows:
             cat test.json
             python3 perfTestTransform.py
 
+  Firefox_Unit_Tests:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - restore-spm-cache@1:
+        is_always_run: true
+    - script@1.1:
+        title: Build for Testing
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 16,OS=18.2" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+
+            ls /Users/vagrant/git/DerivedData/Build/Products
+            ls /Users/vagrant/git/DerivedData
+    - xcode-test-without-building@0:
+        timeout: 6000
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData"'
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
+        - test_repetition_mode: until_failure
+        - maximum_test_repetitions: 10
+    - script@1.2.1:
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
+
+            echo "-- compress --"
+            # Add Fennec-iphonesimulator folder
+            # Add All .xctestrun files
+            # Add firefox-ios-test files and test plans
+
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
+            "$BITRISE_SOURCE_DIR/xcodebuild.log"
+    - deploy-to-bitrise-io@2.10.0:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+        - pipeline_intermediate_files: |-
+            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
+        is_always_run: true
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 

@@ -109,7 +109,18 @@ class DragAndDropTests: BaseTestCase {
                 dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-            XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+
+            if !iPad() {
+                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+
+                if let urlString = url.value as? String {
+                    XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
+                } else {
+                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
+                }
+            } else {
+                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            }
         }
     }
 
@@ -131,7 +142,17 @@ class DragAndDropTests: BaseTestCase {
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
             // Check that focus is kept on last website open
-            XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            if !iPad() {
+                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+
+                if let urlString = url.value as? String {
+                    XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
+                } else {
+                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
+                }
+            } else {
+                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            }
         }
     }
 

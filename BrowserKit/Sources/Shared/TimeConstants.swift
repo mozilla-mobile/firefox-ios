@@ -130,6 +130,9 @@ extension Date {
     public var lastHour: Date {
         return Calendar.current.date(byAdding: .hour, value: -1, to: self) ?? Date()
     }
+    public var lastTwentyFourHours: Date {
+        return Calendar.current.date(byAdding: .hour, value: -24, to: self) ?? Date()
+    }
     public var lastTwoWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
     }
@@ -158,21 +161,6 @@ extension Date {
 
     public func isYesterday() -> Bool {
         return Calendar.current.isDateInYesterday(self)
-    }
-
-    /// Comparison date is used to control unit tests outcome.
-    public func isWithinLast7Days(comparisonDate: Date = Date()) -> Bool {
-        return (comparisonDate.lastWeek ... comparisonDate).contains(self)
-    }
-
-    /// Comparison date is used to control unit tests outcome.
-    public func isWithinLast14Days(comparisonDate: Date = Date()) -> Bool {
-        return (comparisonDate.lastTwoWeek ... comparisonDate).contains(self)
-    }
-
-    /// Comparison date is used to control unit tests outcome.
-    public func isWithinLastHour(comparisonDate: Date = Date()) -> Bool {
-        return (comparisonDate.lastHour ... comparisonDate).contains(self)
     }
 }
 

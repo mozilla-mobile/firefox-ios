@@ -65,6 +65,11 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         if #available(iOS 17, *) {
             urlBarAddress.press(forDuration: 3)
+            var attempts = 3
+            while !app.otherElements["Paste"].exists && attempts > 0 {
+                urlBarAddress.press(forDuration: 3)
+                attempts -= 1
+            }
             app.otherElements["Paste"].waitAndTap()
             mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
         }

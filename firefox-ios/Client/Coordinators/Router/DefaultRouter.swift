@@ -33,6 +33,19 @@ class DefaultRouter: NSObject, Router {
         navigationController.present(viewController, animated: animated, completion: nil)
     }
 
+    func present(_ viewController: UIViewController,
+                 animated: Bool,
+                 customTransition: UIViewControllerTransitioningDelegate?,
+                 presentationStyle: UIModalPresentationStyle = .fullScreen) {
+        viewController.modalPresentationStyle = presentationStyle
+
+        if let transition = customTransition {
+            viewController.transitioningDelegate = transition
+        }
+
+        navigationController.present(viewController, animated: animated, completion: nil)
+    }
+
     func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
         // Make sure we remove reference to the presentedViewController completions
         if let topController = navigationController.presentedViewController {

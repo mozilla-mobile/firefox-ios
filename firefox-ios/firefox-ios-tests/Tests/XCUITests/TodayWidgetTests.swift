@@ -360,16 +360,6 @@ class TodayWidgetTests: BaseTestCase {
         coordinate.tap()
         // Check New Search action
         tapOnWidget(widgetType: "Firefox")
-        // Verify private mode toggle based on device type
-        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-        if iPad() {
-            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
-        }
-        guard let buttonValue = app.buttons[elementToAssert].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
-            return
-        }
-        XCTAssertTrue(buttonValue == "Off", "Expected button value to be 'Off', but got \(buttonValue)")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2769297
@@ -426,16 +416,6 @@ class TodayWidgetTests: BaseTestCase {
         tapOnWidget(widgetType: "Private Tab")
         // Verify the presence of Private Mode message
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
-        // Verify private mode toggle is on
-        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-        if iPad() {
-            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
-        }
-        guard let buttonValue = app.buttons[elementToAssert].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
-            return
-        }
-        XCTAssertTrue(buttonValue == "On", "Expected button value to be 'On', but got \(buttonValue)")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2769300
@@ -532,16 +512,6 @@ class TodayWidgetTests: BaseTestCase {
         springboard.buttons["Done"].waitAndTap()
         checkFirefoxShortcutsOptions()
         springboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Firefox")).element.waitAndTap()
-        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-        if iPad() {
-            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
-        }
-        mozWaitForElementToExist(app.buttons[elementToAssert])
-        guard let buttonValue = app.buttons[elementToAssert].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
-            return
-        }
-        XCTAssertTrue(buttonValue == "Off", "Expected button value to be 'Off', but got \(buttonValue)")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783002
@@ -577,16 +547,6 @@ class TodayWidgetTests: BaseTestCase {
 
         // Verify the presence of Private Mode message
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
-        // Verify private mode toggle is on
-        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-        if iPad() {
-            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
-        }
-        guard let buttonValue = app.buttons[elementToAssert].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
-            return
-        }
-        XCTAssertTrue(buttonValue == "On", "Expected button value to be 'On', but got \(buttonValue)")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783003

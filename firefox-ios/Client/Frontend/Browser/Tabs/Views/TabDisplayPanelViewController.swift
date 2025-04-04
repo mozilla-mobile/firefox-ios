@@ -36,7 +36,7 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     // MARK: UI elements
-    private lazy var tabDisplayView: TabDisplayView = {
+    lazy var tabDisplayView: TabDisplayView = {
         let view = TabDisplayView(panelType: self.panelType,
                                   state: self.tabsState,
                                   windowUUID: windowUUID)
@@ -131,21 +131,9 @@ class TabDisplayPanelViewController: UIViewController,
             backgroundPrivacyOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        if isTabTrayUIExperimentsEnabled, !tabsState.isPrivateTabsEmpty, isCompactLayout {
-            gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
-            fadeView.layer.addSublayer(gradientLayer)
-            view.addSubview(fadeView)
-
-            NSLayoutConstraint.activate([
-                fadeView.topAnchor.constraint(equalTo: view.topAnchor),
-                fadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                fadeView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                fadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            ])
-        }
-
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
+        setupFadeView()
     }
 
     private func setupEmptyView() {
@@ -168,6 +156,28 @@ class TabDisplayPanelViewController: UIViewController,
     private func shouldShowEmptyView(_ shouldShowEmptyView: Bool) {
         emptyPrivateTabsView.isHidden = !shouldShowEmptyView
         tabDisplayView.isHidden = shouldShowEmptyView
+    }
+
+    private func setupFadeView() {
+        guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
+        gradientLayer.locations = [0.0, 0.02, 0.08, 0.12]
+        fadeView.layer.addSublayer(gradientLayer)
+        view.addSubview(fadeView)
+
+        NSLayoutConstraint.activate([
+            fadeView.topAnchor.constraint(equalTo: view.topAnchor),
+            fadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            fadeView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            fadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        shouldShowFadeView()
+    }
+
+    private func shouldShowFadeView() {
+        guard isTabTrayUIExperimentsEnabled, isCompactLayout else { return }
+        let isPrivateModeFadeViewNeeded = !tabsState.tabs.isEmpty && tabsState.isPrivateMode
+        let shouldShow = !tabsState.isPrivateMode || isPrivateModeFadeViewNeeded
+        fadeView.isHidden = !shouldShow
     }
 
     private func currentTheme() -> Theme {
@@ -223,6 +233,7 @@ class TabDisplayPanelViewController: UIViewController,
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        shouldShowFadeView()
     }
 
     // MARK: EmptyPrivateTabsViewDelegate

@@ -149,7 +149,7 @@ export const LabelUtils = {
     return null;
   },
 
-  nextElementInOrder(element, reverse, originalParent) {
+  nextElementInOrder(element, reverse) {
     let result = reverse ? element.lastElementChild : element.firstElementChild;
     if (result) {
       return result;
@@ -165,9 +165,9 @@ export const LabelUtils = {
 
       element = element.parentNode;
       if (
+        !element ||
         element.localName == "form" ||
-        element.localName == "fieldset" ||
-        element == originalParent
+        element.localName == "fieldset"
       ) {
         break;
       }

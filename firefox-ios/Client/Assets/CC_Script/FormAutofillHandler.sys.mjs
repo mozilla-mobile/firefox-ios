@@ -60,10 +60,12 @@ export class FormAutofillHandler {
   #fieldDetails = null;
 
   /**
-   * Flags if the MutationObserver that is observing node
-   * additions/removals in the root element has been set up
+   * Flags if the MutationObserver (this.#formMutationObserver) that is observing
+   * node additions/removals for the root element has been set up
    */
-  #isObservingFormChanges = false;
+  #isObservingFormMutations = false;
+
+  #formMutationObserver = null;
 
   #visibilityStateObserverByElement = new WeakMap();
 
@@ -219,7 +221,9 @@ export class FormAutofillHandler {
   }
 
   clearVisibilityStateObserverByElement(element) {
-    if (this.#visibilityStateObserverByElement.has(element)) {
+    if (this.isVisiblityStateObserverSetUpByElement(element)) {
+      const observer = this.#visibilityStateObserverByElement.get(element);
+      observer.disconnect();
       this.#visibilityStateObserverByElement.delete(element);
     }
   }
@@ -414,7 +418,7 @@ export class FormAutofillHandler {
         continue;
       }
 
-      if (HTMLInputElement.isInstance(element)) {
+      if (FormAutofillUtils.isTextControl(element)) {
         if (element.value && element.value != element.defaultValue) {
           // Skip the field if the user has already entered text and that text
           // is not the site prefilled value.
@@ -461,7 +465,7 @@ export class FormAutofillHandler {
 
       element.previewValue = "";
 
-      if (HTMLInputElement.isInstance(element)) {
+      if (FormAutofillUtils.isTextControl(element)) {
         // Bug 1687679: Since profile appears to be presentation ready data, we need to utilize the "x-formatted" field
         // that is generated when presentation ready data doesn't fit into the autofilling element.
         // For example, autofilling expiration month into an input element will not work as expected if
@@ -579,11 +583,7 @@ export class FormAutofillHandler {
     }
 
     this.setUpElementVisibilityObserver();
-
-    if (!this.#isObservingFormChanges) {
-      this.setUpNodesObserver();
-      this.#isObservingFormChanges = true;
-    }
+    this.setUpFormNodesMutationObserver();
   }
 
   /**
@@ -676,7 +676,11 @@ export class FormAutofillHandler {
    * If any of the added/removed nodes (including the nodes in the node's subtree)
    * are of an address of cc type, a "form-changed" event is dispatched.
    */
-  setUpNodesObserver() {
+  setUpFormNodesMutationObserver() {
+    if (this.#isObservingFormMutations) {
+      return;
+    }
+
     const mutationObserver = new this.window.MutationObserver(
       (mutations, _) => {
         const collectMutatedNodes = mutations => {
@@ -745,7 +749,27 @@ export class FormAutofillHandler {
       }
     );
     const config = { childList: true, subtree: true };
-    mutationObserver.observe(this.form.rootElement, config);
+    this.#formMutationObserver = mutationObserver;
+    this.#formMutationObserver.observe(this.form.rootElement, config);
+    this.#isObservingFormMutations = true;
+  }
+
+  /**
+   * After the form was submitted, disconnect all IntersectionObserver that
+   * are still observing form's elements and disconnect the MutationsOberver
+   * that is observing the form.
+   */
+  clearFormChangeObservers() {
+    if (!this.#isObservingFormMutations) {
+      return;
+    }
+    // Disconnect intersection observers
+    for (let element of this.form.elements) {
+      this.clearVisibilityStateObserverByElement(element);
+    }
+    // Disconnect mutation observer
+    this.#formMutationObserver.disconnect();
+    this.#isObservingFormMutations = false;
   }
 
   computeFillingValue(fieldDetail) {
@@ -1102,7 +1126,7 @@ export class FormAutofillHandler {
       let streetAddressDetail = this.getFieldDetailByName("street-address");
       if (
         streetAddressDetail &&
-        HTMLInputElement.isInstance(streetAddressDetail.element)
+        FormAutofillUtils.isTextControl(streetAddressDetail.element)
       ) {
         profile["street-address"] = profile["-moz-street-address-one-line"];
       }
@@ -1213,14 +1237,14 @@ export class FormAutofillHandler {
   /**
    * Fills the provided element with the specified value.
    *
-   * @param {HTMLInputElement| HTMLSelectElement} element - The form field element to be filled.
+   * @param {HTMLElement} element - The form field element to be filled.
    * @param {string} value - The value to be filled into the form field.
    */
   static fillFieldValue(element, value) {
     if (FormAutofillUtils.focusOnAutofill) {
       element.focus({ preventScroll: true });
     }
-    if (HTMLInputElement.isInstance(element)) {
+    if (FormAutofillUtils.isTextControl(element)) {
       element.setUserInput(value);
     } else if (HTMLSelectElement.isInstance(element)) {
       // Set the value of the select element so that web event handlers can react accordingly
@@ -1315,7 +1339,7 @@ export class FormAutofillHandler {
   }
 
   isFieldAutofillable(fieldDetail, profile) {
-    if (HTMLInputElement.isInstance(fieldDetail.element)) {
+    if (FormAutofillUtils.isTextControl(fieldDetail.element)) {
       return !!profile[fieldDetail.fieldName];
     }
     return !!this.matchSelectOptions(fieldDetail, profile);

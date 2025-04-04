@@ -19,9 +19,7 @@ struct SimpleTab: Hashable, Codable {
     var imageKey: String {
         return url?.baseDomain ?? ""
     }
-}
 
-extension SimpleTab {
     static func getSimpleTabs() -> [String: SimpleTab] {
         if let tbs = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTabKey) as? Data {
             do {

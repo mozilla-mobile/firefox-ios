@@ -8,23 +8,6 @@ import Common
 
 struct HomepageHeaderCellViewModel {
     var showiPadSetup: Bool
-    var showPrivateModeToggle: Bool
-    var isPrivate: Bool
-
-    private var action: (() -> Void)
-    private var homepageTelemetry = HomepageTelemetry()
-
-    init(isPrivate: Bool, showiPadSetup: Bool, showPrivateModeToggle: Bool, action: @escaping () -> Void) {
-        self.isPrivate = isPrivate
-        self.showiPadSetup = showiPadSetup
-        self.showPrivateModeToggle = showPrivateModeToggle
-        self.action = action
-    }
-
-    func switchMode() {
-        action()
-        homepageTelemetry.sendMaskToggleTappedTelemetry(enteringPrivateMode: !isPrivate)
-    }
 }
 
 // Header for the homepage in both normal and private mode
@@ -47,16 +30,6 @@ class LegacyHomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplica
         return logoHeader
     }()
 
-    private lazy var privateModeButton: UIButton = .build { [weak self] button in
-        let maskImage = UIImage(named: StandardImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
-        button.setImage(maskImage, for: .normal)
-        button.frame = UX.circleSize
-        button.layer.cornerRadius = button.frame.size.width / 2
-        button.addTarget(self, action: #selector(self?.switchMode), for: .touchUpInside)
-        button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
-    }
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,7 +43,6 @@ class LegacyHomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplica
 
     private func setupView(with showiPadSetup: Bool) {
         stackContainer.addArrangedSubview(logoHeaderCell.contentView)
-        stackContainer.addArrangedSubview(privateModeButton)
         contentView.addSubview(stackContainer)
 
         setupConstraints(for: showiPadSetup)
@@ -87,8 +59,6 @@ class LegacyHomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplica
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
 
-            privateModeButton.widthAnchor.constraint(equalToConstant: UX.circleSize.width),
-            privateModeButton.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
             logoHeaderCell.contentView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
         ]
 
@@ -99,23 +69,10 @@ class LegacyHomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplica
         self.viewModel = viewModel
         setupView(with: viewModel.showiPadSetup)
         logoHeaderCell.configure(with: viewModel.showiPadSetup)
-        privateModeButton.isHidden = !viewModel.showPrivateModeToggle
-    }
-
-    @objc
-    private func switchMode() {
-        viewModel?.switchMode()
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         logoHeaderCell.applyTheme(theme: theme)
-        guard let viewModel else { return }
-        let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
-        privateModeButton.imageView?.tintColor = privateModeButtonTintColor
-        privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
-        privateModeButton.accessibilityValue = viewModel.isPrivate ?
-            .TabTrayToggleAccessibilityValueOn :
-            .TabTrayToggleAccessibilityValueOff
     }
 }

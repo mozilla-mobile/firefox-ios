@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "מידע נוסף";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.missionLabel" = "u200f%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
+"About.missionLabel" = "‏%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
 
 /* Label on About screen */
 "About.privateBullet1" = "חיפוש וגלישה ישירות מהיישום";
@@ -41,7 +41,7 @@
 "About.title" = "על אודות %@";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.topLabel" = "u200f%@ שם אותך בשליטה.";
+"About.topLabel" = "‏%@ שם אותך בשליטה.";
 
 /* Title for action sheet item to open the current page in another application. %@ is the name of the application to open the current page. */
 "actionSheet.openIn" = "פתיחה ב־%@";
@@ -263,7 +263,7 @@
 "Safari.instructionsExtentions" = "יש לבחור ב־Safari ולאחר מכן בהרחבות";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Safari.instructionsNotEnabled" = "u200f%@ לא מופעל.";
+"Safari.instructionsNotEnabled" = "‏%@ לא מופעל.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "פתחו את היישום הגדרות";
@@ -371,7 +371,7 @@
 "settings.Search.SearchTemplateExample" = "דוגמה: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "יש להדביק או להקליד מחרוזת לחיפוש. במידת הצורך, יש להחליף את הביטוי לחיפוש ב־: %s.";
+"Settings.Search.SearchTemplatePlaceholder" = "יש להדביק או להקליד מחרוזת לחיפוש. במידת הצורך, יש להחליף את הביטוי לחיפוש ב: %s.";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "מנוע חיפוש";
@@ -425,7 +425,7 @@
 "Settings.toggleFaceID" = "שימוש ב־Face ID כדי לשחרר את נעילת היישומון";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "u200fFace ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
+"Settings.toggleFaceIDDescription" = "‏Face ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "הצגת עצות במסך הבית";
@@ -443,7 +443,7 @@
 "Settings.toggleTouchID" = "שימוש ב־Touch ID כדי לשחרר את נעילת היישומון";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "u200fTouch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
+"Settings.toggleTouchIDDescription" = "‏Touch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "כבוי";

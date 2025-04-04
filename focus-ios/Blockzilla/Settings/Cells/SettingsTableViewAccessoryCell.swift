@@ -5,20 +5,6 @@
 import UIKit
 
 class SettingsTableViewAccessoryCell: SettingsTableViewCell {
-    var labelText: String? {
-        get { return textLabel?.text }
-        set {
-            textLabel?.text = newValue
-        }
-    }
-
-    var accessoryLabelText: String? {
-        get { return detailTextLabel?.text }
-        set {
-            detailTextLabel?.text = newValue
-        }
-    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryView = UIImageView(image: UIImage(systemName: "chevron.right"))
@@ -27,5 +13,20 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setConfiguration(text: String, secondaryText: String? = nil) {
+        var configuration = defaultContentConfiguration()
+        configuration.text = text
+        configuration.textProperties.color = .primaryText
+        
+        if let secondaryText {
+            configuration.secondaryText = secondaryText
+        }
+        
+        let margins = configuration.directionalLayoutMargins
+        configuration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: margins.top, leading: UIConstants.layout.settingsCellLeftInset, bottom: margins.bottom, trailing: margins.trailing)
+        configuration.prefersSideBySideTextAndSecondaryText = true
+        contentConfiguration = configuration
     }
 }

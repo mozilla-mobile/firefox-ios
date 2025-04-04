@@ -63,13 +63,7 @@ final class PrivateHomepageViewController:
     private let scrollView: UIScrollView = .build()
 
     private var headerViewModel: HomepageHeaderCellViewModel {
-        return HomepageHeaderCellViewModel(
-            isPrivate: true,
-            showiPadSetup: shouldUseiPadSetup(),
-            showPrivateModeToggle: !shouldUseiPadSetup(),
-            action: { [weak self] in
-                self?.parentCoordinator?.switchMode()
-            })
+        return HomepageHeaderCellViewModel(showiPadSetup: shouldUseiPadSetup())
     }
 
     private let scrollContainer: UIStackView = .build { stackView in

@@ -20,6 +20,15 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
         imageView.clipsToBounds = true
     }
 
+    private var theme: Theme?
+    private var isURLTextFieldCentered = false {
+        didSet {
+            // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
+            guard let theme, isURLTextFieldCentered != oldValue else { return }
+            applyTheme(theme: theme)
+        }
+    }
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -30,7 +39,8 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate) {
+    func configure(_ config: LocationViewConfiguration, isLocationTextCentered: Bool, delegate: LocationViewDelegate) {
+        isURLTextFieldCentered = isLocationTextCentered
         searchEngineImageView.image = config.searchEngineImage
         configureA11y(config)
     }
@@ -66,6 +76,7 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        searchEngineImageView.backgroundColor = colors.layer2
+        searchEngineImageView.backgroundColor = isURLTextFieldCentered ? colors.layer3 : colors.layer2
+        self.theme = theme
     }
 }
