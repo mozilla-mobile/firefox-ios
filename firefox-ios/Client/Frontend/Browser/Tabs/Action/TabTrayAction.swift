@@ -26,8 +26,7 @@ class TabTrayAction: Action {
 enum  TabTrayActionType: ActionType {
     case tabTrayDidLoad
     case changePanel
-    case doneButtonTapped
-    case modalSwipedToClose
+    case onViewDismissed
 
     // Middleware actions
     case didLoadTabTray

@@ -12,6 +12,11 @@ struct HomepageTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    // MARK: - General Homepage
+    func sendHomepageImpressionEvent() {
+        gleanWrapper.recordEvent(for: GleanMetrics.Homepage.viewed)
+    }
+
     // MARK: - Top Sites
     enum ContextMenuTelemetryActionType: String {
         case remove, unpin, pin, settings, sponsoredSupport

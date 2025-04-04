@@ -162,6 +162,7 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        guard homepageState.shouldSendImpression else { return }
         store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,

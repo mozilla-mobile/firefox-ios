@@ -119,8 +119,15 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
 
         // FXIOS-11740 - This is relate to homepage actions, so if we want to break up this middleware
         // then this action should go to the homepage specific middleware.
-        case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose, TabTrayActionType.doneButtonTapped:
+        case TabTrayActionType.dismissTabTray:
             dispatchRecentlyAccessedTabs(action: action)
+
+        // FXIOS-11522 This is used for triggering the homepage telemetry,
+        // but can remove if tab tray is full screen instead of modal
+        case TabTrayActionType.onViewDismissed:
+            dispatchRecentlyAccessedTabs(action: action)
+            dispatchActionAfterDismissingTabTrayAndHomepageSelected(uuid: action.windowUUID)
+
         default:
             break
         }
@@ -337,8 +344,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
         store.dispatch(refreshAction)
 
-        let dismissAction = TabTrayAction(windowUUID: uuid,
-                                          actionType: TabTrayActionType.dismissTabTray)
+        let dismissAction = TabTrayAction(
+            windowUUID: uuid,
+            actionType: TabTrayActionType.dismissTabTray
+        )
         store.dispatch(dismissAction)
 
         let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
@@ -397,7 +406,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
         Task { @MainActor in
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             triggerRefresh(uuid: uuid, isPrivate: isPrivate)
-
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
                                                        windowUUID: uuid,
@@ -429,6 +437,19 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
                 store.dispatch(toastAction)
             }
         }
+    }
+
+    // FXIOS-11522 Method to dispatch action only if the user closes tab and the next active tab is the homepage
+    // At this point, this is used for triggering the homepage telemetry,
+    // but can remove if tab tray is full screen instead of modal
+    private func dispatchActionAfterDismissingTabTrayAndHomepageSelected(uuid: WindowUUID) {
+        guard tabManager(for: uuid).selectedTab?.isFxHomeTab ?? false else { return }
+        store.dispatch(
+            TabPanelMiddlewareAction(
+                windowUUID: uuid,
+                actionType: TabPanelMiddlewareActionType.didTabTrayClose
+            )
+        )
     }
 
     private func setBookmarkQuickActions(with shareItem: ShareItem?, uuid: WindowUUID) {

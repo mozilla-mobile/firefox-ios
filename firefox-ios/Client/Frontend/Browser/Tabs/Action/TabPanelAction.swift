@@ -94,6 +94,7 @@ enum TabPanelMiddlewareActionType: ActionType {
     case refreshInactiveTabs
     case showToast
     case scrollToTab
+    case didTabTrayClose
 }
 
 final class ScreenshotAction: Action {
