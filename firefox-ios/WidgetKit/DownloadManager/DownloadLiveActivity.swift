@@ -107,7 +107,7 @@ struct DownloadLiveActivity: Widget {
             static let stateIconSize: CGFloat = 24
             static let downloadingFontSize: CGFloat = 17
             static let progressFontSize: CGFloat = 15
-            static let wordsTopPadding: CGFloat = 0
+            static let wordsTopPadding: CGFloat = 4
             static let wordsLeftPadding: CGFloat = 5
             static let wordsRightPadding: CGFloat = 5
             static let wordsBottomPadding: CGFloat = 0
