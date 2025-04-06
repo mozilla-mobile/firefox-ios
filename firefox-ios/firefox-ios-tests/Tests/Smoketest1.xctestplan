@@ -61,7 +61,6 @@
         "AddressesTests\/testAutofillAddressesByTapingPhoneField()",
         "AddressesTests\/testAutofillAddressesByTapingPostalCodeField()",
         "AddressesTests\/testAutofillAddressesByTapingStateField()",
-        "AddressesTests\/testDeleteAddress()",
         "AddressesTests\/testDeleteAllAddresses()",
         "AddressesTests\/testRedirectToSettingsByTappingManageAddresses()",
         "AddressesTests\/testToggleAddressOnOff()",
