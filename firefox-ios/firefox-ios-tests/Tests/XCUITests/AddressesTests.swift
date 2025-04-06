@@ -257,11 +257,7 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         // Enter a valid date for Country and press save
@@ -578,11 +574,7 @@ class AddressesTests: BaseTestCase {
 
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update the all addresses fields
         tapEdit()
         updateAddress(updateCountry: updateCountry, isPostalCode: isPostalCode)
@@ -654,11 +646,7 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         // Choose to update an address
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         app.staticTexts[field].waitAndTap()
@@ -676,11 +664,7 @@ class AddressesTests: BaseTestCase {
         if isInfoDisplayed {
             XCTAssertTrue(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is not displayed")
         }
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         // Update field
         tapEdit()
         app.staticTexts[field].waitAndTap()
@@ -695,11 +679,7 @@ class AddressesTests: BaseTestCase {
         // The address is saved
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         XCTAssertFalse(app.staticTexts.elementContainingText(newValue).exists, "\(newValue) is displayed")
-        if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
-        } else {
-            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
-        }
+        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
         tapEdit()
         app.staticTexts[field].waitAndTap()
         app.typeText(newValue)
