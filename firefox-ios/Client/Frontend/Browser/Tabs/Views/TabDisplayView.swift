@@ -344,11 +344,13 @@ class TabDisplayView: UIView,
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: TabUUID) {
-        let action = TabPanelViewAction(panelType: panelType,
-                                        tabUUID: tabUUID,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeTab)
-        store.dispatch(action)
+        if !isDragging {
+            let action = TabPanelViewAction(panelType: panelType,
+                                            tabUUID: tabUUID,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.closeTab)
+            store.dispatch(action)
+        }
     }
 
     // MARK: - SwipeAnimatorDelegate
