@@ -11,7 +11,7 @@
 "About.privateBullet2" = "შეზღუდეთ მეთვალყურეები (ან დაუშვით პარამეტრებიდან)";
 
 /* Label on About screen */
-"About.privateBullet3" = "გაასუფთავეთ, ფუნთუშების, ძიებისა და საიტების ისტორიის წასაშლელად";
+"About.privateBullet3" = "გაასუფთავეთ ფუნთუშების, ძიებისა და საიტების ისტორიის წასაშლელად";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "გამოიყენეთ პირად ბრაუზერად:";
@@ -29,13 +29,13 @@
 "About.rowTerms" = "გამოყენების პირობები";
 
 /* Label on About screen */
-"About.safariBullet1" = "შეზღუდეთ თვალთვალი, მეტი პირადულობისთვის";
+"About.safariBullet1" = "შეზღუდეთ თვალთვალი მეტი პირადულობისთვის";
 
 /* Label on About screen */
-"About.safariBullet2" = "შეზღუდეთ ვებშრიფტები, გვერდის მოცულობის შესამცირებლად";
+"About.safariBullet2" = "შეზღუდეთ ვებშრიფტები გვერდის მოცულობის შესამცირებლად";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "გამოიყენეთ, Safari-ს დამატებად:";
+"About.safariBulletHeader" = "გამოიყენეთ Safari-ს დამატებად:";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "%@ პროგრამის შესახებ";
@@ -314,7 +314,7 @@
 "Settings.detailTextCrashReports.V2" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
+"Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას მისამართების ველში აკრეფილ ტექსტს.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSendUsageData" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რომლებიც გვეხმარება, გავაუმჯობესოთ %@.";
@@ -422,10 +422,10 @@
 "Settings.toggleCrashReports" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "გამოიყენეთ სახის ამომცნობი, პროგრამის გასახსნელად";
+"Settings.toggleFaceID" = "სახის ამოცნობით ჩაკეტილი პროგრამის გაღება";
 
 /* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
+"Settings.toggleFaceIDDescription" = "სახის ამომცნობით გაიღება %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "ცნობები საწყის გვერდზე";
@@ -488,7 +488,7 @@
 "ShareMenu.ShareOpenChrome" = "Chrome-ში გახსნა";
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
-"ShareMenu.ShareOpenDefaultBrowser" = "ნაგულისხმევი ბრაუზერით";
+"ShareMenu.ShareOpenDefaultBrowser" = "ნაგულისხმევი ბრაუზერით გახსნა";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox-ში გახსნა";
@@ -569,7 +569,7 @@
 "Tip.RequestDesktop.Title" = "გსურთ, საიტის სრული სახით ხილვა?";
 
 /* Text for a label that indicates the description for share trackers tip. %@ is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
-"Tip.ShareTrackers.Description" = "%@ შეიზრუდა ამ დრომდე.";
+"Tip.ShareTrackers.Description" = "%@ შეიზღუდა ამ დრომდე.";
 
 /* Text for a label that indicates the title for share trackers tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Tip.ShareTrackers.Title" = "თქვენ ნახულობთ. %@ ზღუდავს.";
@@ -644,7 +644,7 @@
 "trackingProtection.toggleLabel2" = "თვალთვალისგან გაძლიერებული დაცვა";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. %@ is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "სულ შეზღუდული, თარიღიდან %@";
+"trackingProtection.trackersBlockedLabel" = "სულ შეზღუდული თარიღიდან %@";
 
 /* Text for the header of trackers section from Tracking Protection. */
 "trackingProtection.trackersHeader" = "შესაზღუდი მეთვალყურეები";
