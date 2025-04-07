@@ -191,6 +191,28 @@ struct DownloadLiveActivity: Widget {
             .padding()
         }
     }
+
+    private func texts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        let bytesCompleted = liveDownload.state.totalBytesDownloaded
+        let bytesExpected = liveDownload.state.totalBytesExpected
+        let mbCompleted = ByteCountFormatter.string(fromByteCount: bytesCompleted, countStyle: .file)
+        let mbExpected = ByteCountFormatter.string(fromByteCount: bytesExpected, countStyle: .file)
+        let subtitle = String(format: .LiveActivity.Downloads.FileProgressText, mbCompleted, mbExpected)
+
+        return VStack(alignment: .leading, spacing: UX.LockScreen.verticalSpacing) {
+            Text(liveDownload.state.downloads.count == 1 ?
+                 String(format: .LiveActivity.Downloads.FileNameText, liveDownload.state.downloads[0].fileName) :
+                    String(format: .LiveActivity.Downloads.FileCountText,
+                           String(liveDownload.state.downloads.count)))
+            .font(.system(size: UX.LockScreen.titleFont, weight: .bold))
+            .foregroundColor(UX.LockScreen.labelColor)
+            Text(subtitle).font(.system(size: UX.LockScreen.subtitleFont))
+                .opacity(0.8)
+                .foregroundColor(UX.LockScreen.labelColor)
+                .contentTransition(.identity)
+        }
+    }
+
     private func leadingExpandedRegion
     (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
