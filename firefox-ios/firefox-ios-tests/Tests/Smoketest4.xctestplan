@@ -129,6 +129,8 @@
         "LoginTest\/testLoginsListFromBrowserTabMenu()",
         "LoginTest\/testSavedLoginSelectUnselect()",
         "LoginTest\/testSearchLogin()",
+        "LoginTest\/testSearchSavedLoginsByURL()",
+        "LoginTest\/testSearchSavedLoginsByUsername()",
         "LoginTest\/testVerifyPasswordsSettingMenu()",
         "MicrosurveyTests",
         "MultiWindowTests",

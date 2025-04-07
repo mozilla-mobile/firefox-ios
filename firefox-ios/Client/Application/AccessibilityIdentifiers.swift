@@ -628,6 +628,20 @@ struct AccessibilityIdentifiers {
 
         struct Logins {
             static let title = "Logins"
+
+            struct Passwords {
+                static let saveLogins = "saveLogins"
+                static let showLoginsInAppMenu = "showLoginsInAppMenu"
+                static let searchPasswords = "Search passwords"
+                static let emptyList = "No passwords found"
+                static let addButton = "Add"
+
+                struct AddLogin {
+                    static let saveButton = "Save"
+                    static let cancelButton = "Cancel"
+                    static let addCredential = "Add Credential"
+                }
+            }
         }
 
         struct CreditCards {

@@ -24,6 +24,7 @@ let defaultNumRowsEmptyFilterList = 0
 let searchPasswords = "Search passwords"
 
 class LoginTest: BaseTestCase {
+    let passwordssQuery = AccessibilityIdentifiers.Settings.Logins.Passwords.self
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
@@ -48,7 +49,7 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()
-        waitForExistence(app.tables["Login List"])
+        mozWaitForElementToExist(app.tables["Login List"])
         navigator.nowAt(LoginsSettings)
     }
 
@@ -291,54 +292,99 @@ class LoginTest: BaseTestCase {
         // Validate passwords section options are displayed
         waitForElementsToExist(
             [
-                app.switches["saveLogins"],
-                app.switches["showLoginsInAppMenu"],
-                app.searchFields["Search passwords"],
-                app.staticTexts["No passwords found"],
-                app.buttons["Add"]
+                app.switches[passwordssQuery.saveLogins],
+                app.switches[passwordssQuery.showLoginsInAppMenu],
+                app.searchFields[passwordssQuery.searchPasswords],
+                app.staticTexts[passwordssQuery.emptyList],
+                app.buttons[passwordssQuery.addButton]
             ]
         )
-        XCTAssertEqual(app.switches["saveLogins"].value as? String,
+        XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
-        XCTAssertEqual(app.switches["showLoginsInAppMenu"].value as? String,
+        XCTAssertEqual(app.switches[passwordssQuery.showLoginsInAppMenu].value as? String,
                        "1",
                        "Show in Application Menu toggle in not enabled by default")
-        app.buttons["Add"].waitAndTap()
+        app.buttons[passwordssQuery.addButton].waitAndTap()
         waitForElementsToExist(
             [
-                app.buttons["Save"],
-                app.buttons["Cancel"],
-                app.tables["Add Credential"].cells["Website, "],
-                app.tables["Add Credential"].cells["Username, "],
-                app.tables["Add Credential"].cells["Password"]
+                app.buttons[passwordssQuery.AddLogin.saveButton],
+                app.buttons[passwordssQuery.AddLogin.cancelButton],
+                app.tables[passwordssQuery.AddLogin.addCredential].cells["Website, "],
+                app.tables[passwordssQuery.AddLogin.addCredential].cells["Username, "],
+                app.tables[passwordssQuery.AddLogin.addCredential].cells["Password"]
             ]
         )
-        app.buttons["Cancel"].waitAndTap()
+        app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         navigator.goto(SettingsScreen)
     }
 
-    private func createLoginManually() {
-        app.buttons["Add"].waitAndTap()
+    // https://mozilla.testrail.io/index.php?/cases/view/2798590
+    func testSearchSavedLoginsByURL() {
+        validateSearchSavedLoginsByUrlOrUsername(searchText: "localhost")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2798591
+    func testSearchSavedLoginsByUsername() {
+        validateSearchSavedLoginsByUrlOrUsername(searchText: "test")
+    }
+
+    private func validateSearchSavedLoginsByUrlOrUsername(searchText: String) {
+        saveLogin(givenUrl: testLoginPage)
+        openLoginsSettings()
+        // Tap on the search passwords field
+        app.searchFields[passwordssQuery.searchPasswords].waitAndTap()
+        XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
+        // A search field is displayed
+        mozWaitForElementToExist(app.searchFields[passwordssQuery.searchPasswords])
+        // Tap on the cancel button
+        app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
+        // The "Saved logins" page is displayed
+        mozWaitForElementToExist(app.switches[passwordssQuery.saveLogins])
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
+        // Type anything that can match any website from the saved logins
+        app.searchFields[passwordssQuery.searchPasswords].waitAndTap()
+        app.typeText(searchText)
+        // Only matching results are displayed
         waitForElementsToExist(
             [
-                app.tables["Add Credential"],
-                app.tables["Add Credential"].cells.staticTexts.containingText("Web").element,
-                app.tables["Add Credential"].cells.staticTexts["Username"],
-                app.tables["Add Credential"].cells.staticTexts["Password"]
+                app.tables["Login List"].cells.element(boundBy: 2).staticTexts[domain],
+                app.tables["Login List"].cells.element(boundBy: 2).staticTexts[domainLogin]
+            ]
+        )
+        // Tap on one of the matching results
+        app.tables["Login List"].cells.element(boundBy: 2).tap()
+        // The login details are displayed
+        waitForElementsToExist(
+            [
+                app.tables.cells[loginsListURLLabel],
+                app.tables.cells[loginsListUsernameLabel],
+                app.tables.cells[loginsListPasswordLabel]
+            ]
+        )
+    }
+
+    private func createLoginManually() {
+        app.buttons[passwordssQuery.addButton].waitAndTap()
+        waitForElementsToExist(
+            [
+                app.tables[passwordssQuery.AddLogin.addCredential],
+                app.tables[passwordssQuery.AddLogin.addCredential].cells.staticTexts.containingText("Web").element,
+                app.tables[passwordssQuery.AddLogin.addCredential].cells.staticTexts["Username"],
+                app.tables[passwordssQuery.AddLogin.addCredential].cells.staticTexts["Password"]
             ]
         )
 
-        app.tables["Add Credential"].cells["Website, "].waitAndTap()
+        app.tables[passwordssQuery.AddLogin.addCredential].cells["Website, "].waitAndTap()
         enterTextInField(typedText: "testweb")
 
-        app.tables["Add Credential"].cells["Username, "].waitAndTap()
+        app.tables[passwordssQuery.AddLogin.addCredential].cells["Username, "].waitAndTap()
         enterTextInField(typedText: "foo")
 
-        app.tables["Add Credential"].cells["Password"].waitAndTap()
+        app.tables[passwordssQuery.AddLogin.addCredential].cells["Password"].waitAndTap()
         enterTextInField(typedText: "bar")
 
-        app.buttons["Save"].waitAndTap()
+        app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables["Login List"].otherElements["SAVED PASSWORDS"])
     }
 
