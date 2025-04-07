@@ -1,5 +1,5 @@
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ %@-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ დიდხანს შეეხეთ ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
+"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ %@ მალსახმობად მთავარ ეკრანზე. ჩადგმის შემდგომ დიდხანს შეეხეთ ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescriptionV2" = "გამოიყენეთ %@-ის პირადი ფანჯარა სასურველი საძიებოთი.";
