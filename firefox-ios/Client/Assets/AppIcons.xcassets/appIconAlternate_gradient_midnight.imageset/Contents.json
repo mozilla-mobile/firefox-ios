@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "midnight-light.png",
+      "filename" : "midnight-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "midnight-dark.png",
+      "filename" : "midnight-dark.pdf",
       "idiom" : "universal"
     }
   ],
