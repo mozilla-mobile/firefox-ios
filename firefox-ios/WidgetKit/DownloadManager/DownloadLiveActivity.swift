@@ -197,6 +197,28 @@ struct DownloadLiveActivity: Widget {
         }
     }
 
+    private func lockScreenDownloadProgress(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+        let totalCompletion = liveDownload.state.completedDownloads == liveDownload.state.downloads.count
+
+        return ZStack {
+            Circle()
+                .stroke(lineWidth: UX.LockScreen.circleWidth)
+                .foregroundColor(UX.LockScreen.labelColor)
+                .opacity(0.3)
+            Circle()
+                .trim(from: 0.0, to: min(liveDownload.state.totalProgress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: UX.LockScreen.circleWidth))
+                .rotationEffect(.degrees(270))
+                .animation(.linear, value: UX.LockScreen.circleAnimation)
+                .foregroundColor(UX.LockScreen.labelColor)
+            Image(totalCompletion ? UX.checkmarkIcon : UX.mediaStopIcon)
+                .renderingMode(.template)
+                .frame(width: UX.LockScreen.progressIconSize, height: UX.LockScreen.progressIconSize)
+                .foregroundStyle(UX.LockScreen.labelColor)
+        }
+        .frame(width: UX.LockScreen.circleRadius, height: UX.LockScreen.circleRadius)
+    }
+
     private func leadingExpandedRegion
     (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>)
     -> DynamicIslandExpandedRegion<some View> {
