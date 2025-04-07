@@ -12,7 +12,7 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     var bookmarks: [BookmarkConfiguration]
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderState(
+    let sectionHeaderState = SectionHeaderConfiguration(
         title: .BookmarksSectionTitle,
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
         isButtonHidden: false,
