@@ -57,6 +57,10 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
+    - script@1.2.1:
+      title: Install older simulators
+      run: |
+        sudo xcodes runtimes install "iOS 18.2"
     - xcode-test-without-building@0:
         timeout: 600
         inputs:
@@ -91,6 +95,10 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
+    - script@1.2.1:
+      title: Install older simulators
+      run: |
+        sudo xcodes runtimes install "iOS 18.2"
     - xcode-test-without-building@0.4.0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
@@ -233,11 +241,15 @@ workflows:
     - decision_to_run_UI_Tests
     - firefox_pull_and_unzip_dependencies
     steps:
+    - script@1.2.1:
+      title: Install older simulators
+      run: |
+        sudo xcodes runtimes install "iOS 18.2"
     - xcode-test-without-building@0.4.0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.3.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator18.2-arm64.xctestrun"
     - deploy-to-bitrise-io@2.10.0:
@@ -1662,6 +1674,10 @@ workflows:
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
+    - script@1.2.1:
+      title: Install older simulators
+      run: |
+        sudo xcodes runtimes install "iOS 18.2"
     - xcode-test-without-building@0:
         timeout: 6000
         inputs:
@@ -2253,5 +2269,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-16.2.x
+    stack: osx-xcode-16.3.x
     machine_type_id: g2.mac.large
