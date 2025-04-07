@@ -124,29 +124,15 @@ final class TabTraySelectorView: UIView,
         }
         cell.configure(title: items[indexPath.item],
                        selected: indexPath.item == selectedIndex,
-                       theme: themeManager.getCurrentTheme(for: windowUUID))
+                       theme: themeManager.getCurrentTheme(for: windowUUID),
+                       position: indexPath.item,
+                       total: indexPath.count)
         return cell
     }
 
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectNewSection(newIndex: indexPath.item)
-    }
-
-    // MARK: - Scroll Snap
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate { snapToNearestItem() }
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        snapToNearestItem()
-    }
-
-    private func snapToNearestItem() {
-        let center = convert(CGPoint(x: bounds.midX, y: bounds.midY), to: collectionView)
-        if let indexPath = collectionView.indexPathForItem(at: center) {
-            selectNewSection(newIndex: indexPath.item)
-        }
     }
 
     func selectNewSection(newIndex: Int) {
