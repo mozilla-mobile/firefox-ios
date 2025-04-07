@@ -230,6 +230,23 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        guard let panel = currentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController,
+              let webView = selectedTab.webView
+        else {
+            context.completeTransition(true)
+            return
+        }
+
+        let cv = panelViewController.tabDisplayView.collectionView
+        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+        else {
+            // We don't have a collection view when the view is empty (ex: in private tabs)
+            context.completeTransition(true)
+            return
+        }
+
         // This background view is needed for animation between the tab tray and the bvc
         let backgroundView = UIView()
         backgroundView.backgroundColor = .init(white: 0.0, alpha: 0.3)
@@ -254,16 +271,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Hide the destination as we're animating a snapshot into place
         toView.isHidden = true
-
-        guard let panel = currentPanel as? ThemedNavigationController,
-              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController,
-              let webView = selectedTab.webView
-        else { return }
-
-        let cv = panelViewController.tabDisplayView.collectionView
-        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-        else { return }
 
         cv.reloadData()
 
