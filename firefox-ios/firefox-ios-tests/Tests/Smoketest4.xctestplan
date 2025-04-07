@@ -132,6 +132,7 @@
         "LoginTest\/testSearchSavedLoginsByURL()",
         "LoginTest\/testSearchSavedLoginsByUsername()",
         "LoginTest\/testVerifyPasswordsSettingMenu()",
+        "LoginTest\/testVerifyUpdatedPasswordIsSaved()",
         "MicrosurveyTests",
         "MultiWindowTests",
         "NavigationTest\/testBackArrowNavigation()",
