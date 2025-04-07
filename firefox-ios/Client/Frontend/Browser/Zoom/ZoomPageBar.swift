@@ -31,8 +31,6 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
         static let separatorHeightMultiplier = 0.74
-        static let lowerZoomLimit: CGFloat = 0.5
-        static let upperZoomLimit: CGFloat = 2.0
     }
 
     // MARK: - Properties
@@ -229,9 +227,9 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private func checkPageZoomLimits() {
-        if tab.pageZoom <= UX.lowerZoomLimit {
+        if tab.pageZoom <= ZoomConstants.lowerZoomLimit {
             zoomOutButton.isEnabled = false
-        } else if tab.pageZoom >= UX.upperZoomLimit {
+        } else if tab.pageZoom >= ZoomConstants.upperZoomLimit {
             zoomInButton.isEnabled = false
         } else { enableZoomButtons() }
     }
@@ -261,7 +259,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         updateZoomLabel()
         delegate?.didChangeZoomLevel()
         zoomOutButton.isEnabled = true
-        if tab.pageZoom >= UX.upperZoomLimit {
+        if tab.pageZoom >= ZoomConstants.upperZoomLimit {
             zoomInButton.isEnabled = false
         }
     }
@@ -272,7 +270,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         updateZoomLabel()
         delegate?.didChangeZoomLevel()
         zoomInButton.isEnabled = true
-        if tab.pageZoom <= UX.lowerZoomLimit {
+        if tab.pageZoom <= ZoomConstants.lowerZoomLimit {
             zoomOutButton.isEnabled = false
         }
     }
