@@ -8,6 +8,7 @@ import Storage
 import Shared
 import SiteImageView
 import WebKit
+import WebEngine
 
 private var debugTabCount = 0
 
