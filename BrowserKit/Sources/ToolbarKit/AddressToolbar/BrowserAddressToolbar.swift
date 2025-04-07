@@ -6,10 +6,10 @@ import UIKit
 import Common
 
 /// Simple address toolbar implementation.
-/// +-------------+------------+-----------------------+----------+
-/// | navigation  | indicators | url       [ page    ] | browser  |
-/// |   actions   |            |           [ actions ] | actions  |
-/// +-------------+------------+-----------------------+----------+
+/// +-------------+------------+----------------------------------------+----------+
+/// | navigation  | indicators | [ location ]     url       [ page    ] | browser  |
+/// |   actions   |            | [ actions  ]               [ actions ] | actions  |
+/// +-------------+------------+----------------------------------------+----------+
 public class BrowserAddressToolbar: UIView,
                                     Notifiable,
                                     AddressToolbar,
@@ -42,6 +42,7 @@ public class BrowserAddressToolbar: UIView,
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
 
+    private lazy var locationActionStack: UIStackView = .build()
     private lazy var locationContainer: UIView = .build()
 
     private lazy var locationView: LocationView = .build()
