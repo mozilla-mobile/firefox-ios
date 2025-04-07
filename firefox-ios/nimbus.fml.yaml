@@ -46,7 +46,6 @@ include:
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
-  - nimbus-features/tabAnimationFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
