@@ -36,7 +36,6 @@ class A11yUtils: XCTestCase {
         }
     }
 
-
     public static func checkButtonLabels(
         in element: XCUIElement,
         screenName: String,

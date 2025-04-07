@@ -301,7 +301,6 @@ class A11ySettingsTests: BaseTestCase {
 
         XCTContext
             .runActivity(named: "And I open Allow Audio and Video Settings") { _ in
-
                 // Navigate back
                 app.buttons["Browsing"].waitAndTap()
                 app.staticTexts["Allow Audio and Video"].waitAndTap()
