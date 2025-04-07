@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-struct JumpBackInTabConfiguration: Equatable, Hashable {
+struct JumpBackInTabConfiguration: Equatable, Hashable, CustomStringConvertible, CustomDebugStringConvertible {
     let tab: Tab
     let titleText: String
     let descriptionText: String
@@ -13,9 +13,17 @@ struct JumpBackInTabConfiguration: Equatable, Hashable {
     var accessibilityLabel: String {
         return "\(titleText), \(descriptionText)"
     }
+
+    public var debugDescription: String {
+        return "JumpBackInTabConfiguration (\(tab))"
+    }
+
+    public var description: String {
+        return debugDescription
+    }
 }
 
-struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
+struct JumpBackInSyncedTabConfiguration: Equatable, Hashable, CustomStringConvertible, CustomDebugStringConvertible {
     let titleText: String
     let descriptionText: String
     let url: URL
@@ -33,6 +41,14 @@ struct JumpBackInSyncedTabConfiguration: Equatable, Hashable {
     }
     var syncedTabOpenActionTitle: String {
         return .FirefoxHomepage.JumpBackIn.SyncedTabOpenTabA11y
+    }
+
+    public var debugDescription: String {
+        return "JumpBackInSyncedTabConfiguration"
+    }
+
+    public var description: String {
+        return debugDescription
     }
 }
 
