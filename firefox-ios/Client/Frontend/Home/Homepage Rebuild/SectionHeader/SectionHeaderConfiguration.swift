@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct SectionHeaderState: Equatable, Hashable {
+struct SectionHeaderConfiguration: Equatable, Hashable {
     let title: String
     let a11yIdentifier: String
     var isButtonHidden = true
