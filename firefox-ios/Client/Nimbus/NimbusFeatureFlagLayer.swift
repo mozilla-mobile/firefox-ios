@@ -240,8 +240,8 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkTabAnimationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabAnimationFeature.value()
-        return config.enabled
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.animationFeature
     }
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
