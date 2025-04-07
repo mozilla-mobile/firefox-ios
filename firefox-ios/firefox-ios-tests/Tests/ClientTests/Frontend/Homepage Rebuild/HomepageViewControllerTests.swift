@@ -181,6 +181,38 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(actionCalled.showiPadSetup ?? true)
     }
 
+    func test_viewWillAppear_dispatchesAppropriateActions() throws {
+        let subject = createSubject()
+
+        subject.viewWillAppear(false)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
+        )
+
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
+    }
+
+    func test_viewWillAppear_withTabTrayOpen_doesNotSendHomepageTelemetry() throws {
+        let subject = createSubject()
+
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TabTrayAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TabTrayActionType.didLoadTabTray
+            )
+        )
+        subject.newState(state: newState)
+        subject.viewWillAppear(false)
+
+        let homepageActionsCalled = mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
+
+        XCTAssertNil(homepageActionsCalled)
+        XCTAssertFalse(newState.shouldSendImpression)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()

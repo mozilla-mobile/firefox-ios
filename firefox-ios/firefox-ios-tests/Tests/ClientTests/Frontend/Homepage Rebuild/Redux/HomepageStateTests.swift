@@ -25,6 +25,7 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.headerState.isPrivate)
         XCTAssertFalse(initialState.headerState.showiPadSetup)
+        XCTAssertTrue(initialState.shouldSendImpression)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -43,6 +44,38 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
         XCTAssertTrue(newState.headerState.showiPadSetup)
+    }
+
+    func test_didLoadTabTrayAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TabTrayAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TabTrayActionType.didLoadTabTray
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.shouldSendImpression)
+    }
+
+    func test_dismissTabTrayAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            TabTrayAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TabTrayActionType.dismissTabTray
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertTrue(newState.shouldSendImpression)
     }
 
     // MARK: - Private

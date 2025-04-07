@@ -45,6 +45,42 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    func test_viewWillAppearAction_sendsTelemetryData() throws {
+        let subject = createSubject()
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.viewWillAppear
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
+    func test_didTabTrayCloseAction_sendsTelemetryData() throws {
+        let subject = createSubject()
+        let action = TabPanelMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelMiddlewareActionType.didTabTrayClose
+        )
+
+        subject.homepageProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents?[0] as? EventMetricType<NoExtras>)
+        let expectedMetricType = type(of: GleanMetrics.Homepage.viewed)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> HomepageMiddleware {
         return HomepageMiddleware(
