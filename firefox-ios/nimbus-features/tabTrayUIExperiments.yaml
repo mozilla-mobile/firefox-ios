@@ -11,7 +11,7 @@ features:
         default: false
       animation-feature:
         description: >
-          If true, enabes the tab tray animation feature.
+          If true, enables the tab tray animation feature, that occurs when the tab tray opens and closes.
         type: Boolean
         default: false
     defaults:
