@@ -192,7 +192,7 @@ struct DownloadLiveActivity: Widget {
         }
     }
 
-    private func texts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+    private func lockScreenTexts(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
         let bytesCompleted = liveDownload.state.totalBytesDownloaded
         let bytesExpected = liveDownload.state.totalBytesExpected
         let mbCompleted = ByteCountFormatter.string(fromByteCount: bytesCompleted, countStyle: .file)
