@@ -923,8 +923,6 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
     // MARK: - Homepage Related Actions
     private func resolveHomepageActions(with action: Action) {
         switch action.actionType {
-        case HeaderActionType.toggleHomepageMode:
-            tabManager(for: action.windowUUID).switchPrivacyMode()
         case HomepageActionType.viewWillAppear,
             JumpBackInActionType.fetchLocalTabs,
             TopTabsActionType.didTapNewTab,

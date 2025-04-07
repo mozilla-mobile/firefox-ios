@@ -422,10 +422,7 @@ final class HomepageViewController: UIViewController,
                 return UICollectionViewCell()
             }
 
-            headerCell.configure(headerState: state) { [weak self] in
-                self?.toggleHomepageMode()
-            }
-
+            headerCell.configure(headerState: state)
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
@@ -663,16 +660,6 @@ final class HomepageViewController: UIViewController,
         if section.canHandleLongPress {
             navigateToContextMenu(for: section, and: item, sourceView: sourceView)
         }
-    }
-
-    // MARK: Dispatch Actions
-    private func toggleHomepageMode() {
-        store.dispatch(
-            HeaderAction(
-                windowUUID: windowUUID,
-                actionType: HeaderActionType.toggleHomepageMode
-            )
-        )
     }
 
     private func navigateToHomepageSettings() {
