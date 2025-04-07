@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "northernlights-light.png",
+      "filename" : "northernlights-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "northernlights-dark.png",
+      "filename" : "northernlights-dark.pdf",
       "idiom" : "universal"
     }
   ],
